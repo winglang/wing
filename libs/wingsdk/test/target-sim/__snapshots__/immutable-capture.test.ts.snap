@@ -204,19 +204,27 @@ if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(
 }
 };
 })())({
-my_buckets: [(function(env) {
-  let handle = process.env[env];
+my_buckets: [(function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\"),(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")]
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]
 })).handle(event);
 };",
   "connections.json": {
@@ -1734,19 +1742,27 @@ if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`asser
 }
 };
 })())({
-my_map: new Map([[\\"foo\\",(function(env) {
-  let handle = process.env[env];
+my_map: new Map([[\\"foo\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\")],[\\"bar\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],[\\"bar\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")]])
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]])
 })).handle(event);
 };",
   "connections.json": {
@@ -3083,37 +3099,57 @@ if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion fai
 }
 };
 })())({
-my_struct: {\\"bucky\\": (function(env) {
-  let handle = process.env[env];
+my_struct: {\\"bucky\\": (function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\"),\\"mapy\\": new Map([[\\"foo\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),\\"mapy\\": new Map([[\\"foo\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")],[\\"bar\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],[\\"bar\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_0120daf4;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_0120daf4\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_0120daf4\\")]]),\\"arry\\": {\\"boom\\": [(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]]),\\"arry\\": {\\"boom\\": [(function() {
+  let handle = process.env.BUCKET_HANDLE_ea7944ef;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_ea7944ef\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_ea7944ef\\"),(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),(function() {
+  let handle = process.env.BUCKET_HANDLE_1d7ab674;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_1d7ab674\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_1d7ab674\\")],},}
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],},}
 })).handle(event);
 };",
   "connections.json": {

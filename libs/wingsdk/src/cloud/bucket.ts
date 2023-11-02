@@ -161,7 +161,7 @@ export abstract class Bucket extends Resource {
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnCreateProps
+    opts?: BucketOnCreateOptions
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
@@ -184,9 +184,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void {
     if (opts) {
-      console.warn("bucket.onCreate does not support props yet");
+      console.warn("bucket.onCreate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
@@ -194,9 +194,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void {
     if (opts) {
-      console.warn("bucket.onDelete does not support props yet");
+      console.warn("bucket.onDelete does not support options yet");
     }
     this.createBucketEvent([BucketEventType.DELETE], fn, opts);
   }
@@ -204,9 +204,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void {
     if (opts) {
-      console.warn("bucket.onUpdate does not support props yet");
+      console.warn("bucket.onUpdate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
   }
@@ -214,9 +214,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void {
     if (opts) {
-      console.warn("bucket.onEvent does not support props yet");
+      console.warn("bucket.onEvent does not support options yet");
     }
     this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
@@ -400,22 +400,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateProps {}
+export interface BucketOnCreateOptions {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteProps {}
+export interface BucketOnDeleteOptions {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {}
+export interface BucketOnUpdateOptions {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventProps {}
+export interface BucketOnEventOptions {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
