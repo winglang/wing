@@ -250,13 +250,31 @@ export class BucketClient implements IBucketClient {
    * @param dstKey The key of the destination object after copying.
    */
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    const command = new CopyObjectCommand({
-      Bucket: this.bucketName,
-      CopySource: `${this.bucketName}/${srcKey}`,
-      Key: dstKey,
-    });
-
     try {
+      // Get properties of the source object
+      const headResult = await this.s3Client.send(
+        new HeadObjectCommand({
+          Bucket: this.bucketName,
+          Key: srcKey,
+        })
+      );
+
+      // Equivalent to `aws s3 cp --copy-props` in AWS CLI v2
+      const command = new CopyObjectCommand({
+        Bucket: this.bucketName,
+        CopySource: `${this.bucketName}/${srcKey}`,
+        Key: dstKey,
+        MetadataDirective: "REPLACE",
+        // Properties carried over from the source object
+        ContentType: headResult.ContentType,
+        ContentLanguage: headResult.ContentLanguage,
+        ContentEncoding: headResult.ContentEncoding,
+        ContentDisposition: headResult.ContentDisposition,
+        CacheControl: headResult.CacheControl,
+        Expires: headResult.Expires,
+        Metadata: headResult.Metadata,
+      });
+
       await this.s3Client.send(command);
     } catch (error) {
       if (error instanceof NotFound) {
