@@ -77,19 +77,21 @@ const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
+const WINGSDK_EXPECT_MODULE: &'static str = "expect";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_SIM_MODULE: &'static str = "sim";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 9] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
 	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
+	WINGSDK_EXPECT_MODULE,
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
 	WINGSDK_SIM_MODULE,
