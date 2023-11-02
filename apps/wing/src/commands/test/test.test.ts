@@ -48,22 +48,16 @@ describe("printing test reports", () => {
 
 describe("wing test (no options)", () => {
   let logSpy: SpyInstance;
-  let writeResultsSpy: SpyInstance;
-  let writeFileSpy: SpyInstance;
 
   beforeEach(() => {
     chalk.level = 0;
     logSpy = vi.spyOn(console, "log");
-    writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
   });
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     logSpy.mockRestore();
-    writeResultsSpy.mockRestore();
-    writeFileSpy.mockRestore();
   });
 
   test("default entrypoint behaviour", async () => {
@@ -79,6 +73,24 @@ describe("wing test (no options)", () => {
     expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
     expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
     expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
+  });
+});
+
+describe("output-file option", () => {
+  let writeResultsSpy: SpyInstance;
+  let writeFileSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
+    writeFileSpy = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
+    writeResultsSpy.mockRestore();
+    writeFileSpy.mockRestore();
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
