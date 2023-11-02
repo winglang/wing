@@ -1,7 +1,6 @@
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
@@ -40,7 +39,8 @@ async function collectAnalyticsHook(cmd: Command) {
   // Fail silently if collection fails
   try {
     optionallyDisplayDisclaimer();
-    analyticsExportFile = collectCommandAnalytics(cmd);
+    const analyticsModule = await import("./analytics/collect");
+    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd);
   } catch (err) {
     if (process.env.DEBUG) {
       console.error(err);
@@ -97,9 +97,8 @@ async function main() {
     });
 
   async function progressHook(cmd: Command) {
-    const target = cmd.opts().target;
     const progress = program.opts().progress;
-    if (progress !== false && target !== "sim") {
+    if (progress !== false && cmd.opts().platform[0] !== "sim") {
       process.env.PROGRESS = "1";
     }
   }
@@ -140,11 +139,11 @@ async function main() {
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
     .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+      new Option(
+        "-t, --platform <platform...>",
+        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
+      ).default(["sim"])
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "Yaml file with Platform-specific values")
@@ -159,11 +158,11 @@ async function main() {
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
     .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+      new Option(
+        "-t, --platform <platform...>",
+        "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)"
+      ).default(["sim"])
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",

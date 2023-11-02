@@ -105,7 +105,7 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws",
+            "WING_MODEL": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -347,7 +347,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws",
+            "WING_MODEL": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -637,7 +637,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > azurerm backend 
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws",
+            "WING_MODEL": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -809,7 +809,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > gcp backend 1`] 
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws",
+            "WING_MODEL": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
@@ -981,7 +981,7 @@ exports[`Plugin examples > AWS target plugins > tf-backend.js > s3 backend 1`] =
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
-            "WING_TARGET": "tf-aws",
+            "WING_MODEL": "tf-aws",
           },
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
