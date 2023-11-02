@@ -663,7 +663,7 @@ impl<'s> Parser<'s> {
 		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
 			let elif = ElifLetBlock {
 				reassignable: node.child_by_field_name("reassignable").is_some(),
 				statements: statements,
