@@ -204,6 +204,7 @@ pub fn parse_wing_project(
 				),
 				span: None,
 				annotations: vec![],
+				hints: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -361,6 +362,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(span),
 			annotations: vec![],
+			hints: vec![],
 		};
 		report_diagnostic(diag);
 	}
@@ -370,6 +372,7 @@ impl<'s> Parser<'s> {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
 			annotations: vec![],
+			hints: vec![],
 		};
 		report_diagnostic(diag);
 
@@ -663,7 +666,7 @@ impl<'s> Parser<'s> {
 		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
 			let elif = ElifLetBlock {
 				reassignable: node.child_by_field_name("reassignable").is_some(),
 				statements: statements,
@@ -1084,6 +1087,7 @@ impl<'s> Parser<'s> {
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
 							annotations: vec![],
+							hints: vec![],
 						});
 					}
 
@@ -2232,6 +2236,7 @@ impl<'s> Parser<'s> {
 					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
 					annotations: vec![],
+					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2253,6 +2258,7 @@ impl<'s> Parser<'s> {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
 						annotations: vec![],
+						hints: vec![],
 					};
 					report_diagnostic(diag);
 				}
