@@ -36,8 +36,8 @@ import {
   preSynthesizeAllConstructs,
   synthesizeTree,
   Connections,
+  SynthHooks,
 } from "../core";
-import { PluginManager } from "../core/plugin-manager";
 import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { Util } from "../util";
@@ -68,10 +68,10 @@ export class App extends CoreApp {
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
-  private readonly pluginManager: PluginManager;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
+  private synthHooks?: SynthHooks;
 
   /**
    * The test runner for this app.
@@ -117,7 +117,7 @@ export class App extends CoreApp {
       ...args: any[]
     ) => this.newAbstract(fqn, scope, id, ...args);
 
-    this.pluginManager = new PluginManager(props.plugins ?? []);
+    this.synthHooks = props.synthHooks;
 
     this.outdir = outdir;
     this.cdkApp = cdkApp;
@@ -144,8 +144,11 @@ export class App extends CoreApp {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    if (this.synthHooks?.preSynthesize) {
+      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    }
+
     // synthesize cdk.Stack files in `outdir/cdk.out`
-    this.pluginManager.preSynth(this);
     this.cdkApp.synth();
 
     // write `outdir/tree.json`

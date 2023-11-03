@@ -31,6 +31,7 @@ impl From<FilesError> for Diagnostic {
 			message: err.to_string(),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		}
 	}
 }

@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $InflightB }) {
+module.exports = function({ $InflightB, $expect_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $InflightB }) {
     }
     async handle() {
       const b = (await (async () => {const o = new $InflightB(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
+      (await $expect_Util.equal((await b.description()), "InflightB extends InflightA"));
     }
   }
   return $Closure1;
@@ -23,7 +23,7 @@ module.exports = function({ $InflightB }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $extended }) {
+module.exports = function({ $expect_Util, $extended }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -31,7 +31,7 @@ module.exports = function({ $extended }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $extended.do()),"value")))};
+      (await $expect_Util.equal((await $extended.do()), "value"));
     }
   }
   return $Closure2;
@@ -220,10 +220,11 @@ module.exports = function({ $InflightA }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const expect = $stdlib.expect;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -427,6 +428,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $InflightB: ${context._lift(InflightB)},
+            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -518,6 +520,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
+            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $extended: ${context._lift(extended)},
           })
         `;
@@ -544,15 +547,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const e = new E(this, "E");
-    {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e.description()),"E extends C extends B")))};
+    (expect.Util.equal((e.description()), "E extends C extends B"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call inflight", new $Closure1(this, "$Closure1"));
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
     const extended = new ExtendedClass(this, "ExtendedClass");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "super_call.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "super_call.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 
