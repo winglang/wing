@@ -16,6 +16,8 @@ if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
+const DEFAULT_PLATFORM = ["sim"];
+
 function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
     try {
@@ -30,6 +32,12 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
       process.exit(1);
     }
   };
+}
+
+let platformOptionCount = 0;
+// Removes default if a platform option is provided by user
+function collectPlatformVariadic(value: string, previous: string[]) {
+  return platformOptionCount++ == 0 ? [value] : collectVariadic(value, previous);
 }
 
 // Required to support --option x --option y --option z rather than --option x y z
@@ -145,9 +153,9 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option(
       "-t, --platform <platform> --platform <platform>",
-      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])",
-      collectVariadic,
-      []
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
@@ -164,9 +172,9 @@ async function main() {
     .argument("[entrypoint...]", "all files to test (globs are supported)")
     .option(
       "-t, --platform <platform> --platform <platform>",
-      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])",
-      collectVariadic,
-      []
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option(
