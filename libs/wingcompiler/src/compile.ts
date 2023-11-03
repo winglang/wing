@@ -147,7 +147,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   // TODO: couldn't be moved to the context's since used in utils.env(...)
   // in the future we may look for a unified approach
-  process.env["WING_TARGET"] = options.target;
+  process.env["WING_TARGET"] = target;
   process.env["WING_VALUES"] = options.value;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLATFORMS"] = resolvePlatformPaths(options.platform);
