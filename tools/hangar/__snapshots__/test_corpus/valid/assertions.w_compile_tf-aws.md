@@ -14,7 +14,7 @@ module.exports = function({  }) {
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
-    static async isNil(a) {
+    static async nil(a) {
       try {
         {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
       }
@@ -67,7 +67,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["equalStr", "isNil", "equalNum", "$inflight_init"];
+      return ["equalStr", "nil", "equalNum", "$inflight_init"];
     }
   }
   return { Assert };
