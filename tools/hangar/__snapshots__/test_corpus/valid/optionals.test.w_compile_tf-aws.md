@@ -126,7 +126,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -449,10 +449,27 @@ class $Root extends $stdlib.std.Resource {
     const payloadWithoutOptions = ({"a": "a"});
     const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:t", new $Closure1(this, "$Closure1"));
+    const str1 = undefined;
+    const str2 = undefined;
+    {
+      const $if_let_value = str1;
+      if ($if_let_value != undefined) {
+        const s1 = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        const $elif_let_value0 = str2;
+        if ($elif_let_value0 != undefined) {
+          const s2 = $elif_let_value0;
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        }
+      }
+    }
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 
