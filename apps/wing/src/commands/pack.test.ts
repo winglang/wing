@@ -82,6 +82,23 @@ describe("wing pack", () => {
     expect(tarballContents["util.ts"]).toBeDefined();
   });
 
+  it("excludes files in /target from the packaged tarball", async () => {
+    const projectDir = join(fixturesDir, "valid1");
+    const outdir = await generateTmpDir();
+
+    // copy everything to the output directory to sandbox this test
+    await exec(`cp -r ${projectDir}/* ${outdir}`);
+    process.chdir(outdir);
+
+    // create a file in /target
+    await fs.mkdir("target");
+    await fs.writeFile("target/index.js", "console.log('hello world');");
+
+    await pack({ outfile: join(outdir, "tarball.tgz") });
+    const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
+    expect(tarballContents["target/index.js"]).toBeUndefined();
+  });
+
   it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
@@ -133,6 +150,7 @@ describe("wing pack", () => {
       "store.w",
       "enums.w",
       "subdir/util.w",
+      "util.js",
       // util.ts - TypeScript files are not included by default
     ];
     expect(Object.keys(tarballContents).sort()).toEqual(expectedFiles.sort());
