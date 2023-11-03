@@ -62,6 +62,7 @@ impl<'a> LiftVisitor<'a> {
 					span: Some(symbol.span.clone()),
 					message: format!("Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"),
 					annotations: vec![],
+					hints: vec![],
 				});
 			}
 		}
@@ -217,7 +218,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						),
 						span: Some(node.span.clone()),
 						annotations: vec![],
-					});
+			hints: vec![],
+		});
 
 					return;
 				}
@@ -282,7 +284,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
 					span: Some(node.span.clone()),
 					annotations: vec![],
-				});
+			hints: vec![],
+		});
 
 				return;
 			}
