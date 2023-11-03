@@ -44,6 +44,22 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if necessary wing files are excluded by package.json", async () => {
+    // invalid4's package.json contains this:
+    // {
+    //   ...
+    //   "files": [
+    //     "!file1.w"
+    //   ]
+    // }
+    const projectDir = join(fixturesDir, "invalid4");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    await expect(pack()).rejects.toThrow(/Cannot find module ".\/file1.w"/);
+    await expectNoTarball(outdir);
+  });
+
   it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
@@ -90,14 +106,13 @@ describe("wing pack", () => {
     const expectedFiles = [
       "index.js",
       "README.md",
+      "LICENSE",
       "package.json",
       "store.w",
       "enums.w",
       "subdir/util.w",
     ];
-    for (const file of expectedFiles) {
-      expect(tarballContents[file]).toBeDefined();
-    }
+    expect(Object.keys(tarballContents).sort()).toEqual(expectedFiles.sort());
 
     const pkgJson = JSON.parse(tarballContents["package.json"]);
     expect(pkgJson.name).toEqual("wing-fixture");

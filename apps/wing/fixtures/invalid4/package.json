@@ -1,7 +1,10 @@
 {
-  "name": "invalid3",
+  "name": "invalid4",
   "version": "0.0.0",
   "description": "description",
   "author": "author",
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "!file1.w"
+  ]
 }

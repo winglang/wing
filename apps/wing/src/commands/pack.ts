@@ -5,7 +5,6 @@ import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
 import { BuiltinPlatform } from "@winglang/compiler";
-import { glob } from "glob";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
@@ -13,6 +12,8 @@ import { compile } from "./compile";
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
 // TODO: print information about the generated library? (e.g. size, dependencies, number of public APIs)
+
+const defaultGlobs = ["**/*.w", "README*", "LICENSE*"];
 
 export interface PackageOptions {
   /**
@@ -32,29 +33,16 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
   }
 
-  const originalPkgJson = JSON.parse(await fs.readFile(originalPkgJsonPath, "utf8"));
-  const originalPkgJsonFiles: Set<string> = new Set(originalPkgJson.files ?? []);
+  // collect a list of files to copy to the staging directory.
+  // only the files that will be included in the tarball will be copied
+  // this way we can run `wing compile .` in the staging directory and be sure
+  // that someone consuming the library will be able to compile it.
+  const filesToCopy = await listFilesToCopy(userDir, defaultGlobs);
 
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
-    const excludeGlobs = ["target/**", "node_modules/**", ".git/**", ".wing/**"];
-    const includeGlobs = [
-      ...originalPkgJsonFiles,
-      "README*",
-      "package.json",
-      "**/*.w",
-      "**/*.js",
-      "LICENSE*",
-    ];
-
-    const matchingFiles = await glob(includeGlobs, {
-      ignore: excludeGlobs,
-      cwd: userDir,
-      dot: true,
-    });
-
-    // copy matching files to the staging directory
-    await copyFiles(userDir, workdir, matchingFiles);
+    // copy staged files to the staging directory
+    await copyFiles(userDir, workdir, filesToCopy);
 
     // symlink the user's node_modules to the staging directory
     const nodeModulesPath = path.join(workdir, "node_modules");
@@ -62,11 +50,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
     // check that the library compiles to the "sim" target
     console.log('Compiling to the "sim" target...');
-
     await compile(workdir, { platform: [BuiltinPlatform.SIM] });
-    if (process.env.DEBUG) {
-      console.error(`running wing compile ${workdir} --platform sim`);
-    }
 
     // check package.json exists
     const pkgJsonPath = path.join(workdir, "package.json");
@@ -84,9 +68,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
-    // check that Wing source files will be included in the tarball
+    // add default globs to "files" so that Wing files are included in the tarball
     const pkgJsonFiles = new Set(pkgJson.files ?? []);
-    const expectedGlobs = ["**/*.js", "**/*.w"];
+    const expectedGlobs = defaultGlobs;
     for (const pat of expectedGlobs) {
       if (!pkgJsonFiles.has(pat)) {
         pkgJsonFiles.add(pat);
@@ -125,9 +109,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     const arborist = new Arborist({ path: workdir });
     const tree = await arborist.loadActual();
     const pkg = tree.package;
+    const files = await packlist(tree);
     const tarballPath =
       outfile ?? path.join(outdir, `${pkg.name?.replace(/\//g, "-")}-${pkg.version}.tgz`);
-    const files = await packlist(tree);
     await tar.create(
       {
         gzip: true,
@@ -143,6 +127,18 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     console.log("Created tarball:", tarballPath);
     return tarballPath;
   });
+}
+
+/**
+ * Determine a list of files to copy to the staging directory, based on what npm says
+ * it would include in the tarball, given the user's package.json and a set of
+ * additional files that we want to include.
+ */
+async function listFilesToCopy(dir: string, extraGlobs: string[]): Promise<string[]> {
+  const arborist = new Arborist({ path: dir });
+  const tree = await arborist.loadActual();
+  tree.package.files?.push(...extraGlobs);
+  return packlist(tree);
 }
 
 async function copyFiles(srcDir: string, destDir: string, files: string[]) {
@@ -168,7 +164,7 @@ async function withTempDir<T>(work: (workdir: string) => Promise<T>): Promise<T>
   } finally {
     process.chdir(cwd);
     // if you want to debug this you can keep the workdir around
-    if (process.env.WING_PACK_KEEP_WORKDIR) {
+    if (!process.env.WING_PACK_KEEP_WORKDIR) {
       await fs.rm(workdir, { recursive: true });
     }
   }
