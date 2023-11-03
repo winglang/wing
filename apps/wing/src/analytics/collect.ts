@@ -26,7 +26,7 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
     appEntrypoint: cmd.args.length > 0 ? cmd.args[0] : ".",
   });
 
-  const platform = cmd.opts().platform;
+  const platform = cmd.opts().platform ?? [];
   let target = "";
   if (platform) {
     target = determineTargetFromPlatforms(platform);
