@@ -111,7 +111,8 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     const pkg = tree.package;
     const files = await packlist(tree);
     const tarballPath =
-      outfile ?? path.join(outdir, `${pkg.name?.replace(/\//g, "-")}-${pkg.version}.tgz`);
+      outfile ??
+      path.join(outdir, `${pkg.name?.replace(/^@/, "")?.replace(/\//, "-")}-${pkg.version}.tgz`);
     await tar.create(
       {
         gzip: true,
