@@ -53,7 +53,12 @@ async function collectAnalyticsHook(cmd: Command) {
   try {
     optionallyDisplayDisclaimer();
     const analyticsModule = await import("./analytics/collect");
-    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd);
+    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd).catch((err) => {
+      if (process.env.DEBUG) {
+        console.error(err);
+      }
+      return undefined;
+    });
   } catch (err) {
     if (process.env.DEBUG) {
       console.error(err);
