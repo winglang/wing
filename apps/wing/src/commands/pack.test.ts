@@ -66,7 +66,7 @@ describe("wing pack", () => {
     }
 
     const pkgJson = JSON.parse(tarballContents["package.json"]);
-    expect(pkgJson.name).toEqual("wing-fixture");
+    expect(pkgJson.name).toEqual("@winglibs/testfixture");
     expect(pkgJson.keywords.includes("winglang")).toBe(true);
     expect(pkgJson.engines.wing).toEqual("*");
     expect(pkgJson.wing).toEqual(true);
@@ -93,7 +93,7 @@ describe("wing pack", () => {
     }
 
     const pkgJson = JSON.parse(tarballContents["package.json"]);
-    expect(pkgJson.name).toEqual("wing-fixture");
+    expect(pkgJson.name).toEqual("@winglibs/testfixture");
     expect(pkgJson.keywords.includes("winglang")).toBe(true);
     expect(pkgJson.engines.wing).toEqual("*");
     expect(pkgJson.wing).toEqual(true);
