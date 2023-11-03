@@ -86,7 +86,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       ...options,
       log,
       color: coloring,
-      platform: options!.platform
+      platform: options?.platform ?? ["sim"],
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
