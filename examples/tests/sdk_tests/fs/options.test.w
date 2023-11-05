@@ -5,7 +5,7 @@ bring expect;
 test "write and read file with `encoding` option" {
     let tmpdir = fs.mkdtemp();
     let filepath = fs.join(tmpdir, "utf8test.txt");
-    let data = "こんにちは、翼!";
+    let data = "こんにちは、ウィング!";
 
     fs.writeFile(filepath, data, { encoding: "utf8" });
 
