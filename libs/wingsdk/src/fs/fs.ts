@@ -17,7 +17,7 @@ export interface ReadFileOptions {
   readonly encoding?: BufferEncoding;
   /**
    * The `flag` can be set to specify the attributes.
-   * @default `r``.
+   * @default "r".
    */
   readonly flag?: string;
 }
@@ -33,7 +33,7 @@ export interface WriteFileOptions {
   readonly encoding?: BufferEncoding;
   /**
    * The `flag` can be set to specify the attributes.
-   * @default 'w'.
+   * @default "w".
    */
   readonly flag?: string;
 }
