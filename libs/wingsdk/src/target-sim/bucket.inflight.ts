@@ -251,6 +251,26 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    return this.context.withTrace({
+      message: `Copy (srcKey=${srcKey} to dstKey=${dstKey}).`,
+      activity: async () => {
+        if (!this.objectKeys.has(srcKey)) {
+          throw new Error(
+            `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
+          );
+        }
+
+        const dstValue = await this.get(srcKey);
+        const dstMetadata = await this.metadata(srcKey);
+
+        await this.put(dstKey, dstValue, {
+          contentType: dstMetadata.contentType ?? "application/octet-stream",
+        });
+      },
+    });
+  }
+
   private async addFile(
     key: string,
     value: string,

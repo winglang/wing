@@ -639,7 +639,7 @@ force: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 When `true`, exceptions will be ignored if `path` does not exist.
 
@@ -652,7 +652,7 @@ recursive: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 If `true`, perform a recursive directory removal.
 

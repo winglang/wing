@@ -61,13 +61,13 @@ export interface MkdirOptions {
 export interface RemoveOptions {
   /**
    * When `true`, exceptions will be ignored if `path` does not exist.
-   * @default false
+   * @default true
    */
   readonly force?: boolean;
   /**
    * If `true`, perform a recursive directory removal. In
    * recursive mode, operations are retried on failure.
-   * @default false
+   * @default true
    */
   readonly recursive?: boolean;
 }
@@ -317,7 +317,10 @@ export class Util {
    * @param p The path to the file or directory you want to remove.
    */
   public static remove(p: string, opts?: RemoveOptions): void {
-    fs.rmSync(p, opts);
+    fs.rmSync(p, {
+      force: opts?.force ?? true,
+      recursive: opts?.recursive ?? true,
+    });
   }
 
   /**

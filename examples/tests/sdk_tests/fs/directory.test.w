@@ -18,7 +18,7 @@ fs.writeFile(fs.join(dirpath, filename), "");
 let files = fs.readdir(dirpath);
 assert(files.length == 1);
 
-fs.remove(dirpath, { recursive: true });
+fs.remove(dirpath);
 assert(fs.exists(dirpath) == false);
 
 let nilFiles = fs.tryReaddir(dirpath);
@@ -41,7 +41,7 @@ test "inflight create normal directory" {
     let files = fs.readdir(dirpath);
     assert(files.length == 1);
 
-    fs.remove(dirpath, { recursive: true });
+    fs.remove(dirpath);
     assert(fs.exists(dirpath) == false);
 
     let nilFiles = fs.tryReaddir(dirpath);
