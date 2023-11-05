@@ -18,7 +18,10 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpa
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, is_absolute_path, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{
+	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	WINGSDK_TEST_CLASS_NAME,
+};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -986,19 +989,21 @@ impl<'s> Parser<'s> {
 
 		// check if a trusted library exists with this name
 		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
-		let module_dir =
-			wingii::util::package_json::find_dependency_directory(&format!("@winglibs/{}", module_name.name), &source_dir)
-				.ok_or_else(|| {
-					self
-						.with_error::<Node>(
-							format!(
-								"Could not find a trusted library \"@winglibs/{}\" installed. Did you mean to run `npm i @winglibs/{} --save`?",
-								module_name, module_name
-							),
-							&statement_node,
-						)
-						.err();
-				})?;
+		let module_dir = wingii::util::package_json::find_dependency_directory(
+			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
+			&source_dir,
+		)
+		.ok_or_else(|| {
+			self
+				.with_error::<Node>(
+					format!(
+						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{} --save`?",
+						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
+					),
+					&statement_node,
+				)
+				.err();
+		})?;
 
 		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
 		// make sure the trusted library is also parsed
