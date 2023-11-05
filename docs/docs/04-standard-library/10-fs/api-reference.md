@@ -605,7 +605,7 @@ flag: str;
 ```
 
 - *Type:* str
-- *Default:* `r``.
+- *Default:* "r".
 
 The `flag` can be set to specify the attributes.
 
@@ -702,7 +702,7 @@ flag: str;
 ```
 
 - *Type:* str
-- *Default:* 'w'.
+- *Default:* "w".
 
 The `flag` can be set to specify the attributes.
 
