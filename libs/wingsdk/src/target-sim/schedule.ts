@@ -31,7 +31,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickProps = {}
+    props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(

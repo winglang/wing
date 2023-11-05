@@ -21,14 +21,10 @@ export class NotImplementedError extends Error {}
  */
 export interface CompileOptions {
   /**
-   * Target plaform
-   * @default wingCompiler.Target.SIM
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
    */
-  readonly target?: wingCompiler.Target;
-  /**
-   * List of compiler plugins
-   */
-  readonly plugins?: string[];
+  readonly platform: string[];
   /**
    * App root id
    *
@@ -90,7 +86,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       ...options,
       log,
       color: coloring,
-      target: options?.target || wingCompiler.Target.SIM,
+      platform: options?.platform ?? ["sim"],
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
@@ -100,7 +96,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span, annotations } = diagnostic;
+        const { message, span, annotations, hints } = diagnostic;
         const files: File[] = [];
         const labels: Label[] = [];
 
@@ -150,6 +146,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,

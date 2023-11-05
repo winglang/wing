@@ -61,14 +61,14 @@ export abstract class Queue extends Resource {
    */
   public abstract setConsumer(
     handler: IQueueSetConsumerHandler,
-    props?: QueueSetConsumerProps
+    props?: QueueSetConsumerOptions
   ): Function;
 }
 
 /**
  * Options for Queue.setConsumer.
  */
-export interface QueueSetConsumerProps extends FunctionProps {
+export interface QueueSetConsumerOptions extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1
