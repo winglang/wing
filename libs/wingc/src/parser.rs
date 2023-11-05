@@ -997,7 +997,7 @@ impl<'s> Parser<'s> {
 			self
 				.with_error::<Node>(
 					format!(
-						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{} --save`?",
+						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{}`?",
 						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
 					),
 					&statement_node,
