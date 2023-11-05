@@ -127,11 +127,11 @@
       "awscdk": { "implemented": false }
     },
     "copy": {
-      "sim": { "implemented": false, "issue": 4395 },
-      "tf-aws": { "implemented": false, "issue": 4396 },
+      "sim": { "implemented": true },
+      "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 4397 },
       "tf-gcp": { "implemented": false, "issue": 4398 },
-      "awscdk": { "implemented": false, "issue": 4396 }
+      "awscdk": { "implemented": true }
     },
     "list": {
       "sim": { "implemented": true },
