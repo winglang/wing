@@ -25,6 +25,7 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketSignedUrlAction,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -332,33 +333,48 @@ export class BucketClient implements IBucketClient {
    * @Throws if object does not exist.
    * @inflight
    * @param key The key to reach
-   *    @param duration Time until expires
+   * @param duration Time until expires
    */
-
   public async signedUrl(
     key: string,
-    options?: BucketSignedUrlOptions
+    opts: BucketSignedUrlOptions
   ): Promise<string> {
-    if (!(await this.exists(key))) {
+    // Check if the object exists for GET requests
+    if (
+      opts.action === BucketSignedUrlAction.DOWNLOAD &&
+      !(await this.exists(key))
+    ) {
       throw new Error(
-        `Cannot provide signed url for a non-existent key (key=${key})`
+        `Cannot provide a GET-signed URL for a non-existent object (key=${key}).`
       );
     }
-    const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
-    const command: GetObjectCommand = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
+
+    // Define the AWS S3 command based on the action type
+    let command;
+    switch (opts.action) {
+      case BucketSignedUrlAction.DOWNLOAD:
+        command = new GetObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        });
+        break;
+      case BucketSignedUrlAction.UPLOAD:
+        command = new PutObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+          ContentType: "application/octet-stream",
+        });
+        break;
+      default:
+        throw new Error(`Invalid action type: ${opts.action}`);
+    }
+
+    // Generate the signed URL
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: opts.duration?.seconds, // If not set, it defaults to 900s
     });
-    try {
-      const signedUrl: string = await getSignedUrl(this.s3Client, command, {
-        expiresIn: expiryTimeInSeconds,
-      });
-      return signedUrl;
-    } catch (error) {
-      throw new Error(
-        `Unable to generate signed url for key ${key} : ${error as Error}`
-      );
-    }
+
+    return signedUrl;
   }
 
   /**

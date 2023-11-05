@@ -264,14 +264,24 @@ export interface BucketDeleteOptions {
   readonly mustExist?: boolean;
 }
 
+export enum BucketSignedUrlAction {
+  DOWNLOAD = "GET",
+  UPLOAD = "PUT",
+}
+
 /**
  * Options for `Bucket.signedUrl()`.
  */
 export interface BucketSignedUrlOptions {
   /**
-   * The duration for the signed url to expire
+   * The duration for the signed URL to expire.
    */
   readonly duration?: Duration;
+
+  /**
+   * The action allowed by the signed URL.
+   */
+  readonly action: BucketSignedUrlAction;
 }
 
 /**
