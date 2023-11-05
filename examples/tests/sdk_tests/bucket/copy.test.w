@@ -27,8 +27,8 @@ test "copy()" {
   let file1SrcMetadata = b.metadata(KEY1);
   let file2SrcMetadata = b.metadata(KEY2);
 
-  // Sleep 5s to ensure 'metadata.lastModified' changes upon copy.
-  util.sleep(5s);
+  // Sleep 2s to ensure 'metadata.lastModified' changes upon copy.
+  util.sleep(2s);
 
   b.copy(KEY1, KEY1);
   b.copy(KEY2, "dir/${KEY2}");
