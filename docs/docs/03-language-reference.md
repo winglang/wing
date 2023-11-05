@@ -1784,7 +1784,7 @@ bring cloud; // import types from the built-in "cloud" module
 bring containers; // import types from the `@winglibs/containers` trusted library
 ```
 
-To use a trusted library, you must install the relevant npm package with `npm i @winglibs/containers --save`.
+To use a trusted library, you must install the relevant npm package with `npm i @winglibs/containers`.
 
 To import a Wing or JSII library under a named import, you may use the following
 syntax:

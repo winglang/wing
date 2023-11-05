@@ -350,11 +350,11 @@ exports[`bring.test.w 1`] = `
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
-error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c --save\`?
+error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
   --> ../../../examples/tests/invalid/bring.test.w:8:1
   |
 8 | bring c;
-  | ^^^^^^^^ Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c --save\`?
+  | ^^^^^^^^ Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
 
 
 error: Redundant bring of \\"std\\"
