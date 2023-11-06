@@ -114,7 +114,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     const arborist = new Arborist({ path: workdir });
     const tree = await arborist.loadActual();
     const pkg = tree.package;
-    const tarballPath = outfile ?? path.join(outdir, `${pkg.name}-${pkg.version}.tgz`);
+    const tarballPath =
+      outfile ??
+      path.join(outdir, `${pkg.name?.replace(/^@/, "")?.replace(/\//, "-")}-${pkg.version}.tgz`);
     const files = await packlist(tree);
     await tar.create(
       {
