@@ -42,7 +42,7 @@ export const formatWingError = async (error: unknown) => {
       const result = [];
 
       for (const error of errors) {
-        const { message, span, annotations } = error;
+        const { message, span, annotations, hints } = error;
         const files: File[] = [];
         const labels: Label[] = [];
         const cwd = process.cwd();
@@ -102,6 +102,7 @@ export const formatWingError = async (error: unknown) => {
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,

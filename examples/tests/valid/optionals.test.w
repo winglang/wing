@@ -195,3 +195,12 @@ test "t" {
     payloadWithBucket.c?.put("x.txt", "something");
   }
 }
+
+let str1: str? = nil;
+let str2: str? = nil;
+
+if let s1 = str1 {
+  assert(false); // Should not happen
+} elif let s2 = str2 {
+  assert(true);
+}

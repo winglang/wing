@@ -97,6 +97,7 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),

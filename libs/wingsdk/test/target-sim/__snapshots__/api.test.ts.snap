@@ -239,7 +239,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -507,7 +507,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -775,7 +775,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1043,7 +1043,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1311,7 +1311,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1579,7 +1579,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1979,7 +1979,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2264,7 +2264,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}/{age}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2541,7 +2541,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2807,7 +2807,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/foo",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -3164,7 +3164,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -3177,7 +3177,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -3536,7 +3536,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/world",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -3549,7 +3549,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/wingnuts",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -3817,7 +3817,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -4094,7 +4094,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /users/{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -4362,7 +4362,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",

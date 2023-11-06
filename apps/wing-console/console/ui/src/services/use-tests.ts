@@ -1,8 +1,9 @@
 import { inferRouterOutputs } from "@trpc/server";
 import { Router } from "@wingconsole/server";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { TestItem, TestStatus } from "../shared/test-item.js";
+import { TestsContext } from "../tests-context.js";
 
 import { trpc } from "./trpc.js";
 
@@ -10,6 +11,7 @@ type RouterOutput = inferRouterOutputs<Router>;
 
 export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);
+  const { setTestsExists } = useContext(TestsContext);
 
   const testListQuery = trpc["test.list"].useQuery();
 
@@ -26,10 +28,8 @@ export const useTests = () => {
   });
 
   useEffect(() => {
-    if (!testListQuery.data) {
-      return;
-    }
-    setTestList(testListQuery.data);
+    setTestList(testListQuery.data || []);
+    setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
   }, [testListQuery.data]);
 
   const runAllTests = () => {
