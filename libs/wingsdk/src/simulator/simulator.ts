@@ -681,7 +681,9 @@ export class Simulator {
    */
   private tryResolveTokens(obj: any): any {
     if (typeof obj === "string") {
-      while (true) {
+      let resolveCount = 0; // prevent infinite loop, just in case
+      while (resolveCount < 100) {
+        resolveCount += 1;
         const matches = obj.match(SIMULATOR_TOKEN_REGEX);
         if (!matches) {
           break;
