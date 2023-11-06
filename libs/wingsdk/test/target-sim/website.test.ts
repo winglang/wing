@@ -3,13 +3,14 @@ import { resolve } from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Simulator } from "../../src/simulator";
-import { ApiAttributes } from "../../src/target-sim/schema-resources";
+import { Json } from "../../src/std";
+import { WebsiteAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
 
 test("website is serving static pages", async () => {
   // GIVEN
   const app = new SimApp();
-  const website = cloud.Website._newWebsite(app, "website", {
+  cloud.Website._newWebsite(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
 
@@ -44,7 +45,7 @@ test("website is serving static pages", async () => {
 });
 
 function getWebsiteUrl(s: Simulator, path: string): string {
-  const apiAttrs = s.getResourceConfig(path).attrs as ApiAttributes;
+  const apiAttrs = s.getResourceConfig(path).attrs as WebsiteAttributes;
   return apiAttrs.url;
 }
 
@@ -89,6 +90,37 @@ test("website is serving dynamic content", async () => {
   await s.stop();
   expect(await configPage.text()).toEqual(fileContent);
   expect(configPage.headers.get("content-type")).toContain("text/html");
+});
+
+test("api.url is resolved in website config", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "api");
+  const website = cloud.Website._newWebsite(app, "website", {
+    path: resolve(__dirname, "../test-files/website"),
+  });
+  website.addJson("config.json", { apiUrl: api.url } as unknown as Json);
+
+  // WHEN
+  const s = await app.startSimulator();
+  expect(s.getResourceConfig("/website")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+      url: expect.any(String),
+    },
+    path: "root/website",
+    props: {
+      fileRoutes: {
+        "config.json": {
+          contentType: "application/json",
+          data: expect.stringMatching(/{"apiUrl":"http:\/\/127.0.0.1:\d+"}/),
+        },
+      },
+      staticFilesPath: expect.any(String),
+    },
+    type: cloud.WEBSITE_FQN,
+  });
+  await s.stop();
 });
 
 test("addJson throws an error for no json path", async () => {

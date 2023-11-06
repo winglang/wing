@@ -11,7 +11,7 @@ import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-import { isToken } from "../target-sim/tokens";
+import { SIMULATOR_TOKEN_REGEX } from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
 const LOCALHOST_ADDRESS = "127.0.0.1";
@@ -538,6 +538,10 @@ export class Simulator {
       return false;
     }
 
+    // update the resource's config with the resolved props
+    const config = this.getResourceConfig(resourceConfig.path);
+    (config.props as any) = resolvedProps;
+
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
 
@@ -627,6 +631,40 @@ export class Simulator {
     this._traces.push(event);
   }
 
+  private tryResolveToken(s: string): string | undefined {
+    const ref = s.slice(2, -1);
+    const [_, path, rest] = ref.split("#");
+    const config = this.getResourceConfig(path);
+    if (rest.startsWith("attrs.")) {
+      const attrName = rest.slice(6);
+      const attr = config?.attrs[attrName];
+
+      // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+      // that this resource haven't been started yet. so return `undefined`, which will cause
+      // this resource to go back to the init queue.
+      if (!attr) {
+        return undefined;
+      }
+      return attr;
+    } else if (rest.startsWith("props.")) {
+      if (!config.props) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
+        );
+      }
+      const propPath = rest.slice(6);
+      const value = config.props[propPath];
+      if (value === undefined) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
+        );
+      }
+      return value;
+    } else {
+      throw new Error(`Invalid token reference: "${ref}"`);
+    }
+  }
+
   /**
    * Return an object with all tokens in it resolved to their appropriate values.
    *
@@ -643,30 +681,17 @@ export class Simulator {
    */
   private tryResolveTokens(obj: any): any {
     if (typeof obj === "string") {
-      if (isToken(obj)) {
-        const ref = obj.slice(2, -1);
-        const [path, rest] = ref.split("#");
-        const config = this.getResourceConfig(path);
-        if (rest.startsWith("attrs.")) {
-          const attrName = rest.slice(6);
-          const attr = config?.attrs[attrName];
-
-          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
-          // that this resource haven't been started yet. so return `undefined`, which will cause
-          // this resource to go back to the init queue.
-          if (!attr) {
+      while (true) {
+        const matches = obj.match(SIMULATOR_TOKEN_REGEX);
+        if (!matches) {
+          break;
+        }
+        for (const match of matches) {
+          const resolved = this.tryResolveToken(match);
+          if (resolved === undefined) {
             return undefined;
           }
-          return attr;
-        } else if (rest.startsWith("props.")) {
-          if (!config.props) {
-            throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no props defined.`
-            );
-          }
-          return config.props;
-        } else {
-          throw new Error(`Invalid token reference: "${ref}"`);
+          obj = obj.replace(match, resolved);
         }
       }
 
