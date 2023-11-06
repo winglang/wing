@@ -16,7 +16,7 @@ These are the main differences between the two:
 
 ## Code samples
 
-To get a deeper understanding of the differences, let's see the same app built in both Wing and Pulumi.
+To get a deeper understanding of the differences, let's see the same app built in both Wing and AWS-CDK.
 This simple cloud app uses a Function to upload a text file to a Bucket,
 
 import CodeComparison from '../../src/components/CodeComparison';

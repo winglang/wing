@@ -350,6 +350,13 @@ exports[`bring.test.w 1`] = `
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
+error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  |
+8 | bring c;
+  | ^^^^^^^^ Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+
+
 error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
@@ -362,13 +369,6 @@ error: \\"cloud\\" is already defined
   |
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
-
-
-error: \\"c\\" is not a built-in module
-  --> ../../../examples/tests/invalid/bring.test.w:8:1
-  |
-8 | bring c;
-  | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
@@ -801,6 +801,8 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
 4 | |   return \\"Hello \${name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  |  
+  = hint: expected phase to be inflight, but got preflight instead
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
@@ -2142,11 +2144,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
     --> ../../../examples/tests/invalid/json.test.w:106:38
     |
 106 | let mutableJsonStruct: StructyJson = mutableJson;
-    |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+    |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+    |
+    = hint: use StructyJson.fromJson() to convert dynamic Json\\"
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
@@ -2335,11 +2339,13 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
-  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead
+  |
+  = hint: to allow \\"nil\\" assignment use optional type: \\"str?\\"
 
 
 error: Expected optional type, found \\"nil\\"
@@ -2363,11 +2369,13 @@ error: Cannot assign nil value to variables without explicit optional type
    |                 ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type
 
 
-error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+error: Expected type to be \\"num\\", but got \\"nil\\" instead
    --> ../../../examples/tests/invalid/nil.test.w:20:14
    |
 20 |   foo.setBar(nil);
-   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead
+   |
+   = hint: to allow \\"nil\\" assignment use optional type: \\"num?\\"
 
 
  
@@ -2497,6 +2505,57 @@ Duration <DURATION>"
 `;
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
+
+exports[`phase_mismatch.test.w 1`] = `
+"error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
+  |
+2 | my_func1((n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
+  |
+  = hint: expected phase to be inflight, but got preflight instead
+
+
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:5:10
+  |
+5 | my_func2(inflight (n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead
+  |
+  = hint: expected phase to be preflight, but got inflight instead
+
+
+error: Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:12:10
+   |
+12 | my_func3((n: num): num => { return n * 2; });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead
+   |
+   = hint: expected phase to be inflight, but got preflight instead
+
+
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:15:10
+   |
+15 | my_func4(inflight (s: str): str => { return s.uppercase(); });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead
+   |
+   = hint: expected phase to be preflight, but got inflight instead
+
+
+error: Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:25:18
+   |
+25 | accepts_callback(callback); // error
+   |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
 
 exports[`preflight_from_inflight.test.w 1`] = `
 "error: Cannot call into preflight phase while inflight

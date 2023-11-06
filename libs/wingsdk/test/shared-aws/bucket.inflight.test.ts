@@ -7,13 +7,14 @@ import {
   GetPublicAccessBlockCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  CopyObjectCommand,
   S3Client,
   NotFound,
   NoSuchKey,
 } from "@aws-sdk/client-s3";
 import * as s3RequestPresigner from "@aws-sdk/s3-request-presigner/dist-cjs/getSignedUrl";
 import { SdkStream } from "@aws-sdk/types";
-import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
+import { sdkStreamMixin } from "@smithy/util-stream";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach, vi, Mock } from "vitest";
 import { BucketClient } from "../../src/shared-aws/bucket.inflight";
@@ -680,5 +681,52 @@ test("metadata fail on non-existent object", async () => {
   // THEN
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
     "Object does not exist (key=KEY)."
+  );
+});
+
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(response2).toEqual(undefined);
+});
+
+test("copy a non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Unable to copy. Source object does not exist (srcKey=${SRC_KEY}).`
   );
 });

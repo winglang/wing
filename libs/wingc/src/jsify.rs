@@ -42,7 +42,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
-const PLUGINS_VAR: &str = "$plugins";
+const PLATFORMS_VAR: &str = "$platforms";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -155,8 +155,8 @@ impl<'a> JSifier<'a> {
 		if is_entrypoint {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
-				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);",
-				PLUGINS_VAR
+				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
+				PLATFORMS_VAR
 			));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			output.line(format!(
@@ -182,12 +182,16 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
+			output.line(format!(
+				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+				PLATFORMS_VAR
+			));
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }}).synth();",
-				OUTDIR_VAR, app_name, ROOT_CLASS, PLUGINS_VAR, ENV_WING_IS_TEST
+				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
+				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
+			output.line("$APP.synth();".to_string());
 		} else if is_directory {
 			let directory_children = self.source_file_graph.dependencies_of(source_path);
 			let preflight_file_map = self.preflight_file_map.borrow();
@@ -411,6 +415,7 @@ impl<'a> JSifier<'a> {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
 						annotations: vec![],
+						hints: vec![],
 					});
 
 					return "<ERROR>".to_string();
@@ -777,7 +782,24 @@ impl<'a> JSifier<'a> {
 		ctx.visit_ctx.push_stmt(statement.idx);
 		let code = match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
-				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
+				BringSource::BuiltinModule(name) => {
+					let var_name = if let Some(identifier) = identifier {
+						identifier
+					} else {
+						name
+					};
+					CodeMaker::one_line(format!("const {} = {}.{};", var_name, STDLIB, name))
+				}
+				BringSource::TrustedModule(name, module_dir) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						identifier.as_ref().unwrap_or(&name),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
 					// checked during type checking

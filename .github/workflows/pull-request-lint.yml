@@ -30,7 +30,7 @@ jobs:
             playground
             tutorial
             vscode
-            plugins
+            platforms
             console
           types: |-
             feat
