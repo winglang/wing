@@ -186,7 +186,7 @@ export class Function extends cloud.Function {
     for (const key of this.permissions.keys() || []) {
       const scopedRoleAssignment = this.permissions?.get(
         key
-      )
+      ) as ScopedRoleAssignment;
       new RoleAssignment(this, `RoleAssignment${key}`, {
         scope: scopedRoleAssignment.scope,
         roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
