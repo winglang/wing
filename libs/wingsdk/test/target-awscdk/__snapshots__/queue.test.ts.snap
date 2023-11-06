@@ -176,6 +176,7 @@ exports[`queue with a consumer function 2`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "QueueSetConsumerc185c7e3ServiceRole98E9022D",

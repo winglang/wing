@@ -222,6 +222,7 @@ module.exports = function({  }) {
         },
         "function_name": "Function-c8b7b48c",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.arn}",
         "runtime": "nodejs18.x",
