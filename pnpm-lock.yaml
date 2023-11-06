@@ -300,9 +300,6 @@ importers:
       glob:
         specifier: ^10.3.10
         version: 10.3.10
-      minimatch:
-        specifier: ^9.0.3
-        version: 9.0.3
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
