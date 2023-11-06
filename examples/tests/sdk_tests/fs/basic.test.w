@@ -16,7 +16,7 @@ assert(fs.exists(filepath) == false);
 let nilContent = fs.tryReadFile(filepath);
 assert(nilContent == nil);
 
-fs.remove(tmpdir, { recursive: true });
+fs.remove(tmpdir);
 assert(fs.exists(tmpdir) == false);
 
 test "inflight file basic operations" {
@@ -35,6 +35,6 @@ test "inflight file basic operations" {
     let nilContent = fs.tryReadFile(filepath);
     assert(nilContent == nil);
 
-    fs.remove(tmpdir, { recursive: true });
+    fs.remove(tmpdir);
     assert(fs.exists(tmpdir) == false);
 }

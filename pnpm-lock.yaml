@@ -1070,6 +1070,9 @@ importers:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
         version: 15.0.0(cdktf@0.17.0)(constructs@10.2.70)
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../../wing-fixture
       aws-cdk-lib:
         specifier: ^2.94.0
         version: 2.100.0(constructs@10.2.70)
@@ -1097,9 +1100,6 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
-      wing-fixture:
-        specifier: workspace:^
-        version: link:../../wing-fixture
 
   examples/wing-fixture: {}
 

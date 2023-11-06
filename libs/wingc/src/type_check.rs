@@ -3935,7 +3935,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
-			BringSource::WingLibrary(name, module_dir) => {
+			BringSource::WingLibrary(name, module_dir) | BringSource::TrustedModule(name, module_dir) => {
 				let brought_ns = match self.types.source_file_envs.get(module_dir) {
 					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
 						panic!("Expected a namespace to be associated with the library")
@@ -3957,7 +3957,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 				if let Err(e) = env.define(
-					identifier.as_ref().unwrap(),
+					identifier.as_ref().unwrap_or(&name),
 					SymbolKind::Namespace(*brought_ns),
 					AccessModifier::Private,
 					StatementIdx::Top,

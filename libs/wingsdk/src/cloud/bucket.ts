@@ -227,6 +227,20 @@ export abstract class Bucket extends Resource {
 }
 
 /**
+ * Metadata of a bucket object.
+ */
+export interface ObjectMetadata {
+  /** The size of the object in bytes. */
+  readonly size: number;
+
+  /** The time the object was last modified. */
+  readonly lastModified: Datetime;
+
+  /** The content type of the object, if it is known. */
+  readonly contentType?: string;
+}
+
+/**
  * Options for `Bucket.put()`.
  */
 export interface BucketPutOptions {
@@ -370,20 +384,17 @@ export interface IBucketClient {
    * @inflight
    */
   metadata(key: string): Promise<ObjectMetadata>;
-}
 
-/**
- * Metadata of a bucket object.
- */
-export interface ObjectMetadata {
-  /** The size of the object in bytes. */
-  readonly size: number;
-
-  /** The time the object was last modified. */
-  readonly lastModified: Datetime;
-
-  /** The content type of the object, if it is known. */
-  readonly contentType?: string;
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the copying is finished.
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   * @throws if `srcKey` object doesn't exist.
+   * @inflight
+   */
+  copy(srcKey: string, dstKey: string): Promise<void>;
 }
 
 /**
@@ -490,4 +501,6 @@ export enum BucketInflightMethods {
   SIGNED_URL = "signedUrl",
   /** `Bucket.metadata` */
   METADATA = "metadata",
+  /** `Bucket.copy` */
+  COPY = "copy",
 }
