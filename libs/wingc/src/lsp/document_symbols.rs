@@ -35,6 +35,11 @@ impl Visit<'_> for DocumentSymbolVisitor {
 								.document_symbols
 								.push(create_document_symbol(name, SymbolKind::MODULE));
 						}
+						BringSource::TrustedModule(name, _) => {
+							self
+								.document_symbols
+								.push(create_document_symbol(name, SymbolKind::MODULE));
+						}
 						// in these cases, an alias is required (like "bring foo as bar;")
 						// so we don't need to add a symbol for the module itself
 						BringSource::WingLibrary(_, _) => {}

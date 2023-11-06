@@ -790,6 +790,16 @@ impl<'a> JSifier<'a> {
 					};
 					CodeMaker::one_line(format!("const {} = {}.{};", var_name, STDLIB, name))
 				}
+				BringSource::TrustedModule(name, module_dir) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"./{}\")({{ {} }});",
+						identifier.as_ref().unwrap_or(&name),
+						preflight_file_name,
+						STDLIB,
+					))
+				}
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
 					// checked during type checking
