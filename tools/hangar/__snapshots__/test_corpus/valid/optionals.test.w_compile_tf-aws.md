@@ -449,6 +449,22 @@ class $Root extends $stdlib.std.Resource {
     const payloadWithoutOptions = ({"a": "a"});
     const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:t", new $Closure1(this, "$Closure1"));
+    const str1 = undefined;
+    const str2 = undefined;
+    {
+      const $if_let_value = str1;
+      if ($if_let_value != undefined) {
+        const s1 = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        const $elif_let_value0 = str2;
+        if ($elif_let_value0 != undefined) {
+          const s2 = $elif_let_value0;
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        }
+      }
+    }
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

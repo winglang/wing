@@ -142,6 +142,7 @@ exports[`dec() policy statement 2`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -485,6 +486,7 @@ exports[`function with a counter binding 2`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -762,6 +764,7 @@ exports[`inc() policy statement 2`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -1039,6 +1042,7 @@ exports[`peek() policy statement 2`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -1316,6 +1320,7 @@ exports[`set() policy statement 2`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",

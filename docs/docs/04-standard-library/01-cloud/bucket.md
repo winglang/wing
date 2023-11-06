@@ -161,6 +161,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.copy">copy</a></code> | Copy an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
@@ -311,6 +312,33 @@ Run an inflight whenever a file is updated in the bucket.
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateOptions">BucketOnUpdateOptions</a>
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.cloud.IBucketClient.copy"></a>
+
+```wing
+inflight copy(srcKey: str, dstKey: str): void
+```
+
+Copy an object to a new location in the bucket.
+
+If the destination object
+already exists, it will be overwritten. Returns once the copying is finished.
+
+###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
+
+- *Type:* str
+
+The key of the source object you wish to copy.
+
+---
+
+###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.dstKey"></a>
+
+- *Type:* str
+
+The key of the destination object after copying.
 
 ---
 

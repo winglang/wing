@@ -30,6 +30,7 @@ exports[`basic function 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -235,6 +236,7 @@ exports[`basic function with custom log retention 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -446,6 +448,7 @@ exports[`basic function with environment variables 1`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -651,6 +654,7 @@ exports[`basic function with infinite log retention 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",
@@ -960,6 +964,7 @@ exports[`basic function with timeout explicitly set 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",

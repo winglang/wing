@@ -300,9 +300,6 @@ importers:
       glob:
         specifier: ^10.3.10
         version: 10.3.10
-      minimatch:
-        specifier: ^9.0.3
-        version: 9.0.3
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
@@ -1073,6 +1070,9 @@ importers:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
         version: 15.0.0(cdktf@0.17.0)(constructs@10.2.70)
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../../wing-fixture
       aws-cdk-lib:
         specifier: ^2.94.0
         version: 2.100.0(constructs@10.2.70)
@@ -1100,9 +1100,6 @@ importers:
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
-      wing-fixture:
-        specifier: workspace:^
-        version: link:../../wing-fixture
 
   examples/wing-fixture: {}
 
@@ -14022,7 +14019,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20231030
+      typescript: 5.4.0-dev.20231103
     dev: true
 
   /dset@3.1.2:
@@ -23497,8 +23494,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20231030:
-    resolution: {integrity: sha512-azWrF0lAiu8cBHNr6yq3RDkU/DtQScvT48ea3Ngq6oXJ/GPO0n96wCFSRQA5UbZlVVf3fAAqsUfvOdohRbrPVg==}
+  /typescript@5.4.0-dev.20231103:
+    resolution: {integrity: sha512-XOrpoRg1DWN7ei3AFomL+UrpRBseaODTiWWRfZd6AVeT7ODLjQZ+CDUxK6Aj2XPvEthIOaqijvwIxZe6vlNwlQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
