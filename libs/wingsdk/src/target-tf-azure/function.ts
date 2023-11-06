@@ -183,10 +183,10 @@ export class Function extends cloud.Function {
     });
 
     // Apply permissions from bound resources
-    for (const key of this.permissions?.keys() || []) {
+    for (const key of this.permissions.keys() || []) {
       const scopedRoleAssignment = this.permissions?.get(
         key
-      ) as ScopedRoleAssignment;
+      )
       new RoleAssignment(this, `RoleAssignment${key}`, {
         scope: scopedRoleAssignment.scope,
         roleDefinitionName: scopedRoleAssignment.roleDefinitionName,

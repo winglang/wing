@@ -32,7 +32,7 @@ env:
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || 'all' }}
   PNPM_VERSION: "8.6.3"
-  AZURE_LOCATION: "East Us"
+  AZURE_LOCATION: "East US"
   GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
   GOOGLE_REGION: "us-central1" # for the future
 
