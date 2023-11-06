@@ -2,7 +2,7 @@
 
 inflight class C {
   inflight field: num;
-  init() {
+  new() {
     this.field = 12;
   }
   inflight method() {}

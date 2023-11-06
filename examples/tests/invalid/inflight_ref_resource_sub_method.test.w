@@ -23,7 +23,7 @@ class Another {
 class Test {
   another: Another;
 
-  init() {
+  new() {
     this.another = new Another();
   }
 

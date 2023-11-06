@@ -12,7 +12,7 @@ let globalSetOfStr = Set<str>{ "a", "b" };
 class First {
   pub myResource: cloud.Bucket;
 
-  init() {
+  new() {
     this.myResource = new cloud.Bucket();
   }
 }
@@ -26,7 +26,7 @@ class Another {
     this.first = new First();
   }
 
-  inflight init() {
+  inflight new() {
     assert(globalCounter.peek() == 0);
   }
 
@@ -45,7 +45,7 @@ let globalAnother = new Another();
 class MyResource {
   localTopic: cloud.Topic;
   localCounter: cloud.Counter;
-  init() {
+  new() {
     this.localTopic = new cloud.Topic();
     this.localCounter = new cloud.Counter();
     let $parentThis = this;

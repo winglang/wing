@@ -1,6 +1,6 @@
 class SomeResource {
     pub name: str;
-    init() {
+    new() {
         this.name = "John Doe";
     }
 }

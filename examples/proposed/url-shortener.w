@@ -5,7 +5,7 @@ bring http;
 class UrlShortener {
   lookup: cloud.Bucket;
 
-  init() {
+  new() {
     // map from ids to urls
     this.lookup = new cloud.Bucket() as "IdLookup";
   }
@@ -37,7 +37,7 @@ class UrlShortenerApi {
   api: cloud.Api;
   shortener: UrlShortener;
 
-  init(shortener: UrlShortener) {
+  new(shortener: UrlShortener) {
     this.shortener = shortener;
     this.api = new cloud.Api();
 

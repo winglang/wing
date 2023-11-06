@@ -462,7 +462,7 @@ module.exports = grammar({
     initializer: ($) =>
       seq(
         optional(field("inflight", $.inflight_specifier)),
-        "init",
+        "new",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),

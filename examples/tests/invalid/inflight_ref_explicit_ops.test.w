@@ -22,7 +22,7 @@ class Test {
   array: Array<cloud.Bucket>;
   justStr: str;
 
-  init() {
+  new() {
     this.b = new cloud.Bucket() as "b1";
     this.justBucket = new cloud.Bucket() as "b2";
     this.another = new Another();

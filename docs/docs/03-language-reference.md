@@ -677,7 +677,7 @@ Inner classes or closures can access private members of their containing class.
 class Foo {
   private_field: num; // This is private by default
   
-  init() {this.private_field = 1;}
+  new() {this.private_field = 1;}
   
   method() {
     log(this.private_field); // We can access `private_field` since we're in Foo
@@ -854,7 +854,7 @@ class Foo {
   myOpt: num?;
   var myVar: str?;
 
-  init(opt: num?) {
+  new(opt: num?) {
     this.myOpt = opt;
     this.myVar = nil; // everything must be initialized, so you can use `nil` to indicate that there is no value
   }
@@ -1358,7 +1358,7 @@ inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   _field1: num;
   _field2: str;
   
-  init() {
+  new() {
     // constructor implementation
     // order is up to user
     this._field1 = 1;
@@ -1371,7 +1371,7 @@ inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   publicMethod(arg:type, arg:type, ...) { /* impl */ }
 }
 ```
-If no `init()` is defined, the class will have a default constructor that does nothing.
+If no `new()` is defined, the class will have a default constructor that does nothing.
 
 Implicit default field initialization does not exist in Wing. All member fields must be
 initialized in the constructor. Absent initialization is a compile error. All
@@ -1380,12 +1380,12 @@ field types, including the optional types must be initialized.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 1; }
+  new() { this.x = 1; }
 }
 class Bar {
   y: num;
   z: Foo;
-  init() {
+  new() {
     this.y = 1;
     this.z = new Foo();
     this.log(); // OK to call here
@@ -1410,11 +1410,11 @@ their "strict" mode.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 0; }
+  new() { this.x = 0; }
   pub method() { }
 }
 class Boo extends Foo {
-  init() {
+  new() {
     // this.x = 10; // compile error
     super();
     this.x = 10; // OK
@@ -1428,11 +1428,11 @@ Classes can implement interfaces iff the interfaces do not contain `inflight`.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 0; }
+  new() { this.x = 0; }
   pub method() { }
 }
 class Boo extends Foo {
-  init() { super(); this.x = 10; }
+  new() { super(); this.x = 10; }
 }
 
 ```
@@ -1483,7 +1483,7 @@ class Foo {
   inflight field8: bool;
 
   // preflight constructor
-  init(field1: num, field2: str, field3: bool, field4: num, field5: str) { 
+  new(field1: num, field2: str, field3: bool, field4: num, field5: str) { 
     /* initialize preflight fields */
     this.field1 = field1;
     this.field2 = field2;
@@ -1493,7 +1493,7 @@ class Foo {
   } 
 
   // inflight constructor
-  inflight init() { 
+  inflight new() { 
     /* initialize inflight fields */
     this.field6 = 123;
     this.field7 = "hello";
@@ -1584,7 +1584,7 @@ Interface fields are not supported.
 >   field1: num;
 >   field2: str;
 >
->   init(x: num) {
+>   new(x: num) {
 >     this.field1 = x;
 >     this.field2 = "sample";
 >   }
@@ -2020,7 +2020,7 @@ Two class instances or interface-satisfying objects are equal if they are the sa
 ```js
 class Shop {
   hats: num;
-  init(hats: num) {
+  new(hats: num) {
     this.hats = hats;
   }
 }

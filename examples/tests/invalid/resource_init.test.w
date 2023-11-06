@@ -1,11 +1,11 @@
 class R {
-  init() {}
-  init() {}
+  new() {}
+  new() {}
 //^-- can't have multiple inits
-  inflight init() {}
-  inflight init() {}
+  inflight new() {}
+  inflight new() {}
         // ^-- can't have multiple inflight inits
 
-  inflight init(x: num) {}
+  inflight new(x: num) {}
              // ^-- can't have inflight init with args
 }
