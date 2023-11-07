@@ -25,7 +25,6 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
-  BucketSignedUrlAction,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -329,21 +328,18 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Returns a signed url to the given file.
-   * @Throws if object does not exist.
+   * Returns a presigned URL for the specified key in the bucket.
+   * @param key The key of the object in the bucket.
+   * @param opts The options including the action and the duration for the signed URL.
+   * @returns The presigned URL string.
    * @inflight
-   * @param key The key to reach
-   * @param duration Time until expires
    */
   public async signedUrl(
     key: string,
     opts: BucketSignedUrlOptions
   ): Promise<string> {
-    // Check if the object exists for GET requests
-    if (
-      opts.action === BucketSignedUrlAction.DOWNLOAD &&
-      !(await this.exists(key))
-    ) {
+    // Check if the object exists for 'GET' requests
+    if (opts.action === "GET" && !(await this.exists(key))) {
       throw new Error(
         `Cannot provide a GET-signed URL for a non-existent object (key=${key}).`
       );
@@ -352,13 +348,13 @@ export class BucketClient implements IBucketClient {
     // Define the AWS S3 command based on the action type
     let command;
     switch (opts.action) {
-      case BucketSignedUrlAction.DOWNLOAD:
+      case "GET":
         command = new GetObjectCommand({
           Bucket: this.bucketName,
           Key: key,
         });
         break;
-      case BucketSignedUrlAction.UPLOAD:
+      case "PUT":
         command = new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,

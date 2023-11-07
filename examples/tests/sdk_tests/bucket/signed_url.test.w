@@ -9,14 +9,14 @@ let testBucket = new cloud.Bucket(public: true) as "testBucket";
 //   testBucket.put("file1.txt", "Foo");
   
 //   if (util.env("WING_TARGET") != "sim") { 
-//     let signedUrl = testBucket.signedUrl("file1.txt", { action: cloud.BucketSignedUrlAction.DOWNLOAD });
+//     let signedUrl = testBucket.signedUrl("file1.txt", { action: "GET" });
 //     assert(http.get(signedUrl).body ==  "Foo");
 //   }
 // }
 
 test "signedUrl UPLOAD" {
   if (util.env("WING_TARGET") != "sim") { 
-    let signedUrl = testBucket.signedUrl("foo.txt", { action: cloud.BucketSignedUrlAction.UPLOAD });
+    let signedUrl = testBucket.signedUrl("foo.txt", { action: "PUT" });
     // assert(http.get(signedUrl).body ==  "Foo");
     log(signedUrl);
     util.sleep(10s);

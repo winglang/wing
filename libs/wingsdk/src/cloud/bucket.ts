@@ -264,10 +264,13 @@ export interface BucketDeleteOptions {
   readonly mustExist?: boolean;
 }
 
-export enum BucketSignedUrlAction {
-  DOWNLOAD = "GET",
-  UPLOAD = "PUT",
-}
+/**
+ * Specifies the HTTP method permitted by a presigned URL for a bucket.
+ *
+ * - `"GET"`: Allows downloading an object from the bucket.
+ * - `"PUT"`: Allows uploading an object to the bucket.
+ */
+export type BucketSignedUrlAction = "GET" | "PUT";
 
 /**
  * Options for `Bucket.signedUrl()`.
