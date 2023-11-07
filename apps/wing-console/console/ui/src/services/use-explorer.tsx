@@ -60,7 +60,9 @@ export const useExplorer = () => {
     if (!tree.data) {
       return;
     }
-    setItems([createTreeMenuItemFromExplorerTreeItem(tree.data)]);
+    // Remove the root node by taking the children.
+    const items = createTreeMenuItemFromExplorerTreeItem(tree.data).children;
+    setItems(items ?? []);
   }, [tree.data, setItems]);
 
   useEffect(() => {
