@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PropsWithChildren, forwardRef } from "react";
+import { PropsWithChildren, forwardRef, useEffect, useState } from "react";
 
 import { useTheme } from "./theme-provider.js";
 
@@ -9,6 +9,7 @@ export interface ScrollableAreaProps extends PropsWithChildren {
   overflowX?: boolean;
   overflowY?: boolean;
   dataTestid?: string;
+  onScrolledToBottomChange?: (scrolledToBottom: boolean) => void;
 }
 
 export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
@@ -19,11 +20,16 @@ export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
       overflowX,
       overflowY,
       dataTestid,
+      onScrolledToBottomChange,
       children,
     },
     ref,
   ) => {
     const { theme } = useTheme();
+    const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
+    useEffect(() => {
+      onScrolledToBottomChange?.(isScrolledToBottom);
+    }, [isScrolledToBottom, onScrolledToBottomChange]);
     return (
       <div
         ref={ref}
@@ -40,6 +46,13 @@ export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
             "overflow-y-overlay": overflowY,
           },
         )}
+        onScroll={(event) => {
+          const element = event.currentTarget;
+          setIsScrolledToBottom(
+            element.scrollTop >=
+              element.scrollHeight - element.clientHeight - 1,
+          );
+        }}
       >
         {children}
       </div>
