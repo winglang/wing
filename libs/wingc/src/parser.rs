@@ -1332,15 +1332,14 @@ impl<'s> Parser<'s> {
 			None => class_phase,
 			Some(_) => Phase::Inflight,
 		};
-		let x = ClassField {
+		Ok(ClassField {
 			name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 			member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
 			reassignable: self.get_modifier("reassignable", &modifiers)?.is_some(),
 			is_static,
 			phase,
 			access: self.build_access_modifier(&class_element.child_by_field_name("modifiers"))?,
-		};
-		Ok(x)
+		})
 	}
 
 	fn build_interface_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
