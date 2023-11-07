@@ -128,19 +128,13 @@ export abstract class Service extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      ServiceInflightMethods.START,
-      ServiceInflightMethods.STOP,
-      ServiceInflightMethods.STARTED,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**
  * Options for Service.onStart.
  */
-export interface ServiceOnStartProps extends FunctionProps {}
+export interface ServiceOnStartOptions extends FunctionProps {}
 
 /**
  * Inflight interface for `Service`.

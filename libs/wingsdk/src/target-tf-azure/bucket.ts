@@ -6,13 +6,14 @@ import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import { StorageContainer } from "../.gen/providers/azurerm/storage-container";
 import * as cloud from "../cloud";
 import {
-  BucketOnDeleteProps,
-  BucketOnEventProps,
-  BucketOnUpdateProps,
-  BucketOnCreateProps,
+  BucketOnDeleteOptions,
+  BucketOnEventOptions,
+  BucketOnUpdateOptions,
+  BucketOnCreateOptions,
   IBucketEventHandler,
 } from "../cloud";
 import * as core from "../core";
+import { NotImplementedError } from "../core/errors";
 import {
   CaseConventions,
   NameOptions,
@@ -97,6 +98,23 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
@@ -132,44 +150,48 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void {
     fn;
     opts;
-    throw new Error(
-      "on_create method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onCreate method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void {
     fn;
     opts;
-    throw new Error(
-      "on_delete method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onDelete method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void {
     fn;
     opts;
-    throw new Error(
-      "on_update method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onUpdate method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void {
     fn;
     opts;
-    throw new Error(
-      "on_event method isn't implemented yet on the current target."
+    throw new NotImplementedError(
+      "onEvent method isn't implemented yet on the current target.",
+      "https://github.com/winglang/wing/issues/1954"
     );
   }
 

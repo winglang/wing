@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
+import { ScheduleSchema } from "./schema-resources";
 import {
   bindSimulatorResource,
   makeSimulatorJsClient,
@@ -31,7 +31,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickProps = {}
+    props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -68,7 +68,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ScheduleSchema = {
-      type: SCHEDULE_TYPE,
+      type: cloud.SCHEDULE_FQN,
       path: this.node.path,
       props: {
         cronExpression: this.cronExpression,

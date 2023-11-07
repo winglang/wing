@@ -10,6 +10,9 @@ source: libs/wingc/src/lsp/completions.rs
 - label: ex
   kind: 9
   sortText: kk|ex
+- label: expect
+  kind: 9
+  sortText: kk|expect
 - label: fs
   kind: 9
   sortText: kk|fs

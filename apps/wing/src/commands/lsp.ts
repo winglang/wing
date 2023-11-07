@@ -132,7 +132,7 @@ export async function lsp() {
         const diagnosticUri = "file://" + rd.span.file_id;
         const diag = Diagnostic.create(
           Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-          rd.message,
+          `${rd.message}\n${rd.hints.map((hint) => `hint: ${hint}`).join("\n")}`,
           undefined,
           undefined,
           undefined,

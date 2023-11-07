@@ -93,6 +93,20 @@ export class Redis extends ex.Redis {
     this.clusterArn = cluster.arn;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.RedisInflightMethods.URL,
+      ex.RedisInflightMethods.SET,
+      ex.RedisInflightMethods.GET,
+      ex.RedisInflightMethods.HSET,
+      ex.RedisInflightMethods.HGET,
+      ex.RedisInflightMethods.SADD,
+      ex.RedisInflightMethods.SMEMBERS,
+      ex.RedisInflightMethods.DEL,
+    ];
+  }
+
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("redis can only be bound by tfaws.Function for now");

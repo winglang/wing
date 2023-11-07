@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { isAbsolute, join, resolve } from "path";
 import { Construct } from "constructs";
-import { WebsiteOptions, IWebsite } from "../cloud/website";
+import { IWebsite, WebsiteDomainOptions } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Resource, Node } from "../std";
@@ -22,7 +22,12 @@ export const REACT_APP_FQN = fqnForType("ex.ReactApp");
 /**
  * Options for `ReactApp`.
  */
-export interface ReactAppProps extends WebsiteOptions {
+export interface ReactAppProps extends WebsiteDomainOptions, ReactAppOptions {}
+
+/**
+ * Basic options for `ReactApp`.
+ */
+export interface ReactAppOptions {
   /**
    * The path to the React app root folder- can be absolute or relative to the wing folder
    */
@@ -96,7 +101,7 @@ export abstract class ReactApp extends Resource {
   /**
    * @internal
    */
-  protected readonly _hostProps?: WebsiteOptions;
+  protected readonly _hostProps?: WebsiteDomainOptions;
   /**
    * @internal
    */
@@ -145,7 +150,7 @@ export abstract class ReactApp extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [];
   }
 }

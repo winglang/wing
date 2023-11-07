@@ -263,30 +263,30 @@ Returns the set of environment variables for this function.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### ServiceOnStartProps <a name="ServiceOnStartProps" id="@winglang/sdk.cloud.ServiceOnStartProps"></a>
+### ServiceOnStartOptions <a name="ServiceOnStartOptions" id="@winglang/sdk.cloud.ServiceOnStartOptions"></a>
 
 Options for Service.onStart.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ServiceOnStartProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ServiceOnStartOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
+let ServiceOnStartOptions = cloud.ServiceOnStartOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ServiceOnStartProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ServiceOnStartOptions.property.env"></a>
 
 ```wing
 env: MutMap<str>;
@@ -299,7 +299,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ServiceOnStartProps.property.logRetentionDays"></a>
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ServiceOnStartOptions.property.logRetentionDays"></a>
 
 ```wing
 logRetentionDays: num;
@@ -314,20 +314,20 @@ Setting negative value means logs will not expire.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ServiceOnStartProps.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ServiceOnStartOptions.property.memory"></a>
 
 ```wing
 memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartOptions.property.timeout"></a>
 
 ```wing
 timeout: duration;

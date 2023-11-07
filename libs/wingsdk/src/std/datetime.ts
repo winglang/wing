@@ -1,4 +1,4 @@
-import { InflightClient } from "../core";
+import { InflightClient } from "../core/inflight";
 
 /**
  * Interface that is used for setting Datetime date

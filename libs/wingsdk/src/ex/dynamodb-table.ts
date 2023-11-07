@@ -83,20 +83,7 @@ export abstract class DynamodbTable extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      DynamodbTableInflightMethods.PUT_ITEM,
-      DynamodbTableInflightMethods.UPDATE_ITEM,
-      DynamodbTableInflightMethods.DELETE_ITEM,
-      DynamodbTableInflightMethods.GET_ITEM,
-      DynamodbTableInflightMethods.SCAN,
-      DynamodbTableInflightMethods.QUERY,
-      DynamodbTableInflightMethods.TRANSACT_GET_ITEMS,
-      DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
-      DynamodbTableInflightMethods.BATCH_GET_ITEM,
-      DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 }
 
 /**
@@ -594,7 +581,7 @@ export interface DynamodbTableQueryResult {
 /**
  * Options for transact write item's update operation.
  */
-export interface DynamodbTransactWriteItemPutProps {
+export interface DynamodbTransactWriteItemPutOptions {
   /**
    * The values of the item to be put.
    */
@@ -854,7 +841,7 @@ export interface DynamodbTransactWriteItem {
   /**
    * A request to perform a put operation.
    */
-  readonly put?: DynamodbTransactWriteItemPutProps;
+  readonly put?: DynamodbTransactWriteItemPutOptions;
 
   /**
    * A request to perform a update operation.
@@ -905,7 +892,7 @@ export interface DynamodbTableTransactWriteItemsResult {
 /**
  * Options for `DynamodbTable.transactGetItems`'s get operation.
  */
-export interface DynamodbTransactGetItemGetProps {
+export interface DynamodbTransactGetItemGetOptions {
   /**
    * The primary key of the item to be retrieved.
    */
@@ -931,7 +918,7 @@ export interface DynamodbTransactGetItem {
   /**
    * A request to perform a get operation.
    */
-  readonly get?: DynamodbTransactGetItemGetProps;
+  readonly get?: DynamodbTransactGetItemGetOptions;
 }
 
 /**

@@ -6,7 +6,9 @@ import { Bucket, addBucketPermission } from "./bucket";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
   CaseConventions,
   NameOptions,
@@ -40,7 +42,7 @@ interface IFunctionPermissions {
 /**
  * GCP implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 
 export class Function extends cloud.Function {
@@ -105,7 +107,7 @@ export class Function extends cloud.Function {
       project: app.projectId,
       region: app.region,
       runtime: "nodejs16",
-      availableMemoryMb: props.memory ?? 128,
+      availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
@@ -119,6 +121,11 @@ export class Function extends cloud.Function {
 
   public get functionName(): string {
     return this.function.name;
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [];
   }
 
   // TODO: implement with https://github.com/winglang/wing/issues/4403
@@ -152,9 +159,11 @@ export class Function extends cloud.Function {
         );
         break;
       case ResourceTypes.FUNCTION:
-        throw new Error("Function permissions not implemented yet");
+        throw new NotImplementedError(
+          "Function permissions not implemented yet"
+        );
       default:
-        throw new Error("Unsupported resource type");
+        throw new Error(`Unsupported resource type ${permissions.Resource}`);
     }
     const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
     roleDefinitions.add(permissions);

@@ -35,7 +35,7 @@ export class Queue extends cloud.Queue {
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerProps = {}
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -76,6 +76,16 @@ export class Queue extends cloud.Queue {
     });
 
     return fn;
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

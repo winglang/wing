@@ -16,25 +16,10 @@ test("create a Redis resource", async () => {
       },
       path: "root/my_redis",
       props: {},
-      type: "wingsdk.redis.Redis",
+      type: ex.REDIS_FQN,
     });
   });
   expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("access a Redis resource", async () => {
-  // GIVEN
-  const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
-
-  // THEN
-  await app._withSimulator(async (s) => {
-    const client = s.getResource("/my_redis") as ex.IRedisClient;
-    expect((await client.url()).startsWith("redis://")).toBeTruthy();
-    const redisClient = (await client.rawClient()) as IoRedis;
-    await redisClient.set("foo", "bar");
-    expect(await redisClient.get("foo")).toEqual("bar");
-  });
 });
 
 test("can set and get a value", async () => {

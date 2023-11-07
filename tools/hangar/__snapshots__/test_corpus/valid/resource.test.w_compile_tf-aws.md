@@ -419,6 +419,7 @@ module.exports = function({  }) {
         },
         "function_name": "b2-oncreate-OnMessage-59543b60-c807494b",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.arn}",
         "runtime": "nodejs18.x",
@@ -449,6 +450,7 @@ module.exports = function({  }) {
         },
         "function_name": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51.arn}",
         "runtime": "nodejs18.x",
@@ -479,6 +481,7 @@ module.exports = function({  }) {
         },
         "function_name": "cloud-Topic-OnMessage-113c9059-c81d1d09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A.arn}",
         "runtime": "nodejs18.x",
@@ -693,7 +696,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -724,7 +727,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -770,7 +773,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -817,7 +820,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -860,7 +863,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _getInflightOps() {
+          _supportedOps() {
             return ["handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
@@ -895,7 +898,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _getInflightOps() {
+          _supportedOps() {
             return ["handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
@@ -930,7 +933,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _getInflightOps() {
+          _supportedOps() {
             return ["handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
@@ -963,7 +966,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["publish", "getObjectCount", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1007,7 +1010,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -1041,7 +1044,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
@@ -1077,7 +1080,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["$inflight_init"];
       }
     }
@@ -1097,8 +1100,9 @@ class $Root extends $stdlib.std.Resource {
     new ScopeAndIdTestClass(this, "ScopeAndIdTestClass");
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

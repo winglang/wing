@@ -14,7 +14,7 @@ exports[`create a queue 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -23,155 +23,92 @@ exports[`create a queue 2`] = `
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
     ],
     "sdkVersion": "0.0.0",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "my_queue": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A distributed message queue",
-            "title": "Queue",
-          },
-          "id": "my_queue",
-          "path": "root/my_queue",
-        },
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
       },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.2.70",
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
       },
-      "id": "root",
-      "path": "root",
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
     },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`messages are not requeued if the function fails after retention timeout 1`] = `
-{
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
-exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(message) {
-  if (message === \\"BAD MESSAGE\\") {
-    throw new Error(\\"ERROR\\");
-  }
-}
-};
-})())({
-
-}), args: {} })).handle(event);
-};",
-  "connections.json": {
-    "connections": [
-      {
-        "name": "handle()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "setConsumer()",
-        "source": "root/my_queue",
-        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
-      },
-    ],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "wingsdk.cloud.TestRunner",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "wingsdk.cloud.Function",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue",
-        "props": {
-          "retentionPeriod": 1,
-          "timeout": 0.1,
-        },
-        "type": "wingsdk.cloud.Queue",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
-      },
-    ],
-    "sdkVersion": "0.0.0",
   },
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -186,43 +123,6 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "children": {
-            "my_queue-QueueEventMapping-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-            },
-            "my_queue-SetConsumer-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "setConsumer()",
-              },
-              "id": "my_queue-SetConsumer-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-            },
-            "my_queue-SetConsumerHandler-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-SetConsumerHandler-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.2.70",
@@ -249,18 +149,18 @@ async handle(message) {
 
 exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.cloud.Queue created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Queue deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -314,7 +214,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -325,7 +225,7 @@ async handle(message) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -334,7 +234,7 @@ async handle(message) {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "attrs": {},
@@ -346,10 +246,88 @@ async handle(message) {
             "batchSize": 1,
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -444,18 +422,18 @@ async handle(message) {
 
 exports[`messages are requeued if the function fails after timeout 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.cloud.Queue created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Queue deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
   "1 messages pushed back to queue after visibility timeout.",
 ]
 `;
@@ -510,7 +488,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -521,7 +499,7 @@ async handle(message) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -530,7 +508,7 @@ async handle(message) {
           "retentionPeriod": 3600,
           "timeout": 1,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "attrs": {},
@@ -542,10 +520,88 @@ async handle(message) {
             "batchSize": 1,
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -640,11 +696,11 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Queue created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Queue created.",
   "Push (messages=).",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Queue deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -662,7 +718,7 @@ exports[`push rejects empty message 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -671,10 +727,88 @@ exports[`push rejects empty message 2`] = `
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -719,15 +853,15 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Queue created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Queue created.",
   "Push (messages=A).",
   "Push (messages=B).",
   "ApproxSize ().",
   "Purge ().",
   "ApproxSize ().",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Queue deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -745,7 +879,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -754,10 +888,88 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -821,13 +1033,17 @@ return class Handler {
 }
 };
 })())({
-queue: (function(env) {
-  let handle = process.env[env];
+queue: (function() {
+  let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"QUEUE_HANDLE_54fcf4cd\\")
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()
 })).handle(event);
 };",
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
@@ -888,7 +1104,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -899,7 +1115,7 @@ async handle(message) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -908,7 +1124,7 @@ async handle(message) {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "attrs": {},
@@ -920,7 +1136,7 @@ async handle(message) {
             "batchSize": 5,
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
       {
         "attrs": {},
@@ -933,7 +1149,7 @@ async handle(message) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -941,10 +1157,88 @@ async handle(message) {
         "props": {
           "functionHandle": "\${root/my_queue_messages/Function#attrs.handle}",
         },
-        "type": "wingsdk.cloud.OnDeploy",
+        "type": "@winglang/sdk.cloud.OnDeploy",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -1127,7 +1421,7 @@ async handle(message) {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1138,7 +1432,7 @@ async handle(message) {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1147,7 +1441,7 @@ async handle(message) {
           "retentionPeriod": 3600,
           "timeout": 30,
         },
-        "type": "wingsdk.cloud.Queue",
+        "type": "@winglang/sdk.cloud.Queue",
       },
       {
         "attrs": {},
@@ -1159,10 +1453,88 @@ async handle(message) {
             "batchSize": 1,
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {

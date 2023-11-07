@@ -54,28 +54,21 @@ export abstract class Queue extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      QueueInflightMethods.PUSH,
-      QueueInflightMethods.PURGE,
-      QueueInflightMethods.APPROX_SIZE,
-      QueueInflightMethods.POP,
-    ];
-  }
+  public abstract _supportedOps(): string[];
 
   /**
    * Create a function to consume messages from this queue.
    */
   public abstract setConsumer(
     handler: IQueueSetConsumerHandler,
-    props?: QueueSetConsumerProps
+    props?: QueueSetConsumerOptions
   ): Function;
 }
 
 /**
  * Options for Queue.setConsumer.
  */
-export interface QueueSetConsumerProps extends FunctionProps {
+export interface QueueSetConsumerOptions extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1

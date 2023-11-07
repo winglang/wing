@@ -1,45 +1,5 @@
 # [env.test.w](../../../../../../examples/tests/sdk_tests/function/env.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
-"use strict";
-module.exports = function({ $util_Util }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"FOO1\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("FOO1")),"bar")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"FOO2\") == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("FOO2")),"baz")))};
-      return "ok";
-    }
-  }
-  return $Closure1;
-}
-
-```
-
-## inflight.$Closure2-1.js
-```js
-"use strict";
-module.exports = function({ $f1 }) {
-  class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: f1.invoke(\"\") == \"ok\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $f1.invoke("")),"ok")))};
-    }
-  }
-  return $Closure2;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -138,6 +98,7 @@ module.exports = function({ $f1 }) {
         },
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
@@ -176,89 +137,5 @@ module.exports = function({ $f1 }) {
     }
   }
 }
-```
-
-## preflight.js
-```js
-"use strict";
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
-  constructor($scope, $id) {
-    super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure1-1.js")({
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-    }
-    class $Closure2 extends $stdlib.std.Resource {
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure2-1.js")({
-            $f1: ${context._lift(f1)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(f1, host, ["invoke"]);
-        }
-        super._registerOnLift(host, ops);
-      }
-    }
-    const f1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"), { env: ({"FOO1": "bar"}) });
-    (f1.addEnvironment("FOO1", "bar"));
-    (f1.addEnvironment("FOO2", "baz"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:addEnvironment", new $Closure2(this, "$Closure2"));
-  }
-}
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "env.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
 ```
 

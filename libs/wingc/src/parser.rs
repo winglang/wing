@@ -19,7 +19,10 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpa
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, is_absolute_path, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{
+	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	WINGSDK_TEST_CLASS_NAME,
+};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -205,6 +208,7 @@ pub fn parse_wing_project(
 				),
 				span: None,
 				annotations: vec![],
+				hints: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -680,7 +684,7 @@ impl<'s> Parser<'s> {
 		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
 			let elif = ElifLetBlock {
 				reassignable: node.child_by_field_name("reassignable").is_some(),
 				statements: statements,
@@ -991,8 +995,43 @@ impl<'s> Parser<'s> {
 			};
 		}
 
+		if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) || module_name.name == WINGSDK_STD_MODULE {
+			return Ok(StmtKind::Bring {
+				source: BringSource::BuiltinModule(module_name),
+				identifier: alias,
+			});
+		}
+
+		// check if a trusted library exists with this name
+		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+		let module_dir = wingii::util::package_json::find_dependency_directory(
+			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
+			&source_dir,
+		)
+		.ok_or_else(|| {
+			self
+				.with_error::<Node>(
+					format!(
+						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{}`?",
+						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
+					),
+					&statement_node,
+				)
+				.err();
+		})?;
+
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+		// make sure the trusted library is also parsed
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
 		Ok(StmtKind::Bring {
-			source: BringSource::BuiltinModule(module_name),
+			source: BringSource::TrustedModule(
+				Symbol {
+					name: module_name.name,
+					span: module_name.span,
+				},
+				module_dir,
+			),
 			identifier: alias,
 		})
 	}
@@ -1108,8 +1147,23 @@ impl<'s> Parser<'s> {
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
-						continue;
+==== BASE ====
+					let is_static = class_element.child_by_field_name("static").is_some();
+					if is_static {
+						report_diagnostic(Diagnostic {
+							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
+								.to_string(),
+							span: Some(self.node_span(&class_element)),
+							annotations: vec![],
+						});
+					}
+
+					// if there is no "phase_modifier", then inherit from the class phase
+					// currently "phase_modifier" can only be "inflight".
+					let phase = match class_element.child_by_field_name("phase_modifier") {
+						None => class_phase,
+						Some(_) => Phase::Inflight,
+==== BASE ====
 					};
 
 					fields.push(class_field)
@@ -2285,6 +2339,7 @@ impl<'s> Parser<'s> {
 					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
 					annotations: vec![],
+					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2306,6 +2361,7 @@ impl<'s> Parser<'s> {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
 						annotations: vec![],
+						hints: vec![],
 					};
 					report_diagnostic(diag);
 				}

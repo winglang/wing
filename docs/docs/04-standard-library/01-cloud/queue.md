@@ -127,7 +127,7 @@ new cloud.Queue(props?: QueueProps);
 ##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
 
 ```wing
-setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerProps): Function
+setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerOptions): Function
 ```
 
 Create a function to consume messages from this queue.
@@ -140,7 +140,7 @@ Create a function to consume messages from this queue.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerOptions">QueueSetConsumerOptions</a>
 
 ---
 
@@ -258,31 +258,31 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### QueueSetConsumerProps <a name="QueueSetConsumerProps" id="@winglang/sdk.cloud.QueueSetConsumerProps"></a>
+### QueueSetConsumerOptions <a name="QueueSetConsumerOptions" id="@winglang/sdk.cloud.QueueSetConsumerOptions"></a>
 
 Options for Queue.setConsumer.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueSetConsumerProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueSetConsumerOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
+let QueueSetConsumerOptions = cloud.QueueSetConsumerOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerOptions.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.env"></a>
 
 ```wing
 env: MutMap<str>;
@@ -295,7 +295,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.logRetentionDays"></a>
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.logRetentionDays"></a>
 
 ```wing
 logRetentionDays: num;
@@ -310,20 +310,20 @@ Setting negative value means logs will not expire.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.memory"></a>
 
 ```wing
 memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.timeout"></a>
 
 ```wing
 timeout: duration;
@@ -336,7 +336,7 @@ The maximum amount of time the function can run.
 
 ---
 
-##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize"></a>
+##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueSetConsumerOptions.property.batchSize"></a>
 
 ```wing
 batchSize: num;
