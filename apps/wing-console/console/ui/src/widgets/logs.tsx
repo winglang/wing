@@ -46,19 +46,21 @@ export const LogsWidget = ({ loading, onResourceClick }: LogsWidgetProps) => {
     },
   );
 
-  const logsRef = useRef<HTMLDivElement>(null);
+  const scrollableRef = useRef<HTMLDivElement>(null);
   const [scrolledToBottom, setScrolledToBottom] = useState(true);
+  const [initialScroll, setInitialScroll] = useState(true);
 
   useEffect(() => {
-    const div = logsRef.current;
-    if (!div) {
+    const element = scrollableRef.current;
+    if (!element) {
       return;
     }
 
-    if (scrolledToBottom) {
-      div.scrollTo({ top: div.scrollHeight });
+    if (initialScroll || scrolledToBottom) {
+      setInitialScroll(false);
+      element.scrollTo({ top: element.scrollHeight });
     }
-  }, [logs.data, scrolledToBottom]);
+  }, [initialScroll, logs.data, scrolledToBottom]);
 
   const onLogClick = useCallback(
     (log: LogEntry) => {
@@ -90,7 +92,7 @@ export const LogsWidget = ({ loading, onResourceClick }: LogsWidgetProps) => {
       />
       <div className="relative h-full">
         <ScrollableArea
-          ref={logsRef}
+          ref={scrollableRef}
           overflowY
           className={classNames(
             "pb-1.5",
