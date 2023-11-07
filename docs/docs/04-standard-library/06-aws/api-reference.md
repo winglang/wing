@@ -162,6 +162,122 @@ The inflight host.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
+### AwsReactAppProps <a name="AwsReactAppProps" id="@winglang/sdk.aws.AwsReactAppProps"></a>
+
+Options for AWS `ReactApp`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.aws.AwsReactAppProps.Initializer"></a>
+
+```wing
+bring aws;
+
+let AwsReactAppProps = aws.AwsReactAppProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.projectPath">projectPath</a></code> | <code>str</code> | The path to the React app root folder- can be absolute or relative to the wing folder. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.buildCommand">buildCommand</a></code> | <code>str</code> | A command for building the React app. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.buildDir">buildDir</a></code> | <code>str</code> | The path to the React app build folder- relative to the `projectPath`. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.localPort">localPort</a></code> | <code>num</code> | A port to start a local build of the React app on. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.startCommand">startCommand</a></code> | <code>str</code> | A command for starting React app locally. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.useBuildCommand">useBuildCommand</a></code> | <code>bool</code> | In sim, if `true` - will use the start command, and if `false` - the build command. |
+| <code><a href="#@winglang/sdk.aws.AwsReactAppProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.aws.Domain">Domain</a></code> | The website's custom domain object. |
+
+---
+
+##### `projectPath`<sup>Required</sup> <a name="projectPath" id="@winglang/sdk.aws.AwsReactAppProps.property.projectPath"></a>
+
+```wing
+projectPath: str;
+```
+
+- *Type:* str
+
+The path to the React app root folder- can be absolute or relative to the wing folder.
+
+---
+
+##### `buildCommand`<sup>Optional</sup> <a name="buildCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.buildCommand"></a>
+
+```wing
+buildCommand: str;
+```
+
+- *Type:* str
+- *Default:* "npm run build"
+
+A command for building the React app.
+
+---
+
+##### `buildDir`<sup>Optional</sup> <a name="buildDir" id="@winglang/sdk.aws.AwsReactAppProps.property.buildDir"></a>
+
+```wing
+buildDir: str;
+```
+
+- *Type:* str
+- *Default:* "/build"
+
+The path to the React app build folder- relative to the `projectPath`.
+
+---
+
+##### `localPort`<sup>Optional</sup> <a name="localPort" id="@winglang/sdk.aws.AwsReactAppProps.property.localPort"></a>
+
+```wing
+localPort: num;
+```
+
+- *Type:* num
+- *Default:* 3001
+
+A port to start a local build of the React app on.
+
+---
+
+##### `startCommand`<sup>Optional</sup> <a name="startCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.startCommand"></a>
+
+```wing
+startCommand: str;
+```
+
+- *Type:* str
+- *Default:* "npm run start"
+
+A command for starting React app locally.
+
+---
+
+##### `useBuildCommand`<sup>Optional</sup> <a name="useBuildCommand" id="@winglang/sdk.aws.AwsReactAppProps.property.useBuildCommand"></a>
+
+```wing
+useBuildCommand: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+In sim, if `true` - will use the start command, and if `false` - the build command.
+
+---
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.aws.AwsReactAppProps.property.domain"></a>
+
+```wing
+domain: Domain;
+```
+
+- *Type:* <a href="#@winglang/sdk.aws.Domain">Domain</a>
+- *Default:* undefined
+
+The website's custom domain object.
+
+---
+
 ### AwsWebsiteProps <a name="AwsWebsiteProps" id="@winglang/sdk.aws.AwsWebsiteProps"></a>
 
 Options for AWS `Website`.
