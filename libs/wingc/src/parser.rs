@@ -1365,6 +1365,7 @@ impl<'s> Parser<'s> {
 				message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668".to_string(),
 				span: Some(self.node_span(&class_element)),
 				annotations: vec![],
+				hints: vec![],
 			});
 		}
 		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {

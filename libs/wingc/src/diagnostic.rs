@@ -262,6 +262,7 @@ impl Diagnostic {
 			message: msg.to_string(),
 			span: Some(span.span()),
 			annotations: vec![],
+			hints: vec![],
 		}
 	}
 
