@@ -42,6 +42,24 @@ describe("Platform examples", () => {
   const app = "main.w";
   const appFile = path.join(platformsDir, app);
 
+  describe("External platform", () => {
+    const args = ["compile"];
+    const basePlatforms = ["@winglang/platform-awscdk"]
+    const targetDir = path.join(platformsDir, "target", "main.tfaws");
+
+    test("compile awscdk", async () => {
+      process.env.CDK_STACK_NAME = "platform-test";
+      await runWingCommand({
+        cwd: tmpDir,
+        platforms: [...basePlatforms],
+        wingFile: appFile,
+        args,
+        expectFailure: false
+      });
+    })
+
+  });
+
   describe("AWS target platform", () => {
     const args = ["compile"];
     const basePlatforms = ["tf-aws"]

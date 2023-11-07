@@ -45,7 +45,7 @@ describe(
     test("should be able to compile the SDK capture primitives test to awscdk", async () => {
       process.env.CDK_STACK_NAME = "compile-test-stack";
       const artifactDir = await compile(exampleFilePath2, {
-        platform: [BuiltinPlatform.AWSCDK],
+        platform: ["@winglang/platform-awscdk"],
         targetDir: `${await generateTmpDir()}/target`,
       });
       const expectedFiles = [

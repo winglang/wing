@@ -96,12 +96,12 @@ export abstract class App extends Construct {
    * Returns the root app.
    */
   public static of(scope: Construct): App {
-    if (scope instanceof App) {
-      return scope;
+    if (scope instanceof App || (scope as any)._tokens) {
+      return scope as any;
     }
 
     if (!scope.node.scope) {
-      throw new Error("Cannot find root app");
+      throw new Error("Unable to find the root app");
     }
 
     return App.of(scope.node.scope);

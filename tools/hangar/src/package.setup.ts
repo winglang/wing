@@ -47,6 +47,7 @@ const getInstallArgs = async () => {
     "--install-links=false",
     "file:../../../apps/wing",
     "file:../../../libs/wingsdk",
+    "file:../../../libs/awscdk",
   ];
 };
 
