@@ -338,17 +338,16 @@ export class BucketClient implements IBucketClient {
     key: string,
     opts: BucketSignedUrlOptions
   ): Promise<string> {
-    // Check if the object exists for 'GET' requests
-    if (opts.action === "GET" && !(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide a GET-signed URL for a non-existent object (key=${key}).`
-      );
-    }
-
-    // Define the AWS S3 command based on the action type
     let command;
+
+    // Create the AWS S3 command based on the action method
     switch (opts.action) {
       case "GET":
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide a GET-signed URL for a non-existent object (key=${key}).`
+          );
+        }
         command = new GetObjectCommand({
           Bucket: this.bucketName,
           Key: key,
@@ -362,7 +361,7 @@ export class BucketClient implements IBucketClient {
         });
         break;
       default:
-        throw new Error(`Invalid action type: ${opts.action}`);
+        throw new Error(`Invalid action method: ${opts.action}`);
     }
 
     // Generate the signed URL
