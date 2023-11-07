@@ -1108,33 +1108,11 @@ impl<'s> Parser<'s> {
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let modifiers = class_element.child_by_field_name("modifiers");
-
-					let is_static = self.get_modifier("static", &modifiers)?.is_some();
-					if is_static {
-						report_diagnostic(Diagnostic {
-							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
-								.to_string(),
-							span: Some(self.node_span(&class_element)),
-							annotations: vec![],
-						});
-					}
-
-					// if there is no "phase_modifier", then inherit from the class phase
-					// currently "phase_modifier" can only be "inflight".
-					let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
-						None => class_phase,
-						Some(_) => Phase::Inflight,
+					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
+						continue;
 					};
 
-					fields.push(ClassField {
-						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-						member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
-						reassignable: class_element.child_by_field_name("reassignable").is_some(),
-						is_static,
-						phase,
-						access: self.build_access_modifier(&class_element.child_by_field_name("access_modifier"))?,
-					})
+					fields.push(class_field)
 				}
 				"initializer" => {
 					// the initializer is considered an inflight initializer if either the class is inflight
@@ -1338,6 +1316,31 @@ impl<'s> Parser<'s> {
 			inflight_initializer,
 			access,
 		}))
+	}
+
+	fn build_class_field(&self, class_element: Node<'_>, class_phase: Phase) -> Result<ClassField, ()> {
+		let modifiers = class_element.child_by_field_name("modifiers");
+		let is_static = self.get_modifier("static", &modifiers)?.is_some();
+		if is_static {
+			report_diagnostic(Diagnostic {
+				message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668".to_string(),
+				span: Some(self.node_span(&class_element)),
+				annotations: vec![],
+			});
+		}
+		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
+			None => class_phase,
+			Some(_) => Phase::Inflight,
+		};
+		let x = ClassField {
+			name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
+			member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
+			reassignable: self.get_modifier("reassignable", &modifiers)?.is_some(),
+			is_static,
+			phase,
+			access: self.build_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+		};
+		Ok(x)
 	}
 
 	fn build_interface_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
