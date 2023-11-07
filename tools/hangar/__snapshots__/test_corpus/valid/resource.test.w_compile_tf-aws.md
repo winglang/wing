@@ -21,7 +21,7 @@ module.exports = function({ $bucket, $res, $res_foo }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -40,7 +40,7 @@ module.exports = function({ $__parent_this_2_b }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -59,7 +59,7 @@ module.exports = function({ $__parent_this_3_b }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -78,7 +78,7 @@ module.exports = function({ $__parent_this_4_q }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -98,7 +98,7 @@ module.exports = function({ $bigOlPublisher }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=inflight.$Closure5-1.js.map
 ```
 
 ## inflight.Bar-1.js
@@ -130,7 +130,7 @@ module.exports = function({ $Foo, $MyEnum }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=inflight.Bar-1.js.map
 ```
 
 ## inflight.BigPublisher-1.js
@@ -155,7 +155,7 @@ module.exports = function({  }) {
   }
   return BigPublisher;
 }
-
+//# sourceMappingURL=inflight.BigPublisher-1.js.map
 ```
 
 ## inflight.Dummy-1.js
@@ -168,7 +168,7 @@ module.exports = function({  }) {
   }
   return Dummy;
 }
-
+//# sourceMappingURL=inflight.Dummy-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -196,7 +196,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## inflight.ScopeAndIdTestClass-1.js
@@ -209,7 +209,7 @@ module.exports = function({  }) {
   }
   return ScopeAndIdTestClass;
 }
-
+//# sourceMappingURL=inflight.ScopeAndIdTestClass-1.js.map
 ```
 
 ## main.tf.json
@@ -707,7 +707,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `
@@ -835,10 +835,10 @@ class $Root extends $stdlib.std.Resource {
     class BigPublisher extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-        this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "b2");
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-        this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this, "cloud.Topic");
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+        this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "b2");
+        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
+        this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic", this, "cloud.Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -1086,23 +1086,23 @@ class $Root extends $stdlib.std.Resource {
     }
     const MyEnum =
       (function (tmp) {
-        tmp[tmp["A"] = 0] = "A";
-        tmp[tmp["B"] = 1] = "B";
-        tmp[tmp["C"] = 2] = "C";
+        tmp[tmp["A"] = 0] = ",A";
+        tmp[tmp["B"] = 1] = ",B";
+        tmp[tmp["C"] = 2] = ",C";
         return tmp;
       })({})
     ;
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
     const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
     const bigOlPublisher = new BigPublisher(this, "BigPublisher");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:dependency cycles", new $Closure5(this, "$Closure5"));
     new ScopeAndIdTestClass(this, "ScopeAndIdTestClass");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

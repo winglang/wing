@@ -1335,8 +1335,11 @@ impl<'s> Parser<'s> {
 			)?;
 		}
 
+		let span = self.node_span(statement_node);
+
 		Ok(StmtKind::Class(Class {
 			name,
+			span,
 			fields,
 			methods,
 			parent,

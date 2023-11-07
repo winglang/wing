@@ -66,6 +66,10 @@
       "type": "build"
     },
     {
+      "name": "chalk",
+      "type": "build"
+    },
+    {
       "name": "constructs",
       "version": "~10.2.69",
       "type": "build"
@@ -298,6 +302,10 @@
     },
     {
       "name": "safe-stable-stringify",
+      "type": "bundled"
+    },
+    {
+      "name": "stacktracey",
       "type": "bundled"
     },
     {

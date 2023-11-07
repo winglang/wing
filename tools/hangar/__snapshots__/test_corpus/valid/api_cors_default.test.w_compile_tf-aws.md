@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": "hello world","status": 200});
+      return ({"body": "hello world", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -42,7 +42,7 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -68,7 +68,7 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## main.tf.json
@@ -389,15 +389,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const apiDefaultCors = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true });
+    const apiDefaultCors = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api", { cors: true });
     (apiDefaultCors.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_cors_default.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(request) {
-      return ({"body": request.body,"status": 200});
+      return ({"body": request.body, "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -284,7 +284,7 @@ class $Root extends $stdlib.std.Resource {
     const emptySet = new Set([(clonedArray2.at(2))]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
     const func = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", func));
     const argReturn = ((n) => {
@@ -316,6 +316,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inference.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

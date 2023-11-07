@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=inflight.Bar-1.js.map
 ```
 
 ## inflight.Baz-2.js
@@ -23,7 +23,7 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-
+//# sourceMappingURL=inflight.Baz-2.js.map
 ```
 
 ## inflight.Foo-3.js
@@ -36,7 +36,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-3.js.map
 ```
 
 ## main.tf.json
@@ -106,7 +106,7 @@ module.exports = function({ $stdlib }) {
   }
   return { Bar };
 };
-
+//# sourceMappingURL=preflight.bar-1.js.map
 ```
 
 ## preflight.baz-2.js
@@ -144,7 +144,7 @@ module.exports = function({ $stdlib }) {
   }
   return { Baz };
 };
-
+//# sourceMappingURL=preflight.baz-2.js.map
 ```
 
 ## preflight.foo-3.js
@@ -190,7 +190,7 @@ module.exports = function({ $stdlib }) {
   }
   return { Foo };
 };
-
+//# sourceMappingURL=preflight.foo-3.js.map
 ```
 
 ## preflight.js
@@ -217,6 +217,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

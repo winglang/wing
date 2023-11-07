@@ -18,7 +18,7 @@ module.exports = function({ $bucket, $counter }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -262,9 +262,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter", { initial: 100 });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter", { initial: 100 });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }
@@ -272,6 +272,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "file_counter.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

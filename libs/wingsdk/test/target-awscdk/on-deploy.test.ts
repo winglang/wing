@@ -1,9 +1,9 @@
-import { Capture, Match, Template } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { Bucket, OnDeploy } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import * as awscdk from "../../src/target-awscdk";
-import { sanitizeCode, mkdtemp } from "../util";
+import { awscdkSanitize, mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -25,7 +25,7 @@ test("create an OnDeploy", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("Custom::Trigger", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("execute OnDeploy after other resources", () => {
@@ -48,7 +48,7 @@ test("execute OnDeploy after other resources", () => {
   template.hasResource("Custom::Trigger", {
     DependsOn: Match.anyValue(),
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("execute OnDeploy before other resources", () => {
@@ -71,5 +71,5 @@ test("execute OnDeploy before other resources", () => {
   template.hasResource("AWS::S3::Bucket", {
     DependsOn: Match.anyValue(),
   });
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

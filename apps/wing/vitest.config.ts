@@ -4,6 +4,7 @@ export default defineConfig({
   test: {
     // Some tests use process.chdir which is not supported in vitest's multi-thread mode
     threads: false,
+    update: true,
     testTimeout: 200_000,
   },
 });
