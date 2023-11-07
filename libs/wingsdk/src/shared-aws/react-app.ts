@@ -1,10 +1,10 @@
 import { Domain } from "./domain";
-import { WebsiteOptions } from "../cloud";
+import { ReactAppOptions } from "../ex";
 
 /**
- * Options for AWS `Website`.
+ * Options for AWS `ReactApp`.
  */
-export interface AwsWebsiteProps extends WebsiteOptions {
+export interface AwsReactAppProps extends ReactAppOptions {
   /**
    * The website's custom domain object.
    * @default - undefined
