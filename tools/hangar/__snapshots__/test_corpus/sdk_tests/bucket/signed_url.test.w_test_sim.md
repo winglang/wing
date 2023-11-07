@@ -2,13 +2,13 @@
 
 ## stdout.log
 ```log
-ERROR: Resource root/env0/testBucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl/Handler).
+ERROR: Resource root/env0/testBucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl UPLOAD/Handler).
 It might not be implemented yet.
 
 ../../../../examples/tests/sdk_tests/bucket/target/test/signed_url.test.wsim.[REDACTED].tmp/.wing/preflight.js:42
          _registerOnLift(host, ops) {
            if (ops.includes("handle")) {
->>           $Closure1._registerOnLiftObject(testBucket, host, ["put", "signedUrl"]);
+>>           $Closure1._registerOnLiftObject(testBucket, host, ["signedUrl"]);
            }
            super._registerOnLift(host, ops);
 
