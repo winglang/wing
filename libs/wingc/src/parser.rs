@@ -1147,23 +1147,8 @@ impl<'s> Parser<'s> {
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-==== BASE ====
-					let is_static = class_element.child_by_field_name("static").is_some();
-					if is_static {
-						report_diagnostic(Diagnostic {
-							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
-								.to_string(),
-							span: Some(self.node_span(&class_element)),
-							annotations: vec![],
-						});
-					}
-
-					// if there is no "phase_modifier", then inherit from the class phase
-					// currently "phase_modifier" can only be "inflight".
-					let phase = match class_element.child_by_field_name("phase_modifier") {
-						None => class_phase,
-						Some(_) => Phase::Inflight,
-==== BASE ====
+					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
+						continue;
 					};
 
 					fields.push(class_field)
