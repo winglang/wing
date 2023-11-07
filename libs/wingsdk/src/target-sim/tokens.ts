@@ -27,8 +27,7 @@ export function simulatorAttrToken(
  *
  * ${wsim#path/to/resource#property.path}
  */
-export const SIMULATOR_TOKEN_REGEX =
-  /\$\{wsim#([a-zA-Z0-9_\-\/\.:\ ]+)#([a-zA-Z0-9_\-\/\.]+)\}/g;
+export const SIMULATOR_TOKEN_REGEX = /\$\{wsim#[^#\{\}]+#[a-zA-Z0-9_\-\/\.]+\}/;
 
 /**
  * Returns true is the given value is a Simulator token.
