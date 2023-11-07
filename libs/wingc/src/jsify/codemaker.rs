@@ -77,12 +77,11 @@ impl Into<CodeMaker> for &str {
 impl Into<CodeMaker> for Vec<CodeMaker> {
 	fn into(self) -> CodeMaker {
 		let mut code: CodeMaker = CodeMaker::default();
-		for (idx, line) in self.iter().enumerate() {
+		for (idx, line) in self.into_iter().enumerate() {
 			if idx > 0 {
 				code.append(", ");
 			}
-			// TODO BAD CLONE
-			code.append(line.clone());
+			code.append(line);
 		}
 		code
 	}
@@ -120,7 +119,7 @@ impl CodeMaker {
 					line_data.mappings.push((0, source.clone()))
 				}
 			}
-			self.push_line(line_data.clone());
+			self.push_line(line_data);
 		}
 	}
 
@@ -165,9 +164,7 @@ impl CodeMaker {
 
 			if add_another_map {
 				if let Some(last_original_mapping) = last_original_mapping {
-					last_line
-						.mappings
-						.push((last_line.line.len(), last_original_mapping.1.clone()));
+					last_line.mappings.push((last_line.line.len(), last_original_mapping.1));
 				}
 			}
 		}
