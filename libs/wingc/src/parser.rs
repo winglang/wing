@@ -1478,7 +1478,7 @@ impl<'s> Parser<'s> {
 			self.build_type_annotation(Some(rt), phase)?
 		} else {
 			let func_sig_kind = func_sig_node.kind();
-			if func_sig_kind == "inflight_closure" || func_sig_kind == "preflight_closure" {
+			if func_sig_kind == "closure" {
 				TypeAnnotation {
 					kind: TypeAnnotationKind::Inferred,
 					span: Default::default(),
