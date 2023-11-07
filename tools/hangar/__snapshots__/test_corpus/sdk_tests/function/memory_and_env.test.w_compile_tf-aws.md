@@ -157,6 +157,7 @@
         },
         "function_name": "env-fn-c8a226dd",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
         "runtime": "nodejs18.x",
