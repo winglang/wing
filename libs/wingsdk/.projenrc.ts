@@ -11,7 +11,16 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];
+const PUBLIC_MODULES = [
+  "std",
+  "http",
+  "util",
+  "aws",
+  "math",
+  "regex",
+  "sim",
+  "fs",
+];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
@@ -31,7 +40,7 @@ const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
   author: "Wing Cloud",
   authorOrganization: true,
-  authorAddress: "ping@monada.co",
+  authorAddress: "ping@wing.cloud",
   repositoryUrl: "https://github.com/winglang/wing.git",
   repositoryDirectory: "libs/wingsdk",
   license: "MIT",
@@ -53,32 +62,32 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.405.0",
-    "@aws-sdk/client-dynamodb@3.405.0",
-    "@aws-sdk/client-elasticache@3.405.0",
-    "@aws-sdk/util-dynamodb@3.405.0",
-    "@aws-sdk/client-lambda@3.405.0",
-    "@aws-sdk/client-s3@3.405.0",
-    "@aws-sdk/client-secrets-manager@3.405.0",
-    "@aws-sdk/client-sqs@3.405.0",
-    "@aws-sdk/client-sns@3.405.0",
-    "@aws-sdk/types@3.398.0",
-    "@aws-sdk/util-stream-node@3.350.0",
-    "@aws-sdk/util-utf8-node@3.259.0",
-    "@aws-sdk/s3-request-presigner@3.405.0",
+    "@aws-sdk/client-cloudwatch-logs@3.438.0",
+    "@aws-sdk/client-dynamodb@3.438.0",
+    "@aws-sdk/client-elasticache@3.438.0",
+    "@aws-sdk/util-dynamodb@3.438.0",
+    "@aws-sdk/client-lambda@3.438.0",
+    "@aws-sdk/client-s3@3.438.0",
+    "@aws-sdk/client-secrets-manager@3.438.0",
+    "@aws-sdk/client-sqs@3.438.0",
+    "@aws-sdk/client-sns@3.438.0",
+    "@aws-sdk/types@3.433.0",
+    "@smithy/util-stream@2.0.17",
+    "@smithy/util-utf8@2.0.0",
+    "@aws-sdk/s3-request-presigner@3.438.0",
     "@types/aws-lambda",
-    // the following 2 deps are required by @aws-sdk/util-utf8-node
-    "@aws-sdk/util-buffer-from@3.208.0",
-    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
+    // gcp client dependencies
+    "@google-cloud/storage@6.9.5",
     // simulator dependencies
     "express",
     "uuid",
+    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
@@ -95,6 +104,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
+    "mock-gcs@^1.0.0",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
@@ -364,6 +374,7 @@ project.gitignore.addPatterns("src/.gen");
 project.preCompileTask.exec("cdktf get --force");
 
 project.package.file.addDeletionOverride("pnpm");
+
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");

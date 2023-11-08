@@ -3,19 +3,20 @@ import { readFile, rm, rmSync } from "fs";
 import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
-import { Target } from "@winglang/compiler";
+import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
+import { Util } from "@winglang/sdk/lib/util";
 import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { generateTmpDir, withSpinner } from "../../util";
-import { compile, CompileOptions } from "../compile";
+import { withSpinner } from "../../util";
+import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
 
-const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_ARNS"; //TODO: [tsuf] rename arns to identifiers
+const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS = "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS";
 const ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK = "WingTestRunnerFunctionArns";
 
 /**
@@ -58,6 +59,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
+  process.env.WING_TARGET = determineTargetFromPlatforms(options.platform ?? []);
   const testFile = async (entrypoint: string) => {
     const testName = generateTestName(entrypoint);
     try {
@@ -67,7 +69,15 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
-        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+        results: [
+          {
+            pass: false,
+            unsupported: error instanceof NotImplementedError,
+            path: "",
+            error: (error as Error).message,
+            traces: [],
+          },
+        ],
       });
     }
   };
@@ -81,7 +91,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   // if we have any failures, exit with 1
   for (const testSuite of results) {
     for (const r of testSuite.results) {
-      if (r.error) {
+      if (!r.pass && !r.unsupported) {
         return 1;
       }
     }
@@ -91,29 +101,27 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
+  const target = process.env.WING_TARGET; // TODO: try to just call method
   const synthDir = await withSpinner(
-    `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
+    `Compiling ${generateTestName(entrypoint)} to ${target}...`,
     async () =>
       compile(entrypoint, {
         ...options,
         rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
-        // since the test cleans up after each run, it's essential to create a temporary output directory-
-        // at least one that is different then the usual compilation output dir,  otherwise we might end up cleaning up the user's actual resources.
-        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 
-  switch (options.target) {
-    case Target.SIM:
+  switch (target) {
+    case BuiltinPlatform.SIM:
       return testSimulator(synthDir, options);
-    case Target.TF_AZURE:
-    case Target.TF_AWS:
+    case BuiltinPlatform.TF_AZURE:
+    case BuiltinPlatform.TF_AWS:
       return testTf(synthDir, options);
-    case Target.AWSCDK:
+    case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
     default:
-      throw new Error(`unsupported target ${options.target}`);
+      throw new Error(`unsupported target ${target}`);
   }
 }
 
@@ -258,10 +266,12 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const stackName = process.env.CDK_STACK_NAME! + Util.sha256(synthDir).slice(-8);
+
       const testArns = await awsCdkOutput(
         synthDir,
         ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS_AWSCDK,
-        process.env.CDK_STACK_NAME!
+        stackName
       );
 
       const { TestRunnerClient } = await import(
@@ -337,12 +347,12 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 }
 
 const targetFolder: Record<string, string> = {
-  [Target.TF_AWS]: "shared-aws",
-  [Target.TF_AZURE]: "shared-azure",
+  [BuiltinPlatform.TF_AWS]: "shared-aws",
+  [BuiltinPlatform.TF_AZURE]: "shared-azure",
 };
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean, testFilter, target = Target.SIM } = options;
+  const { clean, testFilter, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
     if (!isTerraformInstalled(synthDir)) {
@@ -358,7 +368,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
       const { TestRunnerClient } = await import(
-        `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`
+        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
       );
       const runner = new TestRunnerClient(testArns);
 

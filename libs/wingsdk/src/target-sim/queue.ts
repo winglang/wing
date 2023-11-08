@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -31,9 +31,19 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     }
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
+  }
+
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerProps = {}
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
 
@@ -95,7 +105,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: QueueSchema = {
-      type: QUEUE_TYPE,
+      type: cloud.QUEUE_FQN,
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,

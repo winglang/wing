@@ -3,7 +3,7 @@
 exports[`default queue behavior 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -119,7 +119,7 @@ exports[`default queue behavior 2`] = `
 exports[`queue name valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -237,7 +237,7 @@ exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wings
 exports[`queue with a consumer function 2`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -284,6 +284,7 @@ exports[`queue with a consumer function 2`] = `
         },
         "function_name": "Queue-SetConsumer-c5395e41-c80c3bf7",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.arn}",
         "runtime": "nodejs18.x",
@@ -529,7 +530,7 @@ exports[`queue with a consumer function 3`] = `
 exports[`queue with custom retention 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -645,7 +646,7 @@ exports[`queue with custom retention 2`] = `
 exports[`queue with custom timeout 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -761,7 +762,7 @@ exports[`queue with custom timeout 2`] = `
 exports[`replace invalid character from queue name 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },

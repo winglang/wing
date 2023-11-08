@@ -13,20 +13,18 @@ Error.stackTraceLimit = 50;
 
 const log = debug("wing:compile");
 
+export class NotImplementedError extends Error {}
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
 export interface CompileOptions {
   /**
-   * Target plaform
-   * @default wingCompiler.Target.SIM
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
    */
-  readonly target?: wingCompiler.Target;
-  /**
-   * List of compiler plugins
-   */
-  readonly plugins?: string[];
+  readonly platform: string[];
   /**
    * App root id
    *
@@ -88,7 +86,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       ...options,
       log,
       color: coloring,
-      target: options?.target || wingCompiler.Target.SIM,
+      platform: options?.platform ?? ["sim"],
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
@@ -98,7 +96,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span, annotations } = diagnostic;
+        const { message, span, annotations, hints } = diagnostic;
         const files: File[] = [];
         const labels: Label[] = [];
 
@@ -148,6 +146,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,
@@ -158,11 +157,16 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
+      const isNotImplementedError =
+        (error as wingCompiler.PreflightError).causedBy.constructor.name === "NotImplementedError";
+
+      const errorColor = isNotImplementedError ? "yellow" : "red";
+
       const causedBy = annotatePreflightError(error.causedBy);
 
       const output = new Array<string>();
 
-      output.push(chalk.red(`ERROR: ${causedBy.message}`));
+      output.push(chalk[errorColor](`ERROR: ${causedBy.message}`));
 
       if (causedBy.stack && causedBy.stack.includes("evalmachine.<anonymous>:")) {
         const lineNumber =
@@ -180,7 +184,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         // print line and its surrounding lines
         for (let i = startLine; i <= finishLine; i++) {
           if (i === lineNumber) {
-            output.push(chalk.bold.red(">> ") + chalk.red(lines[i]));
+            output.push(chalk.bold[errorColor](">> ") + chalk[errorColor](lines[i]));
           } else {
             output.push("   " + chalk.dim(lines[i]));
           }
@@ -196,7 +200,11 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         output.push(causedBy.stack ?? "");
       }
 
-      throw new Error(output.join("\n"));
+      if (isNotImplementedError) {
+        throw new NotImplementedError(output.join("\n"));
+      } else {
+        throw new Error(output.join("\n"));
+      }
     } else {
       throw error;
     }

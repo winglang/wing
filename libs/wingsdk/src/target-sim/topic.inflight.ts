@@ -3,11 +3,10 @@ import {
   TopicAttributes,
   TopicSchema,
   TopicSubscriber,
-  TOPIC_TYPE,
   EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, ITopicClient } from "../cloud";
+import { IFunctionClient, ITopicClient, TOPIC_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -47,19 +46,23 @@ export class Topic
           message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },
         sourcePath: this.context.resourcePath,
-        sourceType: TOPIC_TYPE,
+        sourceType: TOPIC_FQN,
         timestamp: new Date().toISOString(),
       });
 
-      await fnClient.invoke(message).catch((err) => {
-        this.context.addTrace({
-          data: {
-            message: `Subscriber error: ${err}`,
-          },
-          sourcePath: this.context.resourcePath,
-          sourceType: TOPIC_TYPE,
-          type: TraceType.RESOURCE,
-          timestamp: new Date().toISOString(),
+      // we are not awaiting `fnClient.invoke` so that if the function sleeps,
+      // performs IO, etc. it does not block the other subscribers
+      process.nextTick(() => {
+        fnClient.invoke(message).catch((err) => {
+          this.context.addTrace({
+            data: {
+              message: `Subscriber error: ${err}`,
+            },
+            sourcePath: this.context.resourcePath,
+            sourceType: TOPIC_FQN,
+            type: TraceType.RESOURCE,
+            timestamp: new Date().toISOString(),
+          });
         });
       });
     }
@@ -82,7 +85,7 @@ export class Topic
         message: `Publish (message=${message}).`,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: TOPIC_TYPE,
+      sourceType: TOPIC_FQN,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
     });

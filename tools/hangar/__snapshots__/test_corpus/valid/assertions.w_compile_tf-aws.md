@@ -14,7 +14,7 @@ module.exports = function({  }) {
         throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
       }
     }
-    static async isNil(a) {
+    static async nil(a) {
       try {
         {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
       }
@@ -46,8 +46,8 @@ module.exports = function({  }) {
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   class Assert extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -66,8 +66,8 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
-      return ["equalStr", "isNil", "equalNum", "$inflight_init"];
+    _supportedOps() {
+      return ["equalStr", "nil", "equalNum", "$inflight_init"];
     }
   }
   return { Assert };

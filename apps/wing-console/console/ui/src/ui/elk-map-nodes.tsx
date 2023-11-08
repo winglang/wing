@@ -7,37 +7,37 @@ const getResourceBorderColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
 ) => {
   switch (resourceType) {
-    case "wingsdk.cloud.Bucket": {
+    case "@winglang/sdk.cloud.Bucket": {
       return "border-t border-t-orange-500 group-hover:border-t-orange-500 group-focus:border-t-orange-500 dark:border-t-orange-500 dark:group-hover:border-t-orange-500 dark:group-focus:border-t-orange-500";
     }
-    case "wingsdk.cloud.Function": {
+    case "@winglang/sdk.cloud.Function": {
       return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
     }
-    case "wingsdk.cloud.Queue": {
+    case "@winglang/sdk.cloud.Queue": {
       return "border-t border-t-emerald-500 group-hover:border-t-emerald-500 group-focus:border-t-emerald-500 dark:border-t-emerald-500 dark:group-hover:border-t-emerald-500 dark:group-focus:border-t-emerald-500";
     }
-    case "wingsdk.cloud.Endpoint": {
+    case "@winglang/sdk.cloud.Endpoint": {
       return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
     }
-    case "wingsdk.cloud.Counter": {
+    case "@winglang/sdk.cloud.Counter": {
       return "border-t border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500 dark:border-t-lime-500 dark:group-hover:border-t-lime-500 dark:group-focus:border-t-lime-500";
     }
-    case "wingsdk.cloud.Topic": {
+    case "@winglang/sdk.cloud.Topic": {
       return "border-t border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500 dark:border-t-pink-500 dark:group-hover:border-t-pink-500 dark:group-focus:border-t-pink-500";
     }
-    case "wingsdk.cloud.Api": {
+    case "@winglang/sdk.cloud.Api": {
       return "border-t border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500 dark:border-t-amber-500 dark:group-hover:border-t-amber-500 dark:group-focus:border-t-amber-500";
     }
-    case "wingsdk.cloud.Table": {
+    case "@winglang/sdk.ex.Table": {
       return "border-t border-t-cyan-500 group-hover:border-t-cyan-500 group-focus:border-t-cyan-500 dark:border-t-cyan-500 dark:group-hover:border-t-cyan-500 dark:group-focus:border-t-cyan-500";
     }
-    case "wingsdk.cloud.Schedule": {
+    case "@winglang/sdk.cloud.Schedule": {
       return "border-t border-t-purple-500 group-hover:border-t-purple-500 group-focus:border-t-purple-500 dark:border-t-purple-500 dark:group-hover:border-t-purple-500 dark:group-focus:border-t-purple-500";
     }
-    case "wingsdk.redis.Redis": {
+    case "@winglang/sdk.ex.Redis": {
       return "border-t border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
     }
-    case "wingsdk.cloud.Website": {
+    case "@winglang/sdk.cloud.Website": {
       return "border-t border-t-violet-500 group-hover:border-t-violet-500 group-focus:border-t-violet-500 dark:border-t-violet-500 dark:group-hover:border-t-violet-500 dark:group-focus:border-t-violet-500";
     }
   }

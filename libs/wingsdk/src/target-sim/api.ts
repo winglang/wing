@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { ApiSchema, API_TYPE, ApiRoute } from "./schema-resources";
+import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -52,7 +52,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
-    Node.of(fn).title = `${method.toLowerCase()}()`;
+    Node.of(fn).title = `${method.toUpperCase()} ${path}`;
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,
@@ -98,7 +98,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetProps | undefined
+    props?: cloud.ApiGetOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.GET, inflight, props);
   }
@@ -112,7 +112,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostProps | undefined
+    props?: cloud.ApiPostOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.POST, inflight, props);
   }
@@ -126,7 +126,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutProps | undefined
+    props?: cloud.ApiPutOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PUT, inflight, props);
   }
@@ -140,7 +140,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteProps | undefined
+    props?: cloud.ApiDeleteOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.DELETE, inflight, props);
   }
@@ -154,7 +154,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchProps | undefined
+    props?: cloud.ApiPatchOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PATCH, inflight, props);
   }
@@ -168,7 +168,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsProps | undefined
+    props?: cloud.ApiOptionsOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.OPTIONS, inflight, props);
   }
@@ -182,7 +182,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadProps | undefined
+    props?: cloud.ApiHeadOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.HEAD, inflight, props);
   }
@@ -196,14 +196,14 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectProps | undefined
+    props?: cloud.ApiConnectOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }
 
   public toSimulator(): BaseResourceSchema {
     const schema: ApiSchema = {
-      type: API_TYPE,
+      type: cloud.API_FQN,
       path: this.node.path,
       props: {
         openApiSpec: this._getApiSpec(),

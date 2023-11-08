@@ -1,12 +1,12 @@
-struct MyStruct {
+pub struct MyStruct {
   val: str;
 }
 
-struct SomeStruct {
+pub struct SomeStruct {
   foo: str;
 }
 
-class UsesStructInImportedFile {
+pub class UsesStructInImportedFile {
   someStruct: SomeStruct;
 
   init() {

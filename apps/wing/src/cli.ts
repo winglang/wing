@@ -1,7 +1,6 @@
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { currentPackage } from "./util";
@@ -16,6 +15,8 @@ const SUPPORTED_NODE_VERSION = currentPackage.engines.node;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
+
+const DEFAULT_PLATFORM = ["sim"];
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
@@ -33,6 +34,17 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
   };
 }
 
+let platformOptionCount = 0;
+// Removes default if a platform option is provided by user
+function collectPlatformVariadic(value: string, previous: string[]) {
+  return platformOptionCount++ == 0 ? [value] : collectVariadic(value, previous);
+}
+
+// Required to support --option x --option y --option z rather than --option x y z
+function collectVariadic(value: string, previous: string[]) {
+  return previous.concat([value]);
+}
+
 async function collectAnalyticsHook(cmd: Command) {
   if (process.env.WING_DISABLE_ANALYTICS) {
     return;
@@ -40,7 +52,13 @@ async function collectAnalyticsHook(cmd: Command) {
   // Fail silently if collection fails
   try {
     optionallyDisplayDisclaimer();
-    analyticsExportFile = collectCommandAnalytics(cmd);
+    const analyticsModule = await import("./analytics/collect");
+    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd).catch((err) => {
+      if (process.env.DEBUG) {
+        console.error(err);
+      }
+      return undefined;
+    });
   } catch (err) {
     if (process.env.DEBUG) {
       console.error(err);
@@ -97,9 +115,8 @@ async function main() {
     });
 
   async function progressHook(cmd: Command) {
-    const target = cmd.opts().target;
     const progress = program.opts().progress;
-    if (progress !== false && target !== "sim") {
+    if (progress !== false && cmd.opts().platform[0] !== "sim") {
       process.env.PROGRESS = "1";
     }
   }
@@ -139,12 +156,12 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "Yaml file with Platform-specific values")
@@ -158,12 +175,12 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",

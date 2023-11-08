@@ -97,6 +97,7 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
@@ -200,18 +201,23 @@ where
 		StmtKind::Struct {
 			name,
 			extends,
-			fields: members,
+			fields,
+			access: _,
 		} => {
 			v.visit_symbol(name);
 			for extend in extends {
 				v.visit_user_defined_type(extend);
 			}
-			for member in members {
+			for member in fields {
 				v.visit_symbol(&member.name);
 				v.visit_type_annotation(&member.member_type);
 			}
 		}
-		StmtKind::Enum { name, values } => {
+		StmtKind::Enum {
+			name,
+			values,
+			access: _,
+		} => {
 			v.visit_symbol(name);
 			for value in values {
 				v.visit_symbol(value);

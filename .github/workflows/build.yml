@@ -51,7 +51,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
@@ -98,7 +98,7 @@ jobs:
 
   test:
     name: Test
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -110,7 +110,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
@@ -167,7 +167,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
@@ -230,7 +230,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
@@ -242,7 +242,9 @@ jobs:
           path: dist
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
@@ -304,7 +306,7 @@ jobs:
         run: |
           if ! flyctl status --app "$APP_NAME"; then
             pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
+            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate

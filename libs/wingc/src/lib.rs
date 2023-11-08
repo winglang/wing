@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol, UtilityFunctions};
+use ast::{AccessModifier, Scope, Symbol, UtilityFunctions};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
@@ -77,19 +77,21 @@ const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
+const WINGSDK_EXPECT_MODULE: &'static str = "expect";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_SIM_MODULE: &'static str = "sim";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 9] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
 	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
+	WINGSDK_EXPECT_MODULE,
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
 	WINGSDK_SIM_MODULE,
@@ -115,7 +117,7 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
-pub const GLOBAL_SYMBOLS: [&'static str; 4] = [WINGSDK_STD_MODULE, "assert", "log", "unsafeCast"];
+pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
 pub struct CompilerOutput {}
 
@@ -171,6 +173,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -186,6 +189,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			message: format!("Source path cannot be found: {}", source_path),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -288,6 +292,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.define(
 			&sym,
 			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
+			AccessModifier::Private,
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
@@ -370,6 +375,7 @@ pub fn compile(
 			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return Err(());
 	}

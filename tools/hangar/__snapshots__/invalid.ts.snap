@@ -212,6 +212,76 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`access_private_apis.test.w 1`] = `
+"error: Class \\"subdir2.MyPrivateClass\\" is private
+  --> ../../../examples/tests/invalid/access_private_apis.test.w:3:5
+  |
+3 | new subdir2.MyPrivateClass();
+  |     ^^^^^^^^^^^^^^^^^^^^^^ Class \\"subdir2.MyPrivateClass\\" is private
+  |
+  --> ../../../examples/tests/invalid/subdir2/file.w:1:7
+  |
+1 | class MyPrivateClass {}
+  |       -------------- defined here
+
+
+error: Class \\"subdir2.inner.MyOtherPrivateClass\\" is private
+  --> ../../../examples/tests/invalid/access_private_apis.test.w:6:5
+  |
+6 | new subdir2.inner.MyOtherPrivateClass();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Class \\"subdir2.inner.MyOtherPrivateClass\\" is private
+  |
+  --> ../../../examples/tests/invalid/subdir2/inner/blah.w:1:7
+  |
+1 | class MyOtherPrivateClass {}
+  |       ------------------- defined here
+
+
+error: Interface \\"subdir2.MyPrivateInterface\\" is private
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ Interface \\"subdir2.MyPrivateInterface\\" is private
+   |
+   --> ../../../examples/tests/invalid/subdir2/file.w:7:11
+   |
+ 7 | interface MyPrivateInterface {}
+   |           ------------------ defined here
+
+
+error: Expected an interface, instead found type \\"unresolved\\"
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:11:14
+   |
+11 | class A impl subdir2.MyPrivateInterface {}
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected an interface, instead found type \\"unresolved\\"
+
+
+error: Struct \\"subdir2.MyPrivateStruct\\" is private
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:14:9
+   |
+14 | let s = subdir2.MyPrivateStruct {};
+   |         ^^^^^^^^^^^^^^^^^^^^^^^ Struct \\"subdir2.MyPrivateStruct\\" is private
+   |
+   --> ../../../examples/tests/invalid/subdir2/file.w:3:8
+   |
+ 3 | struct MyPrivateStruct {}
+   |        --------------- defined here
+
+
+error: Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
+   --> ../../../examples/tests/invalid/access_private_apis.test.w:17:9
+   |
+17 | let e = subdir2.MyPrivateEnum.A;
+   |         ^^^^^^^ Expected identifier \\"subdir2\\" to be a variable, but it's a namespace
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`access_static_from_instance.test.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:4:3
@@ -259,9 +329,9 @@ exports[`ambiguous_api_paths.test.w 1`] = `
 "ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
 
 ../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
-       const handler = new $Closure1(this,\\"$Closure1\\");
-       (api.get(\\"<ABSOLUTE_PATH>/path\\",handler));
->>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\",handler));
+       const handler = new $Closure1(this, \\"$Closure1\\");
+       (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
+>>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
      }
    }
 
@@ -280,6 +350,13 @@ exports[`bring.test.w 1`] = `
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
+error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  |
+8 | bring c;
+  | ^^^^^^^^ Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+
+
 error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
@@ -292,13 +369,6 @@ error: \\"cloud\\" is already defined
   |
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
-
-
-error: \\"c\\" is not a built-in module
-  --> ../../../examples/tests/invalid/bring.test.w:8:1
-  |
-8 | bring c;
-  | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  
@@ -731,6 +801,8 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
 4 | |   return \\"Hello \${name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  |  
+  = hint: expected phase to be inflight, but got preflight instead
 
 
 error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
@@ -1193,6 +1265,13 @@ error: Expected 3 positional argument(s) or named arguments for the last paramet
    | ^^^^^^^^^^^ Expected 3 positional argument(s) or named arguments for the last parameter but got 0
 
 
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_call_arity.test.w:22:49
+   |
+22 | let namedOptionalParamsFunc = (n: num, b: bool, s: str?, opts: Options) => {};
+   |                                                 ^ Optional parameters must always be after all non-optional parameters.
+
+
 error: Expected between 3 and 4 positional arguments or named arguments for the last parameter but got 1
    --> ../../../examples/tests/invalid/function_call_arity.test.w:23:1
    |
@@ -1277,6 +1356,13 @@ error: Expected function return type
   |
 4 | let my_func2 = (callback: ((num)): (str)) => {  };
   |                            ^^^^^ Expected function return type
+
+
+error: Optional parameters must always be after all non-optional parameters.
+   --> ../../../examples/tests/invalid/function_type.test.w:16:25
+   |
+16 | let my_func3 = (a: num, b: str?, c: bool) => {};
+   |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
  
@@ -2058,11 +2144,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
     --> ../../../examples/tests/invalid/json.test.w:106:38
     |
 106 | let mutableJsonStruct: StructyJson = mutableJson;
-    |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
+    |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+    |
+    = hint: use StructyJson.fromJson() to convert dynamic Json\\"
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
@@ -2251,11 +2339,13 @@ Duration <DURATION>"
 `;
 
 exports[`nil.test.w 1`] = `
-"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+"error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
   |
 3 | let x: str = nil;
-  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+  |              ^^^ Expected type to be \\"str\\", but got \\"nil\\" instead
+  |
+  = hint: to allow \\"nil\\" assignment use optional type: \\"str?\\"
 
 
 error: Expected optional type, found \\"nil\\"
@@ -2279,11 +2369,13 @@ error: Cannot assign nil value to variables without explicit optional type
    |                 ^^^^^^^^^^^^^^^ Cannot assign nil value to variables without explicit optional type
 
 
-error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+error: Expected type to be \\"num\\", but got \\"nil\\" instead
    --> ../../../examples/tests/invalid/nil.test.w:20:14
    |
 20 |   foo.setBar(nil);
-   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
+   |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead
+   |
+   = hint: to allow \\"nil\\" assignment use optional type: \\"num?\\"
 
 
  
@@ -2414,6 +2506,57 @@ Duration <DURATION>"
 
 exports[`panic.test.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
+exports[`phase_mismatch.test.w 1`] = `
+"error: Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:2:10
+  |
+2 | my_func1((n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (num): num\\", but got \\"preflight (n: num): num\\" instead
+  |
+  = hint: expected phase to be inflight, but got preflight instead
+
+
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:5:10
+  |
+5 | my_func2(inflight (n: num): num => { return n * 2; });
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (n: num): num\\" instead
+  |
+  = hint: expected phase to be preflight, but got inflight instead
+
+
+error: Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:12:10
+   |
+12 | my_func3((n: num): num => { return n * 2; });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (n: num): num\\", but got \\"preflight (n: num): num\\" instead
+   |
+   = hint: expected phase to be inflight, but got preflight instead
+
+
+error: Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:15:10
+   |
+15 | my_func4(inflight (s: str): str => { return s.uppercase(); });
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"preflight (num): num\\", but got \\"inflight (s: str): str\\" instead
+   |
+   = hint: expected phase to be preflight, but got inflight instead
+
+
+error: Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:25:18
+   |
+25 | accepts_callback(callback); // error
+   |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`preflight_from_inflight.test.w 1`] = `
 "error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.test.w:15:5
@@ -2456,6 +2599,42 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
    |
 13 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`protected_access_modifiers.test.w 1`] = `
+"error: Structs must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:1:1
+  |
+1 | protected struct MyStruct {}
+  | ^^^^^^^^^ Structs must be public (\\"pub\\") or private
+
+
+error: Classes must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:4:1
+  |
+4 | protected class MyClass {}
+  | ^^^^^^^^^ Classes must be public (\\"pub\\") or private
+
+
+error: Interfaces must be public (\\"pub\\") or private
+  --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:7:1
+  |
+7 | protected interface MyInterface {}
+  | ^^^^^^^^^ Interfaces must be public (\\"pub\\") or private
+
+
+error: Enums must be public (\\"pub\\") or private
+   --> ../../../examples/tests/invalid/protected_access_modifiers.test.w:10:1
+   |
+10 | protected enum MyEnum {}
+   | ^^^^^^^^^ Enums must be public (\\"pub\\") or private
 
 
  

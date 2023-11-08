@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -22,7 +22,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -69,7 +69,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
-      type: TOPIC_TYPE,
+      type: cloud.TOPIC_FQN,
       path: this.node.path,
       props: {},
       attrs: {} as any,

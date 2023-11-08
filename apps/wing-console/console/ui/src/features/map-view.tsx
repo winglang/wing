@@ -37,7 +37,7 @@ export const MapView = ({
   return (
     <ZoomPaneProvider>
       <div className={classNames("h-full flex flex-col", theme.bg4)}>
-        <div className="grow relative cursor-grab">
+        <div className="grow relative cursor-grab bg-slate-50 dark:bg-slate-500">
           {showMapControls && (
             <div className="right-0 absolute z-10">
               <div

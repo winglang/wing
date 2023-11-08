@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { NotImplementedError } from "./errors";
 import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
@@ -28,12 +29,6 @@ export interface AppProps {
   readonly stateFile?: string;
 
   /**
-   * Absolute paths to plugin javascript files.
-   * @default - [] no plugins
-   */
-  readonly plugins?: string[];
-
-  /**
    * The root construct class that should be instantiated with a scope and id.
    * If provided, then it will be instantiated on the user's behalf.
    * When the app is synthesized with `isTestEnvironment` set to `true`, then
@@ -59,6 +54,38 @@ export interface AppProps {
    * @default Default
    */
   readonly rootId?: string;
+
+  /**
+   * Hooks to be called at various stages of the synthesis process.
+   * @default - no hooks
+   */
+  readonly synthHooks?: SynthHooks;
+
+  /**
+   * Hooks for overriding newInstance calls
+   * @default - []
+   */
+  readonly newInstanceOverrides?: any[];
+}
+
+/**
+ * Hooks for the synthesis process.
+ */
+export interface SynthHooks {
+  /**
+   * Hooks to be called before synthesizing the app.
+   */
+  readonly preSynthesize?: any[];
+
+  /**
+   * Hooks to be called after synthesizing the app.
+   */
+  readonly postSynthesize?: any[];
+
+  /**
+   * Hooks to be called for validating the synthesized configuration.
+   */
+  readonly validate?: any[];
 }
 
 /**
@@ -133,6 +160,12 @@ export abstract class App extends Construct {
    */
   public abstract readonly _tokens: Tokens;
 
+  /**
+   * NewInstance hooks for defining resource implementations.
+   * @internal
+   */
+  public readonly _newInstanceOverrides: any[];
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -140,6 +173,7 @@ export abstract class App extends Construct {
     }
 
     this.entrypointDir = props.entrypointDir;
+    this._newInstanceOverrides = props.newInstanceOverrides ?? [];
   }
 
   /**
@@ -192,11 +226,18 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
+    // first check if overrides have been provided
+    for (const override of this._newInstanceOverrides) {
+      const instance = override(fqn, scope, id, ...args);
+      if (instance) {
+        return instance;
+      }
+    }
+    // next delegate to "tryNew", which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
     const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
-      throw new Error(
+      throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
@@ -207,22 +248,34 @@ export abstract class App extends Construct {
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
+   * @param fqn The fully qualified name of the class we want the type for (jsii).
+   *
+   * @returns The dependency injected specific target type for the given FQN, or undefined if not found.
+   */
+  protected typeForFqn(fqn: string): any {
+    fqn;
+    return undefined;
+  }
+
+  /**
+   * Can be overridden by derived classes to inject dependencies.
+   *
    * @param fqn The fully qualified name of the class to instantiate (jsii).
    * @param scope The construct scope.
    * @param id The construct id.
    * @param args The arguments to pass to the constructor.
    */
-  protected tryNew(
+  private tryNew(
     fqn: string,
     scope: Construct,
     id: string,
     ...args: any[]
   ): any {
-    fqn;
-    scope;
-    id;
-    args;
-    return undefined;
+    const type = this.typeForFqn(fqn);
+    if (!type) {
+      return undefined;
+    }
+    return new type(scope, id, ...args);
   }
 
   /**

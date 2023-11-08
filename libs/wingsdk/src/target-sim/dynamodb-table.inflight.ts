@@ -1,4 +1,9 @@
-import { CreateTableCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  CreateTableCommand,
+  DynamoDBClient,
+  KeyType,
+  KeySchemaElement,
+} from "@aws-sdk/client-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
@@ -79,16 +84,16 @@ export class DynamodbTable
   }
 
   private async createTable() {
-    const keySchema = [
+    const keySchema: KeySchemaElement[] = [
       {
         AttributeName: this.props.hashKey,
-        KeyType: "HASH",
+        KeyType: KeyType.HASH,
       },
     ];
     if (this.props.rangeKey) {
       keySchema.push({
         AttributeName: this.props.rangeKey,
-        KeyType: "RANGE",
+        KeyType: KeyType.RANGE,
       });
     }
 

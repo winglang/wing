@@ -11,7 +11,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       return $obj;
     }
     async handle(event) {
-      (await $bucket1.put("file.txt","data"));
+      (await $bucket1.put("file.txt", "data"));
       (await $bucket2.get("file.txt"));
       (await $bucket2.get("file2.txt"));
       (await $bucket3.get("file3.txt"));
@@ -65,7 +65,7 @@ module.exports = function({ $headers }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -84,7 +84,7 @@ module.exports = function({ $headers }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -335,6 +335,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "AnotherFunction-c88d2a81",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.arn}",
         "runtime": "nodejs18.x",
@@ -364,6 +365,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.arn}",
         "runtime": "nodejs18.x",
@@ -396,6 +398,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
@@ -428,6 +431,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
@@ -593,17 +597,17 @@ module.exports = function({ $headers }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -626,7 +630,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -639,8 +643,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -661,7 +665,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
@@ -671,22 +675,23 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",({"public": true}));
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const handler = new $Closure1(this,"$Closure1");
-    (queue.setConsumer(handler,{ batchSize: 5 }));
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: ({}) });
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PublicBucket", ({"public": true}));
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "PrivateBucket", { public: false });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const handler = new $Closure1(this, "$Closure1");
+    (queue.setConsumer(handler, { batchSize: 5 }));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", handler, { env: ({}) });
     const emptyEnv = ({});
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "AnotherFunction", handler, { env: emptyEnv });
     const headers = ({"my-fancy-header": "my-fancy-value","not-even-real\"": "wow` !"});
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.get("/hello",new $Closure2(this,"$Closure2")));
+    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    (api.get("/hello", new $Closure2(this, "$Closure2")));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

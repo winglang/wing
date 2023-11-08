@@ -84,6 +84,7 @@ where
 		StmtKind::Bring { source, identifier } => StmtKind::Bring {
 			source: match source {
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::TrustedModule(name, module_dir) => BringSource::TrustedModule(f.fold_symbol(name), module_dir),
 				BringSource::WingLibrary(name, module_dir) => BringSource::WingLibrary(f.fold_symbol(name), module_dir),
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
 				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
@@ -168,14 +169,21 @@ where
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
 		StmtKind::Class(class) => StmtKind::Class(f.fold_class(class)),
 		StmtKind::Interface(interface) => StmtKind::Interface(f.fold_interface(interface)),
-		StmtKind::Struct { name, extends, fields } => StmtKind::Struct {
+		StmtKind::Struct {
+			name,
+			extends,
+			fields,
+			access,
+		} => StmtKind::Struct {
 			name: f.fold_symbol(name),
 			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
 			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
+			access,
 		},
-		StmtKind::Enum { name, values } => StmtKind::Enum {
+		StmtKind::Enum { name, values, access } => StmtKind::Enum {
 			name: f.fold_symbol(name),
 			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
+			access,
 		},
 		StmtKind::TryCatch {
 			try_statements,
@@ -222,6 +230,7 @@ where
 			.collect(),
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
+		access: node.access,
 	}
 }
 
@@ -235,7 +244,7 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 
@@ -265,6 +274,7 @@ where
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
+		access: node.access,
 	}
 }
 
@@ -419,7 +429,7 @@ where
 		signature: f.fold_function_signature(node.signature),
 		is_static: node.is_static,
 		span: node.span,
-		access_modifier: node.access_modifier,
+		access: node.access,
 	}
 }
 

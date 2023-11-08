@@ -12,11 +12,13 @@ const TERRAFORM_JSON_FILENAME = "main.tf.json";
 export async function compileTest(
   sourceDir: string,
   wingFile: string,
-  env?: Record<string, string>
+  env?: Record<string, string>,
+  includeJavaScriptInSnapshots: boolean = true
 ) {
   const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
-  const args = ["compile", "--target", "tf-aws"];
+  const platforms = ["tf-aws"];
+  const args = ["compile"];
   const targetDir = join(
     sourceDir,
     "target",
@@ -27,6 +29,7 @@ export async function compileTest(
   const filePath = join(sourceDir, wingBasename);
   await runWingCommand({
     cwd: sourceDir,
+    platforms,
     wingFile: filePath,
     args,
     expectFailure: false,
@@ -46,6 +49,9 @@ export async function compileTest(
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
     if (!include.find((f) => subpath.includes(f))) {
+      continue;
+    }
+    if (subpath.endsWith(".js") && !includeJavaScriptInSnapshots) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");
@@ -68,7 +74,8 @@ export async function testTest(
   env?: Record<string, string>
 ) {
   const fileMap: Record<string, string> = {};
-  const args = ["test", "-t", "sim"];
+  const platforms = ["sim"];
+  const args = ["test"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
 
   // only entrypoint files have tests (for now)
@@ -83,6 +90,7 @@ export async function testTest(
   const filePath = join(sourceDir, wingFile);
   const out = await runWingCommand({
     cwd: testDir,
+    platforms,
     wingFile: relativeWingFile,
     args,
     expectFailure: false,

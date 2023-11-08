@@ -8,7 +8,7 @@ import { Node } from "../std";
 /**
  * Global identifier for `TestRunner`.
  */
-export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
+export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
 
 /**
  * Properties for `TestRunner`.
@@ -47,7 +47,7 @@ export abstract class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       TestRunnerInflightMethods.LIST_TESTS,
       TestRunnerInflightMethods.RUN_TEST,
@@ -101,6 +101,11 @@ export interface TestResult {
    * Whether the test passed.
    */
   readonly pass: boolean;
+
+  /**
+   * Whether the test contains code that is unsupported by the target.
+   */
+  readonly unsupported?: boolean;
 
   /**
    * The error message if the test failed.

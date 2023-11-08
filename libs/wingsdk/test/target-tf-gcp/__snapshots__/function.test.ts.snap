@@ -5,7 +5,7 @@ exports[`basic function 1`] = `
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
-        "available_memory_mb": 128,
+        "available_memory_mb": 1024,
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {},
@@ -21,6 +21,7 @@ exports[`basic function 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -189,7 +190,7 @@ exports[`basic function with environment variables 1`] = `
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
-        "available_memory_mb": 128,
+        "available_memory_mb": 1024,
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {
@@ -208,6 +209,7 @@ exports[`basic function with environment variables 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -394,6 +396,7 @@ exports[`basic function with memory size specified 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",
@@ -564,7 +567,7 @@ exports[`basic function with timeout explicitly set 1`] = `
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
-        "available_memory_mb": 128,
+        "available_memory_mb": 1024,
         "description": "This function was created by Wing",
         "entry_point": "handler",
         "environment_variables": {},
@@ -580,6 +583,7 @@ exports[`basic function with timeout explicitly set 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
         "public_access_prevention": "enforced",

@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
+import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -33,9 +34,11 @@ import {
   preSynthesizeAllConstructs,
   synthesizeTree,
   Connections,
+  SynthHooks,
 } from "../core";
-import { PluginManager } from "../core/plugin-manager";
+import { DYNAMODB_TABLE_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
+import { Util } from "../util";
 
 /**
  * AWS-CDK App props
@@ -60,10 +63,10 @@ export class App extends CoreApp {
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
-  private readonly pluginManager: PluginManager;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
+  private synthHooks?: SynthHooks;
 
   /**
    * The test runner for this app.
@@ -71,7 +74,7 @@ export class App extends CoreApp {
   protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
-    const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
+    let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
         "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
@@ -80,6 +83,10 @@ export class App extends CoreApp {
 
     const outdir = props.outdir ?? ".";
     const cdkOutdir = join(outdir, ".");
+
+    if (props.isTestEnvironment) {
+      stackName += Util.sha256(outdir.replace(/\.tmp$/, "")).slice(-8);
+    }
 
     mkdirSync(cdkOutdir, { recursive: true });
 
@@ -105,7 +112,7 @@ export class App extends CoreApp {
       ...args: any[]
     ) => this.newAbstract(fqn, scope, id, ...args);
 
-    this.pluginManager = new PluginManager(props.plugins ?? []);
+    this.synthHooks = props.synthHooks;
 
     this.outdir = outdir;
     this.cdkApp = cdkApp;
@@ -132,8 +139,11 @@ export class App extends CoreApp {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    if (this.synthHooks?.preSynthesize) {
+      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    }
+
     // synthesize cdk.Stack files in `outdir/cdk.out`
-    this.pluginManager.preSynth(this);
     this.cdkApp.synth();
 
     // write `outdir/tree.json`
@@ -149,42 +159,40 @@ export class App extends CoreApp {
     return this.synthedOutput;
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
 
       case COUNTER_FQN:
-        return new Counter(scope, id, args[0]);
+        return Counter;
 
       case SCHEDULE_FQN:
-        return new Schedule(scope, id, args[0]);
+        return Schedule;
 
       case QUEUE_FQN:
-        return new Queue(scope, id, args[0]);
+        return Queue;
 
       case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
+        return Topic;
 
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case SECRET_FQN:
-        return new Secret(scope, id, args[0]);
+        return Secret;
 
       case ON_DEPLOY_FQN:
-        return new OnDeploy(scope, id, args[0], args[1]);
+        return OnDeploy;
 
       case WEBSITE_FQN:
-        return new Website(scope, id, args[0]);
+        return Website;
+
+      case DYNAMODB_TABLE_FQN:
+        return DynamodbTable;
     }
     return undefined;
   }

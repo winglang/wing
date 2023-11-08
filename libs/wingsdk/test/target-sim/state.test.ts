@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { cloud } from "../../src";
 import { IFunctionClient, OnDeploy } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import { IStateClient, State } from "../../src/target-sim";
+import { State } from "../../src/target-sim";
 import { SimApp } from "../sim-app";
 
 test("state can be resolved at any time", async () => {
@@ -13,7 +13,6 @@ test("state can be resolved at any time", async () => {
   // WHEN
   const tokenKey = "myKey";
   const token = state.token(tokenKey);
-  console.log(token);
 
   const fn = cloud.Function._newFunction(
     app,

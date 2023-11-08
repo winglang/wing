@@ -1,10 +1,10 @@
 {
-  "name": "wing-fixture",
+  "name": "@winglibs/testfixture",
   "version": "0.0.0",
   "description": "A fake library just for testing stuff out",
   "author": {
     "name": "Wing Cloud",
-    "email": "ping@monada.co",
+    "email": "ping@wing.cloud",
     "url": "https://wing.cloud",
     "organization": true
   },

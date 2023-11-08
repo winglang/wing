@@ -126,7 +126,7 @@ The SDK resources are written using the Constructs Programming Model.
 constructs serves as the low-level foundation of several other infrastructure-as-code frameworks, such as the [AWS CDK](https://github.com/aws/aws-cdk), [cdk8s](https://github.com/cdk8s-team/cdk8s), and [cdktf](https://github.com/hashicorp/terraform-cdk).
 
 Conceptually, constructs are ordinary classes that additionally have a unique **scope** (parent construct) and **id**.
-By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressible based on its location within the tree.
+By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressable based on its location within the tree.
 
 A construct's **path** is obtained by joining the sequence of construct ids from the tree root to the construct, with the "/" character.
 For example, if a construct with no parent is declared the root with an id "root", and it has a child named "Child1", the child has a path of "root/Child1".

@@ -99,7 +99,7 @@ new cloud.Schedule(props?: ScheduleProps);
 ##### `onTick` <a name="onTick" id="@winglang/sdk.cloud.Schedule.onTick"></a>
 
 ```wing
-onTick(inflight: IScheduleOnTickHandler, props?: ScheduleOnTickProps): Function
+onTick(inflight: IScheduleOnTickHandler, props?: ScheduleOnTickOptions): Function
 ```
 
 Create a function that runs when receiving the scheduled event.
@@ -112,7 +112,7 @@ Create a function that runs when receiving the scheduled event.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.onTick.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.ScheduleOnTickProps">ScheduleOnTickProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ScheduleOnTickOptions">ScheduleOnTickOptions</a>
 
 ---
 
@@ -141,30 +141,30 @@ The tree node.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
+### ScheduleOnTickOptions <a name="ScheduleOnTickOptions" id="@winglang/sdk.cloud.ScheduleOnTickOptions"></a>
 
 Options for Schedule.onTick.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleOnTickProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleOnTickOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... };
+let ScheduleOnTickOptions = cloud.ScheduleOnTickOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.env"></a>
 
 ```wing
 env: MutMap<str>;
@@ -177,7 +177,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.logRetentionDays"></a>
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.logRetentionDays"></a>
 
 ```wing
 logRetentionDays: num;
@@ -192,20 +192,20 @@ Setting negative value means logs will not expire.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.memory"></a>
 
 ```wing
 memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickOptions.property.timeout"></a>
 
 ```wing
 timeout: duration;

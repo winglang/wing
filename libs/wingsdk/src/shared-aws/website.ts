@@ -1,15 +1,10 @@
 import { Domain } from "./domain";
+import { WebsiteOptions } from "../cloud";
 
 /**
  * Options for AWS `Website`.
  */
-export interface AwsWebsiteProps {
-  /**
-   * Local path to the website's static files, relative to the Wing source file or absolute.
-   * @example "./dist"
-   */
-  readonly path: string;
-
+export interface AwsWebsiteProps extends WebsiteOptions {
   /**
    * The website's custom domain object.
    * @default - undefined

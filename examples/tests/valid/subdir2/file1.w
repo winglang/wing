@@ -1,6 +1,8 @@
 bring "./inner" as blah; // an alias that is not "inner"
+bring cloud;
+bring util;
 
-class Foo {
+pub class Foo {
   pub foo(): str {
     return "foo";
   }

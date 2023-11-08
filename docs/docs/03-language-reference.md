@@ -74,6 +74,15 @@ import TOCInline from '@theme/TOCInline';
 > let q: num? = nil;          // q is an optional num
 > ```
 
+Numeric literals can be formatted and padded with extra zeroes or underscores to make them easier to read in source code.
+These don't affect the value of the number or how they are printed:
+
+> ```TS
+> let price = 0012.34;
+> let twentyThousand = 20_000;
+> let aBitMore = 20_000.000_1;
+> ```
+
 [`▲ top`][top]
 
 ---
@@ -148,7 +157,7 @@ Return type is optional for closures.
 
 Wing has a primitive data type called `Json`. This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
-`boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
+`boolean`), arrays (both heterogenous and homogeneous) and objects (key-value maps where keys are
 strings and values can be any other JSON value).
 
 `Json` objects are immutable and can be referenced across inflight context.
@@ -711,7 +720,7 @@ interface FooInterface {
 }
 
 class Foo impl FooInterface {
-  pub public_method() {} // This can be accessed from outside of the class implemenetation
+  pub public_method() {} // This can be accessed from outside of the class implementation
   pub interface_method() {} // This must be explicitly defined as `pub` since it's an interface implementation
 }
 let f = new Foo();
@@ -722,15 +731,15 @@ Access modifier rules apply for both fields and methods of a class.
 Struct fields are always public and do not have access modifiers.
 
 #### 1.5.1 Method overriding and access modifiers
-Private methods cannot be overriden. 
+Private methods cannot be overridden. 
 Overriding a method of a parent class requires the parent class's method to be either `pub` or `protected`.
 The overriding method can have either the same access modifier as the original method or a more permissive one.
-You cannot "decrease" the access level down the inheritence hierarchy, only "increase" it. 
+You cannot "decrease" the access level down the inheritance hierarchy, only "increase" it. 
 In practice this means:
-* `protected` methods can be overidden by either a `protected` or a `pub` method.
-* `pub` methods can be overriden by a `pub` method.
+* `protected` methods can be overridden by either a `protected` or a `pub` method.
+* `pub` methods can be overridden by a `pub` method.
 
-Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritence hierarcy.
+Note that method overriding only applies to instance methods. `static` methods are not treated as part of the inheritance hierarchy.
 
 [`▲ top`][top]
 
@@ -1146,14 +1155,13 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 1.14 Roadmap
 
-* Module type visibility (exports/`pub` types) is not implemented yet - see https://github.com/winglang/wing/issues/130 to track.
 * `internal` access modifier is not yet implemented - see https://github.com/winglang/wing/issues/4156 to track.
 
 ## 2. Statements
 
 ### 2.1 bring
 
-**bring** statement can be used to import and reuse code from
+**bring** statement can be used to import and reuse code from Wing and
 other JSII supported languages. The statement is detailed in its own section in
 this document: [Module System](#4-module-system).
 
@@ -1777,12 +1785,20 @@ code. Comments before the first bring expression are valid.
 
 ### 4.1 Imports
 
-To import a JSII package under a named import, you may use the following
+To import a built-in module or trusted Wing library, you can use the following syntax:
+
+```TS
+bring util; // import types from the built-in "util" module
+bring cloud; // import types from the built-in "cloud" module
+bring containers; // import types from the `@winglibs/containers` trusted library
+```
+
+To use a trusted library, you must install the relevant npm package with `npm i @winglibs/containers`.
+
+To import a Wing or JSII library under a named import, you may use the following
 syntax:
 
 ```TS
-bring util; // from util bring * as util;
-bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
 
@@ -1806,7 +1822,7 @@ new myModule.submodule.MyClass();
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Install trusted libraries using `wing install containers` - see https://github.com/winglang/wing/issues/1037 to track.
 * Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]

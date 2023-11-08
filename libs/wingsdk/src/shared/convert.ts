@@ -29,7 +29,7 @@ export function convertBetweenHandlers(
       this.args = args;
     }
 
-    public _getInflightOps(): string[] {
+    public _supportedOps(): string[] {
       return ["handle"];
     }
 
