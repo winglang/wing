@@ -72,7 +72,7 @@
     },
     {
       "name": "jsii",
-      "version": "~5.0.0",
+      "version": "5.2.26",
       "type": "build"
     },
     {
@@ -122,10 +122,6 @@
     },
     {
       "name": "jsii-reflect",
-      "type": "runtime"
-    },
-    {
-      "name": "jsii-rosetta",
       "type": "runtime"
     },
     {

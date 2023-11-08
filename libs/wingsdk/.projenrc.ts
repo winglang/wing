@@ -127,8 +127,11 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "5.0.11",
+  jsiiVersion: "5.2.26",
 });
+
+// remove jsii-rosetta
+project.deps.removeDependency("jsii-rosetta");
 
 project.eslint?.addPlugins("sort-exports");
 project.eslint?.addOverride({

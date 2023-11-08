@@ -4,7 +4,6 @@ import { SPEC_FILE_NAME } from "@jsii/spec";
 import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
-import { TargetLanguage } from "jsii-rosetta";
 import { Npm } from "./_npm";
 import { ApiReference } from "./api-reference";
 import { Readme } from "./readme";
@@ -396,7 +395,7 @@ export class Documentation {
   }
 
   private async createAssembly(
-    language: TargetLanguage | undefined,
+    language: string | undefined,
     options: Required<TransliterationOptions>
   ): Promise<reflect.Assembly> {
     const cacheKey = `lang:${language ?? "ts"}.loose:${
@@ -423,7 +422,7 @@ export class Documentation {
 export const LANGUAGE_SPECIFIC = {
   [Language.PYTHON.toString()]: {
     transpile: new PythonTranspile(),
-    rosettaTarget: TargetLanguage.PYTHON,
+    rosettaTarget: "python",
   },
   [Language.TYPESCRIPT.toString()]: {
     transpile: new TypeScriptTranspile(),
@@ -431,20 +430,20 @@ export const LANGUAGE_SPECIFIC = {
   },
   [Language.JAVA.toString()]: {
     transpile: new JavaTranspile(),
-    rosettaTarget: TargetLanguage.JAVA,
+    rosettaTarget: "java",
   },
   [Language.CSHARP.toString()]: {
     transpile: new CSharpTranspile(),
-    rosettaTarget: TargetLanguage.CSHARP,
+    rosettaTarget: "csharp",
   },
   [Language.GO.toString()]: {
     transpile: new GoTranspile(),
-    rosettaTarget: TargetLanguage.GO,
+    rosettaTarget: "go",
   },
   [Language.WING.toString()]: {
     transpile: new WingTranspile(),
     // TODO WING HACK
-    rosettaTarget: "wing" as TargetLanguage,
+    rosettaTarget: "wing",
   },
 };
 

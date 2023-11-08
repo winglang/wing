@@ -154,7 +154,7 @@ export class Util {
 
   /**
    * Generates a unique ID using the nanoid library.
-   # @link https://github.com/ai/nanoid
+   * @link https://github.com/ai/nanoid
    * @param options - Optional options object for generating the ID.
    */
   public static nanoid(options?: NanoidOptions): string {

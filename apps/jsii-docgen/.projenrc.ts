@@ -15,7 +15,7 @@ const project = new typescript.TypeScriptProject({
     "jsii-docgen": "bin/jsii-docgen",
   },
   devDeps: [
-    "jsii@~5.0.0",
+    "jsii@5.2.26",
     "@types/fs-extra",
     "@types/semver",
     "@types/yargs@^16",
@@ -29,7 +29,6 @@ const project = new typescript.TypeScriptProject({
     "glob-promise",
     "glob",
     "jsii-reflect",
-    "jsii-rosetta",
     "semver",
     "yargs@^16",
   ],
