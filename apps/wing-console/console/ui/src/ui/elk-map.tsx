@@ -43,6 +43,7 @@ const layoutOptions: LayoutOptions = {
 export type NodeItemProps<T> = {
   node: Node<T>;
   depth: number;
+  selected: boolean;
 };
 
 type Sizes = Record<string, { width: number; height: number }>;
@@ -94,7 +95,7 @@ const InvisibleNodeSizeCalculator = memo(
                 className={classNames("h-full relative")}
                 ref={(element) => (refs.current[node.id] = element)}
               >
-                <NodeItem node={node} depth={depth} />
+                <NodeItem node={node} depth={depth} selected={false} />
               </div>
             </div>
 
@@ -257,6 +258,7 @@ type NodeData<T = any> = {
 interface NodesContainerProps {
   nodeList: NodeData[];
   node: FC<NodeItemProps<any>>;
+  selectedNodeId: string | undefined;
   onSelectedNodeIdChange?: (id: string) => void;
 }
 
@@ -264,6 +266,7 @@ const NodesContainer = memo(
   ({
     nodeList,
     node: NodeItem,
+    selectedNodeId,
     onSelectedNodeIdChange,
   }: NodesContainerProps) => {
     return (
@@ -298,7 +301,11 @@ const NodesContainer = memo(
             // onMouseEnter={() => setHighlighted(node.id)}
             // onMouseLeave={() => setHighlighted(undefined)}
           >
-            <NodeItem node={node.data} depth={node.depth} />
+            <NodeItem
+              node={node.data}
+              depth={node.depth}
+              selected={node.id === selectedNodeId}
+            />
           </motion.div>
         ))}
       </>
@@ -541,6 +548,7 @@ export const ElkMap = <T extends unknown = undefined>({
                 <NodesContainer
                   nodeList={nodeList}
                   node={NodeItem}
+                  selectedNodeId={selectedNodeId}
                   onSelectedNodeIdChange={onSelectedNodeIdChange}
                 />
               </AnimatePresence>

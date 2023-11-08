@@ -1,7 +1,7 @@
 import { useTheme, IconComponent } from "@wingconsole/design-system";
 import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren, memo, useMemo } from "react";
+import { PropsWithChildren, memo, useCallback, useMemo } from "react";
 
 const getResourceBorderColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
@@ -71,7 +71,10 @@ export const ContainerNode = memo(
     ...props
   }: PropsWithChildren<ContainerNodeProps>) => {
     const { theme } = useTheme();
-    const borderColor = getResourceBorderColor(resourceType);
+    const borderColor = useMemo(
+      () => getResourceBorderColor(resourceType),
+      [resourceType],
+    );
 
     const compilerNamed = useMemo(() => {
       if (!display) {
