@@ -5,7 +5,6 @@
 pass ┌ http-server.test.wsim » root/env0/test:http server is started with the service
      └ bang bang!
 pass ┌ http-server.test.wsim » root/env1/test:service.stop() closes the http server  
-     │ bang bang!
      └ closing server...
  
  
