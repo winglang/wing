@@ -59,7 +59,7 @@ export const Select = memo(
     return (
       <Listbox
         value={value}
-        onChange={(item) => onChange(item)}
+        onChange={onChange}
         disabled={disabled}
         data-testid={dataTestid}
       >

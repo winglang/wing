@@ -7,6 +7,7 @@ import {
   Ref,
   useCallback,
   memo,
+  forwardRef,
 } from "react";
 
 import { useTheme } from "./theme-provider.js";
@@ -126,10 +127,10 @@ const useSelectionRange = ({
   /**
    * Selects all entries.
    */
-  const selectAll = () => {
+  const selectAll = useCallback(() => {
     onSelectionChange(entries.map((entry) => entry.id));
     setCurrent(entries.length - 1);
-  };
+  }, [entries, onSelectionChange]);
 
   /**
    * Unselects all entries.
@@ -168,6 +169,70 @@ const useSelectionRange = ({
     unselectAll,
   };
 };
+
+interface TreeItemProps {
+  entry: TreeEntry;
+  index: number;
+  selected: boolean;
+  previousSelected: boolean;
+  nextSelected: boolean;
+  active: boolean;
+  toggleOne: (index: number) => void;
+  selectTo: (index: number, options: { additive: boolean }) => void;
+  dataTestid?: string;
+}
+
+const TreeItem = memo(
+  forwardRef<HTMLButtonElement, TreeItemProps>(
+    (
+      {
+        active,
+        entry,
+        index,
+        selected,
+        selectTo,
+        previousSelected,
+        nextSelected,
+        toggleOne,
+        dataTestid,
+      },
+      ref,
+    ) => {
+      return (
+        // TODO: Fix a11y
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        <button
+          ref={ref}
+          className={classNames(
+            "px-2 w-full truncate py-0.5",
+            "text-left text-sm cursor-default focus:outline-none",
+            selected && [
+              !active && "bg-slate-200 dark:bg-slate-750",
+              active && "bg-sky-500 text-white",
+              previousSelected && "rounded-t",
+              nextSelected && "rounded-b",
+            ],
+            !selected && [
+              "rounded",
+              index % 2 === 0 && "bg-slate-100 dark:bg-slate-850",
+            ],
+          )}
+          onClick={async (event) => {
+            event.stopPropagation();
+            if (event.metaKey || event.ctrlKey) {
+              toggleOne(index);
+            } else {
+              selectTo(index, { additive: event.shiftKey });
+            }
+          }}
+          data-testid={`${dataTestid}-entry-${entry.name}`}
+        >
+          {entry.name}
+        </button>
+      );
+    },
+  ),
+);
 
 export const Tree = memo(
   ({
@@ -240,6 +305,9 @@ export const Tree = memo(
       [onOpenEntry, onSelectionChange, selectAll, selectNext, selectPrevious],
     );
 
+    const activate = useCallback(() => setActive(true), []);
+    const deactivate = useCallback(() => setActive(false), []);
+
     return (
       // TODO: Fix a11y
       //  eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -258,53 +326,31 @@ export const Tree = memo(
         // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         onKeyDown={onKeyDown}
-        onClick={() => {
-          unselectAll();
-        }}
-        onFocus={() => {
-          setActive(true);
-        }}
-        onBlur={() => {
-          setActive(false);
-        }}
+        onClick={unselectAll}
+        onFocus={activate}
+        onBlur={deactivate}
       >
         {entries.map((entry, index) => {
-          const selected = selectedEntries.includes(entry.id);
           const previous = entries[index - 1];
           const next = entries[index + 1];
           return (
-            // TODO: Fix a11y
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <button
+            <TreeItem
               ref={entry.id === current ? currentRef : undefined}
               key={entry.name}
-              className={classNames(
-                "px-2 w-full truncate py-0.5",
-                "text-left text-sm cursor-default focus:outline-none",
-                selected && [
-                  !active && "bg-slate-200 dark:bg-slate-750",
-                  active && "bg-sky-500 text-white",
-                  !(previous && selectedEntries.includes(previous.id)) &&
-                    "rounded-t",
-                  !(next && selectedEntries.includes(next.id)) && "rounded-b",
-                ],
-                !selected && [
-                  "rounded",
-                  index % 2 === 0 && "bg-slate-100 dark:bg-slate-850",
-                ],
-              )}
-              onClick={async (event) => {
-                event.stopPropagation();
-                if (event.metaKey || event.ctrlKey) {
-                  toggleOne(index);
-                } else {
-                  selectTo(index, { additive: event.shiftKey });
-                }
-              }}
-              data-testid={`${dataTestid}-entry-${entry.name}`}
-            >
-              {entry.name}
-            </button>
+              entry={entry}
+              index={index}
+              selected={selectedEntries.includes(entry.id)}
+              previousSelected={
+                (previous && selectedEntries.includes(previous.id)) ?? false
+              }
+              nextSelected={
+                (next && selectedEntries.includes(next.id)) ?? false
+              }
+              active={active}
+              toggleOne={toggleOne}
+              selectTo={selectTo}
+              dataTestid={dataTestid}
+            />
           );
         })}
       </div>

@@ -11,6 +11,7 @@ import {
 } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
+import { memo } from "react";
 
 import { TreeMenuItem } from "./use-tree-menu-items.js";
 
@@ -63,7 +64,7 @@ export interface ExplorerProps {
   onCollapseAll(): void;
 }
 
-export const Explorer = (props: ExplorerProps) => {
+export const Explorer = memo((props: ExplorerProps) => {
   const { theme } = useTheme();
   return (
     <div
@@ -113,4 +114,4 @@ export const Explorer = (props: ExplorerProps) => {
       </div>
     </div>
   );
-};
+});

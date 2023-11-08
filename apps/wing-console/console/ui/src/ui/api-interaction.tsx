@@ -91,21 +91,9 @@ export const ApiInteraction = memo(
       items: pathVariables,
       editItem: editPathVariable,
       setItems: setPathVariables,
-      removeAll: removeAllPathVariables,
     } = useKeyValueList({
       useState: usePersistentState,
     });
-
-    const resetApiState = () => {
-      setCurrentRoute("");
-      setCurrentMethod("GET");
-      setBody("");
-      setCurrentHeaderKey("");
-      setValuesList([]);
-      removeAllHeaders();
-      removeAllQueryParameters();
-      removeAllPathVariables();
-    };
 
     const apiCall = useCallback(async () => {
       if (!url || !currentMethod || !currentRoute) {
@@ -226,6 +214,8 @@ export const ApiInteraction = memo(
         setCurrentMethod(methods[0]);
       }
     }, [currentRoute, schemaData, setCurrentMethod]);
+
+    // TODO: Refactor inline functions below. For example, with `useCallback` or with additional memo components.
 
     return (
       <div className="h-full flex-1 flex flex-col text-sm space-y-1">
