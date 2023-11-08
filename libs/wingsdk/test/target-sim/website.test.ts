@@ -123,6 +123,43 @@ test("api.url is resolved in website config", async () => {
   await s.stop();
 });
 
+test("multiple tokens are resolved in website config", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api1 = cloud.Api._newApi(app, "api1");
+  const api2 = cloud.Api._newApi(app, "api2");
+  const website = cloud.Website._newWebsite(app, "website", {
+    path: resolve(__dirname, "../test-files/website"),
+  });
+  website.addJson("config.json", {
+    api1: api1.url,
+    api2: api2.url,
+  } as unknown as Json);
+
+  // WHEN
+  const s = await app.startSimulator();
+  expect(s.getResourceConfig("/website")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+      url: expect.any(String),
+    },
+    path: "root/website",
+    props: {
+      fileRoutes: {
+        "config.json": {
+          contentType: "application/json",
+          data: expect.stringMatching(
+            /{"api1":"http:\/\/127.0.0.1:\d+","api2":"http:\/\/127.0.0.1:\d+"}/
+          ),
+        },
+      },
+      staticFilesPath: expect.any(String),
+    },
+    type: cloud.WEBSITE_FQN,
+  });
+  await s.stop();
+});
+
 test("addJson throws an error for no json path", async () => {
   const jsonConfig = { version: "3.3.5" };
   const jsonPath = "not a json Path";

@@ -30,6 +30,13 @@ export function simulatorAttrToken(
 export const SIMULATOR_TOKEN_REGEX = /\$\{wsim#[^#\{\}]+#[a-zA-Z0-9_\-\/\.]+\}/;
 
 /**
+ * The same as SIMULATOR_TOKEN_REGEX, but it must match the entire string.
+ */
+export const SIMULATOR_TOKEN_REGEX_FULL = new RegExp(
+  `^${SIMULATOR_TOKEN_REGEX.source}$`
+);
+
+/**
  * Returns true is the given value is a Simulator token.
  */
 export function isSimulatorToken(value: string) {
