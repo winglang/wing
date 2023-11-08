@@ -87,16 +87,20 @@ export async function prettyPrintError(
 
   // use only the first item with a source
   const firstGoodItem = traceWithSources.find(
-    (item) => item.sourceFile && !item.native && !item.thirdParty
+    (item) =>
+      item.sourceFile !== undefined &&
+      item.sourceFile.lines.length > 0 &&
+      !item.native &&
+      !item.thirdParty
   );
 
   if (firstGoodItem) {
     const sourceFile = firstGoodItem.sourceFile!;
     const originLines = sourceFile.lines;
-    const originLine = firstGoodItem.line ?? 0;
-    const originColumn = firstGoodItem.column ?? 0;
+    const originLine = firstGoodItem.line ?? 1;
+    const originColumn = firstGoodItem.column ?? 1;
 
-    let startLine = Math.max(originLine - 3, 0);
+    let startLine = Math.max(originLine - 3, 1);
     let finishLine = originLine;
 
     // print line and its surrounding lines
@@ -104,15 +108,17 @@ export async function prettyPrintError(
       `${getRelativePath(sourceFile.path)}:${originLine}:${originColumn}`
     );
 
-    const linesOfInterest = dedent([
-      ...originLines.slice(startLine, finishLine),
-      " ".repeat(originColumn) + "^",
-    ]);
+    let linesOfInterest = originLines;
+    if (startLine !== finishLine) {
+      linesOfInterest = originLines.slice(startLine - 1, finishLine);
+    }
+    linesOfInterest.push(" ".repeat(originColumn) + "^");
+    linesOfInterest = dedent(linesOfInterest);
 
     const maxDigits = finishLine.toString().length;
 
     let x = 0;
-    for (let i = startLine + 1; i <= finishLine; i++) {
+    for (let i = startLine; i <= finishLine; i++) {
       const interestingLine = i === originLine;
       const lineNumberBasic = `${i}`.padStart(maxDigits, " ") + "| ";
       let lineNumber = lineNumberBasic;
