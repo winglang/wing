@@ -22,10 +22,20 @@ export class FunctionClient implements IFunctionClient {
     const response = await this.lambdaClient.send(command);
 
     if (response.FunctionError) {
+      let errorText = toUtf8(response.Payload!);
+      if (errorText.startsWith("{")) {
+        const errorData = JSON.parse(errorText);
+        if ("errorMessage" in errorData) {
+          const newError = new Error(
+            `Invoke failed with message: "${errorData.errorMessage}"`
+          );
+          newError.name = errorData.errorType;
+          newError.stack = errorData.trace?.join("\n");
+          throw newError;
+        }
+      }
       throw new Error(
-        `Invoke failed with message: "${
-          response.FunctionError
-        }". Full error: "${toUtf8(response.Payload!)}"`
+        `Invoke failed with message: "${response.FunctionError}". Full error: "${errorText}"`
       );
     }
     if (!response.Payload) {
@@ -57,10 +67,20 @@ export class FunctionClient implements IFunctionClient {
     const traces = parseLogs(logs, this.constructPath);
 
     if (response.FunctionError) {
+      let errorText = toUtf8(response.Payload!);
+      if (errorText.startsWith("{")) {
+        const errorData = JSON.parse(errorText);
+        if ("errorMessage" in errorData) {
+          const newError = new Error(
+            `Invoke failed with message: "${errorData.errorMessage}"`
+          );
+          newError.name = errorData.errorType;
+          newError.stack = errorData.trace?.join("\n");
+          throw newError;
+        }
+      }
       throw new Error(
-        `Invoke failed with message: "${
-          response.FunctionError
-        }". Full error: "${toUtf8(response.Payload!)}"`
+        `Invoke failed with message: "${response.FunctionError}". Full error: "${errorText}"`
       );
     }
     if (!response.Payload) {

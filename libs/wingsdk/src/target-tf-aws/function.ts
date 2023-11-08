@@ -213,7 +213,14 @@ export class Function extends cloud.Function implements IAwsFunction {
         }),
       },
       environment: {
-        variables: Lazy.anyValue({ produce: () => this.env }) as any,
+        variables: Lazy.anyValue({
+          produce: () => ({
+            ...this.env,
+            // enable source maps
+            NODE_OPTIONS:
+              (this.env.NODE_OPTIONS ?? "") + "--enable-source-maps",
+          }),
+        }) as any,
       },
       timeout: props.timeout
         ? props.timeout.seconds
