@@ -71,11 +71,6 @@ exports[`function with a bucket binding requiring only read 2`] = `
         "role_definition_name": "Storage Blob Data Reader",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",
       },
-      "Function_RoleAssignmentc88fdc5f491a51d8438235500a4821fbc31357ca3aStorageBlobDataReader_57069DF9": {
-        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
-        "role_definition_name": "Storage Blob Data Reader",
-        "scope": "\${azurerm_storage_account.StorageAccount.id}",
-      },
     },
     "azurerm_service_plan": {
       "ServicePlan": {
@@ -191,7 +186,7 @@ exports[`function with a bucket binding requiring read_write 2`] = `
         "role_definition_name": "Storage Blob Data Reader",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",
       },
-      "Function_RoleAssignmentc88fdc5f491a51d8438235500a4821fbc31357ca3aStorageBlobDataContributor_8C0A9D1B": {
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageBlobDataContributor_56D5F61F": {
         "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
         "role_definition_name": "Storage Blob Data Contributor",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",
