@@ -245,6 +245,56 @@ const EdgesContainer = memo(
   },
 );
 
+interface GraphProps {
+  graph: ElkNode;
+  node: FC<NodeItemProps<any>>;
+  nodeList: NodeData[];
+  offsets: Map<string, { x: number; y: number }>;
+  selectedNodeId?: string;
+  onSelectedNodeIdChange?: (id: string) => void;
+}
+
+const Graph = memo(
+  ({
+    graph,
+    node,
+    nodeList,
+    offsets,
+    selectedNodeId,
+    onSelectedNodeIdChange,
+  }: GraphProps) => {
+    return (
+      <div
+        className={classNames("relative", "transition-all", durationClass)}
+        style={{
+          width: graph.width,
+          height: graph.height,
+        }}
+      >
+        <AnimatePresence>
+          <NodesContainer
+            nodeList={nodeList}
+            node={node}
+            selectedNodeId={selectedNodeId}
+            onSelectedNodeIdChange={onSelectedNodeIdChange}
+          />
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {offsets && graph.edges && (
+            <EdgesContainer
+              width={graph.width ?? 0}
+              height={graph.height ?? 0}
+              edges={graph.edges}
+              offsets={offsets}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  },
+);
+
 type NodeData<T = any> = {
   id: string;
   width: number;
@@ -533,37 +583,14 @@ export const ElkMap = <T extends unknown = undefined>({
       <ZoomPane ref={zoomPane} className="w-full h-full" data-testid="map-pane">
         <div ref={rootElement}>
           {graph && (
-            <div
-              className={classNames(
-                "relative",
-                "transition-all",
-                durationClass,
-              )}
-              style={{
-                width: graph.width,
-                height: graph.height,
-              }}
-            >
-              <AnimatePresence>
-                <NodesContainer
-                  nodeList={nodeList}
-                  node={NodeItem}
-                  selectedNodeId={selectedNodeId}
-                  onSelectedNodeIdChange={onSelectedNodeIdChange}
-                />
-              </AnimatePresence>
-
-              <AnimatePresence>
-                {offsets && graph.edges && (
-                  <EdgesContainer
-                    width={graph.width ?? 0}
-                    height={graph.height ?? 0}
-                    edges={graph.edges}
-                    offsets={offsets}
-                  />
-                )}
-              </AnimatePresence>
-            </div>
+            <Graph
+              graph={graph}
+              node={NodeItem}
+              nodeList={nodeList}
+              offsets={offsets!}
+              selectedNodeId={selectedNodeId}
+              onSelectedNodeIdChange={onSelectedNodeIdChange}
+            />
           )}
         </div>
       </ZoomPane>
