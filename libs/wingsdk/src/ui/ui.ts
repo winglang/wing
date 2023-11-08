@@ -44,6 +44,7 @@ export const SECTION_FQN = fqnForType("ui.Section");
 export interface SectionProps {
   /**
    * The label of the section.
+   * @default - no label
    */
   readonly label?: string;
 }
@@ -104,7 +105,7 @@ export const FIELD_FQN = fqnForType("ui.Field");
 export interface FieldProps {
   /**
    * How often the field should be refreshed.
-   * Use nil to disable automatic refresh.
+   * @default - no automatic refresh
    */
   readonly refreshRate?: Duration;
 }
