@@ -155,7 +155,7 @@ describe("test-filter option", () => {
     chalk.level = defaultChalkLevel;
   });
 
-  test("wing test (no filter)", () => {
+  test("wing test (no test-filter)", () => {
     const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
 
     expect(filteredTests.length).toBe(3);
@@ -185,6 +185,30 @@ describe("retry option", () => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     logSpy.mockRestore();
+  });
+
+  test("wing test (no retry)", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+
+    process.chdir(outDir);
+    // Create a test that will consistently fail
+    fs.writeFileSync(
+      "fail.test.w",
+      `
+        bring cloud;
+        test "alwaysFail" {
+          assert(false);
+        }
+      `
+    );
+
+    await wingTest(["fail.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+    });
+
+    const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
+    expect(retryLogs.length).toBe(0);
   });
 
   test("wing test --retry [retries]", async () => {
