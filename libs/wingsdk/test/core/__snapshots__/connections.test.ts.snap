@@ -151,7 +151,6 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
-            "uiComponents": [],
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -165,7 +164,6 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -178,7 +176,6 @@ return class Handler {
           "display": {
             "description": "A cloud object store",
             "title": "Bucket",
-            "uiComponents": [],
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -191,7 +188,6 @@ return class Handler {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
-            "uiComponents": [],
           },
           "id": "my_function",
           "path": "root/my_function",

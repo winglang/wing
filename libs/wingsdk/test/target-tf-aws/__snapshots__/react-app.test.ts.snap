@@ -224,7 +224,6 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                     "display": {
                       "description": "A static website",
                       "title": "Website",
-                      "uiComponents": [],
                     },
                     "id": "Website-host",
                     "path": "root/Default/Website/Website-host",
@@ -237,7 +236,6 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                 "display": {
                   "description": "A deployable React App",
                   "title": "React App",
-                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -269,7 +267,6 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -536,7 +533,6 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                     "display": {
                       "description": "A static website",
                       "title": "Website",
-                      "uiComponents": [],
                     },
                     "id": "Website-host",
                     "path": "root/Default/Website/Website-host",
@@ -549,7 +545,6 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                 "display": {
                   "description": "A deployable React App",
                   "title": "React App",
-                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -581,7 +576,6 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

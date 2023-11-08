@@ -85,7 +85,6 @@ exports[`bucket is public 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -108,7 +107,6 @@ exports[`bucket is public 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -225,7 +223,6 @@ exports[`bucket name valid 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "The-Uncanny-Bucket",
                 "path": "root/Default/The-Uncanny-Bucket",
@@ -257,7 +254,6 @@ exports[`bucket name valid 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -399,7 +395,6 @@ exports[`bucket with two preflight files 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -438,7 +433,6 @@ exports[`bucket with two preflight files 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -580,7 +574,6 @@ exports[`bucket with two preflight objects 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -619,7 +612,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -745,7 +737,6 @@ exports[`create a bucket 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -768,7 +759,6 @@ exports[`create a bucket 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -899,7 +889,6 @@ exports[`create multiple buckets 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -922,7 +911,6 @@ exports[`create multiple buckets 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -945,7 +933,6 @@ exports[`create multiple buckets 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket2",
                 "path": "root/Default/my_bucket2",

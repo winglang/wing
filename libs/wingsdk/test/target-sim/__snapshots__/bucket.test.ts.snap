@@ -181,7 +181,6 @@ exports[`can add file in preflight 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -194,7 +193,6 @@ exports[`can add file in preflight 2`] = `
           "display": {
             "description": "A cloud object store",
             "title": "Bucket",
-            "uiComponents": [],
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -346,7 +344,6 @@ exports[`can add object in preflight 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -359,7 +356,6 @@ exports[`can add object in preflight 2`] = `
           "display": {
             "description": "A cloud object store",
             "title": "Bucket",
-            "uiComponents": [],
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -496,7 +492,6 @@ exports[`create a bucket 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -509,7 +504,6 @@ exports[`create a bucket 1`] = `
           "display": {
             "description": "A cloud object store",
             "title": "Bucket",
-            "uiComponents": [],
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -656,7 +650,6 @@ exports[`get invalid object throws an error 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -669,7 +662,6 @@ exports[`get invalid object throws an error 2`] = `
           "display": {
             "description": "A cloud object store",
             "title": "Bucket",
-            "uiComponents": [],
           },
           "id": "my_bucket",
           "path": "root/my_bucket",

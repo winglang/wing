@@ -71,7 +71,6 @@ exports[`bucket is public 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -110,7 +109,6 @@ exports[`bucket is public 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -195,7 +193,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "The-Uncanny.Bucket",
                 "path": "root/Default/The-Uncanny.Bucket",
@@ -227,7 +224,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -321,7 +317,6 @@ exports[`bucket prefix valid 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -344,7 +339,6 @@ exports[`bucket prefix valid 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "the-uncanny.bucket",
                 "path": "root/Default/the-uncanny.bucket",
@@ -565,7 +559,6 @@ exports[`bucket with onCreate method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -579,7 +572,6 @@ exports[`bucket with onCreate method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
-                  "uiComponents": [],
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -652,7 +644,6 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate",
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
@@ -731,7 +722,6 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-OnMessage-7b961f4d",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
@@ -743,7 +733,6 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-OnMessageHandler-7b961f4d",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-7b961f4d",
@@ -755,7 +744,6 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
@@ -768,7 +756,6 @@ exports[`bucket with onCreate method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -989,7 +976,6 @@ exports[`bucket with onDelete method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1003,7 +989,6 @@ exports[`bucket with onDelete method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
-                  "uiComponents": [],
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -1076,7 +1061,6 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete",
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
@@ -1155,7 +1139,6 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-OnMessage-1de1a361",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
@@ -1167,7 +1150,6 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-OnMessageHandler-1de1a361",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-1de1a361",
@@ -1179,7 +1161,6 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
@@ -1192,7 +1173,6 @@ exports[`bucket with onDelete method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -1551,7 +1531,6 @@ exports[`bucket with onEvent method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1565,7 +1544,6 @@ exports[`bucket with onEvent method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
-                  "uiComponents": [],
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -1638,7 +1616,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate",
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
@@ -1717,7 +1694,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-OnMessage-7b961f4d",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
@@ -1729,7 +1705,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-OnMessageHandler-7b961f4d",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-7b961f4d",
@@ -1741,7 +1716,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-oncreate-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
@@ -1780,7 +1754,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete",
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
@@ -1859,7 +1832,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-OnMessage-1de1a361",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
@@ -1871,7 +1843,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-OnMessageHandler-1de1a361",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-1de1a361",
@@ -1883,7 +1854,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-ondelete-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
@@ -1922,7 +1892,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate",
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
@@ -2001,7 +1970,6 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-OnMessage-46c07356",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
@@ -2013,7 +1981,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-OnMessageHandler-46c07356",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-46c07356",
@@ -2025,7 +1992,6 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
@@ -2038,7 +2004,6 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -2259,7 +2224,6 @@ exports[`bucket with onUpdate method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -2273,7 +2237,6 @@ exports[`bucket with onUpdate method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
-                  "uiComponents": [],
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -2346,7 +2309,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate",
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
@@ -2425,7 +2387,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-OnMessage-46c07356",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
@@ -2437,7 +2398,6 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-OnMessageHandler-46c07356",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-46c07356",
@@ -2449,7 +2409,6 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "uiComponents": [],
                     },
                     "id": "my_bucket-onupdate-eventHandler-9eade8f6",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
@@ -2462,7 +2421,6 @@ exports[`bucket with onUpdate method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -2586,7 +2544,6 @@ exports[`bucket with two preflight files 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -2641,7 +2598,6 @@ exports[`bucket with two preflight files 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -2765,7 +2721,6 @@ exports[`bucket with two preflight objects 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -2820,7 +2775,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -2914,7 +2868,6 @@ exports[`create a bucket 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
-                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -2937,7 +2890,6 @@ exports[`create a bucket 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
-                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",

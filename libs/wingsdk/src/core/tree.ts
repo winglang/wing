@@ -72,8 +72,9 @@ export interface DisplayInfo {
 
   /**
    * UI components to display for this resource.
+   * @default - no UI components
    */
-  readonly uiComponents: any[]; // UIComponent
+  readonly uiComponents?: any[]; // UIComponent
 }
 
 /** @internal */
@@ -211,7 +212,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
       description: display.description,
       hidden: display.hidden,
       sourceModule: display.sourceModule,
-      uiComponents,
+      uiComponents: uiComponents.length > 0 ? uiComponents : undefined,
     };
   }
   return;

@@ -115,7 +115,6 @@ exports[`create a topic 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -128,7 +127,6 @@ exports[`create a topic 1`] = `
           "display": {
             "description": "A pub/sub notification topic",
             "title": "Topic",
-            "uiComponents": [],
           },
           "id": "my_topic",
           "path": "root/my_topic",

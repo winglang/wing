@@ -121,7 +121,6 @@ exports[`create a table 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -134,7 +133,6 @@ exports[`create a table 1`] = `
           "display": {
             "description": "A DynamoDb Table",
             "title": "DynamodbTable",
-            "uiComponents": [],
           },
           "id": "create_table",
           "path": "root/create_table",
@@ -282,7 +280,6 @@ exports[`get item 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -295,7 +292,6 @@ exports[`get item 2`] = `
           "display": {
             "description": "A DynamoDb Table",
             "title": "DynamodbTable",
-            "uiComponents": [],
           },
           "id": "get_table",
           "path": "root/get_table",
@@ -443,7 +439,6 @@ exports[`put item 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -456,7 +451,6 @@ exports[`put item 2`] = `
           "display": {
             "description": "A DynamoDb Table",
             "title": "DynamodbTable",
-            "uiComponents": [],
           },
           "id": "put_table",
           "path": "root/put_table",
@@ -604,7 +598,6 @@ exports[`update item 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -617,7 +610,6 @@ exports[`update item 2`] = `
           "display": {
             "description": "A DynamoDb Table",
             "title": "DynamodbTable",
-            "uiComponents": [],
           },
           "id": "update_table",
           "path": "root/update_table",

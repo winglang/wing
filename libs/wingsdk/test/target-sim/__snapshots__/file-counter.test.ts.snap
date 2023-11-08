@@ -239,7 +239,6 @@ bucket: (function() {
               "display": {
                 "description": "A cloud object store",
                 "title": "Bucket",
-                "uiComponents": [],
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -252,7 +251,6 @@ bucket: (function() {
               "display": {
                 "description": "A distributed atomic counter",
                 "title": "Counter",
-                "uiComponents": [],
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -266,7 +264,6 @@ bucket: (function() {
                 "description": "An inflight resource",
                 "hidden": true,
                 "title": "Inflight",
-                "uiComponents": [],
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -280,7 +277,6 @@ bucket: (function() {
                   },
                   "display": {
                     "hidden": true,
-                    "uiComponents": [],
                   },
                   "id": "Queue-QueueEventMapping-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
@@ -294,7 +290,6 @@ bucket: (function() {
                     "description": "A cloud function (FaaS)",
                     "sourceModule": "@winglang/sdk",
                     "title": "setConsumer()",
-                    "uiComponents": [],
                   },
                   "id": "Queue-SetConsumer-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
@@ -306,7 +301,6 @@ bucket: (function() {
                   },
                   "display": {
                     "hidden": true,
-                    "uiComponents": [],
                   },
                   "id": "Queue-SetConsumerHandler-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
@@ -319,7 +313,6 @@ bucket: (function() {
               "display": {
                 "description": "A distributed message queue",
                 "title": "Queue",
-                "uiComponents": [],
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -341,7 +334,6 @@ bucket: (function() {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
-            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
