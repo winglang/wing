@@ -1,12 +1,11 @@
 import {
   useTheme,
   ResourceIcon,
-  USE_EXTERNAL_THEME_COLOR,
   SpinnerLoader,
 } from "@wingconsole/design-system";
 import { MapNode } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useCallback, useState } from "react";
+import { memo, useState } from "react";
 
 import { useMap } from "../services/use-map.js";
 import { ContainerNode } from "../ui/elk-map-nodes.js";
@@ -69,31 +68,6 @@ export const MapView = memo(
     const { mapData } = useMap({ showTests: showTests ?? false });
     const { theme } = useTheme();
     const [hoverMapControls, setHoverMapControls] = useState(false);
-
-    // const renderNode = useCallback(
-    //   ({ node, depth }: { node: MapNode; depth: number }) => (
-    //     <div className="h-full flex flex-col relative">
-    //       <ContainerNode
-    //         nodeId={node.id}
-    //         display={node.data?.display}
-    //         name={node.data?.label}
-    //         open={node.children && node.children?.length > 0}
-    //         selected={node.id === selectedNodeId}
-    //         resourceType={node.data?.type}
-    //         icon={(props) => (
-    //           <ResourceIcon
-    //             resourceType={node.data?.type}
-    //             resourcePath={node.data?.path}
-    //             solid
-    //             {...props}
-    //           />
-    //         )}
-    //         depth={depth}
-    //       />
-    //     </div>
-    //   ),
-    //   [selectedNodeId],
-    // );
 
     return (
       <ZoomPaneProvider>

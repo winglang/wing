@@ -35,14 +35,14 @@ export interface Viewport {
 }
 
 export interface ZoomPaneContextValue {
-  transform: d3Zoom.ZoomTransform;
+  // transform: d3Zoom.ZoomTransform;
   zoomIn(): void;
   zoomOut(): void;
   zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
 }
 
 const ZoomPaneContext = createContext<ZoomPaneContextValue>({
-  transform: d3Zoom.zoomIdentity,
+  // transform: d3Zoom.zoomIdentity,
   zoomIn() {},
   zoomOut() {},
   zoomToFit() {},
@@ -74,112 +74,137 @@ const selectionTransition = (selection: Selection, duration?: number) => {
 const MIN_ZOOM_LEVEL = 0.5;
 const MAX_ZOOM_LEVEL = 2;
 
-export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
-  props,
-) => {
-  const [transform, setTransform] = useState(() => d3Zoom.zoomIdentity);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const setTransformThrottled = useCallback(throttle(setTransform, 200), []);
+export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
+  (props) => {
+    // const [transform, setTransform] = useState(() => d3Zoom.zoomIdentity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // const setTransformThrottled = useCallback(throttle(setTransform, 200), []);
 
-  const targetRef = useRef<HTMLDivElement>(null);
-  const [zoom] = useState(() =>
-    d3Zoom
-      .zoom<HTMLDivElement, unknown>()
-      .scaleExtent([MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL])
-      .clickDistance(30)
-      .on("zoom", (event) => {
-        const { transform } = event;
-        if (targetRef.current) {
-          targetRef.current.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+    const targetRef = useRef<HTMLDivElement>(null);
+    const [zoom] = useState(() =>
+      d3Zoom
+        .zoom<HTMLDivElement, unknown>()
+        .scaleExtent([MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL])
+        .clickDistance(30)
+        .on("zoom", (event) => {
+          const { transform } = event;
+          if (targetRef.current) {
+            targetRef.current.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+          }
+          // setTransformThrottled(transform);
+        }),
+    );
+    const [selection, setSelection] = useState<Selection | undefined>();
+    const select = useCallback(
+      (node: HTMLDivElement) => {
+        const selection = d3Selection.select(node);
+        selection.call(zoom);
+        setSelection(selection);
+      },
+      [zoom],
+    );
+
+    const zoomToFit = useCallback(
+      (viewport?: Viewport, skipAnimation?: boolean) => {
+        const node = selection?.node();
+        if (!selection || !node) {
+          return;
         }
-        setTransformThrottled(transform);
-      }),
-  );
-  const [selection, setSelection] = useState<Selection | undefined>();
-  const select = useCallback(
-    (node: HTMLDivElement) => {
-      const selection = d3Selection.select(node);
-      selection.call(zoom);
-      setSelection(selection);
-    },
-    [zoom],
-  );
 
-  const zoomToFit = useCallback(
-    (viewport?: Viewport, skipAnimation?: boolean) => {
-      const node = selection?.node();
-      if (!selection || !node) {
+        if (!targetRef.current) {
+          return;
+        }
+
+        viewport ??= {
+          x: 0,
+          y: 0,
+          width: targetRef.current.clientWidth,
+          height: targetRef.current.clientHeight,
+        };
+
+        const width = node.clientWidth;
+        const height = node.clientHeight;
+        const x0 = viewport.x;
+        const y0 = viewport.y;
+        const x1 = x0 + viewport.width;
+        const y1 = y0 + viewport.height;
+
+        const defaultScale = 1.25;
+
+        const scale = Math.min(
+          8,
+          0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
+        );
+
+        console.log({
+          viewport,
+          scale,
+          defaultScale,
+          width,
+          height,
+          x0,
+          y0,
+          x1,
+          y1,
+        });
+
+        const newTransform = d3Zoom.zoomIdentity
+          .translate(width / 2, height / 2)
+          .scale(Math.min(defaultScale, scale))
+          .translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+        if (skipAnimation) {
+          zoom.transform(selection, newTransform);
+        } else {
+          selectionTransition(selection, 500).call(
+            zoom.transform,
+            newTransform,
+          );
+        }
+      },
+      [selection, zoom, targetRef],
+    );
+
+    const zoomOut = useCallback(() => {
+      if (!selection) {
         return;
       }
+      selectionTransition(selection).call(zoom.scaleBy, 0.9);
+    }, [selection, zoom]);
 
-      if (!targetRef.current) {
+    const zoomIn = useCallback(() => {
+      if (!selection) {
         return;
       }
+      selectionTransition(selection).call(zoom.scaleBy, 1.1);
+    }, [selection, zoom]);
 
-      viewport ??= {
-        x: 0,
-        y: 0,
-        width: targetRef.current.clientWidth,
-        height: targetRef.current.clientHeight,
-      };
-
-      const width = node.clientWidth;
-      const height = node.clientHeight;
-      const x0 = viewport.x;
-      const y0 = viewport.y;
-      const x1 = x0 + viewport.width;
-      const y1 = y0 + viewport.height;
-
-      const defaultScale = 1.25;
-
-      const scale = Math.min(
-        8,
-        0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
-      );
-
-      const newTransform = d3Zoom.zoomIdentity
-        .translate(width / 2, height / 2)
-        .scale(Math.min(defaultScale, scale))
-        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
-      if (skipAnimation) {
-        zoom.transform(selection, newTransform);
-      } else {
-        selectionTransition(selection, 500).call(zoom.transform, newTransform);
-      }
-    },
-    [selection, zoom, targetRef],
-  );
-
-  const zoomOut = useCallback(() => {
-    if (!selection) {
-      return;
-    }
-    selectionTransition(selection).call(zoom.scaleBy, 0.9);
-  }, [selection, zoom]);
-
-  const zoomIn = useCallback(() => {
-    if (!selection) {
-      return;
-    }
-    selectionTransition(selection).call(zoom.scaleBy, 1.1);
-  }, [selection, zoom]);
-
-  return (
-    <ZoomPanePrivateContext.Provider
-      value={{ zoom, selection, select, targetRef }}
-    >
-      <ZoomPaneContext.Provider
-        value={{ transform, zoomIn, zoomOut, zoomToFit }}
+    return (
+      <ZoomPanePrivateContext.Provider
+        value={{ zoom, selection, select, targetRef }}
       >
-        {typeof props.children === "function" ? (
-          props.children({ transform, zoomIn, zoomOut, zoomToFit })
-        ) : (
-          <>{props.children}</>
-        )}
-      </ZoomPaneContext.Provider>
-    </ZoomPanePrivateContext.Provider>
-  );
-};
+        <ZoomPaneContext.Provider
+          value={{
+            // transform,
+            zoomIn,
+            zoomOut,
+            zoomToFit,
+          }}
+        >
+          {typeof props.children === "function" ? (
+            props.children({
+              // transform,
+              zoomIn,
+              zoomOut,
+              zoomToFit,
+            })
+          ) : (
+            <>{props.children}</>
+          )}
+        </ZoomPaneContext.Provider>
+      </ZoomPanePrivateContext.Provider>
+    );
+  },
+);
 
 export const useZoomPaneContext = () => {
   return useContext(ZoomPaneContext);

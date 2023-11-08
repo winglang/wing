@@ -29,7 +29,7 @@ export const ToolbarButton = memo(
             "opacity-70 cursor-not-allowed": disabled,
           },
         )}
-        onClick={onClick}
+        onClick={() => onClick?.()}
         title={title}
         disabled={disabled}
       >
