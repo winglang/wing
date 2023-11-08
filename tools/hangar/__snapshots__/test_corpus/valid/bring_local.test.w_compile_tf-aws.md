@@ -216,6 +216,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c8b7b48c",
             "WING_TARGET": "tf-aws"
           }
