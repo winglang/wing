@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FunctionComponent, SVGProps } from "react";
+import { FunctionComponent, SVGProps, memo } from "react";
 
 import {
   getResourceIconColors,
@@ -18,23 +18,25 @@ export interface ResourceIconProps extends IconProps {
 
 export interface IconComponent extends FunctionComponent<IconProps> {}
 
-export const ResourceIcon = ({
-  resourceType,
-  resourcePath,
-  darkenOnGroupHover,
-  forceDarken,
-  className,
-  solid,
-  ...props
-}: ResourceIconProps) => {
-  const Component = getResourceIconComponent(resourceType, {
-    solid,
-    resourceId: resourcePath,
-  });
-  const colors = getResourceIconColors({
+export const ResourceIcon = memo(
+  ({
     resourceType,
+    resourcePath,
     darkenOnGroupHover,
     forceDarken,
-  });
-  return <Component className={classNames(className, colors)} {...props} />;
-};
+    className,
+    solid,
+    ...props
+  }: ResourceIconProps) => {
+    const Component = getResourceIconComponent(resourceType, {
+      solid,
+      resourceId: resourcePath,
+    });
+    const colors = getResourceIconColors({
+      resourceType,
+      darkenOnGroupHover,
+      forceDarken,
+    });
+    return <Component className={classNames(className, colors)} {...props} />;
+  },
+);

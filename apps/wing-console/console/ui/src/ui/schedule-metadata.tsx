@@ -1,5 +1,6 @@
 import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { memo } from "react";
 
 import { MetadataNode } from "./resource-metadata.js";
 
@@ -7,7 +8,7 @@ export interface ScheduleMetadataProps {
   node: MetadataNode;
 }
 
-export const ScheduleMetadata = ({ node }: ScheduleMetadataProps) => {
+export const ScheduleMetadata = memo(({ node }: ScheduleMetadataProps) => {
   const { theme } = useTheme();
   return (
     <div
@@ -20,4 +21,4 @@ export const ScheduleMetadata = ({ node }: ScheduleMetadataProps) => {
       <Attribute name="Cron expression" value={node.props?.cronExpression} />
     </div>
   );
-};
+});

@@ -1,5 +1,6 @@
 import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { memo } from "react";
 
 import { MetadataNode } from "./resource-metadata.js";
 
@@ -7,7 +8,7 @@ export interface FunctionMetadataProps {
   node: MetadataNode;
 }
 
-export const FunctionMetadata = ({ node }: FunctionMetadataProps) => {
+export const FunctionMetadata = memo(({ node }: FunctionMetadataProps) => {
   const { theme } = useTheme();
   return (
     <div
@@ -24,4 +25,4 @@ export const FunctionMetadata = ({ node }: FunctionMetadataProps) => {
       />
     </div>
   );
-};
+});

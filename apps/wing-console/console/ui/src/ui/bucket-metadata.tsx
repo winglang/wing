@@ -1,5 +1,6 @@
 import { useTheme, Attribute } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { memo } from "react";
 
 import { MetadataNode } from "./resource-metadata.js";
 
@@ -7,7 +8,7 @@ export interface BucketMetadataProps {
   node: MetadataNode;
 }
 
-export const BucketMetadata = ({ node }: BucketMetadataProps) => {
+export const BucketMetadata = memo(({ node }: BucketMetadataProps) => {
   const { theme } = useTheme();
   return (
     <div
@@ -20,4 +21,4 @@ export const BucketMetadata = ({ node }: BucketMetadataProps) => {
       <Attribute name="Public" value={node.props?.public ? "Yes" : "No"} />
     </div>
   );
-};
+});
