@@ -335,6 +335,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "AnotherFunction-c88d2a81",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.arn}",
         "runtime": "nodejs18.x",
@@ -364,6 +365,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.arn}",
         "runtime": "nodejs18.x",
@@ -396,6 +398,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
@@ -428,6 +431,7 @@ module.exports = function({ $headers }) {
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
@@ -593,7 +597,7 @@ module.exports = function({ $headers }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -685,8 +689,9 @@ class $Root extends $stdlib.std.Resource {
     (api.get("/hello", new $Closure2(this, "$Closure2")));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

@@ -187,6 +187,7 @@ exports[`create an OnDeploy 1`] = `
           "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "myondeployFunctionServiceRole7277F8BB",
@@ -198,7 +199,7 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
+    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -265,7 +266,7 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
+          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -519,6 +520,7 @@ exports[`execute OnDeploy after other resources 1`] = `
           "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "myondeployFunctionServiceRole7277F8BB",
@@ -530,7 +532,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
+    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -600,7 +602,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
+          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -857,6 +859,7 @@ exports[`execute OnDeploy before other resources 1`] = `
           "S3Key": "f80d449080b3bc6bdcb8d4d5c26fea4558a000376aa660842ca899dbe3179556.zip",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "myondeployFunctionServiceRole7277F8BB",
@@ -868,7 +871,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4": {
+    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -935,7 +938,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-          "Ref": "myondeployFunctionCurrentVersion6BC23754b7391f94763bd1da32cd4e09377d41e4",
+          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {

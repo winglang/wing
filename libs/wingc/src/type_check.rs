@@ -547,6 +547,7 @@ impl Subtype for Type {
 		if std::ptr::eq(self, other) {
 			return true;
 		}
+
 		match (self, other) {
 			(Self::Anything, _) | (_, Self::Anything) => {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
@@ -564,14 +565,14 @@ impl Subtype for Type {
 				// Remove this after https://github.com/winglang/wing/issues/1448
 
 				// First check that the function is in the inflight phase
-				if l0.phase != Phase::Inflight {
+				if !l0.phase.is_subtype_of(&Phase::Inflight) {
 					return false;
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
 					let method = method.as_variable().unwrap();
-					if method.phase != Phase::Inflight {
+					if !method.phase.is_subtype_of(&Phase::Inflight) {
 						return false;
 					}
 
@@ -667,11 +668,7 @@ impl Subtype for Type {
 
 				// Then get the type of the resource's "handle" method if it has one
 				let res_handle_type = if let Some(method) = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
-					if method.type_.is_inflight_function() {
-						method.type_
-					} else {
-						return false;
-					}
+					method.type_
 				} else {
 					return false;
 				};
@@ -686,11 +683,7 @@ impl Subtype for Type {
 
 				// Get the type of the resource's "handle" method if it has one
 				let res_handle_type = if let Some(method) = res.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
-					if method.type_.is_inflight_function() {
-						method.type_
-					} else {
-						return false;
-					}
+					method.type_
 				} else {
 					return false;
 				};
@@ -1484,6 +1477,7 @@ impl Types {
 					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
 					span: Some(span.clone()),
 					annotations: vec![],
+					hints: vec![],
 				});
 				existing_type_option.replace(error);
 				return;
@@ -1794,6 +1788,7 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: Some(spanned.span()),
 			annotations: vec![],
+			hints: vec![],
 		});
 
 		(self.make_error_variable_info(), Phase::Independent)
@@ -1804,6 +1799,16 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: Some(spanned.span()),
 			annotations: vec![],
+			hints: vec![],
+		});
+	}
+
+	fn spanned_error_with_hints<S: Into<String>>(&self, spanned: &impl Spanned, message: S, hints: Vec<String>) {
+		report_diagnostic(Diagnostic {
+			message: message.into(),
+			span: Some(spanned.span()),
+			annotations: vec![],
+			hints: hints,
 		});
 	}
 
@@ -1812,6 +1817,7 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 	}
 
@@ -1825,6 +1831,7 @@ impl<'a> TypeChecker<'a> {
 			message,
 			span: Some(span),
 			annotations,
+			hints: vec![],
 		});
 
 		self.types.error()
@@ -2928,15 +2935,40 @@ impl<'a> TypeChecker<'a> {
 			format!("\"{}\"", first_expected_type)
 		};
 
-		let mut message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
+		let mut hints: Vec<String> = vec![];
 		if return_type.is_nil() && expected_types.len() == 1 {
-			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
+			hints.push(format!(
+				"to allow \"nil\" assignment use optional type: \"{first_expected_type}?\""
+			));
 		}
 		if return_type.maybe_unwrap_option().is_json() {
 			// known json data is statically known
-			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
+			hints.push(format!(
+				"use {first_expected_type}.fromJson() to convert dynamic Json\""
+			));
 		}
-		self.spanned_error(span, message);
+		if let Some(function_signature) = actual_type.as_deep_function_sig() {
+			// No phases match
+			if !expected_types.iter().any(|t| {
+				t.as_deep_function_sig()
+					.is_some_and(|f| function_signature.phase.is_subtype_of(&f.phase))
+			}) {
+				// Get first expected phase
+				if let Some(expected_function_type) = expected_types.iter().find(|t| {
+					t.as_deep_function_sig()
+						.is_some_and(|f| !function_signature.phase.is_subtype_of(&f.phase))
+				}) {
+					hints.push(format!(
+						"expected phase to be {}, but got {} instead",
+						expected_function_type.as_deep_function_sig().unwrap().phase,
+						function_signature.phase
+					));
+				}
+			}
+		}
+
+		self.spanned_error_with_hints(span, message, hints);
 
 		// Evaluate to one of the expected types
 		first_expected_type
@@ -2999,6 +3031,7 @@ impl<'a> TypeChecker<'a> {
 							message: format!("Could not bring \"{}\" due to cyclic bring statements", source_path,),
 							span: None,
 							annotations: vec![],
+							hints: vec![],
 						}),
 					);
 					return;
@@ -3021,6 +3054,7 @@ impl<'a> TypeChecker<'a> {
 							message: format!("Symbol \"{}\" has multiple definitions in \"{}\"", key, source_path),
 							span: None,
 							annotations: vec![],
+							hints: vec![],
 						}),
 					);
 					return;
@@ -3901,7 +3935,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				return;
 			}
-			BringSource::WingLibrary(name, module_dir) => {
+			BringSource::WingLibrary(name, module_dir) | BringSource::TrustedModule(name, module_dir) => {
 				let brought_ns = match self.types.source_file_envs.get(module_dir) {
 					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
 						panic!("Expected a namespace to be associated with the library")
@@ -3923,7 +3957,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 				if let Err(e) = env.define(
-					identifier.as_ref().unwrap(),
+					identifier.as_ref().unwrap_or(&name),
 					SymbolKind::Namespace(*brought_ns),
 					AccessModifier::Private,
 					StatementIdx::Top,
@@ -3988,6 +4022,7 @@ impl<'a> TypeChecker<'a> {
 					message: "defined here (try adding \"var\" in front)".to_string(),
 					span: var.name.span(),
 				}],
+				hints: vec![],
 			});
 		} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());

@@ -2,9 +2,7 @@ bring cloud;
 bring http;
 bring util;
 
-let api = new cloud.Api({
-  cors: true
-});
+let api = new cloud.Api(cors: true);
 let body = "ok!";
 
 api.get("/path", inflight (req) => {

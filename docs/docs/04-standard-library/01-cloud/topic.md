@@ -147,7 +147,7 @@ new cloud.Topic(props?: TopicProps);
 ##### `onMessage` <a name="onMessage" id="@winglang/sdk.cloud.Topic.onMessage"></a>
 
 ```wing
-onMessage(inflight: ITopicOnMessageHandler, props?: TopicOnMessageProps): Function
+onMessage(inflight: ITopicOnMessageHandler, props?: TopicOnMessageOptions): Function
 ```
 
 Run an inflight whenever an message is published to the topic.
@@ -160,7 +160,7 @@ Run an inflight whenever an message is published to the topic.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageProps">TopicOnMessageProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageOptions">TopicOnMessageOptions</a>
 
 ---
 
@@ -205,30 +205,30 @@ The tree node.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
+### TopicOnMessageOptions <a name="TopicOnMessageOptions" id="@winglang/sdk.cloud.TopicOnMessageOptions"></a>
 
 Options for `Topic.onMessage`.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... };
+let TopicOnMessageOptions = cloud.TopicOnMessageOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageOptions.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageOptions.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageOptions.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TopicOnMessageProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.TopicOnMessageOptions.property.env"></a>
 
 ```wing
 env: MutMap<str>;
@@ -241,7 +241,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.TopicOnMessageProps.property.logRetentionDays"></a>
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.TopicOnMessageOptions.property.logRetentionDays"></a>
 
 ```wing
 logRetentionDays: num;
@@ -256,20 +256,20 @@ Setting negative value means logs will not expire.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TopicOnMessageProps.property.memory"></a>
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.TopicOnMessageOptions.property.memory"></a>
 
 ```wing
 memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageOptions.property.timeout"></a>
 
 ```wing
 timeout: duration;

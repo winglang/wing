@@ -12,6 +12,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
@@ -51,7 +52,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(1),
-      memorySize: props.memory ? props.memory : undefined,
+      memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
       architecture: Architecture.ARM_64,
       logRetention: logRetentionDays,
     });

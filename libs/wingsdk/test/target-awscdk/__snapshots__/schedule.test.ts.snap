@@ -146,6 +146,7 @@ exports[`schedule behavior with cron 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
@@ -388,6 +389,7 @@ exports[`schedule behavior with rate 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
@@ -658,6 +660,7 @@ exports[`schedule with two functions 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "ScheduleSetConsumer6e1b4252ServiceRole88F787AF",
@@ -738,6 +741,7 @@ exports[`schedule with two functions 1`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",

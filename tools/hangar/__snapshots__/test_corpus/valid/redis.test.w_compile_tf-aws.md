@@ -30,10 +30,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       return $obj;
     }
     async handle() {
-      const connection = (await $r.rawClient());
-      (await connection.set("wing", "does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
       (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
@@ -262,6 +258,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
@@ -550,7 +547,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -625,7 +622,7 @@ class $Root extends $stdlib.std.Resource {
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
           $Closure2._registerOnLiftObject(queue, host, ["push"]);
-          $Closure2._registerOnLiftObject(r, host, ["get", "rawClient"]);
+          $Closure2._registerOnLiftObject(r, host, ["get"]);
           $Closure2._registerOnLiftObject(r2, host, ["get", "set"]);
         }
         super._registerOnLift(host, ops);
@@ -638,8 +635,9 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

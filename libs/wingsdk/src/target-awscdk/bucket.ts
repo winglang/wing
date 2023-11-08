@@ -31,6 +31,7 @@ const EVENTS = {
 export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
+  private bucketDeployment?: BucketDeployment;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
@@ -41,10 +42,14 @@ export class Bucket extends cloud.Bucket {
   }
 
   public addObject(key: string, body: string): void {
-    new BucketDeployment(this, `S3Object-${key}`, {
-      destinationBucket: this.bucket,
-      sources: [Source.data(key, body)],
-    });
+    if (!this.bucketDeployment) {
+      this.bucketDeployment = new BucketDeployment(this, `S3Object-${key}`, {
+        destinationBucket: this.bucket,
+        sources: [Source.data(key, body)],
+      });
+    } else {
+      this.bucketDeployment.addSource(Source.data(key, body));
+    }
   }
 
   protected eventHandlerLocation(): string {
@@ -54,7 +59,7 @@ export class Bucket extends cloud.Bucket {
   private onEventFunction(
     event: string,
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateProps
+    opts?: cloud.BucketOnCreateOptions
   ): Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -96,12 +101,13 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
     ];
   }
 
   public onCreate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnCreateProps
+    opts?: cloud.BucketOnCreateOptions
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
@@ -119,7 +125,7 @@ export class Bucket extends cloud.Bucket {
 
   public onDelete(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnDeleteProps
+    opts?: cloud.BucketOnDeleteOptions
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
@@ -137,7 +143,7 @@ export class Bucket extends cloud.Bucket {
 
   public onUpdate(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnUpdateProps
+    opts?: cloud.BucketOnUpdateOptions
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
@@ -155,7 +161,7 @@ export class Bucket extends cloud.Bucket {
 
   public onEvent(
     inflight: cloud.IBucketEventHandler,
-    opts?: cloud.BucketOnEventProps
+    opts?: cloud.BucketOnEventOptions
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 
@@ -237,7 +243,14 @@ export function createEncryptedBucket(
 
   return new S3Bucket(scope, name, {
     encryption: BucketEncryption.S3_MANAGED,
-    blockPublicAccess: isPublic ? undefined : BlockPublicAccess.BLOCK_ALL,
+    blockPublicAccess: isPublic
+      ? {
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
+      : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,
     autoDeleteObjects: isTestEnvironment ? true : false,

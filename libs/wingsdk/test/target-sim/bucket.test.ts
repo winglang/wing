@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import { resolve } from "path";
-import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
@@ -47,25 +46,15 @@ test("update an object in bucket", async () => {
   const VALUE = JSON.stringify({ msg: "Hello world!" });
 
   // WHEN
-  // @ts-expect-error - private method
-  const notifyListeners = vi.spyOn(client, "notifyListeners");
-
   await client.put(KEY, VALUE);
-  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
-
   await client.put(KEY, JSON.stringify({ msg: "another msg" }));
-  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.UPDATE, KEY);
-  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
-    BucketEventType.CREATE,
-  ]);
 
   // THEN
   await s.stop();
-  expect(notifyListeners).toBeCalledTimes(2);
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("bucket on event creates 3 topics, and sends the right event and key in the event handlers ", async () => {
+test("bucket on event creates 3 topics, and sends the right event and key in the event handlers", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");
@@ -87,12 +76,6 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
   const logClient = s.getResource("/log_bucket") as cloud.IBucketClient;
-
-  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
-    BucketEventType.CREATE,
-    BucketEventType.UPDATE,
-    BucketEventType.DELETE,
-  ]);
 
   // THEN
   await client.put("a", "1");
@@ -386,33 +369,27 @@ test("removing a key will call onDelete method", async () => {
   const app = new SimApp();
 
   const bucket = cloud.Bucket._newBucket(app, bucketName);
-  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
+  const testInflight = Testing.makeHandler(
+    app,
+    "inflight_test",
+    `async handle(key) { console.log("Received " + key); }`
+  );
   bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();
 
   const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
 
-  // THEN
-
-  // create file
+  // WHEN
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
-
-  // delete file
-  //@ts-expect-error
-  const notifyListeners = vi.spyOn(client, "notifyListeners");
   const response = await client.delete(fileName);
+  await waitUntilTraceCount(s, 1, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
 
-  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
-    BucketEventType.DELETE,
-  ]);
-
+  // THEN
   await s.stop();
 
-  expect(notifyListeners).toBeCalledWith(
-    cloud.BucketEventType.DELETE,
-    fileName
-  );
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
 });
@@ -577,8 +554,7 @@ test("can add file in preflight", async () => {
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
-  //GIVEN
-  let error;
+  // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
 
@@ -587,23 +563,15 @@ test("Given a non public bucket when reaching to a key public url it should thro
 
   const KEY = "KEY";
 
-  // WHEN
-  try {
-    await client.publicUrl(KEY);
-  } catch (err) {
-    error = err;
-  }
-
   // THEN
-  expect(error?.message).toBe(
-    "Cannot provide public url for a non-public bucket"
+  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
+    /Cannot provide public url for a non-public bucket/
   );
   await s.stop();
 });
 
 test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
-  //GIVEN
-  let error;
+  // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
@@ -612,21 +580,14 @@ test("Given a public bucket when reaching to a non existent key, public url it s
 
   const KEY = "KEY";
 
-  // WHEN
-  try {
-    await client.publicUrl(KEY);
-  } catch (err) {
-    error = err;
-  }
-
-  expect(error?.message).toBe(
-    "Cannot provide public url for an non-existent key (key=KEY)"
-  );
   // THEN
+  await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
+    /Cannot provide public url for an non-existent key/
+  );
   await s.stop();
 });
 
-test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
+test("Given a public bucket, when giving one of its keys, we should get its public url", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket", { public: true });
@@ -643,8 +604,8 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
 
   // THEN
   await s.stop();
-  const filePath = `${client.fileDir}/${KEY}`;
-  expect(response).toEqual(url.pathToFileURL(filePath).href);
+  // file paths are different on windows and linux
+  expect(response.endsWith("KEY")).toBe(true);
 });
 
 test("check if an object exists in the bucket", async () => {
@@ -752,6 +713,65 @@ test("tryDelete objects from bucket", async () => {
   expect(existingObject1TryDelete).toEqual(true);
   expect(existingObject2TryDelete).toEqual(true);
   expect(nonExistentObjectTryDelete).toEqual(false);
+});
+
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY1 = "file1.main.w";
+  const VALUE1 = "bring cloud;";
+  const KEY2 = "file2.txt";
+  const VALUE2 = { msg: "Hello world!" };
+
+  // WHEN
+  await client.put(KEY1, VALUE1);
+  await client.putJson(KEY2, VALUE2 as any);
+  const file1SrcMetadata = await client.metadata(KEY1);
+  const file2SrcMetadata = await client.metadata(KEY2);
+
+  // Sleep 100ms to ensure 'metadata.lastModified' changes upon copy.
+  await new Promise((r) => setTimeout(r, 100));
+
+  await client.copy(KEY1, KEY1);
+  await client.copy(KEY2, `dir/${KEY2}`);
+  const file1DstMetadata = await client.metadata(KEY1);
+  const file2DstMetadata = await client.metadata(`dir/${KEY2}`);
+
+  // THEN
+  await s.stop();
+  expect(file1SrcMetadata.contentType).toEqual(file1DstMetadata.contentType);
+  expect(file1SrcMetadata.size).toEqual(file1DstMetadata.size);
+  expect(file1SrcMetadata.lastModified).not.toEqual(
+    file1DstMetadata.lastModified
+  );
+  expect(file2SrcMetadata.contentType).toEqual(file2DstMetadata.contentType);
+  expect(file2SrcMetadata.size).toEqual(file2DstMetadata.size);
+  expect(file2SrcMetadata.lastModified).not.toEqual(
+    file2DstMetadata.lastModified
+  );
+});
+
+test("copy non-existent object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    /Unable to copy. Source object does not exist/
+  );
+  await s.stop();
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

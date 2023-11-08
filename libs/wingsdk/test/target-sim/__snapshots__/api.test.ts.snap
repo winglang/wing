@@ -91,8 +91,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -239,7 +239,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -363,8 +363,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -507,7 +507,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -631,8 +631,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -775,7 +775,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -899,8 +899,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1043,7 +1043,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1167,8 +1167,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1311,7 +1311,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1435,8 +1435,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1579,7 +1579,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1811,8 +1811,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1979,7 +1979,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2120,8 +2120,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2264,7 +2264,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}/{age}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2397,8 +2397,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2541,7 +2541,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2659,8 +2659,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2807,7 +2807,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/foo",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2968,8 +2968,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2996,8 +2996,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3164,7 +3164,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -3177,7 +3177,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -3340,8 +3340,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3368,8 +3368,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3536,7 +3536,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/world",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -3549,7 +3549,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/wingnuts",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -3673,8 +3673,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3817,7 +3817,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -3950,8 +3950,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4094,7 +4094,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /users/{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -4218,8 +4218,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4362,7 +4362,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",

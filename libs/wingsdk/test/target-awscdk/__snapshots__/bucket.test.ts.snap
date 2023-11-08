@@ -27,6 +27,12 @@ exports[`bucket is public 1`] = `
             },
           ],
         },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -456,6 +462,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
@@ -912,6 +919,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnDeletec185c7e3ServiceRole113BE170",
@@ -1390,6 +1398,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnEventc185c7e3ServiceRole3C4A0154",
@@ -1846,6 +1855,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
@@ -2128,11 +2138,13 @@ exports[`bucket with two preflight files 1`] = `
             },
           ],
         },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
+        },
         "Tags": [
-          {
-            "Key": "aws-cdk:cr-owned:573ee45c",
-            "Value": "true",
-          },
           {
             "Key": "aws-cdk:cr-owned:ba3a0b02",
             "Value": "true",
@@ -2205,51 +2217,16 @@ exports[`bucket with two preflight files 1`] = `
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-        ],
-        "SourceMarkers": [
-          {},
-        ],
-        "SourceObjectKeys": [
-          "d082dd5b8abbe767a8cf80c65f5804616aa217b6d7c7b0dfcdc2bffd776b8916.zip",
-        ],
-      },
-      "Type": "Custom::CDKBucketDeployment",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "mybucketS3Objectfile2txtAwsCliLayerF81DE0CB": {
-      "Properties": {
-        "Content": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "e2277687077a2abf9ae1af1cc9565e6715e2ebb62f79ec53aa75a1af9298f642.zip",
-        },
-        "Description": "/opt/awscli/aws",
-      },
-      "Type": "AWS::Lambda::LayerVersion",
-    },
-    "mybucketS3Objectfile2txtCustomResource9DE112FA": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DestinationBucketName": {
-          "Ref": "mybucketD601CBAA",
-        },
-        "Prune": true,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
-            "Arn",
-          ],
-        },
-        "SourceBucketNames": [
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
         ],
         "SourceMarkers": [
           {},
+          {},
         ],
         "SourceObjectKeys": [
+          "d082dd5b8abbe767a8cf80c65f5804616aa217b6d7c7b0dfcdc2bffd776b8916.zip",
           "bebd69ba7a5fa23cb61c485fb88800e88d57559568bdd9c31cea77a362ba10b9.zip",
         ],
       },
@@ -2473,11 +2450,13 @@ exports[`bucket with two preflight objects 1`] = `
             },
           ],
         },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false,
+        },
         "Tags": [
-          {
-            "Key": "aws-cdk:cr-owned:573ee45c",
-            "Value": "true",
-          },
           {
             "Key": "aws-cdk:cr-owned:ba3a0b02",
             "Value": "true",
@@ -2550,51 +2529,16 @@ exports[`bucket with two preflight objects 1`] = `
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-        ],
-        "SourceMarkers": [
-          {},
-        ],
-        "SourceObjectKeys": [
-          "923d41051861c9ea2fa3f60c36c4c5a7f10bdf4fa44ed6965ba3a7bfe50f0487.zip",
-        ],
-      },
-      "Type": "Custom::CDKBucketDeployment",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "mybucketS3Objectfile2txtAwsCliLayerF81DE0CB": {
-      "Properties": {
-        "Content": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Description": "/opt/awscli/aws",
-      },
-      "Type": "AWS::Lambda::LayerVersion",
-    },
-    "mybucketS3Objectfile2txtCustomResource9DE112FA": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DestinationBucketName": {
-          "Ref": "mybucketD601CBAA",
-        },
-        "Prune": true,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536",
-            "Arn",
-          ],
-        },
-        "SourceBucketNames": [
           {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
         ],
         "SourceMarkers": [
           {},
+          {},
         ],
         "SourceObjectKeys": [
+          "923d41051861c9ea2fa3f60c36c4c5a7f10bdf4fa44ed6965ba3a7bfe50f0487.zip",
           "d8e448ceda7005e798516f772e894aaeccd89e5e42e0d9fee76bdd13f117ad3c.zip",
         ],
       },

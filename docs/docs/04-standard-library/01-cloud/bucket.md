@@ -161,6 +161,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.copy">copy</a></code> | Copy an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
@@ -237,7 +238,7 @@ referencing a file from the local filesystem.
 ##### `onCreate` <a name="onCreate" id="@winglang/sdk.cloud.Bucket.onCreate"></a>
 
 ```wing
-onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void
+onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void
 ```
 
 Run an inflight whenever a file is uploaded to the bucket.
@@ -250,14 +251,14 @@ Run an inflight whenever a file is uploaded to the bucket.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onCreate.parameter.opts"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnCreateProps">BucketOnCreateProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnCreateOptions">BucketOnCreateOptions</a>
 
 ---
 
 ##### `onDelete` <a name="onDelete" id="@winglang/sdk.cloud.Bucket.onDelete"></a>
 
 ```wing
-onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void
+onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void
 ```
 
 Run an inflight whenever a file is deleted from the bucket.
@@ -270,14 +271,14 @@ Run an inflight whenever a file is deleted from the bucket.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onDelete.parameter.opts"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnDeleteProps">BucketOnDeleteProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnDeleteOptions">BucketOnDeleteOptions</a>
 
 ---
 
 ##### `onEvent` <a name="onEvent" id="@winglang/sdk.cloud.Bucket.onEvent"></a>
 
 ```wing
-onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void
+onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void
 ```
 
 Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
@@ -290,14 +291,14 @@ Run an inflight whenever a file is uploaded, modified, or deleted from the bucke
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onEvent.parameter.opts"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnEventProps">BucketOnEventProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnEventOptions">BucketOnEventOptions</a>
 
 ---
 
 ##### `onUpdate` <a name="onUpdate" id="@winglang/sdk.cloud.Bucket.onUpdate"></a>
 
 ```wing
-onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void
+onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void
 ```
 
 Run an inflight whenever a file is updated in the bucket.
@@ -310,7 +311,34 @@ Run an inflight whenever a file is updated in the bucket.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateOptions">BucketOnUpdateOptions</a>
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.cloud.IBucketClient.copy"></a>
+
+```wing
+inflight copy(srcKey: str, dstKey: str): void
+```
+
+Copy an object to a new location in the bucket.
+
+If the destination object
+already exists, it will be overwritten. Returns once the copying is finished.
+
+###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
+
+- *Type:* str
+
+The key of the source object you wish to copy.
+
+---
+
+###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.dstKey"></a>
+
+- *Type:* str
+
+The key of the destination object after copying.
 
 ---
 
@@ -663,55 +691,55 @@ Type of event.
 
 ---
 
-### BucketOnCreateProps <a name="BucketOnCreateProps" id="@winglang/sdk.cloud.BucketOnCreateProps"></a>
+### BucketOnCreateOptions <a name="BucketOnCreateOptions" id="@winglang/sdk.cloud.BucketOnCreateOptions"></a>
 
 `onCreate` event options.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnCreateProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnCreateOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
+let BucketOnCreateOptions = cloud.BucketOnCreateOptions{ ... };
 ```
 
 
-### BucketOnDeleteProps <a name="BucketOnDeleteProps" id="@winglang/sdk.cloud.BucketOnDeleteProps"></a>
+### BucketOnDeleteOptions <a name="BucketOnDeleteOptions" id="@winglang/sdk.cloud.BucketOnDeleteOptions"></a>
 
 `onDelete` event options.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnDeleteProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnDeleteOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
+let BucketOnDeleteOptions = cloud.BucketOnDeleteOptions{ ... };
 ```
 
 
-### BucketOnEventProps <a name="BucketOnEventProps" id="@winglang/sdk.cloud.BucketOnEventProps"></a>
+### BucketOnEventOptions <a name="BucketOnEventOptions" id="@winglang/sdk.cloud.BucketOnEventOptions"></a>
 
 `onEvent` options.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnEventProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnEventOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
+let BucketOnEventOptions = cloud.BucketOnEventOptions{ ... };
 ```
 
 
-### BucketOnUpdateProps <a name="BucketOnUpdateProps" id="@winglang/sdk.cloud.BucketOnUpdateProps"></a>
+### BucketOnUpdateOptions <a name="BucketOnUpdateOptions" id="@winglang/sdk.cloud.BucketOnUpdateOptions"></a>
 
 `onUpdate` event options.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnUpdateProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnUpdateOptions.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
+let BucketOnUpdateOptions = cloud.BucketOnUpdateOptions{ ... };
 ```
 
 
