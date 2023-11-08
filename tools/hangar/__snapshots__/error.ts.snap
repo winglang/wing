@@ -4,6 +4,7 @@ exports[`bool_from_json.test.w 1`] = `
 "[ERROR] unable to parse bool:
 - instance is not of a type(s) boolean
 ../../../examples/tests/error/bool_from_json.test.w:5:15
+2| // If it is run with other tests, subsequent failures will be ignored in snapshot.
 3| let j = Json { a: 123 };
 4| 
 5| let a: bool = bool.fromJson(j.get(\\"a\\"));
@@ -35,6 +36,7 @@ exports[`number_from_json.test.w 1`] = `
 "[ERROR] unable to parse num:
 - instance is not of a type(s) number
 ../../../examples/tests/error/number_from_json.test.w:5:14
+2| // If it is run with other tests, subsequent failures will be ignored in snapshot.
 3| let j = Json { a: \\"apples\\" };
 4| 
 5| let a: num = num.fromJson(j.get(\\"a\\"));
@@ -56,6 +58,7 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 For more information, see https://www.winglang.io/docs/concepts/application-tree
 ../../../examples/tests/error/repeat_construct_id.test.w:4:15
+1| bring cloud;
 2| 
 3| let bucket1 = new cloud.Bucket();
 4| let bucket2 = new cloud.Bucket();
@@ -77,6 +80,7 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 For more information, see https://www.winglang.io/docs/concepts/application-tree
 ../../../examples/tests/error/repeat_construct_id2.test.w:8:15
+5| };
 6| 
 7| let bucket1 = new cloud.Bucket() as \\"\${make_name()}\\";
 8| let bucket2 = new cloud.Bucket() as \\"\${make_name()}\\";
@@ -93,6 +97,7 @@ exports[`string_from_json.test.w 1`] = `
 "[ERROR] unable to parse string:
 - instance is not of a type(s) string
 ../../../examples/tests/error/string_from_json.test.w:5:14
+2| // If it is run with other tests, subsequent failures will be ignored in snapshot.
 3| let j = Json { a: 123 };
 4| 
 5| let a: str = str.fromJson(j.get(\\"a\\"));
@@ -109,6 +114,7 @@ exports[`struct_from_json_1.test.w 1`] = `
 "[ERROR] unable to parse Person:
 - instance.age is not of a type(s) number
 ../../../examples/tests/error/struct_from_json_1.test.w:11:1
+ 8| 
  9| let j = {name: \\"cool\\", age: \\"not a number\\"};
 10| 
 11| Person.fromJson(j);
@@ -126,6 +132,7 @@ exports[`struct_from_json_2.test.w 1`] = `
 - instance.age is not of a type(s) number
 - instance requires property \\"advisor\\"
 ../../../examples/tests/error/struct_from_json_2.test.w:22:1
+19|   age: \\"not a number\\"
 20| };
 21| 
 22| Student.fromJson(missingAdvisor);
@@ -143,6 +150,7 @@ exports[`struct_from_json_3.test.w 1`] = `
 - instance.advisors[1].id is not of a type(s) string
 - instance.age is not of a type(s) number
 ../../../examples/tests/error/struct_from_json_3.test.w:26:1
+23|   ]
 24| };
 25| 
 26| Student.fromJson(invalidAdvisorInArray);
@@ -159,6 +167,7 @@ exports[`struct_from_json_4.test.w 1`] = `
 "[ERROR] unable to parse Student:
 - instance.advisors contains duplicate item
 ../../../examples/tests/error/struct_from_json_4.test.w:27:1
+24|   ]
 25| };
 26| 
 27| Student.fromJson(invalidAdvisorInArray);
@@ -175,6 +184,7 @@ exports[`struct_from_json_5.test.w 1`] = `
 "[ERROR] unable to parse Foo:
 - instance.names.c is not of a type(s) string
 ../../../examples/tests/error/struct_from_json_5.test.w:16:1
+13|   }
 14| };
 15| 
 16| Foo.fromJson(jFoo);
@@ -191,7 +201,7 @@ exports[`utilities.test.w 1`] = `
 "[ERROR] assertion failed: false
 ../../../examples/tests/error/utilities.test.w:1:1
 1| assert(false);
-   ^
+  log(\\"W\\");
 at (<ABSOLUTE>:LINE:COL)
  
  
