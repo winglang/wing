@@ -20,6 +20,7 @@ import { useMemo } from "react";
 import { TestItem } from "../shared/test-item.js";
 
 import { NoTests } from "./no-tests.js";
+
 export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
