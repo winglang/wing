@@ -417,6 +417,7 @@ exports[`bucket with onCreate method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
           },
         },
@@ -834,6 +835,7 @@ exports[`bucket with onDelete method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
           },
         },
@@ -1281,6 +1283,7 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
           },
         },
@@ -1304,6 +1307,7 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
           },
         },
@@ -1327,6 +1331,7 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
           },
         },
@@ -2082,6 +2087,7 @@ exports[`bucket with onUpdate method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
           },
         },

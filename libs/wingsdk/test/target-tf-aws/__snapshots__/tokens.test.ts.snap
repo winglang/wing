@@ -86,6 +86,7 @@ exports[`captures tokens 2`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Api-OnRequest-c5395e41-c8f26cae",
             "WING_TOKEN_8_109562212591387E_298": "\${jsonencode(var.Number)}",
             "WING_TOKEN_TFTOKEN_TOKEN_10": "\${jsonencode(var.List)}",
