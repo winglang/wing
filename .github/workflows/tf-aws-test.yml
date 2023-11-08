@@ -170,7 +170,7 @@ jobs:
             then 
                wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             else
-              ./localwing/node_modules/.bin/wing test -t ${{ matrix.test.target }} ${{ matrix.test.directory }}/*.test.w
+              ./localwing/node_modules/.bin/wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             fi
 
       - name: Output Terraform log
