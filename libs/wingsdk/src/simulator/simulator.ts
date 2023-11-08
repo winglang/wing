@@ -397,6 +397,18 @@ export class Simulator {
     return config;
   }
 
+  /**
+   * Obtain a resource's visual interaction components.
+   * @returns An array of UIComponent objects
+   */
+  public getResourceUIComponents(path: string): any {
+    let treeData = this.tree().rawDataForNode(path);
+    if (!treeData) {
+      throw new Error(`Resource "${path}" not found.`);
+    }
+    return treeData.display?.uiComponents ?? [];
+  }
+
   private typeInfo(fqn: string): TypeSchema {
     return this._config.types[fqn];
   }

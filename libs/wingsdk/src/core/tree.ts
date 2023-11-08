@@ -3,6 +3,7 @@ import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
 import { IResource, Node, Resource } from "../std";
+import { VisualComponent } from "../ui";
 
 export const TREE_FILE_PATH = "tree.json";
 
@@ -68,6 +69,36 @@ export interface DisplayInfo {
    * @default - no source information
    */
   readonly sourceModule?: string;
+
+  /**
+   * UI components to display for this resource.
+   */
+  readonly uiComponents: any[]; // UIComponent
+}
+
+/** @internal */
+export type UIComponent = UIField | UISection | UIButton;
+
+/** @internal */
+export interface UIField {
+  readonly kind: "field";
+  readonly label: string;
+  readonly handlerPath: string;
+  readonly refreshRate: number | undefined;
+}
+
+/** @internal */
+export interface UIButton {
+  readonly kind: "button";
+  readonly label: string;
+  readonly handlerPath: string;
+}
+
+/** @internal */
+export interface UISection {
+  readonly kind: "section";
+  readonly label: string | undefined;
+  readonly children: UIComponent[];
 }
 
 /**
@@ -160,12 +191,27 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
     return;
   }
   const display = Node.of(construct);
-  if (display.description || display.title || display.hidden) {
+
+  // generate ui data only based on direct children
+  const uiComponents: UIComponent[] = [];
+  if (
+    App.of(construct)._target === "sim" &&
+    !VisualComponent.isVisualComponent(construct)
+  ) {
+    for (const child of construct.node.children) {
+      if (VisualComponent.isVisualComponent(child)) {
+        uiComponents.push(child._toUIComponent());
+      }
+    }
+  }
+
+  if (display.description || display.title || display.hidden || uiComponents) {
     return {
       title: display.title,
       description: display.description,
       hidden: display.hidden,
       sourceModule: display.sourceModule,
+      uiComponents,
     };
   }
   return;

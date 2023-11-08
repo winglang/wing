@@ -6,7 +6,6 @@ import {
   MetadataOptions,
   IValidation,
 } from "constructs";
-import { IResource } from "./resource";
 import { Connections } from "../core";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
@@ -54,8 +53,6 @@ export class Node {
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
-  public readonly displayFields: Record<string, IDisplayFieldHandler> = {};
-  public readonly displayFieldFns: Record<string, IConstruct> = {};
 
   private constructor(construct: IConstruct) {
     this._constructsNode = construct.node;
@@ -68,10 +65,6 @@ export class Node {
    */
   public addConnection(props: AddConnectionProps) {
     this._connections.add(props);
-  }
-
-  public addDisplayField(label: string, inflight: IDisplayFieldHandler) {
-    this.displayFields[label] = inflight;
   }
 
   // ---- constructs 10.x APIs ----
@@ -333,25 +326,6 @@ export class Node {
   public lock() {
     this._constructsNode.lock();
   }
-}
-
-/**
- * A resource with an inflight "handle" method that can be passed to
- * `addDisplayField`.
- *
- * @inflight `@winglang/sdk.std.IDisplayFieldHandlerClient`
- */
-export interface IDisplayFieldHandler extends IResource {}
-
-/**
- * Inflight client for `IDisplayField`.
- */
-export interface IDisplayFieldHandlerClient {
-  /**
-   * Function that returns a string to display.
-   * @inflight
-   */
-  handle(): Promise<string>;
 }
 
 /**
