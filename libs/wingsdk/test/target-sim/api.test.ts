@@ -530,8 +530,12 @@ test("api url can be used as environment variable", async () => {
   });
 
   // WHEN
-  const s = await app.startSimulator();
+  const simfile = app.synth();
+  const s = new Simulator({ simfile });
   const fnEnvironmentValue =
+    s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
+  await s.start();
+  const fnEnvironmentValueAfterStart =
     s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
 
   const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -539,7 +543,8 @@ test("api url can be used as environment variable", async () => {
 
   // THEN
   await s.stop();
-  expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
+  expect(fnEnvironmentValue).toEqual("${wsim#root/my_api#attrs.url}");
+  expect(fnEnvironmentValueAfterStart).toEqual(expect.stringMatching(/^http/));
   expect(response.startsWith("http://")).toEqual(true);
 });
 

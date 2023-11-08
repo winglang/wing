@@ -11,7 +11,10 @@ import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-import { isToken } from "../target-sim/tokens";
+import {
+  SIMULATOR_TOKEN_REGEX,
+  SIMULATOR_TOKEN_REGEX_FULL,
+} from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
 const LOCALHOST_ADDRESS = "127.0.0.1";
@@ -535,8 +538,10 @@ export class Simulator {
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(resourceConfig.props);
-    if (resolvedProps === undefined) {
+    const { resolved, value: resolvedProps } = this.tryResolveTokens(
+      resourceConfig.props
+    );
+    if (!resolved) {
       this._addTrace({
         type: TraceType.RESOURCE,
         data: { message: `${resourceConfig.path} is waiting on a dependency` },
@@ -549,6 +554,10 @@ export class Simulator {
       // it to the init queue.
       return false;
     }
+
+    // update the resource's config with the resolved props
+    const config = this.getResourceConfig(resourceConfig.path);
+    (config.props as any) = resolvedProps;
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -639,6 +648,40 @@ export class Simulator {
     this._traces.push(event);
   }
 
+  private tryResolveToken(s: string): { resolved: boolean; value: any } {
+    const ref = s.slice(2, -1);
+    const [_, path, rest] = ref.split("#");
+    const config = this.getResourceConfig(path);
+    if (rest.startsWith("attrs.")) {
+      const attrName = rest.slice(6);
+      const attr = config?.attrs[attrName];
+
+      // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+      // that this resource haven't been started yet. so return `undefined`, which will cause
+      // this resource to go back to the init queue.
+      if (!attr) {
+        return { resolved: false, value: undefined };
+      }
+      return { resolved: true, value: attr };
+    } else if (rest.startsWith("props.")) {
+      if (!config.props) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
+        );
+      }
+      const propPath = rest.slice(6);
+      const value = config.props[propPath];
+      if (value === undefined) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
+        );
+      }
+      return { resolved: true, value };
+    } else {
+      throw new Error(`Invalid token reference: "${ref}"`);
+    }
+  }
+
   /**
    * Return an object with all tokens in it resolved to their appropriate values.
    *
@@ -653,64 +696,79 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any): any {
+  private tryResolveTokens(obj: any): { resolved: boolean; value: any } {
     if (typeof obj === "string") {
-      if (isToken(obj)) {
-        const ref = obj.slice(2, -1);
-        const [path, rest] = ref.split("#");
-        const config = this.getResourceConfig(path);
-        if (rest.startsWith("attrs.")) {
-          const attrName = rest.slice(6);
-          const attr = config?.attrs[attrName];
-
-          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
-          // that this resource haven't been started yet. so return `undefined`, which will cause
-          // this resource to go back to the init queue.
-          if (!attr) {
-            return undefined;
-          }
-          return attr;
-        } else if (rest.startsWith("props.")) {
-          if (!config.props) {
-            throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no props defined.`
-            );
-          }
-          return config.props;
-        } else {
-          throw new Error(`Invalid token reference: "${ref}"`);
+      // there are two cases - a token can be the entire string, or it can be part of the string.
+      // first, check if the entire string is a token
+      if (SIMULATOR_TOKEN_REGEX_FULL.test(obj)) {
+        const { resolved, value } = this.tryResolveToken(obj);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
+        return { resolved: true, value };
       }
 
-      return obj;
+      // otherwise, check if the string contains tokens inside it. if so, we need to resolve them
+      // and then check if the result is a string
+      const globalRegex = new RegExp(SIMULATOR_TOKEN_REGEX.source, "g");
+      const matches = obj.matchAll(globalRegex);
+      const replacements = [];
+      for (const match of matches) {
+        const { resolved, value } = this.tryResolveToken(match[0]);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
+        }
+        if (typeof value !== "string") {
+          throw new Error(
+            `Expected token "${
+              match[0]
+            }" to resolve to a string, but it resolved to ${typeof value}.`
+          );
+        }
+        replacements.push({ match, value });
+      }
+
+      // replace all the tokens in reverse order, and return the result
+      // if a token returns another token (god forbid), do not resolve it again
+      let result = obj;
+      for (const { match, value } of replacements.reverse()) {
+        if (match.index === undefined) {
+          throw new Error(`unexpected error: match.index is undefined`);
+        }
+        result =
+          result.slice(0, match.index) +
+          value +
+          result.slice(match.index + match[0].length);
+      }
+      return { resolved: true, value: result };
     }
 
     if (Array.isArray(obj)) {
       const result = [];
       for (const x of obj) {
-        const value = this.tryResolveTokens(x);
-        if (value === undefined) {
-          return undefined;
+        const { resolved, value } = this.tryResolveTokens(x);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
         result.push(value);
       }
 
-      return result;
+      return { resolved: true, value: result };
     }
 
     if (typeof obj === "object") {
       const ret: any = {};
-      for (const [key, value] of Object.entries(obj)) {
-        const resolved = this.tryResolveTokens(value);
-        if (resolved === undefined) {
-          return undefined;
+      for (const [key, v] of Object.entries(obj)) {
+        const { resolved, value } = this.tryResolveTokens(v);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
-        ret[key] = resolved;
+        ret[key] = value;
       }
-      return ret;
+      return { resolved: true, value: ret };
     }
 
-    return obj;
+    return { resolved: true, value: obj };
   }
 }
 
