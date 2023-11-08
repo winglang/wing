@@ -230,6 +230,7 @@ const TreeItem = forwardRef<HTMLButtonElement, TreeItemProps>(
     );
   },
 );
+
 export const Tree = ({
   currentRef,
   entries,

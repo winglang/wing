@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PropsWithChildren, memo } from "react";
+import { PropsWithChildren } from "react";
 
 import { useTheme } from "./theme-provider.js";
 export interface PillProps {

@@ -12,7 +12,7 @@ import {
   Attribute,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { MetadataNode } from "./resource-metadata.js";
 

@@ -1,7 +1,7 @@
 import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 import { useTheme, Button } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo, useId } from "react";
+import { useId } from "react";
 
 export interface CounterInteractionProps {
   handleIncrement: () => void;
@@ -9,6 +9,7 @@ export interface CounterInteractionProps {
   handleReset: () => void;
   currentValue: number;
 }
+
 export const CounterInteraction = ({
   handleDecrement,
   handleIncrement,

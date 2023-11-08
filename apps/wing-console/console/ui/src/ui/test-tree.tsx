@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 
 import { TestItem } from "../shared/test-item.js";
 

@@ -1,7 +1,7 @@
 import { Listbox as HeadlessListbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import { Fragment, memo, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
