@@ -74,8 +74,8 @@ import TOCInline from '@theme/TOCInline';
 > let q: num? = nil;          // q is an optional num
 > ```
 
-Numeric literals can be formatted and padded with extra zeroes or underscores to make them easier to read.
-These don't affect the value of the number:
+Numeric literals can be formatted and padded with extra zeroes or underscores to make them easier to read in source code.
+These don't affect the value of the number or how they are printed:
 
 > ```TS
 > let price = 0012.34;
