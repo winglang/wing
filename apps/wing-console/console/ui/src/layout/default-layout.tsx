@@ -201,6 +201,14 @@ export const DefaultLayout = ({
     ],
   );
 
+  const onConnectionNodeClick = useCallback(
+    (path: string) => {
+      expand(path);
+      setSelectedItems([path]);
+    },
+    [expand, setSelectedItems],
+  );
+
   return (
     <>
       {showTerms && (
@@ -349,10 +357,7 @@ export const DefaultLayout = ({
                             node={metadata.data?.node}
                             inbound={metadata.data?.inbound}
                             outbound={metadata.data?.outbound}
-                            onConnectionNodeClick={(path) => {
-                              expand(path);
-                              setSelectedItems([path]);
-                            }}
+                            onConnectionNodeClick={onConnectionNodeClick}
                           />
                         )}
 
@@ -361,10 +366,7 @@ export const DefaultLayout = ({
                             source={edgeMetadata.data.source}
                             target={edgeMetadata.data.target}
                             inflights={edgeMetadata.data.inflights}
-                            onConnectionNodeClick={(path) => {
-                              expand(path);
-                              setSelectedItems([path]);
-                            }}
+                            onConnectionNodeClick={onConnectionNodeClick}
                           />
                         )}
                       </div>

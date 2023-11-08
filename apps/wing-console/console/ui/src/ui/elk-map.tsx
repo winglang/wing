@@ -137,6 +137,10 @@ interface EdgesContainerProps {
   >;
   selectedEdgeId?: string;
   onClick?: (id: string) => void;
+  isHighlighted(nodeId: string): boolean;
+  setHighlighted(nodeId: string | undefined): void;
+  selectedNodeId?: string;
+  highlighted?: string;
 }
 
 const EdgesContainer = memo(
@@ -147,7 +151,14 @@ const EdgesContainer = memo(
     offsets,
     selectedEdgeId,
     onClick,
+    isHighlighted,
+    setHighlighted,
+    selectedNodeId,
+    highlighted,
   }: EdgesContainerProps) => {
+    // const higlight = useCallback(() => {
+    //   setHighlighted(edge.sources[0] ?? edge.targets[0]);
+    // });
     return (
       <svg
         className="absolute inset-0 pointer-events-none"
@@ -205,12 +216,12 @@ const EdgesContainer = memo(
         </defs>
 
         {edges.map((edge) => {
-          // const isNodeHighlighted =
-          //   isHighlighted(edge.sources[0]!) || isHighlighted(edge.targets[0]!);
-          // const isEdgeHighlighted =
-          //   edge.sources[0] === selectedNodeId ||
-          //   edge.targets[0] === selectedNodeId;
-          // const visible = !highlighted || isNodeHighlighted;
+          const isNodeHighlighted =
+            isHighlighted(edge.sources[0]!) || isHighlighted(edge.targets[0]!);
+          const isEdgeHighlighted =
+            edge.sources[0] === selectedNodeId ||
+            edge.targets[0] === selectedNodeId;
+          const visible = !highlighted || isNodeHighlighted;
           const selected = edge.id === selectedEdgeId;
 
           return (
@@ -218,24 +229,23 @@ const EdgesContainer = memo(
               key={edge.id}
               edge={edge}
               offset={offsets.get((edge as any).container)}
-              // highlighted={isEdgeHighlighted}
+              highlighted={isEdgeHighlighted}
               selected={selected}
-              // fade={!visible}
+              fade={!visible}
               markerStart={
-                // isEdgeHighlighted || selected ? "tee-selected" : "tee"
-                "tee"
+                isEdgeHighlighted || selected ? "tee-selected" : "tee"
+                // "tee"
               }
               markerEnd={
-                // isEdgeHighlighted || selected
-                //   ? "arrow-head-selected"
-                //   : "arrow-head"
-                "arrow-head"
+                isEdgeHighlighted || selected
+                  ? "arrow-head-selected"
+                  : "arrow-head"
+                // "arrow-head"
               }
-              // onMouseEnter={() => {
-              //   setHighlighted(edge.sources[0] ?? edge.targets[0]);
-              // }}
-              // onMouseLeave={() => setHighlighted(undefined)}
-              // onClick={onSelectedEdgeIdChange}
+              onMouseEnter={() => {
+                setHighlighted(edge.sources[0] ?? edge.targets[0]);
+              }}
+              onMouseLeave={() => setHighlighted(undefined)}
               onClick={onClick}
             />
           );
@@ -251,7 +261,11 @@ interface GraphProps {
   nodeList: NodeData[];
   offsets: Map<string, { x: number; y: number }>;
   selectedNodeId?: string;
-  onSelectedNodeIdChange?: (id: string) => void;
+  onSelectedNodeIdChange?(id: string): void;
+  isHighlighted(nodeId: string): boolean;
+  hasHighlightedEdge(node: NodeData): boolean;
+  setHighlighted(nodeId: string | undefined): void;
+  onSelectedEdgeIdChange?(id: string): void;
 }
 
 const Graph = memo(
@@ -262,6 +276,10 @@ const Graph = memo(
     offsets,
     selectedNodeId,
     onSelectedNodeIdChange,
+    isHighlighted,
+    hasHighlightedEdge,
+    setHighlighted,
+    onSelectedEdgeIdChange,
   }: GraphProps) => {
     return (
       <div
@@ -277,6 +295,9 @@ const Graph = memo(
             node={node}
             selectedNodeId={selectedNodeId}
             onSelectedNodeIdChange={onSelectedNodeIdChange}
+            isHighlighted={isHighlighted}
+            hasHighlightedEdge={hasHighlightedEdge}
+            setHighlighted={setHighlighted}
           />
         </AnimatePresence>
 
@@ -287,6 +308,10 @@ const Graph = memo(
               height={graph.height ?? 0}
               edges={graph.edges}
               offsets={offsets}
+              selectedNodeId={selectedNodeId}
+              onClick={onSelectedEdgeIdChange}
+              isHighlighted={isHighlighted}
+              setHighlighted={setHighlighted}
             />
           )}
         </AnimatePresence>
@@ -309,7 +334,10 @@ interface NodesContainerProps {
   nodeList: NodeData[];
   node: FC<NodeItemProps<any>>;
   selectedNodeId: string | undefined;
-  onSelectedNodeIdChange?: (id: string) => void;
+  onSelectedNodeIdChange?(id: string): void;
+  isHighlighted(nodeId: string): boolean;
+  hasHighlightedEdge(node: NodeData): boolean;
+  setHighlighted(nodeId: string | undefined): void;
 }
 
 const NodesContainer = memo(
@@ -318,6 +346,9 @@ const NodesContainer = memo(
     node: NodeItem,
     selectedNodeId,
     onSelectedNodeIdChange,
+    isHighlighted,
+    hasHighlightedEdge,
+    setHighlighted,
   }: NodesContainerProps) => {
     return (
       <>
@@ -340,16 +371,15 @@ const NodesContainer = memo(
             }}
             animate={{
               opacity:
-                // isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.35,
-                1,
+                isHighlighted(node.id) || hasHighlightedEdge(node) ? 1 : 0.35,
             }}
             transition={{ ease: "easeOut", duration: 0.15 }}
             exit={{
               opacity: 0,
             }}
             onClick={() => onSelectedNodeIdChange?.(node.id)}
-            // onMouseEnter={() => setHighlighted(node.id)}
-            // onMouseLeave={() => setHighlighted(undefined)}
+            onMouseEnter={() => setHighlighted(node.id)}
+            onMouseLeave={() => setHighlighted(undefined)}
           >
             <NodeItem
               node={node.data}
@@ -499,39 +529,19 @@ export const ElkMap = <T extends unknown = undefined>({
     });
   }, [graph, nodeRecord, offsets, edges, setNodeList]);
 
-  const { zoomToFit } = useZoomPaneContext() ?? {};
-  const zoomToNode = useCallback(
-    (nodeId: string | undefined, skipAnimation?: boolean) => {
-      const node = nodeList.find((node) => node.id === nodeId ?? "root");
-      if (!node) {
-        return;
-      }
-
-      zoomToFit(
-        {
-          x: node.offset.x,
-          y: node.offset.y,
-          width: node.width,
-          height: node.height,
-        },
-        skipAnimation,
-      );
-    },
-    [nodeList, zoomToFit],
-  );
+  const { zoomToFit } = useZoomPaneContext();
 
   // Zoom to fit when map changes
-  const previousNodeList = useRef<NodeData[] | undefined>();
+  const previousNodeList = useRef<NodeData[]>();
   useEffect(() => {
     // Skip animation if there was no previous node list (eg, first render)
     const skipAnimation =
       !previousNodeList.current || previousNodeList.current.length === 0;
 
-    zoomToNode("root", skipAnimation);
+    zoomToFit(undefined, skipAnimation);
 
     previousNodeList.current = nodeList;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodeList]);
+  }, [nodeList, zoomToFit]);
 
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
@@ -556,7 +566,7 @@ export const ElkMap = <T extends unknown = undefined>({
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) {
-            zoomToNode("root");
+            zoomToFit();
             return;
           }
         }
@@ -570,7 +580,7 @@ export const ElkMap = <T extends unknown = undefined>({
     return () => {
       observer.disconnect();
     };
-  }, [zoomToNode]);
+  }, [zoomToFit]);
 
   return (
     <>
@@ -590,6 +600,10 @@ export const ElkMap = <T extends unknown = undefined>({
               offsets={offsets!}
               selectedNodeId={selectedNodeId}
               onSelectedNodeIdChange={onSelectedNodeIdChange}
+              onSelectedEdgeIdChange={onSelectedEdgeIdChange}
+              isHighlighted={isHighlighted}
+              hasHighlightedEdge={hasHighlightedEdge}
+              setHighlighted={setHighlighted}
             />
           )}
         </div>

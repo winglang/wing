@@ -1,8 +1,10 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import {
+  memo,
   useCallback,
   useEffect,
+  useMemo,
   useState as useReactState,
   useState,
 } from "react";
@@ -70,129 +72,147 @@ export interface KeyValueListProps {
   className?: string;
   placeholder?: string;
 }
-export const KeyValueList = ({
-  items,
-  onAddItem,
-  onRemoveItem,
-  onEditItem,
-  onKeyChange,
-  keyPlaceholder = "Key",
-  keysList,
-  valuePlaceholder = "Value",
-  valuesList,
-  className,
-  disabled = false,
-  keyDisabled = false,
-  valueDisabled = false,
-  readonly = false,
-  placeholder = "No items",
-}: KeyValueListProps) => {
-  const { theme } = useTheme();
 
-  const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
+export const KeyValueList = memo(
+  ({
+    items,
+    onAddItem,
+    onRemoveItem,
+    onEditItem,
+    onKeyChange,
+    keyPlaceholder = "Key",
+    keysList,
+    valuePlaceholder = "Value",
+    valuesList,
+    className,
+    disabled = false,
+    keyDisabled = false,
+    valueDisabled = false,
+    readonly = false,
+    placeholder = "No items",
+  }: KeyValueListProps) => {
+    const { theme } = useTheme();
 
-  useEffect(() => {
-    if (readonly || !onAddItem) {
-      setEditItems(items);
-      return;
-    }
-    setEditItems([...items, { key: "", value: "" }]);
-  }, [readonly, items, onAddItem]);
+    const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
 
-  const onItemChange = (index: number, item: KeyValueItem) => {
-    if (index === items.length) {
-      onAddItem?.(item);
-      return;
-    }
-    onEditItem?.(index, item);
-  };
+    useEffect(() => {
+      if (readonly || !onAddItem) {
+        setEditItems(items);
+        return;
+      }
+      setEditItems([...items, { key: "", value: "" }]);
+    }, [readonly, items, onAddItem]);
 
-  return (
-    <div className={classNames("space-y-1", className)}>
-      {editItems.map((item, index) => (
-        <div key={index} className="gap-1 flex">
-          <Combobox
-            placeholder={keyPlaceholder}
-            items={keysList?.map((value) => {
-              return { label: value, value: value };
-            })}
-            value={item.key}
-            onChange={(value) => {
-              onKeyChange?.(value);
-              onItemChange(index, {
-                key: value,
-                value: item.value,
-              });
-            }}
-            inputClassName={classNames(
-              theme.bgInput,
-              theme.textInput,
-              theme.focusInput,
-              theme.borderInput,
-              "px-2.5 py-1.5 text-xs outline-none w-36",
-              "border rounded",
-              "transition ease-in-out",
-            )}
-            disabled={disabled}
-            readonly={readonly || keyDisabled}
-            filter={false}
-            showSelected={false}
-          />
+    const onItemChange = useCallback(
+      (index: number, item: KeyValueItem) => {
+        if (index === items.length) {
+          onAddItem?.(item);
+          return;
+        }
+        onEditItem?.(index, item);
+      },
+      [items.length, onAddItem, onEditItem],
+    );
 
-          <Combobox
-            placeholder={valuePlaceholder}
-            items={valuesList?.map((value) => {
-              return { label: value, value: value };
-            })}
-            value={item.value}
-            onChange={(value) => {
-              onItemChange(index, {
-                key: item.key,
-                value: value,
-              });
-            }}
-            className="w-full"
-            inputClassName={classNames(
-              theme.bgInput,
-              theme.textInput,
-              theme.focusInput,
-              theme.borderInput,
-              "px-2.5 py-1.5 text-xs outline-none grow flex min-w-0 w-full",
-              "border rounded",
-              "transition ease-in-out",
-            )}
-            disabled={disabled}
-            readonly={readonly || valueDisabled}
-            filter={false}
-            showSelected={false}
-          />
+    const comboboxItems = useMemo(
+      () =>
+        keysList?.map((value) => {
+          return { label: value, value: value };
+        }),
+      [keysList],
+    );
 
-          {!readonly && index === items.length && (
-            <Button className="px-2 grow-0" icon={PlusIcon} disabled />
-          )}
-          {!readonly && index !== items.length && onRemoveItem && (
-            <Button
-              className="px-2"
-              onClick={() => onRemoveItem(index)}
-              icon={TrashIcon}
+    const comboboxValues = useMemo(
+      () =>
+        valuesList?.map((value) => {
+          return { label: value, value: value };
+        }),
+      [valuesList],
+    );
+
+    return (
+      <div className={classNames("space-y-1", className)}>
+        {editItems.map((item, index) => (
+          <div key={index} className="gap-1 flex">
+            <Combobox
+              placeholder={keyPlaceholder}
+              items={comboboxItems}
+              value={item.key}
+              onChange={(value) => {
+                onKeyChange?.(value);
+                onItemChange(index, {
+                  key: value,
+                  value: item.value,
+                });
+              }}
+              inputClassName={classNames(
+                theme.bgInput,
+                theme.textInput,
+                theme.focusInput,
+                theme.borderInput,
+                "px-2.5 py-1.5 text-xs outline-none w-36",
+                "border rounded",
+                "transition ease-in-out",
+              )}
               disabled={disabled}
+              readonly={readonly || keyDisabled}
+              filter={false}
+              showSelected={false}
             />
-          )}
-        </div>
-      ))}
-      {editItems.length === 0 && (
-        <div
-          className={classNames(
-            theme.bgInput,
-            theme.text2,
-            theme.borderInput,
-            "flex-1 text-center text-xs",
-            "px-2.5 py-1.5 rounded border",
-          )}
-        >
-          {placeholder}
-        </div>
-      )}
-    </div>
-  );
-};
+
+            <Combobox
+              placeholder={valuePlaceholder}
+              items={comboboxValues}
+              value={item.value}
+              onChange={(value) => {
+                onItemChange(index, {
+                  key: item.key,
+                  value: value,
+                });
+              }}
+              className="w-full"
+              inputClassName={classNames(
+                theme.bgInput,
+                theme.textInput,
+                theme.focusInput,
+                theme.borderInput,
+                "px-2.5 py-1.5 text-xs outline-none grow flex min-w-0 w-full",
+                "border rounded",
+                "transition ease-in-out",
+              )}
+              disabled={disabled}
+              readonly={readonly || valueDisabled}
+              filter={false}
+              showSelected={false}
+            />
+
+            {!readonly && index === items.length && (
+              <Button className="px-2 grow-0" icon={PlusIcon} disabled />
+            )}
+            {!readonly && index !== items.length && onRemoveItem && (
+              <Button
+                className="px-2"
+                onClick={() => onRemoveItem(index)}
+                icon={TrashIcon}
+                disabled={disabled}
+              />
+            )}
+          </div>
+        ))}
+        {editItems.length === 0 && (
+          <div
+            className={classNames(
+              theme.bgInput,
+              theme.text2,
+              theme.borderInput,
+              "flex-1 text-center text-xs",
+              "px-2.5 py-1.5 rounded border",
+            )}
+          >
+            {placeholder}
+          </div>
+        )}
+      </div>
+    );
+  },
+);
