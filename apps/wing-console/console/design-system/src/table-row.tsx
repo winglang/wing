@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ChangeEvent, RefObject, memo } from "react";
+import { ChangeEvent, RefObject } from "react";
 
 import { RowInput } from "./row-input.js";
 
@@ -62,83 +62,81 @@ export type TableRowProps = {
   dataTestid?: string;
 };
 
-export const TableRow = memo(
-  ({
-    inputRef,
-    row,
-    newRow,
-    placeholder,
-    columns,
-    primaryKey,
-    disabled,
-    readonly,
-    error,
-    updateRow,
-    saveRow,
-    actions,
-    rowClassName,
-    columnClassName,
-    actionsClassName,
-    dataTestid,
-  }: TableRowProps) => {
-    return (
-      <tr
-        className={classNames(
-          rowClassName,
-          error && [
-            "rounded ring-2 ring-red-800/50",
-            "dark:ring-red-500/50 dark:border-red-500/50",
-          ],
-        )}
-        data-testid={dataTestid}
-      >
-        {columns.map(({ name: column, type }, index) => {
-          const inputType = getInputType(type);
-          return (
-            <td
-              key={column}
-              className={classNames(
-                "leading-tight px-1 py-0",
-                inputType === "checkbox" ? "text-center" : "text-left",
-                columnClassName,
-              )}
-            >
-              <RowInput
-                inputRef={index === 0 ? inputRef : undefined}
-                type={inputType}
-                placeholder={type}
-                inactivePlaceholder={placeholder}
-                value={row[column]}
-                onChange={(event) => {
-                  updateRow?.(column, getValue(inputType, event));
-                }}
-                onKeyUp={(event) => {
-                  if (event.key === "Enter") {
-                    saveRow?.(row);
-                  }
-                }}
-                onBlur={() => {
-                  !newRow && saveRow?.(row);
-                }}
-                disabled={
-                  (!newRow && column === primaryKey) || disabled || readonly
+export const TableRow = ({
+  inputRef,
+  row,
+  newRow,
+  placeholder,
+  columns,
+  primaryKey,
+  disabled,
+  readonly,
+  error,
+  updateRow,
+  saveRow,
+  actions,
+  rowClassName,
+  columnClassName,
+  actionsClassName,
+  dataTestid,
+}: TableRowProps) => {
+  return (
+    <tr
+      className={classNames(
+        rowClassName,
+        error && [
+          "rounded ring-2 ring-red-800/50",
+          "dark:ring-red-500/50 dark:border-red-500/50",
+        ],
+      )}
+      data-testid={dataTestid}
+    >
+      {columns.map(({ name: column, type }, index) => {
+        const inputType = getInputType(type);
+        return (
+          <td
+            key={column}
+            className={classNames(
+              "leading-tight px-1 py-0",
+              inputType === "checkbox" ? "text-center" : "text-left",
+              columnClassName,
+            )}
+          >
+            <RowInput
+              inputRef={index === 0 ? inputRef : undefined}
+              type={inputType}
+              placeholder={type}
+              inactivePlaceholder={placeholder}
+              value={row[column]}
+              onChange={(event) => {
+                updateRow?.(column, getValue(inputType, event));
+              }}
+              onKeyUp={(event) => {
+                if (event.key === "Enter") {
+                  saveRow?.(row);
                 }
-                error={!readonly && hasError(row[column], type)}
-                dataTestId={`${dataTestid}-column-${column}`}
-              />
-            </td>
-          );
-        })}
-        <td
-          className={classNames(
-            "align-middle",
-            columnClassName,
-            actionsClassName,
-          )}
-        >
-          {actions instanceof Function ? actions() : actions}
-        </td>
-      </tr>
-    );
-  },
-);
+              }}
+              onBlur={() => {
+                !newRow && saveRow?.(row);
+              }}
+              disabled={
+                (!newRow && column === primaryKey) || disabled || readonly
+              }
+              error={!readonly && hasError(row[column], type)}
+              dataTestId={`${dataTestid}-column-${column}`}
+            />
+          </td>
+        );
+      })}
+      <td
+        className={classNames(
+          "align-middle",
+          columnClassName,
+          actionsClassName,
+        )}
+      >
+        {actions instanceof Function ? actions() : actions}
+      </td>
+    </tr>
+  );
+};

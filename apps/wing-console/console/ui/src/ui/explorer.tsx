@@ -11,7 +11,7 @@ import {
 } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import { TreeMenuItem } from "./use-tree-menu-items.js";
 

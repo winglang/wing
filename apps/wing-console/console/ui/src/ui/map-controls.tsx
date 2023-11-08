@@ -5,9 +5,8 @@ import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Toolbar, ToolbarButton, useTheme } from "@wingconsole/design-system";
-import classNames from "classnames";
-import { memo, useContext } from "react";
+import { Toolbar, ToolbarButton } from "@wingconsole/design-system";
+import { useContext } from "react";
 
 import { TestsContext } from "../tests-context.js";
 
@@ -15,7 +14,7 @@ import { useZoomPaneContext } from "./zoom-pane.js";
 
 export interface MapControlsProps {}
 
-export const MapControls = memo(({}: MapControlsProps) => {
+export const MapControls = ({}: MapControlsProps) => {
   const { zoomIn, zoomOut, zoomToFit } = useZoomPaneContext();
 
   const { showTests, setShowTests, testsExists } = useContext(TestsContext);
@@ -61,4 +60,4 @@ export const MapControls = memo(({}: MapControlsProps) => {
       </div>
     </div>
   );
-});
+};

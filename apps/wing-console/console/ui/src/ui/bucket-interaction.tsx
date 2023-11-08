@@ -41,6 +41,7 @@ export interface BucketInteractionProps {
   onSelectedEntriesChange: (entries: string[]) => void;
   onCurrentEntryChange: (index: string | undefined) => void;
 }
+
 export const BucketInteraction = memo(
   ({
     selectedEntries,

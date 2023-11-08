@@ -8,7 +8,7 @@ export interface BucketMetadataProps {
   node: MetadataNode;
 }
 
-export const BucketMetadata = memo(({ node }: BucketMetadataProps) => {
+export const BucketMetadata = ({ node }: BucketMetadataProps) => {
   const { theme } = useTheme();
   return (
     <div
@@ -21,4 +21,4 @@ export const BucketMetadata = memo(({ node }: BucketMetadataProps) => {
       <Attribute name="Public" value={node.props?.public ? "Yes" : "No"} />
     </div>
   );
-});
+};

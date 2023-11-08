@@ -63,7 +63,7 @@ export const Select = memo(
         disabled={disabled}
         data-testid={dataTestid}
       >
-        {({ open }) => (
+        {() => (
           <div className={classNames("relative inline-block", className)}>
             <div ref={setReferenceElement} className="w-full">
               <Listbox.Button

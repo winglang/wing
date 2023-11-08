@@ -57,153 +57,151 @@ export interface ContainerNodeProps {
   onMouseEnter?: () => void;
 }
 
-export const ContainerNode = memo(
-  ({
-    open,
-    icon: Icon,
-    hideBottomBar,
-    selected,
-    onClick,
-    onMouseEnter,
-    resourceType,
-    depth,
-    display,
-    ...props
-  }: PropsWithChildren<ContainerNodeProps>) => {
-    const { theme } = useTheme();
-    const borderColor = useMemo(
-      () => getResourceBorderColor(resourceType),
-      [resourceType],
-    );
+export const ContainerNode = ({
+  open,
+  icon: Icon,
+  hideBottomBar,
+  selected,
+  onClick,
+  onMouseEnter,
+  resourceType,
+  depth,
+  display,
+  ...props
+}: PropsWithChildren<ContainerNodeProps>) => {
+  const { theme } = useTheme();
+  const borderColor = useMemo(
+    () => getResourceBorderColor(resourceType),
+    [resourceType],
+  );
 
-    const compilerNamed = useMemo(() => {
-      if (!display) {
-        return false;
-      }
-      return display.sourceModule === "@winglang/sdk" && display.title;
-    }, [display]);
+  const compilerNamed = useMemo(() => {
+    if (!display) {
+      return false;
+    }
+    return display.sourceModule === "@winglang/sdk" && display.title;
+  }, [display]);
 
-    return (
-      // TODO: Fix a11y
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+  return (
+    // TODO: Fix a11y
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      className={classNames(
+        "flex flex-col group flex-1",
+        "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
+        "transition-all",
+        "rounded",
+        "cursor-default",
+        open && "shadow-lg",
+        !open && "shadow",
+        {
+          "outline-4": selected,
+          "hover:outline-2": !selected,
+        },
+      )}
+      tabIndex={-1}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+    >
       <div
         className={classNames(
-          "flex flex-col group flex-1",
-          "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
-          "transition-all",
-          "rounded",
-          "cursor-default",
-          open && "shadow-lg",
-          !open && "shadow",
+          "flex relative",
+          "rounded overflow-hidden",
+          borderColor,
+          "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+          theme.bg3,
           {
-            "outline-4": selected,
-            "hover:outline-2": !selected,
+            "rounded-b-none": open,
+            "border-b-0": open,
+            [theme.border3]: !selected,
+            "border-sky-300 dark:border-sky-500": selected,
           },
+          "min-h-[32px]",
+          "cursor-pointer",
         )}
-        tabIndex={-1}
-        onClick={onClick}
-        onMouseEnter={onMouseEnter}
       >
-        <div
-          className={classNames(
-            "flex relative",
-            "rounded overflow-hidden",
-            borderColor,
-            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-            theme.bg3,
-            {
-              "rounded-b-none": open,
-              "border-b-0": open,
-              [theme.border3]: !selected,
-              "border-sky-300 dark:border-sky-500": selected,
-            },
-            "min-h-[32px]",
-            "cursor-pointer",
-          )}
-        >
-          {Icon && (
-            <div
-              className={classNames(
-                theme.bg4,
-                "px-2 py-1",
-                "flex items-center",
-                "transition-all",
-                "rounded-bl",
-                open && "rounded-bl-none",
-                "border-r",
-                {
-                  [theme.border3]: !selected,
-                  "border-sky-300 dark:border-sky-500": selected,
-                },
-              )}
-            >
-              <Icon className="w-5 h-5" />
-            </div>
-          )}
+        {Icon && (
           <div
             className={classNames(
-              "flex-1 flex items-center",
-              "px-2.5 py-2",
-              "rounded-br",
-              !borderColor && "rounded-tr",
-              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              theme.bg4,
+              "px-2 py-1",
+              "flex items-center",
               "transition-all",
+              "rounded-bl",
+              open && "rounded-bl-none",
+              "border-r",
               {
+                [theme.border3]: !selected,
                 "border-sky-300 dark:border-sky-500": selected,
-                "rounded-br-none": open,
-                "rounded-l": !Icon,
               },
             )}
-            data-testid={`map-node:${props.nodeId}`}
           >
-            <div className="flex flex-col">
-              <div
-                className={classNames(
-                  "leading-tight",
-                  "truncate",
-                  "transition-all",
-                  "text-xs",
-                  compilerNamed && ["text-slate-600 dark:text-slate-350"],
-                  !compilerNamed && [theme.text1],
-                )}
-              >
-                {compilerNamed ? display?.title : props.name}
-              </div>
+            <Icon className="w-5 h-5" />
+          </div>
+        )}
+        <div
+          className={classNames(
+            "flex-1 flex items-center",
+            "px-2.5 py-2",
+            "rounded-br",
+            !borderColor && "rounded-tr",
+            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+            "transition-all",
+            {
+              "border-sky-300 dark:border-sky-500": selected,
+              "rounded-br-none": open,
+              "rounded-l": !Icon,
+            },
+          )}
+          data-testid={`map-node:${props.nodeId}`}
+        >
+          <div className="flex flex-col">
+            <div
+              className={classNames(
+                "leading-tight",
+                "truncate",
+                "transition-all",
+                "text-xs",
+                compilerNamed && ["text-slate-600 dark:text-slate-350"],
+                !compilerNamed && [theme.text1],
+              )}
+            >
+              {compilerNamed ? display?.title : props.name}
             </div>
           </div>
         </div>
-        {open && (
+      </div>
+      {open && (
+        <div
+          className={classNames(
+            "flex-1 flex items-stretch",
+            "border-t",
+            "group-focus:border-sky-200 dark:group-focus:border-sky-400",
+            {
+              [theme.border3]: !selected,
+              "border-sky-200 dark:border-sky-400": selected,
+            },
+          )}
+        >
           <div
             className={classNames(
-              "flex-1 flex items-stretch",
-              "border-t",
-              "group-focus:border-sky-200 dark:group-focus:border-sky-400",
-              {
-                [theme.border3]: !selected,
-                "border-sky-200 dark:border-sky-400": selected,
-              },
+              "flex-1 rounded-b",
+              depth % 2 === 0
+                ? "bg-slate-50 dark:bg-slate-500"
+                : "bg-white dark:bg-slate-550",
+              // The classes below are commented out because they cause rendering flashes while zooming.
+              // "border-x border-b border-dashed",
+              // "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              // "transition-all",
+              // "shadow-inner",
+              // {
+              //   [theme.border3]: !selected,
+              //   "border-sky-300 dark:border-sky-500": selected,
+              // },
             )}
-          >
-            <div
-              className={classNames(
-                "flex-1 rounded-b",
-                depth % 2 === 0
-                  ? "bg-slate-50 dark:bg-slate-500"
-                  : "bg-white dark:bg-slate-550",
-                // The classes below are commented out because they cause rendering flashes while zooming.
-                // "border-x border-b border-dashed",
-                // "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-                // "transition-all",
-                // "shadow-inner",
-                // {
-                //   [theme.border3]: !selected,
-                //   "border-sky-300 dark:border-sky-500": selected,
-                // },
-              )}
-            />
-          </div>
-        )}
-      </div>
-    );
-  },
-);
+          />
+        </div>
+      )}
+    </div>
+  );
+};

@@ -18,25 +18,23 @@ export interface ResourceIconProps extends IconProps {
 
 export interface IconComponent extends FunctionComponent<IconProps> {}
 
-export const ResourceIcon = memo(
-  ({
+export const ResourceIcon = ({
+  resourceType,
+  resourcePath,
+  darkenOnGroupHover,
+  forceDarken,
+  className,
+  solid,
+  ...props
+}: ResourceIconProps) => {
+  const Component = getResourceIconComponent(resourceType, {
+    solid,
+    resourceId: resourcePath,
+  });
+  const colors = getResourceIconColors({
     resourceType,
-    resourcePath,
     darkenOnGroupHover,
     forceDarken,
-    className,
-    solid,
-    ...props
-  }: ResourceIconProps) => {
-    const Component = getResourceIconComponent(resourceType, {
-      solid,
-      resourceId: resourcePath,
-    });
-    const colors = getResourceIconColors({
-      resourceType,
-      darkenOnGroupHover,
-      forceDarken,
-    });
-    return <Component className={classNames(className, colors)} {...props} />;
-  },
-);
+  });
+  return <Component className={classNames(className, colors)} {...props} />;
+};

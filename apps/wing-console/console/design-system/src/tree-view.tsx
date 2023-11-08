@@ -1,4 +1,4 @@
-import { PropsWithChildren, memo } from "react";
+import { PropsWithChildren } from "react";
 
 import { TreeView as HeadlessTreeView } from "./headless/tree-view.js";
 
@@ -12,8 +12,9 @@ export interface TreeViewProps {
   onExpandedItemsChange?: (itemIds: string[]) => void;
 }
 
-export const TreeView = memo(
-  ({ children, ...props }: PropsWithChildren<TreeViewProps>) => {
-    return <HeadlessTreeView {...props}>{children}</HeadlessTreeView>;
-  },
-);
+export const TreeView = ({
+  children,
+  ...props
+}: PropsWithChildren<TreeViewProps>) => {
+  return <HeadlessTreeView {...props}>{children}</HeadlessTreeView>;
+};
