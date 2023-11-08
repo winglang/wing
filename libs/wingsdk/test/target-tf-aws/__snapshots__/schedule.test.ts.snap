@@ -118,6 +118,7 @@ exports[`schedule behavior with cron 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -148,6 +149,7 @@ exports[`schedule behavior with cron 2`] = `
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
+                  "uiComponents": [],
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
@@ -226,6 +228,7 @@ exports[`schedule behavior with cron 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
@@ -237,6 +240,7 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -268,6 +272,7 @@ exports[`schedule behavior with cron 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -426,6 +431,7 @@ exports[`schedule behavior with rate 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -456,6 +462,7 @@ exports[`schedule behavior with rate 2`] = `
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
+                  "uiComponents": [],
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
@@ -534,6 +541,7 @@ exports[`schedule behavior with rate 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
@@ -545,6 +553,7 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -576,6 +585,7 @@ exports[`schedule behavior with rate 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -788,6 +798,7 @@ exports[`schedule with two functions 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler1",
                 "path": "root/Default/Handler1",
@@ -801,6 +812,7 @@ exports[`schedule with two functions 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler2",
                 "path": "root/Default/Handler2",
@@ -839,6 +851,7 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
+                  "uiComponents": [],
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
@@ -917,6 +930,7 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTick-0a615500",
                 "path": "root/Default/Schedule-OnTick-0a615500",
@@ -995,6 +1009,7 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTick-7b33bcba",
                 "path": "root/Default/Schedule-OnTick-7b33bcba",
@@ -1006,6 +1021,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
@@ -1017,6 +1033,7 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "uiComponents": [],
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
@@ -1048,6 +1065,7 @@ exports[`schedule with two functions 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

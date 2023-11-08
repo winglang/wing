@@ -96,6 +96,7 @@ exports[`basic function 2`] = `
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
+                      "uiComponents": [],
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -116,6 +117,7 @@ exports[`basic function 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -129,6 +131,7 @@ exports[`basic function 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -284,6 +287,7 @@ exports[`basic function with environment variables 2`] = `
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
+                      "uiComponents": [],
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -304,6 +308,7 @@ exports[`basic function with environment variables 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -317,6 +322,7 @@ exports[`basic function with environment variables 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -471,6 +477,7 @@ exports[`basic function with memory size specified 2`] = `
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
+                      "uiComponents": [],
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -491,6 +498,7 @@ exports[`basic function with memory size specified 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -504,6 +512,7 @@ exports[`basic function with memory size specified 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -658,6 +667,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
+                      "uiComponents": [],
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -678,6 +688,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -691,6 +702,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",

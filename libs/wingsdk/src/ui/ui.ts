@@ -1,37 +1,9 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
+import { VisualComponent } from "./visual";
 import { FUNCTION_FQN, type Function } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
-import { Duration, IResource, Node, Resource } from "../std";
-
-const VISUAL_COMPONENT_SYMBOL = Symbol.for("@winglang/sdk.ui.VisualComponent");
-
-/**
- * A visual component is a class specifies how a class is rendered in the Wing Console.
- * This is a base class for all UI components.
- */
-export abstract class VisualComponent extends Resource {
-  /**
-   * Returns true if the given construct is a visual component.
-   */
-  public static isVisualComponent(c: IConstruct): c is VisualComponent {
-    return (c as any)[VISUAL_COMPONENT_SYMBOL] !== undefined;
-  }
-
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-
-    Node.of(this).hidden = true;
-    Object.defineProperty(this, VISUAL_COMPONENT_SYMBOL, {
-      value: this,
-      enumerable: false,
-      writable: false,
-    });
-  }
-
-  /** @internal */
-  public abstract _toUIComponent(): UIComponent;
-}
+import { Duration, IResource } from "../std";
 
 /**
  * Global identifier for `Section`.

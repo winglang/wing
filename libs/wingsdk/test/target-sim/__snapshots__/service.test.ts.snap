@@ -128,6 +128,9 @@ exports.handle = async function() {
             "fqn": "constructs.Construct",
             "version": "10.2.70",
           },
+          "display": {
+            "uiComponents": [],
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -140,6 +143,7 @@ exports.handle = async function() {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -152,6 +156,7 @@ exports.handle = async function() {
           "display": {
             "description": "A cloud service",
             "title": "Service",
+            "uiComponents": [],
           },
           "id": "my_service",
           "path": "root/my_service",

@@ -78,6 +78,7 @@ exports[`bucket is public 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -217,6 +218,7 @@ exports[`bucket with two preflight files 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -356,6 +358,7 @@ exports[`bucket with two preflight objects 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -467,6 +470,7 @@ exports[`create a bucket 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -588,6 +592,7 @@ exports[`two buckets 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket1",
                 "path": "root/Default/my_bucket1",
@@ -618,6 +623,7 @@ exports[`two buckets 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "uiComponents": [],
                 },
                 "id": "my_bucket2",
                 "path": "root/Default/my_bucket2",

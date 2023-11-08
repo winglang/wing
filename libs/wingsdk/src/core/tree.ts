@@ -3,7 +3,7 @@ import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
 import { IResource, Node, Resource } from "../std";
-import { VisualComponent } from "../ui";
+import { VisualComponent } from "../ui/visual";
 
 export const TREE_FILE_PATH = "tree.json";
 

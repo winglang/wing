@@ -211,6 +211,7 @@ exports[`function with a table binding 3`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
+                  "uiComponents": [],
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -224,6 +225,7 @@ exports[`function with a table binding 3`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "uiComponents": [],
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -246,6 +248,7 @@ exports[`function with a table binding 3`] = `
                 "display": {
                   "description": "A DynamoDb Table",
                   "title": "DynamodbTable",
+                  "uiComponents": [],
                 },
                 "id": "Table",
                 "path": "root/Default/Table",
@@ -277,6 +280,7 @@ exports[`function with a table binding 3`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

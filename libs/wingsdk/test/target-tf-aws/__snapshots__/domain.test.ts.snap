@@ -173,6 +173,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "display": {
                   "description": "A cloud domain",
                   "title": "Domain",
+                  "uiComponents": [],
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
@@ -261,6 +262,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                     "display": {
                       "description": "A static website",
                       "title": "Website",
+                      "uiComponents": [],
                     },
                     "id": "Website-host",
                     "path": "root/Default/Website/Website-host",
@@ -273,6 +275,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "display": {
                   "description": "A deployable React App",
                   "title": "React App",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -304,6 +307,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -517,6 +521,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "display": {
                   "description": "A cloud domain",
                   "title": "Domain",
+                  "uiComponents": [],
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
@@ -605,6 +610,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                     "display": {
                       "description": "A static website",
                       "title": "Website",
+                      "uiComponents": [],
                     },
                     "id": "Website-host",
                     "path": "root/Default/Website/Website-host",
@@ -617,6 +623,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "display": {
                   "description": "A deployable React App",
                   "title": "React App",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -648,6 +655,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -871,6 +879,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                 "display": {
                   "description": "A cloud domain",
                   "title": "Domain",
+                  "uiComponents": [],
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
@@ -965,6 +974,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                 "display": {
                   "description": "A static website",
                   "title": "Website",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -996,6 +1006,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1219,6 +1230,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                 "display": {
                   "description": "A cloud domain",
                   "title": "Domain",
+                  "uiComponents": [],
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
@@ -1313,6 +1325,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                 "display": {
                   "description": "A static website",
                   "title": "Website",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -1344,6 +1357,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

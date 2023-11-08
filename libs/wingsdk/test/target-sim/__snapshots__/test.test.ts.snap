@@ -140,6 +140,7 @@ async handle(event) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "uiComponents": [],
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -153,6 +154,7 @@ async handle(event) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "uiComponents": [],
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -167,6 +169,7 @@ async handle(event) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "uiComponents": [],
               },
               "id": "Handler",
               "path": "root/test:my_test/Handler",
@@ -179,6 +182,7 @@ async handle(event) {
           "display": {
             "description": "A cloud unit test.",
             "title": "Test",
+            "uiComponents": [],
           },
           "id": "test:my_test",
           "path": "root/test:my_test",

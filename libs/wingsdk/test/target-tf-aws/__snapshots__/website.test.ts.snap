@@ -240,6 +240,7 @@ exports[`default website behavior 2`] = `
                 "display": {
                   "description": "A static website",
                   "title": "Website",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -271,6 +272,7 @@ exports[`default website behavior 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -568,6 +570,7 @@ exports[`website with addFile 2`] = `
                 "display": {
                   "description": "A static website",
                   "title": "Website",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -599,6 +602,7 @@ exports[`website with addFile 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -896,6 +900,7 @@ exports[`website with addJson 2`] = `
                 "display": {
                   "description": "A static website",
                   "title": "Website",
+                  "uiComponents": [],
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -927,6 +932,7 @@ exports[`website with addJson 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
