@@ -366,7 +366,7 @@ const NodesContainer = memo(
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
   edges,
-  node: NodeItem,
+  node,
   selectedNodeId,
   onSelectedNodeIdChange,
   selectedEdgeId,
@@ -576,7 +576,7 @@ export const ElkMap = <T extends unknown = undefined>({
     <>
       <InvisibleNodeSizeCalculator
         nodes={nodes}
-        node={NodeItem}
+        node={node}
         onSizesChange={setMinimumSizes}
       />
 
@@ -585,7 +585,7 @@ export const ElkMap = <T extends unknown = undefined>({
           {graph && (
             <Graph
               graph={graph}
-              node={NodeItem}
+              node={node}
               nodeList={nodeList}
               offsets={offsets!}
               selectedNodeId={selectedNodeId}

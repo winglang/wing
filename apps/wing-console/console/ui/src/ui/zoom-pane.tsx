@@ -2,7 +2,7 @@ import classNames from "classnames";
 import * as d3Selection from "d3-selection";
 import * as d3Zoom from "d3-zoom";
 import throttle from "lodash.throttle";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, memo, useEffect } from "react";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -185,29 +185,34 @@ export const useZoomPaneContext = () => {
   return useContext(ZoomPaneContext);
 };
 
-export const ZoomPane = forwardRef<
-  HTMLDivElement,
-  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
->((props, _ref) => {
-  const context = useContext(ZoomPanePrivateContext);
+export const ZoomPane = memo(
+  forwardRef<
+    HTMLDivElement,
+    DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+  >((props, _ref) => {
+    const context = useContext(ZoomPanePrivateContext);
 
-  if (!context) {
-    return <>{props.children}</>;
-  }
+    if (!context) {
+      return <>{props.children}</>;
+    }
 
-  const { select, targetRef } = context;
+    const { select, targetRef } = context;
 
-  return (
-    <div ref={_ref} className={classNames(props.className, "overflow-hidden")}>
+    return (
       <div
-        ref={select}
-        {...props}
+        ref={_ref}
         className={classNames(props.className, "overflow-hidden")}
       >
-        <div ref={targetRef} className="inline-block origin-top-left">
-          {props.children}
+        <div
+          ref={select}
+          {...props}
+          className={classNames(props.className, "overflow-hidden")}
+        >
+          <div ref={targetRef} className="inline-block origin-top-left">
+            {props.children}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  }),
+);
