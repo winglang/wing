@@ -25,6 +25,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "uiComponents": [],
                     },
                     "id": "$Closure1",
                     "path": "root/Default/Default/$Closure1",
@@ -36,6 +37,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "uiComponents": [],
                     },
                     "id": "$Closure5",
                     "path": "root/Default/Default/$Closure5",
@@ -62,6 +64,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "display": {
                               "description": "A distributed atomic counter",
                               "title": "Counter",
+                              "uiComponents": [],
                             },
                             "id": "cloud.Counter",
                             "path": "root/Default/Default/Bar/Foo/cloud.Counter",
@@ -71,6 +74,9 @@ exports[`tree.json for an app with many resources 1`] = `
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
                         },
+                        "display": {
+                          "uiComponents": [],
+                        },
                         "id": "Foo",
                         "path": "root/Default/Default/Bar/Foo",
                       },
@@ -78,6 +84,9 @@ exports[`tree.json for an app with many resources 1`] = `
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
+                    },
+                    "display": {
+                      "uiComponents": [],
                     },
                     "id": "Bar",
                     "path": "root/Default/Default/Bar",
@@ -91,6 +100,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
+                          "uiComponents": [],
                         },
                         "id": "$Closure2",
                         "path": "root/Default/Default/BigPublisher/$Closure2",
@@ -102,6 +112,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
+                          "uiComponents": [],
                         },
                         "id": "$Closure3",
                         "path": "root/Default/Default/BigPublisher/$Closure3",
@@ -113,6 +124,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
+                          "uiComponents": [],
                         },
                         "id": "$Closure4",
                         "path": "root/Default/Default/BigPublisher/$Closure4",
@@ -169,6 +181,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "display": {
                               "description": "A pub/sub notification topic",
                               "title": "Topic",
+                              "uiComponents": [],
                             },
                             "id": "b2-oncreate",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate",
@@ -247,6 +260,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "display": {
                               "description": "A cloud function (FaaS)",
                               "title": "Function",
+                              "uiComponents": [],
                             },
                             "id": "b2-oncreate-OnMessage-59543b60",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60",
@@ -258,6 +272,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "hidden": true,
+                              "uiComponents": [],
                             },
                             "id": "b2-oncreate-OnMessageHandler-59543b60",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessageHandler-59543b60",
@@ -269,6 +284,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "hidden": true,
+                              "uiComponents": [],
                             },
                             "id": "b2-oncreate-eventHandler-fe70cb1e",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
@@ -281,6 +297,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud object store",
                           "title": "Bucket",
+                          "uiComponents": [],
                         },
                         "id": "b2",
                         "path": "root/Default/Default/BigPublisher/b2",
@@ -303,6 +320,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud object store",
                           "title": "Bucket",
+                          "uiComponents": [],
                         },
                         "id": "cloud.Bucket",
                         "path": "root/Default/Default/BigPublisher/cloud.Bucket",
@@ -333,6 +351,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A distributed message queue",
                           "title": "Queue",
+                          "uiComponents": [],
                         },
                         "id": "cloud.Queue",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue",
@@ -403,6 +422,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
+                          "uiComponents": [],
                         },
                         "id": "cloud.Queue-SetConsumer-c50bc9ef",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
@@ -414,6 +434,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
+                          "uiComponents": [],
                         },
                         "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
@@ -444,6 +465,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A pub/sub notification topic",
                           "title": "Topic",
+                          "uiComponents": [],
                         },
                         "id": "cloud.Topic",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic",
@@ -522,6 +544,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
+                          "uiComponents": [],
                         },
                         "id": "cloud.Topic-OnMessage-113c9059",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
@@ -533,6 +556,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
+                          "uiComponents": [],
                         },
                         "id": "cloud.Topic-OnMessageHandler-113c9059",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessageHandler-113c9059",
@@ -541,6 +565,9 @@ exports[`tree.json for an app with many resources 1`] = `
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
+                    },
+                    "display": {
+                      "uiComponents": [],
                     },
                     "id": "BigPublisher",
                     "path": "root/Default/Default/BigPublisher",
@@ -558,6 +585,9 @@ exports[`tree.json for an app with many resources 1`] = `
                                       "fqn": "@winglang/sdk.std.Resource",
                                       "version": "0.0.0",
                                     },
+                                    "display": {
+                                      "uiComponents": [],
+                                    },
                                     "id": "Dummy",
                                     "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy",
                                   },
@@ -565,6 +595,9 @@ exports[`tree.json for an app with many resources 1`] = `
                                 "constructInfo": {
                                   "fqn": "@winglang/sdk.std.Resource",
                                   "version": "0.0.0",
+                                },
+                                "display": {
+                                  "uiComponents": [],
                                 },
                                 "id": "StaticDummy",
                                 "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy",
@@ -574,6 +607,9 @@ exports[`tree.json for an app with many resources 1`] = `
                               "fqn": "@winglang/sdk.std.Resource",
                               "version": "0.0.0",
                             },
+                            "display": {
+                              "uiComponents": [],
+                            },
                             "id": "Dummy",
                             "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy",
                           },
@@ -581,6 +617,9 @@ exports[`tree.json for an app with many resources 1`] = `
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
+                        },
+                        "display": {
+                          "uiComponents": [],
                         },
                         "id": "Dummy",
                         "path": "root/Default/Default/ScopeAndIdTestClass/Dummy",
@@ -590,6 +629,9 @@ exports[`tree.json for an app with many resources 1`] = `
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
                         },
+                        "display": {
+                          "uiComponents": [],
+                        },
                         "id": "tc0",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc0",
                       },
@@ -597,6 +639,9 @@ exports[`tree.json for an app with many resources 1`] = `
                         "constructInfo": {
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
+                        },
+                        "display": {
+                          "uiComponents": [],
                         },
                         "id": "tc1",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc1",
@@ -606,6 +651,9 @@ exports[`tree.json for an app with many resources 1`] = `
                           "fqn": "@winglang/sdk.std.Resource",
                           "version": "0.0.0",
                         },
+                        "display": {
+                          "uiComponents": [],
+                        },
                         "id": "tc2",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc2",
                       },
@@ -613,6 +661,9 @@ exports[`tree.json for an app with many resources 1`] = `
                     "constructInfo": {
                       "fqn": "@winglang/sdk.std.Resource",
                       "version": "0.0.0",
+                    },
+                    "display": {
+                      "uiComponents": [],
                     },
                     "id": "ScopeAndIdTestClass",
                     "path": "root/Default/Default/ScopeAndIdTestClass",
@@ -635,6 +686,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     "display": {
                       "description": "A cloud object store",
                       "title": "Bucket",
+                      "uiComponents": [],
                     },
                     "id": "cloud.Bucket",
                     "path": "root/Default/Default/cloud.Bucket",
@@ -647,6 +699,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     "display": {
                       "description": "A cloud unit test.",
                       "title": "Test",
+                      "uiComponents": [],
                     },
                     "id": "test:dependency cycles",
                     "path": "root/Default/Default/test:dependency cycles",
@@ -659,6 +712,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     "display": {
                       "description": "A cloud unit test.",
                       "title": "Test",
+                      "uiComponents": [],
                     },
                     "id": "test:test",
                     "path": "root/Default/Default/test:test",
@@ -667,6 +721,9 @@ exports[`tree.json for an app with many resources 1`] = `
                 "constructInfo": {
                   "fqn": "@winglang/sdk.std.Resource",
                   "version": "0.0.0",
+                },
+                "display": {
+                  "uiComponents": [],
                 },
                 "id": "Default",
                 "path": "root/Default/Default",
@@ -698,6 +755,7 @@ exports[`tree.json for an app with many resources 1`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "uiComponents": [],
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
