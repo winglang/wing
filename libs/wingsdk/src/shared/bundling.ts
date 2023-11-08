@@ -1,3 +1,4 @@
+import * as crypto from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
 import { buildSync } from "esbuild-wasm";
@@ -89,9 +90,12 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   writeFileSync(outfile, fileContents);
   writeFileSync(outfileMap, JSON.stringify(sourcemapData));
 
+  // calculate a md5 hash of the contents of asset.path
+  const codeHash = crypto.createHash("md5").update(fileContents).digest("hex");
+
   return {
     entrypointPath: outfile,
     directory: outdir,
-    hash: output.hash,
+    hash: codeHash,
   };
 }
