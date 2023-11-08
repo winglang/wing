@@ -43,7 +43,6 @@ export interface TestOptions extends CompileOptions {
   testFilter?: string;
   /**
    * How many times failed tests should be retried.
-   * @default 3
    */
   retry?: number;
 }
