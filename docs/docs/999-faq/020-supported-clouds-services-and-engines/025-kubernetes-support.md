@@ -5,15 +5,20 @@ id: kubernetes-support
 keywords: [faq, supported provisioning engines, Winglang, Wing programming language, Wing language, Kubernetes, K8S]
 ---
 
-## Short answer
-We don't support Kubernetes yet, but we will in the future. 
-Our roadmap is [here](https://www.winglang.io/contributing/status).
+## Deploying Wing workloads to Kubernetes
 
-## Long answer
-There are a different kinds of Kubernetes support with varying levels of maturity in Wing:
-1. Creation and configuration of K8S clusters through the [K8S Terraform Provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs). Since Wing supports any Terraform provider, it should work, but we have not officially tested it yet.
-2. Using Kubernetes to run long-running services. This is not yet supported. You can add your vote for it on [this issue](https://github.com/winglang/wing/issues/2319) to help increase its priority.
-3. Using Kubernetes as a provisioning engine, which means it will be a built-in compilation target for cloud services. You can add your vote for it on [this issue](https://github.com/winglang/wing/issues/2066) to help increase its priority. 
+Yes, Wing supports Kubernetes through the `Workload` resource which is a high-level representation
+of containerized workloads. When deployed to AWS, workloads are scheduled into a Kubernetes/EKS
+cluster via Helm.
 
-Wing currently has full support for Terraform. AWS CDK (based on CloudFormation) is also supported by the community.
+## Synthesizing Kubernetes manifests through Wing using CDK8s
 
+Since Wing has native support for constructs, you can technically use [CDK for
+Kubernetes](https://cdk8s.io) (CDK8s) to synthesize Kubernetes manifests and apply them to your
+cluster.
+
+See [#678](https://github.com/winglang/wing/issues/678) for details.
+
+## Creating Kubernetes cluster infrastructure with Wing
+
+The [Kubernetes Terraform Provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs) can be used in Wing to provision complete clusters.

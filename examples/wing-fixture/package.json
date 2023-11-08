@@ -1,5 +1,5 @@
 {
-  "name": "wing-fixture",
+  "name": "@winglibs/testfixture",
   "version": "0.0.0",
   "description": "A fake library just for testing stuff out",
   "author": {

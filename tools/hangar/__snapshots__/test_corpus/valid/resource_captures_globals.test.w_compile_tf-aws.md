@@ -256,6 +256,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.arn}",
         "runtime": "nodejs18.x",

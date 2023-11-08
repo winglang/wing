@@ -207,6 +207,7 @@ module.exports = function({  }) {
         },
         "function_name": "cloud-Function-c8d4b6f0",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.arn}",
         "runtime": "nodejs18.x",

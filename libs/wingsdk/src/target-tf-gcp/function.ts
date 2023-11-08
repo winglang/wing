@@ -8,6 +8,7 @@ import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-obj
 import * as cloud from "../cloud";
 import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
   CaseConventions,
   NameOptions,
@@ -106,7 +107,7 @@ export class Function extends cloud.Function {
       project: app.projectId,
       region: app.region,
       runtime: "nodejs16",
-      availableMemoryMb: props.memory ?? 128,
+      availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
