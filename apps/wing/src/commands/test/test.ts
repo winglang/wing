@@ -252,14 +252,18 @@ async function runTestsWithRetry(
   const results: std.TestResult[] = [];
 
   while (runCount > 0 && remainingTests.length > 0) {
-    const currentResults = await Promise.all(
-      remainingTests.map((path) => testRunner.runTest(path))
-    );
+    const failedTests: string[] = [];
 
-    results.push(...currentResults);
+    for (const testPath of remainingTests) {
+      const result = await testRunner.runTest(testPath);
+      results.push(result);
 
-    // Filter out the failed tests to retry
-    remainingTests = currentResults.filter((result) => !result.pass).map((result) => result.path);
+      if (!result.pass) {
+        failedTests.push(testPath);
+      }
+    }
+
+    remainingTests = failedTests;
 
     if (remainingTests.length > 0 && runCount > 1) {
       console.log(`Retrying failed tests. ${runCount - 1} retries left.`);
