@@ -5,11 +5,11 @@ import { TestTree } from "../ui/test-tree.js";
 
 export interface TestsTreeViewProps {
   onSelectedItemsChange?: (items: string[]) => void;
-  selectedItems?: string[];
+  selectedItemId?: string;
 }
 
 export const TestsTreeView = memo(
-  ({ onSelectedItemsChange, selectedItems }: TestsTreeViewProps) => {
+  ({ onSelectedItemsChange, selectedItemId }: TestsTreeViewProps) => {
     const { testList, runAllTests, runTest } = useTests();
 
     return (
@@ -18,7 +18,7 @@ export const TestsTreeView = memo(
         handleRunAllTests={runAllTests}
         handleRunTest={runTest}
         onSelectedItemsChange={onSelectedItemsChange}
-        selectedItems={selectedItems}
+        selectedItemId={selectedItemId}
       />
     );
   },

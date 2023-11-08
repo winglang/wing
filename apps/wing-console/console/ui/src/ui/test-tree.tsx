@@ -15,7 +15,7 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 
 import { TestItem } from "../shared/test-item.js";
 
@@ -25,7 +25,7 @@ export interface TestTreeProps {
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
   onSelectedItemsChange?: (ids: string[]) => void;
-  selectedItems?: string[];
+  selectedItemId?: string;
 }
 
 export const TestTree = memo(
@@ -34,9 +34,14 @@ export const TestTree = memo(
     handleRunTest,
     handleRunAllTests,
     onSelectedItemsChange,
-    selectedItems,
+    selectedItemId,
   }: TestTreeProps) => {
     const { theme } = useTheme();
+
+    const selectedItems = useMemo(
+      () => (selectedItemId ? [selectedItemId] : undefined),
+      [selectedItemId],
+    );
 
     return (
       <div

@@ -125,6 +125,18 @@ export const DefaultLayout = ({
     );
   }, [layout.errorScreen?.position, cloudAppState]);
 
+  const selectedItemId = useMemo(() => selectedItems.at(0), [selectedItems]);
+
+  const onTestsSelectedItemsChange = useCallback(
+    (items: string[]) => {
+      if (!showTests) {
+        return;
+      }
+      setSelectedItems(items);
+    },
+    [showTests, setSelectedItems],
+  );
+
   const renderLayoutComponent = useCallback(
     (component: LayoutComponent) => {
       switch (component.type) {
@@ -134,7 +146,7 @@ export const DefaultLayout = ({
               <Explorer
                 loading={loading}
                 items={items}
-                selectedItems={selectedItems}
+                selectedItemId={selectedItemId}
                 onSelectedItemsChange={setSelectedItems}
                 expandedItems={expandedItems}
                 onExpandedItemsChange={setExpandedItems}
@@ -149,13 +161,8 @@ export const DefaultLayout = ({
           return (
             <TestsTreeView
               key={component.type}
-              onSelectedItemsChange={(items) => {
-                if (!showTests) {
-                  return;
-                }
-                setSelectedItems(items);
-              }}
-              selectedItems={showTests ? selectedItems : []}
+              onSelectedItemsChange={onTestsSelectedItemsChange}
+              selectedItemId={showTests ? selectedItemId : undefined}
             />
           );
         }
@@ -180,16 +187,17 @@ export const DefaultLayout = ({
     [
       loading,
       items,
-      selectedItems,
+      selectedItemId,
+      setSelectedItems,
       expandedItems,
-      theme,
-      onResourceClick,
+      setExpandedItems,
       expandAll,
       collapseAll,
-      setSelectedItems,
-      setExpandedItems,
+      onTestsSelectedItemsChange,
       showTests,
+      theme.bg3,
       deferredLoading,
+      onResourceClick,
     ],
   );
 
