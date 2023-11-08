@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import * as d3Selection from "d3-selection";
 import * as d3Zoom from "d3-zoom";
-import throttle from "lodash.throttle";
-import { forwardRef, memo, useEffect } from "react";
+import { forwardRef, memo } from "react";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -35,14 +34,12 @@ export interface Viewport {
 }
 
 export interface ZoomPaneContextValue {
-  // transform: d3Zoom.ZoomTransform;
   zoomIn(): void;
   zoomOut(): void;
   zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
 }
 
 const ZoomPaneContext = createContext<ZoomPaneContextValue>({
-  // transform: d3Zoom.zoomIdentity,
   zoomIn() {},
   zoomOut() {},
   zoomToFit() {},
@@ -76,10 +73,6 @@ const MAX_ZOOM_LEVEL = 2;
 
 export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
   (props) => {
-    // const [transform, setTransform] = useState(() => d3Zoom.zoomIdentity);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // const setTransformThrottled = useCallback(throttle(setTransform, 200), []);
-
     const targetRef = useRef<HTMLDivElement>(null);
     const [zoom] = useState(() =>
       d3Zoom
@@ -91,7 +84,6 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
           if (targetRef.current) {
             targetRef.current.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
           }
-          // setTransformThrottled(transform);
         }),
     );
     const [selection, setSelection] = useState<Selection | undefined>();
@@ -136,18 +128,6 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
           0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
         );
 
-        console.log({
-          viewport,
-          scale,
-          defaultScale,
-          width,
-          height,
-          x0,
-          y0,
-          x1,
-          y1,
-        });
-
         const newTransform = d3Zoom.zoomIdentity
           .translate(width / 2, height / 2)
           .scale(Math.min(defaultScale, scale))
@@ -184,7 +164,6 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
       >
         <ZoomPaneContext.Provider
           value={{
-            // transform,
             zoomIn,
             zoomOut,
             zoomToFit,
@@ -192,7 +171,6 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = memo(
         >
           {typeof props.children === "function" ? (
             props.children({
-              // transform,
               zoomIn,
               zoomOut,
               zoomToFit,
