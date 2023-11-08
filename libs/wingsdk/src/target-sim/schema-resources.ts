@@ -242,6 +242,13 @@ export interface WebsiteSchema extends BaseResourceSchema {
     /** Map of "files" contains dynamic content inserted from preflight */
     fileRoutes: FileRoutes;
   };
+  readonly attrs: WebsiteAttributes & BaseResourceAttributes;
+}
+
+/** Runtime attributes for cloud.Website */
+export interface WebsiteAttributes {
+  /** The URL of the Website. */
+  readonly url: string;
 }
 
 export interface ReactAppSchema extends BaseResourceSchema {
