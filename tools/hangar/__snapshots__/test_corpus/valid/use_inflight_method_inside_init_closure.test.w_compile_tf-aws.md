@@ -124,6 +124,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8858302",
             "WING_TARGET": "tf-aws"
           }

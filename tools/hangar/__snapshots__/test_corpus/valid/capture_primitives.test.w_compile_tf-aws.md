@@ -123,6 +123,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
