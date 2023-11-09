@@ -1,20 +1,21 @@
 import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
-  HeadObjectCommand,
+  __Client,
+  CopyObjectCommand,
   DeleteObjectCommand,
-  GetObjectCommand,
-  ListObjectsV2Command,
-  ListObjectsV2CommandOutput,
-  PutObjectCommand,
   GetBucketLocationCommand,
+  GetObjectCommand,
+  GetObjectOutput,
   GetPublicAccessBlockCommand,
   GetPublicAccessBlockCommandOutput,
-  S3Client,
-  GetObjectOutput,
+  HeadObjectCommand,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
   NotFound,
   NoSuchKey,
-  __Client,
+  PutObjectCommand,
+  S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import mime from "mime-types";
@@ -240,6 +241,51 @@ export class BucketClient implements IBucketClient {
     }
     return list;
   }
+
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten.
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   */
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    try {
+      // Get properties of the source object
+      const headResult = await this.s3Client.send(
+        new HeadObjectCommand({
+          Bucket: this.bucketName,
+          Key: srcKey,
+        })
+      );
+
+      // Equivalent to `aws s3 cp --copy-props` in AWS CLI v2
+      const command = new CopyObjectCommand({
+        Bucket: this.bucketName,
+        CopySource: `${this.bucketName}/${srcKey}`,
+        Key: dstKey,
+        MetadataDirective: "REPLACE",
+        // Properties carried over from the source object
+        ContentType: headResult?.ContentType,
+        ContentLanguage: headResult?.ContentLanguage,
+        ContentEncoding: headResult?.ContentEncoding,
+        ContentDisposition: headResult?.ContentDisposition,
+        CacheControl: headResult?.CacheControl,
+        Expires: headResult?.Expires,
+        Metadata: headResult?.Metadata,
+      });
+
+      await this.s3Client.send(command);
+    } catch (error) {
+      if (error instanceof NotFound) {
+        throw new Error(
+          `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
+        );
+      }
+      throw error;
+    }
+  }
+
   /**
    * Checks if the bucket is public
    * @returns true if the bucket is public and false otherwise

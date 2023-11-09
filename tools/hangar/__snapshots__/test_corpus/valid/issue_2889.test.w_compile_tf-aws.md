@@ -32,7 +32,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
-      const body = (JSON.parse((res.body ?? "")));
+      const body = (JSON.parse(res.body));
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
       {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
     }
@@ -192,6 +192,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
         "runtime": "nodejs18.x",

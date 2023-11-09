@@ -221,7 +221,7 @@ The path of the file to be read.
 The `encoding` can be set to specify the character encoding.
 
 And the `flag` can be set to specify the attributes.
-If a flag is not provided, it defaults to `'r'`.
+If a flag is not provided, it defaults to `"r"`.
 
 ---
 
@@ -425,7 +425,7 @@ The file path of the YAML file.
 ```wing
 bring fs;
 
-fs.writeFile(filepath: str, data: str);
+fs.writeFile(filepath: str, data: str, options?: WriteFileOptions);
 ```
 
 Writes data to a file, replacing the file if it already exists.
@@ -443,6 +443,17 @@ The file path that needs to be written.
 - *Type:* str
 
 The data to write.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.fs.Util.writeFile.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.fs.WriteFileOptions">WriteFileOptions</a>
+
+The `encoding` can be set to specify the character encoding.
+
+And the `flag` can be set to specify the attributes.
+If a flag is not provided, it defaults to `"w"`.
 
 ---
 
@@ -555,7 +566,7 @@ If a folder was created, the path to the first created folder will be returned.
 
 ### ReadFileOptions <a name="ReadFileOptions" id="@winglang/sdk.fs.ReadFileOptions"></a>
 
-Custom settings for reading file.
+Custom settings for reading from a file.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.ReadFileOptions.Initializer"></a>
 
@@ -594,7 +605,7 @@ flag: str;
 ```
 
 - *Type:* str
-- *Default:* 'r'.
+- *Default:* "r".
 
 The `flag` can be set to specify the attributes.
 
@@ -628,7 +639,7 @@ force: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 When `true`, exceptions will be ignored if `path` does not exist.
 
@@ -641,12 +652,59 @@ recursive: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* true
 
 If `true`, perform a recursive directory removal.
 
 In
 recursive mode, operations are retried on failure.
+
+---
+
+### WriteFileOptions <a name="WriteFileOptions" id="@winglang/sdk.fs.WriteFileOptions"></a>
+
+Custom settings for writing to a file.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.fs.WriteFileOptions.Initializer"></a>
+
+```wing
+bring fs;
+
+let WriteFileOptions = fs.WriteFileOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.fs.WriteFileOptions.property.encoding">encoding</a></code> | <code>str</code> | The character encoding utilized for file writing. |
+| <code><a href="#@winglang/sdk.fs.WriteFileOptions.property.flag">flag</a></code> | <code>str</code> | The `flag` can be set to specify the attributes. |
+
+---
+
+##### `encoding`<sup>Optional</sup> <a name="encoding" id="@winglang/sdk.fs.WriteFileOptions.property.encoding"></a>
+
+```wing
+encoding: str;
+```
+
+- *Type:* str
+- *Default:* "utf-8"
+
+The character encoding utilized for file writing.
+
+---
+
+##### `flag`<sup>Optional</sup> <a name="flag" id="@winglang/sdk.fs.WriteFileOptions.property.flag"></a>
+
+```wing
+flag: str;
+```
+
+- *Type:* str
+- *Default:* "w".
+
+The `flag` can be set to specify the attributes.
 
 ---
 

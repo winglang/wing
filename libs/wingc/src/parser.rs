@@ -18,7 +18,10 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpa
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, is_absolute_path, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{
+	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	WINGSDK_TEST_CLASS_NAME,
+};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -666,7 +669,7 @@ impl<'s> Parser<'s> {
 		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
 			let elif = ElifLetBlock {
 				reassignable: node.child_by_field_name("reassignable").is_some(),
 				statements: statements,
@@ -977,8 +980,43 @@ impl<'s> Parser<'s> {
 			};
 		}
 
+		if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) || module_name.name == WINGSDK_STD_MODULE {
+			return Ok(StmtKind::Bring {
+				source: BringSource::BuiltinModule(module_name),
+				identifier: alias,
+			});
+		}
+
+		// check if a trusted library exists with this name
+		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+		let module_dir = wingii::util::package_json::find_dependency_directory(
+			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
+			&source_dir,
+		)
+		.ok_or_else(|| {
+			self
+				.with_error::<Node>(
+					format!(
+						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{}`?",
+						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
+					),
+					&statement_node,
+				)
+				.err();
+		})?;
+
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+		// make sure the trusted library is also parsed
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
 		Ok(StmtKind::Bring {
-			source: BringSource::BuiltinModule(module_name),
+			source: BringSource::TrustedModule(
+				Symbol {
+					name: module_name.name,
+					span: module_name.span,
+				},
+				module_dir,
+			),
 			identifier: alias,
 		})
 	}
@@ -1962,9 +2000,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"number" => Ok(Expr::new(
-				ExprKind::Literal(Literal::Number(
-					self.node_text(&expression_node).parse().expect("Number string"),
-				)),
+				ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
 				expression_span,
 			)),
 			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
@@ -2483,6 +2519,12 @@ pub fn normalize_path(path: &Utf8Path, relative_to: Option<&Utf8Path>) -> Utf8Pa
 	}
 
 	normalized
+}
+
+fn parse_number(s: &str) -> f64 {
+	// remove all underscores from the string
+	let s = s.replace("_", "");
+	return s.parse().expect("Number string");
 }
 
 #[cfg(test)]

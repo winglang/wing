@@ -219,8 +219,8 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_schedule#attrs.handle}",
-          "subscriber": "\${root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_schedule#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",
@@ -470,8 +470,8 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_schedule#attrs.handle}",
-          "subscriber": "\${root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_schedule#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",
@@ -721,8 +721,8 @@ console.log(\\"Hello from schedule!\\");
         "attrs": {},
         "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_schedule#attrs.handle}",
-          "subscriber": "\${root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_schedule#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",

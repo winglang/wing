@@ -117,6 +117,8 @@ const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
+pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
+
 pub struct CompilerOutput {}
 
 /// Exposes an allocation function to the WASM host

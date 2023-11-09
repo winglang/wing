@@ -30,7 +30,7 @@ export const useTests = () => {
   useEffect(() => {
     setTestList(testListQuery.data || []);
     setTestsExists(!!testListQuery.data && testListQuery.data.length > 0);
-  }, [testListQuery.data]);
+  }, [setTestsExists, testListQuery.data]);
 
   const runAllTests = () => {
     runAllTestsMutation.mutate();

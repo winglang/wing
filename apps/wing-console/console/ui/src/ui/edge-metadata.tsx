@@ -12,7 +12,7 @@ import {
   Attribute,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { MetadataNode } from "./resource-metadata.js";
 
@@ -35,7 +35,7 @@ export const EdgeMetadata = ({
     "properties",
   ]);
 
-  const toggleInspectorSection = (section: string) => {
+  const toggleInspectorSection = useCallback((section: string) => {
     setOpenInspectorSections(([...sections]) => {
       const index = sections.indexOf(section);
       if (index === -1) {
@@ -46,7 +46,7 @@ export const EdgeMetadata = ({
         return sections;
       }
     });
-  };
+  }, []);
 
   const entries = useMemo(() => {
     return inflights.map((inflight) => {

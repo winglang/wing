@@ -7,7 +7,7 @@ import { normalPath } from "../shared/misc";
 import { Json } from "../std";
 
 /**
- * Custom settings for reading file
+ * Custom settings for reading from a file
  */
 export interface ReadFileOptions {
   /**
@@ -17,7 +17,23 @@ export interface ReadFileOptions {
   readonly encoding?: BufferEncoding;
   /**
    * The `flag` can be set to specify the attributes.
-   * @default 'r'.
+   * @default "r".
+   */
+  readonly flag?: string;
+}
+
+/**
+ * Custom settings for writing to a file
+ */
+export interface WriteFileOptions {
+  /**
+   * The character encoding utilized for file writing.
+   * @default "utf-8"
+   */
+  readonly encoding?: BufferEncoding;
+  /**
+   * The `flag` can be set to specify the attributes.
+   * @default "w".
    */
   readonly flag?: string;
 }
@@ -45,13 +61,13 @@ export interface MkdirOptions {
 export interface RemoveOptions {
   /**
    * When `true`, exceptions will be ignored if `path` does not exist.
-   * @default false
+   * @default true
    */
   readonly force?: boolean;
   /**
    * If `true`, perform a recursive directory removal. In
    * recursive mode, operations are retried on failure.
-   * @default false
+   * @default true
    */
   readonly recursive?: boolean;
 }
@@ -70,6 +86,7 @@ export class Util {
   public static join(...paths: string[]): string {
     return normalPath(path.join(...paths));
   }
+
   /**
    * Retrieve the name of the directory from a given file path.
    * @param p The path to evaluate.
@@ -78,6 +95,7 @@ export class Util {
   public static dirname(p: string): string {
     return normalPath(path.dirname(p));
   }
+
   /**
    * Retrieve the final segment of a given file path.
    * @param p The path to evaluate.
@@ -86,6 +104,7 @@ export class Util {
   public static basename(p: string): string {
     return path.basename(p);
   }
+
   /**
    * Solve the relative path from {from} to {to} based on the current working directory.
    * At times we have two absolute paths, and we need to derive the relative path from one to the other.
@@ -94,6 +113,7 @@ export class Util {
   public static relative(from: string, to: string): string {
     return normalPath(path.relative(from, to));
   }
+
   /**
    * The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
    *
@@ -110,6 +130,7 @@ export class Util {
   public static resolve(...paths: string[]): string {
     return normalPath(path.resolve(...paths));
   }
+
   /**
    * Check if the path exists.
    * @param p The path to evaluate.
@@ -118,6 +139,7 @@ export class Util {
   public static exists(p: string): boolean {
     return fs.existsSync(p);
   }
+
   /**
    * Read the contents of the directory.
    * @param dirpath The path to evaluate.
@@ -126,6 +148,7 @@ export class Util {
   public static readdir(dirpath: string): Array<string> {
     return fs.readdirSync(dirpath);
   }
+
   /**
    * If the path exists, read the contents of the directory; otherwise, return `undefined`.
    * @param dirpath The path to evaluate.
@@ -138,6 +161,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Create a directory.
    * @param dirpath The path to the directory you want to create.
@@ -148,6 +172,7 @@ export class Util {
       mode: opts?.mode ?? "0777",
     });
   }
+
   /**
    * Create a temporary directory.
    * Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
@@ -161,17 +186,19 @@ export class Util {
     const dirpath = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
     return normalPath(dirpath);
   }
+
   /**
    * Read the entire contents of a file.
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
-   * If a flag is not provided, it defaults to `'r'`.
+   * If a flag is not provided, it defaults to `"r"`.
    * @returns The contents of the `filepath`.
    */
   public static readFile(filepath: string, options?: ReadFileOptions): string {
     const buf = fs.readFileSync(filepath, options);
     return buf.toString();
   }
+
   /**
    * If the file exists and can be read successfully, read the entire contents;
    * otherwise, return `undefined`.
@@ -189,6 +216,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Read the contents of the file and convert it to JSON.
    * @param filepath The file path of the JSON file.
@@ -199,6 +227,7 @@ export class Util {
     const text = Util.readFile(filepath);
     return JSON.parse(text) as Json;
   }
+
   /**
    * Retrieve the contents of the file and convert it to JSON
    * if the file exists and can be parsed successfully, otherwise, return `undefined`.
@@ -213,6 +242,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Convert all YAML objects from a single file into JSON objects.
    * @param filepath The file path of the YAML file.
@@ -230,6 +260,7 @@ export class Util {
       }
     });
   }
+
   /**
    * Convert all YAML objects from a single file into JSON objects
    * if the file exists and can be parsed successfully, `undefined` otherwise.
@@ -248,10 +279,17 @@ export class Util {
    * Writes data to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
    * @param data The data to write.
+   * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
+   * If a flag is not provided, it defaults to `"w"`.
    */
-  public static writeFile(filepath: string, data: string): void {
-    fs.writeFileSync(filepath, data);
+  public static writeFile(
+    filepath: string,
+    data: string,
+    options?: WriteFileOptions
+  ): void {
+    fs.writeFileSync(filepath, data, options);
   }
+
   /**
    * Writes JSON to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
@@ -261,6 +299,7 @@ export class Util {
     const text = JSON.stringify(obj, null, 2);
     fs.writeFileSync(filepath, text);
   }
+
   /**
    * Writes multiple YAML objects to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
@@ -272,13 +311,18 @@ export class Util {
     );
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
+
   /**
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
    * @param p The path to the file or directory you want to remove.
    */
   public static remove(p: string, opts?: RemoveOptions): void {
-    fs.rmSync(p, opts);
+    fs.rmSync(p, {
+      force: opts?.force ?? true,
+      recursive: opts?.recursive ?? true,
+    });
   }
+
   /**
    * @internal
    */
