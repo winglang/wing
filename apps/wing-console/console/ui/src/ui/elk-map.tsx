@@ -282,7 +282,13 @@ const Graph = memo(
   }: GraphProps) => {
     return (
       <div
-        className={classNames("relative", "transition-all", durationClass)}
+        className={classNames(
+          "relative",
+          "transition-all",
+          "rounded-lg",
+          "bg-slate-100 dark:bg-slate-500",
+          durationClass,
+        )}
         style={{
           width: graph.width,
           height: graph.height,
@@ -537,10 +543,19 @@ export const ElkMap = <T extends unknown = undefined>({
     const skipAnimation =
       !previousNodeList.current || previousNodeList.current.length === 0;
 
-    zoomToFit(undefined, skipAnimation);
+    zoomToFit(
+      {
+        x: 0,
+        y: 0,
+        width: graph?.width ?? 0,
+        height: graph?.height ?? 0,
+      },
+      skipAnimation,
+    );
 
     previousNodeList.current = nodeList;
-  }, [nodeList, zoomToFit]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graph, nodeList]);
 
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
@@ -589,7 +604,11 @@ export const ElkMap = <T extends unknown = undefined>({
         onSizesChange={setMinimumSizes}
       />
 
-      <ZoomPane ref={zoomPane} className="w-full h-full" data-testid="map-pane">
+      <ZoomPane
+        ref={zoomPane}
+        className="w-full h-full bg-white dark:bg-slate-550"
+        data-testid="map-pane"
+      >
         <div ref={rootElement}>
           {graph && (
             <Graph
