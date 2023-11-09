@@ -39,7 +39,7 @@ const defaultSynthDir = (model: string): string => {
     default:
       return model;
   }
-}
+};
 
 /**
  * Compile options for the `compile` command.
@@ -86,11 +86,16 @@ function resolveSynthDir(
     } else {
       entrypointName = basename(entrypoint, ".w");
     }
-  } catch (err) {
-    console.error(err);
+  } catch (err: any) {
+    if (err.code !== "ENOENT") {
+      // ENOENT is not a useful error here, anything else might be interesting
+      console.error(err);
+    }
+
     throw new Error("Source file cannot be found");
   }
-  const randomPart = tmp || (testing && target !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
+  const randomPart =
+    tmp || (testing && target !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
   const tmpSuffix = tmp ? ".tmp" : "";
   const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
   if (testing) {
@@ -102,12 +107,14 @@ function resolveSynthDir(
 
 /**
  * Determines the model for a given list of platforms.
- * 
+ *
  * @param platforms list of wing platforms
  * @returns the resolved model
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
-  if (platforms.length === 0) { return ""; }
+  if (platforms.length === 0) {
+    return "";
+  }
   // determine model based on first platform
   const platform = platforms[0];
 
@@ -119,7 +126,7 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
   // If its a custom platform, then we need to load it and get the model
   const platformPath = resolve(platform);
 
-  return new (require(platformPath)).Platform().target;
+  return new (require(platformPath).Platform)().target;
 }
 
 /**

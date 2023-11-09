@@ -1,11 +1,9 @@
-import fs from "fs";
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
-import { parse } from "dotenv";
-import { expand } from "dotenv-expand";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -20,53 +18,6 @@ if (!SUPPORTED_NODE_VERSION) {
 
 const DEFAULT_PLATFORM = ["sim"];
 let analyticsExportFile: Promise<string | undefined>;
-
-function tryStatSync(file: string): fs.Stats | undefined {
-  try {
-    // The "throwIfNoEntry" is a performance optimization for cases where the file does not exist
-    return fs.statSync(file, { throwIfNoEntry: false });
-  } catch {
-    return undefined;
-  }
-}
-
-function getMode(): string | undefined {
-  const args = process.argv;
-  switch (true) {
-    case args.includes("run"):
-    case args.includes("it"):
-      return "run";
-    case args.includes("compile"):
-      return "compile";
-    case args.includes("test"):
-      return "test";
-    case args.includes("lsp"):
-      return "lsp";
-    default:
-      return undefined;
-  }
-}
-
-function loadEnvVariables(): void {
-  const mode = getMode();
-  const envFiles = [`.env`, `.env.local`].concat(
-    mode ? [`.env.${mode}`, `.env.${mode}.local`] : []
-  );
-
-  // Parse `envFiles` and combine their variables into a single object
-  const parsed = Object.fromEntries(
-    envFiles.flatMap((file) => {
-      if (!tryStatSync(file)?.isFile()) return [];
-      return Object.entries(parse(fs.readFileSync(file)));
-    })
-  );
-
-  // Expand and load the environment variables
-  const expandedEnvVariables = expand({ parsed });
-  for (const [key, value] of Object.entries(expandedEnvVariables)) {
-    process.env[key] = value;
-  }
-}
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
@@ -134,7 +85,6 @@ async function exportAnalyticsHook() {
 
 async function main() {
   checkNodeVersion();
-  loadEnvVariables();
 
   const program = new Command();
   program.configureHelp({
@@ -178,12 +128,18 @@ async function main() {
       void import("./commands/upgrade").then((m) => m.checkForUpdates());
     }
   }
+  function loadEnv(cmd: Command) {
+    loadEnvVariables({
+      mode: cmd.args[0],
+    });
+  }
 
   function addValue(value: string, previous: string[]) {
     previous.push(value);
     return previous;
   }
 
+  program.hook("preAction", loadEnv);
   program.hook("preAction", updateHook);
 
   program
