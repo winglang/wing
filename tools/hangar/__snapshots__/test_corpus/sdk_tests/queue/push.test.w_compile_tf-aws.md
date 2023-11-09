@@ -18,7 +18,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Empty messages are not allowed\")")})(e.includes("Empty messages are not allowed"))};
       }
       try {
         (await $q.push("Foo", ""));
@@ -26,7 +26,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Empty messages are not allowed\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Empty messages are not allowed")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"Empty messages are not allowed\")")})(e.includes("Empty messages are not allowed"))};
       }
       (await $q.push("Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return q.approxSize() == 1;\n  })")})((await $util_Util.waitUntil(async () => {
@@ -104,7 +104,7 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -149,11 +149,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "push", new $Closure1(this, "$Closure1"), ({"timeout": (std.Duration.fromSeconds(180))}));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "push", new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(180)) });
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "push.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "push.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 
