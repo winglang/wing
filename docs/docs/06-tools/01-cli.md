@@ -158,7 +158,7 @@ You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://doc
 $ cdk deploy --app target/app.awscdk
 ```
 
-### Target aditional values
+### Resource/Platform specific values
 
 Eventually, some resources require additional specific values for certain resources and platforms.
 

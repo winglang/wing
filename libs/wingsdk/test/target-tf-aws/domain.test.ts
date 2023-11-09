@@ -154,7 +154,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("react website with a domain when passing values from file", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
+    process.env.WING_VALUES = __dirname + "/domain.values.yaml";
     const domain = cloud.Domain._newDomain(app, "Domain", {
       domainName: "www.example.com",
     });
