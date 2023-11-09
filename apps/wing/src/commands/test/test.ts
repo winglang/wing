@@ -1,6 +1,5 @@
 import * as cp from "child_process";
 import { readFile, rm, rmSync } from "fs";
-import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
