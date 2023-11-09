@@ -1,12 +1,12 @@
 import classNames from "classnames";
-import { createRef, ReactNode, useState } from "react";
+import { createRef, memo, ReactNode, useState } from "react";
 
 export interface TopResizableWidgetProps {
   className?: string;
   children?: ReactNode | undefined;
 }
 
-export function TopResizableWidget(props: TopResizableWidgetProps) {
+export const TopResizableWidget = memo((props: TopResizableWidgetProps) => {
   const { className, children } = props;
 
   const [offset, setOffset] = useState(0);
@@ -49,4 +49,4 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
       {children}
     </div>
   );
-}
+});

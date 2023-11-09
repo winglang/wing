@@ -1,14 +1,7 @@
 import { useTheme } from "@wingconsole/design-system";
-import type { LogEntry, LogLevel, State } from "@wingconsole/server";
+import type { State } from "@wingconsole/server";
 import { useLoading } from "@wingconsole/use-loading";
-import {
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import { useEffect, useState, useContext, useMemo, useCallback } from "react";
 
 import { trpc } from "../services/trpc.js";
 import { useExplorer } from "../services/use-explorer.js";
@@ -35,7 +28,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
   const errorMessage = trpc["app.error"].useQuery();
   const { showTests } = useContext(TestsContext);
 
-  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>();
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string>();
 
   const onSelectedItemsChange = useCallback(
     (items: string[]) => {
