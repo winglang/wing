@@ -7,6 +7,7 @@ import { core } from "..";
 import * as cloud from "../cloud";
 import { Connections } from "../core";
 import * as ex from "../ex";
+import * as aws from "../shared-aws";
 
 /**
  * AWS implementation of `ex.ReactApp`.
@@ -15,7 +16,7 @@ import * as ex from "../ex";
  */
 export class ReactApp extends ex.ReactApp {
   private _host: cloud.Website;
-  constructor(scope: Construct, id: string, props: ex.ReactAppProps) {
+  constructor(scope: Construct, id: string, props: aws.AwsReactAppProps) {
     super(scope, id, props);
     this._host = this._createWebsiteHost(
       props.buildCommand ?? ex.DEFAULT_REACT_APP_BUILD_COMMAND

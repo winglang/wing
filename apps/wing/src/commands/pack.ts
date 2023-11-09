@@ -4,8 +4,7 @@ import * as os from "os";
 import * as path from "path";
 import { resolve } from "path";
 import Arborist from "@npmcli/arborist";
-import { Target } from "@winglang/compiler";
-import { minimatch } from "minimatch";
+import { BuiltinPlatform } from "@winglang/compiler";
 import packlist from "npm-packlist";
 import * as tar from "tar";
 import { compile } from "./compile";
@@ -13,6 +12,8 @@ import { compile } from "./compile";
 // TODO: add --dry-run option?
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
 // TODO: print information about the generated library? (e.g. size, dependencies, number of public APIs)
+
+const defaultGlobs = ["**/*.js", "**/*.w", "README*", "LICENSE*", "!/target"];
 
 export interface PackageOptions {
   /**
@@ -22,13 +23,6 @@ export interface PackageOptions {
 }
 
 export async function pack(options: PackageOptions = {}): Promise<string> {
-  // check that the library compiles to the "sim" target
-  console.log('Compiling to the "sim" target...');
-
-  // TODO: workaround for https://github.com/winglang/wing/issues/4431
-  // await compile(".", { target: Target.SIM });
-  await compile(path.join("..", path.basename(process.cwd())), { target: Target.SIM });
-
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
@@ -39,30 +33,26 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
   }
 
-  const originalPkgJson = JSON.parse(await fs.readFile(originalPkgJsonPath, "utf8"));
-  const originalPkgJsonFiles: Set<string> = new Set(originalPkgJson.files ?? []);
+  // collect a list of files to copy to the staging directory.
+  // only the files that will be included in the tarball will be copied
+  // this way we can run `wing compile .` in the staging directory and be sure
+  // that someone consuming the library will be able to compile it.
+  const filesToCopy = await listFilesToCopy(userDir, defaultGlobs);
 
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
-    const excludeGlobs = ["/target/**", "/node_modules/**", "/.git/**", "/.wing/**"];
-    const includeGlobs = [
-      ...originalPkgJsonFiles,
-      "README*",
-      "package.json",
-      "**/*.w",
-      "**/*.js",
-      "LICENSE*",
-    ];
+    // copy staged files to the staging directory
+    await copyFiles(userDir, workdir, filesToCopy);
 
-    // copy the user's directory to the staging directory
-    await copyDir(userDir, workdir, excludeGlobs, includeGlobs);
+    // symlink the user's node_modules to the staging directory
+    const nodeModulesPath = path.join(workdir, "node_modules");
+    await fs.symlink(path.join(userDir, "node_modules"), nodeModulesPath);
 
-    // check package.json exists
+    // check that the library compiles to the "sim" target
+    console.log('Compiling to the "sim" target...');
+    await compile(workdir, { platform: [BuiltinPlatform.SIM] });
+
     const pkgJsonPath = path.join(workdir, "package.json");
-    if (!(await exists(pkgJsonPath))) {
-      throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
-    }
-
     const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
 
     // check package.json has required fields
@@ -73,12 +63,12 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
-    // check that Wing source files will be included in the tarball
+    // add default globs to "files" so that Wing files are included in the tarball
     const pkgJsonFiles = new Set(pkgJson.files ?? []);
-    const expectedGlobs = ["**/*.js", "**/*.w"];
-    for (const glob of expectedGlobs) {
-      if (!pkgJsonFiles.has(glob)) {
-        pkgJsonFiles.add(glob);
+    const expectedGlobs = defaultGlobs;
+    for (const pat of expectedGlobs) {
+      if (!pkgJsonFiles.has(pat)) {
+        pkgJsonFiles.add(pat);
       }
     }
     pkgJson.files = [...pkgJsonFiles];
@@ -114,8 +104,10 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     const arborist = new Arborist({ path: workdir });
     const tree = await arborist.loadActual();
     const pkg = tree.package;
-    const tarballPath = outfile ?? path.join(outdir, `${pkg.name}-${pkg.version}.tgz`);
     const files = await packlist(tree);
+    const tarballPath =
+      outfile ??
+      path.join(outdir, `${pkg.name?.replace(/^@/, "")?.replace(/\//, "-")}-${pkg.version}.tgz`);
     await tar.create(
       {
         gzip: true,
@@ -133,34 +125,25 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   });
 }
 
-async function copyDir(src: string, dest: string, excludeGlobs: string[], includeGlobs: string[]) {
-  const files = await fs.readdir(src);
-  for (const file of files) {
-    const srcPath = path.join(src, file);
-    const destPath = path.join(dest, file);
-    const stat = await fs.stat(srcPath);
-    if (stat.isDirectory()) {
-      if (shouldInclude(srcPath, excludeGlobs, includeGlobs)) {
-        await copyDir(srcPath, destPath, excludeGlobs, includeGlobs);
-      }
-    } else {
-      await fs.copyFile(srcPath, destPath);
-    }
-  }
+/**
+ * Determine a list of files to copy to the staging directory, based on what npm says
+ * it would include in the tarball, given the user's package.json and a set of
+ * additional files that we want to include.
+ */
+async function listFilesToCopy(dir: string, extraGlobs: string[]): Promise<string[]> {
+  const arborist = new Arborist({ path: dir });
+  const tree = await arborist.loadActual();
+  tree.package.files?.push(...extraGlobs);
+  return packlist(tree);
 }
 
-function shouldInclude(srcPath: string, excludeGlobs: string[], includeGlobs: string[]): boolean {
-  for (const glob of excludeGlobs) {
-    if (minimatch(srcPath, glob)) {
-      return false;
-    }
+async function copyFiles(srcDir: string, destDir: string, files: string[]) {
+  for (const file of files) {
+    const srcPath = path.join(srcDir, file);
+    const destPath = path.join(destDir, file);
+    await fs.mkdir(path.dirname(destPath), { recursive: true });
+    await fs.copyFile(srcPath, destPath);
   }
-  for (const glob of includeGlobs) {
-    if (minimatch(srcPath, glob)) {
-      return true;
-    }
-  }
-  return false;
 }
 
 /**
@@ -176,7 +159,10 @@ async function withTempDir<T>(work: (workdir: string) => Promise<T>): Promise<T>
     return await work(workdir);
   } finally {
     process.chdir(cwd);
-    await fs.rm(workdir, { recursive: true });
+    // if you want to debug this you can keep the workdir around
+    if (!process.env.WING_PACK_KEEP_WORKDIR) {
+      await fs.rm(workdir, { recursive: true });
+    }
   }
 }
 

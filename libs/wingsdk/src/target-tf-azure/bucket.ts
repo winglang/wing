@@ -6,10 +6,10 @@ import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import { StorageContainer } from "../.gen/providers/azurerm/storage-container";
 import * as cloud from "../cloud";
 import {
-  BucketOnDeleteProps,
-  BucketOnEventProps,
-  BucketOnUpdateProps,
-  BucketOnCreateProps,
+  BucketOnDeleteOptions,
+  BucketOnEventOptions,
+  BucketOnUpdateOptions,
+  BucketOnCreateOptions,
   IBucketEventHandler,
 } from "../cloud";
 import * as core from "../core";
@@ -77,7 +77,7 @@ export class Bucket extends cloud.Bucket {
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
       storageAccountName: this.storageAccount.name,
-      containerAccessType: this.public ? "public" : "private",
+      containerAccessType: this.public ? "blob" : "private",
     });
   }
 
@@ -112,6 +112,7 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_GET,
       cloud.BucketInflightMethods.TRY_GET_JSON,
       cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.METADATA,
     ];
   }
 
@@ -123,20 +124,25 @@ export class Bucket extends cloud.Bucket {
     // TODO: investigate customized roles over builtin for finer grained access control
     if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT) ||
       ops.includes(cloud.BucketInflightMethods.PUT_JSON)
     ) {
-      host.addPermission(this, {
-        scope: `${this.storageAccount.id}`,
+      host.addPermission(this.storageAccount, {
+        scope: this.storageAccount.id,
         roleDefinitionName: StorageAccountPermissions.READ_WRITE,
       });
     } else if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.EXISTS)
     ) {
-      host.addPermission(this, {
-        scope: `${this.storageAccount.id}`,
+      host.addPermission(this.storageAccount, {
+        scope: this.storageAccount.id,
         roleDefinitionName: StorageAccountPermissions.READ,
       });
     }
@@ -150,7 +156,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void {
     fn;
     opts;
     throw new NotImplementedError(
@@ -162,7 +168,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void {
     fn;
     opts;
     throw new NotImplementedError(
@@ -174,7 +180,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void {
     fn;
     opts;
     throw new NotImplementedError(
@@ -186,7 +192,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void {
     fn;
     opts;
     throw new NotImplementedError(

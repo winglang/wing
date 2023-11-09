@@ -25,7 +25,7 @@ exports[`bucket is public 1`] = `
     },
     "azurerm_storage_container": {
       "my_bucket_Bucket_50609D70": {
-        "container_access_type": "public",
+        "container_access_type": "blob",
         "name": "my-bucket-c8045fcc",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
       },
@@ -335,7 +335,7 @@ exports[`bucket with two preflight files 1`] = `
     },
     "azurerm_storage_container": {
       "my_bucket_Bucket_50609D70": {
-        "container_access_type": "public",
+        "container_access_type": "blob",
         "name": "my-bucket-c8045fcc",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
       },
@@ -514,7 +514,7 @@ exports[`bucket with two preflight objects 1`] = `
     },
     "azurerm_storage_container": {
       "my_bucket_Bucket_50609D70": {
-        "container_access_type": "public",
+        "container_access_type": "blob",
         "name": "my-bucket-c8045fcc",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
       },

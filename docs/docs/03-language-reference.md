@@ -74,28 +74,37 @@ import TOCInline from '@theme/TOCInline';
 > let q: num? = nil;          // q is an optional num
 > ```
 
+Numeric literals can be formatted and padded with extra zeroes or underscores to make them easier to read in source code.
+These don't affect the value of the number or how they are printed:
+
+> ```TS
+> let price = 0012.34;
+> let twentyThousand = 20_000;
+> let aBitMore = 20_000.000_1;
+> ```
+
 [`▲ top`][top]
 
 ---
 
 #### 1.1.2 Container Types
 
-| Name          | Extra information                     |
-| ------------- | ------------------------------------- |
-| `Set<T>`      | set type (set of unique items)        |
-| `Map<T>`      | map type (key-value with string keys) |
-| `Array<T>`    | variable size array of a certain type |
-| `MutSet<T>`   | mutable set type                      |
-| `MutMap<T>`   | mutable map type                      |
-| `MutArray<T>` | mutable array type                    |
+| Name          | Extra information                               |
+| ------------- | ----------------------------------------------- |
+| `Array<T>`    | variable size array of a certain type           |
+| `Map<T>`      | map type (key-value with string keys)           |
+| `Set<T>`      | set type (unordered collection of unique items) |
+| `MutArray<T>` | mutable array type                              |
+| `MutMap<T>`   | mutable map type                                |
+| `MutSet<T>`   | mutable set type                                |
 
 > ```TS
-> let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
-> let zm = MutSet<num>{};          // mutable set
-> let y = {"a" => 1, "b" => 2};    // immutable map, Map<num> is inferred
-> let ym = MutMap<num>{};          // mutable map
-> let x = [1, 2, 3];               // immutable array, Array<num> is inferred
-> let xm = MutArray<num>[];        // mutable array
+> let y = [1, 2, 3];               // immutable array, Array<num> is inferred
+> let ym = MutArray<num>[1, 2, 3]; // mutable array
+> let x = {"a" => 1, "b" => 2};    // immutable map, Map<num> is inferred
+> let xm = MutMap<num>{};          // mutable map
+> let z = Set<num>[1, 2, 3];       // immutable set
+> let zm = MutSet<num>[1, 2, 3];   // mutable set
 > let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
@@ -1152,7 +1161,7 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 2.1 bring
 
-**bring** statement can be used to import and reuse code from
+**bring** statement can be used to import and reuse code from Wing and
 other JSII supported languages. The statement is detailed in its own section in
 this document: [Module System](#4-module-system).
 
@@ -1244,11 +1253,11 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > ```TS
 > // Wing program:
 > let arr = [1, 2, 3];
-> let set = {1, 2, 3};
+> let items = Set<num>[1, 2, 3];
 > for item in arr {
 >   log("${item}");
 > }
-> for item in set {
+> for item in items {
 >   log("${item}");
 > }
 > for item in 0..100 {
@@ -1776,12 +1785,20 @@ code. Comments before the first bring expression are valid.
 
 ### 4.1 Imports
 
-To import a JSII package under a named import, you may use the following
+To import a built-in module or trusted Wing library, you can use the following syntax:
+
+```TS
+bring util; // import types from the built-in "util" module
+bring cloud; // import types from the built-in "cloud" module
+bring containers; // import types from the `@winglibs/containers` trusted library
+```
+
+To use a trusted library, you must install the relevant npm package with `npm i @winglibs/containers`.
+
+To import a Wing or JSII library under a named import, you may use the following
 syntax:
 
 ```TS
-bring util; // from util bring * as util;
-bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
 
@@ -1805,7 +1822,7 @@ new myModule.submodule.MyClass();
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Install trusted libraries using `wing install containers` - see https://github.com/winglang/wing/issues/1037 to track.
 * Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]
@@ -1958,8 +1975,8 @@ assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
 assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
 
-assert(Set<num>{1, 2, 3} == Set<num>{1, 2, 3});
-assert(Set<num>{1, 2, 3} == Set<num>{3, 2, 1});
+assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
+assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
 ```
 
 > *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).

@@ -191,6 +191,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "TopicOnMessage6e1b4252ServiceRoleEC336C6C",
@@ -302,6 +303,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "TopicOnMessagee967ab9dServiceRole111B1D6D",
@@ -556,6 +558,7 @@ exports[`topic with subscriber function 2`] = `
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "TopicOnMessagec185c7e3ServiceRole9266A390",

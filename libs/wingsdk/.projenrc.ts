@@ -11,7 +11,16 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];
+const PUBLIC_MODULES = [
+  "std",
+  "http",
+  "util",
+  "aws",
+  "math",
+  "regex",
+  "sim",
+  "fs",
+];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
@@ -78,6 +87,7 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "express",
     "uuid",
+    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",

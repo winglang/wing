@@ -161,7 +161,7 @@ export abstract class Bucket extends Resource {
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnCreateProps
+    opts?: BucketOnCreateOptions
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
@@ -184,9 +184,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void {
     if (opts) {
-      console.warn("bucket.onCreate does not support props yet");
+      console.warn("bucket.onCreate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
@@ -194,9 +194,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void {
     if (opts) {
-      console.warn("bucket.onDelete does not support props yet");
+      console.warn("bucket.onDelete does not support options yet");
     }
     this.createBucketEvent([BucketEventType.DELETE], fn, opts);
   }
@@ -204,9 +204,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void {
     if (opts) {
-      console.warn("bucket.onUpdate does not support props yet");
+      console.warn("bucket.onUpdate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
   }
@@ -214,9 +214,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void {
     if (opts) {
-      console.warn("bucket.onEvent does not support props yet");
+      console.warn("bucket.onEvent does not support options yet");
     }
     this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
@@ -224,6 +224,20 @@ export abstract class Bucket extends Resource {
       opts
     );
   }
+}
+
+/**
+ * Metadata of a bucket object.
+ */
+export interface ObjectMetadata {
+  /** The size of the object in bytes. */
+  readonly size: number;
+
+  /** The time the object was last modified. */
+  readonly lastModified: Datetime;
+
+  /** The content type of the object, if it is known. */
+  readonly contentType?: string;
 }
 
 /**
@@ -370,41 +384,38 @@ export interface IBucketClient {
    * @inflight
    */
   metadata(key: string): Promise<ObjectMetadata>;
-}
 
-/**
- * Metadata of a bucket object.
- */
-export interface ObjectMetadata {
-  /** The size of the object in bytes. */
-  readonly size: number;
-
-  /** The time the object was last modified. */
-  readonly lastModified: Datetime;
-
-  /** The content type of the object, if it is known. */
-  readonly contentType?: string;
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the copying is finished.
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   * @throws if `srcKey` object doesn't exist.
+   * @inflight
+   */
+  copy(srcKey: string, dstKey: string): Promise<void>;
 }
 
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateProps {}
+export interface BucketOnCreateOptions {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteProps {}
+export interface BucketOnDeleteOptions {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {}
+export interface BucketOnUpdateOptions {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventProps {}
+export interface BucketOnEventOptions {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -490,4 +501,6 @@ export enum BucketInflightMethods {
   SIGNED_URL = "signedUrl",
   /** `Bucket.metadata` */
   METADATA = "metadata",
+  /** `Bucket.copy` */
+  COPY = "copy",
 }

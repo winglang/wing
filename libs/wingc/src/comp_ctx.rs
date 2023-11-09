@@ -108,6 +108,7 @@ pub fn set_custom_panic_hook() {
 			),
 			span: Some(CompilationContext::get_span()),
 			annotations: vec![],
+			hints: vec![],
 		})
 	}));
 }
