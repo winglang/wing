@@ -11,7 +11,7 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { withSpinner } from "../../util";
+import { withSpinner, normalPath } from "../../util";
 import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
@@ -57,10 +57,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   if (entrypoints.length === 0) {
     patterns = ["*.test.w"];
   } else {
-    patterns =
-      os.platform() === "win32"
-        ? entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"))
-        : entrypoints;
+    patterns = entrypoints.map((entrypoint) => normalPath(entrypoint));
   }
 
   const expandedEntrypoints = await glob(patterns);
