@@ -282,11 +282,19 @@ export const ElkMap = <T extends unknown = undefined>({
     const skipAnimation =
       !previousNodeList.current || previousNodeList.current.length === 0;
 
-    zoomToNode("root", skipAnimation);
+    zoomToFit(
+      {
+        x: 0,
+        y: 0,
+        width: graph?.width ?? 0,
+        height: graph?.height ?? 0,
+      },
+      skipAnimation,
+    );
 
     previousNodeList.current = nodeList;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodeList]);
+  }, [graph, nodeList]);
 
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
