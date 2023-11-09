@@ -20,6 +20,10 @@ const DEFAULT_PLATFORM = ["sim"];
 let analyticsExportFile: Promise<string | undefined>;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
+  loadEnvVariables({
+    mode: subCommand,
+  });
+
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
@@ -128,18 +132,12 @@ async function main() {
       void import("./commands/upgrade").then((m) => m.checkForUpdates());
     }
   }
-  function loadEnv(cmd: Command) {
-    loadEnvVariables({
-      mode: cmd.args[0],
-    });
-  }
 
   function addValue(value: string, previous: string[]) {
     previous.push(value);
     return previous;
   }
 
-  program.hook("preAction", loadEnv);
   program.hook("preAction", updateHook);
 
   program
