@@ -225,7 +225,7 @@ See [Libraries](../05-libraries.md) for more details on packaging and consuming 
 
 ## Environment Variables
 
-Wing uses `dotenv` to load additional environment variables from files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv`.
+For development and testing, Wing can automatically read environment variables from `.env` files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv`.
 
 ### Supported dotenv files
 
