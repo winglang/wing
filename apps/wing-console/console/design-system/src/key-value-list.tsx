@@ -3,6 +3,7 @@ import classNames from "classnames";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useState as useReactState,
   useState,
 } from "react";
@@ -70,6 +71,7 @@ export interface KeyValueListProps {
   className?: string;
   placeholder?: string;
 }
+
 export const KeyValueList = ({
   items,
   onAddItem,
@@ -99,13 +101,32 @@ export const KeyValueList = ({
     setEditItems([...items, { key: "", value: "" }]);
   }, [readonly, items, onAddItem]);
 
-  const onItemChange = (index: number, item: KeyValueItem) => {
-    if (index === items.length) {
-      onAddItem?.(item);
-      return;
-    }
-    onEditItem?.(index, item);
-  };
+  const onItemChange = useCallback(
+    (index: number, item: KeyValueItem) => {
+      if (index === items.length) {
+        onAddItem?.(item);
+        return;
+      }
+      onEditItem?.(index, item);
+    },
+    [items.length, onAddItem, onEditItem],
+  );
+
+  const comboboxItems = useMemo(
+    () =>
+      keysList?.map((value) => {
+        return { label: value, value: value };
+      }),
+    [keysList],
+  );
+
+  const comboboxValues = useMemo(
+    () =>
+      valuesList?.map((value) => {
+        return { label: value, value: value };
+      }),
+    [valuesList],
+  );
 
   return (
     <div className={classNames("space-y-1", className)}>
@@ -113,9 +134,7 @@ export const KeyValueList = ({
         <div key={index} className="gap-1 flex">
           <Combobox
             placeholder={keyPlaceholder}
-            items={keysList?.map((value) => {
-              return { label: value, value: value };
-            })}
+            items={comboboxItems}
             value={item.key}
             onChange={(value) => {
               onKeyChange?.(value);
@@ -141,9 +160,7 @@ export const KeyValueList = ({
 
           <Combobox
             placeholder={valuePlaceholder}
-            items={valuesList?.map((value) => {
-              return { label: value, value: value };
-            })}
+            items={comboboxValues}
             value={item.value}
             onChange={(value) => {
               onItemChange(index, {

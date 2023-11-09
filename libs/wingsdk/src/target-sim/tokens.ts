@@ -18,14 +18,29 @@ export function simulatorAttrToken(
   resource: IResource,
   attrName: string
 ): string {
-  return `\${${resource.node.path}#attrs.${attrName}}`;
+  return `\${wsim#${resource.node.path}#attrs.${attrName}}`;
 }
+
+/**
+ * Regular expression that matches a simulator token. This is a sequence of
+ * characters that can appear in the middle of any string in the following format:
+ *
+ * ${wsim#path/to/resource#property.path}
+ */
+export const SIMULATOR_TOKEN_REGEX = /\$\{wsim#[^#\{\}]+#[a-zA-Z0-9_\-\/\.]+\}/;
+
+/**
+ * The same as SIMULATOR_TOKEN_REGEX, but it must match the entire string.
+ */
+export const SIMULATOR_TOKEN_REGEX_FULL = new RegExp(
+  `^${SIMULATOR_TOKEN_REGEX.source}$`
+);
 
 /**
  * Returns true is the given value is a Simulator token.
  */
-export function isToken(value: string) {
-  return /^\$\{.*\#(props\.|attrs\.).*\}/.test(value);
+export function isSimulatorToken(value: string) {
+  return SIMULATOR_TOKEN_REGEX.test(value);
 }
 
 /**
@@ -38,7 +53,7 @@ export class SimTokens extends Tokens {
    */
   public isToken(value: any): boolean {
     if (typeof value === "string") {
-      return isToken(value);
+      return isSimulatorToken(value);
     }
 
     return false;

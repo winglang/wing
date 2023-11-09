@@ -1,5 +1,5 @@
 import { OpenApiSpec } from "@wingconsole/server/src/wingsdk";
-import { useContext, useState } from "react";
+import { memo, useCallback, useContext, useState } from "react";
 
 import { AppContext } from "../AppContext.js";
 import { useApi } from "../services/use-api.js";
@@ -10,12 +10,18 @@ export interface ApiViewProps {
   resourcePath: string;
 }
 
-export const ApiInteractionView = ({ resourcePath }: ApiViewProps) => {
+export const ApiInteractionView = memo(({ resourcePath }: ApiViewProps) => {
   const { appMode } = useContext(AppContext);
   const [schemaData, setSchemaData] = useState<OpenApiSpec>();
   const [apiResponse, setApiResponse] = useState<ApiResponse>();
-  const onFetchDataUpdate = (data: ApiResponse) => setApiResponse(data);
-  const onSchemaDataUpdate = (data: OpenApiSpec) => setSchemaData(data);
+  const onFetchDataUpdate = useCallback(
+    (data: ApiResponse) => setApiResponse(data),
+    [],
+  );
+  const onSchemaDataUpdate = useCallback(
+    (data: OpenApiSpec) => setSchemaData(data),
+    [],
+  );
   const { isLoading, callFetch } = useApi({
     resourcePath,
     onSchemaDataUpdate,
@@ -32,4 +38,4 @@ export const ApiInteractionView = ({ resourcePath }: ApiViewProps) => {
       apiResponse={apiResponse}
     />
   );
-};
+});

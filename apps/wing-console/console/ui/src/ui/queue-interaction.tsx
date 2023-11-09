@@ -1,12 +1,13 @@
 import { Button, TextArea } from "@wingconsole/design-system";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
-import { useCallback, useId, useState } from "react";
+import { useCallback, useId } from "react";
 
 export interface QueueInteractionProps {
   resourceId: string;
   isLoading: boolean;
   onPushMessageClick: (message: string) => void;
 }
+
 export const QueueInteraction = ({
   resourceId,
   isLoading,
