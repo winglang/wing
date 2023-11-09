@@ -7,7 +7,7 @@ import { normalPath } from "../shared/misc";
 import { Json } from "../std";
 
 /**
- * Custom settings for reading file
+ * Custom settings for reading from a file
  */
 export interface ReadFileOptions {
   /**
@@ -17,7 +17,23 @@ export interface ReadFileOptions {
   readonly encoding?: BufferEncoding;
   /**
    * The `flag` can be set to specify the attributes.
-   * @default 'r'.
+   * @default "r".
+   */
+  readonly flag?: string;
+}
+
+/**
+ * Custom settings for writing to a file
+ */
+export interface WriteFileOptions {
+  /**
+   * The character encoding utilized for file writing.
+   * @default "utf-8"
+   */
+  readonly encoding?: BufferEncoding;
+  /**
+   * The `flag` can be set to specify the attributes.
+   * @default "w".
    */
   readonly flag?: string;
 }
@@ -57,6 +73,23 @@ export interface RemoveOptions {
 }
 
 /**
+ * Represents the type of a file system object.
+ */
+type FileType = "File" | "Directory" | "Symlink" | "Other";
+
+/**
+ * Represents metadata information about a file or directory.
+ */
+interface Metadata {
+  fileType: FileType;
+  size: number;
+  permissions: string;
+  modified: Date;
+  accessed: Date;
+  created: Date;
+}
+
+/**
  * The fs class is used for interacting with the file system.
  * All file paths must be POSIX file paths (/ instead of \),
  * and will be normalized to the target platform if running on Windows.
@@ -70,6 +103,7 @@ export class Util {
   public static join(...paths: string[]): string {
     return normalPath(path.join(...paths));
   }
+
   /**
    * Retrieve the name of the directory from a given file path.
    * @param p The path to evaluate.
@@ -78,6 +112,7 @@ export class Util {
   public static dirname(p: string): string {
     return normalPath(path.dirname(p));
   }
+
   /**
    * Retrieve the final segment of a given file path.
    * @param p The path to evaluate.
@@ -86,6 +121,7 @@ export class Util {
   public static basename(p: string): string {
     return path.basename(p);
   }
+
   /**
    * Solve the relative path from {from} to {to} based on the current working directory.
    * At times we have two absolute paths, and we need to derive the relative path from one to the other.
@@ -94,6 +130,7 @@ export class Util {
   public static relative(from: string, to: string): string {
     return normalPath(path.relative(from, to));
   }
+
   /**
    * The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
    *
@@ -110,6 +147,7 @@ export class Util {
   public static resolve(...paths: string[]): string {
     return normalPath(path.resolve(...paths));
   }
+
   /**
    * Check if the path exists.
    * @param p The path to evaluate.
@@ -118,6 +156,7 @@ export class Util {
   public static exists(p: string): boolean {
     return fs.existsSync(p);
   }
+
   /**
    * Read the contents of the directory.
    * @param dirpath The path to evaluate.
@@ -126,6 +165,7 @@ export class Util {
   public static readdir(dirpath: string): Array<string> {
     return fs.readdirSync(dirpath);
   }
+
   /**
    * If the path exists, read the contents of the directory; otherwise, return `undefined`.
    * @param dirpath The path to evaluate.
@@ -138,6 +178,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Create a directory.
    * @param dirpath The path to the directory you want to create.
@@ -148,6 +189,7 @@ export class Util {
       mode: opts?.mode ?? "0777",
     });
   }
+
   /**
    * Create a temporary directory.
    * Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
@@ -161,17 +203,19 @@ export class Util {
     const dirpath = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
     return normalPath(dirpath);
   }
+
   /**
    * Read the entire contents of a file.
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
-   * If a flag is not provided, it defaults to `'r'`.
+   * If a flag is not provided, it defaults to `"r"`.
    * @returns The contents of the `filepath`.
    */
   public static readFile(filepath: string, options?: ReadFileOptions): string {
     const buf = fs.readFileSync(filepath, options);
     return buf.toString();
   }
+
   /**
    * If the file exists and can be read successfully, read the entire contents;
    * otherwise, return `undefined`.
@@ -189,6 +233,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Read the contents of the file and convert it to JSON.
    * @param filepath The file path of the JSON file.
@@ -199,6 +244,7 @@ export class Util {
     const text = Util.readFile(filepath);
     return JSON.parse(text) as Json;
   }
+
   /**
    * Retrieve the contents of the file and convert it to JSON
    * if the file exists and can be parsed successfully, otherwise, return `undefined`.
@@ -213,6 +259,7 @@ export class Util {
       return undefined;
     }
   }
+
   /**
    * Convert all YAML objects from a single file into JSON objects.
    * @param filepath The file path of the YAML file.
@@ -230,6 +277,7 @@ export class Util {
       }
     });
   }
+
   /**
    * Convert all YAML objects from a single file into JSON objects
    * if the file exists and can be parsed successfully, `undefined` otherwise.
@@ -248,10 +296,17 @@ export class Util {
    * Writes data to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
    * @param data The data to write.
+   * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
+   * If a flag is not provided, it defaults to `"w"`.
    */
-  public static writeFile(filepath: string, data: string): void {
-    fs.writeFileSync(filepath, data);
+  public static writeFile(
+    filepath: string,
+    data: string,
+    options?: WriteFileOptions
+  ): void {
+    fs.writeFileSync(filepath, data, options);
   }
+
   /**
    * Writes JSON to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
@@ -261,6 +316,7 @@ export class Util {
     const text = JSON.stringify(obj, null, 2);
     fs.writeFileSync(filepath, text);
   }
+
   /**
    * Writes multiple YAML objects to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
@@ -272,6 +328,7 @@ export class Util {
     );
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
+
   /**
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
    * @param p The path to the file or directory you want to remove.
@@ -282,10 +339,120 @@ export class Util {
       recursive: opts?.recursive ?? true,
     });
   }
+
+  /**
+   * Checks if the given path is a directory and exists.
+   * @param p The path to check.
+   * @returns `true` if the path is an existing directory, `false` otherwise.
+   */
+  public static isDir(p: string): boolean {
+    try {
+      return fs.statSync(p).isDirectory();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Gets the stats of the given path.
+   * @param p The path to get stats for.
+   * @returns The stats of the path.
+   */
+  public static stat(p: string): Metadata {
+    return this.createMetadata(fs.statSync(p));
+  }
+
+  /**
+   * Gets the stats of the given path without following symbolic links.
+   * @param p The path to get stats for.
+   * @returns The stats of the path, formatted as a `Metadata` object.
+   */
+  public static lstat(p: string): Metadata {
+    return this.createMetadata(fs.lstatSync(p));
+  }
+
+  /**
+   * Set the permissions of the file, directory, etc.
+   * Expects a permission string like `"755"` or `"644"`.
+   * @param p The path of the file or directory.
+   * @param permissions The mode to set as a string.
+   */
+  public static chmod(p: string, permissions: string): void {
+    fs.chmodSync(p, parseInt(permissions, 8));
+  }
+
+  /**
+   * Resolves an absolute path from a sequence of path segments.
+   * @param dirs The path segments to resolve.
+   * @returns The resolved absolute path.
+   */
+  public static absolute(...dirs: string[]): string {
+    return path.resolve(...dirs);
+  }
+
+  /**
+   * Extracts the extension (without the leading dot) from the path, if possible.
+   *
+   * @param p The path to get extension for.
+   * @returns The file extension without the leading dot, or `nil` if:
+   *          - The file name starts with a dot (hidden files).
+   *          - There is no dot in the file name.
+   *          - The dot is the last character in the file name.
+   */
+  public static extension(p: string): string | undefined {
+    const ext = path.extname(p);
+    return !ext || p === ext || p.endsWith(".") ? undefined : ext.slice(1);
+  }
+
   /**
    * @internal
    */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Creates `Metadata` object based on the given stats object.
+   * @param stats The `fs.Stats` object.
+   * @returns The ``Metadata`` object.
+   */
+  private static createMetadata(stats: fs.Stats): Metadata {
+    return {
+      fileType: this.getFileType(stats),
+      size: stats.size,
+      permissions: this.formatPermissions(stats.mode),
+      modified: stats.mtime,
+      accessed: stats.atime,
+      created: stats.birthtime,
+    };
+  }
+
+  /**
+   * Returns the type of the file based on the given stats object.
+   * @param stats The `fs.Stats` object.
+   * @returns The type of the file.
+   */
+  private static getFileType(stats: fs.Stats): FileType {
+    switch (true) {
+      case stats.isFile():
+        return "File";
+      case stats.isDirectory():
+        return "Directory";
+      case stats.isSymbolicLink():
+        return "Symlink";
+      default:
+        return "Other";
+    }
+  }
+
+  /**
+   * Converts a numeric mode into a string representation of its permissions.
+   * For example, this will convert the numeric mode `33279` into a `"755"` string.
+   * @param mode The numeric mode to convert.
+   * @returns A string representation of the permissions.
+   */
+  private static formatPermissions(mode: number): string {
+    const octalString = mode.toString(8);
+    return octalString.substring(octalString.length - 3);
   }
 }
