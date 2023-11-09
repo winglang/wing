@@ -203,6 +203,7 @@ module.exports = function({ $cloud_Api }) {
         },
         "function_name": "AnApi-OnRequest-cdafee6e-c8c5dbf2",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnApi_AnApi-OnRequest-cdafee6e_IamRole_BD7A2D2D.arn}",
         "runtime": "nodejs18.x",

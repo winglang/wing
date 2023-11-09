@@ -53,9 +53,9 @@ export type TableRowProps = {
   disabled?: boolean;
   readonly?: boolean;
   error?: string;
-  updateRow: (column: string, value: any) => void;
-  saveRow: (row: Record<string, any>) => void;
-  actions?: () => React.ReactNode;
+  updateRow?: (column: string, value: any) => void;
+  saveRow?: (row: Record<string, any>) => void;
+  actions?: (() => React.ReactNode) | JSX.Element;
   rowClassName?: string;
   columnClassName?: string;
   actionsClassName?: string;
@@ -109,15 +109,15 @@ export const TableRow = ({
               inactivePlaceholder={placeholder}
               value={row[column]}
               onChange={(event) => {
-                updateRow(column, getValue(inputType, event));
+                updateRow?.(column, getValue(inputType, event));
               }}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
-                  saveRow(row);
+                  saveRow?.(row);
                 }
               }}
               onBlur={() => {
-                !newRow && saveRow(row);
+                !newRow && saveRow?.(row);
               }}
               disabled={
                 (!newRow && column === primaryKey) || disabled || readonly
@@ -135,7 +135,7 @@ export const TableRow = ({
           actionsClassName,
         )}
       >
-        {actions?.()}
+        {actions instanceof Function ? actions() : actions}
       </td>
     </tr>
   );

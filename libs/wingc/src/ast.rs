@@ -424,6 +424,8 @@ pub struct Interface {
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
+	/// The name of the trusted module, and the path to the library (usually inside node_modules)
+	TrustedModule(Symbol, Utf8PathBuf),
 	/// The name of the library, and the path to the library (usually inside node_modules)
 	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),

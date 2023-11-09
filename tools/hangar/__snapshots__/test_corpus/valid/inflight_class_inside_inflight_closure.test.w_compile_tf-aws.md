@@ -187,6 +187,7 @@ module.exports = function({  }) {
         },
         "function_name": "cloud-Function-c8db99e3",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.PreflightClass_cloudFunction_IamRole_60AD4A3B.arn}",
         "runtime": "nodejs18.x",

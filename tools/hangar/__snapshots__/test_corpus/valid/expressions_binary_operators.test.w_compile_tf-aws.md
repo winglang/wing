@@ -60,6 +60,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: xyznfj == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznfj,(-5))))};
     const xynfj = Math.trunc((-501.9) / ((-99.1) - 0.91));
     {((cond) => {if (!cond) throw new Error("assertion failed: xynfj == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xynfj,5)))};
+    const price = 12.34;
+    const twentyThousand = 20000;
+    const aBitMore = 20000.0001;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

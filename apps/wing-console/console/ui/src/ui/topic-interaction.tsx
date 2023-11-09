@@ -1,11 +1,12 @@
 import { Button, TextArea } from "@wingconsole/design-system";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
-import { useId, useState } from "react";
+import { useId } from "react";
 
 export interface TopicInteractionProps {
   resourceId: string;
   onPublishClick: (message: string) => void;
 }
+
 export const TopicInteraction = ({
   resourceId,
   onPublishClick,

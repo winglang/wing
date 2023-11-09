@@ -192,6 +192,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
         "runtime": "nodejs18.x",

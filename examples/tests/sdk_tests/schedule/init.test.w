@@ -5,6 +5,8 @@ skip: true
 
 bring cloud;
 
+new cloud.Schedule( rate: 5m ) as "s0";
+
 // Those are testing the many errors in intalization of a cloud.Schedule
 let var error = "";
 try {
