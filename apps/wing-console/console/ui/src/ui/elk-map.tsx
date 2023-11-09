@@ -60,7 +60,6 @@ const InvisibleNodeSizeCalculator = memo(
     node: NodeItem,
     onSizesChange,
   }: InvisibleNodeSizeCalculatorProps<any>) => {
-    console.log("InvisibleNodeSizeCalculator");
     const refs = useRef<Record<string, HTMLDivElement | null>>({});
 
     const [sizes, setSizes] = useState<Sizes>();
