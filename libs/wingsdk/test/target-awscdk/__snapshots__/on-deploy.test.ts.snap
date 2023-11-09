@@ -199,7 +199,7 @@ exports[`create an OnDeploy 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
+    "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -266,11 +266,7 @@ exports[`create an OnDeploy 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-<<<<<<< HEAD
-          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
-=======
-          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
->>>>>>> c5e44ca13 (chore: self mutation (build.diff))
+          "Ref": "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -536,11 +532,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-<<<<<<< HEAD
-    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
-=======
-    "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5": {
->>>>>>> c5e44ca13 (chore: self mutation (build.diff))
+    "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -610,11 +602,7 @@ exports[`execute OnDeploy after other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-<<<<<<< HEAD
-          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
-=======
-          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
->>>>>>> c5e44ca13 (chore: self mutation (build.diff))
+          "Ref": "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
@@ -883,11 +871,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-<<<<<<< HEAD
-    "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898": {
-=======
-    "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5": {
->>>>>>> c5e44ca13 (chore: self mutation (build.diff))
+    "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666": {
       "Properties": {
         "FunctionName": {
           "Ref": "myondeployFunction47551748",
@@ -954,11 +938,7 @@ exports[`execute OnDeploy before other resources 1`] = `
       "Properties": {
         "ExecuteOnHandlerChange": true,
         "HandlerArn": {
-<<<<<<< HEAD
-          "Ref": "myondeployFunctionCurrentVersion6BC237541c564042d3206a3d595a1ff746960898",
-=======
-          "Ref": "myondeployFunctionCurrentVersion6BC237541f758b982776f134a1f1b1bc52b6ccb5",
->>>>>>> c5e44ca13 (chore: self mutation (build.diff))
+          "Ref": "myondeployFunctionCurrentVersion6BC23754db0a4d48a2f2f4dc0221a8d40219f666",
         },
         "InvocationType": "RequestResponse",
         "ServiceToken": {
