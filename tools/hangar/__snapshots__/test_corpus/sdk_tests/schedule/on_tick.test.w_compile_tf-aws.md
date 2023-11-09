@@ -49,11 +49,11 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c1.peek()),0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c2.peek()),0)))};
+      const c1Value = (await $c1.peek());
+      const c2Value = (await $c2.peek());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= c1Value + 1")})(((await $c1.peek()) >= (c1Value + 1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= c2Value + 1")})(((await $c2.peek()) >= (c2Value + 1)))};
     }
   }
   return $Closure3;
@@ -392,7 +392,7 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -510,11 +510,12 @@ class $Root extends $stdlib.std.Resource {
     const c2 = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "c2");
     (from_cron.onTick(new $Closure1(this, "$Closure1")));
     (from_rate.onTick(new $Closure2(this, "$Closure2")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "on tick is called both for rate and cron schedules", new $Closure3(this, "$Closure3"), ({"timeout": (std.Duration.fromSeconds(120))}));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "on tick is called both for rate and cron schedules", new $Closure3(this, "$Closure3"), { timeout: (std.Duration.fromSeconds(120)) });
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "on_tick.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "on_tick.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 
