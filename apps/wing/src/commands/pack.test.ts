@@ -44,6 +44,61 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if necessary wing files are excluded by package.json", async () => {
+    // invalid4's package.json contains this:
+    // {
+    //   ...
+    //   "files": [
+    //     "!file1.w"
+    //   ]
+    // }
+    const projectDir = join(fixturesDir, "invalid4");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    await expect(pack()).rejects.toThrow(/Cannot find module ".\/file1.w"/);
+    await expectNoTarball(outdir);
+  });
+
+  it("includes extra files specified by package.json", async () => {
+    // valid1's package.json contains this:
+    // {
+    //   ...
+    //   "files": [
+    //     "**/*.ts"
+    //   ]
+    // }
+
+    // GIVEN
+    const projectDir = join(fixturesDir, "valid1");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    // WHEN
+    await pack({ outfile: join(outdir, "tarball.tgz") });
+
+    // THEN
+    const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
+    expect(tarballContents["util.ts"]).toBeDefined();
+  });
+
+  it("excludes files in /target from the packaged tarball", async () => {
+    const projectDir = join(fixturesDir, "valid1");
+    const outdir = await generateTmpDir();
+
+    // copy everything to the output directory to sandbox this test
+    await exec(`cp -r ${projectDir}/* ${outdir}`);
+    process.chdir(outdir);
+
+    // create a file in /target
+    await fs.mkdir("target");
+    await fs.writeFile("target/index.js", "console.log('hello world');");
+
+    await pack({ outfile: join(outdir, "tarball.tgz") });
+    const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
+    expect(tarballContents["target/index.js"]).toBeUndefined();
+  });
+
   it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
@@ -87,10 +142,18 @@ describe("wing pack", () => {
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
 
-    const expectedFiles = ["index.js", "README.md", "package.json", "store.w"];
-    for (const file of expectedFiles) {
-      expect(tarballContents[file]).toBeDefined();
-    }
+    const expectedFiles = [
+      "index.js",
+      "README.md",
+      "LICENSE",
+      "package.json",
+      "store.w",
+      "enums.w",
+      "subdir/util.w",
+      "util.js",
+      // util.ts - TypeScript files are not included by default
+    ];
+    expect(Object.keys(tarballContents).sort()).toEqual(expectedFiles.sort());
 
     const pkgJson = JSON.parse(tarballContents["package.json"]);
     expect(pkgJson.name).toEqual("@winglibs/testfixture");

@@ -29,7 +29,7 @@ export interface FunctionProps {
 
   /**
    * The amount of memory to allocate to the function, in MB.
-   * @default 128
+   * @default 1024
    */
   readonly memory?: number;
 
