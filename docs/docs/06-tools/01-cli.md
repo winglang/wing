@@ -233,7 +233,7 @@ Here's the list of supported dotenv files:
 
 - `.env` – Loaded in all cases
 - `.env.local` – Loaded in all cases and typically ignored by git
-- `.env.[mode]` – Only loaded in the specified mode (`run`, `compile`, `test`, `lsp`)
+- `.env.[mode]` – Only loaded in the specified mode (`run`, `compile`, `test`, `lsp`, …)
 - `.env.[mode].local` – Only loaded in the specified mode and typically ignored by git
 
 ### Advanced dotenv usage
