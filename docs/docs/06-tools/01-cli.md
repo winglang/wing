@@ -158,6 +158,35 @@ You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://doc
 $ cdk deploy --app target/app.awscdk
 ```
 
+### Target aditional values
+
+Eventually, some resources require additional specific values for certain resources and platforms.
+
+We can provide these values using the option `-v` or `--value` followed by the value or a YAML file with the values
+
+Usage:
+
+In the example below, it is necessary to provide the hostedZoneId and acmCertificateArn for the project
+
+```sh
+$ wing compile [entrypoint] --platform tf-aws \ 
+  -v root/Default/Domain.hostedZoneId=Z0111111111111111111F \
+  -v root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+```
+
+Which can also be specified with a YAML file as shown below
+
+```sh
+$ wing compile [entrypoint] --platform tf-aws -v domain.yml
+```
+
+domain.yml content:
+```yaml
+root/Default/Domain:
+  hostedZoneId: Z0111111111111111111F
+  acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+```
+
 ## Test: `wing test`
 
 The `wing test` command can be used to compile and execute tests in Wing applications.

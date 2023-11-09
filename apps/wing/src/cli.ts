@@ -164,7 +164,7 @@ async function main() {
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option(
-      "--value <value>",
+      "-v, --value <value>",
       "Platform-specific values in the form KEY=VALUE or yaml file",
       addValue,
       []
