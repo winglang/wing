@@ -11,9 +11,14 @@ import { Json, Node, Resource } from "../std";
 export const WEBSITE_FQN = fqnForType("cloud.Website");
 
 /**
- * Options for `Website`.
+ * Options for `Website`
  */
-export interface WebsiteProps extends WebsiteOptions {
+export interface WebsiteProps extends WebsiteOptions, WebsiteDomainOptions {}
+
+/**
+ * Basic options for `Website`
+ */
+export interface WebsiteOptions {
   /**
    * Local path to the website's static files, relative to the Wing source file or absolute.
    * @example "./dist"
@@ -24,7 +29,7 @@ export interface WebsiteProps extends WebsiteOptions {
 /**
  * Options for `Website`, and `ReactApp`
  */
-export interface WebsiteOptions {
+export interface WebsiteDomainOptions {
   /**
    * The website's custom domain object.
    * @default - undefined

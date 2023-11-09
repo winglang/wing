@@ -350,6 +350,13 @@ exports[`bring.test.w 1`] = `
   |       ^ Expected module specification (see https://www.winglang.io/docs/libraries)
 
 
+error: Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+  --> ../../../examples/tests/invalid/bring.test.w:8:1
+  |
+8 | bring c;
+  | ^^^^^^^^ Could not find a trusted library \\"@winglibs/c\\" installed. Did you mean to run \`npm i @winglibs/c\`?
+
+
 error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.test.w:1:1
   |
@@ -362,13 +369,6 @@ error: \\"cloud\\" is already defined
   |
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
-
-
-error: \\"c\\" is not a built-in module
-  --> ../../../examples/tests/invalid/bring.test.w:8:1
-  |
-8 | bring c;
-  | ^^^^^^^^ \\"c\\" is not a built-in module
 
 
  

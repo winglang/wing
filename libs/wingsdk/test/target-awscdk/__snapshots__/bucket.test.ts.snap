@@ -462,6 +462,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
@@ -918,6 +919,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnDeletec185c7e3ServiceRole113BE170",
@@ -1396,6 +1398,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnEventc185c7e3ServiceRole3C4A0154",
@@ -1852,6 +1855,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",

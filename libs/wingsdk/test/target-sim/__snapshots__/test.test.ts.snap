@@ -42,7 +42,7 @@ async handle(event) {
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
-            "root/test:my_test": "\${root/test:my_test/Handler#attrs.handle}",
+            "root/test:my_test": "\${wsim#root/test:my_test/Handler#attrs.handle}",
           },
         },
         "type": "@winglang/sdk.std.TestRunner",

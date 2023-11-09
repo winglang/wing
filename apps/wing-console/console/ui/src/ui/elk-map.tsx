@@ -249,7 +249,8 @@ export const ElkMap = <T extends unknown = undefined>({
         traverse(node);
       }
 
-      return nodeList;
+      // Remove root node.
+      return nodeList.slice(1);
     });
   }, [graph, nodeRecord, offsets, edges, setNodeList]);
 

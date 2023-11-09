@@ -295,6 +295,12 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/website.md"
         },
         {
+          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/workload"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/workload.md"
+        },
+        {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/dynamodb-table"
         },
         {

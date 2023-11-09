@@ -115,8 +115,8 @@ bucket: (function() {
         "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
-            "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
+            "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
           },
           "sourceCodeFile": ".wing/queue-setconsumer-401ee792_c8c63697.js",
           "sourceCodeLanguage": "javascript",
@@ -137,8 +137,8 @@ bucket: (function() {
         "attrs": {},
         "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
         "props": {
-          "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${root/HelloWorld/Queue/Queue-SetConsumer-401ee792#attrs.handle}",
+          "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/Queue-SetConsumer-401ee792#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
