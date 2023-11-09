@@ -1,6 +1,6 @@
 import { Attribute, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
 
 import { TerminalHistoryItem } from "../shared/ternimal.js";
 
@@ -16,6 +16,7 @@ export interface RedisInteractionProps {
   onArrowUp: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onArrowDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
+
 export const RedisInteraction = ({
   isLoading,
   url,
@@ -31,24 +32,25 @@ export const RedisInteraction = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollableRef = useRef<HTMLDivElement>(null);
 
-  const onInputKeyDown = async (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    switch (event.key) {
-      case "Enter": {
-        onEnter();
-        break;
+  const onInputKeyDown = useCallback(
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      switch (event.key) {
+        case "Enter": {
+          onEnter();
+          break;
+        }
+        case "ArrowUp": {
+          onArrowUp(event);
+          break;
+        }
+        case "ArrowDown": {
+          onArrowDown(event);
+          break;
+        }
       }
-      case "ArrowUp": {
-        onArrowUp(event);
-        break;
-      }
-      case "ArrowDown": {
-        onArrowDown(event);
-        break;
-      }
-    }
-  };
+    },
+    [onArrowDown, onArrowUp, onEnter],
+  );
 
   useEffect(() => {
     inputRef.current?.focus();
