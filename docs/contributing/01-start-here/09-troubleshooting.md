@@ -63,6 +63,6 @@ Try to remove and re-install the project's dependencies.
 (Before running these commands, make sure `git status` says your working tree is clean).
 
 ```
-git clean -fdx
+git clean -fdX
 pnpm install
 ```
