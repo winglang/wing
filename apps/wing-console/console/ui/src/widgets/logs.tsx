@@ -57,9 +57,16 @@ export const LogsWidget = memo(
         return;
       }
 
+      if (!logs.data) {
+        return;
+      }
+
       if (initialScroll || scrolledToBottom) {
         setInitialScroll(false);
-        element.scrollTo({ top: element.scrollHeight });
+        element.scrollTo({
+          top: element.scrollHeight,
+          behavior: initialScroll ? "instant" : "smooth",
+        });
       }
     }, [initialScroll, logs.data, scrolledToBottom]);
 
