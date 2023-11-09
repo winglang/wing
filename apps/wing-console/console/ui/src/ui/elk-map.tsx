@@ -345,7 +345,7 @@ export const ElkMap = <T extends unknown = undefined>({
 
       <ZoomPane
         ref={zoomPane}
-        className="w-full h-full bg-slate-100 dark:bg-slate-550"
+        className="w-full h-full bg-white dark:bg-slate-550"
         data-testid="map-pane"
       >
         <div ref={rootElement}>
@@ -355,7 +355,7 @@ export const ElkMap = <T extends unknown = undefined>({
                 "relative",
                 "transition-all",
                 "rounded-lg",
-                "bg-slate-50 dark:bg-slate-500",
+                "bg-slate-100 dark:bg-slate-500",
                 durationClass,
               )}
               style={{
