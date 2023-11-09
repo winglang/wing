@@ -221,7 +221,7 @@ The path of the file to be read.
 The `encoding` can be set to specify the character encoding.
 
 And the `flag` can be set to specify the attributes.
-If a flag is not provided, it defaults to `r`.
+If a flag is not provided, it defaults to `"r"`.
 
 ---
 
@@ -453,7 +453,7 @@ The data to write.
 The `encoding` can be set to specify the character encoding.
 
 And the `flag` can be set to specify the attributes.
-If a flag is not provided, it defaults to `w`.
+If a flag is not provided, it defaults to `"w"`.
 
 ---
 
