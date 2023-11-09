@@ -191,7 +191,7 @@ export class Util {
    * Read the entire contents of a file.
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
-   * If a flag is not provided, it defaults to `r`.
+   * If a flag is not provided, it defaults to `"r"`.
    * @returns The contents of the `filepath`.
    */
   public static readFile(filepath: string, options?: ReadFileOptions): string {
@@ -280,7 +280,7 @@ export class Util {
    * @param filepath The file path that needs to be written.
    * @param data The data to write.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
-   * If a flag is not provided, it defaults to `w`.
+   * If a flag is not provided, it defaults to `"w"`.
    */
   public static writeFile(
     filepath: string,
