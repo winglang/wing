@@ -95,7 +95,7 @@ test("website is serving dynamic content", async () => {
 test("api.url is resolved in website config", async () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "api");
+  const api = new cloud.Api(app, "api");
   const website = cloud.Website._newWebsite(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
@@ -126,8 +126,8 @@ test("api.url is resolved in website config", async () => {
 test("multiple tokens are resolved in website config", async () => {
   // GIVEN
   const app = new SimApp();
-  const api1 = cloud.Api._newApi(app, "api1");
-  const api2 = cloud.Api._newApi(app, "api2");
+  const api1 = new cloud.Api(app, "api1");
+  const api2 = new cloud.Api(app, "api2");
   const website = cloud.Website._newWebsite(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });

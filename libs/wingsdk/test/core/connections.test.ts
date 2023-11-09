@@ -7,7 +7,7 @@ import { SimApp } from "../sim-app";
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  const bucket = new cloud.Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(
     app,
     "Handler",

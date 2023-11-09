@@ -260,7 +260,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -313,7 +313,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
@@ -466,7 +466,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }

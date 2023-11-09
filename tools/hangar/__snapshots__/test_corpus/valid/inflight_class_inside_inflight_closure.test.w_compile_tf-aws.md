@@ -253,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;

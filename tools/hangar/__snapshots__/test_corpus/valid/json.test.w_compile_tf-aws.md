@@ -225,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
     let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
-    const hasBucket = ({"a": ({"a": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket")})});
+    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket")})});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

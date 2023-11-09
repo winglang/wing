@@ -78,9 +78,9 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket3");
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "bucket1");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "bucket2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "bucket3");
     const arr1 = ["a", "b", "c"];
     const arr2 = [1, 2, 3];
     const arr3 = [bucket1, bucket2];

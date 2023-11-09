@@ -513,7 +513,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+        this.api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -571,7 +571,7 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
     const handler = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", handler));

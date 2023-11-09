@@ -28,33 +28,30 @@ export interface BucketProps {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export abstract class Bucket extends Resource {
-  /**
-   * Create a new bucket.
-   * @internal
-   */
-  public static _newBucket(
-    scope: Construct,
-    id: string,
-    props: BucketProps = {}
-  ): Bucket {
-    return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
-  }
-
+export class Bucket extends Resource {
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
+    if (new.target === Bucket) {
+      return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Bucket";
     Node.of(this).description = "A cloud object store";
-
-    props;
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
 
   /**
    * Add a file to the bucket that is uploaded when the app is deployed.
@@ -62,7 +59,11 @@ export abstract class Bucket extends Resource {
    * TODO: In the future this will support uploading any `Blob` type or
    * referencing a file from the local filesystem.
    */
-  public abstract addObject(key: string, body: string): void;
+  public addObject(key: string, body: string): void {
+    key;
+    body;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a file to the bucket from system folder

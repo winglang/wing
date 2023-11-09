@@ -171,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {

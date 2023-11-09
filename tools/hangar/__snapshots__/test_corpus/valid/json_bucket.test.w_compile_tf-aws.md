@@ -274,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
     const fileName = "file.json";
     const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));

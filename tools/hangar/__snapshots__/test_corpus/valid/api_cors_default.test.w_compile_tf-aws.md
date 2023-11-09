@@ -389,7 +389,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const apiDefaultCors = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true });
+    const apiDefaultCors = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api", { cors: true });
     (apiDefaultCors.get("/users", new $Closure1(this, "$Closure1")));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users has default cors headers", new $Closure2(this, "$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users has default cors headers", new $Closure3(this, "$Closure3"));

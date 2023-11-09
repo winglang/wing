@@ -31,7 +31,7 @@ describe("function with bucket binding", () => {
   test("put operation", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",
@@ -64,7 +64,7 @@ describe("function with bucket binding", () => {
   test("put json operation has correct permissions", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",
@@ -87,7 +87,7 @@ describe("function with bucket binding", () => {
   test("get json operation has correct permissions", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",

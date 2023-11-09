@@ -173,23 +173,13 @@ export type CorsHeaders = {
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 
-export abstract class Api extends Resource {
-  /**
-   * Creates a new cloud.Api instance through the app.
-   * @internal
-   */
-  public static _newApi(
-    scope: Construct,
-    id: string,
-    props: ApiProps = {}
-  ): Api {
-    return App.of(scope).newAbstract(API_FQN, scope, id, props);
-  }
-
+export class Api extends Resource {
   /**
    * The base URL of the API endpoint.
    */
-  public abstract readonly url: string;
+  public get url(): string {
+    throw new Error("proxy");
+  }
 
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
@@ -219,6 +209,10 @@ export abstract class Api extends Resource {
   protected corsOptions?: ApiCorsOptions;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
+    if (new.target === Api) {
+      return App.of(scope).newAbstract(API_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     props;
@@ -226,6 +220,11 @@ export abstract class Api extends Resource {
     this.corsOptions = props.cors ? this._cors(props.corsOptions) : undefined;
     Node.of(this).title = "Api";
     Node.of(this).description = "A REST API endpoint";
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
   }
 
   /** @internal */
@@ -239,11 +238,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract get(
+  public get(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiGetOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for POST requests on the given path.
@@ -251,11 +255,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract post(
+  public post(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPostOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for PUT requests on the given path.
@@ -263,11 +272,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract put(
+  public put(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPutOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for DELETE requests on the given path.
@@ -275,11 +289,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract delete(
+  public delete(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiDeleteOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for PATCH requests on the given path.
@@ -287,11 +306,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract patch(
+  public patch(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPatchOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for OPTIONS requests on the given path.
@@ -299,11 +323,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract options(
+  public options(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiOptionsOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for HEAD requests on the given path.
@@ -311,11 +340,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract head(
+  public head(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiHeadOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 
   /**
    * Add a inflight handler to the api for CONNECT requests on the given path.
@@ -323,11 +357,16 @@ export abstract class Api extends Resource {
    * @param inflight The function to handle the request.
    * @param props Options for the route.
    */
-  public abstract connect(
+  public connect(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiConnectOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
   /**
    * Validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"

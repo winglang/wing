@@ -35,7 +35,7 @@ test("execute OnDeploy after other resources", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
     executeAfter: [bucket],
@@ -58,7 +58,7 @@ test("execute OnDeploy before other resources", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
     executeBefore: [bucket],

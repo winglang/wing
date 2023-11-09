@@ -406,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
     const handler = new $Closure1(this, "$Closure1");
     const testInvalidPath = ((path) => {
       let error = "";

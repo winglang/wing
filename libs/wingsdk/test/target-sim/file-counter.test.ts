@@ -19,7 +19,7 @@ test(
         const counter = cloud.Counter._newCounter(this, "Counter", {
           initial: 1000,
         });
-        const bucket = cloud.Bucket._newBucket(this, "Bucket");
+        const bucket = new cloud.Bucket(this, "Bucket");
         const queue = cloud.Queue._newQueue(this, "Queue");
         const processor = Testing.makeHandler(
           this,

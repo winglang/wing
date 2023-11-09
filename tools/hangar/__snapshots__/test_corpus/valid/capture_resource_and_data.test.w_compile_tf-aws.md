@@ -131,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const data = new Set([1, 2, 3]);
-    const res = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const res = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:resource and data", new $Closure1(this, "$Closure1"));
   }

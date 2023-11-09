@@ -12,7 +12,7 @@ test("function with a bucket binding requiring read_write", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const bucket = cloud.Bucket._newBucket(app, "Bucket");
+  const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -60,7 +60,7 @@ test("function with a bucket binding requiring only read", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const bucket = cloud.Bucket._newBucket(app, "Bucket");
+  const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",

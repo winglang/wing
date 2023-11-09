@@ -284,7 +284,7 @@ class $Root extends $stdlib.std.Resource {
     const emptySet = new Set([(clonedArray2.at(2))]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
     const func = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", func));
     const argReturn = ((n) => {

@@ -479,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
     const storeInBucket = new $Closure1(this, "$Closure1");
     const handler1 = new $Closure2(this, "$Closure2");
     const func1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "func1", handler1);
