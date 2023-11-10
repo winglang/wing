@@ -80,12 +80,12 @@ test "symlinkMetadata()" {
     expect.equal(fs.exists(tempDir), false);
 }
 
-test "chmod()" {
+test "setPermissions()" {
     let tempDir = fs.mkdtemp();
     let tempFile = fs.join(tempDir, "tempfile.txt");
 
     fs.writeFile(tempFile, "Hello, Wing!");
-    fs.chmod(tempFile, "777");
+    fs.setPermissions(tempFile, "777");
 
     let fileStats = fs.metadata(tempFile);
     expect.equal(fileStats.permissions, "777");

@@ -386,7 +386,7 @@ export class Util {
    * @param p The path of the file or directory.
    * @param permissions The mode to set as a string.
    */
-  public static chmod(p: string, permissions: string): void {
+  public static setPermissions(p: string, permissions: string): void {
     fs.chmodSync(p, parseInt(permissions, 8));
   }
 
