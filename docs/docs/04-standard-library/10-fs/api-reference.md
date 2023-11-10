@@ -39,15 +39,14 @@ new fs.Util();
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.fs.Util.absolute">absolute</a></code> | Resolves an absolute path from a sequence of path segments. |
+| <code><a href="#@winglang/sdk.fs.Util.absolute">absolute</a></code> | The right-most parameter is considered {to}. Other parameters are considered an array of {from}. |
 | <code><a href="#@winglang/sdk.fs.Util.basename">basename</a></code> | Retrieve the final segment of a given file path. |
-| <code><a href="#@winglang/sdk.fs.Util.chmod">chmod</a></code> | Set the permissions of the file, directory, etc. |
 | <code><a href="#@winglang/sdk.fs.Util.dirname">dirname</a></code> | Retrieve the name of the directory from a given file path. |
 | <code><a href="#@winglang/sdk.fs.Util.exists">exists</a></code> | Check if the path exists. |
 | <code><a href="#@winglang/sdk.fs.Util.extension">extension</a></code> | Extracts the extension (without the leading dot) from the path, if possible. |
 | <code><a href="#@winglang/sdk.fs.Util.isDir">isDir</a></code> | Checks if the given path is a directory and exists. |
 | <code><a href="#@winglang/sdk.fs.Util.join">join</a></code> | Join all arguments together and normalize the resulting path. |
-| <code><a href="#@winglang/sdk.fs.Util.lstat">lstat</a></code> | Gets the stats of the given path without following symbolic links. |
+| <code><a href="#@winglang/sdk.fs.Util.metadata">metadata</a></code> | Gets the stats of the given path. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdir">mkdir</a></code> | Create a directory. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdtemp">mkdtemp</a></code> | Create a temporary directory. |
 | <code><a href="#@winglang/sdk.fs.Util.readdir">readdir</a></code> | Read the contents of the directory. |
@@ -56,9 +55,9 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.readYaml">readYaml</a></code> | Convert all YAML objects from a single file into JSON objects. |
 | <code><a href="#@winglang/sdk.fs.Util.relative">relative</a></code> | Solve the relative path from {from} to {to} based on the current working directory. |
 | <code><a href="#@winglang/sdk.fs.Util.remove">remove</a></code> | Remove files and directories (modeled on the standard POSIX `rm`utility). |
-| <code><a href="#@winglang/sdk.fs.Util.resolve">resolve</a></code> | The right-most parameter is considered {to}. Other parameters are considered an array of {from}. |
-| <code><a href="#@winglang/sdk.fs.Util.stat">stat</a></code> | Gets the stats of the given path. |
+| <code><a href="#@winglang/sdk.fs.Util.setPermissions">setPermissions</a></code> | Set the permissions of the file, directory, etc. |
 | <code><a href="#@winglang/sdk.fs.Util.symlink">symlink</a></code> | Creates a symbolic link. |
+| <code><a href="#@winglang/sdk.fs.Util.symlinkMetadata">symlinkMetadata</a></code> | Gets the stats of the given path without following symbolic links. |
 | <code><a href="#@winglang/sdk.fs.Util.tryReaddir">tryReaddir</a></code> | If the path exists, read the contents of the directory; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadFile">tryReadFile</a></code> | If the file exists and can be read successfully, read the entire contents; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadJson">tryReadJson</a></code> | Retrieve the contents of the file and convert it to JSON if the file exists and can be parsed successfully, otherwise, return `undefined`. |
@@ -74,16 +73,23 @@ new fs.Util();
 ```wing
 bring fs;
 
-fs.absolute(...dirs: Array<str>);
+fs.absolute(...paths: Array<str>);
 ```
 
-Resolves an absolute path from a sequence of path segments.
+The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
 
-###### `dirs`<sup>Required</sup> <a name="dirs" id="@winglang/sdk.fs.Util.absolute.parameter.dirs"></a>
+Starting from leftmost {from} parameter, resolves {to} to an absolute path.
+
+If {to} isn't already absolute, {from} arguments are prepended in right to left order,
+until an absolute path is found. If after using all {from} paths still no absolute path is found,
+the current working directory is used as well. The resulting path is normalized,
+and trailing slashes are removed unless the path gets resolved to the root directory.
+
+###### `paths`<sup>Required</sup> <a name="paths" id="@winglang/sdk.fs.Util.absolute.parameter.paths"></a>
 
 - *Type:* str
 
-The path segments to resolve.
+A sequence of paths or path segments.
 
 ---
 
@@ -101,36 +107,6 @@ Retrieve the final segment of a given file path.
 
 - *Type:* str
 
-The path to evaluate.
-
----
-
-##### `chmod` <a name="chmod" id="@winglang/sdk.fs.Util.chmod"></a>
-
-```wing
-bring fs;
-
-fs.chmod(p: str, permissions: str);
-```
-
-Set the permissions of the file, directory, etc.
-
-Expects a permission string like `"755"` or `"644"`.
-
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.chmod.parameter.p"></a>
-
-- *Type:* str
-
-The path of the file or directory.
-
----
-
-###### `permissions`<sup>Required</sup> <a name="permissions" id="@winglang/sdk.fs.Util.chmod.parameter.permissions"></a>
-
-- *Type:* str
-
-The mode to set as a string.
-
 ---
 
 ##### `dirname` <a name="dirname" id="@winglang/sdk.fs.Util.dirname"></a>
@@ -146,8 +122,6 @@ Retrieve the name of the directory from a given file path.
 ###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.dirname.parameter.p"></a>
 
 - *Type:* str
-
-The path to evaluate.
 
 ---
 
@@ -165,8 +139,6 @@ Check if the path exists.
 
 - *Type:* str
 
-The path to evaluate.
-
 ---
 
 ##### `extension` <a name="extension" id="@winglang/sdk.fs.Util.extension"></a>
@@ -183,8 +155,6 @@ Extracts the extension (without the leading dot) from the path, if possible.
 
 - *Type:* str
 
-The path to get extension for.
-
 ---
 
 ##### `isDir` <a name="isDir" id="@winglang/sdk.fs.Util.isDir"></a>
@@ -200,8 +170,6 @@ Checks if the given path is a directory and exists.
 ###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.isDir.parameter.p"></a>
 
 - *Type:* str
-
-The path to check.
 
 ---
 
@@ -223,21 +191,19 @@ The array of path need to join.
 
 ---
 
-##### `lstat` <a name="lstat" id="@winglang/sdk.fs.Util.lstat"></a>
+##### `metadata` <a name="metadata" id="@winglang/sdk.fs.Util.metadata"></a>
 
 ```wing
 bring fs;
 
-fs.lstat(p: str);
+fs.metadata(p: str);
 ```
 
-Gets the stats of the given path without following symbolic links.
+Gets the stats of the given path.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.lstat.parameter.p"></a>
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.metadata.parameter.p"></a>
 
 - *Type:* str
-
-The path to get stats for.
 
 ---
 
@@ -408,8 +374,6 @@ Returns `undefined`.
 
 - *Type:* str
 
-The path to the file or directory you want to remove.
-
 ---
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.fs.Util.remove.parameter.opts"></a>
@@ -418,46 +382,29 @@ The path to the file or directory you want to remove.
 
 ---
 
-##### `resolve` <a name="resolve" id="@winglang/sdk.fs.Util.resolve"></a>
+##### `setPermissions` <a name="setPermissions" id="@winglang/sdk.fs.Util.setPermissions"></a>
 
 ```wing
 bring fs;
 
-fs.resolve(...paths: Array<str>);
+fs.setPermissions(p: str, permissions: str);
 ```
 
-The right-most parameter is considered {to}. Other parameters are considered an array of {from}.
+Set the permissions of the file, directory, etc.
 
-Starting from leftmost {from} parameter, resolves {to} to an absolute path.
+Expects a permission string like `"755"` or `"644"`.
 
-If {to} isn't already absolute, {from} arguments are prepended in right to left order,
-until an absolute path is found. If after using all {from} paths still no absolute path is found,
-the current working directory is used as well. The resulting path is normalized,
-and trailing slashes are removed unless the path gets resolved to the root directory.
-
-###### `paths`<sup>Required</sup> <a name="paths" id="@winglang/sdk.fs.Util.resolve.parameter.paths"></a>
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.setPermissions.parameter.p"></a>
 
 - *Type:* str
-
-A sequence of paths or path segments.
 
 ---
 
-##### `stat` <a name="stat" id="@winglang/sdk.fs.Util.stat"></a>
-
-```wing
-bring fs;
-
-fs.stat(p: str);
-```
-
-Gets the stats of the given path.
-
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.stat.parameter.p"></a>
+###### `permissions`<sup>Required</sup> <a name="permissions" id="@winglang/sdk.fs.Util.setPermissions.parameter.permissions"></a>
 
 - *Type:* str
 
-The path to get stats for.
+The mode to set as a string.
 
 ---
 
@@ -483,8 +430,6 @@ The path to the target file or directory.
 
 - *Type:* str
 
-The path to the symbolic link to be created.
-
 ---
 
 ###### `type`<sup>Optional</sup> <a name="type" id="@winglang/sdk.fs.Util.symlink.parameter.type"></a>
@@ -495,6 +440,22 @@ The type of the target.
 
 It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
 Defaults to `"file"` if not specified.
+
+---
+
+##### `symlinkMetadata` <a name="symlinkMetadata" id="@winglang/sdk.fs.Util.symlinkMetadata"></a>
+
+```wing
+bring fs;
+
+fs.symlinkMetadata(p: str);
+```
+
+Gets the stats of the given path without following symbolic links.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.symlinkMetadata.parameter.p"></a>
+
+- *Type:* str
 
 ---
 
