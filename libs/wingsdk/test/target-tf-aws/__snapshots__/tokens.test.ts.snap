@@ -13,9 +13,9 @@ return class Handler {
   }
 };
 })())({
-str: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_8\\"]),
-num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591387E_298\\"]),
-list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_10\\"])
+str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9\\"]),
+num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591388E_298\\"]),
+list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_11\\"])
 })"
 `;
 
@@ -87,9 +87,9 @@ exports[`captures tokens 2`] = `
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Api-OnRequest-c5395e41-c8f26cae",
-            "WING_TOKEN_8_109562212591387E_298": "\${jsonencode(var.Number)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_10": "\${jsonencode(var.List)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_8": "\${jsonencode(aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url)}",
+            "WING_TOKEN_8_109562212591388E_298": "\${jsonencode(var.Number)}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9": "\${jsonencode(\\"https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}/\\")}",
+            "WING_TOKEN_TFTOKEN_TOKEN_11": "\${jsonencode(var.List)}",
           },
         },
         "function_name": "Api-OnRequest-c5395e41-c8f26cae",
