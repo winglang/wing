@@ -215,9 +215,8 @@ export class Api extends Resource {
 
     super(scope, id);
 
-    props;
-
     this.corsOptions = props.cors ? this._cors(props.corsOptions) : undefined;
+
     Node.of(this).title = "Api";
     Node.of(this).description = "A REST API endpoint";
   }
