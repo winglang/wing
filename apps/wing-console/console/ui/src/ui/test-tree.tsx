@@ -15,25 +15,33 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { useMemo } from "react";
 
 import { TestItem } from "../shared/test-item.js";
 
 import { NoTests } from "./no-tests.js";
+
 export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
   onSelectedItemsChange?: (ids: string[]) => void;
-  selectedItems?: string[];
+  selectedItemId?: string;
 }
+
 export const TestTree = ({
   testList,
   handleRunTest,
   handleRunAllTests,
   onSelectedItemsChange,
-  selectedItems,
+  selectedItemId,
 }: TestTreeProps) => {
   const { theme } = useTheme();
+
+  const selectedItems = useMemo(
+    () => (selectedItemId ? [selectedItemId] : undefined),
+    [selectedItemId],
+  );
 
   return (
     <div
@@ -43,7 +51,7 @@ export const TestTree = ({
       <Toolbar title="Tests">
         {testList.length > 0 && (
           <ToolbarButton
-            onClick={() => handleRunAllTests()}
+            onClick={handleRunAllTests}
             title="Run All Tests"
             disabled={testList.length === 0}
           >

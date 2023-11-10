@@ -46,27 +46,21 @@ describe("printing test reports", () => {
   });
 });
 
-describe("test options", () => {
+describe("wing test (no options)", () => {
   let logSpy: SpyInstance;
-  let writeResultsSpy: SpyInstance;
-  let writeFileSpy: SpyInstance;
 
   beforeEach(() => {
     chalk.level = 0;
     logSpy = vi.spyOn(console, "log");
-    writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
   });
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     logSpy.mockRestore();
-    writeResultsSpy.mockRestore();
-    writeFileSpy.mockRestore();
   });
 
-  test("wing test (default entrypoint)", async () => {
+  test("default entrypoint behaviour", async () => {
     const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
@@ -79,6 +73,24 @@ describe("test options", () => {
     expect(logSpy).toHaveBeenCalledWith("pass ─ foo.test.wsim (no tests)");
     expect(logSpy).toHaveBeenCalledWith("pass ─ bar.test.wsim (no tests)");
     expect(logSpy).toHaveBeenCalledWith("pass ─ baz.test.wsim (no tests)");
+  });
+});
+
+describe("output-file option", () => {
+  let writeResultsSpy: SpyInstance;
+  let writeFileSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
+    writeFileSpy = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
+    writeResultsSpy.mockRestore();
+    writeFileSpy.mockRestore();
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
@@ -132,8 +144,18 @@ describe("test options", () => {
       'only .json output files are supported. (found "")'
     );
   });
+});
 
-  test("wing test (no filter)", () => {
+describe("test-filter option", () => {
+  beforeEach(() => {
+    chalk.level = 0;
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+  });
+
+  test("wing test (no test-filter)", () => {
     const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
 
     expect(filteredTests.length).toBe(3);
@@ -148,6 +170,71 @@ describe("test options", () => {
     expect(filteredTests.length).toBe(2);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
     expect(filteredTests[1]).toBe("root/env1/test:get:At()");
+  });
+});
+
+describe("retry option", () => {
+  let logSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    logSpy = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
+    logSpy.mockRestore();
+  });
+
+  test("wing test (no retry)", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+
+    process.chdir(outDir);
+    // Create a test that will consistently fail
+    fs.writeFileSync(
+      "fail.test.w",
+      `
+        bring cloud;
+        test "alwaysFail" {
+          assert(false);
+        }
+      `
+    );
+
+    await wingTest(["fail.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+    });
+
+    const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
+    expect(retryLogs.length).toBe(0);
+  });
+
+  test("wing test --retry [retries]", async () => {
+    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+
+    process.chdir(outDir);
+    // Create a test that will consistently fail
+    fs.writeFileSync(
+      "fail.test.w",
+      `
+        bring cloud;
+        test "alwaysFail" {
+          assert(false);
+        }
+      `
+    );
+
+    // Equivalent to `wing test --retry` (default 3 retries)
+    await wingTest(["fail.test.w"], {
+      clean: true,
+      platform: [BuiltinPlatform.SIM],
+      retry: 3,
+    });
+
+    const retryLogs = logSpy.mock.calls.filter((args) => args[0].includes("Retrying"));
+    expect(retryLogs.length).toBe(3);
   });
 });
 

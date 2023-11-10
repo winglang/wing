@@ -6,6 +6,7 @@ export interface QueueMetadataProps {
   timeout: number;
   onPurgeClick: () => void;
 }
+
 export const QueueMetadata = ({
   approxSize,
   timeout,
