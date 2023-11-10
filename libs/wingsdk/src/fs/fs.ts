@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as os from "os";
-import * as path from "path";
+import * as nodePath from "path";
 import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
@@ -110,25 +110,25 @@ export class Util {
    * @returns The resulting path after joining all the paths.
    */
   public static join(...paths: string[]): string {
-    return normalPath(path.join(...paths));
+    return normalPath(nodePath.join(...paths));
   }
 
   /**
    * Retrieve the name of the directory from a given file path.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns The directory name of the path.
    */
   public static dirname(p: string): string {
-    return normalPath(path.dirname(p));
+    return normalPath(nodePath.dirname(p));
   }
 
   /**
    * Retrieve the final segment of a given file path.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns The last portion of a path.
    */
   public static basename(p: string): string {
-    return path.basename(p);
+    return nodePath.basename(p);
   }
 
   /**
@@ -137,7 +137,7 @@ export class Util {
    * @returns The relative path from {from} to {to}.
    */
   public static relative(from: string, to: string): string {
-    return normalPath(path.relative(from, to));
+    return normalPath(nodePath.relative(from, to));
   }
 
   /**
@@ -154,12 +154,12 @@ export class Util {
    * @returns The resulting path after performing the resolve operation.
    */
   public static absolute(...paths: string[]): string {
-    return normalPath(path.resolve(...paths));
+    return normalPath(nodePath.resolve(...paths));
   }
 
   /**
    * Check if the path exists.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns `true` if the path exists, `false` otherwise.
    */
   public static exists(p: string): boolean {
@@ -209,7 +209,7 @@ export class Util {
     if (prefix == undefined) {
       prefix = "wingtemp";
     }
-    const dirpath = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+    const dirpath = fs.mkdtempSync(nodePath.join(os.tmpdir(), prefix));
     return normalPath(dirpath);
   }
 
@@ -340,7 +340,7 @@ export class Util {
 
   /**
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
-   * @param p The path to the file or directory you want to remove.
+   * @param path The path to the file or directory you want to remove.
    */
   public static remove(p: string, opts?: RemoveOptions): void {
     fs.rmSync(p, {
@@ -351,7 +351,7 @@ export class Util {
 
   /**
    * Checks if the given path is a directory and exists.
-   * @param p The path to check.
+   * @param path The path to check.
    * @returns `true` if the path is an existing directory, `false` otherwise.
    */
   public static isDir(p: string): boolean {
@@ -364,7 +364,7 @@ export class Util {
 
   /**
    * Gets the stats of the given path.
-   * @param p The path to get stats for.
+   * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
   public static metadata(p: string): Metadata {
@@ -373,7 +373,7 @@ export class Util {
 
   /**
    * Gets the stats of the given path without following symbolic links.
-   * @param p The path to get stats for.
+   * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
   public static symlinkMetadata(p: string): Metadata {
@@ -383,7 +383,7 @@ export class Util {
   /**
    * Set the permissions of the file, directory, etc.
    * Expects a permission string like `"755"` or `"644"`.
-   * @param p The path of the file or directory.
+   * @param path The path of the file or directory.
    * @param permissions The mode to set as a string.
    */
   public static setPermissions(p: string, permissions: string): void {
@@ -392,21 +392,21 @@ export class Util {
 
   /**
    * Extracts the extension (without the leading dot) from the path, if possible.
-   * @param p The path to get extension for.
+   * @param path The path to get extension for.
    * @returns The file extension without the leading dot, or `nil` if:
    *          - The file name starts with a dot (hidden files).
    *          - There is no dot in the file name.
    *          - The dot is the last character in the file name.
    */
   public static extension(p: string): string | undefined {
-    const ext = path.extname(p);
+    const ext = nodePath.extname(p);
     return !ext || p === ext || p.endsWith(".") ? undefined : ext.slice(1);
   }
 
   /**
    * Creates a symbolic link.
    * @param target The path to the target file or directory.
-   * @param p The path to the symbolic link to be created.
+   * @param path The path to the symbolic link to be created.
    * @param type The type of the target. It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
    *             Defaults to `"file"` if not specified.
    */
