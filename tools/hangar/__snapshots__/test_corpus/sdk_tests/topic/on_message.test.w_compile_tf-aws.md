@@ -41,7 +41,7 @@ module.exports = function({ $c }) {
 ## inflight.$Closure3-1.cjs
 ```cjs
 "use strict";
-module.exports = function({ $predicate, $std_Duration, $t, $util_Util }) {
+module.exports = function({ $c, $std_Duration, $t, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -52,36 +52,14 @@ module.exports = function({ $predicate, $std_Duration, $t, $util_Util }) {
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
         (await $t.publish("msg"));
       }
-      let i = 0;
-      while ((i < 600)) {
-        i = (i + 1);
-        if ((await $predicate.test())) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await $predicate.test()))};
-          return;
-        }
-        (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
+      (await $util_Util.waitUntil(async () => {
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),10));
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await $predicate.test()))};
+      , { timeout: (await $std_Duration.fromSeconds(10)) }));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),10)))};
     }
   }
   return $Closure3;
-}
-
-```
-
-## inflight.Predicate-1.cjs
-```cjs
-"use strict";
-module.exports = function({  }) {
-  class Predicate {
-    constructor({ $this_c }) {
-      this.$this_c = $this_c;
-    }
-    async test() {
-      return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_c.peek()),10));
-    }
-  }
-  return Predicate;
 }
 
 ```
@@ -389,7 +367,7 @@ module.exports = function({  }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -398,42 +376,6 @@ const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class Predicate extends $stdlib.std.Resource {
-      constructor($scope, $id, c) {
-        super($scope, $id);
-        this.c = c;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.Predicate-1.cjs")({
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const PredicateClient = ${Predicate._toInflightType(this)};
-            const client = new PredicateClient({
-              $this_c: ${this._lift(this.c)},
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _supportedOps() {
-        return ["test", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Predicate._registerOnLiftObject(this.c, host, []);
-        }
-        if (ops.includes("test")) {
-          Predicate._registerOnLiftObject(this.c, host, ["peek"]);
-        }
-        super._registerOnLift(host, ops);
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -508,7 +450,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.cjs")({
-            $predicate: ${context._lift(predicate)},
+            $c: ${context._lift(c)},
             $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
             $t: ${context._lift(t)},
             $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
@@ -531,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(predicate, host, ["test"]);
+          $Closure3._registerOnLiftObject(c, host, ["peek"]);
           $Closure3._registerOnLiftObject(t, host, ["publish"]);
         }
         super._registerOnLift(host, ops);
@@ -541,12 +483,12 @@ class $Root extends $stdlib.std.Resource {
     const c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
     (t.onMessage(new $Closure1(this, "$Closure1")));
     (t.onMessage(new $Closure2(this, "$Closure2")));
-    const predicate = new Predicate(this, "Predicate", c);
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:onMessage", new $Closure3(this, "$Closure3"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "on_message.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "on_message.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

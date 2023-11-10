@@ -160,7 +160,7 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
-          timeout_minutes: 45
+          timeout_minutes: 60
           command: |
             if  ${{ env.MANUAL == 'true' }}
             then

@@ -25,7 +25,7 @@ module.exports = function({ $filename, $fs_Util, $regex_Util }) {
       (await $fs_Util.writeFile((await $fs_Util.join(dirpath, $filename)), ""));
       const files = (await $fs_Util.readdir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-      (await $fs_Util.remove(dirpath, ({"recursive": true})));
+      (await $fs_Util.remove(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),false)))};
       const nilFiles = (await $fs_Util.tryReaddir(dirpath));
       {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
@@ -72,7 +72,7 @@ module.exports = function({ $filename, $fs_Util, $regex_Util }) {
 ```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -131,15 +131,16 @@ class $Root extends $stdlib.std.Resource {
     (fs.Util.writeFile((fs.Util.join(dirpath, filename)), ""));
     const files = (fs.Util.readdir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: files.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.length,1)))};
-    (fs.Util.remove(dirpath, ({"recursive": true})));
+    (fs.Util.remove(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fs.Util.exists(dirpath)),false)))};
     const nilFiles = (fs.Util.tryReaddir(dirpath));
     {((cond) => {if (!cond) throw new Error("assertion failed: nilFiles == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(nilFiles,undefined)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight create normal directory", new $Closure1(this, "$Closure1"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "directory.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "directory.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 
