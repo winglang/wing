@@ -1,5 +1,6 @@
 bring fs;
 bring regex;
+bring expect;
 
 let tmpdir = fs.mkdtemp();
 let dirpath = "${tmpdir}/wingdir-preflight";
@@ -63,6 +64,22 @@ test "cannot overwrite directory with a file" {
     }
     assert(errorCaught == true);
 
-    fs.remove(dirpath, { recursive: true });
+    fs.remove(dirpath);
     assert(fs.exists(dirpath) == false);
+}
+
+test "isDir() correctly identifies directories and files" {
+    let tempDir = fs.mkdtemp();
+    expect.equal(fs.isDir(tempDir), true);
+
+    let tempFile = fs.join(tempDir, "tempfile.txt");
+    fs.writeFile(tempFile, "Sample content");
+    expect.equal(fs.isDir(tempFile), false);
+
+    let nonExistentPath = fs.join(tempDir, "nonexistent");
+    expect.equal(fs.isDir(nonExistentPath), false);
+
+    // Cleanup
+    fs.remove(tempDir);
+    expect.equal(fs.exists(dirpath), false);
 }
