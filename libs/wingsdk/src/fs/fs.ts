@@ -367,8 +367,8 @@ export class Util {
    * @param p The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
-  public static stat(p: string): Metadata {
-    return this.metadata(fs.statSync(p));
+  public static metadata(p: string): Metadata {
+    return this._metadata(fs.statSync(p));
   }
 
   /**
@@ -376,8 +376,8 @@ export class Util {
    * @param p The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
-  public static lstat(p: string): Metadata {
-    return this.metadata(fs.lstatSync(p));
+  public static symlinkMetadata(p: string): Metadata {
+    return this._metadata(fs.lstatSync(p));
   }
 
   /**
@@ -430,11 +430,11 @@ export class Util {
    * @param stats The `fs.Stats` object.
    * @returns The `Metadata` object.
    */
-  private static metadata(stats: fs.Stats): Metadata {
+  private static _metadata(stats: fs.Stats): Metadata {
     return {
-      fileType: this.getFileType(stats),
+      fileType: this._fileType(stats),
       size: stats.size,
-      permissions: this.formatPermissions(stats.mode),
+      permissions: this._formatPermissions(stats.mode),
       accessed: Datetime.fromDate(stats.atime),
       modified: Datetime.fromDate(stats.mtime),
       created: Datetime.fromDate(stats.birthtime),
@@ -446,7 +446,7 @@ export class Util {
    * @param stats The `fs.Stats` object.
    * @returns The type of the file.
    */
-  private static getFileType(stats: fs.Stats): FileType {
+  private static _fileType(stats: fs.Stats): FileType {
     switch (true) {
       case stats.isFile():
         return "File";
@@ -465,7 +465,7 @@ export class Util {
    * @param mode The numeric mode to convert.
    * @returns A string representation of the permissions.
    */
-  private static formatPermissions(mode: number): string {
+  private static _formatPermissions(mode: number): string {
     const octalString = mode.toString(8);
     return octalString.substring(octalString.length - 3);
   }

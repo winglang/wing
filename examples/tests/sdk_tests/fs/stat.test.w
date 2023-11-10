@@ -2,7 +2,7 @@ bring fs;
 bring regex;
 bring expect;
 
-test "stat()" {
+test "metadata()" {
     let tempDir = fs.mkdtemp();
     let tempFile = fs.join(tempDir, "tempfile.txt");
     let tempSymlink = fs.join(tempDir, "symlink");
@@ -11,7 +11,7 @@ test "stat()" {
     fs.symlink(tempFile, tempSymlink);
 
     // Test a File
-    let fileStats = fs.stat(tempFile);
+    let fileStats = fs.metadata(tempFile);
     expect.equal(fileStats.size, 12);
     expect.equal(fileStats.fileType, "File");
     assert(regex.match("[0-7]{3}", fileStats.permissions));
@@ -20,7 +20,7 @@ test "stat()" {
     assert(fileStats.created.year >= 2023);
 
     // Test a Symlink
-    let symlinkStats = fs.stat(tempSymlink);
+    let symlinkStats = fs.metadata(tempSymlink);
     expect.equal(symlinkStats.size, 12);
     expect.equal(symlinkStats.fileType, "File");
     assert(regex.match("[0-7]{3}", symlinkStats.permissions));
@@ -29,7 +29,7 @@ test "stat()" {
     assert(symlinkStats.created.year >= 2023);
 
     // Test a Directory
-    let dirStats = fs.stat(tempDir);
+    let dirStats = fs.metadata(tempDir);
     expect.equal(dirStats.fileType, "Directory");
     assert(regex.match("[0-7]{3}", dirStats.permissions));
     assert(fileStats.accessed.year >= 2023);
@@ -41,7 +41,7 @@ test "stat()" {
     expect.equal(fs.exists(tempDir), false);
 }
 
-test "lstat()" {
+test "symlinkMetadata()" {
     let tempDir = fs.mkdtemp();
     let tempFile = fs.join(tempDir, "tempfile.txt");
     let tempSymlink = fs.join(tempDir, "symlink");
@@ -50,7 +50,7 @@ test "lstat()" {
     fs.symlink(tempFile, tempSymlink);
 
     // Test a File
-    let fileStats = fs.lstat(tempFile);
+    let fileStats = fs.symlinkMetadata(tempFile);
     expect.equal(fileStats.size, 12);
     expect.equal(fileStats.fileType, "File");
     assert(regex.match("[0-7]{3}", fileStats.permissions));
@@ -59,7 +59,7 @@ test "lstat()" {
     assert(fileStats.created.year >= 2023);
 
     // Test a Symlink
-    let symlinkStats = fs.lstat(tempSymlink);
+    let symlinkStats = fs.symlinkMetadata(tempSymlink);
     expect.notEqual(symlinkStats.size, 12);
     expect.equal(symlinkStats.fileType, "Symlink");
     assert(regex.match("[0-7]{3}", symlinkStats.permissions));
@@ -68,7 +68,7 @@ test "lstat()" {
     assert(symlinkStats.created.year >= 2023);
 
     // Test a Directory
-    let dirStats = fs.lstat(tempDir);
+    let dirStats = fs.symlinkMetadata(tempDir);
     expect.equal(dirStats.fileType, "Directory");
     assert(regex.match("[0-7]{3}", dirStats.permissions));
     assert(fileStats.accessed.year >= 2023);
@@ -87,7 +87,7 @@ test "chmod()" {
     fs.writeFile(tempFile, "Hello, Wing!");
     fs.chmod(tempFile, "777");
 
-    let fileStats = fs.stat(tempFile);
+    let fileStats = fs.metadata(tempFile);
     expect.equal(fileStats.permissions, "777");
 
     // Cleanup
