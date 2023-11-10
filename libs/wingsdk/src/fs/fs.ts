@@ -75,12 +75,12 @@ export interface RemoveOptions {
 /**
  * Represents the type of a file system object.
  */
-type FileType = "File" | "Directory" | "Symlink" | "Other";
+export type FileType = "File" | "Directory" | "Symlink" | "Other";
 
 /**
  * Represents metadata information about a file or directory.
  */
-interface Metadata {
+export interface Metadata {
   fileType: FileType;
   size: number;
   permissions: string;
