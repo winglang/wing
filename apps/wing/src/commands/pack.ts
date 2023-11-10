@@ -13,7 +13,15 @@ import { compile } from "./compile";
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
 // TODO: print information about the generated library? (e.g. size, dependencies, number of public APIs)
 
-const defaultGlobs = ["**/*.js", "**/*.w", "README*", "LICENSE*", "!/target"];
+const defaultGlobs = [
+  "**/*.js",
+  "**/*.cjs",
+  "**/*.mjs",
+  "**/*.w",
+  "README*",
+  "LICENSE*",
+  "!/target",
+];
 
 export interface PackageOptions {
   /**
