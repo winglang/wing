@@ -90,10 +90,10 @@ export interface Metadata {
   readonly size: number;
   /** The permissions of the file. */
   readonly permissions: string;
-  /** The date and time the file was last modified. */
-  readonly modified: Datetime;
   /** The date and time the file was last accessed. */
   readonly accessed: Datetime;
+  /** The date and time the file was last modified. */
+  readonly modified: Datetime;
   /** The date and time the file was created. */
   readonly created: Datetime;
 }
@@ -429,8 +429,8 @@ export class Util {
       fileType: this.getFileType(stats),
       size: stats.size,
       permissions: this.formatPermissions(stats.mode),
-      modified: Datetime.fromDate(stats.mtime),
       accessed: Datetime.fromDate(stats.atime),
+      modified: Datetime.fromDate(stats.mtime),
       created: Datetime.fromDate(stats.birthtime),
     };
   }
