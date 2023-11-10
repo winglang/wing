@@ -80,12 +80,21 @@ export type FileType = "File" | "Directory" | "Symlink" | "Other";
 /**
  * Represents metadata information about a file or directory.
  */
+/**
+ * Metadata for a file or directory.
+ */
 export interface Metadata {
+  /** The type of file. */
   readonly fileType: FileType;
+  /** The size of the file in bytes. */
   readonly size: number;
+  /** The permissions of the file. */
   readonly permissions: string;
+  /** The date and time the file was last modified. */
   readonly modified: Datetime;
+  /** The date and time the file was last accessed. */
   readonly accessed: Datetime;
+  /** The date and time the file was created. */
   readonly created: Datetime;
 }
 
