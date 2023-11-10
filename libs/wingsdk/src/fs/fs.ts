@@ -4,7 +4,7 @@ import * as path from "path";
 import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 /**
  * Custom settings for reading from a file
@@ -84,9 +84,9 @@ interface Metadata {
   fileType: FileType;
   size: number;
   permissions: string;
-  modified: Date;
-  accessed: Date;
-  created: Date;
+  modified: Datetime;
+  accessed: Datetime;
+  created: Datetime;
 }
 
 /**
@@ -421,9 +421,9 @@ export class Util {
       fileType: this.getFileType(stats),
       size: stats.size,
       permissions: this.formatPermissions(stats.mode),
-      modified: stats.mtime,
-      accessed: stats.atime,
-      created: stats.birthtime,
+      modified: Datetime.fromDate(stats.mtime),
+      accessed: Datetime.fromDate(stats.atime),
+      created: Datetime.fromDate(stats.birthtime),
     };
   }
 
