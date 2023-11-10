@@ -64,11 +64,12 @@ test "cannot overwrite directory with a file" {
     }
     assert(errorCaught == true);
 
+    // Cleanup
     fs.remove(dirpath);
     assert(fs.exists(dirpath) == false);
 }
 
-test "isDir() correctly identifies directories and files" {
+test "isDir()" {
     let tempDir = fs.mkdtemp();
     expect.equal(fs.isDir(tempDir), true);
 
