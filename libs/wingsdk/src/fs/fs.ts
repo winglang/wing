@@ -81,12 +81,12 @@ export type FileType = "File" | "Directory" | "Symlink" | "Other";
  * Represents metadata information about a file or directory.
  */
 export interface Metadata {
-  fileType: FileType;
-  size: number;
-  permissions: string;
-  modified: Datetime;
-  accessed: Datetime;
-  created: Datetime;
+  readonly fileType: FileType;
+  readonly size: number;
+  readonly permissions: string;
+  readonly modified: Datetime;
+  readonly accessed: Datetime;
+  readonly created: Datetime;
 }
 
 /**
