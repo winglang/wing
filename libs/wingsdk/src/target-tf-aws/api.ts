@@ -352,7 +352,7 @@ class WingRestApi extends Construct {
     // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
     // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
     // in Terraform. Hence, we're creating our own url here.
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}/`;
+    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
   }
 
   /**
