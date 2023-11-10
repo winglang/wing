@@ -73,7 +73,7 @@ test "isDir() correctly identifies directories and files" {
     expect.equal(fs.isDir(tempDir), true);
 
     let tempFile = fs.join(tempDir, "tempfile.txt");
-    fs.writeFile(tempFile, "Sample content");
+    fs.writeFile(tempFile, "Hello, Wing!");
     expect.equal(fs.isDir(tempFile), false);
 
     let nonExistentPath = fs.join(tempDir, "nonexistent");
