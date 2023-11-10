@@ -416,8 +416,8 @@ export class Util {
    * Creates a symbolic link.
    * @param target The path to the target file or directory.
    * @param p The path to the symbolic link to be created.
-   * @param type The type of the target. It can be 'file', 'dir', or 'junction' (Windows only).
-   *             Defaults to 'file' if not specified.
+   * @param type The type of the target. It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
+   *             Defaults to `"file"` if not specified.
    */
   public static symlink(
     target: string,
