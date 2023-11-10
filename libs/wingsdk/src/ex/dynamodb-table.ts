@@ -60,7 +60,7 @@ export class DynamodbTable extends Resource {
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
     if (new.target === DynamodbTable) {
-      return App.of(scope)._newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
+      return App.of(scope).newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
     }
 
     super(scope, id);

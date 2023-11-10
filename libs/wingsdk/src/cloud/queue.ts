@@ -34,7 +34,7 @@ export interface QueueProps {
 export class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     if (new.target === Queue) {
-      return App.of(scope)._newAbstract(QUEUE_FQN, scope, id, props);
+      return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
     }
 
     super(scope, id);

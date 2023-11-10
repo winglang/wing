@@ -219,9 +219,8 @@ export abstract class App extends Construct {
 
   /**
    * Creates a new object of the given abstract class FQN.
-   * @internal
    */
-  public _newAbstract(
+  public newAbstract(
     fqn: string,
     scope: Construct,
     id: string,

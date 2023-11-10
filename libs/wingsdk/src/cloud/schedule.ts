@@ -37,7 +37,7 @@ export interface ScheduleProps {
 export class Schedule extends Resource {
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     if (new.target === Schedule) {
-      return App.of(scope)._newAbstract(SCHEDULE_FQN, scope, id, props);
+      return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
     }
 
     super(scope, id);

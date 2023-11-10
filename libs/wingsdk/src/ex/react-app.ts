@@ -99,7 +99,7 @@ export class ReactApp extends Resource {
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
     if (new.target === ReactApp) {
-      return App.of(scope)._newAbstract(REACT_APP_FQN, scope, id, props);
+      return App.of(scope).newAbstract(REACT_APP_FQN, scope, id, props);
     }
 
     const buildDir = props.buildDir ?? DEFAULT_BUILD_FOLDER;

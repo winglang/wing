@@ -32,7 +32,7 @@ export interface SecretProps {
 export class Secret extends Resource {
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     if (new.target === Secret) {
-      return App.of(scope)._newAbstract(SECRET_FQN, scope, id, props);
+      return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
     }
 
     super(scope, id);

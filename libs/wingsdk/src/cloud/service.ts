@@ -51,7 +51,7 @@ export class Service extends Resource implements IInflightHost {
     props: ServiceProps = {}
   ) {
     if (new.target === Service) {
-      return App.of(scope)._newAbstract(SERVICE_FQN, scope, id, props);
+      return App.of(scope).newAbstract(SERVICE_FQN, scope, id, handler, props);
     }
 
     super(scope, id);

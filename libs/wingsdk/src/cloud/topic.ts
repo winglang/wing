@@ -19,7 +19,7 @@ export interface TopicProps {}
 export class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     if (new.target === Topic) {
-      return App.of(scope)._newAbstract(TOPIC_FQN, scope, id, props);
+      return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
     }
 
     super(scope, id);

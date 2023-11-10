@@ -31,7 +31,7 @@ export class Counter extends Resource {
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     if (new.target === Counter) {
-      return App.of(scope)._newAbstract(COUNTER_FQN, scope, id, props);
+      return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
     }
 
     super(scope, id);

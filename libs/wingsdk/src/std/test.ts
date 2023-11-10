@@ -35,7 +35,7 @@ export class Test extends Resource {
     inflight: ITestHandler,
     props: TestProps = {}
   ): Test {
-    return App.of(scope)._newAbstract(TEST_FQN, scope, id, inflight, props);
+    return App.of(scope).newAbstract(TEST_FQN, scope, id, inflight, props);
   }
 
   /**
@@ -57,7 +57,7 @@ export class Test extends Resource {
     Node.of(this).description = "A cloud unit test.";
 
     if (App.of(this).isTestEnvironment || App.of(this)._target === "sim") {
-      this._fn = App.of(scope)._newAbstract(
+      this._fn = App.of(scope).newAbstract(
         FUNCTION_FQN,
         this,
         "Handler",

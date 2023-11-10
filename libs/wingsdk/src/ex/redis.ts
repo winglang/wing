@@ -16,7 +16,7 @@ export const REDIS_FQN = fqnForType("ex.Redis");
 export class Redis extends Resource {
   constructor(scope: Construct, id: string) {
     if (new.target === Redis) {
-      return App.of(scope)._newAbstract(REDIS_FQN, scope, id);
+      return App.of(scope).newAbstract(REDIS_FQN, scope, id);
     }
 
     super(scope, id);

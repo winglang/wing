@@ -61,13 +61,7 @@ export class Function extends Resource implements IInflightHost {
     props: FunctionProps = {}
   ) {
     if (new.target === Function) {
-      return App.of(scope)._newAbstract(
-        FUNCTION_FQN,
-        scope,
-        id,
-        handler,
-        props
-      );
+      return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
     }
 
     super(scope, id);

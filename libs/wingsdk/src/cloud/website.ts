@@ -51,7 +51,7 @@ export class Website extends Resource implements IWebsite {
 
   constructor(scope: Construct, id: string, props: WebsiteProps) {
     if (new.target === Website) {
-      return App.of(scope)._newAbstract(WEBSITE_FQN, scope, id, props);
+      return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
     }
 
     super(scope, id);

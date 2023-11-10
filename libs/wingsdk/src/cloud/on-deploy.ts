@@ -39,7 +39,7 @@ export class OnDeploy extends Resource {
     props: OnDeployProps = {}
   ) {
     if (new.target === OnDeploy) {
-      return App.of(scope)._newAbstract(
+      return App.of(scope).newAbstract(
         ON_DEPLOY_FQN,
         scope,
         id,

@@ -28,7 +28,7 @@ export class Domain extends Resource {
 
   constructor(scope: Construct, id: string, props: DomainProps) {
     if (new.target === Domain) {
-      return App.of(scope)._newAbstract(DOMAIN_FQN, scope, id, props);
+      return App.of(scope).newAbstract(DOMAIN_FQN, scope, id, props);
     }
 
     super(scope, id);
