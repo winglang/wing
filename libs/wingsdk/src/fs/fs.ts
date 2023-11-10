@@ -153,7 +153,7 @@ export class Util {
    * @param paths A sequence of paths or path segments.
    * @returns The resulting path after performing the resolve operation.
    */
-  public static resolve(...paths: string[]): string {
+  public static absolute(...paths: string[]): string {
     return normalPath(path.resolve(...paths));
   }
 
@@ -388,15 +388,6 @@ export class Util {
    */
   public static chmod(p: string, permissions: string): void {
     fs.chmodSync(p, parseInt(permissions, 8));
-  }
-
-  /**
-   * Resolves an absolute path from a sequence of path segments.
-   * @param dirs The path segments to resolve.
-   * @returns The resolved absolute path.
-   */
-  public static absolute(...dirs: string[]): string {
-    return path.resolve(...dirs);
   }
 
   /**
