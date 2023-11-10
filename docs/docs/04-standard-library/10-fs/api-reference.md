@@ -39,10 +39,15 @@ new fs.Util();
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.fs.Util.absolute">absolute</a></code> | Resolves an absolute path from a sequence of path segments. |
 | <code><a href="#@winglang/sdk.fs.Util.basename">basename</a></code> | Retrieve the final segment of a given file path. |
+| <code><a href="#@winglang/sdk.fs.Util.chmod">chmod</a></code> | Set the permissions of the file, directory, etc. |
 | <code><a href="#@winglang/sdk.fs.Util.dirname">dirname</a></code> | Retrieve the name of the directory from a given file path. |
 | <code><a href="#@winglang/sdk.fs.Util.exists">exists</a></code> | Check if the path exists. |
+| <code><a href="#@winglang/sdk.fs.Util.extension">extension</a></code> | Extracts the extension (without the leading dot) from the path, if possible. |
+| <code><a href="#@winglang/sdk.fs.Util.isDir">isDir</a></code> | Checks if the given path is a directory and exists. |
 | <code><a href="#@winglang/sdk.fs.Util.join">join</a></code> | Join all arguments together and normalize the resulting path. |
+| <code><a href="#@winglang/sdk.fs.Util.lstat">lstat</a></code> | Gets the stats of the given path without following symbolic links. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdir">mkdir</a></code> | Create a directory. |
 | <code><a href="#@winglang/sdk.fs.Util.mkdtemp">mkdtemp</a></code> | Create a temporary directory. |
 | <code><a href="#@winglang/sdk.fs.Util.readdir">readdir</a></code> | Read the contents of the directory. |
@@ -52,6 +57,7 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.relative">relative</a></code> | Solve the relative path from {from} to {to} based on the current working directory. |
 | <code><a href="#@winglang/sdk.fs.Util.remove">remove</a></code> | Remove files and directories (modeled on the standard POSIX `rm`utility). |
 | <code><a href="#@winglang/sdk.fs.Util.resolve">resolve</a></code> | The right-most parameter is considered {to}. Other parameters are considered an array of {from}. |
+| <code><a href="#@winglang/sdk.fs.Util.stat">stat</a></code> | Gets the stats of the given path. |
 | <code><a href="#@winglang/sdk.fs.Util.tryReaddir">tryReaddir</a></code> | If the path exists, read the contents of the directory; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadFile">tryReadFile</a></code> | If the file exists and can be read successfully, read the entire contents; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadJson">tryReadJson</a></code> | Retrieve the contents of the file and convert it to JSON if the file exists and can be parsed successfully, otherwise, return `undefined`. |
@@ -59,6 +65,24 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.writeFile">writeFile</a></code> | Writes data to a file, replacing the file if it already exists. |
 | <code><a href="#@winglang/sdk.fs.Util.writeJson">writeJson</a></code> | Writes JSON to a file, replacing the file if it already exists. |
 | <code><a href="#@winglang/sdk.fs.Util.writeYaml">writeYaml</a></code> | Writes multiple YAML objects to a file, replacing the file if it already exists. |
+
+---
+
+##### `absolute` <a name="absolute" id="@winglang/sdk.fs.Util.absolute"></a>
+
+```wing
+bring fs;
+
+fs.absolute(...dirs: Array<str>);
+```
+
+Resolves an absolute path from a sequence of path segments.
+
+###### `dirs`<sup>Required</sup> <a name="dirs" id="@winglang/sdk.fs.Util.absolute.parameter.dirs"></a>
+
+- *Type:* str
+
+The path segments to resolve.
 
 ---
 
@@ -77,6 +101,34 @@ Retrieve the final segment of a given file path.
 - *Type:* str
 
 The path to evaluate.
+
+---
+
+##### `chmod` <a name="chmod" id="@winglang/sdk.fs.Util.chmod"></a>
+
+```wing
+bring fs;
+
+fs.chmod(p: str, permissions: str);
+```
+
+Set the permissions of the file, directory, etc.
+
+Expects a permission string like `"755"` or `"644"`.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.chmod.parameter.p"></a>
+
+- *Type:* str
+
+The path of the file or directory.
+
+---
+
+###### `permissions`<sup>Required</sup> <a name="permissions" id="@winglang/sdk.fs.Util.chmod.parameter.permissions"></a>
+
+- *Type:* str
+
+The mode to set as a string.
 
 ---
 
@@ -116,6 +168,42 @@ The path to evaluate.
 
 ---
 
+##### `extension` <a name="extension" id="@winglang/sdk.fs.Util.extension"></a>
+
+```wing
+bring fs;
+
+fs.extension(p: str);
+```
+
+Extracts the extension (without the leading dot) from the path, if possible.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.extension.parameter.p"></a>
+
+- *Type:* str
+
+The path to get extension for.
+
+---
+
+##### `isDir` <a name="isDir" id="@winglang/sdk.fs.Util.isDir"></a>
+
+```wing
+bring fs;
+
+fs.isDir(p: str);
+```
+
+Checks if the given path is a directory and exists.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.isDir.parameter.p"></a>
+
+- *Type:* str
+
+The path to check.
+
+---
+
 ##### `join` <a name="join" id="@winglang/sdk.fs.Util.join"></a>
 
 ```wing
@@ -131,6 +219,24 @@ Join all arguments together and normalize the resulting path.
 - *Type:* str
 
 The array of path need to join.
+
+---
+
+##### `lstat` <a name="lstat" id="@winglang/sdk.fs.Util.lstat"></a>
+
+```wing
+bring fs;
+
+fs.lstat(p: str);
+```
+
+Gets the stats of the given path without following symbolic links.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.lstat.parameter.p"></a>
+
+- *Type:* str
+
+The path to get stats for.
 
 ---
 
@@ -336,6 +442,24 @@ A sequence of paths or path segments.
 
 ---
 
+##### `stat` <a name="stat" id="@winglang/sdk.fs.Util.stat"></a>
+
+```wing
+bring fs;
+
+fs.stat(p: str);
+```
+
+Gets the stats of the given path.
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.stat.parameter.p"></a>
+
+- *Type:* str
+
+The path to get stats for.
+
+---
+
 ##### `tryReaddir` <a name="tryReaddir" id="@winglang/sdk.fs.Util.tryReaddir"></a>
 
 ```wing
@@ -512,6 +636,103 @@ The YANL objects to be dumped.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### Metadata <a name="Metadata" id="@winglang/sdk.fs.Metadata"></a>
+
+Metadata for a file or directory.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.fs.Metadata.Initializer"></a>
+
+```wing
+bring fs;
+
+let Metadata = fs.Metadata{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.accessed">accessed</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was last accessed. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.created">created</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was created. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.fileType">fileType</a></code> | <code>str</code> | The type of file. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.modified">modified</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was last modified. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.permissions">permissions</a></code> | <code>str</code> | The permissions of the file. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.size">size</a></code> | <code>num</code> | The size of the file in bytes. |
+
+---
+
+##### `accessed`<sup>Required</sup> <a name="accessed" id="@winglang/sdk.fs.Metadata.property.accessed"></a>
+
+```wing
+accessed: datetime;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Datetime">datetime</a>
+
+The date and time the file was last accessed.
+
+---
+
+##### `created`<sup>Required</sup> <a name="created" id="@winglang/sdk.fs.Metadata.property.created"></a>
+
+```wing
+created: datetime;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Datetime">datetime</a>
+
+The date and time the file was created.
+
+---
+
+##### `fileType`<sup>Required</sup> <a name="fileType" id="@winglang/sdk.fs.Metadata.property.fileType"></a>
+
+```wing
+fileType: str;
+```
+
+- *Type:* str
+
+The type of file.
+
+---
+
+##### `modified`<sup>Required</sup> <a name="modified" id="@winglang/sdk.fs.Metadata.property.modified"></a>
+
+```wing
+modified: datetime;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Datetime">datetime</a>
+
+The date and time the file was last modified.
+
+---
+
+##### `permissions`<sup>Required</sup> <a name="permissions" id="@winglang/sdk.fs.Metadata.property.permissions"></a>
+
+```wing
+permissions: str;
+```
+
+- *Type:* str
+
+The permissions of the file.
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.fs.Metadata.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The size of the file in bytes.
+
+---
 
 ### MkdirOptions <a name="MkdirOptions" id="@winglang/sdk.fs.MkdirOptions"></a>
 

@@ -247,6 +247,7 @@ Returns a Datetime represents the same date in utc.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Datetime.fromComponents">fromComponents</a></code> | Create a Datetime from Datetime components. |
+| <code><a href="#@winglang/sdk.std.Datetime.fromDate">fromDate</a></code> | Create a Datetime from a JavaScript Date object. |
 | <code><a href="#@winglang/sdk.std.Datetime.fromIso">fromIso</a></code> | Create a Datetime from an ISO-8601 string. |
 | <code><a href="#@winglang/sdk.std.Datetime.systemNow">systemNow</a></code> | Create a Datetime from local system timezone. |
 | <code><a href="#@winglang/sdk.std.Datetime.utcNow">utcNow</a></code> | Create a Datetime from UTC timezone. |
@@ -266,6 +267,22 @@ Create a Datetime from Datetime components.
 - *Type:* <a href="#@winglang/sdk.std.DatetimeComponents">DatetimeComponents</a>
 
 DatetimeComponents.
+
+---
+
+##### `fromDate` <a name="fromDate" id="@winglang/sdk.std.Datetime.fromDate"></a>
+
+```wing
+datetime.fromDate(date: datetime);
+```
+
+Create a Datetime from a JavaScript Date object.
+
+###### `date`<sup>Required</sup> <a name="date" id="@winglang/sdk.std.Datetime.fromDate.parameter.date"></a>
+
+- *Type:* datetime
+
+The JavaScript Date object.
 
 ---
 
