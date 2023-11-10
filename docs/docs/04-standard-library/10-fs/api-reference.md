@@ -58,6 +58,7 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.remove">remove</a></code> | Remove files and directories (modeled on the standard POSIX `rm`utility). |
 | <code><a href="#@winglang/sdk.fs.Util.resolve">resolve</a></code> | The right-most parameter is considered {to}. Other parameters are considered an array of {from}. |
 | <code><a href="#@winglang/sdk.fs.Util.stat">stat</a></code> | Gets the stats of the given path. |
+| <code><a href="#@winglang/sdk.fs.Util.symlink">symlink</a></code> | Creates a symbolic link. |
 | <code><a href="#@winglang/sdk.fs.Util.tryReaddir">tryReaddir</a></code> | If the path exists, read the contents of the directory; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadFile">tryReadFile</a></code> | If the file exists and can be read successfully, read the entire contents; |
 | <code><a href="#@winglang/sdk.fs.Util.tryReadJson">tryReadJson</a></code> | Retrieve the contents of the file and convert it to JSON if the file exists and can be parsed successfully, otherwise, return `undefined`. |
@@ -457,6 +458,43 @@ Gets the stats of the given path.
 - *Type:* str
 
 The path to get stats for.
+
+---
+
+##### `symlink` <a name="symlink" id="@winglang/sdk.fs.Util.symlink"></a>
+
+```wing
+bring fs;
+
+fs.symlink(target: str, p: str, type?: str);
+```
+
+Creates a symbolic link.
+
+###### `target`<sup>Required</sup> <a name="target" id="@winglang/sdk.fs.Util.symlink.parameter.target"></a>
+
+- *Type:* str
+
+The path to the target file or directory.
+
+---
+
+###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.symlink.parameter.p"></a>
+
+- *Type:* str
+
+The path to the symbolic link to be created.
+
+---
+
+###### `type`<sup>Optional</sup> <a name="type" id="@winglang/sdk.fs.Util.symlink.parameter.type"></a>
+
+- *Type:* str
+
+The type of the target.
+
+It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
+Defaults to `"file"` if not specified.
 
 ---
 
