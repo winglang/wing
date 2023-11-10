@@ -329,6 +329,9 @@ class WingRestApi extends Construct {
           return JSON.stringify(injectGreedy404Handler(props.apiSpec));
         },
       }),
+      lifecycle: {
+        createBeforeDestroy: true,
+      },
     });
 
     this.deployment = new ApiGatewayDeployment(this, "deployment", {
