@@ -401,7 +401,6 @@ export class Util {
 
   /**
    * Extracts the extension (without the leading dot) from the path, if possible.
-   *
    * @param p The path to get extension for.
    * @returns The file extension without the leading dot, or `nil` if:
    *          - The file name starts with a dot (hidden files).
