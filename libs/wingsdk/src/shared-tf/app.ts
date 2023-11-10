@@ -81,7 +81,7 @@ export abstract class CdktfApp extends App {
       scope: Construct,
       id: string,
       ...args: any[]
-    ) => this.newAbstract(fqn, scope, id, ...args);
+    ) => this._newAbstract(fqn, scope, id, ...args);
 
     (cdktfApp as any).typeForFqn = (fqn: string) => this.typeForFqn(fqn);
 

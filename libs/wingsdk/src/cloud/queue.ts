@@ -31,20 +31,12 @@ export interface QueueProps {
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export abstract class Queue extends Resource {
-  /**
-   * Create a new `Queue` instance.
-   * @internal
-   */
-  public static _newQueue(
-    scope: Construct,
-    id: string,
-    props: QueueProps = {}
-  ): Queue {
-    return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
-  }
-
+export class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
+    if (new.target === Queue) {
+      return App.of(scope)._newAbstract(QUEUE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Queue";
@@ -54,15 +46,26 @@ export abstract class Queue extends Resource {
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
 
   /**
    * Create a function to consume messages from this queue.
    */
-  public abstract setConsumer(
+  public setConsumer(
     handler: IQueueSetConsumerHandler,
     props?: QueueSetConsumerOptions
-  ): Function;
+  ): Function {
+    handler;
+    props;
+    throw new Error("proxy");
+  }
 }
 
 /**

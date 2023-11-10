@@ -32,7 +32,7 @@ export abstract class TestRunner extends Resource {
     id: string,
     props: TestRunnerProps = {}
   ): TestRunner {
-    return App.of(scope).newAbstract(TEST_RUNNER_FQN, scope, id, props);
+    return App.of(scope)._newAbstract(TEST_RUNNER_FQN, scope, id, props);
   }
 
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {

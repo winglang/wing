@@ -572,7 +572,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
     const handler = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", handler));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:api url", new $Closure2(this, "$Closure2"));

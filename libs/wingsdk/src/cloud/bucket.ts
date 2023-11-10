@@ -34,7 +34,7 @@ export class Bucket extends Resource {
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {
-      return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
+      return App.of(scope)._newAbstract(BUCKET_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -94,7 +94,7 @@ export class Bucket extends Resource {
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = Topic._newTopic(
+    const topic = new Topic(
       this,
       `${this.node.id}-${actionType.toLowerCase()}`
     );

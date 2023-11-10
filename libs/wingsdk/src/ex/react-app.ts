@@ -64,39 +64,29 @@ export interface ReactAppOptions {
  *
  * @inflight `@winglang/sdk.ex.IReactAppClient`
  */
-export abstract class ReactApp extends Resource {
+export class ReactApp extends Resource {
   /**
-   * Create a new React App.
    * @internal
    */
-  public static _newReactApp(
-    scope: Construct,
-    id: string,
-    props: ReactAppProps
-  ): ReactApp {
-    return App.of(scope).newAbstract(REACT_APP_FQN, scope, id, props);
+  protected readonly _buildPath!: string;
+  /**
+   * @internal
+   */
+  protected readonly _localPort!: string | number;
+  /**
+   * @internal
+   */
+  protected readonly _projectPath!: string;
+  /**
+   * @internal
+   */
+  protected readonly _useBuildCommand!: boolean;
+  /**
+   * @internal
+   */
+  protected get _websiteHost(): IWebsite {
+    throw new Error("proxy");
   }
-
-  /**
-   * @internal
-   */
-  protected readonly _buildPath: string;
-  /**
-   * @internal
-   */
-  protected readonly _localPort: string | number;
-  /**
-   * @internal
-   */
-  protected readonly _projectPath: string;
-  /**
-   * @internal
-   */
-  protected readonly _useBuildCommand: boolean;
-  /**
-   * @internal
-   */
-  protected abstract _websiteHost: IWebsite;
 
   /**
    * @internal
@@ -108,6 +98,10 @@ export abstract class ReactApp extends Resource {
   protected readonly _environmentVariables: Map<string, string> = new Map();
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
+    if (new.target === ReactApp) {
+      return App.of(scope)._newAbstract(REACT_APP_FQN, scope, id, props);
+    }
+
     const buildDir = props.buildDir ?? DEFAULT_BUILD_FOLDER;
 
     super(scope, id);
@@ -151,7 +145,12 @@ export abstract class ReactApp extends Resource {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
   }
 }
 

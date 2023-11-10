@@ -312,7 +312,7 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
       return lines;
     };
 
-    Function._newFunction(
+    new Function(
       app,
       "Function",
       Testing.makeHandler(

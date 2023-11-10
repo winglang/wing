@@ -322,10 +322,10 @@ class $Root extends $stdlib.std.Resource {
         this.mapOfNum = ({"k1": 11,"k2": 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
       }
       helloPreflight() {
         return this.another;

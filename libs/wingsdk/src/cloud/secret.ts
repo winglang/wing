@@ -29,20 +29,12 @@ export interface SecretProps {
  *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
-export abstract class Secret extends Resource {
-  /**
-   * Create a new secert.
-   * @internal
-   */
-  public static _newSecret(
-    scope: Construct,
-    id: string,
-    props: SecretProps = {}
-  ): Secret {
-    return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
-  }
-
+export class Secret extends Resource {
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
+    if (new.target === Secret) {
+      return App.of(scope)._newAbstract(SECRET_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Secret";
@@ -52,7 +44,14 @@ export abstract class Secret extends Resource {
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
 }
 
 /**

@@ -16,20 +16,12 @@ export interface TopicProps {}
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export abstract class Topic extends Resource {
-  /**
-   * Create a new topic.
-   * @internal
-   */
-  public static _newTopic(
-    scope: Construct,
-    id: string,
-    props: TopicProps = {}
-  ): Topic {
-    return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
-  }
-
+export class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
+    if (new.target === Topic) {
+      return App.of(scope)._newAbstract(TOPIC_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Topic";
@@ -39,17 +31,26 @@ export abstract class Topic extends Resource {
   }
 
   /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
   public _supportedOps(): string[] {
-    return [TopicInflightMethods.PUBLISH];
+    throw new Error("proxy");
   }
 
   /**
    * Run an inflight whenever an message is published to the topic.
    */
-  public abstract onMessage(
+  public onMessage(
     inflight: ITopicOnMessageHandler,
     props?: TopicOnMessageOptions
-  ): Function;
+  ): Function {
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 }
 
 /**

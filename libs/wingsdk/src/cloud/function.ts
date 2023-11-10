@@ -46,26 +46,13 @@ export interface FunctionProps {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export abstract class Function extends Resource implements IInflightHost {
-  /**
-   * Creates a new cloud.Function instance through the app.
-   * @internal
-   */
-  public static _newFunction(
-    scope: Construct,
-    id: string,
-    handler: IFunctionHandler,
-    props: FunctionProps = {}
-  ): Function {
-    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
-  }
-
+export class Function extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
 
   /**
    * The path to the entrypoint source code of the function.
    */
-  protected readonly entrypoint: string;
+  protected readonly entrypoint!: string;
 
   constructor(
     scope: Construct,
@@ -73,6 +60,16 @@ export abstract class Function extends Resource implements IInflightHost {
     handler: IFunctionHandler,
     props: FunctionProps = {}
   ) {
+    if (new.target === Function) {
+      return App.of(scope)._newAbstract(
+        FUNCTION_FQN,
+        scope,
+        id,
+        handler,
+        props
+      );
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Function";
@@ -109,7 +106,14 @@ export abstract class Function extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
 
   /**
    * @internal

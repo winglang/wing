@@ -523,7 +523,7 @@ test("api url can be used as environment variable", async () => {
     "Handler",
     `async handle(req) { return process.env["API_URL"]; }`
   );
-  cloud.Function._newFunction(app, "my_function", handler, {
+  new cloud.Function(app, "my_function", handler, {
     env: {
       API_URL: api.url,
     },

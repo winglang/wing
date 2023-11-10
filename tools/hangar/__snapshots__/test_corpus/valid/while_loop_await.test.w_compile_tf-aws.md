@@ -227,7 +227,7 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }

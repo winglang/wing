@@ -439,8 +439,8 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this, "cloud.Topic");
-        this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic",cloud.Topic,this, "cloud.Topic");
+        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -598,7 +598,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
-    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;

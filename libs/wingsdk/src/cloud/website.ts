@@ -42,25 +42,18 @@ export interface WebsiteDomainOptions {
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export abstract class Website extends Resource implements IWebsite {
-  /**
-   * Create a new website.
-   * @internal
-   */
-  public static _newWebsite(
-    scope: Construct,
-    id: string,
-    props: WebsiteProps
-  ): Website {
-    return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
-  }
+export class Website extends Resource implements IWebsite {
   /** @internal */
-  private readonly _path: string;
+  private readonly _path!: string;
 
   /** @internal */
   protected _domain?: cloud.Domain;
 
   constructor(scope: Construct, id: string, props: WebsiteProps) {
+    if (new.target === Website) {
+      return App.of(scope)._newAbstract(WEBSITE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Website";
@@ -74,8 +67,13 @@ export abstract class Website extends Resource implements IWebsite {
   }
 
   /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
   }
 
   /**
@@ -88,7 +86,9 @@ export abstract class Website extends Resource implements IWebsite {
   /**
    * The website's url.
    */
-  public abstract get url(): string;
+  public get url(): string {
+    throw new Error("proxy");
+  }
 
   /**
    * Add a JSON file with custom values during the website's deployment.
@@ -114,11 +114,12 @@ export abstract class Website extends Resource implements IWebsite {
    * @param data the data to write to the file
    * @param options configure the file's options
    */
-  public abstract addFile(
-    path: string,
-    data: string,
-    options?: AddFileOptions
-  ): string;
+  public addFile(path: string, data: string, options?: AddFileOptions): string {
+    path;
+    data;
+    options;
+    throw new Error("proxy");
+  }
 }
 
 /**

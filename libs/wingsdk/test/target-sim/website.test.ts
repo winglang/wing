@@ -10,7 +10,7 @@ import { SimApp } from "../sim-app";
 test("website is serving static pages", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Website._newWebsite(app, "website", {
+  new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
 
@@ -54,7 +54,7 @@ test("website is serving dynamic json content", async () => {
   const jsonConfig = { version: "3.3.5" };
   const jsonPath = "config.json";
   const app = new SimApp();
-  const website = cloud.Website._newWebsite(app, "website", {
+  const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
   website.addJson(jsonPath, Object(jsonConfig));
@@ -75,7 +75,7 @@ test("website is serving dynamic content", async () => {
   const fileContent = "<html>hello world!</html>";
   const route = "addition.html";
   const app = new SimApp();
-  const website = cloud.Website._newWebsite(app, "website", {
+  const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
   website.addFile(route, fileContent, { contentType: "text/html" });
@@ -96,7 +96,7 @@ test("api.url is resolved in website config", async () => {
   // GIVEN
   const app = new SimApp();
   const api = new cloud.Api(app, "api");
-  const website = cloud.Website._newWebsite(app, "website", {
+  const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
   website.addJson("config.json", { apiUrl: api.url } as unknown as Json);
@@ -128,7 +128,7 @@ test("multiple tokens are resolved in website config", async () => {
   const app = new SimApp();
   const api1 = new cloud.Api(app, "api1");
   const api2 = new cloud.Api(app, "api2");
-  const website = cloud.Website._newWebsite(app, "website", {
+  const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
   website.addJson("config.json", {
@@ -164,7 +164,7 @@ test("addJson throws an error for no json path", async () => {
   const jsonConfig = { version: "3.3.5" };
   const jsonPath = "not a json Path";
   const app = new SimApp();
-  const website = cloud.Website._newWebsite(app, "website", {
+  const website = new cloud.Website(app, "website", {
     path: resolve(__dirname, "../test-files/website"),
   });
 

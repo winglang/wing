@@ -42,10 +42,10 @@ describe("cloud.Domain for tf-aws", () => {
     process.env.WING_VALUES =
       "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const domain = cloud.Domain._newDomain(app, "Domain", {
+    const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
-    cloud.Website._newWebsite(app, "Website", {
+    new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "../test-files/website"),
       domain: domain,
     });
@@ -79,10 +79,10 @@ describe("cloud.Domain for tf-aws", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const domain = cloud.Domain._newDomain(app, "Domain", {
+    const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
-    cloud.Website._newWebsite(app, "Website", {
+    new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "../test-files/website"),
       domain: domain,
     });
@@ -117,11 +117,11 @@ describe("cloud.Domain for tf-aws", () => {
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES =
       "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
-    const domain = cloud.Domain._newDomain(app, "Domain", {
+    const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
     // this isn't a React App, but a website with a package json and a build command
-    ex.ReactApp._newReactApp(app, "Website", {
+    new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       domain: domain,
     });
@@ -156,11 +156,11 @@ describe("cloud.Domain for tf-aws", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
-    const domain = cloud.Domain._newDomain(app, "Domain", {
+    const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
     // this isn't a React App, but a website with a package json and a build command
-    ex.ReactApp._newReactApp(app, "Website", {
+    new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       domain: domain,
     });
@@ -198,7 +198,7 @@ describe("cloud.Domain for tf-aws", () => {
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
-      cloud.Domain._newDomain(app, "Domain", {
+      new cloud.Domain(app, "Domain", {
         domainName: "www.example.com",
       });
     }).toThrowError(`

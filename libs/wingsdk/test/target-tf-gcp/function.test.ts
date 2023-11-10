@@ -20,7 +20,7 @@ test("basic function", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -40,7 +40,7 @@ test("basic function with environment variables", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -71,7 +71,7 @@ test("basic function with timeout explicitly set", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     timeout: Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -97,7 +97,7 @@ test("basic function with timeout beyond the allowed range", () => {
 
   // WHEN
   expect(() => {
-    Function._newFunction(app, "Function", inflight, {
+    new Function(app, "Function", inflight, {
       timeout: Duration.fromSeconds(0),
     });
   }).toThrowErrorMatchingSnapshot();
@@ -109,7 +109,7 @@ test("basic function with memory size specified", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     memory: 256,
   });
   const output = app.synth();
@@ -135,7 +135,7 @@ test("basic function with memory beyond the allowed range", () => {
 
   // WHEN
   expect(() => {
-    Function._newFunction(app, "Function", inflight, {
+    new Function(app, "Function", inflight, {
       memory: 64,
     });
   }).toThrowErrorMatchingSnapshot();

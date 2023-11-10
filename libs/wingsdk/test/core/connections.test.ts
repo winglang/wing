@@ -13,7 +13,7 @@ test("create a bucket", async () => {
     "Handler",
     "async handle() { return 'hello'; }"
   );
-  const fn = cloud.Function._newFunction(app, "my_function", handler);
+  const fn = new cloud.Function(app, "my_function", handler);
 
   // WHEN
   for (let i = 0; i < 5; i++) {

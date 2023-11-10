@@ -33,7 +33,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -65,6 +65,11 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   /** @internal */
   public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
   }
 
   public toSimulator(): BaseResourceSchema {

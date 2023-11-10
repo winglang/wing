@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", inflight_closure);
+        return this.node.root.new("@winglang/sdk.cloud.Function",cloud.Function,this, "cloud.Function", inflight_closure);
       }
       static _toInflightType(context) {
         return `

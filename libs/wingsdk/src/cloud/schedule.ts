@@ -34,20 +34,12 @@ export interface ScheduleProps {
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export abstract class Schedule extends Resource {
-  /**
-   * Create a new schedule.
-   * @internal
-   */
-  public static _newSchedule(
-    scope: Construct,
-    id: string,
-    props: ScheduleProps = {}
-  ): Schedule {
-    return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
-  }
-
+export class Schedule extends Resource {
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
+    if (new.target === Schedule) {
+      return App.of(scope)._newAbstract(SCHEDULE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Schedule";
@@ -78,17 +70,26 @@ export abstract class Schedule extends Resource {
   }
 
   /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
   }
 
   /**
    * Create a function that runs when receiving the scheduled event.
    */
-  public abstract onTick(
+  public onTick(
     inflight: IScheduleOnTickHandler,
     props?: ScheduleOnTickOptions
-  ): Function;
+  ): Function {
+    inflight;
+    props;
+    throw new Error("proxy");
+  }
 }
 
 /**

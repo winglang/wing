@@ -17,7 +17,7 @@ test("create an OnDeploy", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler);
+  new cloud.OnDeploy(app, "my_on_deploy", handler);
   const output = app.synth();
 
   // THEN
@@ -31,7 +31,7 @@ test("execute OnDeploy after other resources", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new cloud.Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
+  new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeAfter: [bucket],
   });
   const output = app.synth();
@@ -51,7 +51,7 @@ test("execute OnDeploy before other resources", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new cloud.Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
+  new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeBefore: [bucket],
   });
   const output = app.synth();

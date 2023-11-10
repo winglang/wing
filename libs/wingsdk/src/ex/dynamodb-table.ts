@@ -52,25 +52,17 @@ export interface DynamodbTableProps {
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
-export abstract class DynamodbTable extends Resource {
-  /**
-   * Create a new DynamodbTable.
-   * @internal
-   */
-  public static _newDynamodbTable(
-    scope: Construct,
-    id: string,
-    props: DynamodbTableProps
-  ): DynamodbTable {
-    return App.of(scope).newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
-  }
-
+export class DynamodbTable extends Resource {
   /**
    * Table name
    */
-  public readonly name: string;
+  public readonly name!: string;
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
+    if (new.target === DynamodbTable) {
+      return App.of(scope)._newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "DynamodbTable";
@@ -83,7 +75,14 @@ export abstract class DynamodbTable extends Resource {
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
 }
 
 /**

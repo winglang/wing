@@ -31,26 +31,23 @@ export interface OnDeployProps extends FunctionProps {
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
-export abstract class OnDeploy extends Resource {
-  /**
-   * Create a new OnDeploy instance.
-   * @internal
-   */
-  public static _newOnDeploy(
-    scope: Construct,
-    id: string,
-    handler: IOnDeployHandler,
-    props: OnDeployProps = {}
-  ): OnDeploy {
-    return App.of(scope).newAbstract(ON_DEPLOY_FQN, scope, id, handler, props);
-  }
-
+export class OnDeploy extends Resource {
   constructor(
     scope: Construct,
     id: string,
     handler: IOnDeployHandler,
     props: OnDeployProps = {}
   ) {
+    if (new.target === OnDeploy) {
+      return App.of(scope)._newAbstract(
+        ON_DEPLOY_FQN,
+        scope,
+        id,
+        handler,
+        props
+      );
+    }
+
     super(scope, id);
 
     Node.of(this).title = "OnDeploy";
@@ -61,8 +58,13 @@ export abstract class OnDeploy extends Resource {
   }
 
   /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
   }
 }
 

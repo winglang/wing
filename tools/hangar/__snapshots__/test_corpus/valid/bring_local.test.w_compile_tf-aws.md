@@ -470,7 +470,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy",cloud.OnDeploy,this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `

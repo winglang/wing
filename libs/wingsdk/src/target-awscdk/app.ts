@@ -110,7 +110,7 @@ export class App extends CoreApp {
       scope: Construct,
       id: string,
       ...args: any[]
-    ) => this.newAbstract(fqn, scope, id, ...args);
+    ) => this._newAbstract(fqn, scope, id, ...args);
 
     this.synthHooks = props.synthHooks;
 

@@ -22,22 +22,15 @@ export interface DomainProps {
 /**
  * A cloud Domain
  */
-export abstract class Domain extends Resource {
-  /**
-   * Create a new website.
-   * @internal
-   */
-  public static _newDomain(
-    scope: Construct,
-    id: string,
-    props: DomainProps
-  ): Domain {
-    return App.of(scope).newAbstract(DOMAIN_FQN, scope, id, props);
-  }
+export class Domain extends Resource {
   /** @internal */
-  protected _domain: string;
+  protected _domain!: string;
 
   constructor(scope: Construct, id: string, props: DomainProps) {
+    if (new.target === Domain) {
+      return App.of(scope)._newAbstract(DOMAIN_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Domain";
@@ -47,8 +40,13 @@ export abstract class Domain extends Resource {
   }
 
   /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
   }
 
   /**

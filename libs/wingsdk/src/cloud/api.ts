@@ -210,7 +210,7 @@ export class Api extends Resource {
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     if (new.target === Api) {
-      return App.of(scope).newAbstract(API_FQN, scope, id, props);
+      return App.of(scope)._newAbstract(API_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -228,7 +228,7 @@ export class Api extends Resource {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [];
+    throw new Error("proxy");
   }
 
   /**

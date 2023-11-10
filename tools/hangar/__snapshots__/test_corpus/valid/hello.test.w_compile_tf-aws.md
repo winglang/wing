@@ -239,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
     (queue.setConsumer(new $Closure1(this, "$Closure1")));
   }
 }

@@ -311,7 +311,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const kv = new KeyValueStore(this, "KeyValueStore");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "sasa");
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "sasa");
     (kv.onUpdate(new $Closure2(this, "$Closure2")));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:main", new $Closure3(this, "$Closure3"));
   }

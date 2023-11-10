@@ -13,16 +13,12 @@ export const REDIS_FQN = fqnForType("ex.Redis");
  *
  * @inflight `@winglang/sdk.ex.IRedisClient`
  */
-export abstract class Redis extends Resource {
-  /**
-   * Create a new redis.
-   * @internal
-   */
-  public static _newRedis(scope: Construct, id: string): Redis {
-    return App.of(scope).newAbstract(REDIS_FQN, scope, id);
-  }
-
+export class Redis extends Resource {
   constructor(scope: Construct, id: string) {
+    if (new.target === Redis) {
+      return App.of(scope)._newAbstract(REDIS_FQN, scope, id);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Redis";
@@ -30,7 +26,14 @@ export abstract class Redis extends Resource {
   }
 
   /** @internal */
-  public abstract _supportedOps(): string[];
+  public _supportedOps(): string[] {
+    throw new Error("proxy");
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    throw new Error("proxy");
+  }
 }
 
 /**
