@@ -359,7 +359,7 @@ export class Util {
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
   public static stat(p: string): Metadata {
-    return this.createMetadata(fs.statSync(p));
+    return this.metadata(fs.statSync(p));
   }
 
   /**
@@ -368,7 +368,7 @@ export class Util {
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
   public static lstat(p: string): Metadata {
-    return this.createMetadata(fs.lstatSync(p));
+    return this.metadata(fs.lstatSync(p));
   }
 
   /**
@@ -412,11 +412,11 @@ export class Util {
   }
 
   /**
-   * Creates `Metadata` object based on the given stats object.
+   * Returns the `Metadata` object based on the given `fs.Stats` object.
    * @param stats The `fs.Stats` object.
    * @returns The `Metadata` object.
    */
-  private static createMetadata(stats: fs.Stats): Metadata {
+  private static metadata(stats: fs.Stats): Metadata {
     return {
       fileType: this.getFileType(stats),
       size: stats.size,
@@ -428,7 +428,7 @@ export class Util {
   }
 
   /**
-   * Returns the type of the file based on the given stats object.
+   * Returns the type of the file based on the given `fs.Stats` object.
    * @param stats The `fs.Stats` object.
    * @returns The type of the file.
    */
