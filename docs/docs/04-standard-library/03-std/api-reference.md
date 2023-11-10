@@ -2795,8 +2795,10 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.parseJson">parseJson</a></code> | Parse a Json string into a Struct. |
 | <code><a href="#@winglang/sdk.std.Struct.schema">schema</a></code> | Retrieve the schema for this struct. |
 | <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
+| <code><a href="#@winglang/sdk.std.Struct.tryParseJson">tryParseJson</a></code> | Parse a Json string into a Struct, returning nil if the Json is not valid. |
 
 ---
 
@@ -2820,6 +2822,20 @@ Converts a Json to a Struct.
 
 ---
 
+##### `parseJson` <a name="parseJson" id="@winglang/sdk.std.Struct.parseJson"></a>
+
+```wing
+Struct.parseJson(json: str);
+```
+
+Parse a Json string into a Struct.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.parseJson.parameter.json"></a>
+
+- *Type:* str
+
+---
+
 ##### `schema` <a name="schema" id="@winglang/sdk.std.Struct.schema"></a>
 
 ```wing
@@ -2839,6 +2855,20 @@ Converts a Json to a Struct, returning nil if the Json is not valid.
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.tryFromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `tryParseJson` <a name="tryParseJson" id="@winglang/sdk.std.Struct.tryParseJson"></a>
+
+```wing
+Struct.tryParseJson(json?: str);
+```
+
+Parse a Json string into a Struct, returning nil if the Json is not valid.
+
+###### `json`<sup>Optional</sup> <a name="json" id="@winglang/sdk.std.Struct.tryParseJson.parameter.json"></a>
+
+- *Type:* str
 
 ---
 

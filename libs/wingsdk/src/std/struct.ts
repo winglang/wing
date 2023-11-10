@@ -38,6 +38,26 @@ export class Struct {
   }
 
   /**
+   * Parse a Json string into a Struct
+   *
+   * @macro ((json) => ($self$._fromJson(JSON.parse(json))))($args$)
+   */
+  public static parseJson(json: string): T1 {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Parse a Json string into a Struct, returning nil if the Json is not valid
+   *
+   * @macro ((json) => ($self$._tryParseJson(json)))($args$)
+   */
+  public static tryParseJson(json: string | undefined): T1 | undefined {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Retrieve the schema for this struct
    * @macro ($self$)
    */
