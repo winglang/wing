@@ -356,7 +356,7 @@ export class Util {
   /**
    * Gets the stats of the given path.
    * @param p The path to get stats for.
-   * @returns The stats of the path.
+   * @returns The stats of the path, formatted as a `Metadata` object.
    */
   public static stat(p: string): Metadata {
     return this.createMetadata(fs.statSync(p));
@@ -414,7 +414,7 @@ export class Util {
   /**
    * Creates `Metadata` object based on the given stats object.
    * @param stats The `fs.Stats` object.
-   * @returns The ``Metadata`` object.
+   * @returns The `Metadata` object.
    */
   private static createMetadata(stats: fs.Stats): Metadata {
     return {
