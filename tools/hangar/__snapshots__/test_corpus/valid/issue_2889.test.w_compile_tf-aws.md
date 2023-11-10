@@ -32,7 +32,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
-      const body = (JSON.parse((res.body ?? "")));
+      const body = (JSON.parse(res.body));
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
       {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
     }

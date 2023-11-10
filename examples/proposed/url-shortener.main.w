@@ -11,14 +11,14 @@ class UrlShortener {
   }
 
   // Generates a short id for the given url.
-  inflight getId(url: str): str {
+  pub inflight getId(url: str): str {
     let id = this._makeId();
     this.lookup.put(id, url);
     return id;
   }
 
   // Get the url for the given id. Returns nil if the id is invalid.
-  inflight getUrl(id: str): str? {
+  pub inflight getUrl(id: str): str? {
     return this.lookup.tryGet(id);
   }
 
@@ -34,7 +34,7 @@ class UrlShortener {
 }
 
 class UrlShortenerApi {
-  api: cloud.Api;
+  pub api: cloud.Api;
   shortener: UrlShortener;
 
   init(shortener: UrlShortener) {
@@ -44,9 +44,7 @@ class UrlShortenerApi {
     this.api.post("/create", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let var requestUrl = "";
       try {
-        if let body = req.body {
-          requestUrl = str.fromJson(Json.parse(body).get("url"));
-        }
+        requestUrl = str.fromJson(Json.parse(req.body).get("url"));
       } catch e {
         log(e);
         return cloud.ApiResponse {
@@ -104,29 +102,26 @@ let TEST_URL = "https://news.ycombinator.com/";
 
 test "shorten url" {
   let response = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
-  let newUrl = str.fromJson(Json.parse(response.body ?? "").get("shortenedUrl"));
+  let newUrl = str.fromJson(Json.parse(response.body).get("shortenedUrl"));
   assert(newUrl.startsWith(urlShortenerApi.api.url));
 }
 
 test "shorten same url twice" {
   let response1 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
-  let newUrl1 = Json.tryParse(response1.body ?? "")?.get("shortenedUrl")?.asStr();
+  let newUrl1 = Json.parse(response1.body).get("shortenedUrl").asStr();
   let response2 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
-  let newUrl2 = Json.tryParse(response2.body ?? "")?.get("shortenedUrl")?.asStr();
+  let newUrl2 = Json.parse(response2.body).get("shortenedUrl").asStr();
   assert(newUrl1 != newUrl2);
 }
 
 test "redirect sends to correct page" {
   let createResponse = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
-  if let newUrl = Json.tryParse(createResponse.body ?? "")?.get("shortenedUrl")?.asStr() {
-    let redirectedResponse = http.get(newUrl);
-    assert(redirectedResponse.body?.contains("<title>Hacker News</title>") ?? false);
-  } else {
-    assert(false);
-  }
+  let newUrl = Json.parse(createResponse.body).get("shortenedUrl").asStr();
+  let redirectedResponse = http.get(newUrl);
+  assert(redirectedResponse.body.contains("<title>Hacker News</title>"));
 }
 
 test "invalid short url" {
   let response = http.get("${urlShortenerApi.api.url}/u/invalid");
-  assert(response.body?.contains("url not found") ?? false);
+  assert(response.body.contains("url not found"));
 }
