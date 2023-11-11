@@ -42,7 +42,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,

@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const initCount = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const initCount = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
     const bar = new Bar(this, "Bar");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:hello", new $Closure1(this, "$Closure1"));
   }

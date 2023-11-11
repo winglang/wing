@@ -47,7 +47,7 @@ describe("run single test", () => {
 
   test("not a function", async () => {
     const app = new SimApp();
-    Bucket._newBucket(app, "test");
+    new Bucket(app, "test");
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -87,7 +87,7 @@ describe("run all tests", () => {
     makeTest(app, "test", ["console.log('hi');"]);
     makeTest(app, "test:bla", ["console.log('hi');"]);
     makeTest(app, "test:blue", ["console.log('hi');"]);
-    Bucket._newBucket(app, "mytestbucket");
+    new Bucket(app, "mytestbucket");
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(

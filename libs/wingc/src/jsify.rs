@@ -437,9 +437,7 @@ impl<'a> JSifier<'a> {
 				let class_type = if let Some(class_type) = expression_type.as_class() { class_type } else {
 					return "".to_string();
 				};
-				let is_abstract = class_type.is_abstract;
-
-				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
+				// if we have an FQN, we emit a call to the "new" factory method to allow
 				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
@@ -470,11 +468,7 @@ impl<'a> JSifier<'a> {
 
 				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
-					if is_abstract {
-						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
-					} else {
-						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
-					}
+					format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.

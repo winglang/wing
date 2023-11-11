@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+        this.api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
         this.url = this.api.url;
       }
       static _toInflightType(context) {
@@ -316,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const r = new MyResource(this, "MyResource");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class", new $Closure1(this, "$Closure1"));
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
     const url = api.url;
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight globals", new $Closure2(this, "$Closure2"));
   }
