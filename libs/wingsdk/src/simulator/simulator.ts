@@ -479,17 +479,21 @@ export class Simulator {
         (resource as any)
           [method](...args)
           .then((result: any) => {
-            const resp: SimulatorServerResponse = { result };
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(serializeValue(resp), "utf-8");
+            res.end(serializeValue({ result }), "utf-8");
           })
           .catch((err: any) => {
-            if (err instanceof Error) {
-              err = err.stack;
-            }
-            const resp: SimulatorServerResponse = { error: err };
             res.writeHead(500, { "Content-Type": "application/json" });
-            res.end(serializeValue(resp), "utf-8");
+            res.end(
+              serializeValue({
+                error: {
+                  message: err.message ?? err,
+                  stack: err.stack,
+                  name: err.name,
+                },
+              }),
+              "utf-8"
+            );
           });
       });
     };

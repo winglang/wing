@@ -37,8 +37,6 @@ export async function prettyPrintError(
 
   let st: StackTracey | undefined;
   let originalMessage = "";
-  console.log(error);
-  console.log(JSON.stringify(error));
   if (typeof error === "string") {
     if (error === "") {
       return "";
@@ -50,14 +48,15 @@ export async function prettyPrintError(
       const idx = lines.findIndex((line) => line.startsWith("    at"));
       if (idx !== -1) {
         originalMessage = lines.slice(0, idx).join("\n");
-        // the message probably starts with "<ErrorType>: ", remove it
-        originalMessage = originalMessage.replace(/^[^:]+: /, "");
       } else {
         originalMessage = error;
       }
     } else {
       originalMessage = error;
     }
+
+    // stringy errors commonly start with "Error: ", we can just remove it
+    originalMessage = originalMessage.replace(/^Error: /, "");
   } else {
     error = rewriteCommonError(error);
     st = new StackTracey(error.stack);

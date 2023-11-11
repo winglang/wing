@@ -93,7 +93,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
-    writeResultsToFile(results, testDuration, options.outputFile);
+    await writeResultsToFile(results, testDuration, options.outputFile);
   }
 
   // if we have any failures, exit with 1
