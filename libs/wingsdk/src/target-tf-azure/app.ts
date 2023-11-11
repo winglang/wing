@@ -40,8 +40,8 @@ const RESOURCEGROUP_NAME_OPTS: NameOptions = {
  * Configuration options for generating a name for Azure Log Analytics Workspace.
  *
  * - The workspace name must be between 4 and 63 characters.
- * - The workspace name can contain only letters, numbers, and hyphens ('-').
- * - The hyphen ('-') should not be the first or the last character in the name.
+ * - The workspace name can contain only letters, numbers, and hyphens (`"-"`).
+ * - The hyphen (`"-"`) should not be the first or the last character in the name.
  */
 const LOG_ANALYTICS_WORKSPACE_NAME_OPTS: NameOptions = {
   maxLen: 63,
