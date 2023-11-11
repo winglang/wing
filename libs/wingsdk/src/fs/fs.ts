@@ -75,7 +75,12 @@ export interface RemoveOptions {
 /**
  * Represents the type of a file system object.
  */
-export type FileType = "File" | "Directory" | "Symlink" | "Other";
+export enum FileType {
+  FILE,
+  DIRECTORY,
+  SYMLINK,
+  OTHER,
+}
 
 /**
  * Represents metadata information about a file or directory.
@@ -118,8 +123,8 @@ export class Util {
    * @param path The path to evaluate.
    * @returns The directory name of the path.
    */
-  public static dirname(p: string): string {
-    return normalPath(nodePath.dirname(p));
+  public static dirname(path: string): string {
+    return normalPath(nodePath.dirname(path));
   }
 
   /**
@@ -127,8 +132,8 @@ export class Util {
    * @param path The path to evaluate.
    * @returns The last portion of a path.
    */
-  public static basename(p: string): string {
-    return nodePath.basename(p);
+  public static basename(path: string): string {
+    return nodePath.basename(path);
   }
 
   /**
@@ -162,8 +167,8 @@ export class Util {
    * @param path The path to evaluate.
    * @returns `true` if the path exists, `false` otherwise.
    */
-  public static exists(p: string): boolean {
-    return fs.existsSync(p);
+  public static exists(path: string): boolean {
+    return fs.existsSync(path);
   }
 
   /**
@@ -342,8 +347,8 @@ export class Util {
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
    * @param path The path to the file or directory you want to remove.
    */
-  public static remove(p: string, opts?: RemoveOptions): void {
-    fs.rmSync(p, {
+  public static remove(path: string, opts?: RemoveOptions): void {
+    fs.rmSync(path, {
       force: opts?.force ?? true,
       recursive: opts?.recursive ?? true,
     });
@@ -354,9 +359,9 @@ export class Util {
    * @param path The path to check.
    * @returns `true` if the path is an existing directory, `false` otherwise.
    */
-  public static isDir(p: string): boolean {
+  public static isDir(path: string): boolean {
     try {
-      return fs.statSync(p).isDirectory();
+      return fs.statSync(path).isDirectory();
     } catch {
       return false;
     }
@@ -367,8 +372,8 @@ export class Util {
    * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
-  public static metadata(p: string): Metadata {
-    return this._metadata(fs.statSync(p));
+  public static metadata(path: string): Metadata {
+    return this._metadata(fs.statSync(path));
   }
 
   /**
@@ -376,8 +381,8 @@ export class Util {
    * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
    */
-  public static symlinkMetadata(p: string): Metadata {
-    return this._metadata(fs.lstatSync(p));
+  public static symlinkMetadata(path: string): Metadata {
+    return this._metadata(fs.lstatSync(path));
   }
 
   /**
@@ -386,8 +391,8 @@ export class Util {
    * @param path The path of the file or directory.
    * @param permissions The mode to set as a string.
    */
-  public static setPermissions(p: string, permissions: string): void {
-    fs.chmodSync(p, parseInt(permissions, 8));
+  public static setPermissions(path: string, permissions: string): void {
+    fs.chmodSync(path, parseInt(permissions, 8));
   }
 
   /**
@@ -398,9 +403,11 @@ export class Util {
    *          - There is no dot in the file name.
    *          - The dot is the last character in the file name.
    */
-  public static extension(p: string): string | undefined {
-    const ext = nodePath.extname(p);
-    return !ext || p === ext || p.endsWith(".") ? undefined : ext.slice(1);
+  public static extension(path: string): string | undefined {
+    const ext = nodePath.extname(path);
+    return !ext || path === ext || path.endsWith(".")
+      ? undefined
+      : ext.slice(1);
   }
 
   /**
@@ -412,10 +419,10 @@ export class Util {
    */
   public static symlink(
     target: string,
-    p: string,
+    path: string,
     type: "file" | "dir" | "junction" = "file"
   ): void {
-    fs.symlinkSync(target, p, type);
+    fs.symlinkSync(target, path, type);
   }
 
   /**
@@ -447,15 +454,14 @@ export class Util {
    * @returns The type of the file.
    */
   private static _fileType(stats: fs.Stats): FileType {
-    switch (true) {
-      case stats.isFile():
-        return "File";
-      case stats.isDirectory():
-        return "Directory";
-      case stats.isSymbolicLink():
-        return "Symlink";
-      default:
-        return "Other";
+    if (stats.isFile()) {
+      return FileType.FILE;
+    } else if (stats.isDirectory()) {
+      return FileType.DIRECTORY;
+    } else if (stats.isSymbolicLink()) {
+      return FileType.SYMLINK;
+    } else {
+      return FileType.OTHER;
     }
   }
 
