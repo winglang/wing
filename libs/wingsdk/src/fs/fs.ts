@@ -475,14 +475,15 @@ export class Util {
    * @returns The type of the file.
    */
   private static _fileType(stats: fs.Stats): FileType {
-    if (stats.isFile()) {
-      return FileType.FILE;
-    } else if (stats.isDirectory()) {
-      return FileType.DIRECTORY;
-    } else if (stats.isSymbolicLink()) {
-      return FileType.SYMLINK;
-    } else {
-      return FileType.OTHER;
+    switch (true) {
+      case stats.isFile():
+        return FileType.FILE;
+      case stats.isDirectory():
+        return FileType.DIRECTORY;
+      case stats.isSymbolicLink():
+        return FileType.SYMLINK;
+      default:
+        return FileType.OTHER;
     }
   }
 
