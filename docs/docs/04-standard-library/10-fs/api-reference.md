@@ -98,14 +98,16 @@ A sequence of paths or path segments.
 ```wing
 bring fs;
 
-fs.basename(p: str);
+fs.basename(path: str);
 ```
 
 Retrieve the final segment of a given file path.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.basename.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.basename.parameter.path"></a>
 
 - *Type:* str
+
+The path to evaluate.
 
 ---
 
@@ -114,14 +116,16 @@ Retrieve the final segment of a given file path.
 ```wing
 bring fs;
 
-fs.dirname(p: str);
+fs.dirname(path: str);
 ```
 
 Retrieve the name of the directory from a given file path.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.dirname.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.dirname.parameter.path"></a>
 
 - *Type:* str
+
+The path to evaluate.
 
 ---
 
@@ -130,14 +134,16 @@ Retrieve the name of the directory from a given file path.
 ```wing
 bring fs;
 
-fs.exists(p: str);
+fs.exists(path: str);
 ```
 
 Check if the path exists.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.exists.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.exists.parameter.path"></a>
 
 - *Type:* str
+
+The path to evaluate.
 
 ---
 
@@ -146,14 +152,16 @@ Check if the path exists.
 ```wing
 bring fs;
 
-fs.extension(p: str);
+fs.extension(path: str);
 ```
 
 Extracts the extension (without the leading dot) from the path, if possible.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.extension.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.extension.parameter.path"></a>
 
 - *Type:* str
+
+The path to get extension for.
 
 ---
 
@@ -162,14 +170,16 @@ Extracts the extension (without the leading dot) from the path, if possible.
 ```wing
 bring fs;
 
-fs.isDir(p: str);
+fs.isDir(path: str);
 ```
 
 Checks if the given path is a directory and exists.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.isDir.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.isDir.parameter.path"></a>
 
 - *Type:* str
+
+The path to check.
 
 ---
 
@@ -196,14 +206,16 @@ The array of path need to join.
 ```wing
 bring fs;
 
-fs.metadata(p: str);
+fs.metadata(path: str);
 ```
 
 Gets the stats of the given path.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.metadata.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.metadata.parameter.path"></a>
 
 - *Type:* str
+
+The path to get stats for.
 
 ---
 
@@ -363,16 +375,18 @@ At times we have two absolute paths, and we need to derive the relative path fro
 ```wing
 bring fs;
 
-fs.remove(p: str, opts?: RemoveOptions);
+fs.remove(path: str, opts?: RemoveOptions);
 ```
 
 Remove files and directories (modeled on the standard POSIX `rm`utility).
 
 Returns `undefined`.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.remove.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.remove.parameter.path"></a>
 
 - *Type:* str
+
+The path to the file or directory you want to remove.
 
 ---
 
@@ -387,16 +401,18 @@ Returns `undefined`.
 ```wing
 bring fs;
 
-fs.setPermissions(p: str, permissions: str);
+fs.setPermissions(path: str, permissions: str);
 ```
 
 Set the permissions of the file, directory, etc.
 
 Expects a permission string like `"755"` or `"644"`.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.setPermissions.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.setPermissions.parameter.path"></a>
 
 - *Type:* str
+
+The path of the file or directory.
 
 ---
 
@@ -413,7 +429,7 @@ The mode to set as a string.
 ```wing
 bring fs;
 
-fs.symlink(target: str, p: str, type?: str);
+fs.symlink(target: str, path: str, type?: SymlinkType);
 ```
 
 Creates a symbolic link.
@@ -426,20 +442,22 @@ The path to the target file or directory.
 
 ---
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.symlink.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.symlink.parameter.path"></a>
 
 - *Type:* str
+
+The path to the symbolic link to be created.
 
 ---
 
 ###### `type`<sup>Optional</sup> <a name="type" id="@winglang/sdk.fs.Util.symlink.parameter.type"></a>
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.fs.SymlinkType">SymlinkType</a>
 
 The type of the target.
 
-It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
-Defaults to `"file"` if not specified.
+It can be `FILE`, `DIRECTORY`, or `JUNCTION` (Windows only).
+Defaults to `FILE` if not specified.
 
 ---
 
@@ -448,14 +466,16 @@ Defaults to `"file"` if not specified.
 ```wing
 bring fs;
 
-fs.symlinkMetadata(p: str);
+fs.symlinkMetadata(path: str);
 ```
 
 Gets the stats of the given path without following symbolic links.
 
-###### `p`<sup>Required</sup> <a name="p" id="@winglang/sdk.fs.Util.symlinkMetadata.parameter.p"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.fs.Util.symlinkMetadata.parameter.path"></a>
 
 - *Type:* str
+
+The path to get stats for.
 
 ---
 
@@ -654,7 +674,7 @@ let Metadata = fs.Metadata{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.fs.Metadata.property.accessed">accessed</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was last accessed. |
 | <code><a href="#@winglang/sdk.fs.Metadata.property.created">created</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was created. |
-| <code><a href="#@winglang/sdk.fs.Metadata.property.fileType">fileType</a></code> | <code>str</code> | The type of file. |
+| <code><a href="#@winglang/sdk.fs.Metadata.property.fileType">fileType</a></code> | <code><a href="#@winglang/sdk.fs.FileType">FileType</a></code> | The type of file. |
 | <code><a href="#@winglang/sdk.fs.Metadata.property.modified">modified</a></code> | <code><a href="#@winglang/sdk.std.Datetime">datetime</a></code> | The date and time the file was last modified. |
 | <code><a href="#@winglang/sdk.fs.Metadata.property.permissions">permissions</a></code> | <code>str</code> | The permissions of the file. |
 | <code><a href="#@winglang/sdk.fs.Metadata.property.size">size</a></code> | <code>num</code> | The size of the file in bytes. |
@@ -688,10 +708,10 @@ The date and time the file was created.
 ##### `fileType`<sup>Required</sup> <a name="fileType" id="@winglang/sdk.fs.Metadata.property.fileType"></a>
 
 ```wing
-fileType: str;
+fileType: FileType;
 ```
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.fs.FileType">FileType</a>
 
 The type of file.
 
@@ -928,4 +948,85 @@ The `flag` can be set to specify the attributes.
 
 ---
 
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### FileType <a name="FileType" id="@winglang/sdk.fs.FileType"></a>
+
+Represents the type of a file system object.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.fs.FileType.FILE">FILE</a></code> | Represents a regular file. |
+| <code><a href="#@winglang/sdk.fs.FileType.DIRECTORY">DIRECTORY</a></code> | Represents a directory. |
+| <code><a href="#@winglang/sdk.fs.FileType.SYMLINK">SYMLINK</a></code> | Represents a symbolic link. |
+| <code><a href="#@winglang/sdk.fs.FileType.OTHER">OTHER</a></code> | Represents any type of file system object that is not `FILE`, `DIRECTORY` or `SYMLINK`. |
+
+---
+
+##### `FILE` <a name="FILE" id="@winglang/sdk.fs.FileType.FILE"></a>
+
+Represents a regular file.
+
+---
+
+
+##### `DIRECTORY` <a name="DIRECTORY" id="@winglang/sdk.fs.FileType.DIRECTORY"></a>
+
+Represents a directory.
+
+---
+
+
+##### `SYMLINK` <a name="SYMLINK" id="@winglang/sdk.fs.FileType.SYMLINK"></a>
+
+Represents a symbolic link.
+
+---
+
+
+##### `OTHER` <a name="OTHER" id="@winglang/sdk.fs.FileType.OTHER"></a>
+
+Represents any type of file system object that is not `FILE`, `DIRECTORY` or `SYMLINK`.
+
+This includes sockets, FIFOs (named pipes), block devices, and character devices.
+
+---
+
+
+### SymlinkType <a name="SymlinkType" id="@winglang/sdk.fs.SymlinkType"></a>
+
+Represents the type of the target for creating symbolic links.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.fs.SymlinkType.FILE">FILE</a></code> | Symbolic link that points to a file. |
+| <code><a href="#@winglang/sdk.fs.SymlinkType.DIRECTORY">DIRECTORY</a></code> | Symbolic link that points to a directory. |
+| <code><a href="#@winglang/sdk.fs.SymlinkType.JUNCTION">JUNCTION</a></code> | Windows-specific: Symbolic link that points to a directory junction. |
+
+---
+
+##### `FILE` <a name="FILE" id="@winglang/sdk.fs.SymlinkType.FILE"></a>
+
+Symbolic link that points to a file.
+
+---
+
+
+##### `DIRECTORY` <a name="DIRECTORY" id="@winglang/sdk.fs.SymlinkType.DIRECTORY"></a>
+
+Symbolic link that points to a directory.
+
+---
+
+
+##### `JUNCTION` <a name="JUNCTION" id="@winglang/sdk.fs.SymlinkType.JUNCTION"></a>
+
+Windows-specific: Symbolic link that points to a directory junction.
+
+---
 
