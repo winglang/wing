@@ -68,16 +68,11 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     "/.wing/"
   );
 
-  for (
-    let sourceIndex = 0;
-    sourceIndex < sourcemapData.sources.length;
-    sourceIndex++
-  ) {
-    const source = sourcemapData.sources[sourceIndex];
-    if (source.endsWith(".w")) {
+  for (const [idx, source] of Object.entries(sourcemapData.sources)) {
+    if ((source as any).endsWith(".w")) {
       const absolutePath = `/${source}`;
       const relativePath = relative(originalEntrypointDir, absolutePath);
-      sourcemapData.sources[sourceIndex] = relativePath;
+      sourcemapData.sources[idx] = relativePath;
     }
   }
 

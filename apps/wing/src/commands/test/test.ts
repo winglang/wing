@@ -176,13 +176,8 @@ export async function renderTestReport(
 
     // if the test failed, add the error message and trace
     if (result.error) {
-      details.push(
-        ...(
-          await prettyPrintError(result.error, {
-            chalk,
-          })
-        ).split("\n")
-      );
+      const err = await prettyPrintError(result.error, { chalk });
+      details.push(...err.split("\n"));
     }
 
     // construct the first row of the test result by collecting the various components and joining

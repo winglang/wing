@@ -156,24 +156,6 @@ export async function prettyPrintError(
     }
   }
 
-  const printItem = (item: StackTracey.Entry) => {
-    let calleeShort = `${item.calleeShort} `;
-
-    // These are typically useless
-    // TODO These can possibly be removed when sourcemaps support "names" mappings
-    if (
-      item.calleeShort === "new $Root" ||
-      item.calleeShort.includes("<anonymous>")
-    ) {
-      calleeShort = "";
-    }
-
-    const file = item.file;
-    const line = item.line;
-    const column = item.column;
-    return `at ${calleeShort}(${file}:${line}:${column})`;
-  };
-
   const outputText = output.length > 0 ? "\n" + output.join("\n") : "";
   const extraStack =
     traceWithSources.length > 0
@@ -182,6 +164,24 @@ export async function prettyPrintError(
 
   // add the rest of the stack trace from the same file
   return message + outputText + extraStack;
+}
+
+function printItem(item: StackTracey.Entry) {
+  let calleeShort = `${item.calleeShort} `;
+
+  // These are typically useless
+  // TODO These can possibly be removed when sourcemaps support "names" mappings
+  if (
+    item.calleeShort === "new $Root" ||
+    item.calleeShort.includes("<anonymous>")
+  ) {
+    calleeShort = "";
+  }
+
+  const file = item.file;
+  const line = item.line;
+  const column = item.column;
+  return `at ${calleeShort}(${file}:${line}:${column})`;
 }
 
 export function rewriteCommonError(error: Error): Error {

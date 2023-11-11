@@ -1,4 +1,9 @@
-import { InvokeCommand, LambdaClient, LogType } from "@aws-sdk/client-lambda";
+import {
+  InvokeCommand,
+  InvokeCommandOutput,
+  LambdaClient,
+  LogType,
+} from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
 import { IFunctionClient } from "../cloud";
 import { Trace, TraceType } from "../std";
@@ -21,27 +26,11 @@ export class FunctionClient implements IFunctionClient {
     });
     const response = await this.lambdaClient.send(command);
 
-    if (response.FunctionError) {
-      let errorText = toUtf8(response.Payload!);
-      if (errorText.startsWith("{")) {
-        const errorData = JSON.parse(errorText);
-        if ("errorMessage" in errorData) {
-          const newError = new Error(
-            `Invoke failed with message: "${errorData.errorMessage}"`
-          );
-          newError.name = errorData.errorType;
-          newError.stack = errorData.trace?.join("\n");
-          throw newError;
-        }
-      }
-      throw new Error(
-        `Invoke failed with message: "${response.FunctionError}". Full error: "${errorText}"`
-      );
-    }
-    if (!response.Payload) {
+    const value = parseCommandOutput(response);
+
+    if (!value) {
       return "";
     }
-    const value = JSON.parse(toUtf8(response.Payload)) ?? "";
     if (typeof value !== "string") {
       throw new Error(
         `function returned value of type ${typeof value}, not string`
@@ -66,33 +55,45 @@ export class FunctionClient implements IFunctionClient {
     const logs = Buffer.from(response.LogResult ?? "", "base64").toString();
     const traces = parseLogs(logs, this.constructPath);
 
-    if (response.FunctionError) {
-      let errorText = toUtf8(response.Payload!);
-      if (errorText.startsWith("{")) {
-        const errorData = JSON.parse(errorText);
-        if ("errorMessage" in errorData) {
-          const newError = new Error(
-            `Invoke failed with message: "${errorData.errorMessage}"`
-          );
-          newError.name = errorData.errorType;
-          newError.stack = errorData.trace?.join("\n");
-          throw newError;
-        }
-      }
-      throw new Error(
-        `Invoke failed with message: "${response.FunctionError}". Full error: "${errorText}"`
-      );
-    }
-    if (!response.Payload) {
+    const value = parseCommandOutput(response);
+
+    if (!value) {
       return ["", traces];
     }
-    const value = JSON.parse(toUtf8(response.Payload)) ?? "";
     if (typeof value !== "string") {
       throw new Error(
         `function returned value of type ${typeof value}, not string`
       );
     }
     return ["", traces];
+  }
+}
+
+function parseCommandOutput(payload: InvokeCommandOutput): any | undefined {
+  if (payload.FunctionError) {
+    let errorText = toUtf8(payload.Payload!);
+    let errorData;
+    try {
+      errorData = JSON.parse(errorText);
+    } catch (_) {}
+
+    if (errorData && "errorMessage" in errorData) {
+      const newError = new Error(
+        `Invoke failed with message: "${errorData.errorMessage}"`
+      );
+      newError.name = errorData.errorType;
+      newError.stack = errorData.trace?.join("\n");
+      throw newError;
+    }
+    throw new Error(
+      `Invoke failed with message: "${payload.FunctionError}". Full error: "${errorText}"`
+    );
+  } else {
+    if (!payload.Payload) {
+      return undefined;
+    } else {
+      return JSON.parse(toUtf8(payload.Payload));
+    }
   }
 }
 
