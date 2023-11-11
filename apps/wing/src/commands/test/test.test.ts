@@ -1,7 +1,7 @@
 import fs from "fs";
 import fsPromises from "fs/promises";
 import { tmpdir } from "os";
-import { join, resolve } from "path";
+import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
