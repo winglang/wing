@@ -205,6 +205,7 @@ Interface definition
 interface A extends B, C {
     do_something();
     inflight do_something_else(x: str): num;
+    some_field: num;
 }
 
 --------------------------------------------------------------------------------
@@ -227,4 +228,7 @@ interface A extends B, C {
           (parameter_definition
             name: (identifier)
             type: (builtin_type)))
+        type: (builtin_type))
+      (class_field
+        name: (identifier)
         type: (builtin_type)))))

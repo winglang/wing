@@ -1410,6 +1410,11 @@ impl<'s> Parser<'s> {
 						methods.push((method_name, func_sig))
 					}
 				}
+				"class_field" => {
+					self
+						.with_error::<Node>("Properties are not supported in interfaces", &interface_element)
+						.err();
+				}
 				"ERROR" => {
 					self
 						.with_error::<Node>("Expected interface element node", &interface_element)

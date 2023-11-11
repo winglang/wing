@@ -39,7 +39,8 @@ module.exports = grammar({
 
     // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
-    [$.class_modifiers, $.closure_modifiers]
+    [$.class_modifiers, $.closure_modifiers],
+    [$.inflight_method_signature, $.field_modifiers]
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -234,7 +235,7 @@ module.exports = grammar({
     interface_implementation: ($) =>
       braced(
         repeat(
-          choice($.method_signature, $.inflight_method_signature)
+          choice($.method_signature, $.inflight_method_signature, $.class_field)
         )
       ),
 
