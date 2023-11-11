@@ -1947,11 +1947,11 @@ Duration <DURATION>"
 `;
 
 exports[`interface.test.w 1`] = `
-"error: Unexpected 'identifier'
+"error: Properties are not supported in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:30:3
    |
 30 |   bar: str;
-   |   ^^^ Unexpected 'identifier'
+   |   ^^^^^^^^^ Properties are not supported in interfaces
 
 
 error: Unknown symbol \\"IB\\"
