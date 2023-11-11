@@ -83,6 +83,15 @@ export enum FileType {
 }
 
 /**
+ * Represents the type of the target for creating symbolic links.
+ */
+export enum SymlinkType {
+  FILE = "file",
+  DIRECTORY = "dir",
+  JUNCTION = "junction",
+}
+
+/**
  * Represents metadata information about a file or directory.
  */
 /**
@@ -414,13 +423,13 @@ export class Util {
    * Creates a symbolic link.
    * @param target The path to the target file or directory.
    * @param path The path to the symbolic link to be created.
-   * @param type The type of the target. It can be `"file"`, `"dir"`, or `"junction"` (Windows only).
-   *             Defaults to `"file"` if not specified.
+   * @param type The type of the target. It can be `FILE`, `DIRECTORY`, or `JUNCTION` (Windows only).
+   *             Defaults to `FILE` if not specified.
    */
   public static symlink(
     target: string,
     path: string,
-    type: "file" | "dir" | "junction" = "file"
+    type: SymlinkType = SymlinkType.FILE
   ): void {
     fs.symlinkSync(target, path, type);
   }
