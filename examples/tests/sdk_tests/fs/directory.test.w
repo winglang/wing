@@ -47,3 +47,22 @@ test "inflight create normal directory" {
     let nilFiles = fs.tryReaddir(dirpath);
     assert(nilFiles == nil);
 }
+
+test "cannot overwrite directory with a file" {
+    let tmpdir = fs.mkdtemp();
+    let dirpath = "${tmpdir}/test-overwrite-dir";
+    let var errorCaught = false;
+
+    fs.mkdir(dirpath);
+    assert(fs.exists(dirpath) == true);
+
+    try {
+        fs.writeFile(dirpath, "This should fail.");
+    } catch e {
+        errorCaught = regex.match("^EISDIR: illegal operation on a directory", e);
+    }
+    assert(errorCaught == true);
+
+    fs.remove(dirpath, { recursive: true });
+    assert(fs.exists(dirpath) == false);
+}

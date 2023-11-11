@@ -20,6 +20,7 @@ const PUBLIC_MODULES = [
   "regex",
   "sim",
   "fs",
+  "expect",
 ];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";

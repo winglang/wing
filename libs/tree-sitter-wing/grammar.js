@@ -341,8 +341,8 @@ module.exports = grammar({
       choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
-    _integer: ($) => choice("0", /[1-9]\d*/),
-    _decimal: ($) => choice(/0\.\d+/, /[1-9]\d*\.\d+/),
+    _integer: ($) => /\d[\d_]*/,
+    _decimal: ($) => /\d[\d_]*\.\d[\d_]*/,
 
     bool: ($) => choice("true", "false"),
 

@@ -1947,11 +1947,11 @@ Duration <DURATION>"
 `;
 
 exports[`interface.test.w 1`] = `
-"error: Properties are not supported in interfaces
+"error: Unexpected 'identifier'
    --> ../../../examples/tests/invalid/interface.test.w:30:3
    |
 30 |   bar: str;
-   |   ^^^^^^^^^ Properties are not supported in interfaces
+   |   ^^^ Unexpected 'identifier'
 
 
 error: Unknown symbol \\"IB\\"
@@ -2691,6 +2691,135 @@ error: Variable is not reassignable
    |          --- defined here (try adding \\"var\\" in front)
 42 |   arg = 0;
    |   ^^^ Variable is not reassignable
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`redundant_modifiers.w 1`] = `
+"error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:3:3
+  |
+3 |   pub pub m1() {}
+  |   ^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:7:3
+  |
+7 |   pub protected m2() {}
+  |   ^^^^^^^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:11:3
+   |
+11 |   static pub static m3() {}
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:15:3
+   |
+15 |   pub inflight static inflight m4() {}
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |   |               |
+   |   |   |               possible redundant modifier
+   |   |   possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:19:3
+   |
+19 |   static extern \\"x.js\\" pub extern \\"y.js\\" m5();
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |      |                 |
+   |   |      |                 possible redundant modifier
+   |   |      possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:23:3
+   |
+23 |   protected protected f1: str;
+   |   ^^^^^^^^^^^^^^^^^^^
+   |   |         |
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:27:3
+   |
+27 |   protected inflight inflight f2: str;
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |         |        |
+   |   |         |        possible redundant modifier
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:31:3
+   |
+31 |   static pub static f3: str;
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:35:3
+   |
+35 |   var pub var f4: str;
+   |   ^^^^^^^^^^^
+   |   |       |
+   |   |       possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:40:1
+   |
+40 | inflight inflight class Foo {}
+   | ^^^^^^^^^^^^^^^^^
+   | |        |
+   | |        possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:43:1
+   |
+43 | pub inflight pub class Foo {}
+   | ^^^^^^^^^^^^^^^^
+   | |            |
+   | |            possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
 
 
  

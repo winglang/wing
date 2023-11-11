@@ -80,6 +80,15 @@ export class JsonSchema {
   }
 
   /** @internal */
+  public _tryParseJson(json: string | undefined) {
+    try {
+      return this._fromJson(JSON.parse(json!));
+    } catch {
+      return undefined;
+    }
+  }
+
+  /** @internal */
   public _toInflightType() {
     return JsonSchema._toInflightType(this.jsonSchema);
   }

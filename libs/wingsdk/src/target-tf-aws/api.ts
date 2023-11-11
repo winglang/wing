@@ -329,6 +329,9 @@ class WingRestApi extends Construct {
           return JSON.stringify(injectGreedy404Handler(props.apiSpec));
         },
       }),
+      lifecycle: {
+        createBeforeDestroy: true,
+      },
     });
 
     this.deployment = new ApiGatewayDeployment(this, "deployment", {
@@ -348,8 +351,11 @@ class WingRestApi extends Construct {
       deploymentId: this.deployment.id,
     });
 
-    //should be exported from here, otherwise won't be mapped to the right token
-    this.url = this.stage.invokeUrl;
+    // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
+    // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
+    // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
+    // in Terraform. Hence, we're creating our own url here.
+    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
   }
 
   /**

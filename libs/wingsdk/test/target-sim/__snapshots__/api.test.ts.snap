@@ -91,8 +91,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -363,8 +363,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -631,8 +631,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -899,8 +899,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1167,8 +1167,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1435,8 +1435,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1811,8 +1811,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2120,8 +2120,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2397,8 +2397,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2659,8 +2659,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2968,8 +2968,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2996,8 +2996,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3340,8 +3340,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3368,8 +3368,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3673,8 +3673,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3950,8 +3950,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4218,8 +4218,8 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
