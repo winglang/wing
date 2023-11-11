@@ -76,18 +76,33 @@ export interface RemoveOptions {
  * Represents the type of a file system object.
  */
 export enum FileType {
-  FILE,
-  DIRECTORY,
-  SYMLINK,
-  OTHER,
+  /** Represents a regular file. */
+  FILE = "File",
+
+  /** Represents a directory. */
+  DIRECTORY = "Directory",
+
+  /** Represents a symbolic link. */
+  SYMLINK = "Symlink",
+
+  /**
+   * Represents any type of file system object that is not `FILE`, `DIRECTORY` or `SYMLINK`.
+   * This includes sockets, FIFOs (named pipes), block devices, and character devices.
+   */
+  OTHER = "Other",
 }
 
 /**
  * Represents the type of the target for creating symbolic links.
  */
 export enum SymlinkType {
+  /** Symbolic link that points to a file. */
   FILE = "file",
+
+  /** Symbolic link that points to a directory. */
   DIRECTORY = "dir",
+
+  /** Windows-specific: Symbolic link that points to a directory junction. */
   JUNCTION = "junction",
 }
 
