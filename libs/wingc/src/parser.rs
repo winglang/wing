@@ -790,7 +790,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Structs must be public (\"pub\") or private",
@@ -1067,7 +1067,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Enums must be public (\"pub\") or private",
@@ -1336,7 +1336,7 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access = self.build_access_modifier(&class_modifiers)?;
+		let access = self.get_access_modifier(&class_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Classes must be public (\"pub\") or private",
@@ -1378,7 +1378,7 @@ impl<'s> Parser<'s> {
 			reassignable: self.get_modifier("reassignable", &modifiers)?.is_some(),
 			is_static,
 			phase,
-			access: self.build_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+			access: self.get_access_modifier(&class_element.child_by_field_name("modifiers"))?,
 		})
 	}
 
@@ -1445,7 +1445,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
@@ -1550,7 +1550,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
-			access: self.build_access_modifier(&modifiers)?,
+			access: self.get_access_modifier(&modifiers)?,
 		})
 	}
 
@@ -1623,14 +1623,20 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
-		match self.get_modifier("access_modifier", modifiers)? {
-			Some(n) => match self.node_text(&n) {
-				"pub" => Ok(AccessModifier::Public),
-				"protected" => Ok(AccessModifier::Protected),
+	/// Get the access modifier an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
+	fn get_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
+		Ok(self.build_access_modifier(&self.get_modifier("access_modifier", modifiers)?))
+	}
+
+	/// Given an access modifier node build the correct access modifier, defaulting to private
+	fn build_access_modifier(&self, maybe_access_modifer: &Option<Node>) -> AccessModifier {
+		match maybe_access_modifer {
+			Some(access_modifier) => match self.node_text(access_modifier) {
+				"pub" => AccessModifier::Public,
+				"protected" => AccessModifier::Protected,
 				other => panic!("Unexpected access modifier {}", other),
 			},
-			None => Ok(AccessModifier::Private),
+			None => AccessModifier::Private,
 		}
 	}
 
