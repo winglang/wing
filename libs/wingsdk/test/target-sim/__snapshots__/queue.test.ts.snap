@@ -240,8 +240,8 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_queue#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -514,8 +514,8 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_queue#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -1130,8 +1130,8 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_queue#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 5,
           },
@@ -1143,7 +1143,7 @@ async handle(message) {
         "path": "root/my_queue_messages/Function",
         "props": {
           "environmentVariables": {
-            "QUEUE_HANDLE_54fcf4cd": "\${root/my_queue#attrs.handle}",
+            "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8ab799f.js",
           "sourceCodeLanguage": "javascript",
@@ -1155,7 +1155,7 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue_messages",
         "props": {
-          "functionHandle": "\${root/my_queue_messages/Function#attrs.handle}",
+          "functionHandle": "\${wsim#root/my_queue_messages/Function#attrs.handle}",
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },
@@ -1447,8 +1447,8 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_queue#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },

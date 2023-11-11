@@ -1,7 +1,7 @@
 import { Combobox as HeadlessCombobox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Fragment, useEffect, useState } from "react";
 
 import { useTheme } from "./theme-provider.js";
@@ -66,10 +66,13 @@ export const Combobox = ({
     );
   }, [items, value, filter]);
 
-  const internalOnChange = (selected: string) => {
-    onChange(selected);
-    inputRef.current?.focus();
-  };
+  const internalOnChange = useCallback(
+    (selected: string) => {
+      onChange(selected);
+      inputRef.current?.focus();
+    },
+    [onChange],
+  );
 
   return (
     <HeadlessCombobox value={value} onChange={internalOnChange}>

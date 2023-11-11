@@ -6,9 +6,7 @@ import {
 } from "@wingconsole/design-system";
 import { createPersistentState } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
-import { useId, useState } from "react";
-
-import { useFunction } from "../services/use-function.js";
+import { useId } from "react";
 
 export interface FunctionInteractionProps {
   resourceId: string;
@@ -29,6 +27,8 @@ export const FunctionInteraction = ({
   const [payload, setPayload] = usePersistentState("");
   const payloadElementId = useId();
   const responseElementId = useId();
+
+  // TODO: useCallback
 
   return (
     <>

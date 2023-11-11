@@ -277,8 +277,8 @@ my_buckets: [(function() {
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1815,8 +1815,8 @@ my_map: new Map([[\\"foo\\",(function() {
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -3247,11 +3247,11 @@ my_struct: {\\"bucky\\": (function() {
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_0120daf4": "\${root/B3#attrs.handle}",
-            "BUCKET_HANDLE_1d7ab674": "\${root/B5#attrs.handle}",
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
-            "BUCKET_HANDLE_ea7944ef": "\${root/B4#attrs.handle}",
+            "BUCKET_HANDLE_0120daf4": "\${wsim#root/B3#attrs.handle}",
+            "BUCKET_HANDLE_1d7ab674": "\${wsim#root/B5#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
+            "BUCKET_HANDLE_ea7944ef": "\${wsim#root/B4#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",

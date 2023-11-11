@@ -2057,9 +2057,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"number" => Ok(Expr::new(
-				ExprKind::Literal(Literal::Number(
-					self.node_text(&expression_node).parse().expect("Number string"),
-				)),
+				ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
 				expression_span,
 			)),
 			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
@@ -2574,6 +2572,12 @@ pub fn normalize_path(path: &Utf8Path, relative_to: Option<&Utf8Path>) -> Utf8Pa
 	}
 
 	normalized
+}
+
+fn parse_number(s: &str) -> f64 {
+	// remove all underscores from the string
+	let s = s.replace("_", "");
+	return s.parse().expect("Number string");
 }
 
 #[cfg(test)]

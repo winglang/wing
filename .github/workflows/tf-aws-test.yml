@@ -1,5 +1,5 @@
-name: SDK Spec AWS Tests
-run-name: SDK Spec AWS Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
+name: SDK Spec Tests
+run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
   workflow_call: {}
   workflow_dispatch:
@@ -12,7 +12,14 @@ on:
         type: string
         default: main
         description: "Ref to checkout. Must be present in the repo input."
-
+      target:
+        type: choice
+        default: all
+        description: "target to run at, can be one or all of them"
+        options:
+          - all
+          - tf-aws
+          - tf-azure
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
@@ -23,7 +30,11 @@ env:
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
+  TARGET: ${{ inputs.target || 'all' }}
   PNPM_VERSION: "8.6.3"
+  AZURE_LOCATION: "East US"
+  GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
+  GOOGLE_REGION: "us-central1" # for the future
 
 jobs:
   setup:
@@ -54,10 +65,20 @@ jobs:
         run: | # TODO: skipping std and external folders, when https://github.com/winglang/wing/issues/3168 is resolve- we'll skip only the external folder.
           dirs=$(ls -d examples/tests/sdk_tests/*/ | sed 's/\/$//' | grep -v "external\|std" | jq -R -s -c 'split("\n")[:-1]')
           processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
-          wrapped_dirs=$(echo "{ \"test\": $processed_dirs }" | jq -c .)
+          wrapped_dirs=$(echo $processed_dirs | jq -c .)
           echo "dirs=$wrapped_dirs" >> $GITHUB_OUTPUT
+      - name: Get targets list
+        id: settargets
+        run: |
+          if [ "${{env.TARGET}}" = "all" ]; then
+            target='["tf-aws", "tf-azure"]'
+          else
+           target='["${{env.TARGET}}"]'
+          fi
+          echo "targets=$target" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.setdirs.outputs.dirs }}
+      targets: ${{ steps.settargets.outputs.targets }}
 
   test-tf-aws:
     needs: setup
@@ -65,8 +86,10 @@ jobs:
     strategy:
       fail-fast: false
       max-parallel: 10
-      matrix: ${{ fromJson(needs.setup.outputs.tests) }}
-    name: ${{ matrix.test.name }}
+      matrix:
+        test: ${{ fromJson(needs.setup.outputs.tests) }}
+        target: ${{ fromJson(needs.setup.outputs.targets) }}
+    name: ${{ matrix.test.name }} - ${{ matrix.target }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -118,11 +141,17 @@ jobs:
           npm install
 
       - name: Configure AWS credentials
+        if: ${{ matrix.target == 'tf-aws' }}
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+      - name: Configure azure credentials
+        if: ${{ matrix.target == 'tf-azure' }}
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Execute wing test in matrix directory
         uses: nick-fields/retry@v2
         env:
@@ -131,17 +160,17 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
-          timeout_minutes: 30
+          timeout_minutes: 60
           command: |
             if  ${{ env.MANUAL == 'true' }}
             then
-              pnpm install
-              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+               pnpm install
+               pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
-              wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+               wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             else
-            ./localwing/node_modules/.bin/wing test -t tf-aws ${{ matrix.test.directory }}/*.test.w
+              ./localwing/node_modules/.bin/wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
             fi
 
       - name: Output Terraform log
