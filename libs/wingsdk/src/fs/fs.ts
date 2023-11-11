@@ -107,10 +107,7 @@ export enum SymlinkType {
 }
 
 /**
- * Represents metadata information about a file or directory.
- */
-/**
- * Metadata for a file or directory.
+ * Metadata of a file system object.
  */
 export interface Metadata {
   /** The type of file. */
