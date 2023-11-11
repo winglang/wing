@@ -220,7 +220,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));
+        this.node.root.new("@winglang/sdk.cloud.Function",cloud.Function,this, "cloud.Function", new $Closure1(this, "$Closure1"));
       }
       static _toInflightType(context) {
         return `

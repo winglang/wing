@@ -11,7 +11,7 @@ test("publishing messages to topic", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const topic = cloud.Topic._newTopic(this, "MyTopic");
+      const topic = new cloud.Topic(this, "MyTopic");
       const publisher = Testing.makeHandler(
         this,
         "Publisher",
@@ -25,7 +25,7 @@ test("publishing messages to topic", async () => {
           },
         }
       );
-      cloud.Function._newFunction(this, "Function", publisher);
+      new cloud.Function(this, "Function", publisher);
 
       const processor = Testing.makeHandler(
         this,
