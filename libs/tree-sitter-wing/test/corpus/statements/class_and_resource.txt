@@ -16,7 +16,8 @@ inflight class A {
 
 (source
   (class_definition
-    phase_modifier: (inflight_specifier)
+    modifiers: (class_modifiers
+      (inflight_specifier))
     name: (identifier)
     implementation: (class_implementation
       (initializer
@@ -64,7 +65,8 @@ inflight class A extends B {}
 
 (source
   (class_definition
-    phase_modifier: (inflight_specifier)
+    modifiers: (class_modifiers
+      (inflight_specifier))
     name: (identifier)
     parent: (custom_type
       object: (type_identifier))

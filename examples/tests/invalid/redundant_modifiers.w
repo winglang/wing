@@ -35,3 +35,10 @@ class Foo {
   var pub var f4: str;
   //^ Multiple or ambiguous modifiers found
 }
+
+// Dup class modifiers
+inflight inflight class Foo {}
+//^ Multiple or ambiguous modifiers found
+
+pub inflight pub class Foo {}
+//^ Multiple or ambiguous modifiers found

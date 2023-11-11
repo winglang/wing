@@ -36,7 +36,10 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._reference_identifier, $._type_identifier],
     [$.parameter_definition, $._reference_identifier],
+
+    // These modifier conflicts should be solved through GLR parsing
     [$.field_modifiers, $.method_modifiers],
+    [$.class_modifiers, $.closure_modifiers]
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -185,10 +188,12 @@ module.exports = grammar({
     _type_annotation: ($) => seq(":", field("type", $._type)),
 
     // Classes
+
+    class_modifiers: ($) => repeat1(choice($.access_modifier, $.inflight_specifier)),
+
     class_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("phase_modifier", $.inflight_specifier)),
+        optional(field("modifiers", $.class_modifiers)),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),

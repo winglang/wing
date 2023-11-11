@@ -1107,7 +1107,8 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
-		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+		let class_modifiers = statement_node.child_by_field_name("modifiers");
+		let class_phase = if self.get_modifier("inflight_specifier", &class_modifiers)?.is_some() {
 			Phase::Inflight
 		} else {
 			class_phase
@@ -1335,12 +1336,11 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(&access_modifier_node)?;
+		let access = self.build_access_modifier(&class_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Classes must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
+				&class_modifiers.expect("access modifier node"),
 			)?;
 		}
 
@@ -2088,10 +2088,6 @@ impl<'s> Parser<'s> {
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"closure" => Ok(Expr::new(
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
-				expression_span,
-			)),
-			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
 			"array_literal" => {
