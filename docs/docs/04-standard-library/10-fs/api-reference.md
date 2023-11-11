@@ -658,7 +658,7 @@ The YANL objects to be dumped.
 
 ### Metadata <a name="Metadata" id="@winglang/sdk.fs.Metadata"></a>
 
-Metadata for a file or directory.
+Metadata of a file system object.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.Metadata.Initializer"></a>
 
