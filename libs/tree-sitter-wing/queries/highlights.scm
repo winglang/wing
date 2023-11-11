@@ -10,9 +10,6 @@
 (method_definition
   name: (identifier) @function
 )
-(inflight_method_definition
-  name: (identifier) @function
-)
 
 ; Functions
 
