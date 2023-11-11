@@ -2000,6 +2000,10 @@ impl<'a> TypeChecker<'a> {
 				// Lookup the class's type in the env
 				let (class_env, class_symbol) = match *class_type {
 					Type::Class(ref class) => {
+						if class.is_abstract {
+							self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
+						}
+
 						if class.phase == Phase::Independent || env.phase == class.phase {
 							(&class.env, &class.name)
 						} else {

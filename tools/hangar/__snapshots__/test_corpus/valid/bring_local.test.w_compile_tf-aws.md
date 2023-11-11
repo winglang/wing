@@ -435,7 +435,7 @@ module.exports = function({ $stdlib }) {
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      this.b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
         constructor($scope, $id, ) {
@@ -470,7 +470,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy",cloud.OnDeploy,this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `

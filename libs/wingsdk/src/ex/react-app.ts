@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { IWebsite, WebsiteDomainOptions } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Resource, Node } from "../std";
 
 const DEFAULT_BUILD_FOLDER = "/build";
@@ -63,40 +64,32 @@ export interface ReactAppOptions {
  * A cloud deployable React App.
  *
  * @inflight `@winglang/sdk.ex.IReactAppClient`
+ * @abstract
  */
-export abstract class ReactApp extends Resource {
+export class ReactApp extends Resource {
   /**
-   * Create a new React App.
    * @internal
    */
-  public static _newReactApp(
-    scope: Construct,
-    id: string,
-    props: ReactAppProps
-  ): ReactApp {
-    return App.of(scope).newAbstract(REACT_APP_FQN, scope, id, props);
+  protected readonly _buildPath!: string;
+  /**
+   * @internal
+   */
+  protected readonly _localPort!: string | number;
+  /**
+   * @internal
+   */
+  protected readonly _projectPath!: string;
+  /**
+   * @internal
+   */
+  protected readonly _useBuildCommand!: boolean;
+  /**
+   * @internal
+   * @abstract
+   */
+  protected get _websiteHost(): IWebsite {
+    throw new AbstractMemberError();
   }
-
-  /**
-   * @internal
-   */
-  protected readonly _buildPath: string;
-  /**
-   * @internal
-   */
-  protected readonly _localPort: string | number;
-  /**
-   * @internal
-   */
-  protected readonly _projectPath: string;
-  /**
-   * @internal
-   */
-  protected readonly _useBuildCommand: boolean;
-  /**
-   * @internal
-   */
-  protected abstract _websiteHost: IWebsite;
 
   /**
    * @internal
@@ -108,6 +101,10 @@ export abstract class ReactApp extends Resource {
   protected readonly _environmentVariables: Map<string, string> = new Map();
 
   constructor(scope: Construct, id: string, props: ReactAppProps) {
+    if (new.target === ReactApp) {
+      return Resource._newFromFactory(REACT_APP_FQN, scope, id, props);
+    }
+
     const buildDir = props.buildDir ?? DEFAULT_BUILD_FOLDER;
 
     super(scope, id);
@@ -147,11 +144,6 @@ export abstract class ReactApp extends Resource {
    */
   public addEnvironment(key: string, value: string) {
     this._environmentVariables.set(key, value);
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
   }
 }
 

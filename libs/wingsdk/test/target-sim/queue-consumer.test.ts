@@ -12,7 +12,7 @@ test("pushing messages through a queue", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const queue = cloud.Queue._newQueue(this, "Queue");
+      const queue = new cloud.Queue(this, "Queue");
       const pusher = Testing.makeHandler(
         app,
         "Pusher",
@@ -27,7 +27,7 @@ test("pushing messages through a queue", async () => {
           },
         }
       );
-      cloud.Function._newFunction(this, "Function", pusher);
+      new cloud.Function(this, "Function", pusher);
 
       const processor = Testing.makeHandler(
         app,

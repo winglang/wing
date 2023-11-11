@@ -165,7 +165,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access cloud resource through static methods only", new $Closure1(this, "$Closure1"));
   }
 }

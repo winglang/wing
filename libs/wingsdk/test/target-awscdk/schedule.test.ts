@@ -19,7 +19,7 @@ test("schedule behavior with rate", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = Schedule._newSchedule(app, "Schedule", {
+  const schedule = new Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
   schedule.onTick(fn);
@@ -42,7 +42,7 @@ test("schedule behavior with cron", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = Schedule._newSchedule(app, "Schedule", {
+  const schedule = new Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -70,7 +70,7 @@ test("schedule with two functions", () => {
     "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = Schedule._newSchedule(app, "Schedule", {
+  const schedule = new Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -97,11 +97,12 @@ test("schedule with rate and cron simultaneously", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() =>
-    Schedule._newSchedule(app, "Schedule", {
-      rate: std.Duration.fromSeconds(30),
-      cron: "0/1 * ? * *",
-    })
+  expect(
+    () =>
+      new Schedule(app, "Schedule", {
+        rate: std.Duration.fromSeconds(30),
+        cron: "0/1 * ? * *",
+      })
   ).toThrow("rate and cron cannot be configured simultaneously.");
 });
 
@@ -110,10 +111,11 @@ test("cron with more than five values", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() =>
-    Schedule._newSchedule(app, "Schedule", {
-      cron: "0/1 * ? * * *",
-    })
+  expect(
+    () =>
+      new Schedule(app, "Schedule", {
+        cron: "0/1 * ? * * *",
+      })
   ).toThrow(
     "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
   );
@@ -124,7 +126,7 @@ test("schedule without rate or cron", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() => Schedule._newSchedule(app, "Schedule")).toThrow(
+  expect(() => new Schedule(app, "Schedule")).toThrow(
     "rate or cron need to be filled."
   );
 });
@@ -134,10 +136,11 @@ test("schedule with rate less than 1 minute", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() =>
-    Schedule._newSchedule(app, "Schedule", {
-      rate: std.Duration.fromSeconds(30),
-    })
+  expect(
+    () =>
+      new Schedule(app, "Schedule", {
+        rate: std.Duration.fromSeconds(30),
+      })
   ).toThrow("rate can not be set to less than 1 minute.");
 });
 
@@ -146,10 +149,11 @@ test("cron with Day-of-month and Day-of-week setting with *", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() =>
-    Schedule._newSchedule(app, "Schedule", {
-      cron: "0/1 * * * *",
-    })
+  expect(
+    () =>
+      new Schedule(app, "Schedule", {
+        cron: "0/1 * * * *",
+      })
   ).toThrow(
     "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
   );

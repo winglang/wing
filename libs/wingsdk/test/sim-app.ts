@@ -34,7 +34,7 @@ export class SimApp extends App {
    */
   public newCloudFunction(code: string) {
     const id = `Function.${this.functionIndex++}`;
-    Function._newFunction(
+    new Function(
       this,
       id,
       Testing.makeHandler(
