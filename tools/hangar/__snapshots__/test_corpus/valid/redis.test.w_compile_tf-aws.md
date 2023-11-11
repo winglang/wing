@@ -250,7 +250,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"

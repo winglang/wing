@@ -180,7 +180,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
             "WING_TARGET": "tf-aws"
           }
@@ -211,7 +211,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
             "WING_TARGET": "tf-aws"
           }

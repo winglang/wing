@@ -412,7 +412,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
             "WING_FUNCTION_NAME": "b2-oncreate-OnMessage-59543b60-c807494b",
             "WING_TARGET": "tf-aws"
@@ -445,7 +445,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
             "WING_TARGET": "tf-aws"
           }
@@ -477,7 +477,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-113c9059-c81d1d09",
             "WING_TARGET": "tf-aws"
           }

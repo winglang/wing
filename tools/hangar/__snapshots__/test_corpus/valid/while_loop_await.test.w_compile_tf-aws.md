@@ -128,7 +128,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }

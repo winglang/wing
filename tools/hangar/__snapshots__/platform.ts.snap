@@ -103,7 +103,7 @@ exports[`Multiple platforms > only first platform app is used 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
@@ -278,7 +278,7 @@ exports[`Platform examples > AWS target platform > permission-boundary.js 1`] = 
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
@@ -522,7 +522,7 @@ exports[`Platform examples > AWS target platform > replicate-s3.js 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
@@ -814,7 +814,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > azurerm backe
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
@@ -988,7 +988,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > gcp backend 1
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
@@ -1162,7 +1162,7 @@ exports[`Platform examples > AWS target platform > tf-backend.js > s3 backend 1`
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.cloudBucket.bucket}",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws",
           },
