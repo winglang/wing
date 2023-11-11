@@ -85,10 +85,10 @@ test "setPermissions()" {
     let tempFile = fs.join(tempDir, "tempfile.txt");
 
     fs.writeFile(tempFile, "Hello, Wing!");
-    fs.setPermissions(tempFile, "777");
+    fs.setPermissions(tempFile, "666");
 
     let fileStats = fs.metadata(tempFile);
-    expect.equal(fileStats.permissions, "777");
+    expect.equal(fileStats.permissions, "666");
 
     // Cleanup
     fs.remove(tempDir);
