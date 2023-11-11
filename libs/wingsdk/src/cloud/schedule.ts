@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Duration, IResource, Node, Resource } from "../std";
 
 /**
@@ -33,11 +33,12 @@ export interface ScheduleProps {
  * A schedule.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
+ * @abstract
  */
 export class Schedule extends Resource {
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     if (new.target === Schedule) {
-      return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
+      return Resource._newFromFactory(SCHEDULE_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -69,18 +70,9 @@ export class Schedule extends Resource {
     }
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Create a function that runs when receiving the scheduled event.
+   * @abstract
    */
   public onTick(
     inflight: IScheduleOnTickHandler,
@@ -88,7 +80,7 @@ export class Schedule extends Resource {
   ): Function {
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 }
 

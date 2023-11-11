@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { IResource, Node, Resource, Duration } from "../std";
 
 /**
@@ -171,14 +171,16 @@ export type CorsHeaders = {
 /**
  * Functionality shared between all `Api` implementations.
  * @inflight `@winglang/sdk.cloud.IApiClient`
+ * @abstract
  */
 
 export class Api extends Resource {
   /**
    * The base URL of the API endpoint.
+   * @abstract
    */
   public get url(): string {
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   // https://spec.openapis.org/oas/v3.0.3
@@ -210,7 +212,7 @@ export class Api extends Resource {
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     if (new.target === Api) {
-      return App.of(scope).newAbstract(API_FQN, scope, id, props);
+      return Resource._newFromFactory(API_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -221,21 +223,12 @@ export class Api extends Resource {
     Node.of(this).description = "A REST API endpoint";
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Add a inflight handler to the api for GET requests on the given path.
    * @param path The path to handle GET requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public get(
     path: string,
@@ -245,7 +238,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -253,6 +246,7 @@ export class Api extends Resource {
    * @param path The path to handle POST requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public post(
     path: string,
@@ -262,7 +256,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -270,6 +264,7 @@ export class Api extends Resource {
    * @param path The path to handle PUT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public put(
     path: string,
@@ -279,7 +274,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -287,6 +282,7 @@ export class Api extends Resource {
    * @param path The path to handle DELETE requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public delete(
     path: string,
@@ -296,7 +292,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -304,6 +300,7 @@ export class Api extends Resource {
    * @param path The path to handle PATCH requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public patch(
     path: string,
@@ -313,7 +310,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -321,6 +318,7 @@ export class Api extends Resource {
    * @param path The path to handle OPTIONS requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public options(
     path: string,
@@ -330,7 +328,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -338,6 +336,7 @@ export class Api extends Resource {
    * @param path The path to handle HEAD requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public head(
     path: string,
@@ -347,7 +346,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -355,6 +354,7 @@ export class Api extends Resource {
    * @param path The path to handle CONNECT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
   public connect(
     path: string,
@@ -364,7 +364,7 @@ export class Api extends Resource {
     path;
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
   /**
    * Validating path:

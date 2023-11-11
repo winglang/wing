@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -22,6 +21,7 @@ export interface CounterProps {
 /**
  * A distributed atomic counter.
  * @inflight `@winglang/sdk.cloud.ICounterClient`
+ * @abstract
  */
 export class Counter extends Resource {
   /**
@@ -31,7 +31,7 @@ export class Counter extends Resource {
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     if (new.target === Counter) {
-      return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
+      return Resource._newFromFactory(COUNTER_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -40,16 +40,6 @@ export class Counter extends Resource {
     Node.of(this).description = "A distributed atomic counter";
 
     this.initial = props.initial ?? 0;
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
   }
 }
 

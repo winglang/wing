@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -41,6 +42,7 @@ export interface WebsiteDomainOptions {
  * A cloud static website.
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
+ * @abstract
  */
 export class Website extends Resource implements IWebsite {
   /** @internal */
@@ -51,7 +53,7 @@ export class Website extends Resource implements IWebsite {
 
   constructor(scope: Construct, id: string, props: WebsiteProps) {
     if (new.target === Website) {
-      return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
+      return Resource._newFromFactory(WEBSITE_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -66,16 +68,6 @@ export class Website extends Resource implements IWebsite {
     this._domain = props.domain;
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Absolute local path to the website's static files.
    */
@@ -85,9 +77,10 @@ export class Website extends Resource implements IWebsite {
 
   /**
    * The website's url.
+   * @abstract
    */
   public get url(): string {
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**
@@ -113,12 +106,13 @@ export class Website extends Resource implements IWebsite {
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
    * @param options configure the file's options
+   * @abstract
    */
   public addFile(path: string, data: string, options?: AddFileOptions): string {
     path;
     data;
     options;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 }
 

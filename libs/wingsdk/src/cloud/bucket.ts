@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
 
@@ -27,6 +28,7 @@ export interface BucketProps {
  * A cloud object store.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @abstract
  */
 export class Bucket extends Resource {
   /** @internal */
@@ -34,7 +36,7 @@ export class Bucket extends Resource {
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {
-      return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
+      return Resource._newFromFactory(BUCKET_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -43,26 +45,17 @@ export class Bucket extends Resource {
     Node.of(this).description = "A cloud object store";
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Add a file to the bucket that is uploaded when the app is deployed.
    *
    * TODO: In the future this will support uploading any `Blob` type or
    * referencing a file from the local filesystem.
+   * @abstract
    */
   public addObject(key: string, body: string): void {
     key;
     body;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 
   /**

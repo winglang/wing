@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { IResource, Node, Resource } from "../std";
 
 /**
@@ -30,6 +29,7 @@ export interface OnDeployProps extends FunctionProps {
  * Run code every time the app is deployed.
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
+ * @abstract
  */
 export class OnDeploy extends Resource {
   constructor(
@@ -39,13 +39,7 @@ export class OnDeploy extends Resource {
     props: OnDeployProps = {}
   ) {
     if (new.target === OnDeploy) {
-      return App.of(scope).newAbstract(
-        ON_DEPLOY_FQN,
-        scope,
-        id,
-        handler,
-        props
-      );
+      return Resource._newFromFactory(ON_DEPLOY_FQN, scope, id, handler, props);
     }
 
     super(scope, id);
@@ -55,16 +49,6 @@ export class OnDeploy extends Resource {
 
     handler;
     props;
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
   }
 }
 

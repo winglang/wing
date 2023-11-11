@@ -45,6 +45,7 @@ export interface FunctionProps {
  * A function.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
+ * @abstract
  */
 export class Function extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
@@ -61,7 +62,7 @@ export class Function extends Resource implements IInflightHost {
     props: FunctionProps = {}
   ) {
     if (new.target === Function) {
-      return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
+      return Resource._newFromFactory(FUNCTION_FQN, scope, id, handler, props);
     }
 
     super(scope, id);
@@ -97,16 +98,6 @@ export class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
   }
 
   /**

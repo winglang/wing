@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Duration, IResource, Node, Resource } from "../std";
 
 /**
@@ -30,11 +30,12 @@ export interface QueueProps {
  * A queue.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @abstract
  */
 export class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     if (new.target === Queue) {
-      return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
+      return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -45,18 +46,9 @@ export class Queue extends Resource {
     props;
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Create a function to consume messages from this queue.
+   * @abstract
    */
   public setConsumer(
     handler: IQueueSetConsumerHandler,
@@ -64,7 +56,7 @@ export class Queue extends Resource {
   ): Function {
     handler;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 }
 

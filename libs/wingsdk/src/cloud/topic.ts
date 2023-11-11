@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { IResource, Node, Resource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
@@ -15,11 +15,12 @@ export interface TopicProps {}
  * A topic.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
+ * @abstract
  */
 export class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     if (new.target === Topic) {
-      return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
+      return Resource._newFromFactory(TOPIC_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -30,18 +31,9 @@ export class Topic extends Resource {
     props;
   }
 
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
   /**
    * Run an inflight whenever an message is published to the topic.
+   * @abstract
    */
   public onMessage(
     inflight: ITopicOnMessageHandler,
@@ -49,7 +41,7 @@ export class Topic extends Resource {
   ): Function {
     inflight;
     props;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 }
 

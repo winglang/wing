@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -54,6 +54,7 @@ export interface TableProps {
 /**
  * A NoSQL database table that can be used to store and query data.
  * @inflight `@winglang/sdk.ex.ITableClient`
+ * @abstract
  */
 export class Table extends Resource {
   /**
@@ -71,7 +72,7 @@ export class Table extends Resource {
 
   constructor(scope: Construct, id: string, props: TableProps) {
     if (new.target === Table) {
-      return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
+      return Resource._newFromFactory(TABLE_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -95,23 +96,14 @@ export class Table extends Resource {
     this.columns = props.columns;
   }
 
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
   /**
    * Add a row to the table that is created when the app is deployed.
+   * @abstract
    */
   public addRow(key: string, row: Json): void {
     key;
     row;
-    throw new Error("proxy");
+    throw new AbstractMemberError();
   }
 }
 

@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -12,27 +11,18 @@ export const REDIS_FQN = fqnForType("ex.Redis");
  * A cloud redis db.
  *
  * @inflight `@winglang/sdk.ex.IRedisClient`
+ * @abstract
  */
 export class Redis extends Resource {
   constructor(scope: Construct, id: string) {
     if (new.target === Redis) {
-      return App.of(scope).newAbstract(REDIS_FQN, scope, id);
+      return Resource._newFromFactory(REDIS_FQN, scope, id);
     }
 
     super(scope, id);
 
     Node.of(this).title = "Redis";
     Node.of(this).description = "A Redis server";
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
   }
 }
 

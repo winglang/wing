@@ -16,7 +16,6 @@ import {
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -51,6 +50,7 @@ export interface DynamodbTableProps {
  * A cloud Dynamodb table.
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
+ * @abstract
  */
 export class DynamodbTable extends Resource {
   /**
@@ -60,7 +60,7 @@ export class DynamodbTable extends Resource {
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
     if (new.target === DynamodbTable) {
-      return App.of(scope).newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
+      return Resource._newFromFactory(DYNAMODB_TABLE_FQN, scope, id, props);
     }
 
     super(scope, id);
@@ -72,16 +72,6 @@ export class DynamodbTable extends Resource {
       throw new Error("Dynamodb table name is not defined");
     }
     this.name = props.name;
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
   }
 }
 

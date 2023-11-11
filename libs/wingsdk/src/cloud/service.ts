@@ -35,6 +35,7 @@ export interface ServiceProps {
  * A long-running service.
  *
  * @inflight `@winglang/sdk.cloud.IServiceClient`
+ * @abstract
  */
 export class Service extends Resource implements IInflightHost {
   /**
@@ -51,7 +52,7 @@ export class Service extends Resource implements IInflightHost {
     props: ServiceProps = {}
   ) {
     if (new.target === Service) {
-      return App.of(scope).newAbstract(SERVICE_FQN, scope, id, handler, props);
+      return Resource._newFromFactory(SERVICE_FQN, scope, id, handler, props);
     }
 
     super(scope, id);
@@ -116,16 +117,6 @@ export class Service extends Resource implements IInflightHost {
    */
   public get env(): Record<string, string> {
     return { ...this._env };
-  }
-
-  /** @internal */
-  public _toInflight(): string {
-    throw new Error("proxy");
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    throw new Error("proxy");
   }
 }
 
