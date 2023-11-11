@@ -64,8 +64,8 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
 
 ../../../examples/tests/error/target/test/repeat_construct_id.test.wsim.[REDACTED].tmp/.wing/preflight.js:11
        super($scope, $id);
-       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, \\"cloud.Bucket\\");
->>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, \\"cloud.Bucket\\");
+       const bucket1 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",cloud.Bucket,this, \\"cloud.Bucket\\");
+>>     const bucket2 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",cloud.Bucket,this, \\"cloud.Bucket\\");
      }
    }
 
@@ -87,8 +87,8 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
 
 ../../../examples/tests/error/target/test/repeat_construct_id2.test.wsim.[REDACTED].tmp/.wing/preflight.js:14
        });
-       const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
->>     const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
+       const bucket1 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",cloud.Bucket,this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
+>>     const bucket2 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",cloud.Bucket,this, String.raw({ raw: [\\"\\", \\"\\"] }, (make_name())));
      }
    }
 

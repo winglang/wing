@@ -88,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
     class MyClosure extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
       }
       static _toInflightType(context) {
         return `

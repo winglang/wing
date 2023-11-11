@@ -262,9 +262,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter", { initial: 100 });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
+    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter", { initial: 100 });
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }

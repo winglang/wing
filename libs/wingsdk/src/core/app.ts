@@ -226,17 +226,10 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // first check if overrides have been provided
-    for (const override of this._newInstanceOverrides) {
-      const instance = override(fqn, scope, id, ...args);
-      if (instance) {
-        return instance;
-      }
-    }
     // next delegate to "tryNew", which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
-    const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
+      const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
       throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
@@ -271,6 +264,14 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
+    // first check if overrides have been provided
+    for (const override of this._newInstanceOverrides) {
+      const instance = override(fqn, scope, id, ...args);
+      if (instance) {
+        return instance;
+      }
+    }
+
     const type = this.typeForFqn(fqn);
     if (!type) {
       return undefined;

@@ -743,6 +743,13 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
+error: Cannot instantiate abstract class \\"Resource\\"
+    --> ../../../examples/tests/invalid/class.test.w:165:1
+    |
+165 | new std.Resource();
+    | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.test.w:31:14
    |

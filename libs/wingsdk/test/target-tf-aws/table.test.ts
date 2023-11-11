@@ -13,7 +13,7 @@ import {
 
 test("default table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  ex.Table._newTable(app, "Table", {
+  new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
@@ -26,7 +26,7 @@ test("default table behavior", () => {
 
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const table = ex.Table._newTable(app, "Table", {
+  const table = new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
@@ -44,7 +44,7 @@ test("function with a table binding", () => {
       },
     }
   );
-  cloud.Function._newFunction(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
