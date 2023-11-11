@@ -3,7 +3,7 @@ import { relative, resolve, sep, join } from "node:path";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 
-export interface EnhancedErrorOptions {
+export interface PrettyPrintErrorOptions {
   /**
    * The source entrypoint. If provided, the stack trace will only show source files that are in the same directory or its subdirectories.
    * It will also exclude files in a `target` subdirectory.
@@ -26,26 +26,45 @@ export interface EnhancedErrorOptions {
  */
 export async function prettyPrintError(
   error: Error | string,
-  options?: EnhancedErrorOptions
+  options?: PrettyPrintErrorOptions
 ): Promise<string> {
-  const chalk = options?.chalk;
-  const isColor = options?.chalk !== undefined;
   const StackTracey = await import("stacktracey").then((m) => m.default);
+
+  const chalk = options?.chalk;
+  const fRed = (s: string) => (chalk ? chalk.red(s) : s);
+  const fBold = (s: string) => (chalk ? chalk.bold(s) : s);
+  const fDim = (s: string) => (chalk ? chalk.dim(s) : s);
 
   let st: StackTracey | undefined;
   let originalMessage = "";
+  console.log(error);
+  console.log(JSON.stringify(error));
   if (typeof error === "string") {
+    if (error === "") {
+      return "";
+    }
     st = new StackTracey(error);
-    // assuming the string is a full stacktrace, extract the message from the first line
-    originalMessage = error.split("\n")[0] ?? "";
+    if (st.items.length > 0) {
+      // we have a stack trace! extract the message (everything before a line that starts with "    at")
+      const lines = error.split("\n");
+      const idx = lines.findIndex((line) => line.startsWith("    at"));
+      if (idx !== -1) {
+        originalMessage = lines.slice(0, idx).join("\n");
+        // the message probably starts with "<ErrorType>: ", remove it
+        originalMessage = originalMessage.replace(/^[^:]+: /, "");
+      } else {
+        originalMessage = error;
+      }
+    } else {
+      originalMessage = error;
+    }
   } else {
     error = rewriteCommonError(error);
     st = new StackTracey(error.stack);
     originalMessage = error.message;
   }
-  const message = !isColor
-    ? `[ERROR] ${originalMessage}`
-    : chalk!.bold.red("[ERROR] ") + chalk!.red(originalMessage);
+
+  const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
 
   st = await st.clean().withSourcesAsync();
 
@@ -102,10 +121,12 @@ export async function prettyPrintError(
 
     let startLine = Math.max(originLine - 3, 1);
     let finishLine = originLine;
+    const maxDigits = finishLine.toString().length;
 
     // print line and its surrounding lines
     output.push(
-      `${getRelativePath(sourceFile.path)}:${originLine}:${originColumn}`
+      " ".repeat(maxDigits + 1) +
+        `--> ${getRelativePath(sourceFile.path)}:${originLine}:${originColumn}`
     );
 
     let linesOfInterest = originLines;
@@ -115,29 +136,23 @@ export async function prettyPrintError(
     linesOfInterest.push(" ".repeat(originColumn) + "^");
     linesOfInterest = dedent(linesOfInterest);
 
-    const maxDigits = finishLine.toString().length;
-
     let x = 0;
     for (let i = startLine; i <= finishLine; i++) {
       const interestingLine = i === originLine;
-      const lineNumberBasic = `${i}`.padStart(maxDigits, " ") + "| ";
-      let lineNumber = lineNumberBasic;
-      if (isColor) {
-        if (interestingLine) {
-          lineNumber = chalk!.bold.red(lineNumberBasic);
-        } else {
-          lineNumber = chalk!.dim(lineNumberBasic);
-        }
+      let lineNumber = interestingLine
+        ? `${i} | `
+        : " ".repeat(maxDigits) + " | ";
+
+      if (interestingLine) {
+        lineNumber = fBold(fRed(lineNumber));
       }
+
       let lineText = linesOfInterest[x++];
       output.push(lineNumber + lineText);
 
       if (interestingLine) {
         // last line is the caret
-        output.push(
-          " ".repeat(lineNumberBasic.length - 1) +
-            (isColor ? chalk!.red(linesOfInterest[x]) : linesOfInterest[x])
-        );
+        output.push(" ".repeat(maxDigits) + " |" + fRed(linesOfInterest[x]));
       }
     }
   }
@@ -163,10 +178,7 @@ export async function prettyPrintError(
   const outputText = output.length > 0 ? "\n" + output.join("\n") : "";
   const extraStack =
     traceWithSources.length > 0
-      ? "\n" +
-        (isColor
-          ? chalk!.dim(traceWithSources.map(printItem).join("\n"))
-          : traceWithSources.map(printItem).join("\n"))
+      ? "\n" + fDim(traceWithSources.map(printItem).join("\n"))
       : "";
 
   // add the rest of the stack trace from the same file
@@ -192,7 +204,7 @@ export function rewriteCommonError(error: Error): Error {
   return error;
 }
 
-function dedent(lines: string[]) {
+export function dedent(lines: string[]) {
   // first, replace all tabs with 2 spaces
   lines = lines.map((line) => line.replace(/\t/g, "  "));
 
@@ -200,7 +212,7 @@ function dedent(lines: string[]) {
   let minIndent = Infinity;
   for (const line of lines) {
     const match = line.match(/^ */);
-    if (match) {
+    if (match && match[0].length !== line.length) {
       minIndent = Math.min(minIndent, match[0].length);
     }
   }

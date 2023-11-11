@@ -47,7 +47,6 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     platform: "node",
     target: "node18",
     write: false,
-    minifyWhitespace: true,
   });
 
   if (esbuild.errors.length > 0) {
@@ -55,9 +54,6 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 
-  // the bundled contains line comments with file paths, which are not useful for us, especially
-  // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
-  // this, so we simply filter those out from the bundle.
   const output = esbuild.outputFiles[1];
   let fileContents = new TextDecoder().decode(output.contents);
 
