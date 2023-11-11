@@ -38,7 +38,7 @@ exports[`basic function 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -277,7 +277,7 @@ exports[`basic function with custom log retention 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -518,7 +518,7 @@ exports[`basic function with environment variables 1`] = `
           "variables": {
             "BOOM": "BAM",
             "FOO": "BAR",
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -751,7 +751,7 @@ exports[`basic function with infinite log retention 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -982,7 +982,7 @@ exports[`basic function with memory size specified 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1221,7 +1221,7 @@ exports[`basic function with timeout explicitly set 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1460,7 +1460,7 @@ exports[`function name valid 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "The-Mighty_Function-01-c86057f3",
           },
         },
@@ -1699,7 +1699,7 @@ exports[`replace invalid character from function name 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": "--enable-source-maps",
+            "NODE_OPTIONS": " --enable-source-maps",
             "WING_FUNCTION_NAME": "The-Mighty-Function-c86ccf73",
           },
         },
