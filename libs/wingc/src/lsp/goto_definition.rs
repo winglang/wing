@@ -67,15 +67,6 @@ pub fn on_goto_definition(params: GotoDefinitionParams) -> Vec<LocationLink> {
 						let path = &path[1..path.len() - 1];
 
 						if let Ok(extern_uri) = uri.join(path) {
-							// make sure it's not a directory
-							if extern_uri
-								.to_file_path()
-								.expect("LSP only works on real filesystems")
-								.is_dir()
-							{
-								return vec![];
-							}
-
 							let node_start = node.start_position();
 							let node_end = node.end_position();
 
