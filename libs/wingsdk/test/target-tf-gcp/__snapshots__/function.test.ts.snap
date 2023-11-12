@@ -2,6 +2,11 @@
 
 exports[`basic function 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -12,7 +17,7 @@ exports[`basic function 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
@@ -133,6 +138,29 @@ exports[`basic function 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -187,6 +215,11 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -200,7 +233,7 @@ exports[`basic function with environment variables 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
@@ -321,6 +354,29 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -377,6 +433,11 @@ exports[`basic function with memory beyond the allowed range 1`] = `"Memory must
 
 exports[`basic function with memory size specified 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -387,7 +448,7 @@ exports[`basic function with memory size specified 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 60,
@@ -508,6 +569,29 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -564,6 +648,11 @@ exports[`basic function with timeout beyond the allowed range 1`] = `"Timeout mu
 
 exports[`basic function with timeout explicitly set 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_cloudfunctions_function": {
       "Function_DefaultFunction_81B206D7": {
@@ -574,7 +663,7 @@ exports[`basic function with timeout explicitly set 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 30,
@@ -694,6 +783,29 @@ exports[`basic function with timeout explicitly set 2`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "google": {
                 "constructInfo": {

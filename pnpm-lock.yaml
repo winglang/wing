@@ -1232,6 +1232,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      google-auth-library:
+        specifier: ^8.9.0
+        version: 8.9.0
       ioredis:
         specifier: ^5.3.2
         version: 5.3.2
@@ -14019,7 +14022,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231103
+      typescript: 5.4.0-dev.20231112
     dev: true
 
   /dset@3.1.2:
@@ -23494,8 +23497,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231103:
-    resolution: {integrity: sha512-XOrpoRg1DWN7ei3AFomL+UrpRBseaODTiWWRfZd6AVeT7ODLjQZ+CDUxK6Aj2XPvEthIOaqijvwIxZe6vlNwlQ==}
+  /typescript@5.4.0-dev.20231112:
+    resolution: {integrity: sha512-K7RH4eFyxJG7LkKWU0m7WdQrNRNz8yVkt2zW2tT2zfiUzIN2jbh2JLuztSqCsfqMNU5KduO7NvKaKK4QIvGY/Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

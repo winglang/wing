@@ -252,7 +252,6 @@ export class Util {
     options?: RequestOptions
   ): Promise<Response> {
     return this.fetch(url, {
-      ...defaultOptions,
       ...options,
       method: HttpMethod.GET,
     });
@@ -269,7 +268,6 @@ export class Util {
     options?: RequestOptions
   ): Promise<Response> {
     return this.fetch(url, {
-      ...defaultOptions,
       ...options,
       method: HttpMethod.POST,
     });
@@ -286,7 +284,6 @@ export class Util {
     options?: RequestOptions
   ): Promise<Response> {
     return this.fetch(url, {
-      ...defaultOptions,
       ...options,
       method: HttpMethod.PUT,
     });
@@ -303,7 +300,6 @@ export class Util {
     options?: RequestOptions
   ): Promise<Response> {
     return this.fetch(url, {
-      ...defaultOptions,
       ...options,
       method: HttpMethod.PATCH,
     });
@@ -321,7 +317,6 @@ export class Util {
     options?: RequestOptions
   ): Promise<Response> {
     return this.fetch(url, {
-      ...defaultOptions,
       ...options,
       method: HttpMethod.DELETE,
     });

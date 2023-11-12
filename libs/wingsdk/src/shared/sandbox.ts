@@ -95,7 +95,7 @@ export class Sandbox {
     }
 
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-    const bundle = createBundle(this.entrypoint, workdir);
+    const bundle = createBundle(this.entrypoint, [], workdir);
     const code = await readFile(bundle.entrypointPath, "utf-8");
     const bundleSize = Buffer.byteLength(code, "utf-8");
     if (process.env.DEBUG) {
