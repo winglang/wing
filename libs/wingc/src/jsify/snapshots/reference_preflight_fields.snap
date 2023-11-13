@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
       s: str;
       b: cloud.Bucket;
 
-      init() { 
+      new() { 
         this.s = "hello"; 
         this.b = new cloud.Bucket();
       }

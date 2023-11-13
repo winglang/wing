@@ -8,13 +8,13 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
     class YourType {
       pub b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
     class MyType {
       pub y: YourType;
-      init() {
+      new() {
         this.y = new YourType();
       }
     }

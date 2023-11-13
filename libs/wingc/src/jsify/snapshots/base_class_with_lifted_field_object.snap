@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }

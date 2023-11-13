@@ -7,7 +7,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     inflight class MyType {
       field: str;
-      init() { this.field = "hi"; }
+      new() { this.field = "hi"; }
   
       getField(): str {
         return this.field;

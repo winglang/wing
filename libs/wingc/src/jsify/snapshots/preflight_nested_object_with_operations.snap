@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
     let b = new cloud.Bucket();
     class A {
       pub bucky: cloud.Bucket;
-      init() {
+      new() {
         this.bucky = b;
       }
     }

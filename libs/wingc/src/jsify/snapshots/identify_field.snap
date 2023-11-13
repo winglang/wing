@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
     class A {
       bucket_this: cloud.Bucket;
 
-      init() { this.bucket_this = new cloud.Bucket(); }
+      new() { this.bucket_this = new cloud.Bucket(); }
 
       inflight foo() {
         (this.bucket_this).put("hello", "world");

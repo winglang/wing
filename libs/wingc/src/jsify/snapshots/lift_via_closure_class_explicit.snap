@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     class MyClosure {
       q: cloud.Queue;
-      init() {
+      new() {
         this.q = new cloud.Queue();
       }
 

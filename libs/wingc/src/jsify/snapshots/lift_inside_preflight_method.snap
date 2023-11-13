@@ -15,7 +15,7 @@ source: libs/wingc/src/jsify/tests.rs
           };
       }
     
-      init() {
+      new() {
         this.defineBucket("b1");
         this.defineBucket("b2");
       }

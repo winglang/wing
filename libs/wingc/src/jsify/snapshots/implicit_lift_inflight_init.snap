@@ -11,11 +11,11 @@ source: libs/wingc/src/jsify/tests.rs
       c: cloud.Counter;
       inflight myField2: str;
 
-      init() {
+      new() {
         this.c = new cloud.Counter();
       }
 
-      inflight init() {
+      inflight new() {
         this.myField2 = "hello";
       }
 

@@ -12,7 +12,7 @@ class Another {
   pub myField: str;
   pub first: First;
 
-  init () {
+  new() {
     this.myField = "hello!";
     this.first = new First();
   }

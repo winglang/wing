@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
       pub name: str;
       pub last: str;
 
-      init() {
+      new() {
         this.name = "hello";
         this.last = "world";
       }

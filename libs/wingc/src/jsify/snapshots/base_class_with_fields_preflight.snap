@@ -7,14 +7,14 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected f: str;
-      init() {
+      new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       g: str;
-      init() {
+      new() {
         this.g = "world";
       }
 

@@ -1771,7 +1771,7 @@ S.
 		r#"
 class S {
   a: num;
-  init() { this.a = 2; }
+  new() { this.a = 2; }
 }
 let x = new S();
 x.
@@ -1785,7 +1785,7 @@ x.
 		r#"
 class S {
   a: num;
-  init() { 
+  new() { 
     this.
        //^
   }
