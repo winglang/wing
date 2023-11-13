@@ -618,10 +618,10 @@ error: Reserved method name. Initializers are declared with \\"init\\"
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:17
+   --> ../../../examples/tests/invalid/class.test.w:17:16
    |
-17 |   init(foo: str)
-   |                 ^ Expected block
+17 |   new(foo: str)
+   |                ^ Expected block
 
 
 error: Preflight field \\"x\\" is not initialized
@@ -1812,7 +1812,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 "error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
-6 | /   inflight init() {
+6 | /   inflight new() {
 7 | | 
 8 | |   }
   | \\\\---^ Multiple inflight initializers defined in class Foo
@@ -2892,29 +2892,29 @@ exports[`resource_init.test.w 1`] = `
 "error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
-3 |   init() {}
-  |   ^^^^^^^^^ Multiple initializers defined in class R
+3 |   new() {}
+  |   ^^^^^^^^ Multiple initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
-6 |   inflight init() {}
-  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+6 |   inflight new() {}
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
-9 |   inflight init(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+9 |   inflight new(x: num) {}
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Inflight initializers cannot have parameters
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:16
+  --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
-9 |   inflight init(x: num) {}
-  |                ^^^^^^^^ Inflight initializers cannot have parameters
+9 |   inflight new(x: num) {}
+  |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
  
