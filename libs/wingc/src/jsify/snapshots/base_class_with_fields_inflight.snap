@@ -7,14 +7,14 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected inflight f: str;
-      inflight init() {
+      inflight new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       inflight g: str;
-      inflight init() {
+      inflight new() {
         this.g = "world";
       }
 

@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected f: str;
-      init() {
+      new() {
         this.f = x;
       }
     }

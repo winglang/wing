@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Capture {
       q: cloud.Queue;
-      init() { this.q = new cloud.Queue(); }
+      new() { this.q = new cloud.Queue(); }
 
       inflight foo() {
         b.list();

@@ -14,7 +14,7 @@ assert(z == 2);
 class R {
   pub var f: num;
   f1: num;
-  init() {
+  new() {
     // Initialize fields in `init` but in an inner scope to make sure 
     // we treat the special case of `this` access from init correctly at all scope levels
     if true {

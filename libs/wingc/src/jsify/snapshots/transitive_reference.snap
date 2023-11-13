@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
     class MyType {
       b: cloud.Bucket;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
 

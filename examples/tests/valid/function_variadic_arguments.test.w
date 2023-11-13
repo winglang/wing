@@ -43,13 +43,13 @@ arityFunc(1, true, "a", "b", "c", "d"); // variadic args should be considered co
 class A {
   pub message: str;
 
-  init(msg: str) {
+  new(msg: str) {
     this.message = msg;
   }
 }
 
 class B extends A {
-  init(msg: str) {
+  new(msg: str) {
     this.message = msg;
   }
 }

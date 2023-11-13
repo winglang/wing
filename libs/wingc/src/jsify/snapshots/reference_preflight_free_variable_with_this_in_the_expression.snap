@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Foo {
       name: str;
       
-      init() {
+      new() {
         this.name = "my_object";
       }
     

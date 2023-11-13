@@ -3,7 +3,7 @@ Inflight class definition
 ================================================================================
 
 inflight class A {
-    init() {}
+    new() {}
     inflight do_something() {}
     a_member: str;
     var b_member: num;
@@ -77,8 +77,8 @@ Preflight class definition
 ================================================================================
 
 class A {
-    init() {}
-    inflight init() {}
+    new() {}
+    inflight new() {}
     preflight_func() {}
     pub preflight_func2() {}
     inflight inflight_func() {}

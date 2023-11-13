@@ -261,11 +261,11 @@ struct Data {
 }
 
 class T {
-	init() {
+	new() {
 		Data { field: "" };
 	}
 
-	inflight init() {
+	inflight new() {
 		Data { field: "" };
           //^
 	}
@@ -280,7 +280,7 @@ class T {
   stuff: num;
 //-----
 
-  init() {
+	new() {
     this.stuff = 1;
          //^
   }

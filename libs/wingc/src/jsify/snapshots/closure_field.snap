@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
     class MyResource {
       closure: inflight (str): str;
     
-      init() {
+      new() {
         this.closure = inflight (s: str): str => {
           globalBucket.list();
           return "hello";

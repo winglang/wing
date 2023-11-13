@@ -171,7 +171,7 @@ class ReplayableQueue {
   bucket: cloud.Bucket; 
   counter: cloud.Counter;
   
-  init() {
+  new() {
     this.queue = new cloud.Queue();
     this.bucket = new cloud.Bucket();
     this.counter = new cloud.Counter();
@@ -208,7 +208,7 @@ inflight () => {
     name: str;
     age: num;
 
-    init(name: str, age: num) {
+    new(name: str, age: num) {
       this.name = name;
       this.age = age;
     }

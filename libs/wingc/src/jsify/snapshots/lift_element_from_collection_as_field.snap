@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
     class Foo {
       arr: Array<cloud.Bucket>;
-      init() {
+      new() {
         this.arr = [new cloud.Bucket()];
       }
 

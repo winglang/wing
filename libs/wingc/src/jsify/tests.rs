@@ -34,7 +34,7 @@ fn free_inflight_obj_from_inflight() {
       let y = "hello";
 
       class A {
-        init() {
+        new() {
           log(y);
         }
       }
@@ -70,7 +70,7 @@ fn static_local_inflight_class() {
       }
 
       class B {
-        init() {
+        new() {
           A.foo();
         }
       }
@@ -248,7 +248,7 @@ fn preflight_nested_object_with_operations() {
     let b = new cloud.Bucket();
     class A {
       pub bucky: cloud.Bucket;
-      init() {
+      new() {
         this.bucky = b;
       }
     }
@@ -287,7 +287,7 @@ fn inflight_field() {
 		r#"
     class A {
       inflight x: str;
-      inflight init() {
+      inflight new() {
         this.x = "hello";
       }
 
@@ -306,7 +306,7 @@ fn reference_inflight_field() {
     class Foo {
       inflight x: str;
       
-      inflight init() {
+      inflight new() {
         this.x = "hello";
       }
     
@@ -325,7 +325,7 @@ fn reference_preflight_field() {
     class Foo {
       x: str;
       
-      init() {
+      new() {
         this.x = "world";
       }
     
@@ -344,7 +344,7 @@ fn reference_preflight_field_call_independent_method() {
     class Foo {
       arr: Array<str>;
       
-      init() {
+      new() {
         this.arr = ["hello", "world"];
       }
     
@@ -366,7 +366,7 @@ fn reference_preflight_free_variable_with_this_in_the_expression() {
     class Foo {
       name: str;
       
-      init() {
+      new() {
         this.name = "my_object";
       }
     
@@ -457,7 +457,7 @@ fn capture_type_inflight_class_sibling_from_init() {
       class Foo { }
       let x = 12;
       class Bar {
-        init() {
+        new() {
           x;
           new Foo();
         }
@@ -564,7 +564,7 @@ fn capture_identifier_from_preflight_scope_with_nested_object() {
 
     class Foo {
       pub b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
@@ -695,7 +695,7 @@ fn preflight_value_field() {
       pub name: str;
       pub last: str;
 
-      init() {
+      new() {
         this.name = "hello";
         this.last = "world";
       }
@@ -718,7 +718,7 @@ fn inflight_field_from_inflight() {
 		r#"
     class MyType {
       inflight s: str;
-      inflight init() {
+      inflight new() {
         this.s = "hey there!";
       }
       inflight foo() {
@@ -736,13 +736,13 @@ fn nested_preflight_operation() {
     bring cloud;
     class YourType {
       pub b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
     class MyType {
       pub y: YourType;
-      init() {
+      new() {
         this.y = new YourType();
       }
     }
@@ -763,7 +763,7 @@ fn nested_inflight_after_preflight_operation() {
     bring cloud;
     class YourType {
       pub inflight b: str;
-      inflight init() {
+      inflight new() {
         this.b = "hello";
       }
     }
@@ -783,7 +783,7 @@ fn var_inflight_field_from_inflight() {
 		r#"
     class MyType {
       inflight var s: str;
-      inflight init() {
+      inflight new() {
         this.s = "hey there!";
       }
       inflight foo() {
@@ -803,7 +803,7 @@ fn preflight_object_through_property() {
 
     class MyType {
       pub b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
@@ -926,7 +926,7 @@ fn reference_preflight_fields() {
       s: str;
       b: cloud.Bucket;
 
-      init() { 
+      new() { 
         this.s = "hello"; 
         this.b = new cloud.Bucket();
       }
@@ -954,7 +954,7 @@ fn transitive_reference() {
 		class MyType {
       b: cloud.Bucket;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
 
@@ -1090,7 +1090,7 @@ fn inline_inflight_class() {
       b: cloud.Bucket;
       q: cloud.Queue;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
         this.q = new cloud.Queue();
 
@@ -1109,7 +1109,7 @@ fn inflight_field_from_inflight_class() {
 		r#"
     inflight class MyType {
       field: str;
-      init() { this.field = "hi"; }
+      new() { this.field = "hi"; }
   
       getField(): str {
         return this.field;
@@ -1340,7 +1340,7 @@ fn lift_element_from_collection_as_field() {
     bring cloud;
     class Foo {
       arr: Array<cloud.Bucket>;
-      init() {
+      new() {
         this.arr = [new cloud.Bucket()];
       }
 
@@ -1373,7 +1373,7 @@ fn inflight_constructor() {
     class Foo {
       inflight x: str;
 
-      inflight init() {
+      inflight new() {
         this.x = "hello";
       }
 
@@ -1517,14 +1517,14 @@ fn base_class_with_fields_preflight() {
 		r#"
     class Base {
       protected f: str;
-      init() {
+      new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       g: str;
-      init() {
+      new() {
         this.g = "world";
       }
 
@@ -1543,14 +1543,14 @@ fn base_class_with_fields_inflight() {
 		r#"
     class Base {
       protected inflight f: str;
-      inflight init() {
+      inflight new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       inflight g: str;
-      inflight init() {
+      inflight new() {
         this.g = "world";
       }
 
@@ -1571,7 +1571,7 @@ fn base_class_with_lifted_fields() {
 
     class Base {
       protected f: str;
-      init() {
+      new() {
         this.f = x;
       }
     }
@@ -1593,7 +1593,7 @@ fn fails_base_class_with_lifted_field_object_unqualified() {
 
     class Base {
       b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
@@ -1616,7 +1616,7 @@ fn base_class_with_lifted_field_object() {
 
     class Base {
       protected b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
     }
@@ -1638,7 +1638,7 @@ fn base_class_lift_indirect() {
 
     class Base {
       b: cloud.Bucket;
-      init() {
+      new() {
         this.b = new cloud.Bucket();
       }
 
@@ -1685,7 +1685,7 @@ fn indirect_capture() {
 
     class Capture {
       q: cloud.Queue;
-      init() { this.q = new cloud.Queue(); }
+      new() { this.q = new cloud.Queue(); }
 
       inflight foo() {
         b.list();
@@ -1712,7 +1712,7 @@ fn lift_via_closure_class_explicit() {
 
     class MyClosure {
       q: cloud.Queue;
-      init() {
+      new() {
         this.q = new cloud.Queue();
       }
 
@@ -1740,7 +1740,7 @@ fn lift_this() {
 		r#"
     class Foo {
       inflight x: num;
-      inflight init() {
+      inflight new() {
         this.x = 42;
       }
       inflight bar(): num { 
@@ -1852,7 +1852,7 @@ fn closure_field() {
     class MyResource {
       closure: inflight (str): str;
     
-      init() {
+      new() {
         this.closure = inflight (s: str): str => {
           globalBucket.list();
           return "hello";
@@ -1895,7 +1895,7 @@ fn identify_field() {
     class A {
       bucket_this: cloud.Bucket;
 
-      init() { this.bucket_this = new cloud.Bucket(); }
+      new() { this.bucket_this = new cloud.Bucket(); }
 
       inflight foo() {
         (this.bucket_this).put("hello", "world");
@@ -1911,7 +1911,7 @@ fn lift_var_with_this() {
 		r#"
     class Foo {
       pub value: str;
-      init() { this.value = "hello"; }
+      new() { this.value = "hello"; }
     }
 
     let foo_this = new Foo();
@@ -1954,7 +1954,7 @@ fn lift_inside_preflight_method() {
           };
       }
     
-      init() {
+      new() {
         this.defineBucket("b1");
         this.defineBucket("b2");
       }
@@ -1973,11 +1973,11 @@ fn implicit_lift_inflight_init() {
       c: cloud.Counter;
       inflight myField2: str;
 
-      init() {
+      new() {
         this.c = new cloud.Counter();
       }
 
-      inflight init() {
+      inflight new() {
         this.myField2 = "hello";
       }
 

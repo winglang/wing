@@ -7,7 +7,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     class MyType {
       inflight var s: str;
-      inflight init() {
+      inflight new() {
         this.s = "hey there!";
       }
       inflight foo() {

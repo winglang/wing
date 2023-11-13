@@ -79,7 +79,7 @@
   "for"
   "if"
   "in"
-  "init"
+  "new"
   "let"
   "new"
   "return"

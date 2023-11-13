@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
       b: cloud.Bucket;
       q: cloud.Queue;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
         this.q = new cloud.Queue();
 
