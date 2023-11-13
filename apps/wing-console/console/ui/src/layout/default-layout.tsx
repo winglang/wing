@@ -324,7 +324,7 @@ export const DefaultLayout = ({
                     <LeftResizableWidget
                       className={classNames(
                         theme.border4,
-                        "flex-shrink w-80 min-w-[10rem] z-10",
+                        "flex-shrink w-[36rem] min-w-[10rem] z-10",
                         USE_EXTERNAL_THEME_COLOR,
                       )}
                     >

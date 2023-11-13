@@ -22,7 +22,7 @@ import {
   acceptTerms,
   getLicense,
 } from "../utils/terms-and-conditions.js";
-import { Simulator } from "../wingsdk.js";
+import { IFunctionClient, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
@@ -562,6 +562,7 @@ export const createAppRouter = () => {
         const nodes = [
           createMapNodeFromConstructTreeNode(
             shakedTree,
+            nodeMap,
             simulator,
             input?.showTests,
           ),
@@ -576,6 +577,7 @@ export const createAppRouter = () => {
         );
 
         return {
+          nodeMap,
           nodes,
           edges,
         };
@@ -628,6 +630,52 @@ export const createAppRouter = () => {
         });
       },
     ),
+
+    "app.getResourceUI": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const ui = simulator.getResourceUIComponents(input.resourcePath);
+        return ui as Array<{
+          kind: string;
+          label: string;
+          handlerPath: string;
+        }>;
+      }),
+
+    "app.getResourceUiField": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        return {
+          value: await client.invoke(""),
+        };
+      }),
+
+    "app.invokeResourceUiButton": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IFunctionClient;
+        await client.invoke("");
+      }),
   });
 
   return { router };
@@ -675,6 +723,7 @@ export interface MapNode {
 
 function createMapNodeFromConstructTreeNode(
   node: ConstructTreeNode,
+  nodeMap: ConstructTreeNodeMap,
   simulator: Simulator,
   showTests = false,
 ): MapNode {
@@ -689,7 +738,7 @@ function createMapNodeFromConstructTreeNode(
     children: node.children
       ? Object.values(node.children)
           .filter((node) => {
-            if (node.display?.hidden) {
+            if (!isNodeVisible(node.path, nodeMap)) {
               return false;
             }
 
@@ -700,7 +749,12 @@ function createMapNodeFromConstructTreeNode(
             return true;
           })
           .map((node) =>
-            createMapNodeFromConstructTreeNode(node, simulator, showTests),
+            createMapNodeFromConstructTreeNode(
+              node,
+              nodeMap,
+              simulator,
+              showTests,
+            ),
           )
       : undefined,
   };
@@ -710,6 +764,23 @@ export interface MapEdge {
   id: string;
   source: string;
   target: string;
+}
+
+function isNodeVisible(node: string, nodeMap: ConstructTreeNodeMap): boolean {
+  const nodeData = nodeMap.get(node);
+  if (!nodeData) {
+    return false;
+  }
+
+  if (nodeData.display?.hidden) {
+    return false;
+  }
+
+  if (!nodeData.parent) {
+    return true;
+  }
+
+  return isNodeVisible(nodeData.parent, nodeMap);
 }
 
 function createMapEdgesFromConnectionData(
@@ -730,7 +801,10 @@ function createMapEdgesFromConnectionData(
           throw new Error(`Could not find node for resource ${target}`);
         }
 
-        if (sourceNode.display?.hidden || targetNode.display?.hidden) {
+        if (
+          !isNodeVisible(source, nodeMap) ||
+          !isNodeVisible(target, nodeMap)
+        ) {
           return false;
         }
 

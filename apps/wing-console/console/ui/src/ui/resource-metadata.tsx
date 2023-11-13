@@ -3,6 +3,7 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import {
+  AdjustmentsHorizontalIcon,
   ArrowPathRoundedSquareIcon,
   CubeTransparentIcon,
   CursorArrowRaysIcon,
@@ -16,12 +17,14 @@ import {
   getResourceIconComponent,
   Attribute,
   ScrollableArea,
+  Button,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
+import { useCallback, useId, useMemo, useState } from "react";
 
 import { QueueMetadataView } from "../features/queue-metadata-view.js";
 import { ResourceInteractionView } from "../features/resource-interaction-view.js";
+import { trpc } from "../services/trpc.js";
 
 import { BucketMetadata } from "./bucket-metadata.js";
 import { CounterMetadata } from "./counter-metadata.js";
@@ -61,6 +64,75 @@ export interface MetadataNode {
     | undefined;
 }
 
+interface CustomResourceUiFieldItemProps {
+  label: string;
+  handlerPath: string;
+}
+
+const CustomResourceUiFieldItem = ({
+  label,
+  handlerPath,
+}: CustomResourceUiFieldItemProps) => {
+  const field = trpc["app.getResourceUiField"].useQuery({
+    resourcePath: handlerPath,
+  });
+  return <Attribute name={label} value={field.data?.value ?? ""} />;
+};
+
+interface CustomResourceUiButtomItemProps {
+  label: string;
+  handlerPath: string;
+}
+
+const CustomResourceUiButtomItem = ({
+  label,
+  handlerPath,
+}: CustomResourceUiButtomItemProps) => {
+  const { theme } = useTheme();
+  const invokeMutation = trpc["app.invokeResourceUiButton"].useMutation();
+  const invoke = useCallback(() => {
+    invokeMutation.mutate({
+      resourcePath: handlerPath,
+    });
+  }, [handlerPath]);
+
+  const id = useId();
+  return (
+    <div className="pl-4 flex flex-row items-center">
+      <label
+        htmlFor={id}
+        className={classNames("min-w-[100px] invisible", theme.text2)}
+      >
+        {label}
+      </label>
+      <Button id={id} title={label} label={label} onClick={invoke} />
+    </div>
+  );
+};
+
+interface CustomResourceUiItemProps {
+  kind: string;
+  label: string;
+  handlerPath: string;
+}
+
+const CustomResourceUiItem = ({
+  handlerPath,
+  kind,
+  label,
+}: CustomResourceUiItemProps) => {
+  return (
+    <>
+      {kind === "field" && (
+        <CustomResourceUiFieldItem label={label} handlerPath={handlerPath} />
+      )}
+      {kind === "button" && (
+        <CustomResourceUiButtomItem label={label} handlerPath={handlerPath} />
+      )}
+    </>
+  );
+};
+
 export interface MetadataProps {
   node: MetadataNode;
   inbound?: Relationship[];
@@ -76,6 +148,7 @@ export const ResourceMetadata = ({
 }: MetadataProps) => {
   const { theme } = useTheme();
   const [openInspectorSections, setOpenInspectorSections] = useState(() => [
+    "resourceUI",
     "interact",
     "interact-actions",
   ]);
@@ -216,6 +289,10 @@ export const ResourceMetadata = ({
     });
   };
 
+  const resourceUI = trpc["app.getResourceUI"].useQuery({
+    resourcePath: node.path,
+  });
+
   return (
     <ScrollableArea
       overflowY
@@ -241,6 +318,109 @@ export const ResourceMetadata = ({
 
       {node && (
         <>
+          {resourceUI.data && resourceUI.data.length > 0 && (
+            <InspectorSection
+              text="Properties"
+              icon={AdjustmentsHorizontalIcon}
+              open={openInspectorSections.includes("resourceUI")}
+              onClick={() => toggleInspectorSection("resourceUI")}
+              headingClassName="pl-2"
+            >
+              <div className={classNames("border-t", theme.border4)}>
+                <div
+                  className={classNames(
+                    "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
+                    theme.bg3,
+                    theme.text1,
+                  )}
+                >
+                  {resourceUI.data.map((item, index) => (
+                    <CustomResourceUiItem
+                      key={index}
+                      handlerPath={item.handlerPath}
+                      kind={item.kind}
+                      label={item.label}
+                    />
+                  ))}
+                </div>
+              </div>
+            </InspectorSection>
+          )}
+
+          {(node.type.startsWith("@winglang/sdk.cloud") ||
+            node.type.startsWith("@winglang/sdk.redis") ||
+            node.type.startsWith("@winglang/sdk.ex")) && (
+            <>
+              <InspectorSection
+                text={resourceGroup?.groupName || "Interact"}
+                icon={resourceGroup?.icon || CursorArrowRaysIcon}
+                open={openInspectorSections.includes("interact")}
+                onClick={() => toggleInspectorSection("interact")}
+                headingClassName="pl-2"
+              >
+                <div
+                  className={classNames(
+                    "border-t",
+                    theme.border4,
+                    theme.bg3,
+                    theme.text1,
+                  )}
+                >
+                  {resourceGroup?.groupName && (
+                    <>
+                      {node.type === "@winglang/sdk.cloud.Function" && (
+                        <FunctionMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Queue" && (
+                        <QueueMetadataView node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Bucket" && (
+                        <BucketMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Counter" && (
+                        <CounterMetadata node={node} />
+                      )}
+                      {node.type === "@winglang/sdk.cloud.Schedule" && (
+                        <ScheduleMetadata node={node} />
+                      )}
+                      {resourceGroup?.actionName && (
+                        <InspectorSection
+                          text={resourceGroup.actionName}
+                          open={openInspectorSections.includes(
+                            "interact-actions",
+                          )}
+                          onClick={() =>
+                            toggleInspectorSection("interact-actions")
+                          }
+                          subection
+                          headingClassName="pl-2"
+                        >
+                          <div className="pl-6 pr-2 pb-2 h-full relative">
+                            <ResourceInteractionView
+                              key={node.path}
+                              resourceType={node.type}
+                              resourcePath={node.path}
+                            />
+                          </div>
+                        </InspectorSection>
+                      )}
+                    </>
+                  )}
+                  {(!resourceGroup?.groupName ||
+                    !resourceGroup?.actionName) && (
+                    <div className="pl-6 pr-2 py-1 relative">
+                      <ResourceInteractionView
+                        key={node.path}
+                        resourceType={node.type}
+                        resourcePath={node.path}
+                      />
+                    </div>
+                  )}
+                </div>
+              </InspectorSection>
+            </>
+          )}
+
           <InspectorSection
             text="Node"
             icon={CubeTransparentIcon}
@@ -335,80 +515,6 @@ export const ResourceMetadata = ({
                 ))}
               </div>
             </InspectorSection>
-          )}
-
-          {(node.type.startsWith("@winglang/sdk.cloud") ||
-            node.type.startsWith("@winglang/sdk.redis") ||
-            node.type.startsWith("@winglang/sdk.ex")) && (
-            <>
-              <InspectorSection
-                text={resourceGroup?.groupName || "Interact"}
-                icon={resourceGroup?.icon || CursorArrowRaysIcon}
-                open={openInspectorSections.includes("interact")}
-                onClick={() => toggleInspectorSection("interact")}
-                headingClassName="pl-2"
-              >
-                <div
-                  className={classNames(
-                    "border-t",
-                    theme.border4,
-                    theme.bg3,
-                    theme.text1,
-                  )}
-                >
-                  {resourceGroup?.groupName && (
-                    <>
-                      {node.type === "@winglang/sdk.cloud.Function" && (
-                        <FunctionMetadata node={node} />
-                      )}
-                      {node.type === "@winglang/sdk.cloud.Queue" && (
-                        <QueueMetadataView node={node} />
-                      )}
-                      {node.type === "@winglang/sdk.cloud.Bucket" && (
-                        <BucketMetadata node={node} />
-                      )}
-                      {node.type === "@winglang/sdk.cloud.Counter" && (
-                        <CounterMetadata node={node} />
-                      )}
-                      {node.type === "@winglang/sdk.cloud.Schedule" && (
-                        <ScheduleMetadata node={node} />
-                      )}
-                      {resourceGroup?.actionName && (
-                        <InspectorSection
-                          text={resourceGroup.actionName}
-                          open={openInspectorSections.includes(
-                            "interact-actions",
-                          )}
-                          onClick={() =>
-                            toggleInspectorSection("interact-actions")
-                          }
-                          subection
-                          headingClassName="pl-2"
-                        >
-                          <div className="pl-6 pr-2 pb-2 h-full relative">
-                            <ResourceInteractionView
-                              key={node.path}
-                              resourceType={node.type}
-                              resourcePath={node.path}
-                            />
-                          </div>
-                        </InspectorSection>
-                      )}
-                    </>
-                  )}
-                  {(!resourceGroup?.groupName ||
-                    !resourceGroup?.actionName) && (
-                    <div className="pl-6 pr-2 py-1 relative">
-                      <ResourceInteractionView
-                        key={node.path}
-                        resourceType={node.type}
-                        resourcePath={node.path}
-                      />
-                    </div>
-                  )}
-                </div>
-              </InspectorSection>
-            </>
           )}
 
           <div className={classNames(theme.border3, "border-t")}></div>
