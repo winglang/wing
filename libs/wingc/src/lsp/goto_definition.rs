@@ -56,7 +56,7 @@ pub fn on_goto_definition(params: GotoDefinitionParams) -> Vec<LocationLink> {
 			match node.kind() {
 				"string" => {
 					let parent = node.parent().unwrap();
-					if parent.kind() == "extern_modifier" {
+					if matches!(parent.kind(), "extern_modifier" | "import_statement") {
 						if node.named_child_count() > 0 {
 							// this is a string interpolation
 							return vec![];
@@ -306,5 +306,15 @@ class Parent {}
 class Child extends Parent {}
                    //^
 "#
+	);
+
+	test_goto_definition!(
+		goto_module_path,
+		r#"
+bring "./blah.w" as blah;
+        //^
+"#,
+		assert!(goto_module_path.len() == 1)
+		assert_eq!(goto_module_path[0].target_uri.to_file_path().unwrap().file_name().unwrap(), "blah.w")
 	);
 }
