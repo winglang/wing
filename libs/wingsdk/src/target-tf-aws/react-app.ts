@@ -37,7 +37,7 @@ export class ReactApp extends ex.ReactApp {
       unlinkSync(join(this._buildPath, ex.WING_JS));
     }
 
-    const host: cloud.Website = cloud.Website._newWebsite(
+    const host: cloud.Website = new cloud.Website(
       this,
       `${this.node.id}-host`,
       {

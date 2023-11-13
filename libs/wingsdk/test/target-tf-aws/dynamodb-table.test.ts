@@ -13,7 +13,7 @@ import {
 
 test("default dynamodb table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  ex.DynamodbTable._newDynamodbTable(app, "Table", {
+  new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
     name: "my-wing-table",
@@ -26,7 +26,7 @@ test("default dynamodb table behavior", () => {
 
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const table = ex.DynamodbTable._newDynamodbTable(app, "Table", {
+  const table = new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
     name: "my-wing-table",
@@ -48,7 +48,7 @@ test("function with a table binding", () => {
       },
     }
   );
-  cloud.Function._newFunction(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();

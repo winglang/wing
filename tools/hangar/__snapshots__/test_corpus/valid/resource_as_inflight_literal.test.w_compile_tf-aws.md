@@ -245,7 +245,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new Foo(this, "Foo"));
+    const fn = this.node.root.new("@winglang/sdk.cloud.Function",cloud.Function,this, "cloud.Function", new Foo(this, "Foo"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }

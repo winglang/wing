@@ -25,7 +25,7 @@ test("try to create a queue with invalid retention period", async () => {
 
   // THEN
   expect(() => {
-    cloud.Queue._newQueue(app, "my_queue", {
+    new cloud.Queue(app, "my_queue", {
       retentionPeriod,
       timeout,
     });
@@ -35,7 +35,7 @@ test("try to create a queue with invalid retention period", async () => {
 test("create a queue", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
   const s = await app.startSimulator();
 
   // THEN
@@ -61,7 +61,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue");
+  const queue = new cloud.Queue(app, "my_queue");
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
@@ -85,7 +85,7 @@ test("queue batch size of 2, purge the queue", async () => {
   const QUEUE_SIZE = 2;
   const QUEUE_EMPTY_SIZE = 0;
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -114,7 +114,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
 
-  const queue = cloud.Queue._newQueue(app, "my_queue");
+  const queue = new cloud.Queue(app, "my_queue");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const consumer = queue.setConsumer(handler, { batchSize: 5 });
 
@@ -138,7 +138,7 @@ async handle() {
       },
     }
   );
-  cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
+  new cloud.OnDeploy(app, "my_queue_messages", onDeployHandler);
 
   const s = await app.startSimulator();
 
@@ -168,7 +168,7 @@ test("messages are requeued if the function fails after timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", {
+  const queue = new cloud.Queue(app, "my_queue", {
     timeout: Duration.fromSeconds(1),
   });
   queue.setConsumer(handler);
@@ -202,7 +202,7 @@ test("messages are not requeued if the function fails before timeout", async () 
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", {
+  const queue = new cloud.Queue(app, "my_queue", {
     timeout: Duration.fromSeconds(30),
   });
   queue.setConsumer(handler);
@@ -245,7 +245,7 @@ test("messages are not requeued if the function fails before timeout", async () 
 //   // GIVEN
 //   const app = new SimApp();
 //   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-//   const queue = cloud.Queue._newQueue(app, "my_queue", {
+//   const queue = new cloud.Queue(app, "my_queue", {
 //     retentionPeriod: Duration.fromSeconds(1),
 //     timeout: Duration.fromMilliseconds(100),
 //   });
@@ -273,7 +273,7 @@ test("messages are not requeued if the function fails before timeout", async () 
 test("queue has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
 
   const treeJson = treeJsonOf(app.synth());
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
@@ -293,7 +293,7 @@ test("queue has no display hidden property", async () => {
 test("queue has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -316,7 +316,7 @@ test("can pop messages from queue", async () => {
   // GIVEN
   const app = new SimApp();
   const messages = ["A", "B", "C", "D", "E", "F"];
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
 
   // WHEN
   const s = await app.startSimulator();
@@ -344,7 +344,7 @@ test("can pop messages from queue", async () => {
 test("pop from empty queue returns nothing", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
 
   // WHEN
   const s = await app.startSimulator();
@@ -359,7 +359,7 @@ test("pop from empty queue returns nothing", async () => {
 test("push rejects empty message", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Queue._newQueue(app, "my_queue");
+  new cloud.Queue(app, "my_queue");
 
   // WHEN
   const s = await app.startSimulator();

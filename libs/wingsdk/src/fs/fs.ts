@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import * as os from "os";
-import * as path from "path";
+import * as nodePath from "path";
 import * as yaml from "yaml";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 /**
  * Custom settings for reading from a file
@@ -73,6 +73,58 @@ export interface RemoveOptions {
 }
 
 /**
+ * Represents the type of a file system object.
+ */
+export enum FileType {
+  /** Represents a regular file. */
+  FILE = "File",
+
+  /** Represents a directory. */
+  DIRECTORY = "Directory",
+
+  /** Represents a symbolic link. */
+  SYMLINK = "Symlink",
+
+  /**
+   * Represents any type of file system object that is not `FILE`, `DIRECTORY` or `SYMLINK`.
+   * This includes sockets, FIFOs (named pipes), block devices, and character devices.
+   */
+  OTHER = "Other",
+}
+
+/**
+ * Represents the type of the target for creating symbolic links.
+ */
+export enum SymlinkType {
+  /** Symbolic link that points to a file. */
+  FILE = "file",
+
+  /** Symbolic link that points to a directory. */
+  DIRECTORY = "dir",
+
+  /** Windows-specific: Symbolic link that points to a directory junction. */
+  JUNCTION = "junction",
+}
+
+/**
+ * Metadata of a file system object.
+ */
+export interface Metadata {
+  /** The type of file. */
+  readonly fileType: FileType;
+  /** The size of the file in bytes. */
+  readonly size: number;
+  /** The permissions of the file. */
+  readonly permissions: string;
+  /** The date and time the file was last accessed. */
+  readonly accessed: Datetime;
+  /** The date and time the file was last modified. */
+  readonly modified: Datetime;
+  /** The date and time the file was created. */
+  readonly created: Datetime;
+}
+
+/**
  * The fs class is used for interacting with the file system.
  * All file paths must be POSIX file paths (/ instead of \),
  * and will be normalized to the target platform if running on Windows.
@@ -84,25 +136,25 @@ export class Util {
    * @returns The resulting path after joining all the paths.
    */
   public static join(...paths: string[]): string {
-    return normalPath(path.join(...paths));
+    return normalPath(nodePath.join(...paths));
   }
 
   /**
    * Retrieve the name of the directory from a given file path.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns The directory name of the path.
    */
-  public static dirname(p: string): string {
-    return normalPath(path.dirname(p));
+  public static dirname(path: string): string {
+    return normalPath(nodePath.dirname(path));
   }
 
   /**
    * Retrieve the final segment of a given file path.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns The last portion of a path.
    */
-  public static basename(p: string): string {
-    return path.basename(p);
+  public static basename(path: string): string {
+    return nodePath.basename(path);
   }
 
   /**
@@ -111,7 +163,7 @@ export class Util {
    * @returns The relative path from {from} to {to}.
    */
   public static relative(from: string, to: string): string {
-    return normalPath(path.relative(from, to));
+    return normalPath(nodePath.relative(from, to));
   }
 
   /**
@@ -127,17 +179,17 @@ export class Util {
    * @param paths A sequence of paths or path segments.
    * @returns The resulting path after performing the resolve operation.
    */
-  public static resolve(...paths: string[]): string {
-    return normalPath(path.resolve(...paths));
+  public static absolute(...paths: string[]): string {
+    return normalPath(nodePath.resolve(...paths));
   }
 
   /**
    * Check if the path exists.
-   * @param p The path to evaluate.
+   * @param path The path to evaluate.
    * @returns `true` if the path exists, `false` otherwise.
    */
-  public static exists(p: string): boolean {
-    return fs.existsSync(p);
+  public static exists(path: string): boolean {
+    return fs.existsSync(path);
   }
 
   /**
@@ -183,7 +235,7 @@ export class Util {
     if (prefix == undefined) {
       prefix = "wingtemp";
     }
-    const dirpath = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+    const dirpath = fs.mkdtempSync(nodePath.join(os.tmpdir(), prefix));
     return normalPath(dirpath);
   }
 
@@ -314,13 +366,84 @@ export class Util {
 
   /**
    * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
-   * @param p The path to the file or directory you want to remove.
+   * @param path The path to the file or directory you want to remove.
    */
-  public static remove(p: string, opts?: RemoveOptions): void {
-    fs.rmSync(p, {
+  public static remove(path: string, opts?: RemoveOptions): void {
+    fs.rmSync(path, {
       force: opts?.force ?? true,
       recursive: opts?.recursive ?? true,
     });
+  }
+
+  /**
+   * Checks if the given path is a directory and exists.
+   * @param path The path to check.
+   * @returns `true` if the path is an existing directory, `false` otherwise.
+   */
+  public static isDir(path: string): boolean {
+    try {
+      return fs.statSync(path).isDirectory();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Gets the stats of the given path.
+   * @param path The path to get stats for.
+   * @returns The stats of the path, formatted as a `Metadata` object.
+   */
+  public static metadata(path: string): Metadata {
+    return this._metadata(fs.statSync(path));
+  }
+
+  /**
+   * Gets the stats of the given path without following symbolic links.
+   * @param path The path to get stats for.
+   * @returns The stats of the path, formatted as a `Metadata` object.
+   */
+  public static symlinkMetadata(path: string): Metadata {
+    return this._metadata(fs.lstatSync(path));
+  }
+
+  /**
+   * Set the permissions of the file, directory, etc.
+   * Expects a permission string like `"755"` or `"644"`.
+   * @param path The path of the file or directory.
+   * @param permissions The mode to set as a string.
+   */
+  public static setPermissions(path: string, permissions: string): void {
+    fs.chmodSync(path, parseInt(permissions, 8));
+  }
+
+  /**
+   * Extracts the extension (without the leading dot) from the path, if possible.
+   * @param path The path to get extension for.
+   * @returns The file extension without the leading dot, or `nil` if:
+   *          - The file name starts with a dot (hidden files).
+   *          - There is no dot in the file name.
+   *          - The dot is the last character in the file name.
+   */
+  public static extension(path: string): string | undefined {
+    const ext = nodePath.extname(path);
+    return !ext || path === ext || path.endsWith(".")
+      ? undefined
+      : ext.slice(1);
+  }
+
+  /**
+   * Creates a symbolic link.
+   * @param target The path to the target file or directory.
+   * @param path The path to the symbolic link to be created.
+   * @param type The type of the target. It can be `FILE`, `DIRECTORY`, or `JUNCTION` (Windows only).
+   *             Defaults to `FILE` if not specified.
+   */
+  public static symlink(
+    target: string,
+    path: string,
+    type: SymlinkType = SymlinkType.FILE
+  ): void {
+    fs.symlinkSync(target, path, type);
   }
 
   /**
@@ -328,5 +451,50 @@ export class Util {
    */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Returns the `Metadata` object based on the given `fs.Stats` object.
+   * @param stats The `fs.Stats` object.
+   * @returns The `Metadata` object.
+   */
+  private static _metadata(stats: fs.Stats): Metadata {
+    return {
+      fileType: this._fileType(stats),
+      size: stats.size,
+      permissions: this._formatPermissions(stats.mode),
+      accessed: Datetime.fromDate(stats.atime),
+      modified: Datetime.fromDate(stats.mtime),
+      created: Datetime.fromDate(stats.birthtime),
+    };
+  }
+
+  /**
+   * Returns the type of the file based on the given `fs.Stats` object.
+   * @param stats The `fs.Stats` object.
+   * @returns The type of the file.
+   */
+  private static _fileType(stats: fs.Stats): FileType {
+    switch (true) {
+      case stats.isFile():
+        return FileType.FILE;
+      case stats.isDirectory():
+        return FileType.DIRECTORY;
+      case stats.isSymbolicLink():
+        return FileType.SYMLINK;
+      default:
+        return FileType.OTHER;
+    }
+  }
+
+  /**
+   * Converts a numeric mode into a string representation of its permissions.
+   * For example, this will convert the numeric mode `33279` into a `"755"` string.
+   * @param mode The numeric mode to convert.
+   * @returns A string representation of the permissions.
+   */
+  private static _formatPermissions(mode: number): string {
+    const octalString = mode.toString(8);
+    return octalString.substring(octalString.length - 3);
   }
 }

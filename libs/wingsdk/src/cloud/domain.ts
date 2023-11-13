@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -21,34 +20,23 @@ export interface DomainProps {
 
 /**
  * A cloud Domain
+ * @abstract
  */
-export abstract class Domain extends Resource {
-  /**
-   * Create a new website.
-   * @internal
-   */
-  public static _newDomain(
-    scope: Construct,
-    id: string,
-    props: DomainProps
-  ): Domain {
-    return App.of(scope).newAbstract(DOMAIN_FQN, scope, id, props);
-  }
+export class Domain extends Resource {
   /** @internal */
-  protected _domain: string;
+  protected _domain!: string;
 
   constructor(scope: Construct, id: string, props: DomainProps) {
+    if (new.target === Domain) {
+      return Resource._newFromFactory(DOMAIN_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Domain";
     Node.of(this).description = "A cloud domain";
 
     this._domain = props.domainName;
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
   }
 
   /**

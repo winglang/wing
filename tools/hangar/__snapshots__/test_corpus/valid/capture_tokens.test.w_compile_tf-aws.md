@@ -144,6 +144,9 @@ module.exports = function({  }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c8ef4b64"
       },
       "cloudApi_api_2B334D75": {
@@ -154,6 +157,9 @@ module.exports = function({  }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c895068c"
       }
     },
@@ -200,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+        this.api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
         this.url = this.api.url;
       }
       static _toInflightType(context) {
@@ -310,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const r = new MyResource(this, "MyResource");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class", new $Closure1(this, "$Closure1"));
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
     const url = api.url;
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight globals", new $Closure2(this, "$Closure2"));
   }

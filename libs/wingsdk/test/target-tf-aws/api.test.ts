@@ -348,7 +348,9 @@ test("api url can be used as environment variable", () => {
   const tfConfig = JSON.parse(output);
   expect(
     tfConfig.resource.aws_lambda_function.Fn.environment.variables.API_URL
-  ).toEqual("${aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url}");
+  ).toEqual(
+    "https://${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}"
+  );
 });
 
 test("api configured for cors", () => {

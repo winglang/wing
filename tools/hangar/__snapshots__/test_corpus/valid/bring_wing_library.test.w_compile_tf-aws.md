@@ -189,7 +189,7 @@ module.exports = function({ $stdlib }) {
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.data = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      this.data = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
     }
     static makeKey(name) {
       return (require("<ABSOLUTE_PATH>/util.js")["makeKey"])(name)

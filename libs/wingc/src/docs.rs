@@ -183,15 +183,17 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 	}
 
 	docs.custom.iter().for_each(|(k, v)| {
-		// skip "@inflight" because it is already included in the type system
-		if k == "inflight" {
-			return;
-		}
-		if k == "macro" {
-			return;
-		}
-		// marking types that are skipped/changed in the documentation, irrelevant to the language server
-		if k == "skipDocs" || k == "wingType" {
+		if matches!(
+			k.as_str(),
+			// Already included in wing's type system
+			"inflight"
+			// Implementation detail not needed for the user
+			| "macro"
+			// Psuedo-abstract marker, mostly useful internally
+			| "abstract"
+			// Marker type use, not for users
+			| "skipDocs" | "wingType"
+		) {
 			return;
 		}
 

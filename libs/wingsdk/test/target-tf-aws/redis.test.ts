@@ -17,7 +17,7 @@ describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    ex.Redis._newRedis(app, "Redis");
+    new ex.Redis(app, "Redis");
 
     // WHEN
     const output = app.synth();
@@ -41,7 +41,7 @@ describe("When creating a Redis resource", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    ex.Redis._newRedis(app, "Redis");
+    new ex.Redis(app, "Redis");
 
     // WHEN
     const output = app.synth();
@@ -61,9 +61,9 @@ describe("When creating a Redis resource", () => {
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
-      const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
+      const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-      const func = Function._newFunction(app, "Function", inflight);
+      const func = new Function(app, "Function", inflight);
       redisCluster.onLift(func, ["set", "get"]);
 
       // WHEN
@@ -83,8 +83,8 @@ describe("When creating multiple Redis resources", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    ex.Redis._newRedis(app, "RedisOne");
-    ex.Redis._newRedis(app, "RedisTwo");
+    new ex.Redis(app, "RedisOne");
+    new ex.Redis(app, "RedisTwo");
 
     // WHEN
     const output = app.synth();
@@ -107,10 +107,10 @@ describe("When creating multiple Redis resources", () => {
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
-      const redisCluster = ex.Redis._newRedis(app, "Redis") as ex.Redis;
-      const otherCluster = ex.Redis._newRedis(app, "OtherRedis") as ex.Redis;
+      const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
+      const otherCluster = new ex.Redis(app, "OtherRedis") as ex.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-      const func = Function._newFunction(app, "Function", inflight);
+      const func = new Function(app, "Function", inflight);
       redisCluster.onLift(func, ["set", "get"]);
       otherCluster.onLift(func, ["set", "get"]);
 
