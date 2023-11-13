@@ -4,7 +4,7 @@ class Another {
   myQueue: cloud.Queue;
   pub anotherStr: str;
 
-  init () {
+  new() {
     this.myQueue = new cloud.Queue();
     this.anotherStr = "bang";
   }
