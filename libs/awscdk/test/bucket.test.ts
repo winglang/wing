@@ -71,8 +71,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "../test-files/test1.txt");
-  bucket.addFile("file2.txt", "../test-files/test2.txt");
+  bucket.addFile("file1.txt", "../test/test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test/test-files/test2.txt");
   const output = app.synth();
 
   // THEN

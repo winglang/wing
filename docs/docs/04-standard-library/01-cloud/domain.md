@@ -58,4 +58,117 @@ root/Default/Default/cloud.Domain:
 
 ### GCP (`tf-gcp`)
 
-🚧 Not supported yet
+🚧 Not supported yet## API Reference <a name="API Reference" id="API Reference"></a>
+
+### Domain <a name="Domain" id="@winglang/sdk.cloud.Domain"></a>
+
+A cloud Domain.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Domain.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Domain(props: DomainProps);
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Domain.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Domain.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.DomainProps">DomainProps</a>
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Domain.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Domain.property.domainName">domainName</a></code> | <code>str</code> | The domain name. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Domain.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@winglang/sdk.cloud.Domain.property.domainName"></a>
+
+```wing
+domainName: str;
+```
+
+- *Type:* str
+
+The domain name.
+
+---
+
+
+
+## Structs <a name="Structs" id="Structs"></a>
+
+### DomainProps <a name="DomainProps" id="@winglang/sdk.cloud.DomainProps"></a>
+
+Options for `Domain`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.DomainProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let DomainProps = cloud.DomainProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.DomainProps.property.domainName">domainName</a></code> | <code>str</code> | The website's custom domain name. |
+
+---
+
+##### `domainName`<sup>Required</sup> <a name="domainName" id="@winglang/sdk.cloud.DomainProps.property.domainName"></a>
+
+```wing
+domainName: str;
+```
+
+- *Type:* str
+
+The website's custom domain name.
+
+---
+
+*Example*
+
+```wing
+"example.com"
+```
+
+
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IDomainClient <a name="IDomainClient" id="@winglang/sdk.cloud.IDomainClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IDomainClient">IDomainClient</a>
+
+Inflight interface for `Domain`.
+
+
+
