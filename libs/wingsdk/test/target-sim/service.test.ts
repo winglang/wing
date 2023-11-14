@@ -14,7 +14,7 @@ test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = new ServiceHandler(app, "Handler", `console.log("hi");`);
-  cloud.Service._newService(app, "my_service", handler);
+  new cloud.Service(app, "my_service", handler);
 
   // WHEN
   const s = await app.startSimulator();
@@ -40,7 +40,7 @@ test("create a service with on start method", async () => {
 test("create a service with a on stop method", async () => {
   // Given
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP)
@@ -80,7 +80,7 @@ test("create a service with a on stop method", async () => {
 test("create a service without autostart", async () => {
   // Given
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", `console.log("hi");`),
@@ -120,7 +120,7 @@ test("start and stop service", async () => {
   // Given
   const app = new SimApp();
 
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
@@ -155,7 +155,7 @@ test("start and stop service", async () => {
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),

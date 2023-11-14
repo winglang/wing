@@ -254,7 +254,7 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    return Function._newFunction(
+    return new Function(
       this,
       `${this.node.id}-OnRequest-${inflightNodeHash}`,
       functionHandler

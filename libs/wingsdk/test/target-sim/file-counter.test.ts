@@ -16,11 +16,11 @@ test(
       constructor(scope: Construct, id: string) {
         super(scope, id);
 
-        const counter = cloud.Counter._newCounter(this, "Counter", {
+        const counter = new cloud.Counter(this, "Counter", {
           initial: 1000,
         });
-        const bucket = cloud.Bucket._newBucket(this, "Bucket");
-        const queue = cloud.Queue._newQueue(this, "Queue");
+        const bucket = new cloud.Bucket(this, "Bucket");
+        const queue = new cloud.Queue(this, "Queue");
         const processor = Testing.makeHandler(
           this,
           "Processor",

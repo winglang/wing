@@ -1,6 +1,6 @@
 class Foo {
   inflight x: num;
-  inflight init() {
+  inflight new() {
     this.x = 42;
   }
   inflight bar(): num { 

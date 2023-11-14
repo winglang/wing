@@ -710,7 +710,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
+        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `
@@ -838,10 +838,10 @@ class $Root extends $stdlib.std.Resource {
     class BigPublisher extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
-        this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "b2");
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
-        this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic", this, "cloud.Topic");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.b2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.t = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -1095,7 +1095,7 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const res = new Bar(this, "Bar", "Arr", bucket, MyEnum.B);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
     const bigOlPublisher = new BigPublisher(this, "BigPublisher");

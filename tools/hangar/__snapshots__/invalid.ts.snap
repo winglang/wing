@@ -617,10 +617,10 @@ error: Reserved method name. Initializers are declared with \\"init\\"
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:17
+   --> ../../../examples/tests/invalid/class.test.w:17:16
    |
-17 |   init(foo: str)
-   |                 ^ Expected block
+17 |   new(foo: str)
+   |                ^ Expected block
 
 
 error: Preflight field \\"x\\" is not initialized
@@ -740,6 +740,13 @@ error: Unknown symbol \\"C11\\"
    |
 78 | class C11 extends C11 {
    |                   ^^^ Unknown symbol \\"C11\\"
+
+
+error: Cannot instantiate abstract class \\"Resource\\"
+    --> ../../../examples/tests/invalid/class.test.w:165:1
+    |
+165 | new std.Resource();
+    | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1804,7 +1811,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 "error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
-6 | /   inflight init() {
+6 | /   inflight new() {
 7 | | 
 8 | |   }
   | \\\\---^ Multiple inflight initializers defined in class Foo
@@ -2699,6 +2706,135 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`redundant_modifiers.w 1`] = `
+"error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:3:3
+  |
+3 |   pub pub m1() {}
+  |   ^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:7:3
+  |
+7 |   pub protected m2() {}
+  |   ^^^^^^^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:11:3
+   |
+11 |   static pub static m3() {}
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:15:3
+   |
+15 |   pub inflight static inflight m4() {}
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |   |               |
+   |   |   |               possible redundant modifier
+   |   |   possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:19:3
+   |
+19 |   static extern \\"x.js\\" pub extern \\"y.js\\" m5();
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |      |                 |
+   |   |      |                 possible redundant modifier
+   |   |      possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:23:3
+   |
+23 |   protected protected f1: str;
+   |   ^^^^^^^^^^^^^^^^^^^
+   |   |         |
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:27:3
+   |
+27 |   protected inflight inflight f2: str;
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |         |        |
+   |   |         |        possible redundant modifier
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:31:3
+   |
+31 |   static pub static f3: str;
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:35:3
+   |
+35 |   var pub var f4: str;
+   |   ^^^^^^^^^^^
+   |   |       |
+   |   |       possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:40:1
+   |
+40 | inflight inflight class Foo {}
+   | ^^^^^^^^^^^^^^^^^
+   | |        |
+   | |        possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:43:1
+   |
+43 | pub inflight pub class Foo {}
+   | ^^^^^^^^^^^^^^^^
+   | |            |
+   | |            possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`resource_access_field_as_method.test.w 1`] = `
 "error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.test.w:9:1
@@ -2755,29 +2891,29 @@ exports[`resource_init.test.w 1`] = `
 "error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
-3 |   init() {}
-  |   ^^^^^^^^^ Multiple initializers defined in class R
+3 |   new() {}
+  |   ^^^^^^^^ Multiple initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
-6 |   inflight init() {}
-  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+6 |   inflight new() {}
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
-9 |   inflight init(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+9 |   inflight new(x: num) {}
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Inflight initializers cannot have parameters
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:16
+  --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
-9 |   inflight init(x: num) {}
-  |                ^^^^^^^^ Inflight initializers cannot have parameters
+9 |   inflight new(x: num) {}
+  |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
  

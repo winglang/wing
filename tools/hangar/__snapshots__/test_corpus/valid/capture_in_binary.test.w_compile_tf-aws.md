@@ -114,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const x = 12;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:binary expressions", new $Closure1(this, "$Closure1"));
   }

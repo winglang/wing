@@ -10,7 +10,7 @@ if util.env("WING_TARGET") == "sim" {
 
     pub s: cloud.Service;
 
-    init(body: str) {
+    new(body: str) {
       this.b = new cloud.Bucket();
       this.body = body;
 

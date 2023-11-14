@@ -14,7 +14,7 @@ new C9(token: "1");
 //^^^^^^^ Expected 0 named argument(s)"
 
 class C10 {
-  init(foo: str)
+  new(foo: str)
 }
 new C10(); 
 //^^^^^^^ Expected 1 required positional arguments but got 0 when instantiating "C5"
@@ -27,7 +27,7 @@ new C10("hello", foo: "bar");
 
 class C3 {
   x: num;
-  init() {
+  new() {
     this.x = "Hi";
            //^^^^ Expected type to be "num", but got "str" instead
   }
@@ -43,7 +43,7 @@ class C4 {
 class C5 {
   inflight x: num;
          //^ Inflight field "x" is not initialized
-  inflight init() {}
+  inflight new() {}
 }
 
 class C6 {
@@ -52,12 +52,12 @@ class C6 {
   y: num;
 //^ Preflight field "y" is not initialized  
   
-  init() {
+  new() {
     this.x = 1;
        //^ "x" cannot be initialized in the Preflight initializer
   }
 
-  inflight init() {
+  inflight new() {
     this.y = 1;
        //^ "y" cannot be initialized in the Inflight initializer
   }
@@ -82,7 +82,7 @@ class C11 extends C11 {
 class Student {
   name: str;
   major: str;
-  init(name: str, major: str) {
+  new(name: str, major: str) {
     super();
 //  ^^^^^^^^ Calls to super constructor can only be made from derived classes
     this.name = name;
@@ -93,7 +93,7 @@ class Student {
 class PaidStudent extends Student {
   hrlyWage: num;
   
-  init(name: str, major: str, hrlyWage: num) {
+  new(name: str, major: str, hrlyWage: num) {
     this.hrlyWage = hrlyWage;
     super(name, major);
 //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
@@ -112,14 +112,14 @@ let s = new PaidStudent("x", "y", 3);
 // Typechecking super calls
 class One {
   someNum: num;
-  init(someNum: num) {
+  new(someNum: num) {
     this.someNum = someNum;
   }
 }
 
 class Two extends One {
   someStr: str;
-  init(someNum: num, someStr: str) {
+  new(someNum: num, someStr: str) {
     super(someStr);
 //        ^^^^^^^ Expected type to be "num", but got "str" instead
     this.someStr = someStr;
@@ -128,7 +128,7 @@ class Two extends One {
 
 class Three extends One {
   someStr: str;
-  init(someNum: num, someStr: str) {
+  new(someNum: num, someStr: str) {
     super();
 //  ^^^^^^^^ Expected 1 positional argument(s) but got 0
     this.someStr = someStr;
@@ -137,7 +137,7 @@ class Three extends One {
 
 class Four extends One {
   someStr: str;
-  init(someNum: num, someStr: str) {
+  new(someNum: num, someStr: str) {
     super(someNum, someStr);
 //  ^^^^^^^^^^^^^^^^^^^^^^^^ Expected 1 arguments but got 2
     this.someStr = someStr;
@@ -147,13 +147,13 @@ class Four extends One {
 // Super inflight
 inflight class Plane {
   year: num;
-  init(year: num) {
+  new(year: num) {
     this.year = year;
   }
 }
 
 inflight class Jet extends Plane{
-  init(year: num) {
+  new(year: num) {
     super();
 //  ^^^^^^^^ Expected 1 positional argument(s) but got 0
   }
@@ -161,3 +161,6 @@ inflight class Jet extends Plane{
 //^^^^^^^^^^^ To declare a initializer, use "init"
   }
 }
+
+new std.Resource();
+//^^^^^^^^^^^^^^^^ Cannot instantiate abstract class "Resource"

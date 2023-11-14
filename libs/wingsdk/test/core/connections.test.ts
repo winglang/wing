@@ -7,13 +7,13 @@ import { SimApp } from "../sim-app";
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  const bucket = new cloud.Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(
     app,
     "Handler",
     "async handle() { return 'hello'; }"
   );
-  const fn = cloud.Function._newFunction(app, "my_function", handler);
+  const fn = new cloud.Function(app, "my_function", handler);
 
   // WHEN
   for (let i = 0; i < 5; i++) {

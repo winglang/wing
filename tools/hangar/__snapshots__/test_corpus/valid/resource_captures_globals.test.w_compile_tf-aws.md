@@ -371,7 +371,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -440,8 +440,8 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic", this, "cloud.Topic");
-        this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
+        this.localTopic = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic");
+        this.localCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -598,8 +598,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
-    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;

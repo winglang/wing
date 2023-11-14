@@ -342,9 +342,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue", this, "cloud.Queue");
-    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "strToStr", new $Closure1(this, "$Closure1"));
-    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "func", new $Closure2(this, "$Closure2"));
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const strToStr = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "strToStr", new $Closure1(this, "$Closure1"));
+    const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -108,7 +108,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         this.field = "hey";
-        this.counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter", this, "cloud.Counter");
+        this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `

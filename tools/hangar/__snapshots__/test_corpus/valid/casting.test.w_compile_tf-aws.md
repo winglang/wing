@@ -65,7 +65,7 @@ const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"tf-aws"))) {
       const s3Bucket = (b.node.findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));

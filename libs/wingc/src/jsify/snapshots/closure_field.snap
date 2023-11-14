@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
     class MyResource {
       closure: inflight (str): str;
     
-      init() {
+      new() {
         this.closure = inflight (s: str): str => {
           globalBucket.list();
           return "hello";
@@ -208,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const x = new MyResource(this, "MyResource");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure2(this, "$Closure2"));
   }

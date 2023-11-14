@@ -286,7 +286,7 @@ const Graph = memo(
           "relative",
           "transition-all",
           "rounded-lg",
-          "bg-slate-100 dark:bg-slate-500",
+          nodeList.length > 0 && "bg-slate-100 dark:bg-slate-500",
           durationClass,
         )}
         style={{

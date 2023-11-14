@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
       let y = "hello";
 
       class A {
-        init() {
+        new() {
           log(y);
         }
       }

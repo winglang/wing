@@ -327,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api", this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     (api.get("/foo", new $Closure1(this, "$Closure1")));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:api should return a valid stringified json", new $Closure2(this, "$Closure2"));
   }

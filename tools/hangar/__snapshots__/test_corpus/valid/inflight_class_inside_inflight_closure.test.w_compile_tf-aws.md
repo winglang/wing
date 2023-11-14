@@ -254,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "cloud.Bucket");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;
@@ -292,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", inflight_closure);
+        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", inflight_closure);
       }
       static _toInflightType(context) {
         return `

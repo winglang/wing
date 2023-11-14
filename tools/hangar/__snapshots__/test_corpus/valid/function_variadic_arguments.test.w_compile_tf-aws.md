@@ -158,9 +158,9 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket", this, "bucket3");
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     (bucket3.node.addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,2)))};

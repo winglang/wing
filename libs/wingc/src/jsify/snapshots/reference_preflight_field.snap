@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Foo {
       x: str;
       
-      init() {
+      new() {
         this.x = "world";
       }
     

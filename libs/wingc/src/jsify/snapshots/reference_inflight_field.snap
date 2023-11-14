@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Foo {
       inflight x: str;
       
-      inflight init() {
+      inflight new() {
         this.x = "hello";
       }
     

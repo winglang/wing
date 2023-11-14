@@ -9,7 +9,7 @@ class Foo {
   }
 
 
-  init() {
+  new() {
     this.instanceField = 1;
   }
 }

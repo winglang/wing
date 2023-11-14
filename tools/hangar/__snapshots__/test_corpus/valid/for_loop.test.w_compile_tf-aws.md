@@ -381,7 +381,7 @@ class $Root extends $stdlib.std.Resource {
       {((cond) => {if (!cond) throw new Error("assertion failed: x > 0")})((x > 0))};
       {console.log(String.raw({ raw: ["", ""] }, x))};
     }
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function", this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

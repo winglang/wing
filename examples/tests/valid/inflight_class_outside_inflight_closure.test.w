@@ -4,7 +4,7 @@ inflight class BinaryOperation {
   lhs: num;
   rhs: num;
 
-  init(lhs: num, rhs: num) {
+  new(lhs: num, rhs: num) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
