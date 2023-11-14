@@ -118,7 +118,7 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
 
   // load custom platform to retrieve the target
   const { _loadCustomPlatform } = require("@winglang/sdk/lib/platform");
-  return _loadCustomPlatform(platform);
+  return _loadCustomPlatform(platform).target;
 }
 
 /**
