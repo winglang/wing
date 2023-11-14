@@ -48,7 +48,7 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactGetItems">transactGetItems</a></code> | Perform a synchronous read operation that groups up to 100 item retrievals. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Edits an existing item's attributes, or adds a new item to the table if it does not already exist |
 
 ---
 
