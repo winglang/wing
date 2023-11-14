@@ -201,7 +201,7 @@ exports[`utilities.test.w 1`] = `
 "runtime error: assertion failed: false
   --> ../../../examples/tests/error/utilities.test.w:1:1
 1 | assert(false);
-  |log(\\"W\\");
+  | ^
 at (<ABSOLUTE>:LINE:COL)
  
  

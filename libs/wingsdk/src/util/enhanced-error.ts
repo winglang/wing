@@ -97,10 +97,6 @@ export async function prettyPrintError(
     );
   }
 
-  const getRelativePath = (path: string) => {
-    return relative(process.cwd(), path);
-  };
-
   let output = [];
 
   // use only the first item with a source
@@ -125,11 +121,14 @@ export async function prettyPrintError(
     // print line and its surrounding lines
     output.push(
       " ".repeat(maxDigits + 1) +
-        `--> ${getRelativePath(sourceFile.path)}:${originLine}:${originColumn}`
+        `--> ${relative(
+          process.cwd(),
+          sourceFile.path
+        )}:${originLine}:${originColumn}`
     );
 
     let linesOfInterest = originLines;
-    if (startLine !== finishLine) {
+    if (linesOfInterest.length > 1) {
       linesOfInterest = originLines.slice(startLine - 1, finishLine);
     }
     linesOfInterest.push(" ".repeat(originColumn) + "^");

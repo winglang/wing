@@ -30,8 +30,11 @@ pub type CharacterOffset = usize;
 
 #[derive(Default, Clone, Debug)]
 pub struct LineData {
+	/// The line of code. Cannot contain any newlines
 	pub line: String,
+	/// Current indent level
 	pub indent: IndentAmount,
+	/// Mappings from character offset of this line text to the given source span
 	pub mappings: Vec<(CharacterOffset, WingSpan)>,
 }
 
@@ -56,28 +59,28 @@ fn string_to_code<S: Into<String>>(s: S) -> CodeMaker {
 	code
 }
 
-impl Into<CodeMaker> for String {
-	fn into(self) -> CodeMaker {
-		string_to_code(self)
+impl From<String> for CodeMaker {
+	fn from(s: String) -> Self {
+		string_to_code(s)
 	}
 }
 
-impl Into<CodeMaker> for &String {
-	fn into(self) -> CodeMaker {
-		string_to_code(self)
+impl From<&String> for CodeMaker {
+	fn from(s: &String) -> Self {
+		string_to_code(s)
 	}
 }
 
-impl Into<CodeMaker> for &str {
-	fn into(self) -> CodeMaker {
-		string_to_code(self)
+impl From<&str> for CodeMaker {
+	fn from(s: &str) -> Self {
+		string_to_code(s)
 	}
 }
 
-impl Into<CodeMaker> for Vec<CodeMaker> {
-	fn into(self) -> CodeMaker {
+impl From<Vec<CodeMaker>> for CodeMaker {
+	fn from(v: Vec<CodeMaker>) -> Self {
 		let mut code: CodeMaker = CodeMaker::default();
-		for (idx, line) in self.into_iter().enumerate() {
+		for (idx, line) in v.into_iter().enumerate() {
 			if idx > 0 {
 				code.append(", ");
 			}
@@ -112,14 +115,21 @@ impl CodeMaker {
 	pub fn line<S: Into<CodeMaker>>(&mut self, line: S) {
 		let mut new_code: CodeMaker = line.into();
 
-		for mut line_data in new_code.lines.drain(..) {
-			line_data.indent += self.indent;
-			if line_data.mappings.is_empty() {
-				if let Some(source) = self.source.as_ref() {
-					line_data.mappings.push((0, source.clone()))
+		for line_data in new_code.lines.drain(..) {
+			let mut mappings = line_data.mappings;
+
+			if mappings.is_empty() {
+				// if there are no existing mappings, use an existing
+				if let Some(source) = &self.source {
+					mappings = vec![(0, source.clone())]
 				}
-			}
-			self.push_line(line_data);
+			};
+
+			self.push_line(LineData {
+				line: line_data.line,
+				indent: line_data.indent + self.indent,
+				mappings,
+			});
 		}
 	}
 
@@ -141,34 +151,32 @@ impl CodeMaker {
 	/// Note this mutates the given code.
 	pub fn append<S: Into<CodeMaker>>(&mut self, line: S) {
 		let mut new_code: CodeMaker = line.into();
+
 		if new_code.is_empty() {
+			// nothing to add
 			return;
 		}
 
 		if self.lines.is_empty() {
+			// we need at list one line to append to
 			self.empty_line();
 		}
 
-		if let Some(last_line) = self.lines.last_mut() {
-			let mut first_new_line = new_code.lines.remove(0);
-			last_line.line.push_str(&first_new_line.line);
+		// we know there is at least one line
+		let existing_last_line = self.lines.last_mut().expect("last line");
 
-			let last_original_mapping = last_line.mappings.last().cloned();
-			let add_another_map = !first_new_line.mappings.is_empty();
+		// Get the first new line and add to to the last line of the current
+		let mut new_first_line = new_code.lines.remove(0);
+		existing_last_line.line.push_str(&new_first_line.line);
 
-			for (offset, span) in first_new_line.mappings.drain(..) {
-				last_line
-					.mappings
-					.push((last_line.line.len() - first_new_line.line.len() + offset, span));
-			}
-
-			if add_another_map {
-				if let Some(last_original_mapping) = last_original_mapping {
-					last_line.mappings.push((last_line.line.len(), last_original_mapping.1));
-				}
-			}
+		// Add the mappings from the first line of the new code to the last line of the existing code
+		for (offset, span) in new_first_line.mappings.drain(..) {
+			existing_last_line
+				.mappings
+				.push((existing_last_line.line.len() - new_first_line.line.len() + offset, span));
 		}
 
+		// Add the remaining lines of the new code (with additional indent)
 		for mut line_data in new_code.lines {
 			line_data.indent += self.indent;
 			self.push_line(line_data);
@@ -201,9 +209,10 @@ impl CodeMaker {
 		self.lines.push(line);
 	}
 
-	pub fn get_sourcemap(&mut self, root: &str, source_content: &str, generated_path: &str) -> String {
+	/// Generates a sourcemap for the current code
+	pub fn generate_sourcemap(&mut self, source_path: &str, source_content: &str, generated_path: &str) -> String {
 		let mut sourcemap = SourceMap::new("");
-		let source_num = sourcemap.add_source(root);
+		let source_num = sourcemap.add_source(source_path);
 
 		sourcemap
 			.set_source_content(source_num as usize, source_content)
@@ -231,7 +240,7 @@ impl CodeMaker {
 
 		json.insert("version", json!(3));
 		json.insert("file", json!(generated_path));
-		json.insert("sources", json!(vec![root]));
+		json.insert("sources", json!(vec![source_path]));
 		json.insert("names", json!(sourcemap.get_names()));
 		json.insert("mappings", json!(String::from_utf8(buffer).unwrap()));
 
@@ -334,6 +343,24 @@ mod tests {
 	}
 
 	#[test]
+	fn sourcemap_no_sources() {
+		let mut code = CodeMaker::default();
+
+		code.line("1");
+		code.line("2");
+		code.append("\n3");
+
+		assert!(code.lines.len() == 3);
+		assert_eq!(code.to_string(), "1\n2\n3");
+
+		let sourcemap: Value =
+			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.js")).expect("sourcemap");
+
+		// "A" just means the line comes from somewhere in the provided source root
+		assert_eq!(sourcemap["mappings"], "A;A;A");
+	}
+
+	#[test]
 	fn sourcemap_default() {
 		let base_span = WingSpan {
 			file_id: "test.w".to_string(),
@@ -357,7 +384,7 @@ mod tests {
 		assert!(code.lines.len() == 4);
 		assert_eq!(code.to_string(), "1\n2\n3\n4");
 		let sourcemap: Value =
-			serde_json::from_str(&code.get_sourcemap("test.w", "1\n2\n3", "test.js")).expect("sourcemap");
+			serde_json::from_str(&code.generate_sourcemap("test.w", "1\n2\n3", "test.js")).expect("sourcemap");
 
 		assert_eq!(sourcemap["version"], 3);
 		assert_eq!(sourcemap["file"], "test.js");
@@ -389,8 +416,8 @@ mod tests {
 
 		assert!(code.lines.len() == 2);
 		assert_eq!(code.to_string(), "123\n4");
-		let sourcemap: Value = serde_json::from_str(&code.get_sourcemap("", "", "")).expect("sourcemap");
+		let sourcemap: Value = serde_json::from_str(&code.generate_sourcemap("", "", "")).expect("sourcemap");
 
-		assert_eq!(sourcemap["mappings"], "AAEI,CAGM,CAHN;AAAA");
+		assert_eq!(sourcemap["mappings"], "AAEI,CAGM;AAHN");
 	}
 }

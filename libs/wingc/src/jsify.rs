@@ -117,7 +117,7 @@ impl<'a> JSifier<'a> {
 
 	pub fn jsify(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
-		let mut js: CodeMaker = CodeMaker::default();
+		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
 		let mut visit_ctx = VisitContext::new();
@@ -264,7 +264,7 @@ impl<'a> JSifier<'a> {
 		let source_content = self.source_files.get_file(source_path.as_str()).unwrap();
 
 		let output_base = output.to_string();
-		let output_sourcemap = output.get_sourcemap(source_path.as_str(), source_content, &preflight_file_name);
+		let output_sourcemap = output.generate_sourcemap(source_path.as_str(), source_content, &preflight_file_name);
 
 		// Emit the file
 		match self
@@ -831,7 +831,6 @@ impl<'a> JSifier<'a> {
 
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		ctx.visit_ctx.push_stmt(statement.idx);
-		// code.push_original_span(statement.span.clone());
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => {
@@ -1590,7 +1589,7 @@ impl<'a> JSifier<'a> {
 		}
 		match self.output_files.borrow_mut().add_file(
 			sourcemap_file,
-			code.get_sourcemap(
+			code.generate_sourcemap(
 				root_source.as_str(),
 				self.source_files.get_file(root_source.as_str()).unwrap(),
 				filename.as_str(),
