@@ -46,7 +46,7 @@ export class Button extends VisualComponent {
     return {
       kind: "button",
       label: this.label,
-      handlerPath: this.fn.node.path,
+      handler: this.fn.node.path,
     };
   }
 

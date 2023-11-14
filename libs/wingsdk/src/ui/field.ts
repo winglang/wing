@@ -69,7 +69,7 @@ export class Field extends VisualComponent {
     return {
       kind: "field",
       label: this.label,
-      handlerPath: this.fn!.node.path,
+      handler: this.fn.node.path,
       refreshRate: this.refreshRate,
     };
   }

@@ -53,7 +53,7 @@ test("can obtain ui components", async () => {
   const response2 = await fieldClient.invoke("");
   expect(response2).toEqual("field worked");
 
-  expect(s.getResourceUIComponents("/MyClass")).toEqual([
+  expect(s.getResourceUI("/MyClass")).toEqual([
     {
       kind: "section",
       label: "Overview",
@@ -61,12 +61,12 @@ test("can obtain ui components", async () => {
         {
           kind: "button",
           label: "Button Label",
-          handlerPath: "root/MyClass/Button/Handler",
+          handler: "root/MyClass/Button/Handler",
         },
         {
           kind: "field",
           label: "Field Label",
-          handlerPath: "root/MyClass/Field/Handler",
+          handler: "root/MyClass/Field/Handler",
         },
       ],
     },

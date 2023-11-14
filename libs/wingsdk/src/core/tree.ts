@@ -74,7 +74,7 @@ export interface DisplayInfo {
    * UI components to display for this resource.
    * @default - no UI components
    */
-  readonly uiComponents?: any[]; // UIComponent
+  readonly ui?: any[]; // UIComponent
 }
 
 /** @internal */
@@ -84,7 +84,8 @@ export type UIComponent = UIField | UISection | UIButton;
 export interface UIField {
   readonly kind: "field";
   readonly label: string;
-  readonly handlerPath: string;
+  /** The construct path to a cloud.Function */
+  readonly handler: string;
   readonly refreshRate: number | undefined;
 }
 
@@ -92,13 +93,14 @@ export interface UIField {
 export interface UIButton {
   readonly kind: "button";
   readonly label: string;
-  readonly handlerPath: string;
+  /** The construct path to a cloud.Function */
+  readonly handler: string;
 }
 
 /** @internal */
 export interface UISection {
   readonly kind: "section";
-  readonly label: string | undefined;
+  readonly label?: string;
   readonly children: UIComponent[];
 }
 
@@ -193,26 +195,24 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
   }
   const display = Node.of(construct);
 
+  const ui: UIComponent[] = [];
   // generate ui data only based on direct children
-  const uiComponents: UIComponent[] = [];
-  if (!VisualComponent.isVisualComponent(construct)) {
-    for (const child of construct.node.children) {
-      if (
-        VisualComponent.isVisualComponent(child) &&
-        child._newParent === undefined
-      ) {
-        uiComponents.push(child._toUIComponent());
-      }
+  for (const child of construct.node.children) {
+    if (
+      VisualComponent.isVisualComponent(child) &&
+      child._newParent === undefined
+    ) {
+      ui.push(child._toUIComponent());
     }
   }
 
-  if (display.description || display.title || display.hidden || uiComponents) {
+  if (display.description || display.title || display.hidden || ui) {
     return {
       title: display.title,
       description: display.description,
       hidden: display.hidden,
       sourceModule: display.sourceModule,
-      uiComponents: uiComponents.length > 0 ? uiComponents : undefined,
+      ui: ui.length > 0 ? ui : undefined,
     };
   }
   return;
