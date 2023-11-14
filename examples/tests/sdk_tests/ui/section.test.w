@@ -4,7 +4,7 @@ bring ui;
 class WidgetService {
   data: cloud.Bucket;
   counter: cloud.Counter;
-  init() {
+  new() {
     this.data = new cloud.Bucket();
     this.counter = new cloud.Counter();
     
