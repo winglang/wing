@@ -50,7 +50,7 @@ exports[`schedule behavior with cron 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
           },
         },
@@ -359,7 +359,7 @@ exports[`schedule behavior with rate 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Schedule-OnTick-c5395e41-c861b8f8",
           },
         },
@@ -687,7 +687,7 @@ exports[`schedule with two functions 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Schedule-OnTick-0a615500-c8fd8480",
           },
         },
@@ -711,7 +711,7 @@ exports[`schedule with two functions 1`] = `
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Schedule-OnTick-7b33bcba-c86000d7",
           },
         },

@@ -325,7 +325,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-oncreate-OnMessage-42558af0-c840cda8",
             "WING_TARGET": "tf-aws"
           }
@@ -360,7 +360,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-oncreate-OnMessage-47274dc3-c82ffa0f",
             "WING_TARGET": "tf-aws"
           }
@@ -395,7 +395,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-ondelete-OnMessage-4b0506cb-c82c9ed0",
             "WING_TARGET": "tf-aws"
           }
@@ -430,7 +430,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-ondelete-OnMessage-cd5c55f4-c8549dac",
             "WING_TARGET": "tf-aws"
           }
@@ -465,7 +465,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-onupdate-OnMessage-39d17a37-c8aa477a",
             "WING_TARGET": "tf-aws"
           }
@@ -500,7 +500,7 @@
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Bucket-onupdate-OnMessage-ff1f5e53-c810f519",
             "WING_TARGET": "tf-aws"
           }

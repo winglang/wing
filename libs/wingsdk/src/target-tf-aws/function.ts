@@ -218,7 +218,9 @@ export class Function extends cloud.Function implements IAwsFunction {
             ...this.env,
             // enable source maps
             NODE_OPTIONS: [
-              ...(this.env.NODE_OPTIONS ?? "").split(" "),
+              ...(this.env.NODE_OPTIONS === undefined
+                ? []
+                : this.env.NODE_OPTIONS.split(" ")),
               "--enable-source-maps",
             ].join(" "),
           }),

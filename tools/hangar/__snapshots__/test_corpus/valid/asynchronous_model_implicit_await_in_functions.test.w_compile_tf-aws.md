@@ -168,7 +168,7 @@ module.exports = function({ $strToStr }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.strToStr.arn}",
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "func-c8cf78f6",
             "WING_TARGET": "tf-aws"
           }
@@ -199,7 +199,7 @@ module.exports = function({ $strToStr }) {
         ],
         "environment": {
           "variables": {
-            "NODE_OPTIONS": " --enable-source-maps",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "strToStr-c8d5081f",
             "WING_TARGET": "tf-aws"
           }
