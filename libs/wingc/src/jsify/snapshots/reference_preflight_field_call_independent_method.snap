@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Foo {
       arr: Array<str>;
       
-      init() {
+      new() {
         this.arr = ["hello", "world"];
       }
     

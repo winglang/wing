@@ -35,25 +35,13 @@ export interface ServiceProps {
  * A long-running service.
  *
  * @inflight `@winglang/sdk.cloud.IServiceClient`
+ * @abstract
  */
-export abstract class Service extends Resource implements IInflightHost {
-  /**
-   * Create a new `Service` instance.
-   * @internal
-   */
-  public static _newService(
-    scope: Construct,
-    id: string,
-    handler: IServiceHandler,
-    props: ServiceProps = {}
-  ): Service {
-    return App.of(scope).newAbstract(SERVICE_FQN, scope, id, handler, props);
-  }
-
+export class Service extends Resource implements IInflightHost {
   /**
    * The entrypoint of the service.
    */
-  protected readonly entrypoint: string;
+  protected readonly entrypoint!: string;
 
   private readonly _env: Record<string, string> = {};
 
@@ -63,6 +51,10 @@ export abstract class Service extends Resource implements IInflightHost {
     handler: IServiceHandler,
     props: ServiceProps = {}
   ) {
+    if (new.target === Service) {
+      return Resource._newFromFactory(SERVICE_FQN, scope, id, handler, props);
+    }
+
     super(scope, id);
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
@@ -126,9 +118,6 @@ export abstract class Service extends Resource implements IInflightHost {
   public get env(): Record<string, string> {
     return { ...this._env };
   }
-
-  /** @internal */
-  public abstract _supportedOps(): string[];
 }
 
 /**

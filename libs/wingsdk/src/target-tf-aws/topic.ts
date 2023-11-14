@@ -64,7 +64,7 @@ export class Topic extends cloud.Topic {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -154,6 +154,10 @@ export class Topic extends cloud.Topic {
       "TopicClient",
       [`process.env["${this.envName()}"]`]
     );
+  }
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
   }
 
   private envName(): string {

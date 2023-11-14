@@ -42,7 +42,7 @@ assert(jj3 == Json "hello");
 
 class Foo {
   pub SumStr: str;
-  init() {
+  new() {
     this.SumStr = "wow!";
   }
 }

@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
       class Foo { }
       let x = 12;
       class Bar {
-        init() {
+        new() {
           x;
           new Foo();
         }

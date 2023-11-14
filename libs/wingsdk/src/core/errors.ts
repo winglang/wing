@@ -9,3 +9,9 @@ export class NotImplementedError extends Error {
     );
   }
 }
+
+export class AbstractMemberError extends Error {
+  constructor() {
+    super("This member is abstract and must be implemented in a subclass.");
+  }
+}

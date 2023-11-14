@@ -9,7 +9,7 @@ pub struct SomeStruct {
 pub class UsesStructInImportedFile {
   someStruct: SomeStruct;
 
-  init() {
+  new() {
     this.someStruct = SomeStruct.fromJson({foo: "123"});
   }
 }

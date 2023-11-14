@@ -17,7 +17,7 @@ resource TaskManager {
   fn: cloud.Function;
   state: cloud.Bucket;
 
-  init(handler: inflight (str): void) {
+  new(handler: inflight (str): void) {
     this.bucket = new cloud.Bucket();
 
     let wrapper = inflight (id: str, input: str) => {

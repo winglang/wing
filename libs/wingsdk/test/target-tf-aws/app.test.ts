@@ -9,8 +9,8 @@ test("artifacts are located in app root level outdir", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(app, "Handler", "async handle() {}");
-  Function._newFunction(app, "Function", inflight);
-  Function._newFunction(app, "Function2", inflight);
+  new Function(app, "Function", inflight);
+  new Function(app, "Function2", inflight);
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;
   const expectedAssetsDir = `${app.outdir}/assets`;
   const expectedAssetCount = 2; // 2 functions = 2 assets

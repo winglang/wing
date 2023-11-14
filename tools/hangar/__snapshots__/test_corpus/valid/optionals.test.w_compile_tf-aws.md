@@ -447,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
-    const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "orange bucket")});
+    const payloadWithBucket = ({"a": "a","c": this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:t", new $Closure1(this, "$Closure1"));
     const str1 = undefined;
     const str2 = undefined;

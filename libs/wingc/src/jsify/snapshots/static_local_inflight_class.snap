@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
       }
 
       class B {
-        init() {
+        new() {
           A.foo();
         }
       }

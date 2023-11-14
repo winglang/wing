@@ -383,8 +383,8 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this, "cloud.Topic").onMessage(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(180)) }));
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue").setConsumer(new $Closure2(this, "$Closure2"), { timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.new("@winglang/sdk.cloud.Topic",cloud.Topic,this, "cloud.Topic").onMessage(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue").setConsumer(new $Closure2(this, "$Closure2"), { timeout: (std.Duration.fromSeconds(180)) }));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

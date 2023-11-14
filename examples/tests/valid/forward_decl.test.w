@@ -17,7 +17,7 @@ class R {
     this.method2(); // we can call ourselves because we are defined in an outer scope
   }
   f: str;
-  init(/* empty */) {
+  new(/* empty */) {
     this.f = "Hello World!!!";
   }
   method1() {}

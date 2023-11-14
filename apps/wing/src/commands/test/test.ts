@@ -1,6 +1,5 @@
 import * as cp from "child_process";
 import { readFile, rm, rmSync } from "fs";
-import * as os from "os";
 import { basename, resolve, sep } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
@@ -11,7 +10,7 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { withSpinner } from "../../util";
+import { withSpinner, normalPath } from "../../util";
 import { compile, CompileOptions, NotImplementedError } from "../compile";
 
 const log = debug("wing:test");
@@ -29,11 +28,22 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  * Options for the `test` command.
  */
 export interface TestOptions extends CompileOptions {
-  /** Whether to keep the build output. */
+  /**
+   * Whether the output artifacts should be kept or cleaned up after the test run.
+   */
   clean: boolean;
+  /**
+   * The name of the output file.
+   */
   outputFile?: string;
-  /** String representing a RegEx used for test filtering. */
+  /**
+   * String representing a regex pattern used to selectively filter which tests to run.
+   */
   testFilter?: string;
+  /**
+   * How many times failed tests should be retried.
+   */
+  retry?: number;
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
@@ -46,10 +56,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   if (entrypoints.length === 0) {
     patterns = ["*.test.w"];
   } else {
-    patterns =
-      os.platform() === "win32"
-        ? entrypoints.map((entrypoint) => entrypoint.replace(/\\/g, "/"))
-        : entrypoints;
+    patterns = entrypoints.map((entrypoint) => normalPath(entrypoint));
   }
 
   const expandedEntrypoints = await glob(patterns);
@@ -230,22 +237,51 @@ export function filterTests(tests: Array<string>, regexString?: string): Array<s
   }
 }
 
+async function runTestsWithRetry(
+  testRunner: std.ITestRunnerClient,
+  tests: string[],
+  retries: number
+): Promise<std.TestResult[]> {
+  let runCount = retries + 1;
+  let remainingTests = tests;
+  const results: std.TestResult[] = [];
+
+  while (runCount > 0 && remainingTests.length > 0) {
+    const failedTests: string[] = [];
+
+    for (const testPath of remainingTests) {
+      const result = await testRunner.runTest(testPath);
+      results.push(result);
+
+      if (!result.pass) {
+        failedTests.push(testPath);
+      }
+    }
+
+    remainingTests = failedTests;
+
+    if (remainingTests.length > 0 && runCount > 1) {
+      console.log(`Retrying failed tests. ${runCount - 1} retries left.`);
+    }
+
+    runCount--;
+  }
+
+  return results;
+}
+
 async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new simulator.Simulator({ simfile: synthDir });
-  const { clean, testFilter } = options;
+  const { clean, testFilter, retry } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
-  const results = new Array<std.TestResult>();
-  // TODO: run these tests in parallel
-  for (const path of filteredTests) {
-    results.push(await testRunner.runTest(path));
-  }
+
+  const results = await runTestsWithRetry(testRunner, filteredTests, retry ?? 0);
 
   await s.stop();
-
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
@@ -258,8 +294,58 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   return results;
 }
 
+async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
+
+  try {
+    if (!isTerraformInstalled(synthDir)) {
+      throw new Error(
+        "Terraform is not installed. Please install Terraform to run tests in the cloud."
+      );
+    }
+
+    await withSpinner("terraform init", async () => terraformInit(synthDir));
+
+    await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
+      const { TestRunnerClient } = await import(
+        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
+      );
+      const runner = new TestRunnerClient(testArns);
+
+      const allTests = await runner.listTests();
+      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
+      return [runner, filteredTests];
+    });
+
+    const results = await withSpinner("Running tests...", async () => {
+      return runTestsWithRetry(testRunner, tests, retry ?? 0);
+    });
+
+    const testReport = renderTestReport(synthDir, results);
+    console.log(testReport);
+
+    if (testResultsContainsFailure(results)) {
+      console.log("One or more tests failed. Cleaning up resources...");
+    }
+
+    return results;
+  } catch (err) {
+    console.warn((err as Error).message);
+    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
+  } finally {
+    if (clean) {
+      await cleanupTf(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
+  }
+}
+
 async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
-  const { clean, testFilter } = options;
+  const { clean, testFilter, retry } = options;
   try {
     await isAwsCdkInstalled(synthDir);
 
@@ -285,11 +371,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const res = new Array<std.TestResult>();
-      for (const path of tests) {
-        res.push(await testRunner.runTest(path));
-      }
-      return res;
+      return runTestsWithRetry(testRunner, tests, retry ?? 0);
     });
 
     const testReport = renderTestReport(synthDir, results);
@@ -350,60 +432,6 @@ const targetFolder: Record<string, string> = {
   [BuiltinPlatform.TF_AWS]: "shared-aws",
   [BuiltinPlatform.TF_AZURE]: "shared-azure",
 };
-
-async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
-  const { clean, testFilter, platform = [BuiltinPlatform.SIM] } = options;
-
-  try {
-    if (!isTerraformInstalled(synthDir)) {
-      throw new Error(
-        "Terraform is not installed. Please install Terraform to run tests in the cloud."
-      );
-    }
-
-    await withSpinner("terraform init", async () => terraformInit(synthDir));
-
-    await withSpinner("terraform apply", () => terraformApply(synthDir));
-
-    const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
-      const { TestRunnerClient } = await import(
-        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
-      );
-      const runner = new TestRunnerClient(testArns);
-
-      const allTests = await runner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
-      return [runner, filteredTests];
-    });
-
-    const results = await withSpinner("Running tests...", async () => {
-      const res = new Array<std.TestResult>();
-      for (const path of tests) {
-        res.push(await testRunner.runTest(path));
-      }
-      return res;
-    });
-
-    const testReport = renderTestReport(synthDir, results);
-    console.log(testReport);
-
-    if (testResultsContainsFailure(results)) {
-      console.log("One or more tests failed. Cleaning up resources...");
-    }
-
-    return results;
-  } catch (err) {
-    console.warn((err as Error).message);
-    return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
-  } finally {
-    if (clean) {
-      await cleanupTf(synthDir);
-    } else {
-      noCleanUp(synthDir);
-    }
-  }
-}
 
 async function cleanupTf(synthDir: string) {
   await withSpinner("terraform destroy", () => terraformDestroy(synthDir));

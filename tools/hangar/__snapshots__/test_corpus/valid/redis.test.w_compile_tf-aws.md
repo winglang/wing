@@ -628,9 +628,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "ex.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "r2");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const r = this.node.root.new("@winglang/sdk.ex.Redis",ex.Redis,this, "ex.Redis");
+    const r2 = this.node.root.new("@winglang/sdk.ex.Redis",ex.Redis,this, "r2");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
     (queue.setConsumer(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(3)) }));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }

@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
       b: cloud.Bucket;
       q: cloud.Queue;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
         this.q = new cloud.Queue();
 
@@ -70,8 +70,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {

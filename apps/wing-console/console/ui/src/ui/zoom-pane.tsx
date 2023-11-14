@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import * as d3Selection from "d3-selection";
 import * as d3Zoom from "d3-zoom";
-import throttle from "lodash.throttle";
-import { forwardRef, useEffect } from "react";
+import { forwardRef } from "react";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -35,14 +34,12 @@ export interface Viewport {
 }
 
 export interface ZoomPaneContextValue {
-  transform: d3Zoom.ZoomTransform;
   zoomIn(): void;
   zoomOut(): void;
   zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
 }
 
 const ZoomPaneContext = createContext<ZoomPaneContextValue>({
-  transform: d3Zoom.zoomIdentity,
   zoomIn() {},
   zoomOut() {},
   zoomToFit() {},
@@ -77,10 +74,6 @@ const MAX_ZOOM_LEVEL = 2;
 export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   props,
 ) => {
-  const [transform, setTransform] = useState(() => d3Zoom.zoomIdentity);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const setTransformThrottled = useCallback(throttle(setTransform, 200), []);
-
   const targetRef = useRef<HTMLDivElement>(null);
   const [zoom] = useState(() =>
     d3Zoom
@@ -92,7 +85,6 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
         if (targetRef.current) {
           targetRef.current.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
         }
-        setTransformThrottled(transform);
       }),
   );
   const [selection, setSelection] = useState<Selection | undefined>();
@@ -169,10 +161,18 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
       value={{ zoom, selection, select, targetRef }}
     >
       <ZoomPaneContext.Provider
-        value={{ transform, zoomIn, zoomOut, zoomToFit }}
+        value={{
+          zoomIn,
+          zoomOut,
+          zoomToFit,
+        }}
       >
         {typeof props.children === "function" ? (
-          props.children({ transform, zoomIn, zoomOut, zoomToFit })
+          props.children({
+            zoomIn,
+            zoomOut,
+            zoomToFit,
+          })
         ) : (
           <>{props.children}</>
         )}

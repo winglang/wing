@@ -20,6 +20,7 @@ const PUBLIC_MODULES = [
   "regex",
   "sim",
   "fs",
+  "expect",
 ];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
@@ -62,19 +63,19 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.438.0",
-    "@aws-sdk/client-dynamodb@3.438.0",
-    "@aws-sdk/client-elasticache@3.438.0",
-    "@aws-sdk/util-dynamodb@3.438.0",
-    "@aws-sdk/client-lambda@3.438.0",
-    "@aws-sdk/client-s3@3.438.0",
-    "@aws-sdk/client-secrets-manager@3.438.0",
-    "@aws-sdk/client-sqs@3.438.0",
-    "@aws-sdk/client-sns@3.438.0",
-    "@aws-sdk/types@3.433.0",
+    "@aws-sdk/client-cloudwatch-logs@3.449.0",
+    "@aws-sdk/client-dynamodb@3.449.0",
+    "@aws-sdk/client-elasticache@3.449.0",
+    "@aws-sdk/util-dynamodb@3.449.0",
+    "@aws-sdk/client-lambda@3.449.0",
+    "@aws-sdk/client-secrets-manager@3.449.0",
+    "@aws-sdk/client-sqs@3.449.0",
+    "@aws-sdk/client-sns@3.449.0",
+    "@aws-sdk/client-s3@3.449.0",
+    "@aws-sdk/s3-request-presigner@3.449.0",
+    "@aws-sdk/types@3.449.0",
     "@smithy/util-stream@2.0.17",
     "@smithy/util-utf8@2.0.0",
-    "@aws-sdk/s3-request-presigner@3.438.0",
     "@types/aws-lambda",
     "mime-types",
     "mime@^3.0.0",
