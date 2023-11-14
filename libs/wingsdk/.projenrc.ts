@@ -21,6 +21,7 @@ const PUBLIC_MODULES = [
   "sim",
   "fs",
   "expect",
+  "ui",
 ];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
