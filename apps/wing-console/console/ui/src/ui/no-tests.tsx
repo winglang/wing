@@ -7,7 +7,7 @@ export const NoTests = () => {
     <div
       className={classNames(
         theme.text2,
-        "flex flex-col text-2xs px-3 py-2 font-mono items-center",
+        "flex flex-col text-xs px-3 py-2 items-center",
       )}
     >
       <div>There are no tests.</div>
