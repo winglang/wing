@@ -1,7 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Topic } from "@winglang/sdk/lib/cloud";
-import { Testing } from "@winglang/sdk/lib/simulator";
+import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 import { sanitizeCode } from "./util";
@@ -14,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default topic behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Topic(app, "Topic");
+  new cloud.Topic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -25,8 +24,8 @@ test("default topic behavior", () => {
 test("topic with subscriber function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = new Topic(app, "Topic");
-  const subscriber = Testing.makeHandler(
+  const topic = new cloud.Topic(app, "Topic");
+  const subscriber = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
@@ -48,13 +47,13 @@ test("topic with subscriber function", () => {
 test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = new Topic(app, "Topic");
-  const subOne = Testing.makeHandler(
+  const topic = new cloud.Topic(app, "Topic");
+  const subOne = simulator.Testing.makeHandler(
     app,
     "Handler1",
     `async handle(event) { console.log("Got Event: ", event); }`
   );
-  const subTwo = Testing.makeHandler(
+  const subTwo = simulator.Testing.makeHandler(
     app,
     "Handler2",
     `async handle(event) { console.log("Ohh yea!! ", event); }`

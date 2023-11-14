@@ -1,7 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Bucket } from "@winglang/sdk/lib/cloud";
-import { Testing } from "@winglang/sdk/lib/simulator";
+import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 
@@ -13,7 +12,7 @@ const CDK_APP_OPTS = {
 test("create a bucket", async () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Bucket(app, "my_bucket");
+  new cloud.Bucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -35,7 +34,7 @@ test("create a bucket", async () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Bucket(app, "my_bucket", { public: true });
+  new cloud.Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -47,7 +46,7 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket", { public: true });
+  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
@@ -70,7 +69,7 @@ test("bucket with two preflight objects", () => {
 test("bucket with two preflight files", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket", { public: true });
+  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
   bucket.addFile("file1.txt", "../test/test-files/test1.txt");
   bucket.addFile("file2.txt", "../test/test-files/test2.txt");
   const output = app.synth();
@@ -93,8 +92,8 @@ test("bucket with two preflight files", () => {
 test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket");
-  const processor = Testing.makeHandler(
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const processor = simulator.Testing.makeHandler(
     app,
     "Handler",
     `\
@@ -125,8 +124,8 @@ async handle(event) {
 test("bucket with onDelete method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket");
-  const processor = Testing.makeHandler(
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const processor = simulator.Testing.makeHandler(
     app,
     "Handler",
     `\
@@ -157,8 +156,8 @@ async handle(event) {
 test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket");
-  const processor = Testing.makeHandler(
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const processor = simulator.Testing.makeHandler(
     app,
     "Handler",
     `\
@@ -189,8 +188,8 @@ async handle(event) {
 test("bucket with onEvent method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new Bucket(app, "my_bucket");
-  const processor = Testing.makeHandler(
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const processor = simulator.Testing.makeHandler(
     app,
     "Handler",
     `\

@@ -1,8 +1,6 @@
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Queue } from "@winglang/sdk/lib/cloud";
-import { Testing } from "@winglang/sdk/lib/simulator";
-import * as std from "@winglang/sdk/lib/std";
+import { std, simulator, cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 import { sanitizeCode } from "./util";
@@ -15,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default queue behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Queue(app, "Queue");
+  new cloud.Queue(app, "Queue");
   const output = app.synth();
 
   // THEN
@@ -26,7 +24,7 @@ test("default queue behavior", () => {
 test("queue with custom timeout", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Queue(app, "Queue", {
+  new cloud.Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -39,7 +37,7 @@ test("queue with custom timeout", () => {
 test("queue with custom retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Queue(app, "Queue", {
+  new cloud.Queue(app, "Queue", {
     retentionPeriod: std.Duration.fromMinutes(30),
   });
   const output = app.synth();
@@ -52,10 +50,10 @@ test("queue with custom retention", () => {
 test("queue with a consumer function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const queue = new Queue(app, "Queue", {
+  const queue = new cloud.Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = Testing.makeHandler(
+  const processor = simulator.Testing.makeHandler(
     app,
     "Handler",
     `\

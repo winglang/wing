@@ -1,7 +1,7 @@
 import { Stack } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Secret } from "@winglang/sdk/lib/cloud";
+import { cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
 
@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default secret behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Secret(app, "Secret");
+  new cloud.Secret(app, "Secret");
   const output = app.synth();
 
   // THEN
@@ -25,7 +25,7 @@ test("default secret behavior", () => {
 test("secret with a name", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const secret = new Secret(app, "Secret", {
+  const secret = new cloud.Secret(app, "Secret", {
     name: "my-secret",
   }) as awscdk.Secret;
 

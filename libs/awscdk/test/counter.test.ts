@@ -1,7 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Counter, Function, CounterInflightMethods } from "@winglang/sdk/lib/cloud"
-import { Testing } from "@winglang/sdk/lib/simulator";
+import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 import { sanitizeCode } from "./util";
@@ -13,7 +12,7 @@ const CDK_APP_OPTS = {
 
 test("default counter behavior", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Counter(app, "Counter");
+  new cloud.Counter(app, "Counter");
   const output = app.synth();
 
   const template = Template.fromJSON(JSON.parse(output));
@@ -30,7 +29,7 @@ test("default counter behavior", () => {
 
 test("counter with initial value", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new Counter(app, "Counter", {
+  new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
   const output = app.synth();
@@ -49,8 +48,8 @@ test("counter with initial value", () => {
 
 test("function with a counter binding", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
@@ -60,11 +59,11 @@ test("function with a counter binding", () => {
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.INC],
+        ops: [cloud.CounterInflightMethods.INC],
       },
     }
   );
-  new Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
@@ -78,8 +77,8 @@ test("function with a counter binding", () => {
 
 test("inc() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
@@ -89,11 +88,11 @@ test("inc() policy statement", () => {
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.INC],
+        ops: [cloud.CounterInflightMethods.INC],
       },
     }
   );
-  new Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
@@ -113,8 +112,8 @@ test("inc() policy statement", () => {
 
 test("dec() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
@@ -124,11 +123,11 @@ test("dec() policy statement", () => {
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.DEC],
+        ops: [cloud.CounterInflightMethods.DEC],
       },
     }
   );
-  new Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
@@ -148,8 +147,8 @@ test("dec() policy statement", () => {
 
 test("peek() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
@@ -159,11 +158,11 @@ test("peek() policy statement", () => {
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.PEEK],
+        ops: [cloud.CounterInflightMethods.PEEK],
       },
     }
   );
-  new Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
@@ -183,8 +182,8 @@ test("peek() policy statement", () => {
 
 test("set() policy statement", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const counter = new Counter(app, "Counter");
-  const inflight = Testing.makeHandler(
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) {
@@ -194,11 +193,11 @@ test("set() policy statement", () => {
     {
       my_counter: {
         obj: counter,
-        ops: [CounterInflightMethods.SET],
+        ops: [cloud.CounterInflightMethods.SET],
       },
     }
   );
-  new Function(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();

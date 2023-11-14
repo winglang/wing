@@ -1,7 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
-import { Bucket, OnDeploy } from "@winglang/sdk/lib/cloud";
-import { Testing } from "@winglang/sdk/lib/simulator";
+import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 
@@ -18,8 +17,8 @@ test("create an OnDeploy", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new OnDeploy(app, "my_on_deploy", handler);
+  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.OnDeploy(app, "my_on_deploy", handler);
   const output = app.synth();
 
   // THEN
@@ -35,9 +34,9 @@ test("execute OnDeploy after other resources", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const bucket = new Bucket(app, "my_bucket");
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new OnDeploy(app, "my_on_deploy", handler, {
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeAfter: [bucket],
   });
   const output = app.synth();
@@ -58,9 +57,9 @@ test("execute OnDeploy before other resources", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const bucket = new Bucket(app, "my_bucket");
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new OnDeploy(app, "my_on_deploy", handler, {
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeBefore: [bucket],
   });
   const output = app.synth();

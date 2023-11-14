@@ -1,8 +1,6 @@
 import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
-import { Schedule } from "@winglang/sdk/lib/cloud";
-import { Testing } from "@winglang/sdk/lib/simulator";
-import * as std from "@winglang/sdk/lib/std";
+import { simulator, cloud, std } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
 
@@ -14,12 +12,12 @@ const CDK_APP_OPTS = {
 test("schedule behavior with rate", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = Testing.makeHandler(
+  const fn = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new Schedule(app, "Schedule", {
+  const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
   schedule.onTick(fn);
@@ -37,12 +35,12 @@ test("schedule behavior with rate", () => {
 test("schedule behavior with cron", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = Testing.makeHandler(
+  const fn = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new Schedule(app, "Schedule", {
+  const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -60,17 +58,17 @@ test("schedule behavior with cron", () => {
 test("schedule with two functions", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = Testing.makeHandler(
+  const fn = simulator.Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const fn2 = Testing.makeHandler(
+  const fn2 = simulator.Testing.makeHandler(
     app,
     "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new Schedule(app, "Schedule", {
+  const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -99,7 +97,7 @@ test("schedule with rate and cron simultaneously", () => {
   // THEN
   expect(
     () =>
-      new Schedule(app, "Schedule", {
+      new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
         cron: "0/1 * ? * *",
       })
@@ -113,7 +111,7 @@ test("cron with more than five values", () => {
   // THEN
   expect(
     () =>
-      new Schedule(app, "Schedule", {
+      new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
       })
   ).toThrow(
@@ -126,7 +124,7 @@ test("schedule without rate or cron", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
-  expect(() => new Schedule(app, "Schedule")).toThrow(
+  expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
     "rate or cron need to be filled."
   );
 });
@@ -138,7 +136,7 @@ test("schedule with rate less than 1 minute", () => {
   // THEN
   expect(
     () =>
-      new Schedule(app, "Schedule", {
+      new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
       })
   ).toThrow("rate can not be set to less than 1 minute.");
@@ -151,7 +149,7 @@ test("cron with Day-of-month and Day-of-week setting with *", () => {
   // THEN
   expect(
     () =>
-      new Schedule(app, "Schedule", {
+      new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * * * *",
       })
   ).toThrow(
