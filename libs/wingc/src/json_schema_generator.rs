@@ -12,11 +12,11 @@ impl JsonSchemaGenerator {
 
 	fn get_struct_env_properties(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
-		for (field_name, (.., kind)) in env.symbol_map.iter() {
+		for (field_name, entry) in env.symbol_map.iter() {
 			code.line(format!(
 				"{}: {},",
 				field_name,
-				self.get_struct_schema_field(&kind.as_variable().unwrap().type_)
+				self.get_struct_schema_field(&entry.kind.as_variable().unwrap().type_)
 			));
 		}
 		code
@@ -25,8 +25,8 @@ impl JsonSchemaGenerator {
 	fn get_struct_schema_required_fields(&self, env: &SymbolEnv) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open("required: [");
-		for (field_name, (_stmt_idx, kind)) in env.symbol_map.iter() {
-			if !matches!(*kind.as_variable().unwrap().type_, Type::Optional(_)) {
+		for (field_name, entry) in env.symbol_map.iter() {
+			if !matches!(*entry.kind.as_variable().unwrap().type_, Type::Optional(_)) {
 				code.line(format!("\"{}\",", field_name));
 			}
 		}

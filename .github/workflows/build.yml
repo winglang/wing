@@ -19,7 +19,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
   CARGO_TERM_COLOR: always
@@ -52,19 +51,16 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -102,7 +98,7 @@ jobs:
 
   test:
     name: Test
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -114,19 +110,16 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
+        uses: moonrepo/setup-rust@v1
         with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
+          inherit-toolchain: true
+          cache: false
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -174,7 +167,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
@@ -182,10 +175,16 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
-      - name: Run E2E Benchmarks
+      - name: Run Baseline Benchmarks
+        working-directory: tools/hangar
+        if: github.event_name == 'pull_request'
         env:
-          BENCH_FAIL_THRESHOLD_PERCENT: "50"
-          BENCH_COMPARE_PREVIOUS: "${{ github.event_name == 'pull_request' && 'main' || '' }}"
+          HANGAR_WINGLANG_PACKAGE: "winglang@latest"
+        run: pnpm bench
+
+      - name: Run Benchmarks
+        env:
+          BENCH_FAIL_THRESHOLD_PERCENT: "25"
           GITHUB_TOKEN: ${{ env.IS_SAME_REPO_PR == 'true' && secrets.PROJEN_GITHUB_TOKEN || secrets.GITHUB_TOKEN  }}
           BENCH_PR: "${{ env.IS_SAME_REPO_PR == 'true' && github.event.pull_request.number || '' }}"
         working-directory: tools/hangar
@@ -231,7 +230,7 @@ jobs:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: "pnpm"
           node-version: ${{ matrix.node }}
@@ -243,7 +242,9 @@ jobs:
           path: dist
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
@@ -305,7 +306,7 @@ jobs:
         run: |
           if ! flyctl status --app "$APP_NAME"; then
             pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest
+            flyctl launch --no-deploy --copy-config --name "$APP_NAME" --image-label latest -o personal
             popd
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
@@ -317,7 +318,7 @@ jobs:
         with:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
-            
+
             ###### Last Updated (UTC) ${{steps.deploy-fly.outputs.deploytime }}
           comment_tag: Console preview environment
           GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
@@ -379,9 +380,10 @@ jobs:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         with:
           max_attempts: 7
-          retry_on: error
           timeout_minutes: 5
           command: |
+            set -o pipefail
+
             cd dist
             PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
             for PACKAGE in "${PACKAGES[@]}"; do
@@ -396,6 +398,11 @@ jobs:
               TARBALL=$(echo "$PACKAGE-$PACKAGE_VERSION.tgz" | sed 's/@//g' | sed 's/\//-/g')
 
               npm publish "$TARBALL" --access public --verbose
+
+              if [ $? -ne 0 ]; then
+                echo "Publishing $PACKAGE failed, exiting"
+                exit 1
+              fi
             done
 
       - name: Publish Extension to Visual Studio Marketplace

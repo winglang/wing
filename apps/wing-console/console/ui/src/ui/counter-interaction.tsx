@@ -9,6 +9,7 @@ export interface CounterInteractionProps {
   handleReset: () => void;
   currentValue: number;
 }
+
 export const CounterInteraction = ({
   handleDecrement,
   handleIncrement,
@@ -35,13 +36,13 @@ export const CounterInteraction = ({
             small
             icon={MinusSmallIcon}
             className="px-0.5"
-            onClick={() => handleDecrement()}
+            onClick={handleDecrement}
             dataTestid="cloud.counter:decrease"
           />
           <input
             id={actualValueElementId}
             className={classNames(
-              "w-full border opacity-70 ease-in-out items-center px-2 select-text text-sm transition truncate rounded",
+              "w-full border opacity-70 ease-in-out items-center px-2 py-0 select-text text-sm transition truncate rounded",
               theme.bgInput,
               theme.borderInput,
               theme.textInput,
@@ -55,7 +56,7 @@ export const CounterInteraction = ({
             small
             icon={PlusSmallIcon}
             className="px-0.5"
-            onClick={() => handleIncrement()}
+            onClick={handleIncrement}
             dataTestid="cloud.counter:increase"
           />
         </div>
@@ -72,7 +73,7 @@ export const CounterInteraction = ({
           id={resetValueElementId}
           title="Reset value"
           label="Reset value"
-          onClick={() => handleReset()}
+          onClick={handleReset}
           dataTestid="cloud.counter:reset"
         />
       </div>

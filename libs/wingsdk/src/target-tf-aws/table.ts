@@ -51,7 +51,7 @@ export class Table extends ex.Table {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
@@ -79,7 +79,10 @@ export class Table extends ex.Table {
       });
     }
 
-    if (ops.includes(ex.TableInflightMethods.GET)) {
+    if (
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
+    ) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
         resources: [this.table.arn],
@@ -97,7 +100,7 @@ export class Table extends ex.Table {
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
     host.addEnvironment(this.columnsEnvName(), JSON.stringify(this.columns));
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
@@ -112,6 +115,19 @@ export class Table extends ex.Table {
         `process.env["${this.columnsEnvName()}"]`,
       ]
     );
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.TableInflightMethods.INSERT,
+      ex.TableInflightMethods.UPSERT,
+      ex.TableInflightMethods.UPDATE,
+      ex.TableInflightMethods.DELETE,
+      ex.TableInflightMethods.GET,
+      ex.TableInflightMethods.TRYGET,
+      ex.TableInflightMethods.LIST,
+    ];
   }
 
   private envName(): string {

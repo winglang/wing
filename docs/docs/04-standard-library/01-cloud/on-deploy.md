@@ -141,6 +141,7 @@ let OnDeployProps = cloud.OnDeployProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.logRetentionDays">logRetentionDays</a></code> | <code>num</code> | Specifies the number of days that function logs will be kept. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.OnDeployProps.property.executeAfter">executeAfter</a></code> | <code>MutArray&lt;constructs.Construct&gt;</code> | Execute this trigger only after these resources have been provisioned. |
@@ -161,6 +162,21 @@ Environment variables to pass to the function.
 
 ---
 
+##### `logRetentionDays`<sup>Optional</sup> <a name="logRetentionDays" id="@winglang/sdk.cloud.OnDeployProps.property.logRetentionDays"></a>
+
+```wing
+logRetentionDays: num;
+```
+
+- *Type:* num
+- *Default:* 30
+
+Specifies the number of days that function logs will be kept.
+
+Setting negative value means logs will not expire.
+
+---
+
 ##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.OnDeployProps.property.memory"></a>
 
 ```wing
@@ -168,7 +184,7 @@ memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 

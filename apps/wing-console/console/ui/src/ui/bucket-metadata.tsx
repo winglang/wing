@@ -12,7 +12,7 @@ export const BucketMetadata = ({ node }: BucketMetadataProps) => {
   return (
     <div
       className={classNames(
-        "px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4",
+        "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
         theme.bg3,
         theme.text2,
       )}

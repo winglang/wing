@@ -48,7 +48,7 @@ export class RedisClient extends RedisClientBase {
     return cacheNode.Endpoint.Address!;
   }
 
-  public async rawClient(): Promise<any> {
+  protected async rawClient(): Promise<any> {
     if (!this.clusterId) {
       throw new Error("No cluster id provided");
     }

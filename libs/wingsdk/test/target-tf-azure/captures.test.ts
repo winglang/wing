@@ -7,8 +7,12 @@ import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("function with a bucket binding requiring read_write", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = cloud.Bucket._newBucket(app, "Bucket");
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
+  const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -22,7 +26,7 @@ test("function with a bucket binding requiring read_write", () => {
   );
 
   // WHEN
-  cloud.Function._newFunction(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -37,6 +41,7 @@ test("function with a bucket binding requiring read_write", () => {
   ).toEqual(true);
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app",
     "azurerm_resource_group",
     "azurerm_role_assignment",
@@ -50,8 +55,12 @@ test("function with a bucket binding requiring read_write", () => {
 
 test("function with a bucket binding requiring only read", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = cloud.Bucket._newBucket(app, "Bucket");
+  const app = new tfazure.App({
+    outdir: mkdtemp(),
+    location: "East US",
+    entrypointDir: __dirname,
+  });
+  const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -65,7 +74,7 @@ test("function with a bucket binding requiring only read", () => {
   );
 
   // WHEN
-  cloud.Function._newFunction(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -91,6 +100,7 @@ test("function with a bucket binding requiring only read", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "azurerm_application_insights",
     "azurerm_linux_function_app",
     "azurerm_resource_group",
     "azurerm_role_assignment",

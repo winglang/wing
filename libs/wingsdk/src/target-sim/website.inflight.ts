@@ -1,13 +1,13 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
-import { ApiAttributes, WebsiteSchema, WEBSITE_TYPE } from "./schema-resources";
-import { IWebsiteClient } from "../cloud";
+import { ApiAttributes, WebsiteSchema, FileRoutes } from "./schema-resources";
+import { IWebsiteClient, WEBSITE_FQN } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { Json, TraceType } from "../std";
+import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -25,13 +25,14 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
 
     // Use static directory
     this.app.use(express.static(props.staticFilesPath));
-    this.initiateJsonRoutes(props.jsonRoutes);
+    this.initiateFileRoutes(props.fileRoutes);
   }
 
-  private initiateJsonRoutes(routes: Record<string, Json>) {
+  private initiateFileRoutes(routes: FileRoutes) {
     for (const path in routes) {
       this.app.get(`/${path}`, (_, res) => {
-        res.json(routes[path]);
+        res.setHeader("Content-Type", routes[path].contentType);
+        res.send(routes[path].data);
       });
     }
   }
@@ -72,7 +73,7 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
         message,
       },
       sourcePath: this.context.resourcePath,
-      sourceType: WEBSITE_TYPE,
+      sourceType: WEBSITE_FQN,
       timestamp: new Date().toISOString(),
     });
   }

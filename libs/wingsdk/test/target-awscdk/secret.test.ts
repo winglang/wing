@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default secret behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Secret._newSecret(app, "Secret");
+  new Secret(app, "Secret");
   const output = app.synth();
 
   // THEN
@@ -25,7 +25,7 @@ test("default secret behavior", () => {
 test("secret with a name", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const secret = Secret._newSecret(app, "Secret", {
+  const secret = new Secret(app, "Secret", {
     name: "my-secret",
   }) as awscdk.Secret;
 

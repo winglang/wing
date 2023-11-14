@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       return $obj;
     }
     async handle() {
-      (await $__parent_this_1_b.put("data.txt","<empty>"));
+      (await $__parent_this_1_b.put("data.txt", "<empty>"));
     }
   }
   return $Closure1;
@@ -20,13 +21,14 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ## inflight.Store-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
       this.$this_b = $this_b;
     }
     async store(data) {
-      (await this.$this_b.put("data.txt",data));
+      (await this.$this_b.put("data.txt", data));
     }
   }
   return Store;
@@ -36,6 +38,7 @@ module.exports = function({  }) {
 
 ## inflight.Util-1.js
 ```js
+"use strict";
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -48,6 +51,7 @@ module.exports = function({  }) {
 
 ## preflight.empty-1.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
@@ -57,14 +61,15 @@ module.exports = function({ $stdlib }) {
 
 ## preflight.js
 ```js
+"use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Util extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
+    constructor($scope, $id, ) {
+      super($scope, $id);
     }
     static _toInflightType(context) {
       return `
@@ -83,18 +88,18 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
-    constructor(scope, id, ) {
-      super(scope, id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    constructor($scope, $id, ) {
+      super($scope, $id);
+      this.b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
+        constructor($scope, $id, ) {
+          super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
         static _toInflightType(context) {
@@ -115,17 +120,17 @@ module.exports = function({ $stdlib }) {
             })())
           `;
         }
-        _getInflightOps() {
+        _supportedOps() {
           return ["handle", "$inflight_init"];
         }
-        _registerBind(host, ops) {
+        _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
-            $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+            $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
           }
-          super._registerBind(host, ops);
+          super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
+      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy",cloud.OnDeploy,this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `
@@ -145,17 +150,17 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
-    _getInflightOps() {
+    _supportedOps() {
       return ["store", "$inflight_init"];
     }
-    _registerBind(host, ops) {
+    _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
-        Store._registerBindObject(this.b, host, []);
+        Store._registerOnLiftObject(this.b, host, []);
       }
       if (ops.includes("store")) {
-        Store._registerBindObject(this.b, host, ["put"]);
+        Store._registerOnLiftObject(this.b, host, ["put"]);
       }
-      super._registerBind(host, ops);
+      super._registerOnLift(host, ops);
     }
   }
   const Color =

@@ -3,7 +3,7 @@
 exports[`bucket is public 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -152,7 +152,7 @@ exports[`bucket is public 2`] = `
 exports[`bucket prefix must be lowercase 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -267,7 +267,7 @@ exports[`bucket prefix must be lowercase 2`] = `
 exports[`bucket prefix valid 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -382,11 +382,17 @@ exports[`bucket prefix valid 2`] = `
 exports[`bucket with onCreate method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_CloudwatchLogGroup_6917D6E9": {
+        "name": "/aws/lambda/my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -416,12 +422,13 @@ exports[`bucket with onCreate method 1`] = `
         },
         "function_name": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -651,6 +658,14 @@ exports[`bucket with onCreate method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -784,11 +799,17 @@ exports[`bucket with onCreate method 2`] = `
 exports[`bucket with onDelete method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_CloudwatchLogGroup_FFDFBC6C": {
+        "name": "/aws/lambda/my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -818,12 +839,13 @@ exports[`bucket with onDelete method 1`] = `
         },
         "function_name": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_S3Object_2203B527.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1053,6 +1075,14 @@ exports[`bucket with onDelete method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1186,11 +1216,25 @@ exports[`bucket with onDelete method 2`] = `
 exports[`bucket with onEvent method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_CloudwatchLogGroup_6917D6E9": {
+        "name": "/aws/lambda/my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
+        "retention_in_days": 30,
+      },
+      "my_bucket_my_bucket-ondelete-OnMessage-1de1a361_CloudwatchLogGroup_FFDFBC6C": {
+        "name": "/aws/lambda/my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
+        "retention_in_days": 30,
+      },
+      "my_bucket_my_bucket-onupdate-OnMessage-46c07356_CloudwatchLogGroup_7D60006A": {
+        "name": "/aws/lambda/my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -1242,12 +1286,13 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_S3Object_AA8B2734.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1264,12 +1309,13 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_S3Object_2203B527.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1286,12 +1332,13 @@ exports[`bucket with onEvent method 1`] = `
         },
         "function_name": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-46c07356_S3Object_0B6EDB66.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -1583,6 +1630,14 @@ exports[`bucket with onEvent method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1713,6 +1768,14 @@ exports[`bucket with onEvent method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -1842,6 +1905,14 @@ exports[`bucket with onEvent method 2`] = `
                         },
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
+                      },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -1976,11 +2047,17 @@ exports[`bucket with onEvent method 2`] = `
 exports[`bucket with onUpdate method 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "my_bucket_my_bucket-onupdate-OnMessage-46c07356_CloudwatchLogGroup_7D60006A": {
+        "name": "/aws/lambda/my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
+        "retention_in_days": 30,
+      },
+    },
     "aws_iam_role": {
       "my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -2010,12 +2087,13 @@ exports[`bucket with onUpdate method 1`] = `
         },
         "function_name": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-46c07356_S3Object_0B6EDB66.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -2245,6 +2323,14 @@ exports[`bucket with onUpdate method 2`] = `
                         "id": "Asset",
                         "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/Asset",
                       },
+                      "CloudwatchLogGroup": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "CloudwatchLogGroup",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356/CloudwatchLogGroup",
+                      },
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -2378,7 +2464,7 @@ exports[`bucket with onUpdate method 2`] = `
 exports[`bucket with two preflight files 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2555,7 +2641,7 @@ exports[`bucket with two preflight files 2`] = `
 exports[`bucket with two preflight objects 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -2732,7 +2818,7 @@ exports[`bucket with two preflight objects 2`] = `
 exports[`create a bucket 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },

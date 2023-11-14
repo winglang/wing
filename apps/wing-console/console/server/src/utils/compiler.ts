@@ -35,7 +35,7 @@ export const createCompiler = (wingfile: string): Compiler => {
       isCompiling = true;
       await events.emit("compiling");
       const simfile = await wing.compile(wingfile, {
-        target: wing.Target.SIM,
+        platform: [wing.BuiltinPlatform.SIM],
       });
       await events.emit("compiled", { simfile });
     } catch (error) {
@@ -61,7 +61,15 @@ export const createCompiler = (wingfile: string): Compiler => {
   };
 
   const dirname = path.dirname(wingfile);
-  const ignoreList = ["**/target/**", "**/node_modules/**"];
+  //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3956
+  const ignoreList = [
+    "**/target/**",
+    "**/node_modules/**",
+    "**/**/wing.js",
+    "**/src/**",
+    "**/build/**",
+    "**/public/**",
+  ];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
   });

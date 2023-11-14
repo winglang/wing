@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Node, Resource } from "../std";
 
 /**
@@ -22,42 +21,25 @@ export interface CounterProps {
 /**
  * A distributed atomic counter.
  * @inflight `@winglang/sdk.cloud.ICounterClient`
+ * @abstract
  */
-export abstract class Counter extends Resource {
-  /**
-   * Create a new counter.
-   * @internal
-   */
-  public static _newCounter(
-    scope: Construct,
-    id: string,
-    props: CounterProps = {}
-  ): Counter {
-    return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
-  }
-
+export class Counter extends Resource {
   /**
    * The initial value of the counter.
    */
-  public readonly initial: number;
+  public readonly initial!: number;
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
+    if (new.target === Counter) {
+      return Resource._newFromFactory(COUNTER_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Counter";
     Node.of(this).description = "A distributed atomic counter";
 
     this.initial = props.initial ?? 0;
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      CounterInflightMethods.INC,
-      CounterInflightMethods.DEC,
-      CounterInflightMethods.PEEK,
-      CounterInflightMethods.SET,
-    ];
   }
 }
 

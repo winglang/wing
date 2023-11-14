@@ -21,7 +21,8 @@ test("unsupported resource in target", async ({ expect }) => {
   const result = await runWingCommand({
     cwd: workdir,
     wingFile: entrypoint,
-    args: ["compile", "--target", "tf-gcp"],
+    platforms: ["tf-gcp"],
+    args: ["compile"],
     expectFailure: true,
     env: {
       GOOGLE_PROJECT_ID: "test-project",
@@ -32,10 +33,11 @@ test("unsupported resource in target", async ({ expect }) => {
   expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot(`
     "ERROR: A Google Cloud region must be specified through the GOOGLE_REGION environment variable.
 
-    target/main.tfgcp.[REDACTED].tmp/.wing/preflight.js:13
+    target/main.tfgcp.[REDACTED].tmp/.wing/preflight.js:14
        }
-       const $App = $stdlib.core.App.for<PATH>;
-    >> new $App({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+       const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+    >> const $APP = $PlatformManager.createApp({ outdir: $outdir, name: \\"main\\", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+       $APP.synth();
        
     "
   `);

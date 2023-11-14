@@ -10,7 +10,7 @@ import {
   MegaphoneIcon,
   QueueListIcon,
   TableCellsIcon,
-  LockClosedIcon,
+  KeyIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -23,7 +23,7 @@ import {
   MegaphoneIcon as SolidMegaphoneIcon,
   QueueListIcon as SolidQueueListIcon,
   TableCellsIcon as SolidTableCellsIcon,
-  LockClosedIcon as SolidLockClosedIcon,
+  KeyIcon as SolidKeyIcon,
 } from "@heroicons/react/24/solid";
 
 import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
@@ -44,44 +44,44 @@ export const getResourceIconComponent = (
     return solid ? SolidBeakerIcon : BeakerIcon;
   }
   switch (resourceType) {
-    case "wingsdk.cloud.Bucket": {
+    case "@winglang/sdk.cloud.Bucket": {
       return solid ? SolidArchiveBoxIcon : ArchiveBoxIcon;
     }
-    case "wingsdk.cloud.Function": {
+    case "@winglang/sdk.cloud.Function": {
       return solid ? SolidBoltIcon : BoltIcon;
     }
-    case "wingsdk.cloud.Queue": {
+    case "@winglang/sdk.cloud.Queue": {
       return solid ? SolidQueueListIcon : QueueListIcon;
     }
-    case "wingsdk.cloud.Website":
-    case "wingsdk.cloud.Endpoint": {
+    case "@winglang/sdk.cloud.Website":
+    case "@winglang/sdk.cloud.Endpoint": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
     }
-    case "wingsdk.cloud.Counter": {
+    case "@winglang/sdk.cloud.Counter": {
       return solid ? SolidCalculatorIcon : CalculatorIcon;
     }
-    case "wingsdk.cloud.Topic": {
+    case "@winglang/sdk.cloud.Topic": {
       return solid ? SolidMegaphoneIcon : MegaphoneIcon;
     }
-    case "wingsdk.cloud.Api": {
+    case "@winglang/sdk.cloud.Api": {
       return solid ? SolidCloudIcon : CloudIcon;
     }
-    case "wingsdk.cloud.Table": {
+    case "@winglang/sdk.ex.Table": {
       return solid ? SolidTableCellsIcon : TableCellsIcon;
     }
-    case "wingsdk.cloud.Schedule": {
+    case "@winglang/sdk.cloud.Schedule": {
       return solid ? SolidClockIcon : ClockIcon;
     }
-    case "wingsdk.redis.Redis": {
+    case "@winglang/sdk.ex.Redis": {
       return RedisIcon;
     }
-    case "wingsdk.cloud.Test": {
+    case "@winglang/sdk.std.Test": {
       return solid ? SolidBeakerIcon : BeakerIcon;
     }
-    case "wingsdk.cloud.Secret": {
-      return solid ? SolidLockClosedIcon : LockClosedIcon;
+    case "@winglang/sdk.cloud.Secret": {
+      return solid ? SolidKeyIcon : KeyIcon;
     }
-    case "wingsdk.ex.DynamodbTable": {
+    case "@winglang/sdk.ex.DynamodbTable": {
       return DynamoDBIcon;
     }
     default: {
@@ -96,7 +96,7 @@ export const getResourceIconColors = (options: {
   forceDarken?: boolean;
 }) => {
   switch (options.resourceType) {
-    case "wingsdk.cloud.Bucket": {
+    case "@winglang/sdk.cloud.Bucket": {
       return [
         "text-orange-500 dark:text-orange-400",
         options.darkenOnGroupHover &&
@@ -104,7 +104,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-orange-600 dark:text-orange-300",
       ];
     }
-    case "wingsdk.cloud.Function": {
+    case "@winglang/sdk.cloud.Function": {
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
@@ -112,7 +112,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
     }
-    case "wingsdk.cloud.Queue": {
+    case "@winglang/sdk.cloud.Queue": {
       return [
         "text-emerald-500 dark:text-emerald-400",
         options.darkenOnGroupHover &&
@@ -120,7 +120,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-emerald-600 dark:text-emerald-300",
       ];
     }
-    case "wingsdk.cloud.Endpoint": {
+    case "@winglang/sdk.cloud.Endpoint": {
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
@@ -128,7 +128,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
     }
-    case "wingsdk.cloud.Counter": {
+    case "@winglang/sdk.cloud.Counter": {
       return [
         "text-lime-500 dark:text-lime-400",
         options.darkenOnGroupHover &&
@@ -136,7 +136,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-lime-600 dark:text-lime-300",
       ];
     }
-    case "wingsdk.cloud.Topic": {
+    case "@winglang/sdk.cloud.Topic": {
       return [
         "text-pink-500 dark:text-pink-400",
         options.darkenOnGroupHover &&
@@ -144,7 +144,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-pink-600 dark:text-pink-300",
       ];
     }
-    case "wingsdk.cloud.Api": {
+    case "@winglang/sdk.cloud.Api": {
       return [
         "text-amber-500 dark:text-amber-400",
         options.darkenOnGroupHover &&
@@ -152,7 +152,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-amber-600 dark:text-amber-300",
       ];
     }
-    case "wingsdk.cloud.Table": {
+    case "@winglang/sdk.ex.Table": {
       return [
         "text-cyan-500 dark:text-cyan-400",
         options.darkenOnGroupHover &&
@@ -160,7 +160,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-cyan-600 dark:text-cyan-300",
       ];
     }
-    case "wingsdk.cloud.Schedule": {
+    case "@winglang/sdk.cloud.Schedule": {
       return [
         "text-purple-500 dark:text-purple-400",
         options.darkenOnGroupHover &&
@@ -168,7 +168,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-purple-600 dark:text-purple-300",
       ];
     }
-    case "wingsdk.redis.Redis": {
+    case "@winglang/sdk.ex.Redis": {
       return [
         "text-red-700 dark:text-red-400",
         options.darkenOnGroupHover &&
@@ -176,7 +176,7 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-red-700 dark:text-red-300",
       ];
     }
-    case "wingsdk.cloud.Website": {
+    case "@winglang/sdk.cloud.Website": {
       return [
         "text-violet-700 dark:text-violet-400",
         options.darkenOnGroupHover &&

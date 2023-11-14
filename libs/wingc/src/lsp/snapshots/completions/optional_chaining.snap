@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): bool"
   documentation:
     kind: markdown
-    value: "```wing\nasBool: (): bool\n```\n---\nConvert Json element to boolean if possible.\n\n\n### Returns\na boolean."
+    value: "```wing\nasBool: (): bool\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
   sortText: ff|asBool
   insertText: asBool()
 - label: asNum
@@ -14,7 +14,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): num"
   documentation:
     kind: markdown
-    value: "```wing\nasNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n\n### Returns\na number."
+    value: "```wing\nasNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
   sortText: ff|asNum
   insertText: asNum()
 - label: asStr
@@ -22,7 +22,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nasStr: (): str\n```\n---\nConvert Json element to string if possible.\n\n\n### Returns\na string."
+    value: "```wing\nasStr: (): str\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
   sortText: ff|asStr
   insertText: asStr()
 - label: get
@@ -30,9 +30,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): Json"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): Json\n```\n---\nReturns the value associated with the specified Json key.\n\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+    value: "```wing\nget: (key: str): Json\n```\n---\nReturns the value associated with the specified Json key.\n### Parameters\n- `key` — `str` — The key of the Json property.\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
   sortText: ff|get
-  insertText: get($0)
+  insertText: get($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -42,9 +42,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): Json"
   documentation:
     kind: markdown
-    value: "```wing\ngetAt: (index: num): Json\n```\n---\nReturns a specified element at a given index from Json Array.\n\n\n### Returns\nThe element at given index in Json Array\n\n*@throws* *index out of bounds error if the given index does not exist for the Json Array*"
+    value: "```wing\ngetAt: (index: num): Json\n```\n---\nReturns a specified element at a given index from Json Array.\n### Parameters\n- `index` — `num` — The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array\n\n*@throws* *index out of bounds error if the given index does not exist for the Json Array*"
   sortText: ff|getAt
-  insertText: getAt($0)
+  insertText: getAt($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): bool?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n\n### Returns\na boolean."
+    value: "```wing\ntryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
   sortText: ff|tryAsBool
   insertText: tryAsBool()
 - label: tryAsNum
@@ -62,7 +62,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): num?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsNum: (): num?\n```\n---\nConvert Json element to number if possible.\n\n\n### Returns\na number."
+    value: "```wing\ntryAsNum: (): num?\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
   sortText: ff|tryAsNum
   insertText: tryAsNum()
 - label: tryAsStr
@@ -70,7 +70,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): str?"
   documentation:
     kind: markdown
-    value: "```wing\ntryAsStr: (): str?\n```\n---\nConvert Json element to string if possible.\n\n\n### Returns\na string."
+    value: "```wing\ntryAsStr: (): str?\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
   sortText: ff|tryAsStr
   insertText: tryAsStr()
 - label: tryGet
@@ -78,9 +78,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): Json?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGet: (key: str): Json?\n```\n---\nOptionally returns an specified element from the Json.\n\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+    value: "```wing\ntryGet: (key: str): Json?\n```\n---\nOptionally returns an specified element from the Json.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
   sortText: ff|tryGet
-  insertText: tryGet($0)
+  insertText: tryGet($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -90,9 +90,9 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): Json?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGetAt: (index: num): Json?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+    value: "```wing\ntryGetAt: (index: num): Json?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n### Parameters\n- `index` — `num` — The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
   sortText: ff|tryGetAt
-  insertText: tryGetAt($0)
+  insertText: tryGetAt($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

@@ -1,7 +1,7 @@
 import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
+import { ServiceSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
@@ -23,7 +23,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ServiceSchema = {
-      type: SERVICE_TYPE,
+      type: cloud.SERVICE_FQN,
       path: this.node.path,
       props: {
         environmentVariables: this.env,
@@ -35,9 +35,18 @@ export class Service extends cloud.Service implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.ServiceInflightMethods.START,
+      cloud.ServiceInflightMethods.STOP,
+      cloud.ServiceInflightMethods.STARTED,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   public _toInflight(): string {

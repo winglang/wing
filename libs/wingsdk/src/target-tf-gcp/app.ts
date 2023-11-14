@@ -1,10 +1,12 @@
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
+import { Table } from "./table";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
+import { NotImplementedError } from "../core/errors";
+import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 
 /**
@@ -21,6 +23,12 @@ export interface AppProps extends CdktfAppProps {
    * @see https://cloud.google.com/functions/docs/locations
    */
   readonly region: string;
+
+  /**
+   * The Google Cloud zone, used for all resources.
+   * @see https://cloud.google.com/functions/docs/locations
+   */
+  readonly zone: string;
 }
 
 /**
@@ -38,14 +46,17 @@ export class App extends CdktfApp {
    */
   public readonly region: string;
 
+  /**
+   * The Google Cloud zone.
+   */
+  public readonly zone: string;
+
   public readonly _target = "tf-gcp";
 
   constructor(props: AppProps) {
     super(props);
 
     this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
-    // Using env variable for location is work around until we are
-    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
@@ -59,6 +70,8 @@ export class App extends CdktfApp {
       );
     }
 
+    this.zone = props.zone ?? `${this.region}-a`;
+
     new GoogleProvider(this, "google", {
       project: this.projectId,
       region: this.region,
@@ -68,24 +81,23 @@ export class App extends CdktfApp {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
       if (this.isTestEnvironment) {
-        throw new Error("wing test not supported for tf-gcp target yet");
+        throw new NotImplementedError(
+          "wing test not supported for tf-gcp target yet"
+        );
       } else {
         new Root(this, "Default");
       }
     }
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
+      case TABLE_FQN:
+        return Table;
     }
 
     return undefined;

@@ -10,7 +10,7 @@ test("create an OnDeploy", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler);
+  new cloud.OnDeploy(app, "my_on_deploy", handler);
   const s = await app.startSimulator();
 
   // THEN
@@ -22,7 +22,7 @@ test("create an OnDeploy", async () => {
     props: {
       functionHandle: expect.any(String),
     },
-    type: "wingsdk.cloud.OnDeploy",
+    type: cloud.ON_DEPLOY_FQN,
   });
 
   await s.stop();

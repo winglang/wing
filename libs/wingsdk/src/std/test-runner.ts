@@ -2,13 +2,12 @@ import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Node } from "../std";
 
 /**
  * Global identifier for `TestRunner`.
  */
-export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
+export const TEST_RUNNER_FQN = fqnForType("std.TestRunner");
 
 /**
  * Properties for `TestRunner`.
@@ -21,21 +20,14 @@ export interface TestRunnerProps {}
  *
  * @inflight `@winglang/sdk.std.ITestRunnerClient`
  * @skipDocs
+ * @abstract
  */
-export abstract class TestRunner extends Resource {
-  /**
-   * Create a new test engine.
-   * @internal
-   */
-  public static _newTestRunner(
-    scope: Construct,
-    id: string,
-    props: TestRunnerProps = {}
-  ): TestRunner {
-    return App.of(scope).newAbstract(TEST_RUNNER_FQN, scope, id, props);
-  }
-
+export class TestRunner extends Resource {
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
+    if (new.target === TestRunner) {
+      return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).hidden = true;
@@ -47,7 +39,7 @@ export abstract class TestRunner extends Resource {
   }
 
   /** @internal */
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     return [
       TestRunnerInflightMethods.LIST_TESTS,
       TestRunnerInflightMethods.RUN_TEST,
@@ -101,6 +93,11 @@ export interface TestResult {
    * Whether the test passed.
    */
   readonly pass: boolean;
+
+  /**
+   * Whether the test contains code that is unsupported by the target.
+   */
+  readonly unsupported?: boolean;
 
   /**
    * The error message if the test failed.

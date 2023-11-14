@@ -2,6 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
+"use strict";
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -10,7 +11,7 @@ module.exports = function({ $r }) {
       return $obj;
     }
     async handle(message) {
-      (await $r.set("hello",message));
+      (await $r.set("hello", message));
     }
   }
   return $Closure1;
@@ -20,6 +21,7 @@ module.exports = function({ $r }) {
 
 ## inflight.$Closure2-1.js
 ```js
+"use strict";
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -28,11 +30,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       return $obj;
     }
     async handle() {
-      const connection = (await $r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
-      (await $r2.set("wing","does redis again"));
+      (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
       (await $queue.push("world!"));
@@ -61,7 +59,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -80,7 +78,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -90,6 +88,18 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     ]
   },
   "resource": {
+    "aws_cloudwatch_log_group": {
+      "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Queue-SetConsumer-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer-cdafee6e_CloudwatchLogGroup_F895C874"
+          }
+        },
+        "name": "/aws/lambda/cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
+        "retention_in_days": 30
+      }
+    },
     "aws_eip": {
       "EIP": {
         "//": {
@@ -248,12 +258,13 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB.key}",
-        "timeout": 3,
+        "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
             "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
@@ -477,7 +488,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue"
           }
         },
-        "name": "cloud-Queue-c86e03d8"
+        "message_retention_seconds": 3600,
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 30
       }
     },
     "aws_subnet": {
@@ -532,8 +545,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 
 ## preflight.js
 ```js
+"use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -541,11 +555,11 @@ const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -566,19 +580,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["set"]);
+          $Closure1._registerOnLiftObject(r, host, ["set"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -602,27 +616,28 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
+      _supportedOps() {
         return ["handle", "$inflight_init"];
       }
-      _registerBind(host, ops) {
+      _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(queue, host, ["push"]);
-          $Closure2._registerBindObject(r, host, ["get", "rawClient"]);
-          $Closure2._registerBindObject(r2, host, ["get", "set"]);
+          $Closure2._registerOnLiftObject(queue, host, ["push"]);
+          $Closure2._registerOnLiftObject(r, host, ["get"]);
+          $Closure2._registerOnLiftObject(r2, host, ["get", "set"]);
         }
-        super._registerBind(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"r2");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    (queue.setConsumer(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(3)) }));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:testing Redis",new $Closure2(this,"$Closure2"));
+    const r = this.node.root.new("@winglang/sdk.ex.Redis",ex.Redis,this, "ex.Redis");
+    const r2 = this.node.root.new("@winglang/sdk.ex.Redis",ex.Redis,this, "r2");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
+    (queue.setConsumer(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(3)) }));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
 
 ```
 

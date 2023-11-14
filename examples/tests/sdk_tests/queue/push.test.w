@@ -17,14 +17,14 @@ new std.Test(inflight () => {
     q.push("");
     assert(false);
   } catch e {
-    assert(e == "Empty messages are not allowed");
+    assert(e.contains("Empty messages are not allowed"));
   }
 
   try {
     q.push("Foo", "");
     assert(false);
   } catch e {
-    assert(e == "Empty messages are not allowed");
+    assert(e.contains("Empty messages are not allowed"));
   }
 
   q.push("Foo");
@@ -47,4 +47,4 @@ new std.Test(inflight () => {
   assert(util.waitUntil((): bool => {
     return q.approxSize() == 3;
   }));
-}, { timeout: 3m }) as "push";
+}, timeout: 3m) as "push";

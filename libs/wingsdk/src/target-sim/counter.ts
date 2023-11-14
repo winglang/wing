@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { CounterSchema, COUNTER_TYPE } from "./schema-resources";
+import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { BaseResourceSchema } from "../simulator/simulator";
@@ -19,9 +19,19 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     this.initial = props.initial ?? 0;
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.PEEK,
+      cloud.CounterInflightMethods.SET,
+    ];
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: CounterSchema = {
-      type: COUNTER_TYPE,
+      type: cloud.COUNTER_FQN,
       path: this.node.path,
       props: {
         initial: this.initial,
@@ -31,9 +41,9 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

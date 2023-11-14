@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("create a bucket", async () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Bucket._newBucket(app, "my_bucket");
+  new Bucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -35,7 +35,7 @@ test("create a bucket", async () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Bucket._newBucket(app, "my_bucket", { public: true });
+  new Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -47,35 +47,53 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  template.resourceCountIs("Custom::CDKBucketDeployment", 1);
+  template.hasResourceProperties(
+    "Custom::CDKBucketDeployment",
+    Match.objectLike({
+      SourceObjectKeys: Match.arrayWith([
+        Match.stringLikeRegexp(".zip"),
+        Match.stringLikeRegexp(".zip"),
+      ]),
+    })
+  );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with two preflight files", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "../testFiles/test1.txt");
-  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  const bucket = new Bucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "../test-files/test1.txt");
+  bucket.addFile("file2.txt", "../test-files/test2.txt");
   const output = app.synth();
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  template.resourceCountIs("Custom::CDKBucketDeployment", 1);
+  template.hasResourceProperties(
+    "Custom::CDKBucketDeployment",
+    Match.objectLike({
+      SourceObjectKeys: Match.arrayWith([
+        Match.stringLikeRegexp(".zip"),
+        Match.stringLikeRegexp(".zip"),
+      ]),
+    })
+  );
   expect(template.toJSON()).toMatchSnapshot();
 });
 
 test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
     "Handler",
@@ -107,7 +125,7 @@ async handle(event) {
 test("bucket with onDelete method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
     "Handler",
@@ -139,7 +157,7 @@ async handle(event) {
 test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
     "Handler",
@@ -171,7 +189,7 @@ async handle(event) {
 test("bucket with onEvent method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
     "Handler",

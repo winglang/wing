@@ -12,7 +12,7 @@ test("pushing messages through a queue", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const queue = cloud.Queue._newQueue(this, "Queue");
+      const queue = new cloud.Queue(this, "Queue");
       const pusher = Testing.makeHandler(
         app,
         "Pusher",
@@ -27,7 +27,7 @@ test("pushing messages through a queue", async () => {
           },
         }
       );
-      cloud.Function._newFunction(this, "Function", pusher);
+      new cloud.Function(this, "Function", pusher);
 
       const processor = Testing.makeHandler(
         app,
@@ -63,14 +63,14 @@ test("pushing messages through a queue", async () => {
     {
       data: { message: "Hello, world!" },
       sourcePath: "root/HelloWorld/Function",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
     },
     {
       data: { message: "Received foo" },
       sourcePath: "root/HelloWorld/Queue/Queue-SetConsumer-13c4eaf1",
-      sourceType: "wingsdk.cloud.Function",
+      sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
     },

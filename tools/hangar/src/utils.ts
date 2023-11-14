@@ -9,12 +9,13 @@ export interface RunWingCommandOptions {
   wingFile?: string;
   args: string[];
   expectFailure: boolean;
-  plugins?: string[];
+  platforms?: string[];
   env?: Record<string, string>;
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
+  const platformOptions: string[] = [];
+  options.platforms?.forEach((p) => platformOptions.push(...["-t",  `${p}`])) ?? [];
   const out = await execa(
     wingBin,
     [
@@ -22,7 +23,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       "--no-analytics",
       ...options.args,
       options.wingFile ?? "",
-      ...plugins,
+      ...platformOptions
     ],
     {
       cwd: options.cwd,
@@ -51,7 +52,9 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 }
 
 function sanitizeOutput(output: string) {
-  return output.replace(/\d+m[\d.]+s/g, "<DURATION>");
+  return output
+    .replace(/\d+m[\d.]+s/g, "<DURATION>")
+    .replace(/(?<=wsim.)\d+(?=.tmp)/g, "[REDACTED]");
 }
 
 export function sanitize_json_paths(path: string) {

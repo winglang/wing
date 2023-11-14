@@ -4,6 +4,7 @@
   "pipeline": {
     "compile:copy-wingc-wasm": {
       "dependsOn": ["^compile"],
+      "inputs": ["../wingc/wingc.wasm"],
       "outputs": ["wingc.wasm", "../../dist/wingc.wasm"]
     },
     "compile": {

@@ -3,6 +3,13 @@
 //-----------------------------------------------------------------------------
 bring cloud;
 
+test "has()" {
+  let obj = Json { key1: 1, key2: 2};
+
+  assert(Json.has(obj, "key1") == true);
+  assert(Json.has(obj, "key3") == false);
+}
+
 test "get()" {
   let assertThrows = (expected: str, block: (): void) => {
     let var error = false;
@@ -104,24 +111,71 @@ test "keys(), values(), entries()" {
   }
 }
 
-//-----------------------------------------------------------------------------
-// tryParse()
-assert(Json.tryParse(nil) == nil);
-assert(Json.tryParse("boom") == nil);
-assert(Json.tryParse("") == nil);
+test "parse()" {
+  let obj = Json { key1: 1, key2: 2};
+  let String = "{\"key\":1,\"key2\":2}";
 
-/*
-Will add test later:
-test "setWithNonMutJsonObject()" {
-let var error = "";
-try {
-    let f = MutJson { e: 4 };
-    f.set("f", 9);
- } catch e {
-     error = e;
- }
-
- log(error);
- assert(error == "");
+  assert(Json.parse("123") == 123);
+  assert(Json.parse("true") == true);
+  assert(Json.parse("\"foo\"") == "foo");
+  /**
+   * To be fixed in the compiler
+   * see https://github.com/winglang/wing/issues/4131
+  */
+  // assert(Json.parse("[1,5,false]") == "[1,5,false]");
+  // assert(Json.parse(String) == obj);
+  /**
+   * To uncomment once Json null is implemented
+   * see https://github.com/winglang/wing/issues/1819
+  */
+  // assert(Json.parse("null") == null);
 }
-*/
+
+test "tryParse()" {
+  let obj = Json { key1: 1, key2: 2};
+  let String = "{\"key\":1,\"key2\":2}";
+
+  assert(Json.tryParse("123") == 123);
+  assert(Json.tryParse("true") == true);
+  assert(Json.tryParse("\"foo\"") == "foo");
+  /**
+   * To be fixed in the compiler
+   * see https://github.com/winglang/wing/issues/4131
+  */
+  // assert(Json.tryParse("[1,5,false]") == "[1,5,false]");
+  // assert(Json.tryParse(String) == obj);
+  /**
+   * To uncomment once Json null is implemented
+   * see https://github.com/winglang/wing/issues/1819
+  */
+  // assert(Json.tryParse("null") == null);
+  assert(Json.tryParse("foo") == nil);
+  assert(Json.tryParse("") == nil);
+  assert(Json.tryParse(nil) == nil);
+}
+
+test "deepCopy(), deepCopyMut()" {
+  let original = Json ({
+    "string": "wing",
+    "number": 123,
+    "array": [1, 2, 3],
+    "true": true,
+    "false": false,
+    "object": {
+      "key1": "value1",
+      "key2": 2,
+      "key3": false,
+      "key5": [3, 2, 1]
+    }
+  });
+  let mutation = Json{ key1: 1, key2: 2};
+
+  let copy = Json.deepCopy(original);
+  let copyMut = Json.deepCopyMut(original);
+
+  assert(copy == copyMut);
+  copyMut.set("object", mutation);
+  assert(copy != copyMut);
+
+  assert(copyMut.get("object") == mutation);
+}

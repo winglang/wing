@@ -12,8 +12,8 @@ import {
 } from "../util";
 
 test("default table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  ex.Table._newTable(app, "Table", {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
@@ -25,8 +25,8 @@ test("default table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const table = ex.Table._newTable(app, "Table", {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const table = new ex.Table(app, "Table", {
     columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
@@ -44,11 +44,12 @@ test("function with a table binding", () => {
       },
     }
   );
-  cloud.Function._newFunction(app, "Function", inflight);
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group", // log group for function
     "aws_dynamodb_table", // main table
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role

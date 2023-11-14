@@ -12,6 +12,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
@@ -36,6 +37,13 @@ export class Function extends cloud.Function implements IAwsFunction {
     // bundled code is guaranteed to be in a fresh directory
     const bundle = createBundle(this.entrypoint);
 
+    const logRetentionDays =
+      props.logRetentionDays === undefined
+        ? 30
+        : props.logRetentionDays < 0
+        ? undefined // Negative value means Infinite retention
+        : props.logRetentionDays;
+
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
@@ -43,15 +51,21 @@ export class Function extends cloud.Function implements IAwsFunction {
       environment: this.env,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
-        : Duration.minutes(0.5),
-      memorySize: props.memory ? props.memory : undefined,
+        : Duration.minutes(1),
+      memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
       architecture: Architecture.ARM_64,
+      logRetention: logRetentionDays,
     });
 
     this.arn = this.function.functionArn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }
@@ -67,7 +81,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

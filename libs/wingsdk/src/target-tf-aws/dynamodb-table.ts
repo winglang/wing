@@ -3,17 +3,10 @@ import { Function } from "./function";
 import { DynamodbTable as AwsDynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import * as core from "../core";
 import * as ex from "../ex";
-import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { ResourceNames } from "../shared/resource-names";
+import { NAME_OPTS } from "../shared-aws/dynamodb-table";
+import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
-
-/**
- * Table names must be between 3 and 255 characters.
- * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
- */
-const NAME_OPTS: NameOptions = {
-  maxLen: 255,
-  disallowedRegex: /[^a-zA-Z0-9\_\.\-]+/g,
-};
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
@@ -41,67 +34,36 @@ export class DynamodbTable extends ex.DynamodbTable {
     });
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.DynamodbTableInflightMethods.PUT_ITEM,
+      ex.DynamodbTableInflightMethods.UPDATE_ITEM,
+      ex.DynamodbTableInflightMethods.DELETE_ITEM,
+      ex.DynamodbTableInflightMethods.GET_ITEM,
+      ex.DynamodbTableInflightMethods.SCAN,
+      ex.DynamodbTableInflightMethods.QUERY,
+      ex.DynamodbTableInflightMethods.TRANSACT_GET_ITEMS,
+      ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS,
+      ex.DynamodbTableInflightMethods.BATCH_GET_ITEM,
+      ex.DynamodbTableInflightMethods.BATCH_WRITE_ITEM,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error(
         "Dynamodb tables can only be bound by tfaws.Function for now"
       );
     }
 
-    if (ops.includes(ex.DynamodbTableInflightMethods.PUT_ITEM)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:PutItem"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.UPDATE_ITEM)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:UpdateItem"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.DELETE_ITEM)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:DeleteItem"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.GET_ITEM)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:GetItem"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.SCAN)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:Scan"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.QUERY)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:Query"],
-        resources: [this.table.arn],
-      });
-    }
-    if (ops.includes(ex.DynamodbTableInflightMethods.TRANSACT_WRITE_ITEMS)) {
-      host.addPolicyStatements({
-        actions: ["dynamodb:PutItem"],
-        resources: [this.table.arn],
-      });
-      host.addPolicyStatements({
-        actions: ["dynamodb:UpdateItem"],
-        resources: [this.table.arn],
-      });
-      host.addPolicyStatements({
-        actions: ["dynamodb:DeleteItem"],
-        resources: [this.table.arn],
-      });
-    }
+    host.addPolicyStatements(
+      ...calculateDynamodbTablePermissions(this.table.arn, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

@@ -4,8 +4,15 @@ import {
   BlobServiceClient,
   ContainerClient,
 } from "@azure/storage-blob";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Json } from "../std";
+import mime from "mime-types";
+import {
+  IBucketClient,
+  ObjectMetadata,
+  BucketPutOptions,
+  BucketDeleteOptions,
+  BucketSignedUrlOptions,
+} from "../cloud";
+import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
@@ -52,10 +59,19 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @param body string contents of the object
    */
-  public async put(key: string, body: string): Promise<void> {
-    await this.containerClient
-      .getBlockBlobClient(key)
-      .upload(body, body.length);
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
+    const blobClient = this.containerClient.getBlockBlobClient(key);
+    const options = {
+      blobHTTPHeaders: {
+        blobContentType:
+          (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
+      },
+    };
+    await blobClient.upload(body, body.length, options);
   }
 
   /**
@@ -65,7 +81,9 @@ export class BucketClient implements IBucketClient {
    * @param body Json object
    */
   public async putJson(key: string, body: Json): Promise<void> {
-    await this.put(key, JSON.stringify(body, null, 2));
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   /**
@@ -196,6 +214,16 @@ export class BucketClient implements IBucketClient {
     return list;
   }
 
+  public async signedUrl(
+    key: string,
+    options?: BucketSignedUrlOptions
+  ): Promise<string> {
+    options;
+    throw new Error(
+      `signedUrl is not implemented yet for tf-azure (key=${key})`
+    );
+  }
+
   /**
    * Returns a url to the given file.
    * @Throws if the file is not public or if object does not exist.
@@ -212,6 +240,39 @@ export class BucketClient implements IBucketClient {
 
     return encodeURI(
       `https://${this.storageAccount}.blob.core.windows.net/${this.bucketName}/${key}`
+    );
+  }
+
+  /**
+   * Get the metadata of an object in the bucket.
+   * @param key Key of the object.
+   * @throws if the object does not exist.
+   */
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    const blobClient = this.containerClient.getBlobClient(key);
+
+    try {
+      const properties = await blobClient.getProperties();
+      return {
+        contentType: properties.contentType,
+        lastModified: Datetime.fromIso(properties.lastModified!.toISOString()),
+        size: properties.contentLength!,
+      };
+    } catch (error) {
+      throw new Error(`Failed to get metadata for object. (key=${key})`);
+    }
+  }
+
+  /**
+   * Copy object within the container
+   *
+   * @param srcKey The key of the source object you wish to copy.
+   * @param dstKey The key of the destination object after copying.
+   * @throws if `srcKey` object doesn't exist.
+   */
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    return Promise.reject(
+      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
     );
   }
 

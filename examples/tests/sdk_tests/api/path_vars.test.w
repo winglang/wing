@@ -31,7 +31,7 @@ test "test" {
 
 
   assert(res.status == 200);
-  assert(Json.parse(res.body ?? "").get("user") == username);
+  assert(Json.parse(res.body).get("user") == username);
 }
 
 test "test2" {
@@ -40,7 +40,7 @@ test "test2" {
 
 
   assert(res.status == 200);
-  assert(Json.parse(res.body ?? "").get("user") == username);
+  assert(Json.parse(res.body).get("user") == username);
 }
 
 test "test3" {
@@ -49,7 +49,7 @@ test "test3" {
 
 
   assert(res.status == 200);
-  assert(Json.parse(res.body ?? "").get("user") == username);
+  assert(Json.parse(res.body).get("user") == username);
 }
 
 test "test4" {
@@ -59,6 +59,6 @@ test "test4" {
 
 
   assert(res.status == 200);
-  assert(Json.parse(res.body ?? "").get("user") == username);
-  assert(Json.parse(res.body ?? "").get("age") == age);
+  assert(Json.parse(res.body).get("user") == username);
+  assert(Json.parse(res.body).get("age") == age);
 }

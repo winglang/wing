@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Duration, IResource, Node, Resource } from "../std";
 
 /**
@@ -33,21 +33,14 @@ export interface ScheduleProps {
  * A schedule.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
+ * @abstract
  */
-export abstract class Schedule extends Resource {
-  /**
-   * Create a new schedule.
-   * @internal
-   */
-  public static _newSchedule(
-    scope: Construct,
-    id: string,
-    props: ScheduleProps = {}
-  ): Schedule {
-    return App.of(scope).newAbstract(SCHEDULE_FQN, scope, id, props);
-  }
-
+export class Schedule extends Resource {
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
+    if (new.target === Schedule) {
+      return Resource._newFromFactory(SCHEDULE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Schedule";
@@ -77,24 +70,24 @@ export abstract class Schedule extends Resource {
     }
   }
 
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [];
-  }
-
   /**
    * Create a function that runs when receiving the scheduled event.
+   * @abstract
    */
-  public abstract onTick(
+  public onTick(
     inflight: IScheduleOnTickHandler,
-    props?: ScheduleOnTickProps
-  ): Function;
+    props?: ScheduleOnTickOptions
+  ): Function {
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**
  * Options for Schedule.onTick.
  */
-export interface ScheduleOnTickProps extends FunctionProps {}
+export interface ScheduleOnTickOptions extends FunctionProps {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

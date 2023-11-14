@@ -49,8 +49,8 @@ if util.env("WING_TARGET") == "sim" {
 
   test "http server is started with the service" {
     let response = http.get("http://localhost:{foo.port()}");
-    log(response.body ?? "");
-    assert(response.body ?? "" == "bang bang!");
+    log(response.body);
+    assert(response.body == "bang bang!");
   }
 
   test "service.stop() closes the http server" {

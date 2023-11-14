@@ -26,3 +26,18 @@ s1.someRandomMethod();
 
 let a: Array<str> = MutArray<str>[];
 //                  ^^^^^^^^^^^^^^^ Expected type to be "Array<str>", but got "MutArray<str>" instead
+
+let mm1: MutMap<num> = { "a" => 1, "b" => 2, "c" => 3 };
+//                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "MutMap<num>", but got "Map<num>" instead
+let mm2 = MutMap<num> { "a" => 1, "b" => 2, "c" => 3 };
+let mm3 = mm2.copyMut();
+//            ^^^^^^^ Unknown symbol "copyMut"
+
+
+let ss1: MutSet<str> = Set{"c"};
+//                        ^^^^^ Expected type to be "MutSet<str>", but got "Set<str>" instead
+let ss2: MutSet<num> = MutSet<num> {true};
+//                                  ^^^^ Expected type to be "num", but got "bool" instead
+let ss3 = MutSet<bool> {false, true};
+let ss4 = ss3.copyMut();
+//            ^^^^^^^ Unknown symbol "copyMut"

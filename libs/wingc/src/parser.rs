@@ -10,15 +10,18 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Spanned,
-	Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
+	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
-use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
-use crate::{dbg_panic, is_absolute_path, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
+use crate::{
+	dbg_panic, is_absolute_path, TRUSTED_LIBRARY_NPM_NAMESPACE, WINGSDK_BRINGABLE_MODULES, WINGSDK_STD_MODULE,
+	WINGSDK_TEST_CLASS_NAME,
+};
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -203,6 +206,8 @@ pub fn parse_wing_project(
 					formatted_cycle.trim_end()
 				),
 				span: None,
+				annotations: vec![],
+				hints: vec![],
 			});
 
 			// return a list of all files just so we can continue type-checking
@@ -275,7 +280,7 @@ fn parse_wing_directory(
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
-			|| path.extension() == Some("w")
+			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
 			files_and_dirs.push(path);
 		}
@@ -359,6 +364,8 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(span),
+			annotations: vec![],
+			hints: vec![],
 		};
 		report_diagnostic(diag);
 	}
@@ -367,6 +374,8 @@ impl<'s> Parser<'s> {
 		let diag = Diagnostic {
 			message: message.to_string(),
 			span: Some(self.node_span(node)),
+			annotations: vec![],
+			hints: vec![],
 		};
 		report_diagnostic(diag);
 
@@ -533,8 +542,7 @@ impl<'s> Parser<'s> {
 			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
-			"class_definition" => self.build_class_statement(statement_node, Phase::Inflight)?, // `inflight class` is always "inflight"
-			"resource_definition" => self.build_class_statement(statement_node, phase)?, // `class` without a modifier inherits from scope
+			"class_definition" => self.build_class_statement(statement_node, phase)?,
 			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
@@ -661,7 +669,7 @@ impl<'s> Parser<'s> {
 		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
 			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
 			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
 			let elif = ElifLetBlock {
 				reassignable: node.child_by_field_name("reassignable").is_some(),
 				statements: statements,
@@ -766,10 +774,20 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Structs must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Struct {
 			name,
 			extends,
 			fields: members,
+			access,
 		})
 	}
 
@@ -788,7 +806,15 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let module_name_node = self.get_child_field(&statement_node, "module_name")?;
+		let Some(module_name_node) = statement_node.child_by_field_name("module_name") else {
+			return self.with_error(
+				"Expected module specification (see https://www.winglang.io/docs/libraries)",
+				&statement_node
+					.child(statement_node.child_count() - 1)
+					.unwrap_or(*statement_node),
+			);
+		};
+
 		let module_name = self.node_symbol(&module_name_node)?;
 		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
 			Some(self.check_reserved_symbol(&identifier)?)
@@ -796,7 +822,12 @@ impl<'s> Parser<'s> {
 			None
 		};
 
-		let module_path = Utf8Path::new(&module_name.name[1..module_name.name.len() - 1]);
+		let module_path = if module_name.name.len() > 1 {
+			Utf8Path::new(&module_name.name[1..module_name.name.len() - 1])
+		} else {
+			Utf8Path::new(&module_name.name)
+		};
+
 		if is_absolute_path(&module_path) {
 			return self.with_error(
 				format!("Cannot bring \"{}\" since it is not a relative path", module_path),
@@ -885,10 +916,55 @@ impl<'s> Parser<'s> {
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+			// we need to inspect the npm dependency to figure out if it's a JSII library or a Wing library
+			// first, find where the package.json is located
+			let module_name_parsed = module_name.name[1..module_name.name.len() - 1].to_string();
+			let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+			let module_dir = wingii::util::package_json::find_dependency_directory(&module_name_parsed, &source_dir)
+				.ok_or_else(|| {
+					self
+						.with_error::<Node>(
+							format!(
+								"Unable to load {}: Module not found in \"{}\"",
+								module_name, self.source_name
+							),
+							&statement_node,
+						)
+						.err();
+				})?;
+
+			// If the package.json has a `wing` field, then we treat it as a Wing library
+			if is_wing_library(&Utf8Path::new(&module_dir)) {
+				return if let Some(alias) = alias {
+					// make sure the Wing library is also parsed
+					self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
+					Ok(StmtKind::Bring {
+						source: BringSource::WingLibrary(
+							Symbol {
+								name: module_name_parsed,
+								span: module_name.span,
+							},
+							module_dir,
+						),
+						identifier: Some(alias),
+					})
+				} else {
+					self.with_error::<StmtKind>(
+						format!(
+							"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+							module_name
+						),
+						statement_node,
+					)
+				};
+			}
+
+			// otherwise, we treat it as a JSII library
 			return if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::JsiiModule(Symbol {
-						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						name: module_name_parsed,
 						span: module_name.span,
 					}),
 					identifier: Some(alias),
@@ -904,8 +980,43 @@ impl<'s> Parser<'s> {
 			};
 		}
 
+		if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) || module_name.name == WINGSDK_STD_MODULE {
+			return Ok(StmtKind::Bring {
+				source: BringSource::BuiltinModule(module_name),
+				identifier: alias,
+			});
+		}
+
+		// check if a trusted library exists with this name
+		let source_dir = Utf8Path::new(&self.source_name).parent().unwrap();
+		let module_dir = wingii::util::package_json::find_dependency_directory(
+			&format!("{}/{}", TRUSTED_LIBRARY_NPM_NAMESPACE, module_name.name),
+			&source_dir,
+		)
+		.ok_or_else(|| {
+			self
+				.with_error::<Node>(
+					format!(
+						"Could not find a trusted library \"{}/{}\" installed. Did you mean to run `npm i {}/{}`?",
+						TRUSTED_LIBRARY_NPM_NAMESPACE, module_name, TRUSTED_LIBRARY_NPM_NAMESPACE, module_name
+					),
+					&statement_node,
+				)
+				.err();
+		})?;
+
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+		// make sure the trusted library is also parsed
+		self.referenced_wing_paths.borrow_mut().push(module_dir.clone());
+
 		Ok(StmtKind::Bring {
-			source: BringSource::BuiltinModule(module_name),
+			source: BringSource::TrustedModule(
+				Symbol {
+					name: module_name.name,
+					span: module_name.span,
+				},
+				module_dir,
+			),
 			identifier: alias,
 		})
 	}
@@ -940,13 +1051,28 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Enums must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Enum {
 			name: name.unwrap(),
 			values,
+			access,
 		})
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
+		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+			Phase::Inflight
+		} else {
+			class_phase
+		};
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
@@ -973,7 +1099,9 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
-					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+					let Ok(func_def) =
+						self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static)
+					else {
 						continue;
 					};
 
@@ -996,6 +1124,8 @@ impl<'s> Parser<'s> {
 							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
 								.to_string(),
 							span: Some(self.node_span(&class_element)),
+							annotations: vec![],
+							hints: vec![],
 						});
 					}
 
@@ -1012,7 +1142,7 @@ impl<'s> Parser<'s> {
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
-						access_modifier: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
+						access: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
 					})
 				}
 				"initializer" => {
@@ -1065,7 +1195,7 @@ impl<'s> Parser<'s> {
 							},
 							is_static: false,
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
@@ -1080,7 +1210,7 @@ impl<'s> Parser<'s> {
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
-							access_modifier: AccessModifier::Public,
+							access: AccessModifier::Public,
 						})
 					}
 				}
@@ -1124,7 +1254,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1149,7 +1279,7 @@ impl<'s> Parser<'s> {
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,
 				span: WingSpan::default(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			},
 		};
 
@@ -1196,6 +1326,15 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Classes must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
@@ -1205,6 +1344,7 @@ impl<'s> Parser<'s> {
 			initializer,
 			phase: class_phase,
 			inflight_initializer,
+			access,
 		}))
 	}
 
@@ -1275,7 +1415,21 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
+		let access = self.build_access_modifier(access_modifier_node)?;
+		if access == AccessModifier::Protected {
+			self.with_error::<Node>(
+				"Interfaces must be public (\"pub\") or private",
+				&access_modifier_node.expect("access modifier node"),
+			)?;
+		}
+
+		Ok(StmtKind::Interface(Interface {
+			name,
+			methods,
+			extends,
+			access,
+		}))
 	}
 
 	fn build_interface_method(
@@ -1329,8 +1483,12 @@ impl<'s> Parser<'s> {
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
-			let node_text = &node_text[1..node_text.len() - 1];
-			FunctionBody::External(node_text.to_string())
+			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
+			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
+			if !file_path.exists() {
+				self.add_error(format!("File not found: {}", node_text), &external);
+			}
+			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
 		};
@@ -1341,7 +1499,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
-			access_modifier: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
+			access: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
 		})
 	}
 
@@ -1710,7 +1868,7 @@ impl<'s> Parser<'s> {
 				};
 
 				Ok(Expr::new(
-					ExprKind::New(NewExpr {
+					ExprKind::New(New {
 						class: class_udt,
 						obj_id,
 						arg_list: arg_list?,
@@ -1842,9 +2000,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"number" => Ok(Expr::new(
-				ExprKind::Literal(Literal::Number(
-					self.node_text(&expression_node).parse().expect("Number string"),
-				)),
+				ExprKind::Literal(Literal::Number(parse_number(self.node_text(&expression_node)))),
 				expression_span,
 			)),
 			"nil_value" => Ok(Expr::new(ExprKind::Literal(Literal::Nil), expression_span)),
@@ -2113,8 +2269,10 @@ impl<'s> Parser<'s> {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
 				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
-					message: "Expected ';'".to_string(),
+					message: ERR_EXPECTED_SEMICOLON.to_string(),
 					span: Some(self.node_span(&target_node)),
+					annotations: vec![],
+					hints: vec![],
 				};
 				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
@@ -2135,6 +2293,8 @@ impl<'s> Parser<'s> {
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(self.node_span(&target_node)),
+						annotations: vec![],
+						hints: vec![],
 					};
 					report_diagnostic(diag);
 				}
@@ -2226,14 +2386,14 @@ impl<'s> Parser<'s> {
 				},
 				is_static: true,
 				span: statements_span.clone(),
-				access_modifier: AccessModifier::Public,
+				access: AccessModifier::Public,
 			}),
 			statements_span.clone(),
 		);
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New(NewExpr {
+			ExprKind::New(New {
 				class: UserDefinedType {
 					root: Symbol::global(WINGSDK_STD_MODULE),
 					fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
@@ -2249,6 +2409,29 @@ impl<'s> Parser<'s> {
 			}),
 			span,
 		)))
+	}
+}
+
+/// Check if the package.json in the given directory has a `wing` field
+fn is_wing_library(module_dir: &Utf8Path) -> bool {
+	let package_json_path = Utf8Path::new(module_dir).join("package.json");
+	if !package_json_path.exists() {
+		return false;
+	}
+
+	let package_json = match fs::read_to_string(package_json_path) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	let package_json: serde_json::Value = match serde_json::from_str(&package_json) {
+		Ok(package_json) => package_json,
+		Err(_) => return false,
+	};
+
+	match package_json.get("wing") {
+		Some(_) => true,
+		None => false,
 	}
 }
 
@@ -2336,6 +2519,12 @@ pub fn normalize_path(path: &Utf8Path, relative_to: Option<&Utf8Path>) -> Utf8Pa
 	}
 
 	normalized
+}
+
+fn parse_number(s: &str) -> f64 {
+	// remove all underscores from the string
+	let s = s.replace("_", "");
+	return s.parse().expect("Number string");
 }
 
 #[cfg(test)]

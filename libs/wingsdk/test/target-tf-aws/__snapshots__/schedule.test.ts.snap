@@ -3,7 +3,7 @@
 exports[`schedule behavior with cron 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -18,6 +18,12 @@ exports[`schedule behavior with cron 1`] = `
       "Schedule_ScheduleTarget-c5395e41_BF97AE46": {
         "arn": "\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
+    },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
@@ -49,12 +55,13 @@ exports[`schedule behavior with cron 1`] = `
         },
         "function_name": "Schedule-OnTick-c5395e41-c861b8f8",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -154,6 +161,14 @@ exports[`schedule behavior with cron 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -296,7 +311,7 @@ exports[`schedule behavior with cron 2`] = `
 exports[`schedule behavior with rate 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -311,6 +326,12 @@ exports[`schedule behavior with rate 1`] = `
       "Schedule_ScheduleTarget-c5395e41_BF97AE46": {
         "arn": "\${aws_lambda_function.Schedule-OnTick-c5395e41.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
+    },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-c5395e41_CloudwatchLogGroup_582BD7D1": {
+        "name": "/aws/lambda/Schedule-OnTick-c5395e41-c861b8f8",
+        "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
@@ -342,12 +363,13 @@ exports[`schedule behavior with rate 1`] = `
         },
         "function_name": "Schedule-OnTick-c5395e41-c861b8f8",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule-OnTick-c5395e41_IamRole_014E0D2D.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-c5395e41_S3Object_70645C21.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -447,6 +469,14 @@ exports[`schedule behavior with rate 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -589,7 +619,7 @@ exports[`schedule behavior with rate 2`] = `
 exports[`schedule with two functions 1`] = `
 {
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
   },
@@ -608,6 +638,16 @@ exports[`schedule with two functions 1`] = `
       "Schedule_ScheduleTarget-7b33bcba_A92DF656": {
         "arn": "\${aws_lambda_function.Schedule-OnTick-7b33bcba.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
+      },
+    },
+    "aws_cloudwatch_log_group": {
+      "Schedule-OnTick-0a615500_CloudwatchLogGroup_2E9B471C": {
+        "name": "/aws/lambda/Schedule-OnTick-0a615500-c8fd8480",
+        "retention_in_days": 30,
+      },
+      "Schedule-OnTick-7b33bcba_CloudwatchLogGroup_D13A3FA1": {
+        "name": "/aws/lambda/Schedule-OnTick-7b33bcba-c86000d7",
+        "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
@@ -650,12 +690,13 @@ exports[`schedule with two functions 1`] = `
         },
         "function_name": "Schedule-OnTick-0a615500-c8fd8480",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule-OnTick-0a615500_IamRole_92CE809F.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-0a615500_S3Object_587833FB.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -672,12 +713,13 @@ exports[`schedule with two functions 1`] = `
         },
         "function_name": "Schedule-OnTick-7b33bcba-c86000d7",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Schedule-OnTick-7b33bcba_IamRole_C04DD603.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Schedule-OnTick-7b33bcba_S3Object_4D57889B.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": [],
@@ -811,6 +853,14 @@ exports[`schedule with two functions 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-0a615500/Asset",
                   },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-0a615500/CloudwatchLogGroup",
+                  },
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -880,6 +930,14 @@ exports[`schedule with two functions 2`] = `
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Asset",
+                  },
+                  "CloudwatchLogGroup": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudwatchLogGroup",
+                    "path": "root/Default/Schedule-OnTick-7b33bcba/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {

@@ -1,6 +1,6 @@
 name: Enhancement 🚀
 description: Suggest a new feature or other improvement
-labels: ["✨ enhancement"]
+labels: ["✨ enhancement","needs-discussion"]
 body:
 - type: markdown
   attributes:
@@ -65,3 +65,4 @@ body:
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
       * If you are interested to work on this issue, please leave a comment.
+      * If this issue is labeled **needs-discussion**, it means the spec has not been finalized yet. Please reach out on the #dev channel in the [Wing Slack](https://t.winglang.io/slack).

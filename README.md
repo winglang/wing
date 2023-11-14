@@ -23,13 +23,13 @@ Wing programs can be executed locally (*yes, no internet required*) using a full
 
 The mission of Winglang is to bring back your creative flow and close the gap between imagination and creation.
 
-Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
+Developing for the cloud today requires mastering various layers of the cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
 
-Winglang addresses these pains by letting you work at a higher level of abstraction and allowing you to focus on business logic instead of cloud mechanics, only surfacing low-level details when its needed.
+Winglang addresses these pains by letting you work at a higher level of abstraction and allowing you to focus on business logic instead of cloud mechanics, only surfacing low-level details when it's needed.
 We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <p align="center">
-  <img src="./logo/demo.gif" alt="Wing Demo" height="360px">
+  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="360px">
 </p>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
@@ -42,10 +42,10 @@ Cloud applications are fundamentally different from applications that run on a s
 they are distributed systems that rely on cloud infrastructure to achieve their goals.
 
 In order to be able to express both infrastructure and application logic in a safe and unified programming model, 
-Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight* is for runtime code.
+Winglang has two execution phases: *preflight* for infrastructure definitions and *inflight* for runtime code.
 
 Preflight code is executed *during compilation* and produces the infrastructure configuration for your app (e.g. **Terraform**, **CloudFormation**, etc).
-Inflight code is compiled to **JavaScript** and executed within cloud compute platforms in Node.js environments.
+Inflight code is compiled into **JavaScript** and executed within cloud compute platforms in Node.js environments.
 
 Let's look at a simple example:
 
@@ -79,7 +79,7 @@ You are welcome to read more about it [here](https://www.winglang.io/docs/faq/wh
 
 ## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from the ground up to make it easy for building applications on any cloud.
+Wing was built from scratch to make it easy for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
 * [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for describing infrastructure and runtime code ([`preflight` and `inflight`](https://www.winglang.io/docs/concepts/inflights)). 
@@ -97,9 +97,7 @@ For a more in-depth look at Wing's features and benefits, check out our [documen
 
 ## Getting started 🛠️
 
-> 🚧 Wing is still in alpha, and not recommended for production use. But we're excited for anyone to take part in shaping our 
-> roadmap and contributing in any way. Our [project status](https://www.winglang.io/contributing/status) page includes more information about 
-> stability and roadmap.
+> 🚧 This is a pre-release, please see our [project status](https://www.winglang.io/contributing/status) for more details.
 
 If you'd just like to dip your feet in the water and see what Wing is all about, you can try it out in our [online playground](https://www.winglang.io/play/) or walk through the [interactive tour](https://www.winglang.io/learn/).
 

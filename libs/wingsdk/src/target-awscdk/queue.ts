@@ -8,7 +8,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node } from "../std";
+import { IInflightHost, Node, Duration as StdDuration } from "../std";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -17,23 +17,25 @@ import { IInflightHost, Node } from "../std";
  */
 export class Queue extends cloud.Queue {
   private readonly queue: SQSQueue;
+  private readonly timeout: StdDuration;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
+    this.timeout = props.timeout ?? StdDuration.fromSeconds(30);
 
     this.queue = new SQSQueue(this, "Default", {
       visibilityTimeout: props.timeout
         ? Duration.seconds(props.timeout?.seconds)
-        : undefined,
+        : Duration.seconds(30),
       retentionPeriod: props.retentionPeriod
         ? Duration.seconds(props.retentionPeriod?.seconds)
-        : undefined,
+        : Duration.hours(1),
     });
   }
 
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerProps = {}
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -47,11 +49,14 @@ export class Queue extends cloud.Queue {
       "QueueSetConsumerHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
-      props
+      {
+        ...props,
+        timeout: this.timeout,
+      }
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
@@ -73,7 +78,17 @@ export class Queue extends cloud.Queue {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -88,7 +103,7 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.queueUrl);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

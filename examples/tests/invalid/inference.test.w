@@ -96,3 +96,19 @@ let badFunc: inflight (str): void = inflight (arg1: num) => {};
 // ^ Inferred type Array<str> conflicts with already inferred type Array<num>
 };
 
+
+let returnsNumber = () => { return 2; };
+if true {
+  let x: str = returnsNumber();
+//             ^^^^^^^^^^^^^^^ Expected str, got num
+}
+
+// See https://github.com/winglang/wing/issues/4464 for details
+let unknownArg = (arg) => {
+//                ^^^ Unable to infer type
+  return arg.get("a");
+//           ^^^ Property not found
+};
+if true {
+  unknownArg({ a: true });
+}

@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
+import { ScheduleSchema } from "./schema-resources";
 import {
   bindSimulatorResource,
   makeSimulatorJsClient,
@@ -31,7 +31,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickProps = {}
+    props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -42,7 +42,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
@@ -68,7 +68,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ScheduleSchema = {
-      type: SCHEDULE_TYPE,
+      type: cloud.SCHEDULE_FQN,
       path: this.node.path,
       props: {
         cronExpression: this.cronExpression,
@@ -83,8 +83,8 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 }

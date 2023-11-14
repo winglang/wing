@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default topic behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Topic._newTopic(app, "Topic");
+  new Topic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -24,7 +24,7 @@ test("default topic behavior", () => {
 test("topic with subscriber function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = Topic._newTopic(app, "Topic");
+  const topic = new Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
     "Handler",
@@ -37,9 +37,9 @@ test("topic with subscriber function", () => {
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SNS::Topic", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 1);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   template.resourceCountIs("AWS::Lambda::Permission", 1);
-  template.resourceCountIs("AWS::IAM::Role", 1);
+  template.resourceCountIs("AWS::IAM::Role", 2);
   template.resourceCountIs("AWS::SNS::Subscription", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -47,7 +47,7 @@ test("topic with subscriber function", () => {
 test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = Topic._newTopic(app, "Topic");
+  const topic = new Topic(app, "Topic");
   const subOne = Testing.makeHandler(
     app,
     "Handler1",
@@ -71,9 +71,9 @@ test("topic with multiple subscribers", () => {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SNS::Topic", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 3);
   template.resourceCountIs("AWS::Lambda::Permission", 2);
-  template.resourceCountIs("AWS::IAM::Role", 2);
+  template.resourceCountIs("AWS::IAM::Role", 3);
   template.resourceCountIs("AWS::SNS::Subscription", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

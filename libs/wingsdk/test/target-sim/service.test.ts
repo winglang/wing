@@ -3,7 +3,6 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Resource } from "../../src/std";
-import { SERVICE_TYPE } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
 
 const HANDLER_WITH_START_AND_STOP = `
@@ -15,7 +14,7 @@ test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = new ServiceHandler(app, "Handler", `console.log("hi");`);
-  cloud.Service._newService(app, "my_service", handler);
+  new cloud.Service(app, "my_service", handler);
 
   // WHEN
   const s = await app.startSimulator();
@@ -31,7 +30,7 @@ test("create a service with on start method", async () => {
       environmentVariables: {},
       autoStart: true,
     },
-    type: "wingsdk.cloud.Service",
+    type: cloud.SERVICE_FQN,
   });
 
   await s.stop();
@@ -41,7 +40,7 @@ test("create a service with on start method", async () => {
 test("create a service with a on stop method", async () => {
   // Given
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP)
@@ -62,26 +61,26 @@ test("create a service with a on stop method", async () => {
       environmentVariables: {},
       autoStart: true,
     },
-    type: "wingsdk.cloud.Service",
+    type: cloud.SERVICE_FQN,
   });
 
   expect(
     s
       .listTraces()
-      .filter((v) => v.sourceType == SERVICE_TYPE)
+      .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
     "start!",
-    "wingsdk.cloud.Service created.",
+    "@winglang/sdk.cloud.Service created.",
     "stop!",
-    "wingsdk.cloud.Service deleted.",
+    "@winglang/sdk.cloud.Service deleted.",
   ]);
 });
 
 test("create a service without autostart", async () => {
   // Given
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", `console.log("hi");`),
@@ -103,17 +102,17 @@ test("create a service without autostart", async () => {
       environmentVariables: {},
       autoStart: false,
     },
-    type: "wingsdk.cloud.Service",
+    type: cloud.SERVICE_FQN,
   });
 
   expect(
     s
       .listTraces()
-      .filter((v) => v.sourceType == SERVICE_TYPE)
+      .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "wingsdk.cloud.Service created.", // Service created never started
-    "wingsdk.cloud.Service deleted.",
+    "@winglang/sdk.cloud.Service created.", // Service created never started
+    "@winglang/sdk.cloud.Service deleted.",
   ]);
 });
 
@@ -121,7 +120,7 @@ test("start and stop service", async () => {
   // Given
   const app = new SimApp();
 
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
@@ -142,10 +141,10 @@ test("start and stop service", async () => {
   expect(
     s
       .listTraces()
-      .filter((v) => v.sourceType == SERVICE_TYPE)
+      .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
   ).toEqual([
-    "wingsdk.cloud.Service created.",
+    "@winglang/sdk.cloud.Service created.",
     "start!",
     "stop!",
     "start!",
@@ -156,7 +155,7 @@ test("start and stop service", async () => {
 test("consecutive start and stop service", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Service._newService(
+  new cloud.Service(
     app,
     "my_service",
     new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
@@ -179,16 +178,16 @@ test("consecutive start and stop service", async () => {
   expect(
     s
       .listTraces()
-      .filter((v) => v.sourceType == SERVICE_TYPE)
+      .filter((v) => v.sourceType == cloud.SERVICE_FQN)
       .map((trace) => trace.data.message)
-  ).toEqual(["wingsdk.cloud.Service created.", "start!", "stop!"]);
+  ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
 });
 
 class ServiceHandler extends Resource implements cloud.IServiceHandler {
   constructor(scope: Construct, id: string, private readonly code: string) {
     super(scope, id);
   }
-  public _getInflightOps(): string[] {
+  public _supportedOps(): string[] {
     throw new Error("Method not implemented.");
   }
   public _toInflight(): string {

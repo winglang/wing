@@ -5,8 +5,8 @@ import { tfResourcesOf, tfSanitize, treeJsonOf, mkdtemp } from "../util";
 
 test("default secret behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Secret._newSecret(app, "Secret");
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Secret(app, "Secret");
   const output = app.synth();
 
   // THEN
@@ -17,8 +17,8 @@ test("default secret behavior", () => {
 
 test("secret with a name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Secret._newSecret(app, "Secret", {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Secret(app, "Secret", {
     name: "my-secret",
   });
   const output = app.synth();

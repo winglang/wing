@@ -1,35 +1,41 @@
-import { CorsHeaders, HttpMethod, OpenApiSpec } from "../cloud";
-import { ColumnType } from "../ex";
+import { EVENT_MAPPING_FQN } from "./event-mapping";
+import { STATE_FQN } from "./state";
+import {
+  API_FQN,
+  BUCKET_FQN,
+  COUNTER_FQN,
+  CorsHeaders,
+  DOMAIN_FQN,
+  FUNCTION_FQN,
+  HttpMethod,
+  ON_DEPLOY_FQN,
+  OpenApiSpec,
+  QUEUE_FQN,
+  SCHEDULE_FQN,
+  SECRET_FQN,
+  SERVICE_FQN,
+  TOPIC_FQN,
+  WEBSITE_FQN,
+} from "../cloud";
+import {
+  ColumnType,
+  DYNAMODB_TABLE_FQN,
+  REACT_APP_FQN,
+  REDIS_FQN,
+  TABLE_FQN,
+} from "../ex";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
 } from "../simulator/simulator";
-import { Json } from "../std";
-
-export const API_TYPE = "wingsdk.cloud.Api";
-export const QUEUE_TYPE = "wingsdk.cloud.Queue";
-export const EVENT_MAPPING_TYPE = "wingsdk.sim.EventMapping";
-export const FUNCTION_TYPE = "wingsdk.cloud.Function";
-export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
-export const TOPIC_TYPE = "wingsdk.cloud.Topic";
-export const COUNTER_TYPE = "wingsdk.cloud.Counter";
-export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
-export const TABLE_TYPE = "wingsdk.cloud.Table"; // for backwards compat
-export const LOGGER_TYPE = "wingsdk.cloud.Logger";
-export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
-export const REDIS_TYPE = "wingsdk.redis.Redis"; // for backwards compat
-export const WEBSITE_TYPE = "wingsdk.cloud.Website";
-export const SECRET_TYPE = "wingsdk.cloud.Secret";
-export const SERVICE_TYPE = "wingsdk.cloud.Service";
-export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
-export const DYNAMODB_TABLE_TYPE = "wingsdk.ex.DynamodbTable";
+import { Json, TEST_RUNNER_FQN } from "../std";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
 
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
-  readonly type: typeof API_TYPE;
+  readonly type: typeof API_FQN;
   readonly props: {
     openApiSpec: OpenApiSpec;
     corsHeaders?: CorsHeaders;
@@ -58,7 +64,7 @@ export interface ApiRoute {
 
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
-  readonly type: typeof FUNCTION_TYPE;
+  readonly type: typeof FUNCTION_FQN;
   readonly props: {
     /** The path to a file containing source code to be run when invoked. */
     readonly sourceCodeFile: string;
@@ -76,7 +82,7 @@ export interface FunctionAttributes {}
 
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
-  readonly type: typeof QUEUE_TYPE;
+  readonly type: typeof QUEUE_FQN;
   readonly props: {
     /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
@@ -87,7 +93,7 @@ export interface QueueSchema extends BaseResourceSchema {
 
 /** Schema for cloud.Service */
 export interface ServiceSchema extends BaseResourceSchema {
-  readonly type: typeof SERVICE_TYPE;
+  readonly type: typeof SERVICE_FQN;
   readonly props: {
     /** The source code of the service */
     readonly sourceCodeFile: string;
@@ -106,7 +112,7 @@ export interface ScheduleAttributes {}
 
 /** Schema for cloud.Schedule */
 export interface ScheduleSchema extends BaseResourceSchema {
-  readonly type: typeof SCHEDULE_TYPE;
+  readonly type: typeof SCHEDULE_FQN;
   readonly props: {
     /** The cron expression that defines when the schedule should run. */
     readonly cronExpression: string;
@@ -123,7 +129,7 @@ export interface EventSubscription {}
 
 /** Schema for sim.EventMapping */
 export interface EventMappingSchema extends BaseResourceSchema {
-  readonly type: typeof EVENT_MAPPING_TYPE;
+  readonly type: typeof EVENT_MAPPING_FQN;
   readonly props: {
     /** Function handle to call for subscriber */
     subscriber: FunctionHandle;
@@ -150,7 +156,7 @@ export interface QueueSubscriber extends EventSubscription {
 
 /** Schema for cloud.Topic */
 export interface TopicSchema extends BaseResourceSchema {
-  readonly type: typeof TOPIC_TYPE;
+  readonly type: typeof TOPIC_FQN;
   readonly props: {};
 }
 
@@ -167,7 +173,7 @@ export interface TableAttributes {}
 
 /** Schema for cloud.Table */
 export interface TableSchema extends BaseResourceSchema {
-  readonly type: typeof TABLE_TYPE;
+  readonly type: typeof TABLE_FQN;
   readonly props: {
     readonly name: string;
     readonly columns: { [key: string]: ColumnType };
@@ -178,7 +184,7 @@ export interface TableSchema extends BaseResourceSchema {
 
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
-  readonly type: typeof BUCKET_TYPE;
+  readonly type: typeof BUCKET_FQN;
   readonly props: {
     /** Whether the bucket should be publicly accessible. */
     readonly public: boolean;
@@ -192,18 +198,9 @@ export interface BucketSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Bucket */
 export interface BucketAttributes {}
 
-/** Schema for cloud.Logger */
-export interface LoggerSchema extends BaseResourceSchema {
-  readonly type: typeof LOGGER_TYPE;
-  readonly props: {};
-}
-
-/** Runtime attributes for cloud.Logger */
-export interface LoggerAttributes {}
-
 /** Schema for cloud.Counter */
 export interface CounterSchema extends BaseResourceSchema {
-  readonly type: typeof COUNTER_TYPE;
+  readonly type: typeof COUNTER_FQN;
   readonly props: {
     /** The initial value of the counter. */
     readonly initial: number;
@@ -215,7 +212,7 @@ export interface CounterAttributes {}
 
 /** Schema for cloud.TestRunner */
 export interface TestRunnerSchema extends BaseResourceSchema {
-  readonly type: typeof TEST_RUNNER_TYPE;
+  readonly type: typeof TEST_RUNNER_FQN;
   readonly props: {
     /** A map from test functions to their handles. */
     readonly tests: Record<string, FunctionHandle>;
@@ -227,26 +224,52 @@ export interface TestRunnerAttributes {}
 
 /** Schema for redis.Redis */
 export interface RedisSchema extends BaseResourceSchema {
-  readonly type: typeof REDIS_TYPE;
+  readonly type: typeof REDIS_FQN;
   readonly props: {};
 }
+/**
+ * Custom routes created in preflight.
+ * Each contains the data to send to the user and a contentType header.
+ */
+export type FileRoutes = Record<string, { data: string; contentType: string }>;
 
 /** Schema for cloud.Website */
 export interface WebsiteSchema extends BaseResourceSchema {
-  readonly type: typeof WEBSITE_TYPE;
+  readonly type: typeof WEBSITE_FQN;
   readonly props: {
     /** Path to the directory where all static files are hosted from */
     staticFilesPath: string;
-    /** Map of `.json` file paths to dynamic content inserted from preflight */
-    jsonRoutes: Record<string, Json>;
+    /** Map of "files" contains dynamic content inserted from preflight */
+    fileRoutes: FileRoutes;
   };
+  readonly attrs: WebsiteAttributes & BaseResourceAttributes;
+}
+
+/** Runtime attributes for cloud.Website */
+export interface WebsiteAttributes {
+  /** The URL of the Website. */
+  readonly url: string;
+}
+
+export interface ReactAppSchema extends BaseResourceSchema {
+  readonly type: typeof REACT_APP_FQN;
+  readonly props: {
+    path: string;
+    startCommand: string;
+    environmentVariables: Record<string, string>;
+    useBuildCommand: boolean;
+    url: string;
+  };
+}
+export interface ReactAppAttributes {
+  url: string;
 }
 
 export interface RedisAttributes {}
 
 /** Schema for cloud.Secret */
 export interface SecretSchema extends BaseResourceSchema {
-  readonly type: typeof SECRET_TYPE;
+  readonly type: typeof SECRET_FQN;
   readonly props: {
     /** The name of the secret */
     readonly name: string;
@@ -258,7 +281,7 @@ export interface SecretAttributes {}
 
 /** Schema for cloud.OnDeploy */
 export interface OnDeploySchema extends BaseResourceSchema {
-  readonly type: typeof ON_DEPLOY_TYPE;
+  readonly type: typeof ON_DEPLOY_FQN;
   readonly props: {
     /** The function to run on deploy. */
     readonly functionHandle: FunctionHandle;
@@ -273,7 +296,7 @@ export interface DynamodbTableAttributes {}
 
 /** Schema for ex.DynamodbTable */
 export interface DynamodbTableSchema extends BaseResourceSchema {
-  readonly type: typeof DYNAMODB_TABLE_TYPE;
+  readonly type: typeof DYNAMODB_TABLE_FQN;
   readonly props: {
     readonly name: string;
     /**
@@ -289,4 +312,16 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
      */
     readonly rangeKey?: string;
   };
+}
+
+/** Schema for simulator.State */
+export interface StateSchema extends BaseResourceSchema {
+  readonly type: typeof STATE_FQN;
+  readonly props: {};
+}
+
+/** Schema for cloud.Domain */
+export interface DomainSchema extends BaseResourceSchema {
+  readonly type: typeof DOMAIN_FQN;
+  readonly props: {};
 }

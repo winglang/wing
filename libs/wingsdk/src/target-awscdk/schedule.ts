@@ -63,7 +63,7 @@ export class Schedule extends cloud.Schedule {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props?: cloud.ScheduleOnTickProps | undefined
+    props?: cloud.ScheduleOnTickOptions | undefined
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -77,7 +77,7 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,

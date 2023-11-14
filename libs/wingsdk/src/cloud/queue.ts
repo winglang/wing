@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Duration, IResource, Node, Resource } from "../std";
 
 /**
@@ -15,13 +15,13 @@ export const QUEUE_FQN = fqnForType("cloud.Queue");
 export interface QueueProps {
   /**
    * How long a queue's consumers have to process a message.
-   * @default undefined
+   * @default 30s
    */
   readonly timeout?: Duration;
 
   /**
    * How long a queue retains a message.
-   * @default undefined
+   * @default 1h
    */
   readonly retentionPeriod?: Duration;
 }
@@ -30,21 +30,14 @@ export interface QueueProps {
  * A queue.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
+ * @abstract
  */
-export abstract class Queue extends Resource {
-  /**
-   * Create a new `Queue` instance.
-   * @internal
-   */
-  public static _newQueue(
-    scope: Construct,
-    id: string,
-    props: QueueProps = {}
-  ): Queue {
-    return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
-  }
-
+export class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
+    if (new.target === Queue) {
+      return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Queue";
@@ -53,29 +46,24 @@ export abstract class Queue extends Resource {
     props;
   }
 
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      QueueInflightMethods.PUSH,
-      QueueInflightMethods.PURGE,
-      QueueInflightMethods.APPROX_SIZE,
-      QueueInflightMethods.POP,
-    ];
-  }
-
   /**
    * Create a function to consume messages from this queue.
+   * @abstract
    */
-  public abstract setConsumer(
+  public setConsumer(
     handler: IQueueSetConsumerHandler,
-    props?: QueueSetConsumerProps
-  ): Function;
+    props?: QueueSetConsumerOptions
+  ): Function {
+    handler;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**
  * Options for Queue.setConsumer.
  */
-export interface QueueSetConsumerProps extends FunctionProps {
+export interface QueueSetConsumerOptions extends FunctionProps {
   /**
    * The maximum number of messages to send to subscribers at once.
    * @default 1

@@ -17,10 +17,12 @@ use crate::lifting::LiftVisitor;
 use crate::parser::{normalize_path, parse_wing_project};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check::type_reference_transform::TypeReferenceTransformer;
 use crate::type_check_assert::TypeCheckAssert;
 use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
-use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
+use crate::wasm_util::extern_json_fn;
+use crate::{ast::Scope, type_check::Types};
 
 /// The output of compiling a Wing project with one or more files
 pub struct ProjectData {
@@ -60,12 +62,7 @@ thread_local! {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		on_document_did_open(parsed);
-	} else {
-		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
-	}
+	extern_json_fn(ptr, len, on_document_did_open);
 }
 
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
@@ -90,12 +87,7 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		on_document_did_change(parsed);
-	} else {
-		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
-	}
+	extern_json_fn(ptr, len, on_document_did_change);
 }
 
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
@@ -135,7 +127,7 @@ fn partial_compile(
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
-	let source_path = Utf8Path::from_path(source_path).expect("invalid unicide path");
+	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
 	let source_path = normalize_path(source_path, None);
 
 	let topo_sorted_files = parse_wing_project(
@@ -167,7 +159,7 @@ fn partial_compile(
 	// Type check all files in topological order (start with files that don't require any other
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
+		let mut scope = project_data.asts.remove(file).expect("matching AST not found");
 		type_check(
 			&mut scope,
 			&mut types,
@@ -177,6 +169,10 @@ fn partial_compile(
 			&mut jsii_imports,
 		);
 
+		// Make sure all type reference are no longer considered references
+		let mut tr_transformer = TypeReferenceTransformer { types: &mut types };
+		let scope = tr_transformer.fold_scope(scope);
+
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
@@ -184,20 +180,13 @@ fn partial_compile(
 		// Validate all Json literals to make sure their values are legal
 		let mut json_checker = ValidJsonVisitor::new(&types);
 		json_checker.check(&scope);
+
+		project_data.asts.insert(file.clone(), scope);
 	}
 
 	// -- LIFTING PHASE --
 
-	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
-	let project_dir = source_path.parent().expect("Empty filename");
-
-	let jsifier = JSifier::new(
-		&mut types,
-		&project_data.files,
-		&project_data.file_graph,
-		&source_path,
-		&project_dir,
-	);
+	let jsifier = JSifier::new(&mut types, &project_data.files, &project_data.file_graph, &source_path);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
@@ -244,7 +233,7 @@ pub mod test_utils {
 	///
 	pub fn load_file_with_contents(content: &str) -> TextDocumentPositionParams {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
-		let filename = format!("{}.w", Uuid::new_v4());
+		let filename = format!("{}.main.w", Uuid::new_v4());
 		let file_path = temp_dir.path().join(&filename);
 		fs::write(&file_path, content).expect("Failed to write to temporary file");
 		let file_uri_string = format!("file:///{}", file_path.to_str().unwrap());
@@ -286,5 +275,32 @@ pub mod test_utils {
 			text_document: TextDocumentIdentifier { uri },
 			position: cursor_position,
 		};
+	}
+
+	/// Finds all ranges in the document starting with `//-`
+	pub fn get_ranges(content: &str) -> Vec<Range> {
+		let lines = content.lines();
+
+		let mut ranges = vec![];
+		for line in lines.enumerate() {
+			if line.1.contains("//-") {
+				let start_col = line.1.match_indices("//-").next().unwrap().0 + 2;
+				let end_col = line.1.len();
+				let line_num = line.0 - 1;
+
+				ranges.push(Range {
+					start: Position {
+						line: line_num as u32,
+						character: start_col as u32,
+					},
+					end: Position {
+						line: line_num as u32,
+						character: end_col as u32,
+					},
+				});
+			}
+		}
+
+		ranges
 	}
 }

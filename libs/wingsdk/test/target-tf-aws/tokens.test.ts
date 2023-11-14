@@ -7,7 +7,7 @@ import { mkdtemp, tfSanitize, sanitizeCode } from "../util";
 
 test("captures tokens", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
   const numVar = new TerraformVariable(app, "Number", {
     type: "Number",

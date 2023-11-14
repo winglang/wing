@@ -3,7 +3,7 @@ source: libs/wingc/src/lsp/hover.rs
 ---
 contents:
   kind: markdown
-  value: "```wing\nstruct Data\n```\n---\n### Fields\n- `field` — str"
+  value: "```wing\nstruct Data\n```\n---\n### Fields\n- `field` — `str`"
 range:
   start:
     line: 11

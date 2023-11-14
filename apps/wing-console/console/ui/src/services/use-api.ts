@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { ApiRequest } from "../shared/api.js";
 
@@ -9,6 +9,7 @@ export interface UseApiOptions {
   onFetchDataUpdate: (data: any) => void;
   onSchemaDataUpdate: (data: any) => void;
 }
+
 export const useApi = ({
   resourcePath,
   onFetchDataUpdate,
@@ -22,35 +23,31 @@ export const useApi = ({
     //   return;
     // }
     onFetchDataUpdate(fetch.data);
-  }, [fetch.data]);
+  }, [fetch.data, onFetchDataUpdate]);
 
   useEffect(() => {
     if (!schema.data) {
       return;
     }
     onSchemaDataUpdate(schema.data);
-  }, [schema.data]);
+  }, [onSchemaDataUpdate, schema.data]);
 
-  const callFetch = async ({
-    url,
-    route,
-    method,
-    variables,
-    headers,
-    body,
-  }: ApiRequest) => {
-    if (!url || !method || !route) {
-      return;
-    }
-    await fetch.mutateAsync({
-      url,
-      route,
-      variables,
-      method,
-      headers,
-      body,
-    });
-  };
+  const callFetch = useCallback(
+    async ({ url, route, method, variables, headers, body }: ApiRequest) => {
+      if (!url || !method || !route) {
+        return;
+      }
+      await fetch.mutateAsync({
+        url,
+        route,
+        variables,
+        method,
+        headers,
+        body,
+      });
+    },
+    [fetch],
+  );
 
   const isLoading = useMemo(() => {
     return fetch.isLoading || schema.isLoading;

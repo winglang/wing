@@ -31,7 +31,7 @@ export class Topic extends cloud.Topic {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -45,7 +45,7 @@ export class Topic extends cloud.Topic {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -69,7 +69,7 @@ export class Topic extends cloud.Topic {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }
@@ -80,7 +80,7 @@ export class Topic extends cloud.Topic {
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

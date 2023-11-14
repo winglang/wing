@@ -45,6 +45,8 @@ impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 								report_diagnostic(Diagnostic {
 									message: format!("\"{tt}\" is not a legal JSON value"),
 									span: Some(inner.span.clone()),
+									annotations: vec![],
+									hints: vec![],
 								})
 							}
 						}
@@ -55,6 +57,8 @@ impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 									report_diagnostic(Diagnostic {
 										message: format!("\"{tt}\" is not a legal JSON value"),
 										span: Some(inner.span.clone()),
+										annotations: vec![],
+										hints: vec![],
 									})
 								}
 							}
@@ -66,6 +70,8 @@ impl<'a> Visit<'_> for ValidJsonVisitor<'a> {
 									report_diagnostic(Diagnostic {
 										message: format!("\"{tt}\" is not a legal JSON value"),
 										span: Some(v.span.clone()),
+										annotations: vec![],
+										hints: vec![],
 									})
 								}
 							}

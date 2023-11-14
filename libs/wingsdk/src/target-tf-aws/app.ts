@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
@@ -6,6 +5,7 @@ import { DynamodbTable } from "./dynamodb-table";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
+import { ReactApp } from "./react-app";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
@@ -28,6 +28,7 @@ import {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  DOMAIN_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -37,8 +38,9 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN } from "../ex";
+import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { Domain } from "../shared-aws/domain";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -72,57 +74,58 @@ export class App extends CdktfApp {
     this.synthRoots(props, this.testRunner);
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case API_FQN:
-        return new Api(scope, id, args[0]);
+        return Api;
 
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
 
       case QUEUE_FQN:
-        return new Queue(scope, id, args[0]);
+        return Queue;
 
       case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
+        return Topic;
 
       case COUNTER_FQN:
-        return new Counter(scope, id, args[0]);
+        return Counter;
 
       case SCHEDULE_FQN:
-        return new Schedule(scope, id, args[0]);
+        return Schedule;
 
       case TABLE_FQN:
-        return new Table(scope, id, args[0]);
+        return Table;
 
       case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
+        return Topic;
 
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case REDIS_FQN:
-        return new Redis(scope, id);
+        return Redis;
 
       case WEBSITE_FQN:
-        return new Website(scope, id, args[0]);
+        return Website;
 
       case SECRET_FQN:
-        return new Secret(scope, id, args[0]);
+        return Secret;
 
       case ON_DEPLOY_FQN:
-        return new OnDeploy(scope, id, args[0], args[1]);
+        return OnDeploy;
+
+      case DOMAIN_FQN:
+        return Domain;
+
+      case REACT_APP_FQN:
+        return ReactApp;
 
       case DYNAMODB_TABLE_FQN:
-        return new DynamodbTable(scope, id, args[0]);
+        return DynamodbTable;
     }
 
     return undefined;

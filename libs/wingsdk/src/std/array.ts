@@ -295,7 +295,7 @@ export class MutArray {
   }
 
   /**
-   * Removes first occurence of a given value in an array
+   * Removes first occurrence of a given value in an array
    *
    * @macro ((obj, args) => { if (obj.indexOf(args[0]) !== -1) { obj.splice(obj.indexOf(args[0]), 1); return true; } return false; })($self$, [$args$])
    *

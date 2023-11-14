@@ -19,7 +19,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    let fn = cloud.Function._newFunction(this, "Function", handler, props);
+    let fn = new cloud.Function(this, "Function", handler, props);
     const awsFn = fn as AwsFunction;
 
     // add all of the children of the construct to the dependencies

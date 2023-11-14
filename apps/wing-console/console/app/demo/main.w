@@ -70,12 +70,13 @@ rateSchedule.onTick(inflight () => {
 });
 
 new cloud.Service(
-      onStart: inflight () => {
-        log("start!");
-      },
-      onStop: inflight () => {
-        log("stop!");
-      });
+  inflight () => {
+    log("start!");
+    return inflight () => {
+      log("stop!");
+    };
+  },
+);
 
 let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
   cron: "* * * * ?"

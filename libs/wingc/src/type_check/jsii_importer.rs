@@ -48,6 +48,7 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
+#[derive(Debug)]
 pub struct JsiiImportSpec {
 	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
 	pub assembly_name: String,
@@ -213,7 +214,12 @@ impl<'a> JsiiImporter<'a> {
 			self
 				.wing_types
 				.libraries
-				.define(&Symbol::global(assembly), SymbolKind::Namespace(ns), StatementIdx::Top)
+				.define(
+					&Symbol::global(assembly),
+					SymbolKind::Namespace(ns),
+					AccessModifier::Public,
+					StatementIdx::Top,
+				)
 				.unwrap();
 		};
 
@@ -271,6 +277,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Symbol::global(namespace_name),
 						SymbolKind::Namespace(ns),
+						AccessModifier::Public,
 						StatementIdx::Top,
 					)
 					.unwrap();
@@ -528,6 +535,7 @@ impl<'a> JsiiImporter<'a> {
 							access_modifier,
 							Some(Docs::from(&m.docs)),
 						),
+						access_modifier,
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -572,6 +580,7 @@ impl<'a> JsiiImporter<'a> {
 							access_modifier,
 							Some(Docs::from(&p.docs)),
 						),
+						access_modifier,
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -593,7 +602,7 @@ impl<'a> JsiiImporter<'a> {
 					line: (jsii_source_location.line - 1.0) as u32,
 					col: 0,
 				},
-				file_id: (&jsii_source_location.filename).into(),
+				file_id: jsii_source_location.filename.clone(),
 			}
 		} else {
 			Default::default()
@@ -795,6 +804,7 @@ impl<'a> JsiiImporter<'a> {
 					access_modifier,
 					Some(Docs::from(&initializer.docs)),
 				),
+				access_modifier,
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
@@ -981,6 +991,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Symbol::global(assembly.name.clone()),
 						SymbolKind::Namespace(ns),
+						AccessModifier::Public,
 						StatementIdx::Top,
 					)
 					.expect("Failed to define jsii root namespace");
@@ -1013,6 +1024,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(
 				&self.jsii_spec.alias,
 				SymbolKind::Namespace(ns),
+				AccessModifier::Private,
 				StatementIdx::Index(self.jsii_spec.import_statement_idx),
 			)
 			.unwrap();
@@ -1041,7 +1053,12 @@ impl<'a> JsiiImporter<'a> {
 		ns.envs
 			.get_mut(0)
 			.unwrap()
-			.define(&symbol, SymbolKind::Type(type_ref), StatementIdx::Top)
+			.define(
+				&symbol,
+				SymbolKind::Type(type_ref),
+				AccessModifier::Public,
+				StatementIdx::Top,
+			)
 			.expect(&format!("Invalid JSII library: failed to define type {}", fqn));
 	}
 }
@@ -1069,9 +1086,7 @@ pub fn is_construct_base(fqn: &str) -> bool {
 
 impl From<&Option<jsii::Docs>> for Docs {
 	fn from(value: &Option<jsii::Docs>) -> Self {
-		let Some(docs) = value else {
-			return Docs::default()
-		};
+		let Some(docs) = value else { return Docs::default() };
 
 		Docs {
 			custom: docs.custom.as_ref().unwrap_or(&BTreeMap::default()).clone(),

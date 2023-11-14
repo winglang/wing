@@ -4,7 +4,7 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
-    "turbo": "^1.10.13"
+    "turbo": "^1.10.14"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
@@ -23,14 +23,14 @@
     "pnpm": "8.6.5"
   },
   "pnpm": {
+    "overrides": {
+      "mime": "^3.0.0"
+    },
     "patchedDependencies": {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
-      "@aws-sdk/is-array-buffer@3.201.0": "patches/@aws-sdk__is-array-buffer@3.201.0.patch",
-      "@aws-sdk/util-buffer-from@3.208.0": "patches/@aws-sdk__util-buffer-from@3.208.0.patch",
       "jsii@5.0.11": "patches/jsii@5.0.11.patch",
-      "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
-      "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch",
-      "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch"
+      "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch",
+      "mime@3.0.0": "patches/mime@3.0.0.patch"
     }
   }
 }

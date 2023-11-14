@@ -6,11 +6,21 @@ keywords: [Wing contributors, contributors, workflows]
 
 This topic includes a description of common development workflows for the Wing project.
 
-## Environment Setup
+## How to prepare for take-off? 🐤
 
 :::info
-You can open up this repo just using the badge below. It is recommended to select a 4-core minimum machine.
+You can open up this repo by clicking the badge below. It is recommended to select a 4-core minimum machine.
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/winglang/wing)
+:::
+
+:::info
+For windows we recommend to set the tools up within WSL as some of the scripts 
+don't support windows and expect unix tooling.
+
+Some Guides:
+- [💡 Setup WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install#install-wsl-command)
+- [💡 Setup build essentials for rust](https://stackoverflow.com/questions/52445961/how-do-i-fix-the-rust-error-linker-cc-not-found-for-debian-on-windows-10)
+- [💡 Enable systemd to install docker without the need of Docker Desktop](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/#how-can-you-get-systemd-on-your-machine)
 :::
 
 Here is a list of minimal tools you should install to build the Wing repo in your development
@@ -34,6 +44,7 @@ git clone https://github.com/winglang/wing
 cd wing
 pnpm install
 ```
+
 
 :::note Turbo Commands
 [Turbo] commands in this document are structured as
@@ -60,7 +71,6 @@ pnpm turbo <task> --filter=<project> -- <args>
 [volta]: https://volta.sh
 [PNPM]: https://pnpm.io
 [Docker]: https://docs.docker.com/get-docker/
-[emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
 ## Full build
 
@@ -102,7 +112,7 @@ Now, you can edit a source file anywhere across the stack and run the compiler w
 For example:
 
 ```sh
-pnpm wing -- test examples/tests/valid/captures.w
+pnpm wing -- test examples/tests/valid/captures.test.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
@@ -147,7 +157,7 @@ pnpm turbo wing:e2e
 ### Test Meta-Comments
 
 In your wing files in `examples/tests/valid`, you can add a specially formatted comment to add additional information for hangar.
-Inside this comment, a yaml block will be read and used for serveral purposes.
+Inside this comment, a yaml block will be read and used for several purposes.
 
 Example:
 

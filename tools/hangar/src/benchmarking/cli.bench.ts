@@ -27,13 +27,14 @@ describe("compile", async () => {
           await runWingCommand({
             cwd: benchmarksTestDir,
             wingFile: wingFile,
-            args: ["compile", "--target", target],
+            platforms: [target],
+            args: ["compile"],
             expectFailure: false,
           });
         },
         {
           warmupIterations: 1,
-          iterations: 15,
+          iterations: 10,
           time: 0,
           setup: async (f) => {
             f.opts.beforeEach = async () => {

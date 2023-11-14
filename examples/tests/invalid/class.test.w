@@ -161,3 +161,6 @@ inflight class Jet extends Plane{
 //^^^^^^^^^^^ To declare a initializer, use "init"
   }
 }
+
+new std.Resource();
+//^^^^^^^^^^^^^^^^ Cannot instantiate abstract class "Resource"

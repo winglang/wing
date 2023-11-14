@@ -30,6 +30,8 @@ impl From<FilesError> for Diagnostic {
 		Self {
 			message: err.to_string(),
 			span: None,
+			annotations: vec![],
+			hints: vec![],
 		}
 	}
 }

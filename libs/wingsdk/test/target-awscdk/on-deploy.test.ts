@@ -13,9 +13,13 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
 test("create an OnDeploy", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = new awscdk.App({
+    outdir: mkdtemp(),
+    entrypointDir: __dirname,
+    ...CDK_APP_OPTS,
+  });
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  OnDeploy._newOnDeploy(app, "my_on_deploy", handler);
+  new OnDeploy(app, "my_on_deploy", handler);
   const output = app.synth();
 
   // THEN
@@ -26,10 +30,14 @@ test("create an OnDeploy", () => {
 
 test("execute OnDeploy after other resources", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const app = new awscdk.App({
+    outdir: mkdtemp(),
+    entrypointDir: __dirname,
+    ...CDK_APP_OPTS,
+  });
+  const bucket = new Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
+  new OnDeploy(app, "my_on_deploy", handler, {
     executeAfter: [bucket],
   });
   const output = app.synth();
@@ -45,10 +53,14 @@ test("execute OnDeploy after other resources", () => {
 
 test("execute OnDeploy before other resources", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = Bucket._newBucket(app, "my_bucket");
+  const app = new awscdk.App({
+    outdir: mkdtemp(),
+    entrypointDir: __dirname,
+    ...CDK_APP_OPTS,
+  });
+  const bucket = new Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  OnDeploy._newOnDeploy(app, "my_on_deploy", handler, {
+  new OnDeploy(app, "my_on_deploy", handler, {
     executeBefore: [bucket],
   });
   const output = app.synth();

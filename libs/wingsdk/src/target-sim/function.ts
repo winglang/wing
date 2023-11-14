@@ -1,7 +1,7 @@
 import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
+import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { App } from "../core";
@@ -36,7 +36,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
   public toSimulator(): BaseResourceSchema {
     const outdir = App.of(this).outdir;
     const schema: FunctionSchema = {
-      type: FUNCTION_TYPE,
+      type: cloud.FUNCTION_FQN,
       path: this.node.path,
       props: {
         sourceCodeFile: relative(outdir, this.entrypoint),
@@ -49,9 +49,14 @@ export class Function extends cloud.Function implements ISimulatorResource {
     return schema;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */

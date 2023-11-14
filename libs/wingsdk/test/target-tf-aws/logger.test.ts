@@ -5,7 +5,7 @@ import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   const inflight = Testing.makeHandler(
     app,
@@ -15,13 +15,14 @@ test("inflight function uses a logger", () => {
     }`
   );
 
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", inflight);
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_log_group",
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",

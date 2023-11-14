@@ -2,7 +2,20 @@
 
 exports[`basic function 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_linux_function_app": {
       "Function_042596DC": {
         "app_settings": {
@@ -18,8 +31,10 @@ exports[`basic function 1`] = `
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
         "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
         "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "16",
+            "node_version": "18",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -85,6 +100,14 @@ exports[`basic function 2`] = `
         "children": {
           "Default": {
             "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
               "Function": {
                 "children": {
                   "Asset": {
@@ -198,6 +221,29 @@ exports[`basic function 2`] = `
                 "id": "azure",
                 "path": "root/Default/azure",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -236,7 +282,20 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_linux_function_app": {
       "Function_042596DC": {
         "app_settings": {
@@ -254,8 +313,10 @@ exports[`basic function with environment variables 1`] = `
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
         "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
         "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "16",
+            "node_version": "18",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -321,6 +382,14 @@ exports[`basic function with environment variables 2`] = `
         "children": {
           "Default": {
             "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
               "Function": {
                 "children": {
                   "Asset": {
@@ -434,6 +503,29 @@ exports[`basic function with environment variables 2`] = `
                 "id": "azure",
                 "path": "root/Default/azure",
               },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -472,7 +564,20 @@ exports[`basic function with environment variables 2`] = `
 
 exports[`replace invalid character from function name 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_linux_function_app": {
       "someFunction01_Function_83CF4008": {
         "app_settings": {
@@ -488,8 +593,10 @@ exports[`replace invalid character from function name 1`] = `
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
         "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
         "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
           "application_stack": {
-            "node_version": "16",
+            "node_version": "18",
           },
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
@@ -555,6 +662,14 @@ exports[`replace invalid character from function name 2`] = `
         "children": {
           "Default": {
             "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
               "Handler": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -599,6 +714,29 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "someFunction01": {
                 "children": {

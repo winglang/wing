@@ -122,6 +122,11 @@
       "type": "build"
     },
     {
+      "name": "mock-gcs",
+      "version": "^1.0.0",
+      "type": "build"
+    },
+    {
       "name": "nanoid",
       "type": "build"
     },
@@ -161,72 +166,57 @@
     },
     {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-elasticache",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-secrets-manager",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sns",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.405.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
-      "name": "@aws-sdk/is-array-buffer",
-      "version": "3.201.0",
+      "name": "@aws-sdk/s3-request-presigner",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.398.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-buffer-from",
-      "version": "3.208.0",
+      "version": "3.433.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-dynamodb",
-      "version": "3.405.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-stream-node",
-      "version": "3.350.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-utf8-node",
-      "version": "3.259.0",
+      "version": "3.438.0",
       "type": "bundled"
     },
     {
@@ -241,6 +231,21 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@google-cloud/storage",
+      "version": "6.9.5",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-stream",
+      "version": "2.0.17",
+      "type": "bundled"
+    },
+    {
+      "name": "@smithy/util-utf8",
+      "version": "2.0.0",
       "type": "bundled"
     },
     {
@@ -282,6 +287,11 @@
       "type": "bundled"
     },
     {
+      "name": "mime",
+      "version": "^3.0.0",
+      "type": "bundled"
+    },
+    {
       "name": "nanoid",
       "version": "^3.3.6",
       "type": "bundled"
@@ -291,7 +301,15 @@
       "type": "bundled"
     },
     {
+      "name": "undici",
+      "type": "bundled"
+    },
+    {
       "name": "uuid",
+      "type": "bundled"
+    },
+    {
+      "name": "yaml",
       "type": "bundled"
     },
     {

@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -28,32 +27,20 @@ export interface SecretProps {
  * A cloud secret.
  *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
+ * @abstract
  */
-export abstract class Secret extends Resource {
-  /**
-   * Create a new secert.
-   * @internal
-   */
-  public static _newSecret(
-    scope: Construct,
-    id: string,
-    props: SecretProps = {}
-  ): Secret {
-    return App.of(scope).newAbstract(SECRET_FQN, scope, id, props);
-  }
-
+export class Secret extends Resource {
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
+    if (new.target === Secret) {
+      return Resource._newFromFactory(SECRET_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Secret";
     Node.of(this).description = "A cloud secret";
 
     props;
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [SecretInflightMethods.VALUE, SecretInflightMethods.VALUE_JSON];
   }
 }
 

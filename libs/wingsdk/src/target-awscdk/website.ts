@@ -8,7 +8,6 @@ import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import * as cloud from "../cloud";
-import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
 
@@ -52,7 +51,7 @@ export class Website extends cloud.Website {
           originAccessIdentity: cloudFrontOAI,
         }),
       },
-      domainNames: this._domain ? [this._domain] : undefined,
+      domainNames: this._domain ? [this._domain.domainName] : undefined,
       defaultRootObject: INDEX_FILE,
     });
 
@@ -63,16 +62,15 @@ export class Website extends cloud.Website {
     return this._url;
   }
 
-  public addJson(path: string, data: Json): string {
-    if (!path.endsWith(".json")) {
-      throw new Error(
-        `key must have a .json suffix. (current: "${path.split(".").pop()}")`
-      );
-    }
-
+  public addFile(
+    path: string,
+    data: string,
+    options?: cloud.AddFileOptions
+  ): string {
     new BucketDeployment(this, `S3Object-${path}`, {
       destinationBucket: this.bucket,
-      sources: [Source.data(this.formatPath(path), JSON.stringify(data))],
+      contentType: options?.contentType ?? "text/plain",
+      sources: [Source.data(this.formatPath(path), data)],
     });
 
     return `${this.url}/${path}`;

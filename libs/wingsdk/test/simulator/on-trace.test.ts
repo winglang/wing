@@ -1,13 +1,13 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/simulator";
-import * as sim from "../../src/target-sim";
+import { App } from "../../src/target-sim/app";
 import { mkdtemp } from "../util";
 
 test("onTrace", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
-  cloud.Bucket._newBucket(app, "my_bucket", { public: false });
+  const app = new App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new cloud.Bucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
 
   let numTraces = 0;
@@ -15,7 +15,7 @@ test("onTrace", async () => {
   // WHEN
   const s = new testing.Simulator({ simfile });
   s.onTrace({
-    callback: (_trace: cloud.Trace) => {
+    callback: (_trace) => {
       numTraces++;
     },
   });

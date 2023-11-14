@@ -105,7 +105,6 @@ module.exports = grammar({
         $.variable_assignment_statement,
         $.return_statement,
         $.class_definition,
-        $.resource_definition,
         $.interface_definition,
         $.for_in_loop,
         $.while_statement,
@@ -124,13 +123,14 @@ module.exports = grammar({
     import_statement: ($) =>
       seq(
         "bring",
-        field("module_name", choice($.identifier, $.string)),
+        optional(field("module_name", choice($.identifier, $.string))),
         optional(seq("as", field("alias", $.identifier))),
         $._semicolon
       ),
 
     struct_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "struct",
         field("name", $.identifier),
         optional(seq("extends", commaSep(field("extends", $.custom_type)))),
@@ -141,6 +141,7 @@ module.exports = grammar({
 
     enum_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "enum",
         field("enum_name", $.identifier),
         braced(commaSep(alias($.identifier, $.enum_field)))
@@ -185,7 +186,8 @@ module.exports = grammar({
     // Classes
     class_definition: ($) =>
       seq(
-        $.inflight_specifier,
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("phase_modifier", $.inflight_specifier)),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
@@ -217,28 +219,9 @@ module.exports = grammar({
         $._semicolon
       ),
 
-    resource_definition: ($) =>
-      seq(
-        "class",
-        field("name", $.identifier),
-        optional(seq("extends", field("parent", $.custom_type))),
-        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
-        field("implementation", $.resource_implementation)
-      ),
-    resource_implementation: ($) =>
-      braced(
-        repeat(
-          choice(
-            $.initializer,
-            $.method_definition,
-            $.inflight_method_definition,
-            $.class_field
-          )
-        )
-      ),
-
     interface_definition: ($) =>
       seq(
+        optional(field("access_modifier", $.access_modifier)),
         "interface",
         field("name", $.identifier),
         optional(seq("extends", field("extends", commaSep1($.custom_type)))),
@@ -354,8 +337,8 @@ module.exports = grammar({
       choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
-    _integer: ($) => choice("0", /[1-9]\d*/),
-    _decimal: ($) => choice(/0\.\d+/, /[1-9]\d*\.\d+/),
+    _integer: ($) => /\d[\d_]*/,
+    _decimal: ($) => /\d[\d_]*\.\d[\d_]*/,
 
     bool: ($) => choice("true", "false"),
 
@@ -490,7 +473,6 @@ module.exports = grammar({
 
     method_signature: ($) =>
       seq(
-        optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -502,7 +484,6 @@ module.exports = grammar({
         optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
-        optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -529,8 +510,6 @@ module.exports = grammar({
         optional($._return_type),
         choice(field("block", $.block), $._semicolon)
       ),
-
-    async_modifier: ($) => "async",
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
 

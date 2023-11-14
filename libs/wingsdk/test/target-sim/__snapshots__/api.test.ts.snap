@@ -1,26 +1,296 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`api allows duplicates routes with different methods 1`] = `
+{
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
+  "simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "openApiSpec": {
+            "openapi": "3.0.3",
+            "paths": {
+              "/hello": {
+                "get": {
+                  "operationId": "get-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+                "post": {
+                  "operationId": "post-hello",
+                  "parameters": [],
+                  "responses": {
+                    "200": {
+                      "content": {},
+                      "description": "200 response",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "@winglang/sdk.sim.EventMapping",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "cloud.TestRunner": {
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
+        "my_api": {
+          "children": {
+            "ApiEventMapping-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "ApiEventMapping-e645076f",
+              "path": "root/my_api/ApiEventMapping-e645076f",
+            },
+            "OnRequestHandler-e645076f": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "GET /hello",
+              },
+              "id": "OnRequestHandler-e645076f",
+              "path": "root/my_api/OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.2.70",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.2.70",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`api handler can read the request params 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -52,7 +322,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -63,7 +333,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -87,14 +357,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -104,10 +374,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -159,7 +507,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -191,25 +539,26 @@ return class Handler {
 
 exports[`api handler can read the request path 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -241,7 +590,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -252,7 +601,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -276,14 +625,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -293,10 +642,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -348,7 +775,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -380,25 +807,26 @@ return class Handler {
 
 exports[`api handler can set response headers 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -430,7 +858,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -441,7 +869,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -465,14 +893,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -482,10 +910,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -537,7 +1043,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -569,25 +1075,26 @@ return class Handler {
 
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -619,7 +1126,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -630,7 +1137,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -654,14 +1161,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -671,10 +1178,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -726,7 +1311,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -758,25 +1343,26 @@ return class Handler {
 
 exports[`api response returns default Content-Type header 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -808,7 +1394,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -819,7 +1405,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -843,14 +1429,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -860,10 +1446,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -915,7 +1579,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -947,11 +1611,11 @@ return class Handler {
 
 exports[`api supports every method type 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -973,17 +1637,18 @@ exports[`api supports every method type 1`] = `
   "Processing \\"PATCH /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1045,7 +1710,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1056,7 +1721,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1140,14 +1805,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1181,10 +1846,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -1236,7 +1979,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1268,25 +2011,26 @@ return class Handler {
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /{name}/{age}\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}).",
   "GET /{name}/{age} - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1318,7 +2062,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1329,7 +2073,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1370,14 +2114,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1387,10 +2131,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -1442,7 +2264,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}/{age}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1474,25 +2296,26 @@ return class Handler {
 
 exports[`api with 'name' parameter 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /{name}\\" params={\\"name\\":\\"akhil\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}).",
   "GET /{name} - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1524,7 +2347,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1535,7 +2358,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1568,14 +2391,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1585,10 +2408,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -1640,7 +2541,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1672,7 +2573,8 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1704,7 +2606,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1715,7 +2617,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1751,14 +2653,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1772,10 +2674,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -1827,7 +2807,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/foo",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1859,32 +2839,33 @@ return class Handler {
 
 exports[`api with multiple methods on same route 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1898,7 +2879,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1935,7 +2917,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -1946,7 +2928,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -1980,14 +2962,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1997,7 +2979,7 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
       {
         "attrs": {},
@@ -2008,14 +2990,14 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2025,10 +3007,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -2104,7 +3164,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -2117,7 +3177,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -2149,32 +3209,33 @@ return class Handler {
 
 exports[`api with multiple routes 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello/world\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
   "Processing \\"GET /hello/wingnuts\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/wingnuts - 200.",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2188,7 +3249,8 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2225,7 +3287,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2236,7 +3298,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -2272,14 +3334,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-7c48a9f0",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2289,7 +3351,7 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
       {
         "attrs": {},
@@ -2300,14 +3362,14 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-f6d90a7f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2317,10 +3379,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -2396,7 +3536,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/world",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -2409,7 +3549,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello/wingnuts",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -2441,25 +3581,26 @@ return class Handler {
 
 exports[`api with one GET route 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2491,7 +3632,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2502,7 +3643,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -2526,14 +3667,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2543,10 +3684,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -2598,7 +3817,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2630,25 +3849,26 @@ return class Handler {
 
 exports[`api with one GET route with request params 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /users/{name}\\" params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/{name} - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2680,7 +3900,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2691,7 +3911,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -2724,14 +3944,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2741,10 +3961,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -2796,7 +4094,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "get()",
+                "title": "GET /users/{name}",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2828,25 +4126,26 @@ return class Handler {
 
 exports[`api with one POST route, with body 1`] = `
 [
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
+  "@winglang/sdk.std.TestRunner created.",
+  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api created.",
-  "wingsdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
-  "wingsdk.sim.EventMapping deleted.",
+  "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
-  "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
+  "@winglang/sdk.cloud.Api deleted.",
+  "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "exports.handler = async function(event) {
+  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2878,7 +4177,7 @@ return class Handler {
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -2889,7 +4188,7 @@ return class Handler {
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
-        "type": "wingsdk.cloud.Function",
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "attrs": {},
@@ -2913,14 +4212,14 @@ return class Handler {
             },
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
       {
         "attrs": {},
         "path": "root/my_api/ApiEventMapping-e645076f",
         "props": {
-          "publisher": "\${root/my_api#attrs.handle}",
-          "subscriber": "\${root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "publisher": "\${wsim#root/my_api#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2930,10 +4229,88 @@ return class Handler {
             ],
           },
         },
-        "type": "wingsdk.sim.EventMapping",
+        "type": "@winglang/sdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {
@@ -2985,7 +4362,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "sourceModule": "@winglang/sdk",
-                "title": "post()",
+                "title": "POST /hello",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -3029,7 +4406,7 @@ exports[`create an api 1`] = `
         "props": {
           "tests": {},
         },
-        "type": "wingsdk.cloud.TestRunner",
+        "type": "@winglang/sdk.std.TestRunner",
       },
       {
         "attrs": {},
@@ -3040,10 +4417,88 @@ exports[`create an api 1`] = `
             "paths": {},
           },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "@winglang/sdk.cloud.Api",
       },
     ],
     "sdkVersion": "0.0.0",
+    "types": {
+      "@winglang/sdk.cloud.Api": {
+        "className": "Api",
+        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
+      },
+      "@winglang/sdk.cloud.Bucket": {
+        "className": "Bucket",
+        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
+      },
+      "@winglang/sdk.cloud.Counter": {
+        "className": "Counter",
+        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
+      },
+      "@winglang/sdk.cloud.Domain": {
+        "className": "Domain",
+        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Function": {
+        "className": "Function",
+        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
+      },
+      "@winglang/sdk.cloud.OnDeploy": {
+        "className": "OnDeploy",
+        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
+      },
+      "@winglang/sdk.cloud.Queue": {
+        "className": "Queue",
+        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
+      },
+      "@winglang/sdk.cloud.Schedule": {
+        "className": "Schedule",
+        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
+      },
+      "@winglang/sdk.cloud.Secret": {
+        "className": "Secret",
+        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
+      },
+      "@winglang/sdk.cloud.Service": {
+        "className": "Service",
+        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
+      },
+      "@winglang/sdk.cloud.Topic": {
+        "className": "Topic",
+        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
+      },
+      "@winglang/sdk.cloud.Website": {
+        "className": "Website",
+        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
+      },
+      "@winglang/sdk.ex.DynamodbTable": {
+        "className": "DynamodbTable",
+        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
+      },
+      "@winglang/sdk.ex.ReactApp": {
+        "className": "ReactApp",
+        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
+      },
+      "@winglang/sdk.ex.Redis": {
+        "className": "Redis",
+        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
+      },
+      "@winglang/sdk.ex.Table": {
+        "className": "Table",
+        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
+      },
+      "@winglang/sdk.sim.EventMapping": {
+        "className": "EventMapping",
+        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
+      },
+      "@winglang/sdk.sim.State": {
+        "className": "State",
+        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
+      },
+      "@winglang/sdk.std.TestRunner": {
+        "className": "TestRunner",
+        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
+      },
+    },
   },
   "tree.json": {
     "tree": {

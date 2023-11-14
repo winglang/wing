@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -22,7 +22,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
@@ -33,7 +33,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -57,9 +57,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return fn;
   }
 
-  public bind(host: IInflightHost, ops: string[]): void {
+  public onLift(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    super.onLift(host, ops);
   }
 
   /** @internal */
@@ -67,9 +67,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
-      type: TOPIC_TYPE,
+      type: cloud.TOPIC_FQN,
       path: this.node.path,
       props: {},
       attrs: {} as any,

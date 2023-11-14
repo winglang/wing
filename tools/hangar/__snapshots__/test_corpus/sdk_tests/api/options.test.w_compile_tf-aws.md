@@ -1,87 +1,5 @@
 # [options.test.w](../../../../../../examples/tests/sdk_tests/api/options.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
-module.exports = function({ $cloud_HttpMethod, $path }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.OPTIONS")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.OPTIONS)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body?.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body?.length,0)))};
-      return ({"status": 204});
-    }
-  }
-  return $Closure1;
-}
-
-```
-
-## inflight.$Closure2-1.js
-```js
-module.exports = function({ $cloud_HttpMethod, $path }) {
-  class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.HEAD")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.HEAD)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body?.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body?.length,0)))};
-      return ({"status": 204});
-    }
-  }
-  return $Closure2;
-}
-
-```
-
-## inflight.$Closure3-1.js
-```js
-module.exports = function({  }) {
-  class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle(req) {
-      return ({"status": 204});
-    }
-  }
-  return $Closure3;
-}
-
-```
-
-## inflight.$Closure4-1.js
-```js
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
-  class $Closure4 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const url = ($api_url + $path);
-      const options = (await $http_Util.fetch(url,{ method: $http_HttpMethod.OPTIONS }));
-      const head = (await $http_Util.fetch(url,{ method: $http_HttpMethod.HEAD }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.status,204)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.url,url)))};
-    }
-  }
-  return $Closure4;
-}
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -95,7 +13,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
       "root": {
         "Default": {
           "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -114,7 +32,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }
   },
@@ -150,6 +68,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path\":{\"options\":{\"operationId\":\"options-path\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}},\"head\":{\"operationId\":\"head-path\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-86898773_701F5CA7.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}},\"connect\":{\"operationId\":\"connect-path\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-3fc9280c_5DA20E7A.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c895068c"
       }
     },
@@ -164,6 +85,38 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         "deployment_id": "${aws_api_gateway_deployment.cloudApi_api_deployment_545514BF.id}",
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "stage_name": "prod"
+      }
+    },
+    "aws_cloudwatch_log_group": {
+      "cloudApi_cloudApi-OnRequest-3fc9280c_CloudwatchLogGroup_B2849792": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-3fc9280c/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-3fc9280c_CloudwatchLogGroup_B2849792"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
+        "retention_in_days": 30
+      },
+      "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-86898773-c8ed6547",
+        "retention_in_days": 30
+      },
+      "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26"
+          }
+        },
+        "name": "/aws/lambda/cloud-Api-OnRequest-cdafee6e-c8147384",
+        "retention_in_days": 30
       }
     },
     "aws_iam_role": {
@@ -278,12 +231,13 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         },
         "function_name": "cloud-Api-OnRequest-3fc9280c-c8d3ecf9",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-3fc9280c_IamRole_EBC99528.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-3fc9280c_S3Object_EC722CF3.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -307,12 +261,13 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         },
         "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-86898773_S3Object_12D28469.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -336,12 +291,13 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
         },
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
+        "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
@@ -437,162 +393,5 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
     }
   }
 }
-```
-
-## preflight.js
-```js
-const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
-const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
-const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-const http = $stdlib.http;
-const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure1-1.js")({
-            $cloud_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
-            $path: ${context._lift(path)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerBindObject(path, host, []);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure2-1.js")({
-            $cloud_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
-            $path: ${context._lift(path)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(path, host, []);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure3-1.js")({
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
-            const client = new $Closure3Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-    }
-    class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        (std.Node.of(this)).hidden = true;
-      }
-      static _toInflightType(context) {
-        return `
-          require("./inflight.$Closure4-1.js")({
-            $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $path: ${context._lift(path)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this)};
-            const client = new $Closure4Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure4._registerBindObject(api.url, host, []);
-          $Closure4._registerBindObject(path, host, []);
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const path = "/path";
-    (api.options(path,new $Closure1(this,"$Closure1")));
-    (api.head(path,new $Closure2(this,"$Closure2")));
-    (api.connect(path,new $Closure3(this,"$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS",new $Closure4(this,"$Closure4"));
-  }
-}
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "options.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
 ```
 
