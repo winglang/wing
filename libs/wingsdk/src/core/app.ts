@@ -96,12 +96,12 @@ export abstract class App extends Construct {
    * Returns the root app.
    */
   public static of(scope: Construct): App {
-    if (scope instanceof App || (scope as any)._tokens) {
+    if ((scope as any)._isApp) {
       return scope as any;
     }
 
     if (!scope.node.scope) {
-      throw new Error("Unable to find the root app");
+      throw new Error("Cannot find root app");
     }
 
     return App.of(scope.node.scope);
@@ -165,6 +165,12 @@ export abstract class App extends Construct {
    * @internal
    */
   public readonly _newInstanceOverrides: any[];
+
+  /**
+   * Used to identify App instances
+   * @internal
+   */
+  public readonly _isApp = true;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);

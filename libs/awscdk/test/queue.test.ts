@@ -4,7 +4,8 @@ import { Queue } from "@winglang/sdk/lib/cloud";
 import { Testing } from "@winglang/sdk/lib/simulator";
 import * as std from "@winglang/sdk/lib/std";
 import * as awscdk from "../src";
-import { mkdtemp, sanitizeCode, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { sanitizeCode } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",

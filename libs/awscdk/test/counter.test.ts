@@ -3,7 +3,8 @@ import { test, expect } from "vitest";
 import { Counter, Function, CounterInflightMethods } from "@winglang/sdk/lib/cloud"
 import { Testing } from "@winglang/sdk/lib/simulator";
 import * as awscdk from "../src";
-import { sanitizeCode, mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { sanitizeCode } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
