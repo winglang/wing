@@ -209,7 +209,21 @@ impl CodeMaker {
 		self.lines.push(line);
 	}
 
-	/// Generates a sourcemap for the current code
+	/// Generates a sourcemap for the given source and generated paths, based on the provided source content.
+	///
+	/// # Remarks
+	///
+	/// See sourcemap spec for more details: https://sourcemaps.info/spec.html
+	///
+	/// # Arguments
+	///
+	/// * `source_path` - Path to the source file, must be the source file reference in the mappings
+	/// * `source_content` - Content of the source file
+	/// * `generated_path` - Path to the generated (output) file
+	///
+	/// # Returns
+	///
+	/// A JSON string that represents the generated sourcemap.
 	pub fn generate_sourcemap(&mut self, source_path: &str, source_content: &str, generated_path: &str) -> String {
 		let mut sourcemap = SourceMap::new("");
 		let source_num = sourcemap.add_source(source_path);
