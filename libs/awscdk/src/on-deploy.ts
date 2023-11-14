@@ -1,8 +1,7 @@
 import { Trigger } from "aws-cdk-lib/triggers";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core } from "@winglang/sdk";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.

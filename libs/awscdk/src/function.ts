@@ -9,11 +9,9 @@ import {
   Runtime,
 } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, std, core } from "@winglang/sdk";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
-import { IInflightHost } from "@winglang/sdk/lib/std";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -64,7 +62,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     return [cloud.FunctionInflightMethods.INVOKE];
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }

@@ -16,8 +16,9 @@ import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
 import { Website } from "./website";
+import { cloud } from "@winglang/sdk";
 
-import {
+const {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
@@ -27,25 +28,15 @@ import {
   TOPIC_FQN,
   SCHEDULE_FQN,
   WEBSITE_FQN,
-} from "@winglang/sdk/lib/cloud";
+} = cloud;
 
-import {
-  App as CoreApp,
-  AppProps,
-  preSynthesizeAllConstructs,
-  synthesizeTree,
-  Connections,
-  SynthHooks,
-} from "@winglang/sdk/lib/core";
-
-import { DYNAMODB_TABLE_FQN } from "@winglang/sdk/lib/ex";
-import { TEST_RUNNER_FQN } from "@winglang/sdk/lib/std";
+import { core, std, ex } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
 
 /**
  * AWS-CDK App props
  */
-export interface CdkAppProps extends AppProps {
+export interface CdkAppProps extends core.AppProps {
   /**
    * CDK Stack Name
    * @default - undefined
@@ -56,7 +47,7 @@ export interface CdkAppProps extends AppProps {
 /**
  * An app that knows how to synthesize constructs into CDK configuration.
  */
-export class App extends CoreApp {
+export class App extends core.App {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: CdkTokens;
@@ -68,7 +59,7 @@ export class App extends CoreApp {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private synthHooks?: SynthHooks;
+  private synthHooks?: core.SynthHooks;
 
   /**
    * The test runner for this app.
@@ -139,7 +130,7 @@ export class App extends CoreApp {
     }
 
     // call preSynthesize() on every construct in the tree
-    preSynthesizeAllConstructs(this);
+    core.preSynthesizeAllConstructs(this);
 
     if (this.synthHooks?.preSynthesize) {
       this.synthHooks.preSynthesize.forEach((hook) => hook(this));
@@ -149,10 +140,10 @@ export class App extends CoreApp {
     this.cdkApp.synth();
 
     // write `outdir/tree.json`
-    synthesizeTree(this, this.outdir);
+    core.synthesizeTree(this, this.outdir);
 
     // write `outdir/connections.json`
-    Connections.of(this).synth(this.outdir);
+    core.Connections.of(this).synth(this.outdir);
 
     const template = Template.fromStack(this.cdkStack);
 
@@ -181,7 +172,7 @@ export class App extends CoreApp {
       case TOPIC_FQN:
         return Topic;
 
-      case TEST_RUNNER_FQN:
+      case std.TEST_RUNNER_FQN:
         return TestRunner;
 
       case SECRET_FQN:
@@ -193,7 +184,7 @@ export class App extends CoreApp {
       case WEBSITE_FQN:
         return Website;
 
-      case DYNAMODB_TABLE_FQN:
+      case ex.DYNAMODB_TABLE_FQN:
         return DynamodbTable;
     }
     return undefined;

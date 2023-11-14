@@ -1,8 +1,8 @@
-import { IBucketEventHandlerClient, IFunctionHandlerClient } from "@winglang/sdk/lib/cloud";
+import { cloud } from "@winglang/sdk";
 
-export class BucketEventHandlerClient implements IBucketEventHandlerClient {
-  private readonly handler: IFunctionHandlerClient;
-  constructor({ handler }: { handler: IFunctionHandlerClient }) {
+export class BucketEventHandlerClient implements cloud.IBucketEventHandlerClient {
+  private readonly handler: cloud.IFunctionHandlerClient;
+  constructor({ handler }: { handler: cloud.IFunctionHandlerClient }) {
     this.handler = handler;
   }
   public async handle(event: any) {

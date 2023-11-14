@@ -3,11 +3,9 @@ import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
 import { LambdaSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IInflightHost, Node } from "@winglang/sdk/lib/std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -60,7 +58,7 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onMessage()",
@@ -69,7 +67,7 @@ export class Topic extends cloud.Topic {
     return fn;
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }

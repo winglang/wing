@@ -4,11 +4,9 @@ import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { std, core, cloud} from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IInflightHost, Node, Duration as StdDuration } from "@winglang/sdk/lib/std";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -17,11 +15,11 @@ import { IInflightHost, Node, Duration as StdDuration } from "@winglang/sdk/lib/
  */
 export class Queue extends cloud.Queue {
   private readonly queue: SQSQueue;
-  private readonly timeout: StdDuration;
+  private readonly timeout: std.Duration;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
-    this.timeout = props.timeout ?? StdDuration.fromSeconds(30);
+    this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
 
     this.queue = new SQSQueue(this, "Default", {
       visibilityTimeout: props.timeout
@@ -69,7 +67,7 @@ export class Queue extends cloud.Queue {
     });
     fn._addEventSource(eventSource);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "setConsumer()",
@@ -88,7 +86,7 @@ export class Queue extends cloud.Queue {
     ];
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }

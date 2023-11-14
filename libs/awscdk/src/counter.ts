@@ -2,11 +2,9 @@ import { RemovalPolicy } from "aws-cdk-lib";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core, std } from "@winglang/sdk";
 import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IInflightHost } from "@winglang/sdk/lib/std";
 
 /**
  * AWS implementation of `cloud.Counter`.
@@ -36,7 +34,7 @@ export class Counter extends cloud.Counter {
     ];
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by awscdk.Function for now");
     }

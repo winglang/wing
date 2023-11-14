@@ -5,10 +5,8 @@ import {
 } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core, std } from "@winglang/sdk";
 import { calculateSecretPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IInflightHost } from "@winglang/sdk/lib/std";
 
 /**
  * AWS Implemntation of `cloud.Secret`
@@ -49,7 +47,7 @@ export class Secret extends cloud.Secret {
     return this.secret.secretArn;
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by awscdk.Function for now");
     }

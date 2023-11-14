@@ -1,10 +1,10 @@
 import { App } from "./app";
-import { IPlatform } from "@winglang/sdk/lib/platform";
+import { platform } from "@winglang/sdk";
 
 /**
  * AWS CDK Platform
  */
-export class Platform implements IPlatform {
+export class Platform implements platform.IPlatform {
   /** Platform model */
   public readonly target = "awscdk";
 

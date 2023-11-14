@@ -1,9 +1,7 @@
 import { CfnOutput, Lazy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
-import * as core from "@winglang/sdk/lib/core";
-import * as std from "@winglang/sdk/lib/std";
-import { IInflightHost } from "@winglang/sdk/lib/std";
+import { core, std } from "@winglang/sdk";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WingTestRunnerFunctionArns";
 
@@ -29,7 +27,7 @@ export class TestRunner extends std.TestRunner {
     output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof AwsFunction)) {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }

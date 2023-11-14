@@ -6,8 +6,7 @@ import { Bucket as S3Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
-import { core } from "@winglang/sdk/lib";
-import * as cloud from "@winglang/sdk/lib/cloud";
+import { core, cloud } from "@winglang/sdk/lib";
 
 const INDEX_FILE = "index.html";
 

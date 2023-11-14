@@ -7,10 +7,8 @@ import {
 } from "aws-cdk-lib/aws-events-targets";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { Node } from "@winglang/sdk/lib/std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -94,7 +92,7 @@ export class Schedule extends cloud.Schedule {
     this.rule.addTarget(new LambdaFunction(fn._function));
     addLambdaPermission(this.rule, fn._function);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onTick()",

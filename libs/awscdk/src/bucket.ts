@@ -11,11 +11,9 @@ import { LambdaDestination } from "aws-cdk-lib/aws-s3-notifications";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-import * as cloud from "@winglang/sdk/lib/cloud";
-import * as core from "@winglang/sdk/lib/core";
+import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IInflightHost, Node } from "@winglang/sdk/lib/std";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -111,7 +109,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onCreate()",
@@ -129,7 +127,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onDelete()",
@@ -147,7 +145,7 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onUpdate()",
@@ -165,7 +163,7 @@ export class Bucket extends cloud.Bucket {
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onCreate()",
@@ -175,7 +173,7 @@ export class Bucket extends cloud.Bucket {
       new LambdaDestination(fn._function)
     );
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onDelete()",
@@ -185,7 +183,7 @@ export class Bucket extends cloud.Bucket {
       new LambdaDestination(fn._function)
     );
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "onUpdate()",
@@ -196,7 +194,7 @@ export class Bucket extends cloud.Bucket {
     );
   }
 
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
