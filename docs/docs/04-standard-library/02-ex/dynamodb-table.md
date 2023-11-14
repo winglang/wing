@@ -48,7 +48,7 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactGetItems">transactGetItems</a></code> | Perform a synchronous read operation that groups up to 100 item retrievals. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Edit an existing item's attributes, or add a new item to the table if it does not already exist. |
 
 ---
 
@@ -220,7 +220,7 @@ options for the transact write items operation.
 inflight updateItem(options: DynamodbTableUpdateItemOptions): DynamodbTableUpdateItemResult
 ```
 
-Get an item from the table.
+Edit an existing item's attributes, or add a new item to the table if it does not already exist.
 
 > [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html)
 
@@ -310,7 +310,7 @@ the table name.
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactGetItems">transactGetItems</a></code> | Perform a synchronous read operation that groups up to 100 item retrievals. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Get an item from the table. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Edit an existing item's attributes, or add a new item to the table if it does not already exist. |
 
 ---
 
@@ -446,7 +446,7 @@ Perform a synchronous write operation that groups up to 100 action requests.
 updateItem(options: DynamodbTableUpdateItemOptions): DynamodbTableUpdateItemResult
 ```
 
-Get an item from the table.
+Edit an existing item's attributes, or add a new item to the table if it does not already exist.
 
 ###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem.parameter.options"></a>
 
