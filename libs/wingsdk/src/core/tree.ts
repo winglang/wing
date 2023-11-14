@@ -3,7 +3,7 @@ import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
 import { IResource, Node, Resource } from "../std";
-import { VisualComponent } from "../ui/visual";
+import { VisualComponent } from "../ui/base";
 
 export const TREE_FILE_PATH = "tree.json";
 
@@ -195,12 +195,12 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
 
   // generate ui data only based on direct children
   const uiComponents: UIComponent[] = [];
-  if (
-    App.of(construct)._target === "sim" &&
-    !VisualComponent.isVisualComponent(construct)
-  ) {
+  if (!VisualComponent.isVisualComponent(construct)) {
     for (const child of construct.node.children) {
-      if (VisualComponent.isVisualComponent(child)) {
+      if (
+        VisualComponent.isVisualComponent(child) &&
+        child._newParent === undefined
+      ) {
         uiComponents.push(child._toUIComponent());
       }
     }
