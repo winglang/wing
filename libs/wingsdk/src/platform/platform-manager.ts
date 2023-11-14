@@ -139,7 +139,12 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
   const cwdNodeModules = join(cwd(), "node_modules");
   const customPlatformLib = join(cwdNodeModules, customPlatformPath, "lib");
 
-  const resolvablePaths = [...module.paths, platformDir, cwdNodeModules, customPlatformLib];
+  const resolvablePaths = [
+    ...module.paths,
+    platformDir,
+    cwdNodeModules,
+    customPlatformLib,
+  ];
 
   const requireResolve = (path: string) => {
     return require.resolve(path, {
