@@ -13,6 +13,7 @@ import { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useMemo } from "react";
 
+import { NoResources } from "./no-resources.js";
 import { TreeMenuItem } from "./use-tree-menu-items.js";
 
 const renderTreeItems = (items: TreeMenuItem[]) => {
@@ -114,6 +115,7 @@ export const Explorer = memo((props: ExplorerProps) => {
             )}
           >
             <div className="flex flex-col">
+              {expandedItems.length === 0 && <NoResources />}
               <TreeView
                 expandedItems={expandedItems}
                 onExpandedItemsChange={onExpandedItemsChange}

@@ -1,7 +1,7 @@
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
-export const NoTests = () => {
+export const NoResources = () => {
   const { theme } = useTheme();
   return (
     <div
@@ -10,12 +10,12 @@ export const NoTests = () => {
         "flex flex-col text-xs px-3 py-2 items-center",
       )}
     >
-      <div>There are no tests.</div>
+      <div>There are no resources.</div>
       <div>
-        <span>Learn how to add tests </span>
+        <span>Learn how to add resources </span>
         <a
           className="text-sky-500 hover:text-sky-600"
-          href="https://www.winglang.io/docs/concepts/tests"
+          href="https://www.winglang.io/docs/category/cloud-library"
           target="_blank"
           rel="noreferrer"
         >
