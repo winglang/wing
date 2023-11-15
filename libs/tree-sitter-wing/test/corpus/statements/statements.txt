@@ -211,8 +211,9 @@ inflight (a: num, b: str?, var c: bool) => {};
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
       parameter_list: (parameter_list
         (parameter_definition
           name: (identifier)
@@ -237,8 +238,9 @@ inflight (callback: (num,num):bool) => {};
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
       parameter_list: (parameter_list
         (parameter_definition
           name: (identifier)
@@ -259,8 +261,9 @@ inflight (var ...z: MutArray<num>):bool => {};
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
       parameter_list: (parameter_list
         (parameter_definition
           reassignable: (reassignable)
@@ -281,8 +284,9 @@ inflight (var x: num, y: Array<num>, ...z: Array<num>):bool => {};
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
       parameter_list: (parameter_list
         (parameter_definition
           reassignable: (reassignable)

@@ -6,7 +6,7 @@ import { SimApp } from "../sim-app";
 test("create a table", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "create_table", {
+  const t = new ex.DynamodbTable(app, "create_table", {
     name: "new_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -35,7 +35,7 @@ test("create a table", async () => {
 test("put item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "put_table", {
+  const t = new ex.DynamodbTable(app, "put_table", {
     name: "my_insert_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -71,7 +71,7 @@ test("put item", async () => {
 test("get item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "get_table", {
+  const t = new ex.DynamodbTable(app, "get_table", {
     name: "my_get_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -107,7 +107,7 @@ test("get item", async () => {
 test("update item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "update_table", {
+  const t = new ex.DynamodbTable(app, "update_table", {
     name: "my_update_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -150,7 +150,7 @@ test("update item", async () => {
 test("inserting the same id twice", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "put_twice_table", {
+  const t = new ex.DynamodbTable(app, "put_twice_table", {
     name: "my_insert_twice_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -179,15 +179,11 @@ test("inserting the same id twice", async () => {
 test("update non-existent item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(
-    app,
-    "update_non_existing_table",
-    {
-      name: "my_update_non_existent_table",
-      attributeDefinitions: { id: "S" } as any,
-      hashKey: "id",
-    }
-  );
+  const t = new ex.DynamodbTable(app, "update_non_existing_table", {
+    name: "my_update_non_existent_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
   const s = await app.startSimulator();
   const client = s.getResource(
     "/update_non_existing_table"
@@ -207,7 +203,7 @@ test("update non-existent item", async () => {
 test("delete item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "delete_table", {
+  const t = new ex.DynamodbTable(app, "delete_table", {
     name: "my_delete_non_existent_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -229,7 +225,7 @@ test("delete item", async () => {
 test("scan", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "scan_table", {
+  const t = new ex.DynamodbTable(app, "scan_table", {
     name: "scan_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -251,7 +247,7 @@ test("scan", async () => {
 test("query", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "query_table", {
+  const t = new ex.DynamodbTable(app, "query_table", {
     name: "query_table",
     attributeDefinitions: { id: "S", age: "N" } as any,
     hashKey: "id",
@@ -291,15 +287,11 @@ test("query", async () => {
 test("transact get items", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(
-    app,
-    "transact_get_items_table",
-    {
-      name: "transact_get_items_table",
-      attributeDefinitions: { id: "S" } as any,
-      hashKey: "id",
-    }
-  );
+  const t = new ex.DynamodbTable(app, "transact_get_items_table", {
+    name: "transact_get_items_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
   const s = await app.startSimulator();
   const client = s.getResource(
     "/transact_get_items_table"
@@ -357,15 +349,11 @@ test("transact get items", async () => {
 test("transact write items", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(
-    app,
-    "transact_write_items_table",
-    {
-      name: "transact_write_items_table",
-      attributeDefinitions: { id: "S" } as any,
-      hashKey: "id",
-    }
-  );
+  const t = new ex.DynamodbTable(app, "transact_write_items_table", {
+    name: "transact_write_items_table",
+    attributeDefinitions: { id: "S" } as any,
+    hashKey: "id",
+  });
   const s = await app.startSimulator();
   const client = s.getResource(
     "/transact_write_items_table"
@@ -413,7 +401,7 @@ test("transact write items", async () => {
 test("batch get item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_get_item_table", {
+  const t = new ex.DynamodbTable(app, "batch_get_item_table", {
     name: "batch_get_item_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -449,7 +437,7 @@ test("batch get item", async () => {
 test("batch write item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.DynamodbTable._newDynamodbTable(app, "batch_write_item_table", {
+  const t = new ex.DynamodbTable(app, "batch_write_item_table", {
     name: "batch_write_item_table",
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",

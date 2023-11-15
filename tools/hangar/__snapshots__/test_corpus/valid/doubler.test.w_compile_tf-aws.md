@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -38,7 +38,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -57,7 +57,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -77,7 +77,7 @@ module.exports = function({ $f }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## inflight.Doubler-1.js
@@ -95,7 +95,7 @@ module.exports = function({  }) {
   }
   return Doubler;
 }
-
+//# sourceMappingURL=inflight.Doubler-1.js.map
 ```
 
 ## inflight.Doubler2-1.js
@@ -108,7 +108,7 @@ module.exports = function({  }) {
   }
   return Doubler2;
 }
-
+//# sourceMappingURL=inflight.Doubler2-1.js.map
 ```
 
 ## main.tf.json
@@ -201,6 +201,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
             "WING_TARGET": "tf-aws"
           }
@@ -363,7 +364,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure2(this, "$Closure2"));
+        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
       }
       static _toInflightType(context) {
         return `
@@ -448,12 +449,12 @@ class $Root extends $stdlib.std.Resource {
     const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));
     const doubler2 = new Doubler2(this, "Doubler2");
     const f = (doubler2.makeFunc(new $Closure3(this, "$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "doubler.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

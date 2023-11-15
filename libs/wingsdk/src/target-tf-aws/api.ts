@@ -254,7 +254,7 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    return Function._newFunction(
+    return new Function(
       this,
       `${this.node.id}-OnRequest-${inflightNodeHash}`,
       functionHandler
@@ -314,7 +314,7 @@ class WingRestApi extends Construct {
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    this.api = new ApiGatewayRestApi(this, "api", {
+    this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
@@ -329,6 +329,9 @@ class WingRestApi extends Construct {
           return JSON.stringify(injectGreedy404Handler(props.apiSpec));
         },
       }),
+      lifecycle: {
+        createBeforeDestroy: true,
+      },
     });
 
     this.deployment = new ApiGatewayDeployment(this, "deployment", {
@@ -348,8 +351,11 @@ class WingRestApi extends Construct {
       deploymentId: this.deployment.id,
     });
 
-    //should be exported from here, otherwise won't be mapped to the right token
-    this.url = this.stage.invokeUrl;
+    // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
+    // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
+    // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
+    // in Terraform. Hence, we're creating our own url here.
+    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
   }
 
   /**

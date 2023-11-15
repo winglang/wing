@@ -18,13 +18,13 @@ New classes introduce new scopes, so the same name can be used for different res
 
 ```js
 class Group1 {
-  init() {
+  new() {
     new cloud.Bucket() as "Store";
   }
 }
 
 class Group2 {
-  init() {
+  new() {
     new cloud.Bucket() as "Store";
   }
 }

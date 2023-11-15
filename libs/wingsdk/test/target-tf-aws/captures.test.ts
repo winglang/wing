@@ -31,7 +31,7 @@ describe("function with bucket binding", () => {
   test("put operation", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",
@@ -43,7 +43,7 @@ describe("function with bucket binding", () => {
         },
       }
     );
-    cloud.Function._newFunction(app, "Function", inflight);
+    new cloud.Function(app, "Function", inflight);
     const output = app.synth();
 
     // THEN
@@ -64,7 +64,7 @@ describe("function with bucket binding", () => {
   test("put json operation has correct permissions", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",
@@ -76,7 +76,7 @@ describe("function with bucket binding", () => {
         },
       }
     );
-    cloud.Function._newFunction(app, "Function", inflight);
+    new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(output, ["s3:PutObject*"], "Allow");
 
@@ -87,7 +87,7 @@ describe("function with bucket binding", () => {
   test("get json operation has correct permissions", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const bucket = cloud.Bucket._newBucket(app, "Bucket");
+    const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
       "Handler",
@@ -99,7 +99,7 @@ describe("function with bucket binding", () => {
         },
       }
     );
-    cloud.Function._newFunction(app, "Function", inflight);
+    new cloud.Function(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(
       output,
@@ -120,7 +120,7 @@ test("function with a function binding", () => {
     "Handler1",
     `async handle(event) { console.log(event); }`
   );
-  const fn1 = cloud.Function._newFunction(app, "Function1", inflight1);
+  const fn1 = new cloud.Function(app, "Function1", inflight1);
   const inflight2 = Testing.makeHandler(
     app,
     "Handler2",
@@ -135,7 +135,7 @@ test("function with a function binding", () => {
       },
     }
   );
-  cloud.Function._newFunction(app, "Function2", inflight2);
+  new cloud.Function(app, "Function2", inflight2);
   const output = app.synth();
 
   // THEN
@@ -163,8 +163,8 @@ test("two functions reusing the same IFunctionHandler", () => {
     `async handle(event) { console.log(event); }`
   );
 
-  cloud.Function._newFunction(app, "Function1", inflight);
-  cloud.Function._newFunction(app, "Function2", inflight);
+  new cloud.Function(app, "Function1", inflight);
+  new cloud.Function(app, "Function2", inflight);
 
   // THEN
   const output = app.synth();
@@ -184,7 +184,7 @@ test("two functions reusing the same IFunctionHandler", () => {
 test("function with a queue binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const queue = cloud.Queue._newQueue(app, "Queue");
+  const queue = new cloud.Queue(app, "Queue");
   const pusher = Testing.makeHandler(
     app,
     "Pusher",
@@ -196,7 +196,7 @@ test("function with a queue binding", () => {
       },
     }
   );
-  cloud.Function._newFunction(app, "Function", pusher);
+  new cloud.Function(app, "Function", pusher);
 
   const processor = Testing.makeHandler(
     app,

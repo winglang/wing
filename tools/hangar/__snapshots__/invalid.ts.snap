@@ -4,7 +4,7 @@ exports[`access_hidden_namespace.test.w 1`] = `
 "error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.test.w:7:5
   |
-7 | new core.NodeJsCode(\\"<ABSOLUTE_PATH>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
+7 | new core.NodeJsCode(\\"<ABSOLUTE>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^ Unknown symbol \\"core\\"
 
 
@@ -326,15 +326,14 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
-
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
-       const handler = new $Closure1(this, \\"$Closure1\\");
-       (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
->>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
-     }
-   }
-
+"runtime error: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+   --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
+   | };
+   | 
+   | api.get(\\"<ABSOLUTE>/path\\", handler);
+12 | api.get(\\"<ABSOLUTE>/{variable}\\", handler);
+   | ^
+at (<ABSOLUTE>:LINE:COL)
  
  
 Tests 1 failed (1)
@@ -386,11 +385,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
+error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
 
 
  
@@ -408,18 +407,18 @@ exports[`bring_local_dir.test.w 1`] = `
   |       ^^^^^^^^^ Cannot bring \\"/subdir\\" since it is not a relative path
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   --> ../../../examples/tests/invalid/subdir/other.w:1:1
   |
 1 | bring \\"./inner\\" as inner;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   --> ../../../examples/tests/invalid/bring_local_dir.test.w:1:1
   |
 1 | bring \\"./subdir\\" as subdir;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
  
@@ -618,10 +617,10 @@ error: Reserved method name. Initializers are declared with \\"init\\"
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:17
+   --> ../../../examples/tests/invalid/class.test.w:17:16
    |
-17 |   init(foo: str)
-   |                 ^ Expected block
+17 |   new(foo: str)
+   |                ^ Expected block
 
 
 error: Preflight field \\"x\\" is not initialized
@@ -741,6 +740,13 @@ error: Unknown symbol \\"C11\\"
    |
 78 | class C11 extends C11 {
    |                   ^^^ Unknown symbol \\"C11\\"
+
+
+error: Cannot instantiate abstract class \\"Resource\\"
+    --> ../../../examples/tests/invalid/class.test.w:165:1
+    |
+165 | new std.Resource();
+    | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1007,24 +1013,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring3.w
-- <ABSOLUTE_PATH>/cyclic_bring2.w
-- <ABSOLUTE_PATH>/cyclic_bring1.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring3.w
+- <ABSOLUTE>/cyclic_bring2.w
+- <ABSOLUTE>/cyclic_bring1.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
  
@@ -1035,24 +1041,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring1.w
-- <ABSOLUTE_PATH>/cyclic_bring3.w
-- <ABSOLUTE_PATH>/cyclic_bring2.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring1.w
+- <ABSOLUTE>/cyclic_bring3.w
+- <ABSOLUTE>/cyclic_bring2.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
  
@@ -1063,24 +1069,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring2.w
-- <ABSOLUTE_PATH>/cyclic_bring1.w
-- <ABSOLUTE_PATH>/cyclic_bring3.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring2.w
+- <ABSOLUTE>/cyclic_bring1.w
+- <ABSOLUTE>/cyclic_bring3.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  
@@ -1805,7 +1811,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 "error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
-6 | /   inflight init() {
+6 | /   inflight new() {
 7 | | 
 8 | |   }
   | \\\\---^ Multiple inflight initializers defined in class Foo
@@ -2700,6 +2706,135 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`redundant_modifiers.w 1`] = `
+"error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:3:3
+  |
+3 |   pub pub m1() {}
+  |   ^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:7:3
+  |
+7 |   pub protected m2() {}
+  |   ^^^^^^^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:11:3
+   |
+11 |   static pub static m3() {}
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:15:3
+   |
+15 |   pub inflight static inflight m4() {}
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |   |               |
+   |   |   |               possible redundant modifier
+   |   |   possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:19:3
+   |
+19 |   static extern \\"x.js\\" pub extern \\"y.js\\" m5();
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |      |                 |
+   |   |      |                 possible redundant modifier
+   |   |      possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:23:3
+   |
+23 |   protected protected f1: str;
+   |   ^^^^^^^^^^^^^^^^^^^
+   |   |         |
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:27:3
+   |
+27 |   protected inflight inflight f2: str;
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |         |        |
+   |   |         |        possible redundant modifier
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:31:3
+   |
+31 |   static pub static f3: str;
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:35:3
+   |
+35 |   var pub var f4: str;
+   |   ^^^^^^^^^^^
+   |   |       |
+   |   |       possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:40:1
+   |
+40 | inflight inflight class Foo {}
+   | ^^^^^^^^^^^^^^^^^
+   | |        |
+   | |        possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:43:1
+   |
+43 | pub inflight pub class Foo {}
+   | ^^^^^^^^^^^^^^^^
+   | |            |
+   | |            possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`resource_access_field_as_method.test.w 1`] = `
 "error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.test.w:9:1
@@ -2756,29 +2891,29 @@ exports[`resource_init.test.w 1`] = `
 "error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
-3 |   init() {}
-  |   ^^^^^^^^^ Multiple initializers defined in class R
+3 |   new() {}
+  |   ^^^^^^^^ Multiple initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
-6 |   inflight init() {}
-  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+6 |   inflight new() {}
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
-9 |   inflight init(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+9 |   inflight new(x: num) {}
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Inflight initializers cannot have parameters
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:16
+  --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
-9 |   inflight init(x: num) {}
-  |                ^^^^^^^^ Inflight initializers cannot have parameters
+9 |   inflight new(x: num) {}
+  |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
  

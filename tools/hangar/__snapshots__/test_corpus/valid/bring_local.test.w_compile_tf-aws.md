@@ -16,7 +16,7 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure1-3.js
@@ -35,7 +35,7 @@ module.exports = function({ $store }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-3.js.map
 ```
 
 ## inflight.Q-2.js
@@ -51,7 +51,7 @@ module.exports = function({  }) {
   }
   return Q;
 }
-
+//# sourceMappingURL=inflight.Q-2.js.map
 ```
 
 ## inflight.Store-1.js
@@ -68,7 +68,7 @@ module.exports = function({  }) {
   }
   return Store;
 }
-
+//# sourceMappingURL=inflight.Store-1.js.map
 ```
 
 ## inflight.Triangle-3.js
@@ -81,7 +81,7 @@ module.exports = function({  }) {
   }
   return Triangle;
 }
-
+//# sourceMappingURL=inflight.Triangle-3.js.map
 ```
 
 ## inflight.Util-1.js
@@ -94,7 +94,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-
+//# sourceMappingURL=inflight.Util-1.js.map
 ```
 
 ## inflight.Util-3.js
@@ -107,7 +107,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-
+//# sourceMappingURL=inflight.Util-3.js.map
 ```
 
 ## main.tf.json
@@ -216,6 +216,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c8b7b48c",
             "WING_TARGET": "tf-aws"
           }
@@ -280,7 +281,7 @@ module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
 };
-
+//# sourceMappingURL=preflight.empty-1.js.map
 ```
 
 ## preflight.js
@@ -386,8 +387,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const store = new file1.Store(this, "file1.Store");
     const q = new file2.Q(this, "file2.Q");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:add data to store", new $Closure1(this, "$Closure1"));
-    const s = ({"x": 1,"y": 2});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
+    const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
     {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
     const t = new Triangle(this, "Triangle");
@@ -396,7 +397,7 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
 ## preflight.store-2.js
@@ -435,7 +436,7 @@ module.exports = function({ $stdlib }) {
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
         constructor($scope, $id, ) {
@@ -470,7 +471,7 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
     static _toInflightType(context) {
       return `
@@ -505,15 +506,15 @@ module.exports = function({ $stdlib }) {
   }
   const Color =
     (function (tmp) {
-      tmp[tmp["RED"] = 0] = "RED";
-      tmp[tmp["GREEN"] = 1] = "GREEN";
-      tmp[tmp["BLUE"] = 2] = "BLUE";
+      tmp[tmp["RED"] = 0] = ",RED";
+      tmp[tmp["GREEN"] = 1] = ",GREEN";
+      tmp[tmp["BLUE"] = 2] = ",BLUE";
       return tmp;
     })({})
   ;
   return { Util, Store, Color };
 };
-
+//# sourceMappingURL=preflight.store-2.js.map
 ```
 
 ## preflight.subfile-3.js
@@ -549,6 +550,6 @@ module.exports = function({ $stdlib }) {
   }
   return { Q };
 };
-
+//# sourceMappingURL=preflight.subfile-3.js.map
 ```
 

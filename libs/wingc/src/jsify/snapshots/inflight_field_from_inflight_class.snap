@@ -7,7 +7,7 @@ source: libs/wingc/src/jsify/tests.rs
 
     inflight class MyType {
       field: str;
-      init() { this.field = "hi"; }
+      new() { this.field = "hi"; }
   
       getField(): str {
         return this.field;
@@ -33,6 +33,7 @@ module.exports = function({  }) {
   }
   return MyType;
 }
+//# sourceMappingURL=inflight.MyType-1.js.map
 ```
 
 ## preflight.js
@@ -86,5 +87,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -12,4 +12,5 @@ export * as aws from "./shared-aws";
 export * as simulator from "./simulator";
 export * as std from "./std";
 export * as sim from "./target-sim";
+export * as ui from "./ui";
 export * as util from "./util";

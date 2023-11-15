@@ -7,7 +7,7 @@ new C1();
 // class with init and no arguments
 class C2 {
   pub x: num;
-  init() {
+  new() {
     this.x = 1;
   }
 }
@@ -18,7 +18,7 @@ assert(c2.x == 1);
 class C3 {
   pub x: num;
   pub y: num;
-  init(a: num, b: num) {
+  new(a: num, b: num) {
     this.x = a;
     if true {
       this.y = b;
@@ -39,7 +39,7 @@ assert(C4.m() == 1);
 class C5 {
   pub inflight x: num;
   pub inflight var y: num;
-  inflight init() {
+  inflight new() {
     this.x = 123;
     this.y = 321;
   }
@@ -58,7 +58,7 @@ test "access inflight field" {
 
 class Person {
   pub name: str;
-  init(name: str) {
+  new(name: str) {
     this.name = name;
   }
 }
@@ -66,7 +66,7 @@ class Person {
 class Student extends Person {
   pub major: str;
 
-  init(name: str, major: str) {
+  new(name: str, major: str) {
     super(name);
     this.major = major;
   }
@@ -74,7 +74,7 @@ class Student extends Person {
 
 class PaidStudent extends Student {
   pub hrlyWage: num;
-  init(name: str, major: str, hrlyWage: num) {
+  new(name: str, major: str, hrlyWage: num) {
     super(name, major);
     this.hrlyWage = hrlyWage;
   }
@@ -89,7 +89,7 @@ test "check derived class instance variables" {
 }
 
 class TeacherAid extends PaidStudent {
-  init(name: str, major: str, hrlyWage: num) {
+  new(name: str, major: str, hrlyWage: num) {
     super(name, major, hrlyWage);
     this.hrlyWage = 10; // should overwrite the super set value
   }
@@ -105,13 +105,13 @@ test "devived class init body happens after super" {
 inflight class A {
   pub sound: str;
 
-  inflight init(sound: str) {
+  inflight new(sound: str) {
     this.sound = sound;
   }
 }
 
 inflight class B extends A {
-  inflight init(sound: str) {
+  inflight new(sound: str) {
     super(sound);
   }
 }
@@ -124,7 +124,7 @@ test "inflight super constructor" {
 // derived preflight class with inflight methods
 class Bar {}
 class Foo extends Bar  {
-  init() {
+  new() {
     super();
   }
 
@@ -138,6 +138,6 @@ class Baz extends Bar {}
 new Baz();
 
 class Boom {
-  init() { }
+  new() { }
 }
 class Bam extends Boom {}

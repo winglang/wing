@@ -14,7 +14,7 @@ test("state can be resolved at any time", async () => {
   const tokenKey = "myKey";
   const token = state.token(tokenKey);
 
-  const fn = cloud.Function._newFunction(
+  const fn = new cloud.Function(
     app,
     "MyFunction",
     Testing.makeHandler(
@@ -33,7 +33,7 @@ test("state can be resolved at any time", async () => {
     }
   );
 
-  OnDeploy._newOnDeploy(
+  new OnDeploy(
     app,
     "MyOnDeploy",
     Testing.makeHandler(

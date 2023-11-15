@@ -44,8 +44,8 @@ export class TestRunner
     try {
       await fnClient.invoke("");
       pass = true;
-    } catch (e) {
-      error = (e as any).stack;
+    } catch (e: any) {
+      error = e.stack;
     }
     // only return traces that were added after the test was run
     const newTraces = this.context.listTraces().slice(previousTraces);

@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { IResource, Node, Resource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
@@ -15,21 +15,14 @@ export interface TopicProps {}
  * A topic.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
+ * @abstract
  */
-export abstract class Topic extends Resource {
-  /**
-   * Create a new topic.
-   * @internal
-   */
-  public static _newTopic(
-    scope: Construct,
-    id: string,
-    props: TopicProps = {}
-  ): Topic {
-    return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
-  }
-
+export class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
+    if (new.target === Topic) {
+      return Resource._newFromFactory(TOPIC_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Topic";
@@ -38,18 +31,18 @@ export abstract class Topic extends Resource {
     props;
   }
 
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [TopicInflightMethods.PUBLISH];
-  }
-
   /**
    * Run an inflight whenever an message is published to the topic.
+   * @abstract
    */
-  public abstract onMessage(
+  public onMessage(
     inflight: ITopicOnMessageHandler,
     props?: TopicOnMessageOptions
-  ): Function;
+  ): Function {
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 }
 
 /**

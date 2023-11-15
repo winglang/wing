@@ -149,6 +149,7 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "env-fn-c8a226dd",
             "WING_TARGET": "tf-aws",
             "catAge": "2",
@@ -182,6 +183,7 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
             "WING_TARGET": "tf-aws"
           }

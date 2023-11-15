@@ -7,6 +7,8 @@ use lsp_types::{Position, Range};
 
 use serde::Serialize;
 
+use crate::ast::Spanned;
+
 pub type FileId = String;
 type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
@@ -119,6 +121,12 @@ impl Into<Range> for &WingSpan {
 	}
 }
 
+impl From<&WingSpan> for WingSpan {
+	fn from(span: &WingSpan) -> Self {
+		span.clone()
+	}
+}
+
 impl WingSpan {
 	/// Checks if the given span is contained within this span
 	pub fn contains_span(&self, position: &Self) -> bool {
@@ -223,7 +231,7 @@ impl Display for WingSpan {
 		write!(
 			f,
 			"{}:{}:{}",
-			Utf8Path::new(&self.file_id).file_name().expect("invalid file id"),
+			Utf8Path::new(&self.file_id).file_name().unwrap_or("<unknown>"),
 			self.start.line + 1,
 			self.start.col + 1
 		)
@@ -252,6 +260,28 @@ pub struct Diagnostic {
 	pub annotations: Vec<DiagnosticAnnotation>,
 	pub span: Option<WingSpan>,
 	pub hints: Vec<String>,
+}
+
+impl Diagnostic {
+	pub fn new(msg: impl ToString, span: &impl Spanned) -> Self {
+		Self {
+			message: msg.to_string(),
+			span: Some(span.span()),
+			annotations: vec![],
+			hints: vec![],
+		}
+	}
+
+	pub fn add_anotation(&mut self, msg: impl ToString, span: impl Spanned) {
+		self.annotations.push(DiagnosticAnnotation {
+			message: msg.to_string(),
+			span: span.span(),
+		});
+	}
+
+	pub fn report(&self) {
+		report_diagnostic(self.clone());
+	}
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]

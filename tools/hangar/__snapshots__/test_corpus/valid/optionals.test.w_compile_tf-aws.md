@@ -19,7 +19,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Node-1.js
@@ -32,7 +32,7 @@ module.exports = function({  }) {
   }
   return Node;
 }
-
+//# sourceMappingURL=inflight.Node-1.js.map
 ```
 
 ## inflight.Sub-1.js
@@ -46,7 +46,7 @@ module.exports = function({ $Super }) {
   }
   return Sub;
 }
-
+//# sourceMappingURL=inflight.Sub-1.js.map
 ```
 
 ## inflight.Sub1-1.js
@@ -60,7 +60,7 @@ module.exports = function({ $Super }) {
   }
   return Sub1;
 }
-
+//# sourceMappingURL=inflight.Sub1-1.js.map
 ```
 
 ## inflight.Super-1.js
@@ -73,7 +73,7 @@ module.exports = function({  }) {
   }
   return Super;
 }
-
+//# sourceMappingURL=inflight.Super-1.js.map
 ```
 
 ## main.tf.json
@@ -288,7 +288,7 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this, "Super");
     const s = (optionalSup ?? new Sub(this, "Sub"));
     {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
-    let name = ({"first": "John","last": "Doe"});
+    let name = ({"first": "John", "last": "Doe"});
     {
       const $if_let_value = name;
       if ($if_let_value != undefined) {
@@ -312,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0)),"last": (parts.at(1))});
+      return ({"first": (parts.at(0)), "last": (parts.at(1))});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
@@ -447,8 +447,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
-    const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "orange bucket")});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:t", new $Closure1(this, "$Closure1"));
+    const payloadWithBucket = ({"a": "a", "c": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
     const str1 = undefined;
     const str2 = undefined;
     {
@@ -470,6 +470,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

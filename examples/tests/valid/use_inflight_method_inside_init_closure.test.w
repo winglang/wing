@@ -1,7 +1,7 @@
 bring cloud;
 
 class Foo {
-  init() {
+  new() {
     new cloud.Function(inflight () => {
       this.bar();
     });

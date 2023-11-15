@@ -17,7 +17,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -30,7 +30,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -139,12 +139,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo_this = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_expr_with_this.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

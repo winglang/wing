@@ -16,7 +16,7 @@ module.exports = function({ $bucket2 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $fn }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -57,7 +57,7 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.MyClosure-1.js
@@ -86,7 +86,7 @@ module.exports = function({ $bucket2 }) {
   }
   return MyClosure;
 }
-
+//# sourceMappingURL=inflight.MyClosure-1.js.map
 ```
 
 ## main.tf.json
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
     class MyClosure extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -304,16 +304,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const fn = new $Closure1(this, "$Closure1");
     const fn2 = new MyClosure(this, "MyClosure");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:call synthetic closure class as a function", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:call non-synthetic closure as a function", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call synthetic closure class as a function", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call non-synthetic closure as a function", new $Closure3(this, "$Closure3"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "lift_via_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
