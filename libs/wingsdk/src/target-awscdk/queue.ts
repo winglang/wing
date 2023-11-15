@@ -121,7 +121,15 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 
-  public innerAwsQueue(): any {
-    return this.queue;
+  public arn(): string {
+    return this.queue.queueArn;
+  }
+
+  public queueName(): string {
+    return this.queue.queueName;
+  }
+
+  public queueUrl(): string {
+    return this.queue.queueUrl;
   }
 }

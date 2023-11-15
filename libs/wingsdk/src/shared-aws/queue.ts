@@ -5,9 +5,19 @@ import { IResource } from "../std";
  */
 export interface IAwsQueue {
   /**
-   * Get iinternal AWS Queue
+   * AWS Queue arn
    */
-  innerAwsQueue(): any;
+  arn(): string;
+
+  /**
+   * AWS Queue name
+   */
+  queueName(): string;
+
+  /**
+   * AWS Queue url
+   */
+  queueUrl(): string;
 }
 
 /**
@@ -27,6 +37,8 @@ export class Queue {
   }
 
   private static isAwsQueue(obj: any): obj is IAwsQueue {
-    return typeof obj.innerAwsQueue === "function";
+    return typeof obj.arn === "function" &&
+      typeof obj.queueName === "function" &&
+      typeof obj.queueUrl === "function";
   }
 }
