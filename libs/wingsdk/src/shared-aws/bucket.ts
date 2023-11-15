@@ -5,9 +5,14 @@ import { IResource } from "../std";
  */
 export interface IAwsBucket {
   /**
-   * Get iinternal AWS Bucket
+   * AWS Bucket arn
    */
-  innerAwsBucket(): any;
+  arn(): string;
+
+  /**
+   * AWS Bucket name
+   */
+  bucketName(): string;
 }
 
 /**
@@ -27,6 +32,7 @@ export class Bucket {
   }
 
   private static isAwsBucket(obj: any): obj is IAwsBucket {
-    return typeof obj.innerAwsBucket === "function";
+    return typeof obj.arn === "function" &&
+      typeof obj.bucketName === "function";
   }
 }

@@ -211,7 +211,11 @@ export class Website extends cloud.Website implements aws.IAwsBucket {
     );
   }
 
-  public innerAwsBucket(): any {
-    return this.bucket;
+  public arn(): string {
+    return this.bucket.arn;
+  }
+
+  public bucketName(): string {
+    return this.bucket.bucketDomainName;
   }
 }

@@ -234,8 +234,12 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public innerAwsBucket(): any {
-    return this.bucket;
+  public arn(): string {
+    return this.bucket.bucketArn;
+  }
+
+  public bucketName(): string {
+    return this.bucket.bucketName;
   }
 }
 
