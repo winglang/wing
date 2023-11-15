@@ -314,7 +314,7 @@ class WingRestApi extends Construct {
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    this.api = new ApiGatewayRestApi(this, `${id}Api`, {
+    this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
