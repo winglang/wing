@@ -9,7 +9,7 @@ new cdktf.S3Backend();
 //^ Expected 1 positional argument(s) but got 0
 
 class Foo {
-  init() {
+  new() {
     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: "foo", key: "bar"}) as "s3_backend";
                                                                                   //^ Cannot set id of non-standard preflight class "S3Backend" using `as`
     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: "foo", key: "bar"}) in this;

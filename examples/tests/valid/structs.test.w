@@ -24,7 +24,7 @@ let y = B {
 class Foo {
   data: B;
 
-  init(b: B) {
+  new(b: B) {
     this.data = b;
   }
 

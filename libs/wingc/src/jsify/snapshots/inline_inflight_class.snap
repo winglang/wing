@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
       b: cloud.Bucket;
       q: cloud.Queue;
 
-      init() {
+      new() {
         this.b = new cloud.Bucket();
         this.q = new cloud.Queue();
 
@@ -39,6 +39,7 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -52,6 +53,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## preflight.js
@@ -70,8 +72,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-        this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -134,5 +136,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

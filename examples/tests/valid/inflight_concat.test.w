@@ -2,7 +2,7 @@ bring cloud;
 
 class R {
   s1: str;
-  init() {
+  new() {
     this.s1 = "hello";
   }
   inflight foo() {

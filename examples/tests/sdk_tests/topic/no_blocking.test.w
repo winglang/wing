@@ -18,8 +18,8 @@ test "topic subscribers are invoked without blocking" {
   // since the subscriber sleeps for 3 seconds, the counter should still be 0
   assert(counter.peek() == 0);
 
-  util.sleep(6s);
-
   // after a while, the counter should be 1
+  util.waitUntil(inflight () => { return counter.peek() == 1; }, interval: 1s, timeout: 30s);
+
   assert(counter.peek() == 1);
 }

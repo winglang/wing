@@ -26,7 +26,7 @@ module.exports = function({ $r }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Another-1.js
@@ -45,7 +45,7 @@ module.exports = function({  }) {
   }
   return Another;
 }
-
+//# sourceMappingURL=inflight.Another-1.js.map
 ```
 
 ## inflight.First-1.js
@@ -58,7 +58,7 @@ module.exports = function({  }) {
   }
   return First;
 }
-
+//# sourceMappingURL=inflight.First-1.js.map
 ```
 
 ## inflight.MyResource-1.js
@@ -144,7 +144,7 @@ module.exports = function({  }) {
   }
   return MyResource;
 }
-
+//# sourceMappingURL=inflight.MyResource-1.js.map
 ```
 
 ## main.tf.json
@@ -260,7 +260,7 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -313,19 +313,19 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
         this.myOptStr = "myOptString";
         this.arrayOfStr = ["s1", "s2"];
-        this.mapOfNum = ({"k1": 11,"k2": 22});
+        this.mapOfNum = ({"k1": 11, "k2": 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
       helloPreflight() {
         return this.another;
@@ -466,14 +466,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

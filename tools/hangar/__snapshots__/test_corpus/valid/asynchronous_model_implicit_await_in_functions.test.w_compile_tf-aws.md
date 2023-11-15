@@ -15,7 +15,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $strToStr }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -168,6 +168,7 @@ module.exports = function({ $strToStr }) {
         "environment": {
           "variables": {
             "FUNCTION_NAME_bc9a3a6d": "${aws_lambda_function.strToStr.arn}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "func-c8cf78f6",
             "WING_TARGET": "tf-aws"
           }
@@ -198,6 +199,7 @@ module.exports = function({ $strToStr }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "strToStr-c8d5081f",
             "WING_TARGET": "tf-aws"
           }
@@ -340,14 +342,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
-    const strToStr = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "strToStr", new $Closure1(this, "$Closure1"));
-    const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "func", new $Closure2(this, "$Closure2"));
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    const strToStr = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "strToStr", new $Closure1(this, "$Closure1"));
+    const func = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "asynchronous_model_implicit_await_in_functions.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

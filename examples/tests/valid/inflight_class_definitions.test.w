@@ -22,7 +22,7 @@ let fn = inflight () => {
 class D {
   inner: inflight (): str;
 
-  init() {
+  new() {
     class E {
       pub foo(): str { return "e1"; }
     }

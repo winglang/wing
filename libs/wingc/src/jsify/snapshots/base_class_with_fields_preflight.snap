@@ -7,14 +7,14 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected f: str;
-      init() {
+      new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       g: str;
-      init() {
+      new() {
         this.g = "world";
       }
 
@@ -37,6 +37,7 @@ module.exports = function({  }) {
   }
   return Base;
 }
+//# sourceMappingURL=inflight.Base-1.js.map
 ```
 
 ## inflight.Derived-1.js
@@ -51,6 +52,7 @@ module.exports = function({ $Base }) {
   }
   return Derived;
 }
+//# sourceMappingURL=inflight.Derived-1.js.map
 ```
 
 ## preflight.js
@@ -127,5 +129,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

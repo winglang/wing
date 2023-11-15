@@ -279,6 +279,7 @@ exports[`queue with a consumer function 2`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Queue-SetConsumer-c5395e41-c80c3bf7",
           },
         },

@@ -6,7 +6,7 @@ import { SimApp } from "../sim-app";
 test("create a table", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "new_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -40,7 +40,7 @@ test("create a table", async () => {
 test("insert row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_insert_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -78,7 +78,7 @@ test("insert row", async () => {
 test("get row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_get_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -123,7 +123,7 @@ test("get row", async () => {
 test("tryGet row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_get_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -167,7 +167,7 @@ test("tryGet row", async () => {
 test("update row", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_update_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -210,7 +210,7 @@ test("update row", async () => {
 test("list table", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_list_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -252,7 +252,7 @@ test("list table", async () => {
 test("inserting the same id twice", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_insert_twice_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -273,7 +273,7 @@ test("inserting the same id twice", async () => {
 test("update non-existent item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_update_non_existent_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -293,7 +293,7 @@ test("update non-existent item", async () => {
 test("deleting non-existent item", async () => {
   // GIVEN
   const app = new SimApp();
-  const t = ex.Table._newTable(app, "my_table", {
+  const t = new ex.Table(app, "my_table", {
     name: "my_delete_non_existent_table",
     columns: {
       name: ex.ColumnType.STRING,
@@ -314,7 +314,7 @@ test("can add row in preflight", async () => {
   const ROW = { name: "Joe Doe", age: 50 };
 
   const app = new SimApp();
-  const table = ex.Table._newTable(app, "my_table", {
+  const table = new ex.Table(app, "my_table", {
     name: "my_addrow_table",
     columns: {
       name: ex.ColumnType.STRING,

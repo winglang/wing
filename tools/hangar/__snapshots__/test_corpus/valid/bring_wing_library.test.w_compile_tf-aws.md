@@ -16,7 +16,7 @@ module.exports = function({ $fixture_Store }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-3.js.map
 ```
 
 ## inflight.Store-2.js
@@ -36,7 +36,7 @@ module.exports = function({ $myutil_Util }) {
   }
   return Store;
 }
-
+//# sourceMappingURL=inflight.Store-2.js.map
 ```
 
 ## inflight.Util-1.js
@@ -52,7 +52,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-
+//# sourceMappingURL=inflight.Util-1.js.map
 ```
 
 ## main.tf.json
@@ -108,14 +108,14 @@ module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const FavoriteNumbers =
     (function (tmp) {
-      tmp[tmp["SEVEN"] = 0] = "SEVEN";
-      tmp[tmp["FORTY_TWO"] = 1] = "FORTY_TWO";
+      tmp[tmp["SEVEN"] = 0] = ",SEVEN";
+      tmp[tmp["FORTY_TWO"] = 1] = ",FORTY_TWO";
       return tmp;
     })({})
   ;
   return { FavoriteNumbers };
 };
-
+//# sourceMappingURL=preflight.enums-1.js.map
 ```
 
 ## preflight.js
@@ -170,13 +170,13 @@ class $Root extends $stdlib.std.Resource {
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
     {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKey(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fixture.Store.makeKey("hello")),"data/hello.json")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
 ## preflight.store-3.js
@@ -189,7 +189,7 @@ module.exports = function({ $stdlib }) {
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.data = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     }
     static makeKey(name) {
       return (require("<ABSOLUTE_PATH>/util.js")["makeKey"])(name)
@@ -229,7 +229,7 @@ module.exports = function({ $stdlib }) {
   }
   return { Store };
 };
-
+//# sourceMappingURL=preflight.store-3.js.map
 ```
 
 ## preflight.subdir-4.js
@@ -241,7 +241,7 @@ module.exports = function({ $stdlib }) {
     ...require("./preflight.util-2.js")({ $stdlib }),
   };
 };
-
+//# sourceMappingURL=preflight.subdir-4.js.map
 ```
 
 ## preflight.testfixture-5.js
@@ -255,7 +255,7 @@ module.exports = function({ $stdlib }) {
     ...require("./preflight.enums-1.js")({ $stdlib }),
   };
 };
-
+//# sourceMappingURL=preflight.testfixture-5.js.map
 ```
 
 ## preflight.util-2.js
@@ -290,6 +290,6 @@ module.exports = function({ $stdlib }) {
   }
   return { Util };
 };
-
+//# sourceMappingURL=preflight.util-2.js.map
 ```
 

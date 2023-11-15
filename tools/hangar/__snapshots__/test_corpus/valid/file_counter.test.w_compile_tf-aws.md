@@ -18,7 +18,7 @@ module.exports = function({ $bucket, $counter }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -145,6 +145,7 @@ module.exports = function({ $bucket, $counter }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }
@@ -262,9 +263,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter", { initial: 100 });
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
+    const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter", { initial: 100 });
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }
@@ -272,6 +273,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "file_counter.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

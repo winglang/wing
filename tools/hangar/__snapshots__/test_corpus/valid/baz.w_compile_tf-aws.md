@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-
+//# sourceMappingURL=inflight.Baz-1.js.map
 ```
 
 ## preflight.js
@@ -48,6 +48,6 @@ module.exports = function({ $stdlib }) {
   }
   return { Baz };
 };
-
+//# sourceMappingURL=preflight.js.map
 ```
 

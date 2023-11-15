@@ -13,13 +13,13 @@ module.exports = function({ $counter, $std_Json }) {
     async handle(request) {
       const count = (await $counter.inc());
       const bodyResponse = ({"count": count});
-      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([bodyResponse]),"headers": ({"content-type": "application/json"}),"status": 200});
+      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([bodyResponse]), "headers": ({"content-type": "application/json"}), "status": 200});
       return resp;
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -39,7 +39,7 @@ module.exports = function({ $api_url }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -54,12 +54,12 @@ module.exports = function({ $__parent_this_3_api_url }) {
     }
     async handle(req) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
-      return ({"status": 200,"body": text});
+      return ({"status": 200, "body": text});
     }
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.A-1.js
@@ -72,7 +72,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## main.tf.json
@@ -158,6 +158,9 @@ module.exports = function({  }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/endpoint1\":{\"get\":{\"operationId\":\"get-endpoint1\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.A_cloudApi_cloudApi-OnRequest-73c5308f_E645B0BE.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c8c7a7a3"
       },
       "cloudApi_api_2B334D75": {
@@ -168,6 +171,9 @@ module.exports = function({  }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello/world\":{\"get\":{\"operationId\":\"get-hello/world\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c895068c"
       }
     },
@@ -313,9 +319,10 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_30": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_31_EXECUTE_API_TFTOKEN_TOKEN_24_AMAZONAWS_COM_TFTOKEN_TOKEN_32": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}\")}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -345,6 +352,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
             "WING_TARGET": "tf-aws"
           }
@@ -513,7 +521,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+        this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
@@ -571,17 +579,17 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
-    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const handler = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", handler));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:api url", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:api url", new $Closure2(this, "$Closure2"));
     new A(this, "A");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

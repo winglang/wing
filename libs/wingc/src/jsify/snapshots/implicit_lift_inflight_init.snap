@@ -11,11 +11,11 @@ source: libs/wingc/src/jsify/tests.rs
       c: cloud.Counter;
       inflight myField2: str;
 
-      init() {
+      new() {
         this.c = new cloud.Counter();
       }
 
-      inflight init() {
+      inflight new() {
         this.myField2 = "hello";
       }
 
@@ -51,6 +51,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## preflight.js
@@ -69,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
       static _toInflightType(context) {
         return `
@@ -107,5 +108,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

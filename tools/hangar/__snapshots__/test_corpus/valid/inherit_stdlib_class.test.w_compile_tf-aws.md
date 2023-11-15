@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -36,7 +36,7 @@ module.exports = function({ $api_url, $http_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.AnApi-1.js
@@ -50,7 +50,7 @@ module.exports = function({ $cloud_Api }) {
   }
   return AnApi;
 }
-
+//# sourceMappingURL=inflight.AnApi-1.js.map
 ```
 
 ## main.tf.json
@@ -121,6 +121,9 @@ module.exports = function({ $cloud_Api }) {
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/\":{\"get\":{\"operationId\":\"get\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.AnApi_AnApi-OnRequest-cdafee6e_9D410EFB.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c89cd213"
       }
     },
@@ -197,6 +200,7 @@ module.exports = function({ $cloud_Api }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "AnApi-OnRequest-cdafee6e-c8c5dbf2",
             "WING_TARGET": "tf-aws"
           }
@@ -360,12 +364,12 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = new AnApi(this, "AnApi");
     (api.get("/", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can inherit std lib preflight class", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inherit_stdlib_class.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

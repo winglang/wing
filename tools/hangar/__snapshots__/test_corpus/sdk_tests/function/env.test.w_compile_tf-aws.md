@@ -92,6 +92,7 @@
           "variables": {
             "FOO1": "bar",
             "FOO2": "baz",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }

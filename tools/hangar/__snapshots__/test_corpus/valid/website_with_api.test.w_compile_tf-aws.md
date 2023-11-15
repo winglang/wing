@@ -11,12 +11,12 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]), "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -32,15 +32,15 @@ module.exports = function({ $std_Json, $usersTable }) {
     async handle(req) {
       const body = (JSON.parse((req.body ?? "")));
       if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),"")))) {
-        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]),"status": 400});
+        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]), "status": 400});
       }
       (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]), body));
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]),"status": 201});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]), "status": 201});
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -54,7 +54,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 200));
       (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
@@ -66,7 +66,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -80,7 +80,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
       (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
@@ -89,7 +89,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## main.tf.json
@@ -197,6 +197,9 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users\":{\"get\":{\"operationId\":\"get-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}},\"post\":{\"operationId\":\"post-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-86898773_701F5CA7.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                #if ($context.httpMethod == \\\"OPTIONS\\\")\\n                    {\\\"statusCode\\\": 204}\\n                #else\\n                    {\\\"statusCode\\\": 404}\\n                #end\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"204\":{\"statusCode\":\"204\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\",\"method.response.header.Access-Control-Allow-Origin\":\"'*'\",\"method.response.header.Access-Control-Allow-Methods\":\"'GET,POST,OPTIONS'\",\"method.response.header.Access-Control-Allow-Headers\":\"'Content-Type'\"},\"responseTemplates\":{\"application/json\":\"{}\"}},\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"204\":{\"description\":\"204 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"},\"Access-Control-Allow-Origin\":{\"type\":\"string\"},\"Access-Control-Allow-Methods\":{\"type\":\"string\"},\"Access-Control-Allow-Headers\":{\"type\":\"string\"}}},\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c895068c"
       }
     },
@@ -399,6 +402,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
             "WING_TARGET": "tf-aws"
           }
@@ -432,6 +436,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
             "WING_TARGET": "tf-aws"
           }
@@ -573,7 +578,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content": "{\"apiUrl\":\"${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}\"}",
+        "content": "{\"apiUrl\":\"https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}\"}",
         "content_type": "application/json",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
@@ -740,21 +745,21 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type"],"allowCredentials": false,"exposeHeaders": ["Content-Type"],"maxAge": (std.Duration.fromSeconds(600))}) });
-    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website_with_api" });
-    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
+    const website = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "cloud.Website", { path: "./website_with_api" });
+    const usersTable = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING, "name": ex.ColumnType.STRING, "age": ex.ColumnType.NUMBER}) });
     const getHandler = new $Closure1(this, "$Closure1");
     const postHandler = new $Closure2(this, "$Closure2");
     (api.get("/users", getHandler));
     (api.post("/users", postHandler));
     (website.addJson("config.json", ({"apiUrl": api.url})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "website_with_api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

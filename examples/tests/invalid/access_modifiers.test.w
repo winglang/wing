@@ -9,7 +9,7 @@ class Foo impl SomeInterface {
   private_field: str;
   pub public_field: str;
 
-  init() {
+  new() {
     this.protected_field = "hello";
     this.private_field = "world";
     this.public_field = "!";

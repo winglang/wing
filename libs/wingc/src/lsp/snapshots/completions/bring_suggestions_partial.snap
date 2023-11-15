@@ -28,6 +28,9 @@ source: libs/wingc/src/lsp/completions.rs
 - label: sim
   kind: 9
   sortText: kk|sim
+- label: ui
+  kind: 9
+  sortText: kk|ui
 - label: util
   kind: 9
   sortText: kk|util
