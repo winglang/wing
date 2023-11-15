@@ -120,7 +120,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
   }
 
@@ -138,7 +138,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
   }
 
@@ -156,7 +156,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
   }
 
@@ -173,7 +173,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
 
     Node.of(this).addConnection({
@@ -183,7 +183,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
 
     Node.of(this).addConnection({
@@ -193,7 +193,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn.innerAwsFunction())
+      new LambdaDestination(fn._awsFunction)
     );
   }
 
@@ -250,11 +250,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-          blockPublicAcls: false,
-          blockPublicPolicy: false,
-          ignorePublicAcls: false,
-          restrictPublicBuckets: false,
-        }
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

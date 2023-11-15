@@ -76,7 +76,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       {
         topicArn: this.topic.arn,
         protocol: "lambda",
-        endpoint: fn.arn,
+        endpoint: fn.arn(),
       }
     );
 

@@ -24,7 +24,7 @@ import { IInflightHost } from "../std";
 export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
   /** Function ARN */
-  public readonly arn: string;
+  public readonly functionArn: string;
 
   constructor(
     scope: Construct,
@@ -41,8 +41,8 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-        ? undefined // Negative value means Infinite retention
-        : props.logRetentionDays;
+          ? undefined // Negative value means Infinite retention
+          : props.logRetentionDays;
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
@@ -57,7 +57,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       logRetention: logRetentionDays,
     });
 
-    this.arn = this.function.functionArn;
+    this.functionArn = this.function.functionArn;
   }
 
   /** @internal */
@@ -115,10 +115,6 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
   }
 
-  public innerAwsFunction(): CdkFunction {
-    return this.function;
-  }
-
   /** @internal */
   public _addEventSource(eventSource: IEventSource) {
     this.function.addEventSource(eventSource);
@@ -126,5 +122,17 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  get _awsFunction() {
+    return this.function;
+  }
+
+  public arn(): string {
+    return this.function.functionArn;
+  }
+
+  public functionName(): string {
+    return this.function.functionName;
   }
 }

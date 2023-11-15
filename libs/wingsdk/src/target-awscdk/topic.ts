@@ -51,7 +51,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       throw new Error("Topic only supports creating awscdk.Function right now");
     }
 
-    const subscription = new LambdaSubscription(fn.innerAwsFunction());
+    const subscription = new LambdaSubscription(fn._awsFunction);
     this.topic.addSubscription(subscription);
 
     Node.of(this).addConnection({

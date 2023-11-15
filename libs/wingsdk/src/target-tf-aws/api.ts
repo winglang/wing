@@ -436,7 +436,7 @@ class WingRestApi extends Construct {
     new LambdaPermission(this, `permission-${permissionId}`, {
       statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
       action: "lambda:InvokeFunction",
-      functionName: handler.innerAwsFunction().functionName,
+      functionName: handler.functionName(),
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${path}`,
     });

@@ -97,7 +97,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn.innerAwsFunction().functionName,
+      functionName: fn.functionName(),
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
     });

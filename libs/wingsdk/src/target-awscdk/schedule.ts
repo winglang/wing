@@ -91,8 +91,8 @@ export class Schedule extends cloud.Schedule {
       );
     }
 
-    this.rule.addTarget(new LambdaFunction(fn.innerAwsFunction()));
-    addLambdaPermission(this.rule, fn.innerAwsFunction());
+    this.rule.addTarget(new LambdaFunction(fn._awsFunction));
+    addLambdaPermission(this.rule, fn._awsFunction);
 
     Node.of(this).addConnection({
       source: this,

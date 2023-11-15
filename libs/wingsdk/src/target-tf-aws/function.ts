@@ -65,7 +65,7 @@ export class Function extends cloud.Function implements IAwsFunction {
    * Unqualified Function ARN
    * @returns Unqualified ARN of the function
    */
-  public readonly arn: string;
+  public readonly functionArn: string;
   /**
    * Qualified Function ARN
    * @returns Qualified ARN of the function
@@ -233,16 +233,12 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
-    this.arn = this.function.arn;
+    this.functionArn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
-  }
-
-  public get functionName(): string {
-    return this.function.functionName;
   }
 
   /** @internal */
@@ -325,7 +321,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       this,
       `InvokePermission-${source.node.addr}`,
       {
-        functionName: this.innerAwsFunction().functionName,
+        functionName: this.functionName(),
         action: "lambda:InvokeFunction",
         principal: principal,
         sourceArn: sourceArn,
@@ -334,11 +330,15 @@ export class Function extends cloud.Function implements IAwsFunction {
     );
   }
 
-  public innerAwsFunction(): any {
-    return this.function;
-  }
-
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  public arn(): string {
+    return this.function.arn;
+  }
+
+  public functionName(): string {
+    return this.function.functionName;
   }
 }

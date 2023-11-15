@@ -16,9 +16,14 @@ export interface IAwsFunction {
   addPolicyStatements(...policies: PolicyStatement[]): void;
 
   /**
-   * Get internal AWS Function
+   * AWS Function arn
    */
-  innerAwsFunction(): any;
+  arn(): string;
+
+  /**
+   * AWS Function name
+   */
+  functionName(): string;
 }
 
 /**
@@ -41,7 +46,8 @@ export class Function {
     return (
       typeof obj.addPolicyStatements === "function" &&
       typeof obj.addEnvironment === "function" &&
-      typeof obj.innerAwsFunction === "function"
+      typeof obj.arn === "function" &&
+      typeof obj.functionName === "function"
     );
   }
 }
