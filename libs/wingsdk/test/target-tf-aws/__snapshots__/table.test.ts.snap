@@ -96,6 +96,7 @@ exports[`function with a table binding 2`] = `
             "DYNAMODB_TABLE_NAME_e7245baa": "\${aws_dynamodb_table.Table.name}",
             "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\\"name\\":0}",
             "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },

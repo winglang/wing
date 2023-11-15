@@ -296,6 +296,7 @@ exports[`dec() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -613,6 +614,7 @@ exports[`function with a counter binding 2`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -887,6 +889,7 @@ exports[`inc() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1161,6 +1164,7 @@ exports[`peek() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1557,6 +1561,7 @@ exports[`set() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },

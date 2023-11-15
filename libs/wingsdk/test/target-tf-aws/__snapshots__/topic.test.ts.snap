@@ -395,6 +395,7 @@ exports[`topic with subscriber function 2`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Topic-OnMessage-c5395e41-c8eb4431",
           },
         },

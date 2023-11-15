@@ -15,7 +15,8 @@ export interface RunWingCommandOptions {
 
 export async function runWingCommand(options: RunWingCommandOptions) {
   const platformOptions: string[] = [];
-  options.platforms?.forEach((p) => platformOptions.push(...["-t",  `${p}`])) ?? [];
+  options.platforms?.forEach((p) => platformOptions.push(...["-t", `${p}`])) ??
+    [];
   const out = await execa(
     wingBin,
     [
@@ -23,7 +24,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       "--no-analytics",
       ...options.args,
       options.wingFile ?? "",
-      ...platformOptions
+      ...platformOptions,
     ],
     {
       cwd: options.cwd,
@@ -53,8 +54,19 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 
 function sanitizeOutput(output: string) {
   return output
-    .replace(/\d+m[\d.]+s/g, "<DURATION>")
-    .replace(/(?<=wsim.)\d+(?=.tmp)/g, "[REDACTED]");
+      // Normalize line endings
+      .replaceAll("\r\n", "\n")
+      // Normalize windows slashes
+      .replace(/\\+([a-zA-Z0-9]+?)/g, "/$1")
+      // Remove line/column numbers from rust sources
+      .replace(/(src\/.+\.rs):\d+:\d+/g, "$1:LINE:COL")
+      // Remove absolute stacktraces
+      .replace(/\(\/.+:\d+:\d+\)/g, "(<ABSOLUTE>:LINE:COL)")
+      // Remove absolute paths
+      .replace(/(?<=[\s"])(\/|\w:)\S+\/(.+)/g, "<ABSOLUTE>/$2")
+      // Remove duration from test results
+      .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
+  ;
 }
 
 export function sanitize_json_paths(path: string) {

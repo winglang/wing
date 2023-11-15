@@ -24,7 +24,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -122,15 +122,15 @@ class $Root extends $stdlib.std.Resource {
     }
     const arr = ["hello", "world"];
     const mySet = new Set(["my", "my", "set"]);
-    const myMap = ({"hello": 123,"world": 999});
+    const myMap = ({"hello": 123, "world": 999});
     const arrOfMap = [({"bang": 123})];
-    const j = ({"a": "hello","b": "world"});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:capture_containers", new $Closure1(this, "$Closure1"));
+    const j = ({"a": "hello", "b": "world"});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:capture_containers", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_containers.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

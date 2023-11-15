@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Animal;
 }
-
+//# sourceMappingURL=inflight.Animal-1.js.map
 ```
 
 ## inflight.Cat-1.js
@@ -24,7 +24,7 @@ module.exports = function({ $Animal }) {
   }
   return Cat;
 }
-
+//# sourceMappingURL=inflight.Cat-1.js.map
 ```
 
 ## inflight.Dog-1.js
@@ -38,7 +38,7 @@ module.exports = function({ $Animal }) {
   }
   return Dog;
 }
-
+//# sourceMappingURL=inflight.Dog-1.js.map
 ```
 
 ## main.tf.json
@@ -192,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.has(\"one\")")})((sSet.has("one")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sSet.size,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutSet.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutSet.size,3)))};
-    const sMap = ({"one": 1,"two": 2});
+    const sMap = ({"one": 1, "two": 2});
     const nestedMap = ({"a": ({"b": ({"c": "hello"})})});
     const mutMap = {...(sMap)};
     ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five", 5]);
@@ -204,12 +204,12 @@ class $Root extends $stdlib.std.Resource {
     const heterogeneousArray = [new Cat(this, "C1"), new Dog(this, "D1")];
     const heterogeneousDoubleArray = [[new Cat(this, "C2")], [new Cat(this, "C3"), new Dog(this, "D2")], [new Animal(this, "A1")]];
     const heterogeneousSet = new Set([new Cat(this, "C4"), new Dog(this, "D3")]);
-    const heterogeneousMap = ({"cat": new Cat(this, "C5"),"dog": new Dog(this, "D4")});
+    const heterogeneousMap = ({"cat": new Cat(this, "C5"), "dog": new Dog(this, "D4")});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "std_containers.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

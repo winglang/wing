@@ -17,7 +17,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -34,7 +34,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -143,17 +143,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = ({"field0": "Sup"});
-    const y = ({"field0": "hello","field1": 1,"field2": "world","field3": ({"field0": "foo"})});
+    const y = ({"field0": "hello", "field1": 1, "field2": "world", "field3": ({"field0": "foo"})});
     {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.field0,"Sup")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field1,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field3.field0,"foo")))};
     const s = ({"a": "Boom baby"});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:struct definitions are phase independant", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "structs.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
