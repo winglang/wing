@@ -7,9 +7,9 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { Duration, IInflightHost, Node } from "../std";
-import { IAwsQueue } from "../shared-aws";
 
 /**
  * Queue names are limited to 80 characters.

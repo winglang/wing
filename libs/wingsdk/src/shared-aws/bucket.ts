@@ -27,8 +27,6 @@ export class Bucket {
   }
 
   private static isAwsBucket(obj: any): obj is IAwsBucket {
-    return (
-      typeof obj.innerAwsBucket === "function"
-    );
+    return typeof obj.innerAwsBucket === "function";
   }
 }

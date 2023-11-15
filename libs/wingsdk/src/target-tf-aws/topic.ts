@@ -9,8 +9,8 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node, Resource } from "../std";
 import { IAwsTopic } from "../shared-aws/topic";
+import { IInflightHost, Node, Resource } from "../std";
 
 /**
  * Topic names are limited to 256 characters.

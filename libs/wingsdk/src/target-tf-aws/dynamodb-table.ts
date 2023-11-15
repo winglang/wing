@@ -6,8 +6,8 @@ import * as ex from "../ex";
 import { ResourceNames } from "../shared/resource-names";
 import { NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
 import { IAwsTable } from "../shared-aws/table";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.

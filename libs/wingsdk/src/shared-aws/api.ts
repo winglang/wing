@@ -18,7 +18,7 @@ export interface IAwsApi {
 /**
  * A helper class for working with AWS apis.
  */
-export class RestApi {
+export class Api {
   /**
    * If the api is an AWS RestApi, return a helper interface for
    * working with it.
@@ -33,8 +33,8 @@ export class RestApi {
 
   private static isAwsApi(obj: any): obj is IAwsApi {
     return (
-      typeof obj.innerAwsApi === "function"
-      && obj.innerAwsStage === "function"
+      typeof obj.innerAwsApi === "function" &&
+      typeof obj.innerAwsStage === "function"
     );
   }
 }

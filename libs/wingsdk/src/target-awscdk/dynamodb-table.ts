@@ -7,8 +7,8 @@ import * as ex from "../ex";
 import { ResourceNames } from "../shared/resource-names";
 import { NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
 import { IAwsTable } from "../shared-aws/table";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
@@ -34,9 +34,9 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
       },
       sortKey: props.rangeKey
         ? {
-          name: props.rangeKey,
-          type: attributeDefinitions[props.rangeKey] as AttributeType,
-        }
+            name: props.rangeKey,
+            type: attributeDefinitions[props.rangeKey] as AttributeType,
+          }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,

@@ -6,8 +6,8 @@ import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { Json, IInflightHost } from "../std";
 import { IAwsTable } from "../shared-aws/table";
+import { Json, IInflightHost } from "../std";
 
 /**
  * Table names must be between 3 and 255 characters.

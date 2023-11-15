@@ -27,8 +27,6 @@ export class Topic {
   }
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
-    return (
-      typeof obj.innerAwsTopic === "function"
-    );
+    return typeof obj.innerAwsTopic === "function";
   }
 }

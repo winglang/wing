@@ -4,7 +4,7 @@ bring util;
 
 let target = util.env("WING_TARGET");
 
-let api = new cloud.Api() as "aws-wing-api";
+let api = new cloud.Api() as "api";
 api.get("/", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200
@@ -23,7 +23,7 @@ let apiName = getApiName(api);
 
 test "validates the AWS api name" {
   if let name = apiName {
-    assert(name.contains("aws-wing-api"));
+    assert(name.contains("api"));
   }
   // If the test is not on AWS, it should not fail, so I am returning true.
   assert(true);

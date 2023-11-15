@@ -7,8 +7,8 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Node } from "../std";
 import { IAwsTopic } from "../shared-aws/topic";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.

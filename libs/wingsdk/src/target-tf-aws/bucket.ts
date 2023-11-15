@@ -20,9 +20,9 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
+import { IAwsBucket } from "../shared-aws/bucket";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
-import { IAwsBucket } from "../shared-aws/bucket";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
