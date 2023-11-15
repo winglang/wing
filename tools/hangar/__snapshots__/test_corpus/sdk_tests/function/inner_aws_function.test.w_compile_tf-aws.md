@@ -90,6 +90,7 @@
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "aws-wing-function-c8f4cdef",
             "WING_TARGET": "tf-aws"
           }
