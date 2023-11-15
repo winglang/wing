@@ -8,25 +8,19 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node } from "../std";
+import { IAwsTopic } from "../shared-aws/topic";
 
 /**
  * AWS Implementation of `cloud.Topic`.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic {
+export class Topic extends cloud.Topic implements IAwsTopic {
   private readonly topic: SNSTopic;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
     this.topic = new SNSTopic(this, "Topic");
-  }
-
-  /**
-   * Topic's arn
-   */
-  public get arn(): string {
-    return this.topic.topicArn;
   }
 
   public onMessage(
@@ -57,7 +51,7 @@ export class Topic extends cloud.Topic {
       throw new Error("Topic only supports creating awscdk.Function right now");
     }
 
-    const subscription = new LambdaSubscription(fn._function);
+    const subscription = new LambdaSubscription(fn.innerAwsFunction());
     this.topic.addSubscription(subscription);
 
     Node.of(this).addConnection({
@@ -100,5 +94,9 @@ export class Topic extends cloud.Topic {
 
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsTopic(): any {
+    return this.topic;
   }
 }

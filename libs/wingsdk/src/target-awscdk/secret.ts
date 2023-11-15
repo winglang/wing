@@ -42,13 +42,6 @@ export class Secret extends cloud.Secret {
     ];
   }
 
-  /**
-   * Secret's arn
-   */
-  public get arn(): string {
-    return this.secret.secretArn;
-  }
-
   public onLift(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("secrets can only be bound by awscdk.Function for now");

@@ -22,6 +22,7 @@ import {
 } from "../shared/resource-names";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
+import { IAwsBucket } from "../shared-aws/bucket";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
@@ -50,7 +51,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
@@ -109,7 +110,7 @@ export class Bucket extends cloud.Bucket {
     this.notificationTopics.push({
       id: `on-${actionType.toLowerCase()}-notification`,
       events: EVENTS[actionType],
-      topicArn: handler.arn,
+      topicArn: handler.innerAwsTopic().arn,
     });
 
     this.notificationDependencies.push(handler.permissions);
@@ -156,6 +157,10 @@ export class Bucket extends cloud.Bucket {
 
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsBucket(): any {
+    return this.bucket;
   }
 }
 

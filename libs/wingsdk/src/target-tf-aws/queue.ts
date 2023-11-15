@@ -9,6 +9,7 @@ import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { Duration, IInflightHost, Node } from "../std";
+import { IAwsQueue } from "../shared-aws";
 
 /**
  * Queue names are limited to 80 characters.
@@ -24,7 +25,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.Queue {
+export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SqsQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -96,7 +97,7 @@ export class Queue extends cloud.Queue {
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn._functionName,
+      functionName: fn.innerAwsFunction().functionName,
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
     });
@@ -138,5 +139,9 @@ export class Queue extends cloud.Queue {
 
   private envName(): string {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsQueue(): any {
+    return this.queue;
   }
 }

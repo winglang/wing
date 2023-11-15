@@ -9,13 +9,14 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node, Duration as StdDuration } from "../std";
+import { IAwsQueue } from "../shared-aws";
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.Queue {
+export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SQSQueue;
   private readonly timeout: StdDuration;
 
@@ -118,5 +119,9 @@ export class Queue extends cloud.Queue {
 
   private envName(): string {
     return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsQueue(): any {
+    return this.queue;
   }
 }

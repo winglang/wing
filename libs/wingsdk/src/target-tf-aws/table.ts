@@ -7,6 +7,7 @@ import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json, IInflightHost } from "../std";
+import { IAwsTable } from "../shared-aws/table";
 
 /**
  * Table names must be between 3 and 255 characters.
@@ -22,7 +23,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
-export class Table extends ex.Table {
+export class Table extends ex.Table implements IAwsTable {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
@@ -140,5 +141,9 @@ export class Table extends ex.Table {
 
   private columnsEnvName(): string {
     return `${this.envName()}_COLUMNS`;
+  }
+
+  public innerAwsTable(): any {
+    return this.table;
   }
 }

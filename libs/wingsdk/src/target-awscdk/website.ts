@@ -8,6 +8,7 @@ import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import * as cloud from "../cloud";
+import { IAwsBucket } from "../shared-aws";
 
 const INDEX_FILE = "index.html";
 
@@ -16,7 +17,7 @@ const INDEX_FILE = "index.html";
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export class Website extends cloud.Website {
+export class Website extends cloud.Website implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly _url: string;
 
@@ -88,5 +89,9 @@ export class Website extends cloud.Website {
       "WebsiteClient",
       []
     );
+  }
+
+  public innerAwsBucket(): any {
+    return this.bucket;
   }
 }

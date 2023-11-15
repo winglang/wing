@@ -8,13 +8,14 @@ import { ResourceNames } from "../shared/resource-names";
 import { NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
+import { IAwsTable } from "../shared-aws/table";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
-export class DynamodbTable extends ex.DynamodbTable {
+export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
   private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
@@ -33,9 +34,9 @@ export class DynamodbTable extends ex.DynamodbTable {
       },
       sortKey: props.rangeKey
         ? {
-            name: props.rangeKey,
-            type: attributeDefinitions[props.rangeKey] as AttributeType,
-          }
+          name: props.rangeKey,
+          type: attributeDefinitions[props.rangeKey] as AttributeType,
+        }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -85,5 +86,9 @@ export class DynamodbTable extends ex.DynamodbTable {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsTable(): any {
+    return this.table;
   }
 }

@@ -16,6 +16,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node } from "../std";
+import { IAwsBucket } from "../shared-aws/bucket";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -28,7 +29,7 @@ const EVENTS = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private bucketDeployment?: BucketDeployment;
@@ -119,7 +120,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
   }
 
@@ -137,7 +138,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
   }
 
@@ -155,7 +156,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
   }
 
@@ -172,7 +173,7 @@ export class Bucket extends cloud.Bucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
 
     Node.of(this).addConnection({
@@ -182,7 +183,7 @@ export class Bucket extends cloud.Bucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
 
     Node.of(this).addConnection({
@@ -192,7 +193,7 @@ export class Bucket extends cloud.Bucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._function)
+      new LambdaDestination(fn.innerAwsFunction())
     );
   }
 
@@ -232,6 +233,10 @@ export class Bucket extends cloud.Bucket {
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+
+  public innerAwsBucket(): any {
+    return this.bucket;
+  }
 }
 
 export function createEncryptedBucket(
@@ -245,11 +250,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-          blockPublicAcls: false,
-          blockPublicPolicy: false,
-          ignorePublicAcls: false,
-          restrictPublicBuckets: false,
-        }
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

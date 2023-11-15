@@ -14,6 +14,11 @@ export interface IAwsFunction {
    * Add policy statements to the function's IAM role.
    */
   addPolicyStatements(...policies: PolicyStatement[]): void;
+
+  /**
+   * Get internal AWS Function
+   */
+  innerAwsFunction(): any;
 }
 
 /**
@@ -21,7 +26,7 @@ export interface IAwsFunction {
  */
 export class Function {
   /**
-   * If the inflight host is an AWS function, return a helper interface for
+   * If the inflight host is an AWS Lambda, return a helper interface for
    * working with it.
    * @param host The inflight host.
    */
@@ -35,7 +40,8 @@ export class Function {
   private static isAwsFunction(obj: any): obj is IAwsFunction {
     return (
       typeof obj.addPolicyStatements === "function" &&
-      typeof obj.addEnvironment === "function"
+      typeof obj.addEnvironment === "function" &&
+      typeof obj.innerAwsFunction === "function"
     );
   }
 }

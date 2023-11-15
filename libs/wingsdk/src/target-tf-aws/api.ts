@@ -20,6 +20,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost, Node } from "../std";
+import { IAwsApi } from "../shared-aws";
 
 /**
  * The stage name for the API, used in its url.
@@ -37,7 +38,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api {
+export class Api extends cloud.Api implements IAwsApi {
   private readonly api: WingRestApi;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
@@ -289,6 +290,14 @@ export class Api extends cloud.Api {
       case: CaseConventions.UPPERCASE,
     });
   }
+
+  public innerAwsApi(): any {
+    return this.api.api;
+  }
+
+  public innerAwsStage(): any {
+    return this.api.stage;
+  }
 }
 
 /**
@@ -411,7 +420,7 @@ class WingRestApi extends Construct {
     new LambdaPermission(this, `permission-${permissionId}`, {
       statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
       action: "lambda:InvokeFunction",
-      functionName: handler._functionName,
+      functionName: handler.innerAwsFunction().functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${path}`,
     });

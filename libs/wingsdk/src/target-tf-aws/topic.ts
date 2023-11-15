@@ -10,6 +10,7 @@ import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node, Resource } from "../std";
+import { IAwsTopic } from "../shared-aws/topic";
 
 /**
  * Topic names are limited to 256 characters.
@@ -25,7 +26,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic {
+export class Topic extends cloud.Topic implements IAwsTopic {
   private readonly topic: SnsTopic;
   /**
    * Topic's publishing permissions. can be use as a dependency of another resource.
@@ -39,13 +40,6 @@ export class Topic extends cloud.Topic {
     this.topic = new SnsTopic(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
-  }
-
-  /**
-   * Topic's arn
-   */
-  public get arn(): string {
-    return this.topic.arn;
   }
 
   public onMessage(
@@ -162,5 +156,9 @@ export class Topic extends cloud.Topic {
 
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
+  }
+
+  public innerAwsTopic(): any {
+    return this.topic;
   }
 }
