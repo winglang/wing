@@ -96,7 +96,11 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 
-  public innerAwsTopic(): any {
-    return this.topic;
+  public arn(): string {
+    return this.topic.topicArn;
+  }
+
+  public name(): string {
+    return this.topic.topicName;
   }
 }

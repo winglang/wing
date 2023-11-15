@@ -5,9 +5,14 @@ import { IResource } from "../std";
  */
 export interface IAwsTopic {
   /**
-   * Get iinternal AWS Topic
+   * AWS Topic arn
    */
-  innerAwsTopic(): any;
+  arn(): string;
+
+  /**
+   * AWS Topic name
+   */
+  name(): string;
 }
 
 /**
@@ -27,6 +32,7 @@ export class Topic {
   }
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
-    return typeof obj.innerAwsTopic === "function";
+    return typeof obj.arn === "function" &&
+      typeof obj.name === "function";
   }
 }

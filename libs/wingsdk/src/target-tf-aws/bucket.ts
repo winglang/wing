@@ -110,7 +110,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.notificationTopics.push({
       id: `on-${actionType.toLowerCase()}-notification`,
       events: EVENTS[actionType],
-      topicArn: handler.innerAwsTopic().arn,
+      topicArn: handler.arn(),
     });
 
     this.notificationDependencies.push(handler.permissions);
