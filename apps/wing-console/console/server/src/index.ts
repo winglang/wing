@@ -1,4 +1,5 @@
 import type { inferRouterInputs } from "@trpc/server";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
 import type { Express } from "express";
 
@@ -170,7 +171,7 @@ export const createConsoleServer = async ({
     invalidateQuery("app.state");
     invalidateQuery("app.error");
   });
-  simulator.on("trace", (trace) => {
+  simulator.on("trace", async (trace) => {
     // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
     const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
@@ -187,7 +188,8 @@ export const createConsoleServer = async ({
       });
     }
     if (trace.data.status === "failure") {
-      consoleLogger.error(trace.data.error.message, "user", {
+      let output = await prettyPrintError(trace.data.error);
+      consoleLogger.error(output, "user", {
         sourceType: trace.sourceType,
         sourcePath: trace.sourcePath,
       });

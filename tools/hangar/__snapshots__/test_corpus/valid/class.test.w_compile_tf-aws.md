@@ -19,7 +19,7 @@ module.exports = function({ $c5 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -40,7 +40,7 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -59,7 +59,7 @@ module.exports = function({ $ta_hrlyWage }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -79,7 +79,7 @@ module.exports = function({ $B }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## inflight.A-1.js
@@ -95,7 +95,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -113,7 +113,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
-
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## inflight.Bam-1.js
@@ -127,7 +127,7 @@ module.exports = function({ $Boom }) {
   }
   return Bam;
 }
-
+//# sourceMappingURL=inflight.Bam-1.js.map
 ```
 
 ## inflight.Bar-1.js
@@ -140,7 +140,7 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=inflight.Bar-1.js.map
 ```
 
 ## inflight.Baz-1.js
@@ -154,7 +154,7 @@ module.exports = function({ $Bar }) {
   }
   return Baz;
 }
-
+//# sourceMappingURL=inflight.Baz-1.js.map
 ```
 
 ## inflight.Boom-1.js
@@ -167,7 +167,7 @@ module.exports = function({  }) {
   }
   return Boom;
 }
-
+//# sourceMappingURL=inflight.Boom-1.js.map
 ```
 
 ## inflight.C1-1.js
@@ -180,7 +180,7 @@ module.exports = function({  }) {
   }
   return C1;
 }
-
+//# sourceMappingURL=inflight.C1-1.js.map
 ```
 
 ## inflight.C2-1.js
@@ -193,7 +193,7 @@ module.exports = function({  }) {
   }
   return C2;
 }
-
+//# sourceMappingURL=inflight.C2-1.js.map
 ```
 
 ## inflight.C3-1.js
@@ -206,7 +206,7 @@ module.exports = function({  }) {
   }
   return C3;
 }
-
+//# sourceMappingURL=inflight.C3-1.js.map
 ```
 
 ## inflight.C4-1.js
@@ -219,7 +219,7 @@ module.exports = function({  }) {
   }
   return C4;
 }
-
+//# sourceMappingURL=inflight.C4-1.js.map
 ```
 
 ## inflight.C5-1.js
@@ -239,7 +239,7 @@ module.exports = function({  }) {
   }
   return C5;
 }
-
+//# sourceMappingURL=inflight.C5-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -255,7 +255,7 @@ module.exports = function({ $Bar }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## inflight.PaidStudent-1.js
@@ -269,7 +269,7 @@ module.exports = function({ $Student }) {
   }
   return PaidStudent;
 }
-
+//# sourceMappingURL=inflight.PaidStudent-1.js.map
 ```
 
 ## inflight.Person-1.js
@@ -282,7 +282,7 @@ module.exports = function({  }) {
   }
   return Person;
 }
-
+//# sourceMappingURL=inflight.Person-1.js.map
 ```
 
 ## inflight.Student-1.js
@@ -296,7 +296,7 @@ module.exports = function({ $Person }) {
   }
   return Student;
 }
-
+//# sourceMappingURL=inflight.Student-1.js.map
 ```
 
 ## inflight.TeacherAid-1.js
@@ -310,7 +310,7 @@ module.exports = function({ $PaidStudent }) {
   }
   return TeacherAid;
 }
-
+//# sourceMappingURL=inflight.TeacherAid-1.js.map
 ```
 
 ## main.tf.json
@@ -920,12 +920,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: c3.y == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c3.y,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: C4.m() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((C4.m()),1)))};
     const c5 = new C5(this, "C5");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access inflight field", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure1(this, "$Closure1"));
     const student = new PaidStudent(this, "PaidStudent", "Tom", "MySpace", 38);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:check derived class instance variables", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check derived class instance variables", new $Closure2(this, "$Closure2"));
     const ta = new TeacherAid(this, "TeacherAid", "John", "Rock'n Roll", 50);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:devived class init body happens after super", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight super constructor", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:devived class init body happens after super", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight super constructor", new $Closure4(this, "$Closure4"));
     new Foo(this, "Foo");
     new Baz(this, "Baz");
   }
@@ -933,6 +933,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "class.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

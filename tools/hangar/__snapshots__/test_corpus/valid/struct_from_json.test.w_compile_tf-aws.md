@@ -17,7 +17,7 @@ module.exports = function({ $cloud_BucketProps, $j }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-2.js.map
 ```
 
 ## inflight.$Closure2-2.js
@@ -31,7 +31,7 @@ module.exports = function({ $Student }) {
       return $obj;
     }
     async handle() {
-      const jStudent3 = ({"firstName": "struct","lastName": "greatest","enrolled": true,"schoolId": "s3-inflight","dob": ({"month": 4,"day": 1,"year": 1999}),"coursesTaken": [({"grade": "B","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 101","credits": 2})}), ({"grade": "A","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 121","credits": 4})})]});
+      const jStudent3 = ({"firstName": "struct", "lastName": "greatest", "enrolled": true, "schoolId": "s3-inflight", "dob": ({"month": 4, "day": 1, "year": 1999}), "coursesTaken": [({"grade": "B", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "A", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
       const studentInflight1 = ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(jStudent3);
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.firstName == \"struct\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.firstName,"struct")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.lastName == \"greatest\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.lastName,"greatest")))};
@@ -57,7 +57,7 @@ module.exports = function({ $Student }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-2.js.map
 ```
 
 ## inflight.$Closure3-2.js
@@ -83,7 +83,7 @@ module.exports = function({ $Student, $jStudent1 }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-2.js.map
 ```
 
 ## inflight.$Closure4-2.js
@@ -104,7 +104,7 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-2.js.map
 ```
 
 ## inflight.$Closure5-2.js
@@ -126,7 +126,7 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=inflight.$Closure5-2.js.map
 ```
 
 ## inflight.UsesStructInImportedFile-1.js
@@ -139,7 +139,7 @@ module.exports = function({  }) {
   }
   return UsesStructInImportedFile;
 }
-
+//# sourceMappingURL=inflight.UsesStructInImportedFile-1.js.map
 ```
 
 ## main.tf.json
@@ -363,7 +363,7 @@ class $Root extends $stdlib.std.Resource {
     const j = ({"public": false});
     const x = ((json, validateOptions) => (cloud_BucketProps._fromJson(json, validateOptions)))(j);
     {((cond) => {if (!cond) throw new Error("assertion failed: x.public == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.public,false)))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
     {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo).f,"bar")))};
     const jFoosible = ({});
@@ -385,11 +385,11 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    const jBar = ({"f": "bar","b": 10});
+    const jBar = ({"f": "bar", "b": 10});
     const b = ((json, validateOptions) => (Bar._fromJson(json, validateOptions)))(jBar);
     {((cond) => {if (!cond) throw new Error("assertion failed: b.f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.f,"bar")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: b.b == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.b,10)))};
-    const jStudent1 = ({"firstName": "John","lastName": "Smith","enrolled": true,"schoolId": "s1-xyz","dob": ({"month": 10,"day": 10,"year": 2005}),"enrolledCourses": []});
+    const jStudent1 = ({"firstName": "John", "lastName": "Smith", "enrolled": true, "schoolId": "s1-xyz", "dob": ({"month": 10, "day": 10, "year": 2005}), "enrolledCourses": []});
     const student1 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent1);
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.firstName == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.firstName,"John")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.lastName == \"Smith\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.lastName,"Smith")))};
@@ -398,7 +398,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.month == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.month,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.day == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.day,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.year == 2005")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.year,2005)))};
-    const jStudent2 = ({"advisor": ({"firstName": "Tom","lastName": "Baker","dob": ({"month": 1,"day": 1,"year": 1983}),"employeeID": "emp123"}),"firstName": "Sally","lastName": "Reynolds","enrolled": false,"schoolId": "s2-xyz","dob": ({"month": 5,"day": 31,"year": 1987}),"enrolledCourses": [({"name": "COMP 101","credits": 2}), ({"name": "COMP 121","credits": 4})],"coursesTaken": [({"grade": "F","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 101","credits": 2})}), ({"grade": "D","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 121","credits": 4})})]});
+    const jStudent2 = ({"advisor": ({"firstName": "Tom", "lastName": "Baker", "dob": ({"month": 1, "day": 1, "year": 1983}), "employeeID": "emp123"}), "firstName": "Sally", "lastName": "Reynolds", "enrolled": false, "schoolId": "s2-xyz", "dob": ({"month": 5, "day": 31, "year": 1987}), "enrolledCourses": [({"name": "COMP 101", "credits": 2}), ({"name": "COMP 121", "credits": 4})], "coursesTaken": [({"grade": "F", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "D", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
     const student2 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent2);
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.firstName,"Sally")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.lastName,"Reynolds")))};
@@ -423,7 +423,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    const jStudent3 = ({"enrolled": false,"schoolId": "w/e","firstName": student2.firstName,"lastName": student2.lastName,"dob": ({"month": 1,"day": 1,"year": 1959}),"additionalData": ({"notes": "wow such notes","legacy": false,"emergencyContactsNumbers": ["123-345-9928"]})});
+    const jStudent3 = ({"enrolled": false, "schoolId": "w/e", "firstName": student2.firstName, "lastName": student2.lastName, "dob": ({"month": 1, "day": 1, "year": 1959}), "additionalData": ({"notes": "wow such notes", "legacy": false, "emergencyContactsNumbers": ["123-345-9928"]})});
     const student3 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent3);
     {
       const $if_let_value = student3.additionalData;
@@ -436,7 +436,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    const invalidStudent = ({"firstName": "I dont have","lastName": "Any other info"});
+    const invalidStudent = ({"firstName": "I dont have", "lastName": "Any other info"});
     {
       const $if_let_value = ((json) => (Student._tryFromJson(json)))(invalidStudent);
       if ($if_let_value != undefined) {
@@ -463,32 +463,32 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:lifting a student", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = ((json, validateOptions) => (externalStructs_MyOtherStruct._fromJson(json, validateOptions)))(jj1);
     {((cond) => {if (!cond) throw new Error("assertion failed: externalBar.data.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(externalBar.data.val,10)))};
-    const jMyStruct = ({"m1": ({"val": 10}),"m2": ({"val": "10"})});
+    const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"})});
     const myStruct = ((json, validateOptions) => (MyStruct._fromJson(json, validateOptions)))(jMyStruct);
     {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m1.val == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m1.val,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: myStruct.m2.val == \"10\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myStruct.m2.val,"10")))};
     const schema = (MyStruct);
     (schema.validate(jMyStruct));
-    const expectedSchema = ({"id": "/MyStruct","type": "object","properties": ({"m1": ({"type": "object","properties": ({"val": ({"type": "number"})}),"required": ["val"]}),"m2": ({"type": "object","properties": ({"val": ({"type": "string"})}),"required": ["val"]})}),"required": ["m1", "m2"]});
+    const expectedSchema = ({"id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
     {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([expectedSchema]))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));
     (std.Number.fromJson("cool", { unsafe: true }));
     ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
     new otherExternalStructs.UsesStructInImportedFile(this, "otherExternalStructs.UsesStructInImportedFile");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "struct_from_json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
 ## preflight.structs-1.js
@@ -506,7 +506,7 @@ module.exports = function({ $stdlib }) {
   const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
   return {  };
 };
-
+//# sourceMappingURL=preflight.structs-1.js.map
 ```
 
 ## preflight.structs2-2.js
@@ -550,6 +550,6 @@ module.exports = function({ $stdlib }) {
   }
   return { UsesStructInImportedFile };
 };
-
+//# sourceMappingURL=preflight.structs2-2.js.map
 ```
 

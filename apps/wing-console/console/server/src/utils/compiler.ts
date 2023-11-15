@@ -46,9 +46,12 @@ export const createCompiler = (wingfile: string): Compiler => {
 
       await events.emit(
         "error",
-        new Error(`Failed to compile.\n\n${await formatWingError(error)}`, {
-          cause: error,
-        }),
+        new Error(
+          `Failed to compile.\n\n${await formatWingError(error, wingfile)}`,
+          {
+            cause: error,
+          },
+        ),
       );
     } finally {
       isCompiling = false;

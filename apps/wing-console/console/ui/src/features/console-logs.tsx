@@ -26,21 +26,28 @@ interface LogEntryProps {
   showIcons?: boolean;
 }
 
+function logText(log: LogEntry, expanded: boolean) {
+  return expanded ? log.message : log.message?.split("\n")?.[0];
+}
+
 const LogEntryRow = memo(
   ({ log, showIcons = true, onRowClick, onResourceClick }: LogEntryProps) => {
     const { theme } = useTheme();
 
     const [expanded, setExpanded] = useState(false);
-    const expandableRef = useRef<HTMLElement>(null);
+    const expandableRef = useRef<HTMLPreElement>(null);
     const [overflows, setOverflows] = useState(false);
 
     useEffect(() => {
       const computeOverflows = throttle(() => {
-        const element = expandableRef.current?.parentNode as HTMLElement;
+        const element = expandableRef.current?.parentNode as HTMLPreElement;
         if (!element) {
           return;
         }
-        setOverflows(element.offsetWidth < element.scrollWidth);
+        setOverflows(
+          element.offsetWidth < element.scrollWidth ||
+            log.message?.indexOf("\n") !== -1,
+        );
       }, 500);
 
       computeOverflows();
@@ -49,7 +56,7 @@ const LogEntryRow = memo(
       return () => {
         window.removeEventListener("resize", computeOverflows);
       };
-    }, []);
+    }, [log.message]);
     const [canBeExpanded, setCanBeExpanded] = useState(false);
     useEffect(() => {
       setCanBeExpanded(overflows || expanded);
@@ -129,8 +136,9 @@ const LogEntryRow = memo(
                 />
               </button>
             )}
-            <span
+            <pre
               className={classNames(
+                "inline",
                 log.ctx?.messageType === "info" && theme.text2,
                 log.ctx?.messageType === "title" && theme.text1,
                 log.ctx?.messageType === "success" &&
@@ -152,9 +160,9 @@ const LogEntryRow = memo(
                   },
                 }}
               >
-                {log.message}
+                {logText(log, expanded)}
               </Linkify>
-            </span>
+            </pre>
           </div>
 
           {onResourceClick && (
