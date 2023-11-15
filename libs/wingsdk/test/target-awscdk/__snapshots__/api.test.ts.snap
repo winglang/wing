@@ -15,87 +15,7 @@ exports[`api configured for cors 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -249,15 +169,15 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -265,7 +185,7 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -298,17 +218,17 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90061478595aa61bac0c7d15c6c0069f032f": {
+    "ApiApiApideploymentAD95F77Abe10265012f9e469b001cff9bdfe2bcb": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGETc2e3ffa85BF93889": {
+    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -333,7 +253,7 @@ exports[`api configured for cors 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/",
             ],
@@ -342,20 +262,101 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90061478595aa61bac0c7d15c6c0069f032f",
+          "Ref": "ApiApiApideploymentAD95F77Abe10265012f9e469b001cff9bdfe2bcb",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -482,7 +483,7 @@ exports[`api url can be used as environment variable 1`] = `
     },
   },
   "Resources": {
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -539,15 +540,15 @@ exports[`api url can be used as environment variable 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -555,7 +556,7 @@ exports[`api url can be used as environment variable 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -588,26 +589,26 @@ exports[`api url can be used as environment variable 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862": {
+    "ApiApiApideploymentAD95F77Ae4f487f413aff6bf8f60e1a71abfdaee": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862",
+          "Ref": "ApiApiApideploymentAD95F77Ae4f487f413aff6bf8f60e1a71abfdaee",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
@@ -635,7 +636,7 @@ exports[`api url can be used as environment variable 1`] = `
                 [
                   "https://",
                   {
-                    "Ref": "Apiapi93AB445C",
+                    "Ref": "ApiApiApiapi76C34A06",
                   },
                   ".execute-api.",
                   {
@@ -647,7 +648,7 @@ exports[`api url can be used as environment variable 1`] = `
                   },
                   "/",
                   {
-                    "Ref": "Apiapistage69F1AB31",
+                    "Ref": "ApiApiApistageEFA10127",
                   },
                   "/",
                 ],
@@ -656,6 +657,7 @@ exports[`api url can be used as environment variable 1`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FnServiceRoleB9001A96",
@@ -846,87 +848,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1042,15 +964,15 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -1058,7 +980,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1091,17 +1013,17 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006619920637029c1dc11686e0fdf7abcfe": {
+    "ApiApiApideploymentAD95F77Ad604423fead1ca701242738f03ce2549": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGETe6c024e850B59745": {
+    "ApiApiApipermissionGETe6c024e8D8DF8C95": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1126,7 +1048,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/{name}/{age}",
             ],
@@ -1135,20 +1057,101 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006619920637029c1dc11686e0fdf7abcfe",
+          "Ref": "ApiApiApideploymentAD95F77Ad604423fead1ca701242738f03ce2549",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -1275,87 +1278,7 @@ exports[`api with 'name' parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1463,15 +1386,15 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -1479,7 +1402,7 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1512,17 +1435,17 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90062aebf8bb5e9d71287c6d08fe3894dd86": {
+    "ApiApiApideploymentAD95F77A38a20ea6d691f541c2d4cd7d50c51e50": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGETda43a2f29F0450A6": {
+    "ApiApiApipermissionGETda43a2f24D2CA9DC": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1547,7 +1470,7 @@ exports[`api with 'name' parameter 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/{name}",
             ],
@@ -1556,20 +1479,101 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90062aebf8bb5e9d71287c6d08fe3894dd86",
+          "Ref": "ApiApiApideploymentAD95F77A38a20ea6d691f541c2d4cd7d50c51e50",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -1696,87 +1700,7 @@ exports[`api with CONNECT route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1875,15 +1799,15 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -1891,7 +1815,7 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1924,17 +1848,17 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90061bb0f3120d3e7f1cd83671830f7785d5": {
+    "ApiApiApideploymentAD95F77Ac2d8d7494b83aed61629c73d178d55f8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionCONNECTc2e3ffa848E50D94": {
+    "ApiApiApipermissionCONNECTc2e3ffa8986D072A": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1959,7 +1883,7 @@ exports[`api with CONNECT route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/CONNECT/",
             ],
@@ -1968,20 +1892,101 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90061bb0f3120d3e7f1cd83671830f7785d5",
+          "Ref": "ApiApiApideploymentAD95F77Ac2d8d7494b83aed61629c73d178d55f8",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -2108,87 +2113,7 @@ exports[`api with DELETE route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -2287,15 +2212,15 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -2303,7 +2228,7 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -2336,17 +2261,17 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900691ead72707f1c2c50cd721fe9ec00676": {
+    "ApiApiApideploymentAD95F77Aa2cee560bc8d990674706493710a42f0": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionDELETEc2e3ffa888232744": {
+    "ApiApiApipermissionDELETEc2e3ffa80DE0710F": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2371,7 +2296,7 @@ exports[`api with DELETE route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/DELETE/",
             ],
@@ -2380,20 +2305,101 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900691ead72707f1c2c50cd721fe9ec00676",
+          "Ref": "ApiApiApideploymentAD95F77Aa2cee560bc8d990674706493710a42f0",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -2520,87 +2526,7 @@ exports[`api with GET route at root 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -2699,15 +2625,15 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -2715,7 +2641,7 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -2748,17 +2674,17 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006689d2fd667efcb286230c36c8c936157": {
+    "ApiApiApideploymentAD95F77A0d0b20fa7690edc8f773a41f35b547ba": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGETc2e3ffa85BF93889": {
+    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2783,7 +2709,7 @@ exports[`api with GET route at root 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/",
             ],
@@ -2792,20 +2718,101 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006689d2fd667efcb286230c36c8c936157",
+          "Ref": "ApiApiApideploymentAD95F77A0d0b20fa7690edc8f773a41f35b547ba",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -2932,167 +2939,7 @@ exports[`api with GET routes with common prefix 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequest6e1b42522C08E04B": {
-      "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -3233,15 +3080,15 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -3249,7 +3096,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -3282,17 +3129,17 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006d329f69d4c6c2b34f134f24ea2c382b4": {
+    "ApiApiApideploymentAD95F77A59de9c6dcc217b8d2b4b484193f1a4af": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET01d4e10b58D09124": {
+    "ApiApiApipermissionGET01d4e10b81FB26D2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3317,7 +3164,7 @@ exports[`api with GET routes with common prefix 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/bat",
             ],
@@ -3326,7 +3173,7 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionGET4984af0e7ED7CAA2": {
+    "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3351,7 +3198,7 @@ exports[`api with GET routes with common prefix 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/foo",
             ],
@@ -3360,20 +3207,182 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006d329f69d4c6c2b34f134f24ea2c382b4",
+          "Ref": "ApiApiApideploymentAD95F77A59de9c6dcc217b8d2b4b484193f1a4af",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequest6e1b42522C08E04B": {
+      "DependsOn": [
+        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -3500,167 +3509,7 @@ exports[`api with GET routes with different prefix 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequest6e1b42522C08E04B": {
-      "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -3801,15 +3650,15 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -3817,7 +3666,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -3850,17 +3699,17 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006bfc6c7abd0edb8dbc63b88aa083e476f": {
+    "ApiApiApideploymentAD95F77A376647f53e567309b656c871c18834c6": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET14d002e84040D816": {
+    "ApiApiApipermissionGET14d002e85A20F09F": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3885,7 +3734,7 @@ exports[`api with GET routes with different prefix 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/foo/bar",
             ],
@@ -3894,7 +3743,7 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionGET4984af0e7ED7CAA2": {
+    "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3919,7 +3768,7 @@ exports[`api with GET routes with different prefix 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/foo",
             ],
@@ -3928,20 +3777,182 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006bfc6c7abd0edb8dbc63b88aa083e476f",
+          "Ref": "ApiApiApideploymentAD95F77A376647f53e567309b656c871c18834c6",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequest6e1b42522C08E04B": {
+      "DependsOn": [
+        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -4068,87 +4079,7 @@ exports[`api with HEAD route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -4247,15 +4178,15 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -4263,7 +4194,7 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -4296,17 +4227,17 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006e43ddb8f6952d3cb016c1ca7ad895f79": {
+    "ApiApiApideploymentAD95F77A472038678666bb44e02a31ce0c5f8a72": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionHEADc2e3ffa84EAE7826": {
+    "ApiApiApipermissionHEADc2e3ffa8410D3C20": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -4331,7 +4262,7 @@ exports[`api with HEAD route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/HEAD/",
             ],
@@ -4340,20 +4271,101 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006e43ddb8f6952d3cb016c1ca7ad895f79",
+          "Ref": "ApiApiApideploymentAD95F77A472038678666bb44e02a31ce0c5f8a72",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -4480,87 +4492,7 @@ exports[`api with OPTIONS route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -4659,15 +4591,15 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -4675,7 +4607,7 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -4708,17 +4640,17 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006288dddc308a11722a4d4440f21118164": {
+    "ApiApiApideploymentAD95F77Abbfb5affc0f3d104d39bdd88b19c68ed": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionOPTIONSc2e3ffa8A347CDD2": {
+    "ApiApiApipermissionOPTIONSc2e3ffa8501F80B0": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -4743,7 +4675,7 @@ exports[`api with OPTIONS route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/OPTIONS/",
             ],
@@ -4752,20 +4684,101 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006288dddc308a11722a4d4440f21118164",
+          "Ref": "ApiApiApideploymentAD95F77Abbfb5affc0f3d104d39bdd88b19c68ed",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -4892,87 +4905,7 @@ exports[`api with PATCH route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5071,15 +5004,15 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -5087,7 +5020,7 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -5120,17 +5053,17 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90068c2c089f9c518421b622b2644f2d94ee": {
+    "ApiApiApideploymentAD95F77A3f5ae94cc1b358a3bdcb529a4a9f1615": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionPATCHc2e3ffa81B1A24AB": {
+    "ApiApiApipermissionPATCHc2e3ffa8B10E55C5": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -5155,7 +5088,7 @@ exports[`api with PATCH route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/PATCH/",
             ],
@@ -5164,20 +5097,101 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90068c2c089f9c518421b622b2644f2d94ee",
+          "Ref": "ApiApiApideploymentAD95F77A3f5ae94cc1b358a3bdcb529a4a9f1615",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -5304,87 +5318,7 @@ exports[`api with POST route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5483,15 +5417,15 @@ exports[`api with POST route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -5499,7 +5433,7 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -5532,17 +5466,17 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90067c73b61a7f9b9f94aa6d13d63632fd54": {
+    "ApiApiApideploymentAD95F77A7e8e4600c2d47aa9aa79bc7b4d240d3a": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionPOSTc2e3ffa84BF1BB79": {
+    "ApiApiApipermissionPOSTc2e3ffa801CBC553": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -5567,7 +5501,7 @@ exports[`api with POST route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/POST/",
             ],
@@ -5576,20 +5510,101 @@ exports[`api with POST route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90067c73b61a7f9b9f94aa6d13d63632fd54",
+          "Ref": "ApiApiApideploymentAD95F77A7e8e4600c2d47aa9aa79bc7b4d240d3a",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -5716,87 +5731,7 @@ exports[`api with PUT route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5895,15 +5830,15 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -5911,7 +5846,7 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -5944,17 +5879,17 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90061d5378c99bce30b9423ad223442b0574": {
+    "ApiApiApideploymentAD95F77Aa769c5967cd6499659da1b0ab60d5d60": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionPUTc2e3ffa832C407B6": {
+    "ApiApiApipermissionPUTc2e3ffa86986289D": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -5979,7 +5914,7 @@ exports[`api with PUT route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/PUT/",
             ],
@@ -5988,20 +5923,101 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90061d5378c99bce30b9423ad223442b0574",
+          "Ref": "ApiApiApideploymentAD95F77Aa769c5967cd6499659da1b0ab60d5d60",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -6128,87 +6144,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -6349,15 +6285,15 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -6365,7 +6301,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -6398,17 +6334,17 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA9006917d81c2589fe9fdb3cf546dfb7ff24d": {
+    "ApiApiApideploymentAD95F77A4669673aa35a0add9d8182172f818231": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET01d4e10b58D09124": {
+    "ApiApiApipermissionGET01d4e10b81FB26D2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -6433,7 +6369,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/bat",
             ],
@@ -6442,7 +6378,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionGET4984af0e7ED7CAA2": {
+    "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -6467,7 +6403,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/foo",
             ],
@@ -6476,20 +6412,101 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA9006917d81c2589fe9fdb3cf546dfb7ff24d",
+          "Ref": "ApiApiApideploymentAD95F77A4669673aa35a0add9d8182172f818231",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -6616,167 +6633,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequest6e1b42522C08E04B": {
-      "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -6917,15 +6774,15 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -6933,7 +6790,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -6966,17 +6823,17 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90064f2956c4dece79cefd0b0727a095d9e2": {
+    "ApiApiApideploymentAD95F77Ab962ba42c934da41c706f5a9a6e37206": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET4984af0e7ED7CAA2": {
+    "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7001,7 +6858,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/foo",
             ],
@@ -7010,7 +6867,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionPOST01d4e10b1C72C9D7": {
+    "ApiApiApipermissionPOST01d4e10bB17D19F6": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7035,7 +6892,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/POST/hello/bat",
             ],
@@ -7044,20 +6901,182 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90064f2956c4dece79cefd0b0727a095d9e2",
+          "Ref": "ApiApiApideploymentAD95F77Ab962ba42c934da41c706f5a9a6e37206",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequest6e1b42522C08E04B": {
+      "DependsOn": [
+        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -7184,87 +7203,7 @@ exports[`api with multiple methods and one lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -7405,15 +7344,15 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -7421,7 +7360,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -7454,17 +7393,17 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90068d933db4198564818e10d40960599905": {
+    "ApiApiApideploymentAD95F77A69a7e1bbe2ef554d2e9fdd471e5e2208": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET4984af0e7ED7CAA2": {
+    "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7489,7 +7428,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/foo",
             ],
@@ -7498,7 +7437,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionPOST01d4e10b1C72C9D7": {
+    "ApiApiApipermissionPOST01d4e10bB17D19F6": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7523,7 +7462,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/POST/hello/bat",
             ],
@@ -7532,20 +7471,101 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90068d933db4198564818e10d40960599905",
+          "Ref": "ApiApiApideploymentAD95F77A69a7e1bbe2ef554d2e9fdd471e5e2208",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -7672,87 +7692,7 @@ exports[`api with multiple methods on same route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -7891,15 +7831,15 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -7907,7 +7847,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -7940,17 +7880,17 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA900663fc9e82490a3d88a8e899d29ea52aca": {
+    "ApiApiApideploymentAD95F77A4486442159facc2962824026cb4d4c27": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGETc2e3ffa85BF93889": {
+    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7975,7 +7915,7 @@ exports[`api with multiple methods on same route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/",
             ],
@@ -7984,7 +7924,7 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiapipermissionPUTc2e3ffa832C407B6": {
+    "ApiApiApipermissionPUTc2e3ffa86986289D": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -8009,7 +7949,7 @@ exports[`api with multiple methods on same route 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/PUT/",
             ],
@@ -8018,20 +7958,101 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA900663fc9e82490a3d88a8e899d29ea52aca",
+          "Ref": "ApiApiApideploymentAD95F77A4486442159facc2962824026cb4d4c27",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
@@ -8158,87 +8179,7 @@ exports[`api with path parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "Apiapi93AB445C": {
+    "ApiApiApiapi76C34A06": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -8346,15 +8287,15 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiapiAccount3EE8A867": {
+    "ApiApiApiapiAccount34D30CBB": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "Apiapi93AB445C",
+        "ApiApiApiapi76C34A06",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiapiCloudWatchRole6C699FCE",
+            "ApiApiApiapiCloudWatchRole5F9E897D",
             "Arn",
           ],
         },
@@ -8362,7 +8303,7 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapiCloudWatchRole6C699FCE": {
+    "ApiApiApiapiCloudWatchRole5F9E897D": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -8395,17 +8336,17 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "Apiapideployment63AA90064f9ea8cae3e0949e5921489d0a727641": {
+    "ApiApiApideploymentAD95F77Afddc54fcd988fc74ce7401b07292dd21": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiapipermissionGET01369a0aAA9D8BFC": {
+    "ApiApiApipermissionGET01369a0aFFE307B5": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -8430,7 +8371,7 @@ exports[`api with path parameter 1`] = `
               },
               ":",
               {
-                "Ref": "Apiapi93AB445C",
+                "Ref": "ApiApiApiapi76C34A06",
               },
               "/prod/GET/hello/{world}",
             ],
@@ -8439,20 +8380,101 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "Apiapistage69F1AB31": {
+    "ApiApiApistageEFA10127": {
       "DependsOn": [
-        "ApiapiAccount3EE8A867",
+        "ApiApiApiapiAccount34D30CBB",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "Apiapideployment63AA90064f9ea8cae3e0949e5921489d0a727641",
+          "Ref": "ApiApiApideploymentAD95F77Afddc54fcd988fc74ce7401b07292dd21",
         },
         "RestApiId": {
-          "Ref": "Apiapi93AB445C",
+          "Ref": "ApiApiApiapi76C34A06",
         },
         "StageName": "prod",
       },
       "Type": "AWS::ApiGateway::Stage",
+    },
+    "ApiApiOnRequestc185c7e32908D5D4": {
+      "DependsOn": [
+        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "<S3Key>",
+        },
+        "Handler": "index.handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
+    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
     },
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
       "DependsOn": [
