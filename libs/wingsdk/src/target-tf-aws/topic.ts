@@ -162,7 +162,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return this.topic.arn;
   }
 
-  public name(): string {
+  public topicName(): string {
     return this.topic.name;
   }
 }

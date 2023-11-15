@@ -12,7 +12,7 @@ export interface IAwsTopic {
   /**
    * AWS Topic name
    */
-  name(): string;
+  topicName(): string;
 }
 
 /**
@@ -33,6 +33,6 @@ export class Topic {
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
     return typeof obj.arn === "function" &&
-      typeof obj.name === "function";
+      typeof obj.topicName === "function";
   }
 }

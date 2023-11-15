@@ -9,7 +9,7 @@ let topic = new cloud.Topic() as "aws-wing-topic";
 let getTopicInfo = (t: cloud.Topic): Map<str>? => {
   if let topic = aws.Topic.from(t) {
     return {
-      name: topic.name(),
+      name: topic.topicName(),
       arn: topic.arn(),
     };
   }
