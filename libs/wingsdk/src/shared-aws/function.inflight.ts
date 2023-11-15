@@ -60,7 +60,9 @@ export class FunctionClient implements IFunctionClient {
       throw new Error(
         `Invoke failed with message: "${
           response.FunctionError
-        }". Full error: "${toUtf8(response.Payload!)}"`
+        }". Full error: "${toUtf8(response.Payload!)}". (logs: ${
+          this.cloudwatchLogsPath
+        })`
       );
     }
     if (!response.Payload) {
@@ -73,6 +75,14 @@ export class FunctionClient implements IFunctionClient {
       );
     }
     return ["", traces];
+  }
+
+  private get cloudwatchLogsPath() {
+    const functionName = encodeURIComponent(
+      this.functionArn.split(":").slice(-1)[0]
+    );
+    const region = this.functionArn.split(":")[3];
+    return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/%2Faws%2Flambda%2F${functionName}`;
   }
 }
 
