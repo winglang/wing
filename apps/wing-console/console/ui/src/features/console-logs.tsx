@@ -166,7 +166,7 @@ const LogEntryRow = memo(
           </div>
 
           {onResourceClick && (
-            <div className="justify-end ml-1 flex space-x-1 items-center">
+            <div className="justify-end ml-1 flex space-x-1">
               {log.ctx?.sourceType && (
                 <ResourceIcon
                   resourceType={log.ctx.sourceType}
