@@ -5,14 +5,34 @@ import { IResource } from "../std";
  */
 export interface IAwsApi {
   /**
-   * Get internal AWS ApiGateway
+   * RestApi id
    */
-  innerAwsApi(): any;
+  restApiId(): string;
 
   /**
-   * Get internal AWS ApiGatewayStage
+   * RestApi arn
    */
-  innerAwsStage(): any;
+  restApiArn(): string;
+
+  /**
+   * RestApi arn
+   */
+  restApiExecutionArn(): string;
+
+  /**
+   * RestApi stage name
+   */
+  stageName(): string;
+
+  /**
+   * Invoke URL
+   */
+  invokeUrl(): string;
+
+  /**
+   * restApi deployment id
+   */
+  deploymentId(): string;
 }
 
 /**
@@ -33,8 +53,12 @@ export class Api {
 
   private static isAwsApi(obj: any): obj is IAwsApi {
     return (
-      typeof obj.innerAwsApi === "function" &&
-      typeof obj.innerAwsStage === "function"
+      typeof obj.restApiId === "function" &&
+      typeof obj.restApiArn === "function" &&
+      typeof obj.restApiExecutionArn === "function" &&
+      typeof obj.stageName === "function" &&
+      typeof obj.invokeUrl === "function" &&
+      typeof obj.deploymentId === "function"
     );
   }
 }

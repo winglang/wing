@@ -291,12 +291,28 @@ export class Api extends cloud.Api implements IAwsApi {
     });
   }
 
-  public innerAwsApi(): any {
-    return this.api.api;
+  public restApiId(): string {
+    return this.api.api.id;
   }
 
-  public innerAwsStage(): any {
-    return this.api.stage;
+  public restApiArn(): string {
+    return this.api.api.arn;
+  }
+
+  public restApiExecutionArn(): string {
+    return this.api.api.executionArn;
+  }
+
+  public stageName(): string {
+    return this.api.stage.stageName;
+  }
+
+  public invokeUrl(): string {
+    return this.api.stage.invokeUrl;
+  }
+
+  public deploymentId(): string {
+    return this.api.deployment.id;
   }
 }
 
@@ -307,7 +323,7 @@ class WingRestApi extends Construct {
   public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
-  private readonly deployment: ApiGatewayDeployment;
+  public readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
 
   constructor(
