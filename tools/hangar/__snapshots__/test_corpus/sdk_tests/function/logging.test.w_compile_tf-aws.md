@@ -129,6 +129,7 @@
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "f1-c8545025",
             "WING_TARGET": "tf-aws"
           }
@@ -160,6 +161,7 @@
         "environment": {
           "variables": {
             "FUNCTION_NAME_09b8c606": "${aws_lambda_function.f1.arn}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "f2-c812cd39",
             "WING_TARGET": "tf-aws"
           }

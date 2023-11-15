@@ -1,7 +1,7 @@
 import fs from "fs";
-import { mkdtemp } from "fs/promises";
+import fsPromises from "fs/promises";
 import { tmpdir } from "os";
-import { join, resolve } from "path";
+import { join } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
@@ -22,18 +22,18 @@ describe("printing test reports", () => {
     process.chdir(cwd);
   });
 
-  test("resource traces are not shown if debug mode is disabled", () => {
-    const testReport = renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
+  test("resource traces are not shown if debug mode is disabled", async () => {
+    const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     expect(testReport).toMatchSnapshot();
     expect(testReport).not.toContain("Push (message=cool)");
   });
 
-  test("resource traces are shown if debug mode is enabled", () => {
+  test("resource traces are shown if debug mode is enabled", async () => {
     const oldDebug = process.env.DEBUG;
     process.env.DEBUG = "1";
 
-    const testReport = renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
+    const testReport = await renderTestReport("hello.w", EXAMPLE_TEST_RESULTS);
 
     if (oldDebug) {
       process.env.DEBUG = oldDebug;
@@ -61,7 +61,7 @@ describe("wing test (no options)", () => {
   });
 
   test("default entrypoint behaviour", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
     fs.writeFileSync("foo.test.w", "bring cloud;");
@@ -83,7 +83,7 @@ describe("output-file option", () => {
   beforeEach(() => {
     chalk.level = 0;
     writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fs, "writeFile").mockImplementation(() => null);
+    writeFileSpy = vi.spyOn(fsPromises, "writeFile");
   });
 
   afterEach(() => {
@@ -94,10 +94,11 @@ describe("output-file option", () => {
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
     fs.writeFileSync("test.test.w", EXAMPLE_TEST);
+    console.log(outDir);
 
     const outputFile = "out.json";
 
@@ -113,14 +114,14 @@ describe("output-file option", () => {
     expect(testName).toBe("test.test.w");
     expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-    expect(writeFileSpy).toBeCalledTimes(1);
-    const [filePath, output] = writeFileSpy.mock.calls[0];
-    expect(filePath).toBe(resolve("out.json"));
+    expect(writeFileSpy).toBeCalledTimes(2);
+    const [filePath, output] = writeFileSpy.mock.calls[1];
+    expect(filePath).toBe("out.json");
     expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
   });
 
   test("wing test without output file calls writeResultsToFile", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-compile-test"));
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 
     process.chdir(outDir);
     fs.writeFileSync("test.test.w", EXAMPLE_TEST);
@@ -188,7 +189,7 @@ describe("retry option", () => {
   });
 
   test("wing test (no retry)", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-retry-test"));
 
     process.chdir(outDir);
     // Create a test that will consistently fail
@@ -212,7 +213,7 @@ describe("retry option", () => {
   });
 
   test("wing test --retry [retries]", async () => {
-    const outDir = await mkdtemp(join(tmpdir(), "-wing-retry-test"));
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-retry-test"));
 
     process.chdir(outDir);
     // Create a test that will consistently fail

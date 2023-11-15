@@ -75,7 +75,11 @@ export function makeSimulatorClient(url: string, handle: string) {
       let parsed: SimulatorServerResponse = deserializeValue(await resp.text());
 
       if (parsed.error) {
-        throw new Error(parsed.error);
+        let err = new Error();
+        err.message = parsed.error?.message;
+        err.stack = parsed.error?.stack;
+        err.name = parsed.error?.name;
+        throw err;
       }
       return parsed.result;
     };

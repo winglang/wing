@@ -1,6 +1,7 @@
 // from https://github.com/microsoft/vscode/blob/main/src/vs/platform/extensions/common/extensions.ts
 
 export interface VSCodeExtensionContributions {
+  readonly breakpoints?: { language: string }[];
   readonly commands?: VSCodeCommand[];
   readonly configuration?: VSCodeConfiguration | VSCodeConfiguration[];
   readonly debuggers?: VSCodeDebugger[];

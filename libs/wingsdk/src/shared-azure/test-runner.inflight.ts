@@ -33,8 +33,8 @@ export class TestRunnerClient implements ITestRunnerClient {
       const [_, functionTraces] = await client.invokeWithLogs("");
       traces.push(...functionTraces);
       pass = true;
-    } catch (e) {
-      error = (e as any).stack;
+    } catch (e: any) {
+      error = e.stack;
     }
     return {
       path,

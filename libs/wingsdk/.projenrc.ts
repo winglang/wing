@@ -98,6 +98,8 @@ const project = new cdk.JsiiProject({
     "jsonschema",
     // fs module dependency
     "yaml",
+    // enhanced diagnostics
+    "stacktracey",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -117,6 +119,7 @@ const project = new cdk.JsiiProject({
     "@types/uuid",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    "chalk",
     ...JSII_DEPS,
   ],
   jest: false,

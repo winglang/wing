@@ -1250,6 +1250,9 @@ importers:
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
+      stacktracey:
+        specifier: ^2.1.8
+        version: 2.1.8
       undici:
         specifier: ^5.25.4
         version: 5.25.4
@@ -1302,6 +1305,9 @@ importers:
       cdktf-cli:
         specifier: 0.17.0
         version: 0.17.0(ink@3.2.0)(react@17.0.2)
+      chalk:
+        specifier: ^4.1.2
+        version: 4.1.2
       eslint:
         specifier: ^8
         version: 8.51.0
@@ -14019,7 +14025,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231112
+      typescript: 5.4.0-dev.20231114
     dev: true
 
   /dset@3.1.2:
@@ -23494,8 +23500,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231112:
-    resolution: {integrity: sha512-K7RH4eFyxJG7LkKWU0m7WdQrNRNz8yVkt2zW2tT2zfiUzIN2jbh2JLuztSqCsfqMNU5KduO7NvKaKK4QIvGY/Q==}
+  /typescript@5.4.0-dev.20231114:
+    resolution: {integrity: sha512-z7rH8Vy4KWJyzNUaFt1HMzwYNRUmy2HMN98eufjvqbhmS3WPoQF89/UgonRmYf1vAP/69z0PytuV9hBMHNkaDg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
