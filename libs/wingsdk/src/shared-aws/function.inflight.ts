@@ -26,7 +26,7 @@ export class FunctionClient implements IFunctionClient {
     });
     const response = await this.lambdaClient.send(command);
 
-    const value = parseCommandOutput(response);
+    const value = parseCommandOutput(response, this.functionArn);
 
     if (!value) {
       return "";
@@ -55,7 +55,7 @@ export class FunctionClient implements IFunctionClient {
     const logs = Buffer.from(response.LogResult ?? "", "base64").toString();
     const traces = parseLogs(logs, this.constructPath);
 
-    const value = parseCommandOutput(response);
+    const value = parseCommandOutput(response, this.functionArn);
 
     if (!value) {
       return ["", traces];
@@ -69,7 +69,10 @@ export class FunctionClient implements IFunctionClient {
   }
 }
 
-function parseCommandOutput(payload: InvokeCommandOutput): any | undefined {
+function parseCommandOutput(
+  payload: InvokeCommandOutput,
+  functionArn: string
+): any | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
     let errorData;
@@ -79,14 +82,18 @@ function parseCommandOutput(payload: InvokeCommandOutput): any | undefined {
 
     if (errorData && "errorMessage" in errorData) {
       const newError = new Error(
-        `Invoke failed with message: "${errorData.errorMessage}"`
+        `Invoke failed with message: "${
+          errorData.errorMessage
+        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
       );
       newError.name = errorData.errorType;
       newError.stack = errorData.trace?.join("\n");
       throw newError;
     }
     throw new Error(
-      `Invoke failed with message: "${payload.FunctionError}". Full error: "${errorText}"`
+      `Invoke failed with message: "${
+        payload.FunctionError
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
   } else {
     if (!payload.Payload) {
@@ -95,6 +102,12 @@ function parseCommandOutput(payload: InvokeCommandOutput): any | undefined {
       return JSON.parse(toUtf8(payload.Payload));
     }
   }
+}
+
+function cloudwatchLogsPath(functionArn: string): string {
+  const functionName = encodeURIComponent(functionArn.split(":").slice(-1)[0]);
+  const region = functionArn.split(":")[3];
+  return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/%2Faws%2Flambda%2F${functionName}`;
 }
 
 export function parseLogs(logs: string, sourcePath: string) {
