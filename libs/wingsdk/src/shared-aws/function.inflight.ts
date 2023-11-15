@@ -91,7 +91,7 @@ function parseCommandOutput(
     throw new Error(
       `Invoke failed with message: "${
         payload.FunctionError
-      }". Full error: "${errorText}" (logs: ${cloudwatchLogsPath(functionArn)})`
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
   } else {
     if (!payload.Payload) {
