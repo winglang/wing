@@ -82,7 +82,9 @@ function parseCommandOutput(
 
     if (errorData && "errorMessage" in errorData) {
       const newError = new Error(
-        `Invoke failed with message: "${errorData.errorMessage}"`
+        `Invoke failed with message: "${
+          errorData.errorMessage
+        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
       );
       newError.name = errorData.errorType;
       newError.stack = errorData.trace?.join("\n");
