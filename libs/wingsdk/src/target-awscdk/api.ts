@@ -26,7 +26,7 @@ export class Api extends cloud.Api {
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-    this.api = new WingRestApi(this, "api", {
+    this.api = new WingRestApi(this, `${id}Api`, {
       apiSpec: this._getApiSpec(),
       cors: this.corsOptions,
     });
