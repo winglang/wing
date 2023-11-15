@@ -19,7 +19,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure10-1.js
@@ -39,7 +39,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   }
   return $Closure10;
 }
-
+//# sourceMappingURL=inflight.$Closure10-1.js.map
 ```
 
 ## inflight.$Closure11-1.js
@@ -59,7 +59,7 @@ module.exports = function({ $cat1, $cat2 }) {
   }
   return $Closure11;
 }
-
+//# sourceMappingURL=inflight.$Closure11-1.js.map
 ```
 
 ## inflight.$Closure12-1.js
@@ -79,7 +79,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
   }
   return $Closure12;
 }
-
+//# sourceMappingURL=inflight.$Closure12-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -99,7 +99,7 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -119,7 +119,7 @@ module.exports = function({ $jsonA, $jsonB }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -139,7 +139,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -159,7 +159,7 @@ module.exports = function({ $setA, $setB }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=inflight.$Closure5-1.js.map
 ```
 
 ## inflight.$Closure6-1.js
@@ -179,7 +179,7 @@ module.exports = function({ $setA, $setB, $setC }) {
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=inflight.$Closure6-1.js.map
 ```
 
 ## inflight.$Closure7-1.js
@@ -199,7 +199,7 @@ module.exports = function({ $mapA, $mapB }) {
   }
   return $Closure7;
 }
-
+//# sourceMappingURL=inflight.$Closure7-1.js.map
 ```
 
 ## inflight.$Closure8-1.js
@@ -219,7 +219,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
   }
   return $Closure8;
 }
-
+//# sourceMappingURL=inflight.$Closure8-1.js.map
 ```
 
 ## inflight.$Closure9-1.js
@@ -239,7 +239,7 @@ module.exports = function({ $arrayA, $arrayB }) {
   }
   return $Closure9;
 }
-
+//# sourceMappingURL=inflight.$Closure9-1.js.map
 ```
 
 ## main.tf.json
@@ -729,38 +729,38 @@ class $Root extends $stdlib.std.Resource {
     const strA = "wing";
     const strB = "wing";
     const strC = "wingnuts";
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Primitive types with the same value", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Primitive types with different values", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with the same value", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Primitive types with different values", new $Closure2(this, "$Closure2"));
     const jsonA = ({"a": 1});
     const jsonB = ({"a": 1});
     const jsonC = [1, 2, 3];
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Json with different values", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with the same value", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Json with different values", new $Closure4(this, "$Closure4"));
     const setA = new Set([1, 2, 3]);
     const setB = new Set([1, 2, 3]);
     const setC = new Set([4, 5, 6]);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
-    const mapA = ({"a": 1,"b": 2});
-    const mapB = ({"a": 1,"b": 2});
-    const mapC = ({"c": 10,"b": 2});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Map with different values", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
+    const mapA = ({"a": 1, "b": 2});
+    const mapB = ({"a": 1, "b": 2});
+    const mapC = ({"c": 10, "b": 2});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure8(this, "$Closure8"));
     const arrayA = [1, 2, 3];
     const arrayB = [1, 2, 3];
     const arrayC = [4, 5, 6];
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Array with the same value", new $Closure9(this, "$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Array with different values", new $Closure10(this, "$Closure10"));
-    const cat1 = ({"name": "Mittens","age": 3});
-    const cat2 = ({"name": "Mittens","age": 3});
-    const cat3 = ({"name": "Simba","age": 5});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Struct with the same value", new $Closure11(this, "$Closure11"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:Struct with different values", new $Closure12(this, "$Closure12"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with the same value", new $Closure9(this, "$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Array with different values", new $Closure10(this, "$Closure10"));
+    const cat1 = ({"name": "Mittens", "age": 3});
+    const cat2 = ({"name": "Mittens", "age": 3});
+    const cat3 = ({"name": "Simba", "age": 5});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with the same value", new $Closure11(this, "$Closure11"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Struct with different values", new $Closure12(this, "$Closure12"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "deep_equality.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

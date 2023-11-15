@@ -90,14 +90,20 @@ export function getTfDataSource(
 export function awscdkSanitize(template: Template): any {
   let json = template.toJSON();
 
-  return JSON.parse(
-    JSON.stringify(json, (key, value) => {
-      if (key === "S3Key" && value.endsWith(".zip")) {
-        return "<S3Key>";
-      }
-      return value;
-    })
+  let jsonString = JSON.stringify(json, (key, value) => {
+    if (key === "S3Key" && value.endsWith(".zip")) {
+      return "<S3Key>";
+    }
+
+    return value;
+  });
+
+  jsonString = jsonString.replace(
+    /CurrentVersion.+?"/g,
+    'CurrentVersion<GUID>"'
   );
+
+  return JSON.parse(jsonString);
 }
 
 export function tfSanitize(templateStr: string): any {

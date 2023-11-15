@@ -52,6 +52,7 @@
     "aws-sdk-client-mock-jest": "^2.2.0",
     "bump-pack": "workspace:^",
     "cdktf-cli": "0.17.0",
+    "chalk": "^4.1.2",
     "constructs": "~10.2.69",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
@@ -110,6 +111,7 @@
     "mime-types": "^2.1.35",
     "nanoid": "^3.3.6",
     "safe-stable-stringify": "^2.4.3",
+    "stacktracey": "^2.1.8",
     "undici": "^5.25.4",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
@@ -144,6 +146,7 @@
     "mime-types",
     "nanoid",
     "safe-stable-stringify",
+    "stacktracey",
     "undici",
     "uuid",
     "yaml"

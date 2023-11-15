@@ -48,7 +48,7 @@ impl JsonSchemaGenerator {
 				code.close("},");
 				code.add_code(self.get_struct_schema_required_fields(&s.env));
 				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
+				code.to_string()
 			}
 			Type::Array(ref t) | Type::Set(ref t) => {
 				let mut code = CodeMaker::default();
@@ -63,7 +63,7 @@ impl JsonSchemaGenerator {
 				code.line(format!("items: {}", self.get_struct_schema_field(t)));
 
 				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
+				code.to_string()
 			}
 			Type::Map(ref t) => {
 				let mut code = CodeMaker::default();
@@ -76,7 +76,7 @@ impl JsonSchemaGenerator {
 				));
 
 				code.close("}");
-				code.to_string().strip_suffix("\n").unwrap().to_string()
+				code.to_string()
 			}
 			Type::Optional(t) => self.get_struct_schema_field(&t),
 			Type::Json(_) => "{ type: \"object\" }".to_string(),

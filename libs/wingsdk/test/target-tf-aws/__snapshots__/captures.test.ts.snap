@@ -86,6 +86,7 @@ exports[`function with a function binding 3`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function1-c87c16f1",
           },
         },
@@ -110,6 +111,7 @@ exports[`function with a function binding 3`] = `
         "environment": {
           "variables": {
             "FUNCTION_NAME_50735b21": "\${aws_lambda_function.Function1.arn}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function2-c827e998",
           },
         },
@@ -239,6 +241,7 @@ exports[`function with a queue binding 3`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "QUEUE_URL_1cfcc997": "\${aws_sqs_queue.Queue.url}",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
@@ -263,6 +266,7 @@ exports[`function with a queue binding 3`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Queue-SetConsumer-5cb7e554-c8f6c540",
           },
         },
@@ -363,6 +367,7 @@ exports[`function with bucket binding > put operation 2`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_1357ca3a": "\${aws_s3_bucket.Bucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -454,6 +459,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function1-c87c16f1",
           },
         },
@@ -477,6 +483,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function2-c827e998",
           },
         },

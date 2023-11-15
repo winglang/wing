@@ -110,6 +110,7 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
             "WING_TARGET": "tf-aws"
           }

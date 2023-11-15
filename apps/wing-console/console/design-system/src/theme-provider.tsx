@@ -280,9 +280,9 @@ export const ThemeProvider = ({
     setThemeMode(mode);
   }, []);
 
-  setThemeMode(mode);
-
   useEffect(() => {
+    setThemeMode(mode);
+
     const reloadThemeMode = () => {
       setThemeMode();
     };
