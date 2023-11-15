@@ -19,8 +19,8 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, Node } from "../std";
 import { IAwsApi } from "../shared-aws";
+import { IInflightHost, Node } from "../std";
 
 /**
  * The stage name for the API, used in its url.

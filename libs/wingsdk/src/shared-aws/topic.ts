@@ -32,7 +32,6 @@ export class Topic {
   }
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
-    return typeof obj.arn === "function" &&
-      typeof obj.topicName === "function";
+    return typeof obj.arn === "function" && typeof obj.topicName === "function";
   }
 }

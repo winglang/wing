@@ -37,8 +37,10 @@ export class Queue {
   }
 
   private static isAwsQueue(obj: any): obj is IAwsQueue {
-    return typeof obj.arn === "function" &&
+    return (
+      typeof obj.arn === "function" &&
       typeof obj.queueName === "function" &&
-      typeof obj.queueUrl === "function";
+      typeof obj.queueUrl === "function"
+    );
   }
 }

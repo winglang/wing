@@ -32,7 +32,6 @@ export class Table {
   }
 
   private static isAwsTable(obj: any): obj is IAwsTable {
-    return typeof obj.arn === "function" &&
-      typeof obj.tableName === "function";
+    return typeof obj.arn === "function" && typeof obj.tableName === "function";
   }
 }

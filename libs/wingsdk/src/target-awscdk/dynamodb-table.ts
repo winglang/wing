@@ -34,9 +34,9 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
       },
       sortKey: props.rangeKey
         ? {
-          name: props.rangeKey,
-          type: attributeDefinitions[props.rangeKey] as AttributeType,
-        }
+            name: props.rangeKey,
+            type: attributeDefinitions[props.rangeKey] as AttributeType,
+          }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,

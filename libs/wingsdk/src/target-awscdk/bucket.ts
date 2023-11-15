@@ -254,11 +254,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-        blockPublicAcls: false,
-        blockPublicPolicy: false,
-        ignorePublicAcls: false,
-        restrictPublicBuckets: false,
-      }
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

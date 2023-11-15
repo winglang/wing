@@ -32,7 +32,8 @@ export class Bucket {
   }
 
   private static isAwsBucket(obj: any): obj is IAwsBucket {
-    return typeof obj.arn === "function" &&
-      typeof obj.bucketName === "function";
+    return (
+      typeof obj.arn === "function" && typeof obj.bucketName === "function"
+    );
   }
 }

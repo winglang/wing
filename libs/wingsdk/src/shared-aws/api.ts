@@ -30,7 +30,7 @@ export interface IAwsApi {
   invokeUrl(): string;
 
   /**
-   * restApi deployment id
+   * RestApi deployment id
    */
   deploymentId(): string;
 }
