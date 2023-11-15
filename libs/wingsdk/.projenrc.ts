@@ -141,6 +141,7 @@ project.eslint?.addOverride({
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen");
+project.deps.removeDependency("jsii-rosetta");
 
 enum Zone {
   PREFLIGHT = "preflight",

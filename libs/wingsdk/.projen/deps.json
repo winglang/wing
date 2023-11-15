@@ -112,11 +112,6 @@
       "type": "build"
     },
     {
-      "name": "jsii-rosetta",
-      "version": "5.0.11",
-      "type": "build"
-    },
-    {
       "name": "jsii",
       "version": "5.0.11",
       "type": "build"
