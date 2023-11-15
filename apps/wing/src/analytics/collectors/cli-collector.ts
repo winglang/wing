@@ -23,12 +23,11 @@ export class CLICollector extends Collector {
   }
 
   async collect(): Promise<CLIData> {
+    const platform: string[] = this.cmd.opts().platform ?? [];
+
     return {
-      platform: this.cmd
-        .opts()
-        .platform.map((p: string) => basename(p))
-        .join(","), // only report the platform name, not the full path
-      target: determineTargetFromPlatforms(this.cmd.opts().platform),
+      platform: platform.map((p: string) => basename(p)).join(","), // only report the platform name, not the full path
+      target: determineTargetFromPlatforms(platform),
       options: `${JSON.stringify(this.cmd.opts())}`,
       version: PACKAGE_VERSION,
       wing_sdk_version: this.tryGetModuleVersion("@winglang/sdk/package.json"),

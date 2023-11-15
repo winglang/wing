@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default topic behavior", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Topic._newTopic(app, "Topic");
+  new Topic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -24,7 +24,7 @@ test("default topic behavior", () => {
 test("topic with subscriber function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = Topic._newTopic(app, "Topic");
+  const topic = new Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
     "Handler",
@@ -47,7 +47,7 @@ test("topic with subscriber function", () => {
 test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const topic = Topic._newTopic(app, "Topic");
+  const topic = new Topic(app, "Topic");
   const subOne = Testing.makeHandler(
     app,
     "Handler1",

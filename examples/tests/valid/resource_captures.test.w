@@ -3,7 +3,7 @@ bring cloud;
 class First {
   pub myResource: cloud.Bucket;
 
-  init() {
+  new() {
     this.myResource = new cloud.Bucket();
   }
 }
@@ -12,7 +12,7 @@ class Another {
   pub myField: str;
   pub first: First;
 
-  init () {
+  new() {
     this.myField = "hello!";
     this.first = new First();
   }
@@ -43,11 +43,11 @@ class MyResource {
   extNum: num;
 
   inflight inflightField: num;
-  inflight init() {
+  inflight new() {
     this.inflightField = 123;
   }
 
-  init(externalBucket: cloud.Bucket, externalNum: num) {
+  new(externalBucket: cloud.Bucket, externalNum: num) {
     this.myResource = new cloud.Bucket();
     this.myStr = "myString";
     this.myNum = 42;

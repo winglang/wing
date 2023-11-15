@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Foo {
       name: str;
       
-      init() {
+      new() {
         this.name = "my_object";
       }
     
@@ -37,6 +37,7 @@ module.exports = function({ $b }) {
   }
   return Foo;
 }
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## preflight.js
@@ -90,11 +91,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, writeFile } from "fs";
-import { parse, resolve } from "path";
+import { mkdir, writeFile } from "fs/promises";
+import { parse } from "path";
 import { std } from "@winglang/sdk";
 import chalk from "chalk";
 
@@ -102,7 +102,7 @@ interface TestResultsJson {
   results: Record<string, Record<string, std.TestResult>>;
 }
 
-export function writeResultsToFile(
+export async function writeResultsToFile(
   testResults: { testName: string; results: std.TestResult[] }[],
   duration: number,
   filePath: string
@@ -115,22 +115,12 @@ export function writeResultsToFile(
     );
   }
 
-  const { dir } = parse(filePath);
   try {
-    if (!!dir && !existsSync(dir)) {
-      mkdirSync(dir, { recursive: true });
+    const { dir } = parse(filePath);
+    if (dir !== "") {
+      await mkdir(dir, { recursive: true });
     }
-
-    writeFile(
-      resolve(filePath),
-      JSON.stringify(output, null, 2),
-      { encoding: "utf-8" },
-      (error) => {
-        if (error) {
-          console.error(`error while writing test output file: ${error}`);
-        }
-      }
-    );
+    await writeFile(filePath, JSON.stringify(output, null, 2), { encoding: "utf-8" });
   } catch (error) {
     console.error(`error while writing test output file: ${error}`);
   }

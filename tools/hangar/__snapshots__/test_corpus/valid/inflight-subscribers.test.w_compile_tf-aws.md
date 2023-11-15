@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({  }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -180,12 +180,14 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Queue-SetConsumer-86898773-c8cecfb3",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-86898773_IamRole_36B46149.arn}",
         "runtime": "nodejs18.x",
@@ -209,12 +211,14 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudTopic-OnMessage-cdafee6e_IamRole_54B0303A.arn}",
         "runtime": "nodejs18.x",
@@ -381,13 +385,13 @@ class $Root extends $stdlib.std.Resource {
         return ["handle", "$inflight_init"];
       }
     }
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this, "cloud.Topic").onMessage(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(180)) }));
-    (this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue").setConsumer(new $Closure2(this, "$Closure2"), { timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic").onMessage(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(180)) }));
+    (this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue").setConsumer(new $Closure2(this, "$Closure2"), { timeout: (std.Duration.fromSeconds(180)) }));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight-subscribers.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

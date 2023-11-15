@@ -78,9 +78,9 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket3");
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     const arr1 = ["a", "b", "c"];
     const arr2 = [1, 2, 3];
     const arr3 = [bucket1, bucket2];
@@ -102,10 +102,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: s3.has(bucket2)")})((s3.has(bucket2)))};
     const m1 = ({"hello": "world"});
     const m2 = ({"hello": 123});
-    const m3 = ({"b1": bucket1,"b2": bucket2});
+    const m3 = ({"b1": bucket1, "b2": bucket2});
     const m4 = m1;
     const m5 = ({"goodbye": "world"});
-    const m6 = ({"a": m1,"b": m5});
+    const m6 = ({"a": m1, "b": m5});
     {((cond) => {if (!cond) throw new Error("assertion failed: m1.has(\"hello\")")})(("hello" in (m1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b1\") == bucket1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m3, "b1"),bucket1)))};
@@ -122,6 +122,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "mut_container_types.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

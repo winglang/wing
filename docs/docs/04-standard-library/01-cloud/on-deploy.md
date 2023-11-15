@@ -184,7 +184,7 @@ memory: num;
 ```
 
 - *Type:* num
-- *Default:* 128
+- *Default:* 1024
 
 The amount of memory to allocate to the function, in MB.
 

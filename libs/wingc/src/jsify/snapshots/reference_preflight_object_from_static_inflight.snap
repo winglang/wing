@@ -31,6 +31,7 @@ module.exports = function({ $q }) {
   }
   return MyType;
 }
+//# sourceMappingURL=inflight.MyType-1.js.map
 ```
 
 ## preflight.js
@@ -78,11 +79,12 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeOnLift(host, ops);
       }
     }
-    const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

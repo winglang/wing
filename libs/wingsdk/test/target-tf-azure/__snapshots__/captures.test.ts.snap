@@ -29,6 +29,7 @@ exports[`function with a bucket binding requiring only read 2`] = `
         "location": "\${azurerm_resource_group.ResourceGroup.location}",
         "name": "application-insights",
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
       },
     },
     "azurerm_linux_function_app": {
@@ -59,6 +60,13 @@ exports[`function with a bucket binding requiring only read 2`] = `
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
       },
     },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_resource_group": {
       "ResourceGroup": {
         "location": "East US",
@@ -67,11 +75,6 @@ exports[`function with a bucket binding requiring only read 2`] = `
     },
     "azurerm_role_assignment": {
       "Function_ReadLambdaCodeAssignment_75049D5E": {
-        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
-        "role_definition_name": "Storage Blob Data Reader",
-        "scope": "\${azurerm_storage_account.StorageAccount.id}",
-      },
-      "Function_RoleAssignmentc88fdc5f491a51d8438235500a4821fbc31357ca3aStorageBlobDataReader_57069DF9": {
         "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
         "role_definition_name": "Storage Blob Data Reader",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",
@@ -149,6 +152,7 @@ exports[`function with a bucket binding requiring read_write 2`] = `
         "location": "\${azurerm_resource_group.ResourceGroup.location}",
         "name": "application-insights",
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
       },
     },
     "azurerm_linux_function_app": {
@@ -179,6 +183,13 @@ exports[`function with a bucket binding requiring read_write 2`] = `
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
       },
     },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
     "azurerm_resource_group": {
       "ResourceGroup": {
         "location": "East US",
@@ -191,7 +202,7 @@ exports[`function with a bucket binding requiring read_write 2`] = `
         "role_definition_name": "Storage Blob Data Reader",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",
       },
-      "Function_RoleAssignmentc88fdc5f491a51d8438235500a4821fbc31357ca3aStorageBlobDataContributor_8C0A9D1B": {
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageBlobDataContributor_56D5F61F": {
         "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
         "role_definition_name": "Storage Blob Data Contributor",
         "scope": "\${azurerm_storage_account.StorageAccount.id}",

@@ -77,7 +77,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       "QueueSetConsumerHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,

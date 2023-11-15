@@ -13,7 +13,7 @@ const CDK_APP_OPTS = {
 test("default website behaviour", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  Website._newWebsite(app, "Website", {
+  new Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
   const output = app.synth();
@@ -35,7 +35,7 @@ test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
     const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-    Website._newWebsite(app, "Website", {
+    new Website(app, "Website", {
       path: path.resolve(__dirname, "/absolute/non-existent"),
     });
     app.synth();
@@ -45,7 +45,7 @@ test("website with invalid path should throw error", () => {
 test("website with addJson", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const website = Website._newWebsite(app, "Website", {
+  const website = new Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
   website.addJson("config.json", Object({ version: "8.31.0" }));
@@ -67,7 +67,7 @@ test("website with addJson", () => {
 test("website with addFile", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const website = Website._newWebsite(app, "Website", {
+  const website = new Website(app, "Website", {
     path: path.resolve(__dirname, "website"),
   });
   website.addFile("addition.html", "<html>Hello world!</html>", "text/html");
@@ -90,7 +90,7 @@ test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
     const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-    const website = Website._newWebsite(app, "Website", {
+    const website = new Website(app, "Website", {
       path: path.resolve(__dirname, "website"),
     });
     website.addJson(

@@ -110,12 +110,14 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Topic-OnMessage-cdafee6e-c814de3f",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudTopic-OnMessage-cdafee6e_IamRole_54B0303A.arn}",
         "runtime": "nodejs18.x",

@@ -16,7 +16,7 @@ module.exports = function({ $x }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.A-1.js
@@ -35,7 +35,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.Dog-1.js
@@ -51,7 +51,7 @@ module.exports = function({  }) {
   }
   return Dog;
 }
-
+//# sourceMappingURL=inflight.Dog-1.js.map
 ```
 
 ## inflight.Terrier-1.js
@@ -68,7 +68,7 @@ module.exports = function({ $Dog }) {
   }
   return Terrier;
 }
-
+//# sourceMappingURL=inflight.Terrier-1.js.map
 ```
 
 ## inflight.r-1.js
@@ -84,7 +84,7 @@ module.exports = function({  }) {
   }
   return r;
 }
-
+//# sourceMappingURL=inflight.r-1.js.map
 ```
 
 ## main.tf.json
@@ -280,6 +280,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "impl_interface.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -3,7 +3,7 @@ bring "./subdir/util.w" as myutil;
 
 pub class Store {
   data: cloud.Bucket;
-  init() {
+  new() {
     this.data = new cloud.Bucket();
   }
 

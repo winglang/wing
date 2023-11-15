@@ -17,7 +17,7 @@ module.exports = function({ $InflightB, $expect_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -36,7 +36,7 @@ module.exports = function({ $expect_Util, $extended }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.A-1.js
@@ -49,7 +49,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -63,7 +63,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
-
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## inflight.BaseClass-1.js
@@ -79,7 +79,7 @@ module.exports = function({ $b }) {
   }
   return BaseClass;
 }
-
+//# sourceMappingURL=inflight.BaseClass-1.js.map
 ```
 
 ## inflight.C-1.js
@@ -93,7 +93,7 @@ module.exports = function({ $B }) {
   }
   return C;
 }
-
+//# sourceMappingURL=inflight.C-1.js.map
 ```
 
 ## inflight.D-1.js
@@ -107,7 +107,7 @@ module.exports = function({ $C }) {
   }
   return D;
 }
-
+//# sourceMappingURL=inflight.D-1.js.map
 ```
 
 ## inflight.E-1.js
@@ -121,7 +121,7 @@ module.exports = function({ $D }) {
   }
   return E;
 }
-
+//# sourceMappingURL=inflight.E-1.js.map
 ```
 
 ## inflight.ExtendedClass-1.js
@@ -139,7 +139,7 @@ module.exports = function({ $BaseClass, $b }) {
   }
   return ExtendedClass;
 }
-
+//# sourceMappingURL=inflight.ExtendedClass-1.js.map
 ```
 
 ## inflight.InflightA-1.js
@@ -153,7 +153,7 @@ module.exports = function({  }) {
   }
   return InflightA;
 }
-
+//# sourceMappingURL=inflight.InflightA-1.js.map
 ```
 
 ## inflight.InflightB-1.js
@@ -167,7 +167,7 @@ module.exports = function({ $InflightA }) {
   }
   return InflightB;
 }
-
+//# sourceMappingURL=inflight.InflightB-1.js.map
 ```
 
 ## main.tf.json
@@ -548,15 +548,15 @@ class $Root extends $stdlib.std.Resource {
     }
     const e = new E(this, "E");
     (expect.Util.equal((e.description()), "E extends C extends B"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call inflight", new $Closure1(this, "$Closure1"));
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:super call inflight", new $Closure1(this, "$Closure1"));
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const extended = new ExtendedClass(this, "ExtendedClass");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:super call sets binding permissions", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "super_call.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

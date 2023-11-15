@@ -417,11 +417,13 @@ exports[`bucket with onCreate method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
           },
         },
         "function_name": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01.arn}",
         "runtime": "nodejs18.x",
@@ -833,11 +835,13 @@ exports[`bucket with onDelete method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
           },
         },
         "function_name": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9.arn}",
         "runtime": "nodejs18.x",
@@ -1279,11 +1283,13 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
           },
         },
         "function_name": "my_bucket-oncreate-OnMessage-7b961f4d-c81311dd",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-7b961f4d_IamRole_7FA5AA01.arn}",
         "runtime": "nodejs18.x",
@@ -1301,11 +1307,13 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
           },
         },
         "function_name": "my_bucket-ondelete-OnMessage-1de1a361-c89e08bf",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-1de1a361_IamRole_94D9A7C9.arn}",
         "runtime": "nodejs18.x",
@@ -1323,11 +1331,13 @@ exports[`bucket with onEvent method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
           },
         },
         "function_name": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3.arn}",
         "runtime": "nodejs18.x",
@@ -2077,11 +2087,13 @@ exports[`bucket with onUpdate method 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
           },
         },
         "function_name": "my_bucket-onupdate-OnMessage-46c07356-c844b8ba",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-46c07356_IamRole_4FC47AD3.arn}",
         "runtime": "nodejs18.x",

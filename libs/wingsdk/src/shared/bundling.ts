@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
-import { mkdirSync, readFileSync, writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { mkdirSync, writeFileSync } from "fs";
+import { join, relative, resolve } from "path";
 import { buildSync } from "esbuild-wasm";
 import { normalPath } from "./misc";
 
@@ -19,14 +19,22 @@ export interface Bundle {
  * @returns Bundle information
  */
 export function createBundle(entrypoint: string, outputDir?: string): Bundle {
+  const originalEntrypointDir = normalPath(resolve(entrypoint, ".."));
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
-  const outfile = join(outdir, "index.js");
+
+  const outfileName = "index.js";
+  const soucemapFilename = `${outfileName}.map`;
+
+  const outfile = join(outdir, outfileName);
+  const outfileMap = join(outdir, soucemapFilename);
 
   let esbuild = buildSync({
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],
-    outfile: normalPath(outfile),
+    outdir: originalEntrypointDir,
+    sourceRoot: originalEntrypointDir + "/",
+    absWorkingDir: originalEntrypointDir,
     // if the user has specified a node_modules directory to resolve from
     nodePaths: process.env.WING_NODE_MODULES
       ? [normalPath(process.env.WING_NODE_MODULES as string)]
@@ -35,8 +43,10 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
       "@winglang/sdk": SDK_PATH,
     },
     minify: false,
+    sourcemap: "external",
     platform: "node",
     target: "node18",
+    write: false,
   });
 
   if (esbuild.errors.length > 0) {
@@ -44,16 +54,35 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 
-  // the bundled contains line comments with file paths, which are not useful for us, especially
-  // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
-  // this, so we simply filter those out from the bundle.
-  const outlines = readFileSync(outfile, "utf-8").split("\n");
-  const isNotLineComment = (line: string) => !line.startsWith("//");
-  const final = outlines.filter(isNotLineComment).join("\n");
-  writeFileSync(outfile, final);
+  const output = esbuild.outputFiles[1];
+  let fileContents = new TextDecoder().decode(output.contents);
+
+  // sourcemap hacks for winglang:
+  // source paths in sourcemap are incorrect and need to be fixed
+  const sourcemapData = JSON.parse(
+    new TextDecoder().decode(esbuild.outputFiles[0].contents)
+  );
+  // unrandomize the sourceRoot
+  sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot).replace(
+    /\.\d+\.tmp\/\.wing\//g,
+    "/.wing/"
+  );
+
+  for (const [idx, source] of Object.entries(sourcemapData.sources)) {
+    if ((source as any).endsWith(".w")) {
+      const absolutePath = `/${source}`;
+      const relativePath = relative(originalEntrypointDir, absolutePath);
+      sourcemapData.sources[idx] = relativePath;
+    }
+  }
+
+  fileContents += `//# sourceMappingURL=${soucemapFilename}`;
+
+  writeFileSync(outfile, fileContents);
+  writeFileSync(outfileMap, JSON.stringify(sourcemapData));
 
   // calculate a md5 hash of the contents of asset.path
-  const codeHash = crypto.createHash("md5").update(final).digest("hex");
+  const codeHash = crypto.createHash("md5").update(fileContents).digest("hex");
 
   return {
     entrypointPath: outfile,

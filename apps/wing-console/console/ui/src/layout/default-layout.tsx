@@ -12,14 +12,13 @@ import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
-import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
+import { LogsWidget } from "../widgets/logs.js";
 
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
@@ -84,21 +83,13 @@ export const DefaultLayout = ({
     selectedEdgeId,
     setSelectedEdgeId,
     edgeMetadata,
-    setSearchText,
-    selectedLogTypeFilters,
-    setSelectedLogTypeFilters,
-    setLogsTimeFilter,
     showTests,
-    logsRef,
-    logs,
     onResourceClick,
     title,
-    wingfile,
     termsConfig,
     acceptTerms,
   } = useLayout({
     cloudAppState,
-    defaultLogLevels: ["info", "warn", "error"],
   });
 
   useEffect(() => {
@@ -134,6 +125,18 @@ export const DefaultLayout = ({
     );
   }, [layout.errorScreen?.position, cloudAppState]);
 
+  const selectedItemId = useMemo(() => selectedItems.at(0), [selectedItems]);
+
+  const onTestsSelectedItemsChange = useCallback(
+    (items: string[]) => {
+      if (!showTests) {
+        return;
+      }
+      setSelectedItems(items);
+    },
+    [showTests, setSelectedItems],
+  );
+
   const renderLayoutComponent = useCallback(
     (component: LayoutComponent) => {
       switch (component.type) {
@@ -143,7 +146,7 @@ export const DefaultLayout = ({
               <Explorer
                 loading={loading}
                 items={items}
-                selectedItems={selectedItems}
+                selectedItemId={selectedItemId}
                 onSelectedItemsChange={setSelectedItems}
                 expandedItems={expandedItems}
                 onExpandedItemsChange={setExpandedItems}
@@ -158,13 +161,8 @@ export const DefaultLayout = ({
           return (
             <TestsTreeView
               key={component.type}
-              onSelectedItemsChange={(items) => {
-                if (!showTests) {
-                  return;
-                }
-                setSelectedItems(items);
-              }}
-              selectedItems={showTests ? selectedItems : []}
+              onSelectedItemsChange={onTestsSelectedItemsChange}
+              selectedItemId={showTests ? selectedItemId : undefined}
             />
           );
         }
@@ -177,41 +175,10 @@ export const DefaultLayout = ({
                 theme.bg3,
               )}
             >
-              <div className="relative h-full flex flex-col gap-2">
-                <div
-                  className={classNames(
-                    "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                    "transition-all",
-                    !deferredLoading && "opacity-0 -z-10",
-                    theme.text2,
-                  )}
-                />
-
-                <ConsoleLogsFilters
-                  selectedLogTypeFilters={selectedLogTypeFilters}
-                  setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                  clearLogs={() => setLogsTimeFilter(Date.now())}
-                  isLoading={false} // display logs also while in loading state
-                  onSearch={setSearchText}
-                />
-                <div className="relative h-full">
-                  <ScrollableArea
-                    ref={logsRef}
-                    overflowY
-                    className={classNames(
-                      "pb-1.5",
-                      theme.bg3,
-                      theme.text2,
-                      USE_EXTERNAL_THEME_COLOR,
-                    )}
-                  >
-                    <ConsoleLogs
-                      logs={logs.data ?? []}
-                      onResourceClick={onResourceClick}
-                    />
-                  </ScrollableArea>
-                </div>
-              </div>
+              <LogsWidget
+                loading={deferredLoading}
+                onResourceClick={onResourceClick}
+              />
             </div>
           );
         }
@@ -220,23 +187,26 @@ export const DefaultLayout = ({
     [
       loading,
       items,
-      selectedItems,
+      selectedItemId,
+      setSelectedItems,
       expandedItems,
-      logs.data,
-      theme,
-      logsRef,
-      onResourceClick,
-      selectedLogTypeFilters,
-      setSelectedLogTypeFilters,
-      setLogsTimeFilter,
-      setSearchText,
+      setExpandedItems,
       expandAll,
       collapseAll,
-      setSelectedItems,
-      setExpandedItems,
+      onTestsSelectedItemsChange,
       showTests,
+      theme.bg3,
       deferredLoading,
+      onResourceClick,
     ],
+  );
+
+  const onConnectionNodeClick = useCallback(
+    (path: string) => {
+      expand(path);
+      setSelectedItems([path]);
+    },
+    [expand, setSelectedItems],
   );
 
   return (
@@ -387,10 +357,7 @@ export const DefaultLayout = ({
                             node={metadata.data?.node}
                             inbound={metadata.data?.inbound}
                             outbound={metadata.data?.outbound}
-                            onConnectionNodeClick={(path) => {
-                              expand(path);
-                              setSelectedItems([path]);
-                            }}
+                            onConnectionNodeClick={onConnectionNodeClick}
                           />
                         )}
 
@@ -399,10 +366,7 @@ export const DefaultLayout = ({
                             source={edgeMetadata.data.source}
                             target={edgeMetadata.data.target}
                             inflights={edgeMetadata.data.inflights}
-                            onConnectionNodeClick={(path) => {
-                              expand(path);
-                              setSelectedItems([path]);
-                            }}
+                            onConnectionNodeClick={onConnectionNodeClick}
                           />
                         )}
                       </div>

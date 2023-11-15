@@ -14,7 +14,7 @@ class Foo  {
   var field2: num; // <-- reassignable
   inflight field3: Array<str>;
 
-  init() {
+  new() {
     this.field1 = "hello";
     this.field2 = 123;
   }
@@ -23,7 +23,7 @@ class Foo  {
     this.field2 = value;
   }
 
-  inflight init() {
+  inflight new() {
     this.field3 = ["value created on inflight init"];
     log("at inflight init");
   }
@@ -81,7 +81,7 @@ interface IKVStore extends std.IResource { // https://github.com/winglang/wing/i
 
 class BucketBasedKeyValueStore impl IKVStore {
   bucket: cloud.Bucket;
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
   pub inflight get(key: str): Json {
@@ -105,7 +105,7 @@ interface IKVStore extends std.IResource {
 
 class BucketBasedKeyValueStore impl IKVStore {
   bucket: cloud.Bucket;
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
   pub inflight get(key: str): Json {
@@ -118,7 +118,7 @@ class BucketBasedKeyValueStore impl IKVStore {
 
 class TableBasedKeyValueStore impl IKVStore {
   table: cloud.Table;
-  init() {
+  new() {
     this.table = new cloud.Table(
       name: "table",
       primaryKey: "key",

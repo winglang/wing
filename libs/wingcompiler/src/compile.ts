@@ -301,7 +301,9 @@ async function runPreflightCodeInVm(
   });
 
   try {
-    vm.runInContext(artifact, context);
+    vm.runInContext(artifact, context, {
+      filename: artifactPath
+    });
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);
   }

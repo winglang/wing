@@ -210,12 +210,14 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "from_cron-OnTick-cdafee6e-c8a82a50",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "from_cron-OnTick-cdafee6e-c8a82a50",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_cron-OnTick-cdafee6e_IamRole_E3633395.arn}",
         "runtime": "nodejs18.x",
@@ -240,12 +242,14 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "from_rate-OnTick-86898773-c8fb9fa6",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "from_rate-OnTick-86898773-c8fb9fa6",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.arn}",
         "runtime": "nodejs18.x",

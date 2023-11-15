@@ -105,6 +105,7 @@ exports[`function with a table binding 1`] = `
           },
         },
         "Handler": "index.handler",
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "FunctionServiceRole675BB04A",

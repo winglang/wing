@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { IResource, Node, Resource, Duration } from "../std";
 
 /**
@@ -171,25 +171,17 @@ export type CorsHeaders = {
 /**
  * Functionality shared between all `Api` implementations.
  * @inflight `@winglang/sdk.cloud.IApiClient`
+ * @abstract
  */
 
-export abstract class Api extends Resource {
-  /**
-   * Creates a new cloud.Api instance through the app.
-   * @internal
-   */
-  public static _newApi(
-    scope: Construct,
-    id: string,
-    props: ApiProps = {}
-  ): Api {
-    return App.of(scope).newAbstract(API_FQN, scope, id, props);
-  }
-
+export class Api extends Resource {
   /**
    * The base URL of the API endpoint.
+   * @abstract
    */
-  public abstract readonly url: string;
+  public get url(): string {
+    throw new AbstractMemberError();
+  }
 
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
@@ -219,18 +211,16 @@ export abstract class Api extends Resource {
   protected corsOptions?: ApiCorsOptions;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
+    if (new.target === Api) {
+      return Resource._newFromFactory(API_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
-    props;
-
     this.corsOptions = props.cors ? this._cors(props.corsOptions) : undefined;
+
     Node.of(this).title = "Api";
     Node.of(this).description = "A REST API endpoint";
-  }
-
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
   }
 
   /**
@@ -238,96 +228,144 @@ export abstract class Api extends Resource {
    * @param path The path to handle GET requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract get(
+  public get(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiGetOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for POST requests on the given path.
    * @param path The path to handle POST requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract post(
+  public post(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPostOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for PUT requests on the given path.
    * @param path The path to handle PUT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract put(
+  public put(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPutOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for DELETE requests on the given path.
    * @param path The path to handle DELETE requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract delete(
+  public delete(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiDeleteOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for PATCH requests on the given path.
    * @param path The path to handle PATCH requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract patch(
+  public patch(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiPatchOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for OPTIONS requests on the given path.
    * @param path The path to handle OPTIONS requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract options(
+  public options(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiOptionsOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for HEAD requests on the given path.
    * @param path The path to handle HEAD requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract head(
+  public head(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiHeadOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a inflight handler to the api for CONNECT requests on the given path.
    * @param path The path to handle CONNECT requests for.
    * @param inflight The function to handle the request.
    * @param props Options for the route.
+   * @abstract
    */
-  public abstract connect(
+  public connect(
     path: string,
     inflight: IApiEndpointHandler,
     props?: ApiConnectOptions
-  ): void;
+  ): void {
+    path;
+    inflight;
+    props;
+    throw new AbstractMemberError();
+  }
   /**
    * Validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"

@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -24,7 +24,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
-
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## main.tf.json
@@ -158,9 +158,9 @@ class $Root extends $stdlib.std.Resource {
         return ["$inflight_init"];
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "bucket3");
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     (bucket3.node.addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,2)))};
@@ -207,6 +207,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "function_variadic_arguments.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
