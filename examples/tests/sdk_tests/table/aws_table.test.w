@@ -10,23 +10,25 @@ let table = new ex.Table(
   columns: { "gender" => ex.ColumnType.STRING }
 ) as "aws-wing-table";
 
-let getTableName = (t: ex.Table): str? => {
+let getTableInfo = (t: ex.Table): Map<str>? => {
   if let table = aws.Table.from(t) {
-    let tableAws = table.innerAwsTable();
-    if target == "tf-aws" {
-      return tableAws.name;
-    }
+    return {
+      tableName: table.tableName(),
+      arn: table.arn(),
+    };
   }
   return nil;
 };
 
-let tableName = getTableName(table);
+let tableInfo = getTableInfo(table);
 
 test "validates the AWS table name" {
-  if let name = tableName {
+  if let table = tableInfo {
     if target == "tf-aws" {
-      assert(name.contains("aws-wing-table"));
-    } 
+      assert(table.get("arn").contains("arn:aws:dynamodb:"));
+      assert(table.get("arn").contains("aws-wing-table"));
+      assert(table.get("tableName").contains("aws-wing-table"));
+    }
   }
   // If the test is not on AWS, it should not fail, so I am returning true.
   assert(true);

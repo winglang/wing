@@ -34,9 +34,9 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
       },
       sortKey: props.rangeKey
         ? {
-            name: props.rangeKey,
-            type: attributeDefinitions[props.rangeKey] as AttributeType,
-          }
+          name: props.rangeKey,
+          type: attributeDefinitions[props.rangeKey] as AttributeType,
+        }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -88,7 +88,11 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public innerAwsTable(): any {
-    return this.table;
+  public arn(): string {
+    return this.table.tableArn;
+  }
+
+  public tableName(): string {
+    return this.table.tableName;
   }
 }

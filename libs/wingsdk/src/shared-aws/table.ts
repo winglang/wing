@@ -5,9 +5,14 @@ import { IResource } from "../std";
  */
 export interface IAwsTable {
   /**
-   * Get iinternal AWS Table
+   * AWS Table arn
    */
-  innerAwsTable(): any;
+  arn(): string;
+
+  /**
+   * AWS Table name
+   */
+  tableName(): string;
 }
 
 /**
@@ -27,6 +32,7 @@ export class Table {
   }
 
   private static isAwsTable(obj: any): obj is IAwsTable {
-    return typeof obj.innerAwsTable === "function";
+    return typeof obj.arn === "function" &&
+      typeof obj.tableName === "function";
   }
 }
