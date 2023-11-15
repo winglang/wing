@@ -114,9 +114,9 @@ module.exports = function({  }) {
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_apiApi_067B2506.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}",
         "triggers": {
-          "redeployment": "${sha256(aws_api_gateway_rest_api.MyResource_cloudApi_api_apiApi_067B2506.body)}"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.body)}"
         }
       },
       "cloudApi_api_deployment_545514BF": {
@@ -129,18 +129,18 @@ module.exports = function({  }) {
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_apiApi_FE5ACA2E.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "${sha256(aws_api_gateway_rest_api.cloudApi_api_apiApi_FE5ACA2E.body)}"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.cloudApi_api_2B334D75.body)}"
         }
       }
     },
     "aws_api_gateway_rest_api": {
-      "MyResource_cloudApi_api_apiApi_067B2506": {
+      "MyResource_cloudApi_api_4CB9B8E3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Api/api/apiApi",
-            "uniqueId": "MyResource_cloudApi_api_apiApi_067B2506"
+            "path": "root/Default/Default/MyResource/cloud.Api/api/api",
+            "uniqueId": "MyResource_cloudApi_api_4CB9B8E3"
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
@@ -149,11 +149,11 @@ module.exports = function({  }) {
         },
         "name": "api-c8ef4b64"
       },
-      "cloudApi_api_apiApi_FE5ACA2E": {
+      "cloudApi_api_2B334D75": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/api/apiApi",
-            "uniqueId": "cloudApi_api_apiApi_FE5ACA2E"
+            "path": "root/Default/Default/cloud.Api/api/api",
+            "uniqueId": "cloudApi_api_2B334D75"
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
@@ -172,7 +172,7 @@ module.exports = function({  }) {
           }
         },
         "deployment_id": "${aws_api_gateway_deployment.MyResource_cloudApi_api_deployment_6DBAED7F.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_apiApi_067B2506.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}",
         "stage_name": "prod"
       },
       "cloudApi_api_stage_BBB283E4": {
@@ -183,7 +183,7 @@ module.exports = function({  }) {
           }
         },
         "deployment_id": "${aws_api_gateway_deployment.cloudApi_api_deployment_545514BF.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_apiApi_FE5ACA2E.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "stage_name": "prod"
       }
     }

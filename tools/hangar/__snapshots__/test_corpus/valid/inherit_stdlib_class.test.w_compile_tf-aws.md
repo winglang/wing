@@ -106,18 +106,18 @@ module.exports = function({ $cloud_Api }) {
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.AnApi_api_apiApi_2896F44F.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.AnApi_api_99502955.id}",
         "triggers": {
-          "redeployment": "${sha256(aws_api_gateway_rest_api.AnApi_api_apiApi_2896F44F.body)}"
+          "redeployment": "${sha256(aws_api_gateway_rest_api.AnApi_api_99502955.body)}"
         }
       }
     },
     "aws_api_gateway_rest_api": {
-      "AnApi_api_apiApi_2896F44F": {
+      "AnApi_api_99502955": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/AnApi/api/apiApi",
-            "uniqueId": "AnApi_api_apiApi_2896F44F"
+            "path": "root/Default/Default/AnApi/api/api",
+            "uniqueId": "AnApi_api_99502955"
           }
         },
         "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/\":{\"get\":{\"operationId\":\"get\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.AnApi_AnApi-OnRequest-cdafee6e_9D410EFB.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
@@ -136,7 +136,7 @@ module.exports = function({ $cloud_Api }) {
           }
         },
         "deployment_id": "${aws_api_gateway_deployment.AnApi_api_deployment_E6534C00.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.AnApi_api_apiApi_2896F44F.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.AnApi_api_99502955.id}",
         "stage_name": "prod"
       }
     },
@@ -231,7 +231,7 @@ module.exports = function({ $cloud_Api }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.AnApi_AnApi-OnRequest-cdafee6e_9D410EFB.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.AnApi_api_apiApi_2896F44F.execution_arn}/*/GET/",
+        "source_arn": "${aws_api_gateway_rest_api.AnApi_api_99502955.execution_arn}/*/GET/",
         "statement_id": "AllowExecutionFromAPIGateway-GET-c2e3ffa8"
       }
     },
