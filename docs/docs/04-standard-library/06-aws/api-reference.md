@@ -114,6 +114,98 @@ The IAM certificate identifier value.
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### Api <a name="Api" id="@winglang/sdk.aws.Api"></a>
+
+A helper class for working with AWS apis.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Api.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Api();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Api.from">from</a></code> | If the api is an AWS RestApi, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Api.from"></a>
+
+```wing
+bring aws;
+
+aws.Api.from(api: IResource);
+```
+
+If the api is an AWS RestApi, return a helper interface for working with it.
+
+###### `api`<sup>Required</sup> <a name="api" id="@winglang/sdk.aws.Api.from.parameter.api"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+The cloud.Api.
+
+---
+
+
+
+### Bucket <a name="Bucket" id="@winglang/sdk.aws.Bucket"></a>
+
+A helper class for working with AWS buckets.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Bucket.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Bucket();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Bucket.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Bucket.from"></a>
+
+```wing
+bring aws;
+
+aws.Bucket.from(bucket: IResource);
+```
+
+If the bucket is an AWS Bucket, return a helper interface for working with it.
+
+###### `bucket`<sup>Required</sup> <a name="bucket" id="@winglang/sdk.aws.Bucket.from.parameter.bucket"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+The cloud.Bucket.
+
+---
+
+
+
 ### Function <a name="Function" id="@winglang/sdk.aws.Function"></a>
 
 A helper class for working with AWS functions.
@@ -136,7 +228,7 @@ new aws.Function();
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS function, return a helper interface for working with it. |
+| <code><a href="#@winglang/sdk.aws.Function.from">from</a></code> | If the inflight host is an AWS Lambda, return a helper interface for working with it. |
 
 ---
 
@@ -148,13 +240,151 @@ bring aws;
 aws.Function.from(host: IInflightHost);
 ```
 
-If the inflight host is an AWS function, return a helper interface for working with it.
+If the inflight host is an AWS Lambda, return a helper interface for working with it.
 
 ###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Function.from.parameter.host"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
 The inflight host.
+
+---
+
+
+
+### Queue <a name="Queue" id="@winglang/sdk.aws.Queue"></a>
+
+A helper class for working with AWS queues.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Queue.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Queue();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Queue.from">from</a></code> | If the queue is an AWS SQS, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Queue.from"></a>
+
+```wing
+bring aws;
+
+aws.Queue.from(queue: IResource);
+```
+
+If the queue is an AWS SQS, return a helper interface for working with it.
+
+###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.aws.Queue.from.parameter.queue"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+The cloud.Queue.
+
+---
+
+
+
+### Table <a name="Table" id="@winglang/sdk.aws.Table"></a>
+
+A helper class for working with AWS tables.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Table.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Table();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Table.from">from</a></code> | If the table is an AWS DynamoDB, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Table.from"></a>
+
+```wing
+bring aws;
+
+aws.Table.from(table: IResource);
+```
+
+If the table is an AWS DynamoDB, return a helper interface for working with it.
+
+###### `table`<sup>Required</sup> <a name="table" id="@winglang/sdk.aws.Table.from.parameter.table"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+The ex.Table.
+
+---
+
+
+
+### Topic <a name="Topic" id="@winglang/sdk.aws.Topic"></a>
+
+A helper class for working with AWS topics.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Topic.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Topic();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Topic.from">from</a></code> | If the topic is an AWS SNS, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Topic.from"></a>
+
+```wing
+bring aws;
+
+aws.Topic.from(topic: IResource);
+```
+
+If the topic is an AWS SNS, return a helper interface for working with it.
+
+###### `topic`<sup>Required</sup> <a name="topic" id="@winglang/sdk.aws.Topic.from.parameter.topic"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+The cloud.Topic.
 
 ---
 
@@ -391,6 +621,61 @@ Resources.
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
+### IAwsApi <a name="IAwsApi" id="@winglang/sdk.aws.IAwsApi"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsApi">IAwsApi</a>
+
+A shared interface for AWS api.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.innerAwsApi">innerAwsApi</a></code> | Get internal AWS ApiGateway. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.innerAwsStage">innerAwsStage</a></code> | Get internal AWS ApiGatewayStage. |
+
+---
+
+##### `innerAwsApi` <a name="innerAwsApi" id="@winglang/sdk.aws.IAwsApi.innerAwsApi"></a>
+
+```wing
+innerAwsApi(): any
+```
+
+Get internal AWS ApiGateway.
+
+##### `innerAwsStage` <a name="innerAwsStage" id="@winglang/sdk.aws.IAwsApi.innerAwsStage"></a>
+
+```wing
+innerAwsStage(): any
+```
+
+Get internal AWS ApiGatewayStage.
+
+
+### IAwsBucket <a name="IAwsBucket" id="@winglang/sdk.aws.IAwsBucket"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
+
+A shared interface for AWS buckets.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.innerAwsBucket">innerAwsBucket</a></code> | Get iinternal AWS Bucket. |
+
+---
+
+##### `innerAwsBucket` <a name="innerAwsBucket" id="@winglang/sdk.aws.IAwsBucket.innerAwsBucket"></a>
+
+```wing
+innerAwsBucket(): any
+```
+
+Get iinternal AWS Bucket.
+
+
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
 
 - *Implemented By:* <a href="#@winglang/sdk.aws.IAwsFunction">IAwsFunction</a>
@@ -403,6 +688,7 @@ A shared interface for AWS functions.
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.innerAwsFunction">innerAwsFunction</a></code> | Get internal AWS Function. |
 
 ---
 
@@ -439,6 +725,83 @@ Add policy statements to the function's IAM role.
 - *Type:* <a href="#@winglang/sdk.aws.PolicyStatement">PolicyStatement</a>
 
 ---
+
+##### `innerAwsFunction` <a name="innerAwsFunction" id="@winglang/sdk.aws.IAwsFunction.innerAwsFunction"></a>
+
+```wing
+innerAwsFunction(): any
+```
+
+Get internal AWS Function.
+
+
+### IAwsQueue <a name="IAwsQueue" id="@winglang/sdk.aws.IAwsQueue"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsQueue">IAwsQueue</a>
+
+A shared interface for AWS queues.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.innerAwsQueue">innerAwsQueue</a></code> | Get iinternal AWS Queue. |
+
+---
+
+##### `innerAwsQueue` <a name="innerAwsQueue" id="@winglang/sdk.aws.IAwsQueue.innerAwsQueue"></a>
+
+```wing
+innerAwsQueue(): any
+```
+
+Get iinternal AWS Queue.
+
+
+### IAwsTable <a name="IAwsTable" id="@winglang/sdk.aws.IAwsTable"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsTable">IAwsTable</a>
+
+A shared interface for AWS tables.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.innerAwsTable">innerAwsTable</a></code> | Get iinternal AWS Table. |
+
+---
+
+##### `innerAwsTable` <a name="innerAwsTable" id="@winglang/sdk.aws.IAwsTable.innerAwsTable"></a>
+
+```wing
+innerAwsTable(): any
+```
+
+Get iinternal AWS Table.
+
+
+### IAwsTopic <a name="IAwsTopic" id="@winglang/sdk.aws.IAwsTopic"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsTopic">IAwsTopic</a>
+
+A shared interface for AWS topics.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.innerAwsTopic">innerAwsTopic</a></code> | Get iinternal AWS Topic. |
+
+---
+
+##### `innerAwsTopic` <a name="innerAwsTopic" id="@winglang/sdk.aws.IAwsTopic.innerAwsTopic"></a>
+
+```wing
+innerAwsTopic(): any
+```
+
+Get iinternal AWS Topic.
 
 
 ## Enums <a name="Enums" id="Enums"></a>
