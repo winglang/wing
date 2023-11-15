@@ -67,6 +67,7 @@ let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
 
 rateSchedule.onTick(inflight () => {
   log("Rate schedule ticked!");
+  throw "lol";
 });
 
 new cloud.Service(

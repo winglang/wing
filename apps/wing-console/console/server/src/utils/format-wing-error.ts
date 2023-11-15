@@ -36,7 +36,6 @@ function offsetFromLineAndColumn(source: string, line: number, column: number) {
 export const formatWingError = async (error: unknown) => {
   try {
     if (error instanceof CompileError) {
-      console.log(error.diagnostics);
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
@@ -95,7 +94,6 @@ export const formatWingError = async (error: unknown) => {
           });
         }
 
-        console.log("pre diagnostic");
         const diagnosticText = emitDiagnostic(
           files,
           {

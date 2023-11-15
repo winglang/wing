@@ -62,7 +62,6 @@ export const createCompiler = (wingfile: string): Compiler => {
 
   const dirname = path.dirname(wingfile);
   //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3956
-  console.log("dirname", dirname);
   const ignoreList = [`${dirname}/target/**`, "**/node_modules/**"];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
