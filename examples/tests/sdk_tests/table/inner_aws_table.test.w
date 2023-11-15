@@ -7,6 +7,7 @@ let target = util.env("WING_TARGET");
 let table = new ex.Table(
   name: "users",
   primaryKey: "name",
+  columns: { "gender" => ex.ColumnType.STRING }
 ) as "aws-wing-table";
 
 let getTableName = (t: ex.Table): str? => {
