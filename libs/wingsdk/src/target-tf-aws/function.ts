@@ -12,6 +12,7 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
+import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
@@ -212,12 +213,23 @@ export class Function extends cloud.Function implements IAwsFunction {
         }),
       },
       environment: {
-        variables: Lazy.anyValue({ produce: () => this.env }) as any,
+        variables: Lazy.anyValue({
+          produce: () => ({
+            ...this.env,
+            // enable source maps
+            NODE_OPTIONS: [
+              ...(this.env.NODE_OPTIONS === undefined
+                ? []
+                : this.env.NODE_OPTIONS.split(" ")),
+              "--enable-source-maps",
+            ].join(" "),
+          }),
+        }) as any,
       },
       timeout: props.timeout
         ? props.timeout.seconds
         : Duration.fromMinutes(1).seconds,
-      memorySize: props.memory ? props.memory : undefined,
+      memorySize: props.memory ?? DEFAULT_MEMORY_SIZE,
       architectures: ["arm64"],
     });
 

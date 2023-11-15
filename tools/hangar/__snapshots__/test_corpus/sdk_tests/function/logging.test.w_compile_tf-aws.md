@@ -129,12 +129,14 @@
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "f1-c8545025",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "f1-c8545025",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f1_IamRole_FD68C58F.arn}",
         "runtime": "nodejs18.x",
@@ -159,12 +161,14 @@
         "environment": {
           "variables": {
             "FUNCTION_NAME_09b8c606": "${aws_lambda_function.f1.arn}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "f2-c812cd39",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "f2-c812cd39",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.f2_IamRole_B66911B2.arn}",
         "runtime": "nodejs18.x",

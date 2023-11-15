@@ -46,7 +46,7 @@ return class Handler {
         "attrs": {},
         "path": "root/my_on_deploy",
         "props": {
-          "functionHandle": "\${root/my_on_deploy/Function#attrs.handle}",
+          "functionHandle": "\${wsim#root/my_on_deploy/Function#attrs.handle}",
         },
         "type": "@winglang/sdk.cloud.OnDeploy",
       },

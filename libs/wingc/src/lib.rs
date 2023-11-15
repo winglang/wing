@@ -81,10 +81,11 @@ const WINGSDK_EXPECT_MODULE: &'static str = "expect";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_SIM_MODULE: &'static str = "sim";
+const WINGSDK_UI_MODULE: &'static str = "ui";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
@@ -95,6 +96,7 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 10] = [
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
 	WINGSDK_SIM_MODULE,
+	WINGSDK_UI_MODULE,
 ];
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -116,6 +118,8 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
+
+pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
 pub struct CompilerOutput {}
 

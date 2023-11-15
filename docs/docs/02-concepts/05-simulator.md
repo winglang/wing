@@ -5,7 +5,7 @@ description: A facility for executing Wing applications on the local machine for
 keywords: [Wing simulator, simulator]
 ---
 
-The simulator is a built-in [platform provider](./03-platform-provider.md) that comes
+The simulator is a built-in [platform provider](./03-platforms.md) that comes
 provided in Wing for testing applications locally. The simulator does not
 require you to deploy resources to any cloud providers. Since it's a simulation,
 the simulator does not provide the same guarantees as running your application
@@ -14,7 +14,7 @@ application.
 
 There are two main ways to interact with the simulator:
 
-* Running inflight [unit tests](/02-concepts/04-tests.md) with the `wing test` command.
+* Running inflight [unit tests](./04-tests.md) with the `wing test` command.
 * Interacting with the simulated application through the Wing Console
 
 The simulator is also available as a set of APIs exported through the

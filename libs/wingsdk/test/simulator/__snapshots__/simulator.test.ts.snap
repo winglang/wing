@@ -133,7 +133,7 @@ exports[`run single test > test failure 1`] = `
   "error": "Error: test failed
 <sanitized>
 <sanitized>
-    at evalmachine.<anonymous>:<sanitized>
+<sanitized>
     at Script.runInContext (node:vm:<sanitized>)
     at Object.runInContext (node:vm:<sanitized>)
 <sanitized>

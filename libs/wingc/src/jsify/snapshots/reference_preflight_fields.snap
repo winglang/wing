@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
       s: str;
       b: cloud.Bucket;
 
-      init() { 
+      new() { 
         this.s = "hello"; 
         this.b = new cloud.Bucket();
       }
@@ -50,6 +50,7 @@ module.exports = function({  }) {
   }
   return MyType;
 }
+//# sourceMappingURL=inflight.MyType-1.js.map
 ```
 
 ## preflight.js
@@ -69,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         this.s = "hello";
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+        this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
       static _toInflightType(context) {
         return `
@@ -113,5 +114,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

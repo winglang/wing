@@ -16,7 +16,7 @@ module.exports = function({ $__parent_this_1 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -31,7 +31,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -124,12 +124,14 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8858302",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8858302",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Foo_cloudFunction_IamRole_037E9FB3.arn}",
         "runtime": "nodejs18.x",
@@ -219,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure1(this, "$Closure1"));
+        this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
       }
       static _toInflightType(context) {
         return `
@@ -248,6 +250,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "use_inflight_method_inside_init_closure.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

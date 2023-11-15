@@ -11,7 +11,7 @@ source: libs/wingc/src/jsify/tests.rs
     class MyResource {
       closure: inflight (str): str;
     
-      init() {
+      new() {
         this.closure = inflight (s: str): str => {
           globalBucket.list();
           return "hello";
@@ -50,6 +50,7 @@ module.exports = function({ $globalBucket }) {
   }
   return $Closure1;
 }
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -70,6 +71,7 @@ module.exports = function({ $x }) {
   }
   return $Closure2;
 }
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.MyResource-1.js
@@ -87,6 +89,7 @@ module.exports = function({  }) {
   }
   return MyResource;
 }
+//# sourceMappingURL=inflight.MyResource-1.js.map
 ```
 
 ## preflight.js
@@ -205,13 +208,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const x = new MyResource(this, "MyResource");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:variable can be an inflight closure", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

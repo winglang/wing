@@ -144,7 +144,7 @@ export interface Response {
   /**
    * A string representation of the body contents.
    */
-  readonly body?: string;
+  readonly body: string;
 }
 
 /**

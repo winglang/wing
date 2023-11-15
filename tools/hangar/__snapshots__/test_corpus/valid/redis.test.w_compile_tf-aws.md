@@ -16,7 +16,7 @@ module.exports = function({ $r }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -36,14 +36,13 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $r.get("hello")),undefined));
-      }
-      ));
+      }));
       {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"${r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -251,6 +250,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
@@ -258,6 +258,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         },
         "function_name": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.arn}",
         "runtime": "nodejs18.x",
@@ -627,16 +628,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "ex.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this, "r2");
-    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this, "cloud.Queue");
+    const r = this.node.root.new("@winglang/sdk.ex.Redis", ex.Redis, this, "ex.Redis");
+    const r2 = this.node.root.new("@winglang/sdk.ex.Redis", ex.Redis, this, "r2");
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
     (queue.setConsumer(new $Closure1(this, "$Closure1"), { timeout: (std.Duration.fromSeconds(3)) }));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:testing Redis", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:testing Redis", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "redis.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -1,15 +1,15 @@
 bring cloud;
 
-resource CachableFunction extends cloud.Function {
+class CachableFunction extends cloud.Function {
     _func: cloud.Function;
     _cache: cloud.Bucket;
 
-    init(inflight: inflight (event: any) => any, props: cloud.FunctionProps) {
+    new(inflight: inflight (event: any) => any, props: cloud.FunctionProps) {
         super(inflight, props);
         this._cache = new cloud.Bucket();
     }
 
-    pub override inflight invoke(event: any): any {
+    pub inflight invoke(event: any): any {
         let key = hashof(event);
         let cached = this._cache.try_get(key);
         if cached {
