@@ -11,12 +11,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": "hello world","status": 200});
+      return ({"body": "hello world", "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -42,7 +42,7 @@ module.exports = function({ $api_url, $expect_Util, $http_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -68,7 +68,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -82,7 +82,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Access-Control-Request-Method": "PUT","Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Access-Control-Request-Method": "PUT", "Access-Control-Request-Headers": "Content-Type,Authorization,X-Custom-Foo"})})));
       const headers = response.headers;
       (await $expect_Util.equal(response.status, 204));
       (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
@@ -92,7 +92,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## main.tf.json
@@ -242,6 +242,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
             "WING_TARGET": "tf-aws"
           }
@@ -452,16 +453,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"],"allowCredentials": true,"exposeHeaders": ["Content-Type"]}) });
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"], "allowCredentials": true, "exposeHeaders": ["Content-Type"]}) });
     (api.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_cors_custom.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

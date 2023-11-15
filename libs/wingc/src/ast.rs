@@ -349,6 +349,7 @@ pub struct ElifLetBlock {
 #[derive(Debug)]
 pub struct Class {
 	pub name: Symbol,
+	pub span: WingSpan,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub initializer: FunctionDefinition,
