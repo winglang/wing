@@ -19,8 +19,8 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsApi } from "../shared-aws";
 import { IInflightHost, Node } from "../std";
+import { IAwsApi } from "../shared-aws";
 
 /**
  * The stage name for the API, used in its url.
@@ -291,16 +291,16 @@ export class Api extends cloud.Api implements IAwsApi {
     });
   }
 
+  public arn(): string {
+    return this.api.api.executionArn;
+  }
+
   public restApiId(): string {
     return this.api.api.id;
   }
 
-  public restApiArn(): string {
-    return this.api.api.arn;
-  }
-
-  public restApiExecutionArn(): string {
-    return this.api.api.executionArn;
+  public restApiName(): string {
+    return this.api.api.name;
   }
 
   public stageName(): string {
@@ -404,7 +404,7 @@ class WingRestApi extends Construct {
   private createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {

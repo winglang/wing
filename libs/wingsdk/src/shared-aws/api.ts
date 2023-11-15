@@ -5,19 +5,19 @@ import { IResource } from "../std";
  */
 export interface IAwsApi {
   /**
+   * RestApi arn
+   */
+  arn(): string;
+
+  /**
    * RestApi id
    */
   restApiId(): string;
 
   /**
-   * RestApi arn
+   * RestApi id
    */
-  restApiArn(): string;
-
-  /**
-   * RestApi arn
-   */
-  restApiExecutionArn(): string;
+  restApiName(): string;
 
   /**
    * RestApi stage name
@@ -53,9 +53,9 @@ export class Api {
 
   private static isAwsApi(obj: any): obj is IAwsApi {
     return (
+      typeof obj.arn === "function" &&
       typeof obj.restApiId === "function" &&
-      typeof obj.restApiArn === "function" &&
-      typeof obj.restApiExecutionArn === "function" &&
+      typeof obj.restApiName === "function" &&
       typeof obj.stageName === "function" &&
       typeof obj.invokeUrl === "function" &&
       typeof obj.deploymentId === "function"
