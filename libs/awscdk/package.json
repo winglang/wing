@@ -1,6 +1,16 @@
 {
   "name": "@winglang/platform-awscdk",
   "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/awscdk"
+  },
   "description": "Wing Platform for AWS CDK",
   "publishConfig": {
     "access": "public",
