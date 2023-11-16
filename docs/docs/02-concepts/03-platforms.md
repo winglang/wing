@@ -115,6 +115,9 @@ export interface IPlatform {
   // Define the App that will be used for creating resources
   newApp?(appProps: AppProps): App;
 
+  // Define overrides for concrete resources
+  newInstance?(type: string, scope: Construct, id: string, props: any): any;
+
   // Synthesis Hooks
   preSynth?(app: Construct): void;
   postSynth?(config: any): any;
