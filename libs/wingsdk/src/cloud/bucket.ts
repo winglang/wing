@@ -132,12 +132,11 @@ export class Bucket extends Resource {
    */
   private createInflightHandler(
     eventType: BucketEventType,
-    inflight: IBucketEventHandler
+    inflight: any
   ): IResource {
-    const hash = inflight.node.addr.slice(-8);
     return convertBetweenHandlers(
       this,
-      `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
+      `${this.getTopic(eventType).node.id}-eventHandler`,
       inflight,
       // since uses __dirname should be specified under the target directory
       this.eventHandlerLocation(),
@@ -417,7 +416,7 @@ export interface BucketOnEventOptions {}
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

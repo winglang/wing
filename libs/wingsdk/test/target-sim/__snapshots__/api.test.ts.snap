@@ -2,32 +2,32 @@
 
 exports[`api allows duplicates routes with different methods 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-5_c8573ac0.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-5",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-5",
       },
     ],
     "version": "connections-0.1",
@@ -44,10 +44,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-5",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-5_c8573ac0.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -89,10 +89,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-5",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-5#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -192,19 +192,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -220,7 +207,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-5": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -228,10 +215,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-5",
+              "path": "root/my_api/ApiEventMapping-5",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-5": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -241,8 +228,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-5",
+              "path": "root/my_api/OnRequestHandler-5",
             },
           },
           "constructInfo": {
@@ -289,27 +276,27 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-17_c88775d1.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-17",
       },
     ],
     "version": "connections-0.1",
@@ -326,10 +313,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-17",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-17_c88775d1.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -361,10 +348,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-17",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-17#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -460,19 +447,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -488,7 +462,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-17": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -496,10 +470,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-17",
+              "path": "root/my_api/ApiEventMapping-17",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-17": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -509,8 +483,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-17",
+              "path": "root/my_api/OnRequestHandler-17",
             },
           },
           "constructInfo": {
@@ -557,27 +531,27 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-16_c8c927a5.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.path }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.path }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-16",
       },
     ],
     "version": "connections-0.1",
@@ -594,10 +568,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-16",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-16_c8c927a5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -629,10 +603,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-16",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-16#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -728,19 +702,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -756,7 +717,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-16": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -764,10 +725,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-16",
+              "path": "root/my_api/ApiEventMapping-16",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-16": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -777,8 +738,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-16",
+              "path": "root/my_api/OnRequestHandler-16",
             },
           },
           "constructInfo": {
@@ -825,27 +786,27 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-18_c83c7850.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-18",
       },
     ],
     "version": "connections-0.1",
@@ -862,10 +823,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-18",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-18_c83c7850.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -897,10 +858,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-18",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-18#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -996,19 +957,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1024,7 +972,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-18": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1032,10 +980,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-18",
+              "path": "root/my_api/ApiEventMapping-18",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-18": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1045,8 +993,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-18",
+              "path": "root/my_api/OnRequestHandler-18",
             },
           },
           "constructInfo": {
@@ -1093,27 +1041,27 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-20_c8dc8ccb.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.headers, headers: { \\"Content-Type\\": \\"application/octet-stream; charset=utf-8\\" } }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.headers, headers: { \\"Content-Type\\": \\"application/octet-stream; charset=utf-8\\" } }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-20",
       },
     ],
     "version": "connections-0.1",
@@ -1130,10 +1078,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-20",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-20_c8dc8ccb.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1165,10 +1113,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-20",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-20#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1264,19 +1212,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1292,7 +1227,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-20": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1300,10 +1235,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-20",
+              "path": "root/my_api/ApiEventMapping-20",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-20": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1313,8 +1248,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-20",
+              "path": "root/my_api/OnRequestHandler-20",
             },
           },
           "constructInfo": {
@@ -1361,27 +1296,27 @@ exports[`api response returns default Content-Type header 1`] = `
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-21_c879ca96.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-21",
       },
     ],
     "version": "connections-0.1",
@@ -1398,10 +1333,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-21",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-21_c879ca96.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1433,10 +1368,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-21",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-21#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1532,19 +1467,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1560,7 +1482,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-21": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1568,10 +1490,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-21",
+              "path": "root/my_api/ApiEventMapping-21",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-21": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1581,8 +1503,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-21",
+              "path": "root/my_api/OnRequestHandler-21",
             },
           },
           "constructInfo": {
@@ -1647,57 +1569,57 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-10_c8eb1e97.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.method }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.method }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "put()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "delete()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "head()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "options()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
       {
         "name": "patch()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-10",
       },
     ],
     "version": "connections-0.1",
@@ -1714,10 +1636,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-10",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-10_c8eb1e97.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1809,10 +1731,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-10",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-10#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1932,19 +1854,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1960,7 +1869,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-10": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1968,10 +1877,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-10",
+              "path": "root/my_api/ApiEventMapping-10",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-10": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1981,8 +1890,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-10",
+              "path": "root/my_api/OnRequestHandler-10",
             },
           },
           "constructInfo": {
@@ -2029,27 +1938,27 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-3_c8f8a8b3.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-3",
       },
     ],
     "version": "connections-0.1",
@@ -2066,10 +1975,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-3",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-3_c8f8a8b3.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2118,10 +2027,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-3",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-3#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2217,19 +2126,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2245,7 +2141,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-3": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2253,10 +2149,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-3",
+              "path": "root/my_api/ApiEventMapping-3",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-3": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2266,8 +2162,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /{name}/{age}",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-3",
+              "path": "root/my_api/OnRequestHandler-3",
             },
           },
           "constructInfo": {
@@ -2314,27 +2210,27 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-2_c82e7c24.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-2",
       },
     ],
     "version": "connections-0.1",
@@ -2351,10 +2247,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-2",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-2_c82e7c24.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2395,10 +2291,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-2",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2494,19 +2390,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2522,7 +2405,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-2": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2530,10 +2413,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-2",
+              "path": "root/my_api/ApiEventMapping-2",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-2": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2543,8 +2426,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /{name}",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-2",
+              "path": "root/my_api/OnRequestHandler-2",
             },
           },
           "constructInfo": {
@@ -2573,27 +2456,27 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-9_c8a3c32b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-9",
       },
     ],
     "version": "connections-0.1",
@@ -2610,10 +2493,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-9",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-9_c8a3c32b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2657,10 +2540,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-9",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-9#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2760,19 +2643,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2788,7 +2658,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2796,10 +2666,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-9",
+              "path": "root/my_api/ApiEventMapping-9",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-9": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2809,8 +2679,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-9",
+              "path": "root/my_api/OnRequestHandler-9",
             },
           },
           "constructInfo": {
@@ -2864,47 +2734,47 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+  ".wing/onrequesthandler-11_c829255a.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: \\"boom\\" }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: \\"boom\\" }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+  ".wing/onrequesthandler-12_c8afdee7.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: \\"bang\\" }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: \\"bang\\" }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/my_api/OnRequestHandler-11",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/my_api/OnRequestHandler-12",
       },
     ],
     "version": "connections-0.1",
@@ -2921,10 +2791,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/OnRequestHandler-11",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-7c48a9f0_c8912b27.js",
+          "sourceCodeFile": ".wing/onrequesthandler-11_c829255a.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2966,10 +2836,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-7c48a9f0",
+        "path": "root/my_api/ApiEventMapping-11",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-11#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2983,10 +2853,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/OnRequestHandler-12",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-f6d90a7f_c869cdc5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-12_c8afdee7.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2994,10 +2864,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-f6d90a7f",
+        "path": "root/my_api/ApiEventMapping-12",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-12#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3093,32 +2963,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler1": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler1",
-          "path": "root/Handler1",
-        },
-        "Handler2": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler2",
-          "path": "root/Handler2",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3134,7 +2978,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-7c48a9f0": {
+            "ApiEventMapping-11": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3142,10 +2986,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-7c48a9f0",
-              "path": "root/my_api/ApiEventMapping-7c48a9f0",
+              "id": "ApiEventMapping-11",
+              "path": "root/my_api/ApiEventMapping-11",
             },
-            "ApiEventMapping-f6d90a7f": {
+            "ApiEventMapping-12": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3153,10 +2997,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-f6d90a7f",
-              "path": "root/my_api/ApiEventMapping-f6d90a7f",
+              "id": "ApiEventMapping-12",
+              "path": "root/my_api/ApiEventMapping-12",
             },
-            "OnRequestHandler-7c48a9f0": {
+            "OnRequestHandler-11": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3166,10 +3010,10 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-7c48a9f0",
-              "path": "root/my_api/OnRequestHandler-7c48a9f0",
+              "id": "OnRequestHandler-11",
+              "path": "root/my_api/OnRequestHandler-11",
             },
-            "OnRequestHandler-f6d90a7f": {
+            "OnRequestHandler-12": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3179,8 +3023,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
-              "id": "OnRequestHandler-f6d90a7f",
-              "path": "root/my_api/OnRequestHandler-f6d90a7f",
+              "id": "OnRequestHandler-12",
+              "path": "root/my_api/OnRequestHandler-12",
             },
           },
           "constructInfo": {
@@ -3234,47 +3078,47 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler-7c48a9f0_c8912b27.js": "\\"use strict\\";
+  ".wing/onrequesthandler-13_c8dcfe04.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: \\"boom\\" }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: \\"boom\\" }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
-  ".wing/onrequesthandler-f6d90a7f_c869cdc5.js": "\\"use strict\\";
+  ".wing/onrequesthandler-14_c8bb26d3.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: \\"bang\\" }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: \\"bang\\" }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/my_api/OnRequestHandler-13",
       },
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/my_api/OnRequestHandler-14",
       },
     ],
     "version": "connections-0.1",
@@ -3291,10 +3135,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/OnRequestHandler-13",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-7c48a9f0_c8912b27.js",
+          "sourceCodeFile": ".wing/onrequesthandler-13_c8dcfe04.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3338,10 +3182,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-7c48a9f0",
+        "path": "root/my_api/ApiEventMapping-13",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-13#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3355,10 +3199,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/OnRequestHandler-14",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-f6d90a7f_c869cdc5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-14_c8bb26d3.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3366,10 +3210,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-f6d90a7f",
+        "path": "root/my_api/ApiEventMapping-14",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-14#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3465,32 +3309,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler1": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler1",
-          "path": "root/Handler1",
-        },
-        "Handler2": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler2",
-          "path": "root/Handler2",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3506,7 +3324,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-7c48a9f0": {
+            "ApiEventMapping-13": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3514,10 +3332,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-7c48a9f0",
-              "path": "root/my_api/ApiEventMapping-7c48a9f0",
+              "id": "ApiEventMapping-13",
+              "path": "root/my_api/ApiEventMapping-13",
             },
-            "ApiEventMapping-f6d90a7f": {
+            "ApiEventMapping-14": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3525,10 +3343,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-f6d90a7f",
-              "path": "root/my_api/ApiEventMapping-f6d90a7f",
+              "id": "ApiEventMapping-14",
+              "path": "root/my_api/ApiEventMapping-14",
             },
-            "OnRequestHandler-7c48a9f0": {
+            "OnRequestHandler-13": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3538,10 +3356,10 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/world",
               },
-              "id": "OnRequestHandler-7c48a9f0",
-              "path": "root/my_api/OnRequestHandler-7c48a9f0",
+              "id": "OnRequestHandler-13",
+              "path": "root/my_api/OnRequestHandler-13",
             },
-            "OnRequestHandler-f6d90a7f": {
+            "OnRequestHandler-14": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3551,8 +3369,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
-              "id": "OnRequestHandler-f6d90a7f",
-              "path": "root/my_api/OnRequestHandler-f6d90a7f",
+              "id": "OnRequestHandler-14",
+              "path": "root/my_api/OnRequestHandler-14",
             },
           },
           "constructInfo": {
@@ -3599,27 +3417,27 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-0_c83ff6f5.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: \\"boom\\" }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: \\"boom\\" }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-0",
       },
     ],
     "version": "connections-0.1",
@@ -3636,10 +3454,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-0_c83ff6f5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3671,10 +3489,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3770,19 +3588,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3798,7 +3603,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3806,10 +3611,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-0",
+              "path": "root/my_api/ApiEventMapping-0",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3819,8 +3624,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-0",
+              "path": "root/my_api/OnRequestHandler-0",
             },
           },
           "constructInfo": {
@@ -3867,27 +3672,27 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-1_c8825f4b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-1",
       },
     ],
     "version": "connections-0.1",
@@ -3904,10 +3709,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-1",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-1_c8825f4b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3948,10 +3753,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-1",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-1#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4047,19 +3852,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -4075,7 +3867,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4083,10 +3875,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-1",
+              "path": "root/my_api/ApiEventMapping-1",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4096,8 +3888,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/{name}",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-1",
+              "path": "root/my_api/OnRequestHandler-1",
             },
           },
           "constructInfo": {
@@ -4144,27 +3936,27 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler-e645076f_c887c38c.js": "\\"use strict\\";
+  ".wing/onrequesthandler-15_c86010ac.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-};
-})())({
-
-})).handle(event);
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+        };
+        })())({
+        
+        })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/my_api/OnRequestHandler-15",
       },
     ],
     "version": "connections-0.1",
@@ -4181,10 +3973,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-e645076f",
+        "path": "root/my_api/OnRequestHandler-15",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-e645076f_c887c38c.js",
+          "sourceCodeFile": ".wing/onrequesthandler-15_c86010ac.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -4216,10 +4008,10 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-e645076f",
+        "path": "root/my_api/ApiEventMapping-15",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-15#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4315,19 +4107,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -4343,7 +4122,7 @@ return class Handler {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-e645076f": {
+            "ApiEventMapping-15": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4351,10 +4130,10 @@ return class Handler {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-e645076f",
-              "path": "root/my_api/ApiEventMapping-e645076f",
+              "id": "ApiEventMapping-15",
+              "path": "root/my_api/ApiEventMapping-15",
             },
-            "OnRequestHandler-e645076f": {
+            "OnRequestHandler-15": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4364,8 +4143,8 @@ return class Handler {
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
-              "id": "OnRequestHandler-e645076f",
-              "path": "root/my_api/OnRequestHandler-e645076f",
+              "id": "OnRequestHandler-15",
+              "path": "root/my_api/OnRequestHandler-15",
             },
           },
           "constructInfo": {

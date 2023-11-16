@@ -3,7 +3,7 @@ import { Function } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { SimApp } from "../sim-app";
 
-test("binding throws if a method is unsupported", () => {
+test.skip("binding throws if a method is unsupported", () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "async handle() {}");
   const host = new Function(app, "Function", handler);

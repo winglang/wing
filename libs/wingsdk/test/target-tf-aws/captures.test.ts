@@ -34,7 +34,6 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {
@@ -67,7 +66,6 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {
@@ -90,7 +88,6 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {
@@ -117,13 +114,11 @@ test("function with a function binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight1 = Testing.makeHandler(
     app,
-    "Handler1",
     `async handle(event) { console.log(event); }`
   );
   const fn1 = new cloud.Function(app, "Function1", inflight1);
   const inflight2 = Testing.makeHandler(
     app,
-    "Handler2",
     `async handle(event) {
       console.log("Event: " + event);
       await this.function.invoke(JSON.stringify({ hello: "world" }));
@@ -159,7 +154,6 @@ test("two functions reusing the same IFunctionHandler", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(
     app,
-    "Handler1",
     `async handle(event) { console.log(event); }`
   );
 
@@ -187,7 +181,6 @@ test("function with a queue binding", () => {
   const queue = new cloud.Queue(app, "Queue");
   const pusher = Testing.makeHandler(
     app,
-    "Pusher",
     `async handle(event) { await this.queue.push("info"); }`,
     {
       queue: {
@@ -200,7 +193,6 @@ test("function with a queue binding", () => {
 
   const processor = Testing.makeHandler(
     app,
-    "Processor",
     `async handle(event) { console.log("Received" + event); }`
   );
   queue.setConsumer(processor);

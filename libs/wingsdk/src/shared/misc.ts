@@ -72,3 +72,8 @@ export async function runDockerImage({
 
   return { hostPort };
 }
+
+let id = 0;
+export function autoId() {
+  return id++;
+}

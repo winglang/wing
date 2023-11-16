@@ -23,7 +23,6 @@ test(
         const queue = new cloud.Queue(this, "Queue");
         const processor = Testing.makeHandler(
           this,
-          "Processor",
           `async handle(event) {
           let next = await this.counter.inc();
           let key = "file-" + next + ".txt";

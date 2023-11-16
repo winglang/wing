@@ -159,19 +159,6 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -397,19 +384,6 @@ exports[`basic function with custom log retention 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -639,19 +613,6 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -863,19 +824,6 @@ exports[`basic function with infinite log retention 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -1103,19 +1051,6 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -1342,19 +1277,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -1510,19 +1432,6 @@ exports[`function name valid 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "The-Mighty_Function-01": {
                 "children": {
@@ -1749,19 +1658,6 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "The%Mighty$Function": {
                 "children": {

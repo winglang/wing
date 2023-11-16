@@ -9,7 +9,6 @@ test("inflight function uses a logger", () => {
 
   const inflight = Testing.makeHandler(
     app,
-    
     `async handle() {
       console.log("hello world!");
     }`

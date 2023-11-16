@@ -19,7 +19,6 @@ test("state can be resolved at any time", async () => {
     "MyFunction",
     Testing.makeHandler(
       app,
-      "MyHandler",
       `
       async handle(event) {
         return process.env.MY_KEY;
@@ -38,7 +37,6 @@ test("state can be resolved at any time", async () => {
     "MyOnDeploy",
     Testing.makeHandler(
       app,
-      "OnDeployHandler",
       `
       async handle() {
         console.log("setting ${tokenKey}");

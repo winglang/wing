@@ -6,6 +6,7 @@ import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
+import { autoId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { Duration, IInflightHost, Node } from "../std";
@@ -55,7 +56,7 @@ export class Queue extends cloud.Queue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
+    const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumerHandler-${hash}`,

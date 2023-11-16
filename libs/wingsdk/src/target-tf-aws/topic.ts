@@ -7,6 +7,7 @@ import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscripti
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
+import { autoId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node, Resource } from "../std";
@@ -52,7 +53,7 @@ export class Topic extends cloud.Topic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
+    const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,

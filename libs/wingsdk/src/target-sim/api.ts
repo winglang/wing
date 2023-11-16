@@ -6,6 +6,7 @@ import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { autoId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -31,7 +32,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    const hash = inflight.node.addr.slice(-8);
+    const hash = (inflight as any)._id ?? autoId();
     const fnPath = `OnRequestHandler-${hash}`;
     const eventId = `ApiEventMapping-${hash}`;
 

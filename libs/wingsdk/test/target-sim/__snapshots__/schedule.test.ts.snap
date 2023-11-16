@@ -148,40 +148,30 @@ exports[`create a schedule 1`] = `
 
 exports[`schedule with one task using rate of 3h 1`] = `
 {
-  ".wing/my_schedule-ontick-e645076f_c83e5455.js": "\\"use strict\\";
+  ".wing/my_schedule-ontick-2_c8f55faa.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+        };
+        })())({
+        
+        }), args: {} })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_schedule-OnTick-2",
       },
     ],
     "version": "connections-0.1",
@@ -198,10 +188,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTick-2",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_schedule-ontick-e645076f_c83e5455.js",
+          "sourceCodeFile": ".wing/my_schedule-ontick-2_c8f55faa.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -217,10 +207,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTickMapping-2",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
-          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-2#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",
@@ -309,19 +299,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -337,7 +314,7 @@ console.log(\\"Hello from schedule!\\");
         },
         "my_schedule": {
           "children": {
-            "my_schedule-OnTick-e645076f": {
+            "my_schedule-OnTick-2": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -347,10 +324,10 @@ console.log(\\"Hello from schedule!\\");
                 "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
-              "id": "my_schedule-OnTick-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+              "id": "my_schedule-OnTick-2",
+              "path": "root/my_schedule/my_schedule-OnTick-2",
             },
-            "my_schedule-OnTickMapping-e645076f": {
+            "my_schedule-OnTickMapping-2": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -358,19 +335,8 @@ console.log(\\"Hello from schedule!\\");
               "display": {
                 "hidden": true,
               },
-              "id": "my_schedule-OnTickMapping-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
-            },
-            "my_scheduleOnTickHandlere645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_scheduleOnTickHandlere645076f",
-              "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+              "id": "my_schedule-OnTickMapping-2",
+              "path": "root/my_schedule/my_schedule-OnTickMapping-2",
             },
           },
           "constructInfo": {
@@ -399,40 +365,30 @@ console.log(\\"Hello from schedule!\\");
 
 exports[`schedule with one task using rate of 10m 1`] = `
 {
-  ".wing/my_schedule-ontick-e645076f_c83e5455.js": "\\"use strict\\";
+  ".wing/my_schedule-ontick-1_c801adf2.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+        };
+        })())({
+        
+        }), args: {} })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_schedule-OnTick-1",
       },
     ],
     "version": "connections-0.1",
@@ -449,10 +405,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTick-1",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_schedule-ontick-e645076f_c83e5455.js",
+          "sourceCodeFile": ".wing/my_schedule-ontick-1_c801adf2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -468,10 +424,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTickMapping-1",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
-          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-1#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",
@@ -560,19 +516,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -588,7 +531,7 @@ console.log(\\"Hello from schedule!\\");
         },
         "my_schedule": {
           "children": {
-            "my_schedule-OnTick-e645076f": {
+            "my_schedule-OnTick-1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -598,10 +541,10 @@ console.log(\\"Hello from schedule!\\");
                 "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
-              "id": "my_schedule-OnTick-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+              "id": "my_schedule-OnTick-1",
+              "path": "root/my_schedule/my_schedule-OnTick-1",
             },
-            "my_schedule-OnTickMapping-e645076f": {
+            "my_schedule-OnTickMapping-1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -609,19 +552,8 @@ console.log(\\"Hello from schedule!\\");
               "display": {
                 "hidden": true,
               },
-              "id": "my_schedule-OnTickMapping-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
-            },
-            "my_scheduleOnTickHandlere645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_scheduleOnTickHandlere645076f",
-              "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+              "id": "my_schedule-OnTickMapping-1",
+              "path": "root/my_schedule/my_schedule-OnTickMapping-1",
             },
           },
           "constructInfo": {
@@ -650,40 +582,30 @@ console.log(\\"Hello from schedule!\\");
 
 exports[`schedule with one task with cron 1`] = `
 {
-  ".wing/my_schedule-ontick-e645076f_c83e5455.js": "\\"use strict\\";
+  ".wing/my_schedule-ontick-0_c8390d47.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-};
-})())({
-
-}), args: {} })).handle(event);
+        };
+        })())({
+        
+        }), args: {} })).handle(event);
 };",
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "onTick()",
         "source": "root/my_schedule",
-        "target": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_schedule-OnTick-0",
       },
     ],
     "version": "connections-0.1",
@@ -700,10 +622,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTick-0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_schedule-ontick-e645076f_c83e5455.js",
+          "sourceCodeFile": ".wing/my_schedule-ontick-0_c8390d47.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -719,10 +641,10 @@ console.log(\\"Hello from schedule!\\");
       },
       {
         "attrs": {},
-        "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
+        "path": "root/my_schedule/my_schedule-OnTickMapping-0",
         "props": {
           "publisher": "\${wsim#root/my_schedule#attrs.handle}",
-          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_schedule/my_schedule-OnTick-0#attrs.handle}",
           "subscriptionProps": {},
         },
         "type": "@winglang/sdk.sim.EventMapping",
@@ -811,19 +733,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -839,7 +748,7 @@ console.log(\\"Hello from schedule!\\");
         },
         "my_schedule": {
           "children": {
-            "my_schedule-OnTick-e645076f": {
+            "my_schedule-OnTick-0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -849,10 +758,10 @@ console.log(\\"Hello from schedule!\\");
                 "sourceModule": "@winglang/sdk",
                 "title": "onTick()",
               },
-              "id": "my_schedule-OnTick-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTick-e645076f",
+              "id": "my_schedule-OnTick-0",
+              "path": "root/my_schedule/my_schedule-OnTick-0",
             },
-            "my_schedule-OnTickMapping-e645076f": {
+            "my_schedule-OnTickMapping-0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -860,19 +769,8 @@ console.log(\\"Hello from schedule!\\");
               "display": {
                 "hidden": true,
               },
-              "id": "my_schedule-OnTickMapping-e645076f",
-              "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
-            },
-            "my_scheduleOnTickHandlere645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_scheduleOnTickHandlere645076f",
-              "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+              "id": "my_schedule-OnTickMapping-0",
+              "path": "root/my_schedule/my_schedule-OnTickMapping-0",
             },
           },
           "constructInfo": {

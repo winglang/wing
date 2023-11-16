@@ -7,6 +7,7 @@ import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
+import { autoId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -45,7 +46,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
+    const hash = (inflight as any)._id ?? autoId();
 
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs

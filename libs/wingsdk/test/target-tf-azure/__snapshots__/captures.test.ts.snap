@@ -2,17 +2,17 @@
 
 exports[`function with a bucket binding requiring only read 1`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { await this.bucket.get(\\"hello.txt\\"); }
-};
-})())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(event) { await this.bucket.get(\\"hello.txt\\"); }
+        };
+        })())({
+        bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
+        })"
 `;
 
 exports[`function with a bucket binding requiring only read 2`] = `
@@ -125,17 +125,17 @@ exports[`function with a bucket binding requiring only read 2`] = `
 
 exports[`function with a bucket binding requiring read_write 1`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
-};
-})())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
+        };
+        })())({
+        bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
+        })"
 `;
 
 exports[`function with a bucket binding requiring read_write 2`] = `

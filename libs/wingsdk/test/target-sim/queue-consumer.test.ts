@@ -9,13 +9,13 @@ import { SimApp } from "../sim-app";
 test("pushing messages through a queue", async () => {
   // GIVEN
   class HelloWorld extends Construct {
+    public readonly consumerPath: string;
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
       const queue = new cloud.Queue(this, "Queue");
       const pusher = Testing.makeHandler(
         app,
-        "Pusher",
         `async handle(event) {
           console.log("Hello, world!");
           await this.queue.push(event);
@@ -31,23 +31,23 @@ test("pushing messages through a queue", async () => {
 
       const processor = Testing.makeHandler(
         app,
-        "Processor",
         `async handle(event) {
           console.log("Received " + event);
         }`
       );
-      queue.setConsumer(processor);
+      const consumer = queue.setConsumer(processor);
+      this.consumerPath = consumer.node.path;
     }
   }
 
   const app = new SimApp();
-  new HelloWorld(app, "HelloWorld");
+  const helloWorld = new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
 
   const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
   const consumer = s.getResource(
-    "root/HelloWorld/Queue/Queue-SetConsumer-13c4eaf1"
+    helloWorld.consumerPath
   ) as cloud.IFunctionClient;
 
   // warm up the consumer so timing is more predictable
@@ -69,7 +69,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue/Queue-SetConsumer-13c4eaf1",
+      sourcePath: helloWorld.consumerPath,
       sourceType: "@winglang/sdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

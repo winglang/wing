@@ -317,7 +317,6 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
       "Function",
       Testing.makeHandler(
         app,
-        "foo",
         [
           "async handle() {",
           ...renderInflightCode(),

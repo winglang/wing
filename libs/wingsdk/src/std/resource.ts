@@ -144,10 +144,10 @@ export abstract class Resource extends Construct implements IResource {
         }
 
         // if the object is a resource (i.e. has a "lift" method"), register a lifting between it and the host.
-        if (isResource(obj)) {
+        if (IsLiftable(obj) && "_addOnLift" in obj) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._addOnLift(host, [...ops, "$inflight_init"]);
+          (obj as any)._addOnLift(host, [...ops, "$inflight_init"]);
           return;
         }
 
@@ -162,7 +162,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-        if (isResourceType(obj)) {
+        if (isLiftableType(obj)) {
           obj._registerTypeOnLift(host, ops);
           return;
         }
@@ -268,7 +268,7 @@ export abstract class Resource extends Construct implements IResource {
    * @param host The host to bind to
    * @param ops The operations that may access this resource
    * @returns `true` if a new bind was added or `false` if there was already a bind
-   */
+   */ // @ts-ignore
   private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
       `Registering a binding for a resource (${this.node.path}) to a host (${
@@ -357,19 +357,14 @@ export interface OperationAnnotation {
   };
 }
 
-function isResource(obj: any): obj is Resource {
-  return isIResourceType(obj.constructor);
-}
-
-function isIResourceType(t: any): t is new (...args: any[]) => IResource {
+function IsLiftable(t: any): t is new (...args: any[]) => IResource {
   return (
-    t instanceof Function &&
-    "prototype" in t &&
-    typeof t.prototype.onLift === "function" &&
-    typeof t.prototype._registerOnLift === "function"
+    t !== undefined &&
+    typeof t.onLift === "function" &&
+    typeof t._registerOnLift === "function"
   );
 }
 
-function isResourceType(t: any): t is typeof Resource {
-  return typeof t._registerTypeOnLift === "function" && isIResourceType(t);
+function isLiftableType(t: any): t is typeof Resource {
+  return typeof t._registerTypeOnLift === "function" && IsLiftable(t);
 }

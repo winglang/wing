@@ -2,35 +2,208 @@
 
 exports[`function with a function binding 1`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { console.log(event); }
-};
-})())({
-
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          Handler1
+        };
+        })())({
+        0: undefined,
+1: undefined,
+2: undefined,
+3: undefined,
+4: undefined,
+5: undefined,
+6: undefined,
+7: undefined,
+8: undefined,
+9: undefined,
+10: undefined,
+11: undefined,
+12: undefined,
+13: undefined,
+14: undefined,
+15: undefined,
+16: undefined,
+17: undefined,
+18: undefined,
+19: undefined,
+20: undefined,
+21: undefined,
+22: undefined,
+23: undefined,
+24: undefined,
+25: undefined,
+26: undefined,
+27: undefined,
+28: undefined,
+29: undefined,
+30: undefined,
+31: undefined,
+32: undefined,
+33: undefined,
+34: undefined,
+35: undefined,
+36: undefined,
+37: undefined,
+38: undefined,
+39: undefined,
+40: undefined,
+41: undefined,
+42: undefined
+        })"
 `;
 
 exports[`function with a function binding 2`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) {
-      console.log(\\"Event: \\" + event);
-      await this.function.invoke(JSON.stringify({ hello: \\"world\\" }));
-    }
-};
-})())({
-function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"], \\"root/Default/Function1\\")
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          Handler2
+        };
+        })())({
+        0: undefined,
+1: undefined,
+2: undefined,
+3: undefined,
+4: undefined,
+5: undefined,
+6: undefined,
+7: undefined,
+8: undefined,
+9: undefined,
+10: undefined,
+11: undefined,
+12: undefined,
+13: undefined,
+14: undefined,
+15: undefined,
+16: undefined,
+17: undefined,
+18: undefined,
+19: undefined,
+20: undefined,
+21: undefined,
+22: undefined,
+23: undefined,
+24: undefined,
+25: undefined,
+26: undefined,
+27: undefined,
+28: undefined,
+29: undefined,
+30: undefined,
+31: undefined,
+32: undefined,
+33: undefined,
+34: undefined,
+35: undefined,
+36: undefined,
+37: undefined,
+38: undefined,
+39: undefined,
+40: undefined,
+41: undefined,
+42: undefined,
+43: undefined,
+44: undefined,
+45: undefined,
+46: undefined,
+47: undefined,
+48: undefined,
+49: undefined,
+50: undefined,
+51: undefined,
+52: undefined,
+53: undefined,
+54: undefined,
+55: undefined,
+56: undefined,
+57: undefined,
+58: undefined,
+59: undefined,
+60: undefined,
+61: undefined,
+62: undefined,
+63: undefined,
+64: undefined,
+65: undefined,
+66: undefined,
+67: undefined,
+68: undefined,
+69: undefined,
+70: undefined,
+71: undefined,
+72: undefined,
+73: undefined,
+74: undefined,
+75: undefined,
+76: undefined,
+77: undefined,
+78: undefined,
+79: undefined,
+80: undefined,
+81: undefined,
+82: undefined,
+83: undefined,
+84: undefined,
+85: undefined,
+86: undefined,
+87: undefined,
+88: undefined,
+89: undefined,
+90: undefined,
+91: undefined,
+92: undefined,
+93: undefined,
+94: undefined,
+95: undefined,
+96: undefined,
+97: undefined,
+98: undefined,
+99: undefined,
+100: undefined,
+101: undefined,
+102: undefined,
+103: undefined,
+104: undefined,
+105: undefined,
+106: undefined,
+107: undefined,
+108: undefined,
+109: undefined,
+110: undefined,
+111: undefined,
+112: undefined,
+113: undefined,
+114: undefined,
+115: undefined,
+116: undefined,
+117: undefined,
+118: undefined,
+119: undefined,
+120: undefined,
+121: undefined,
+122: undefined,
+123: undefined,
+124: undefined,
+125: undefined,
+126: undefined,
+127: undefined,
+128: undefined,
+129: undefined,
+130: undefined,
+131: undefined,
+132: undefined,
+133: undefined,
+134: undefined
+        })"
 `;
 
 exports[`function with a function binding 3`] = `
@@ -65,7 +238,7 @@ exports[`function with a function binding 3`] = `
         "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
       },
       "Function2_IamRolePolicy_E46C9D6B": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.Function1.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
         "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
       },
     },
@@ -110,7 +283,6 @@ exports[`function with a function binding 3`] = `
         ],
         "environment": {
           "variables": {
-            "FUNCTION_NAME_50735b21": "\${aws_lambda_function.Function1.arn}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function2-c827e998",
           },
@@ -153,32 +325,140 @@ exports[`function with a function binding 3`] = `
 
 exports[`function with a queue binding 1`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { await this.queue.push(\\"info\\"); }
-};
-})())({
-queue: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/queue.inflight\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          Pusher
+        };
+        })())({
+        0: undefined,
+1: undefined,
+2: undefined,
+3: undefined,
+4: undefined,
+5: undefined,
+6: undefined,
+7: undefined,
+8: undefined,
+9: undefined,
+10: undefined,
+11: undefined,
+12: undefined,
+13: undefined,
+14: undefined,
+15: undefined,
+16: undefined,
+17: undefined,
+18: undefined,
+19: undefined,
+20: undefined,
+21: undefined,
+22: undefined,
+23: undefined,
+24: undefined,
+25: undefined,
+26: undefined,
+27: undefined,
+28: undefined,
+29: undefined,
+30: undefined,
+31: undefined,
+32: undefined,
+33: undefined,
+34: undefined,
+35: undefined,
+36: undefined,
+37: undefined,
+38: undefined,
+39: undefined,
+40: undefined,
+41: undefined,
+42: undefined,
+43: undefined,
+44: undefined,
+45: undefined,
+46: undefined,
+47: undefined,
+48: undefined,
+49: undefined,
+50: undefined,
+51: undefined,
+52: undefined,
+53: undefined
+        })"
 `;
 
 exports[`function with a queue binding 2`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { console.log(\\"Received\\" + event); }
-};
-})())({
-
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          Processor
+        };
+        })())({
+        0: undefined,
+1: undefined,
+2: undefined,
+3: undefined,
+4: undefined,
+5: undefined,
+6: undefined,
+7: undefined,
+8: undefined,
+9: undefined,
+10: undefined,
+11: undefined,
+12: undefined,
+13: undefined,
+14: undefined,
+15: undefined,
+16: undefined,
+17: undefined,
+18: undefined,
+19: undefined,
+20: undefined,
+21: undefined,
+22: undefined,
+23: undefined,
+24: undefined,
+25: undefined,
+26: undefined,
+27: undefined,
+28: undefined,
+29: undefined,
+30: undefined,
+31: undefined,
+32: undefined,
+33: undefined,
+34: undefined,
+35: undefined,
+36: undefined,
+37: undefined,
+38: undefined,
+39: undefined,
+40: undefined,
+41: undefined,
+42: undefined,
+43: undefined,
+44: undefined,
+45: undefined,
+46: undefined,
+47: undefined,
+48: undefined,
+49: undefined,
+50: undefined,
+51: undefined,
+52: undefined,
+53: undefined,
+54: undefined,
+55: undefined
+        })"
 `;
 
 exports[`function with a queue binding 3`] = `
@@ -194,8 +474,8 @@ exports[`function with a queue binding 3`] = `
         "name": "/aws/lambda/Function-c852aba6",
         "retention_in_days": 30,
       },
-      "Queue-SetConsumer-5cb7e554_CloudwatchLogGroup_9BC4EDAA": {
-        "name": "/aws/lambda/Queue-SetConsumer-5cb7e554-c8f6c540",
+      "Queue-SetConsumer-7_CloudwatchLogGroup_F1CB9FB7": {
+        "name": "/aws/lambda/Queue-SetConsumer-7-c8443c63",
         "retention_in_days": 30,
       },
     },
@@ -203,18 +483,18 @@ exports[`function with a queue binding 3`] = `
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      "Queue-SetConsumer-5cb7e554_IamRole_35925398": {
+      "Queue-SetConsumer-7_IamRole_61536C4F": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
-      "Queue-SetConsumer-5cb7e554_IamRolePolicy_8502FAE8": {
+      "Queue-SetConsumer-7_IamRolePolicy_4DF11FC2": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-7_IamRole_61536C4F.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
@@ -222,16 +502,16 @@ exports[`function with a queue binding 3`] = `
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
-      "Queue-SetConsumer-5cb7e554_IamRolePolicyAttachment_14162571": {
+      "Queue-SetConsumer-7_IamRolePolicyAttachment_65DC1EA3": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-7_IamRole_61536C4F.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
       "Queue_EventSourceMapping_8332F7DC": {
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
-        "function_name": "\${aws_lambda_function.Queue-SetConsumer-5cb7e554.function_name}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer-7.function_name}",
       },
     },
     "aws_lambda_function": {
@@ -242,7 +522,6 @@ exports[`function with a queue binding 3`] = `
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "QUEUE_URL_1cfcc997": "\${aws_sqs_queue.Queue.url}",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -260,24 +539,24 @@ exports[`function with a queue binding 3`] = `
           "subnet_ids": [],
         },
       },
-      "Queue-SetConsumer-5cb7e554": {
+      "Queue-SetConsumer-7": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Queue-SetConsumer-5cb7e554-c8f6c540",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer-7-c8443c63",
           },
         },
-        "function_name": "Queue-SetConsumer-5cb7e554-c8f6c540",
+        "function_name": "Queue-SetConsumer-7-c8443c63",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Queue-SetConsumer-5cb7e554_IamRole_35925398.arn}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-7_IamRole_61536C4F.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Queue-SetConsumer-5cb7e554_S3Object_074547A5.key}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer-7_S3Object_6CEEE2E1.key}",
         "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
@@ -296,7 +575,7 @@ exports[`function with a queue binding 3`] = `
         "key": "<key>",
         "source": "<source>",
       },
-      "Queue-SetConsumer-5cb7e554_S3Object_074547A5": {
+      "Queue-SetConsumer-7_S3Object_6CEEE2E1": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -315,17 +594,17 @@ exports[`function with a queue binding 3`] = `
 
 exports[`function with bucket binding > put operation 1`] = `
 "new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
-};
-})())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
-})"
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
+        };
+        })())({
+        bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
+        })"
 `;
 
 exports[`function with bucket binding > put operation 2`] = `

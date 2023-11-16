@@ -14,7 +14,6 @@ test("publishing messages to topic", async () => {
       const topic = new cloud.Topic(this, "MyTopic");
       const publisher = Testing.makeHandler(
         this,
-        "Publisher",
         `async handle(event) {
             await this.topic.publish(event);
         }`,
@@ -29,7 +28,6 @@ test("publishing messages to topic", async () => {
 
       const processor = Testing.makeHandler(
         this,
-        "Processor",
         `async handle(event) {
           if (event.message === "") throw new Error("No message recieved");
       }`

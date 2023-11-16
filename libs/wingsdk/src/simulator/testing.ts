@@ -1,6 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
+import { autoId } from "../shared/misc";
 import { IInflightHost, Resource } from "../std";
 
 /**
@@ -17,7 +18,6 @@ export class Testing {
    * made through `this.<resource>`.
    *
    * @param scope The scope to create the handler in.
-   * @param id The ID of the handler.
    * @param code The code of the handler.
    * @param bindings The bindings of the handler.
    */
@@ -34,6 +34,7 @@ export class Testing {
 
     // implements IFunctionHandler
     return {
+      _id: autoId(),
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
           Resource._registerOnLiftObject(v.obj, host, v.ops);

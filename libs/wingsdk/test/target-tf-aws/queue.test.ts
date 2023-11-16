@@ -60,7 +60,6 @@ test("queue with a consumer function", () => {
   });
   const processor = Testing.makeHandler(
     app,
-    
     `\
 async handle(event) {
   console.log("Received " + event.name);

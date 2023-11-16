@@ -11,7 +11,6 @@ test("schedule behavior with rate", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
-    
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
@@ -51,7 +50,6 @@ test("schedule behavior with cron", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn = Testing.makeHandler(
     app,
-    
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
@@ -91,12 +89,10 @@ test("schedule with two functions", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const fn1 = Testing.makeHandler(
     app,
-    "Handler1",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const fn2 = Testing.makeHandler(
     app,
-    "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {

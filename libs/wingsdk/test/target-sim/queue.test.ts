@@ -121,7 +121,6 @@ test("queue with one subscriber, batch size of 5", async () => {
   // initialize the queue with some messages
   const onDeployHandler = Testing.makeHandler(
     app,
-    "OnDeployHandler",
     `\
 async handle() {
   await this.queue.push("A");
@@ -157,7 +156,7 @@ async handle() {
     .listTraces()
     .filter(
       (trace) =>
-        trace.sourcePath === "root/my_queue/my_queue-SetConsumer-e645076f" &&
+        trace.sourcePath === consumer.node.path &&
         trace.data.message.startsWith("Invoke")
     );
   expect(invokeMessages.length).toEqual(2); // queue messages are processed in two batches based on batch size

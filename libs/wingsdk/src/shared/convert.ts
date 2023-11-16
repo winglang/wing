@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { normalPath } from "./misc";
-import { IInflightHost, IResource, Node, Resource } from "../std";
+import { IResource } from "../std";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -11,42 +11,22 @@ import { IInflightHost, IResource, Node, Resource } from "../std";
  * resources with a single method named "handle".
  */
 export function convertBetweenHandlers(
-  scope: Construct,
-  id: string,
-  baseHandler: IResource,
+  _scope: Construct,
+  _id: string,
+  baseHandler: any,
   newHandlerClientPath: string,
   newHandlerClientClassName: string,
   args: Record<string, unknown> = {}
 ): IResource {
-  class NewHandler extends Resource {
-    private readonly handler: IResource;
-    private readonly args: Record<string, unknown> = {};
-
-    constructor(theScope: Construct, theId: string, handler: IResource) {
-      super(theScope, theId);
-      this.handler = handler;
-      Node.of(this).hidden = true;
-      this.args = args;
-    }
-
-    public _supportedOps(): string[] {
-      return ["handle"];
-    }
-
-    public _toInflight(): string {
-      const handlerClient = this.handler._toInflight();
+  return {
+    ...baseHandler,
+    _toInflight(): string {
+      const handlerClient = baseHandler._toInflight();
       return `new (require("${normalPath(
         newHandlerClientPath
       )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
-        this.args
+        args
       )} })`;
-    }
-
-    public _registerOnLift(host: IInflightHost, ops: string[]): void {
-      NewHandler._registerOnLiftObject(this.handler, host, ["handle"]);
-      super._registerOnLift(host, ops);
-    }
-  }
-
-  return new NewHandler(scope, id, baseHandler);
+    },
+  };
 }
