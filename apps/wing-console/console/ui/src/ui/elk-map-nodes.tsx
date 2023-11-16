@@ -188,8 +188,8 @@ export const ContainerNode = memo(
               className={classNames(
                 "flex-1 rounded-b",
                 depth % 2 === 0
-                  ? "bg-slate-50 dark:bg-slate-500"
-                  : "bg-white dark:bg-slate-550",
+                  ? "bg-white dark:bg-slate-500"
+                  : "bg-slate-50 dark:bg-slate-550",
                 // The classes below are commented out because they cause rendering flashes while zooming.
                 // "border-x border-b border-dashed",
                 // "group-focus:border-sky-300 dark:group-focus:border-sky-500",
