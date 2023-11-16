@@ -631,26 +631,62 @@ A shared interface for AWS api.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.innerAwsApi">innerAwsApi</a></code> | Get internal AWS ApiGateway. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.innerAwsStage">innerAwsStage</a></code> | Get internal AWS ApiGatewayStage. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.arn">arn</a></code> | RestApi arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.deploymentId">deploymentId</a></code> | RestApi deployment id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.invokeUrl">invokeUrl</a></code> | Invoke URL. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.restApiId">restApiId</a></code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.restApiName">restApiName</a></code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.stageName">stageName</a></code> | RestApi stage name. |
 
 ---
 
-##### `innerAwsApi` <a name="innerAwsApi" id="@winglang/sdk.aws.IAwsApi.innerAwsApi"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsApi.arn"></a>
 
 ```wing
-innerAwsApi(): any
+arn(): str
 ```
 
-Get internal AWS ApiGateway.
+RestApi arn.
 
-##### `innerAwsStage` <a name="innerAwsStage" id="@winglang/sdk.aws.IAwsApi.innerAwsStage"></a>
+##### `deploymentId` <a name="deploymentId" id="@winglang/sdk.aws.IAwsApi.deploymentId"></a>
 
 ```wing
-innerAwsStage(): any
+deploymentId(): str
 ```
 
-Get internal AWS ApiGatewayStage.
+RestApi deployment id.
+
+##### `invokeUrl` <a name="invokeUrl" id="@winglang/sdk.aws.IAwsApi.invokeUrl"></a>
+
+```wing
+invokeUrl(): str
+```
+
+Invoke URL.
+
+##### `restApiId` <a name="restApiId" id="@winglang/sdk.aws.IAwsApi.restApiId"></a>
+
+```wing
+restApiId(): str
+```
+
+RestApi id.
+
+##### `restApiName` <a name="restApiName" id="@winglang/sdk.aws.IAwsApi.restApiName"></a>
+
+```wing
+restApiName(): str
+```
+
+RestApi id.
+
+##### `stageName` <a name="stageName" id="@winglang/sdk.aws.IAwsApi.stageName"></a>
+
+```wing
+stageName(): str
+```
+
+RestApi stage name.
 
 
 ### IAwsBucket <a name="IAwsBucket" id="@winglang/sdk.aws.IAwsBucket"></a>
@@ -663,17 +699,26 @@ A shared interface for AWS buckets.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsBucket.innerAwsBucket">innerAwsBucket</a></code> | Get iinternal AWS Bucket. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.arn">arn</a></code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.bucketName">bucketName</a></code> | AWS Bucket name. |
 
 ---
 
-##### `innerAwsBucket` <a name="innerAwsBucket" id="@winglang/sdk.aws.IAwsBucket.innerAwsBucket"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsBucket.arn"></a>
 
 ```wing
-innerAwsBucket(): any
+arn(): str
 ```
 
-Get iinternal AWS Bucket.
+AWS Bucket arn.
+
+##### `bucketName` <a name="bucketName" id="@winglang/sdk.aws.IAwsBucket.bucketName"></a>
+
+```wing
+bucketName(): str
+```
+
+AWS Bucket name.
 
 
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
@@ -688,7 +733,8 @@ A shared interface for AWS functions.
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.innerAwsFunction">innerAwsFunction</a></code> | Get internal AWS Function. |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.arn">arn</a></code> | AWS Function arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.functionName">functionName</a></code> | AWS Function name. |
 
 ---
 
@@ -726,13 +772,21 @@ Add policy statements to the function's IAM role.
 
 ---
 
-##### `innerAwsFunction` <a name="innerAwsFunction" id="@winglang/sdk.aws.IAwsFunction.innerAwsFunction"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsFunction.arn"></a>
 
 ```wing
-innerAwsFunction(): any
+arn(): str
 ```
 
-Get internal AWS Function.
+AWS Function arn.
+
+##### `functionName` <a name="functionName" id="@winglang/sdk.aws.IAwsFunction.functionName"></a>
+
+```wing
+functionName(): str
+```
+
+AWS Function name.
 
 
 ### IAwsQueue <a name="IAwsQueue" id="@winglang/sdk.aws.IAwsQueue"></a>
@@ -745,17 +799,35 @@ A shared interface for AWS queues.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsQueue.innerAwsQueue">innerAwsQueue</a></code> | Get iinternal AWS Queue. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.arn">arn</a></code> | AWS Queue arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.queueName">queueName</a></code> | AWS Queue name. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.queueUrl">queueUrl</a></code> | AWS Queue url. |
 
 ---
 
-##### `innerAwsQueue` <a name="innerAwsQueue" id="@winglang/sdk.aws.IAwsQueue.innerAwsQueue"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsQueue.arn"></a>
 
 ```wing
-innerAwsQueue(): any
+arn(): str
 ```
 
-Get iinternal AWS Queue.
+AWS Queue arn.
+
+##### `queueName` <a name="queueName" id="@winglang/sdk.aws.IAwsQueue.queueName"></a>
+
+```wing
+queueName(): str
+```
+
+AWS Queue name.
+
+##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueue.queueUrl"></a>
+
+```wing
+queueUrl(): str
+```
+
+AWS Queue url.
 
 
 ### IAwsTable <a name="IAwsTable" id="@winglang/sdk.aws.IAwsTable"></a>
@@ -768,17 +840,26 @@ A shared interface for AWS tables.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.innerAwsTable">innerAwsTable</a></code> | Get iinternal AWS Table. |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.arn">arn</a></code> | AWS Table arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.tableName">tableName</a></code> | AWS Table name. |
 
 ---
 
-##### `innerAwsTable` <a name="innerAwsTable" id="@winglang/sdk.aws.IAwsTable.innerAwsTable"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsTable.arn"></a>
 
 ```wing
-innerAwsTable(): any
+arn(): str
 ```
 
-Get iinternal AWS Table.
+AWS Table arn.
+
+##### `tableName` <a name="tableName" id="@winglang/sdk.aws.IAwsTable.tableName"></a>
+
+```wing
+tableName(): str
+```
+
+AWS Table name.
 
 
 ### IAwsTopic <a name="IAwsTopic" id="@winglang/sdk.aws.IAwsTopic"></a>
@@ -791,17 +872,26 @@ A shared interface for AWS topics.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTopic.innerAwsTopic">innerAwsTopic</a></code> | Get iinternal AWS Topic. |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.arn">arn</a></code> | AWS Topic arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.topicName">topicName</a></code> | AWS Topic name. |
 
 ---
 
-##### `innerAwsTopic` <a name="innerAwsTopic" id="@winglang/sdk.aws.IAwsTopic.innerAwsTopic"></a>
+##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsTopic.arn"></a>
 
 ```wing
-innerAwsTopic(): any
+arn(): str
 ```
 
-Get iinternal AWS Topic.
+AWS Topic arn.
+
+##### `topicName` <a name="topicName" id="@winglang/sdk.aws.IAwsTopic.topicName"></a>
+
+```wing
+topicName(): str
+```
+
+AWS Topic name.
 
 
 ## Enums <a name="Enums" id="Enums"></a>
