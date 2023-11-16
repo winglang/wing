@@ -68,6 +68,7 @@ export const createCompiler = (wingfile: string): Compiler => {
   const ignoreList = [`${dirname}/target/**`, "**/node_modules/**"];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
+    ignoreInitial: true,
   });
   watcher.on("change", recompile);
   watcher.on("add", recompile);
@@ -77,6 +78,8 @@ export const createCompiler = (wingfile: string): Compiler => {
     }
     void recompile();
   });
+
+  void recompile();
 
   return {
     async start() {
