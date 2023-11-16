@@ -33,9 +33,9 @@ const TABLE_NAME_OPTS: NameOptions = {
  */
 export enum StorageAccountPermissions {
   /** Read only permission */
-  READ = "Storage Table Reader",
+  READ = "Storage Table Data Reader",
   /** Read write permission */
-  READ_WRITE = "Storage Table Contributor",
+  READ_WRITE = "Storage Table Data Contributor",
 }
 
 /**
@@ -88,24 +88,30 @@ export class Counter extends cloud.Counter {
       });
     }
 
-    host.addEnvironment(this.envName(), this.storageTable.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
+    host.addEnvironment(this.envStorageTableName(), this.storageTable.name);
     super.onLift(host, ops);
   }
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "TableClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.envStorageAccountName()}"]`,
-    ]);
-  }
-
-  private envName(): string {
-    return `TABLE_NAME_${this.storageTable.node.addr.slice(-8)}`;
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "CounterClient",
+      [
+        `process.env["${this.envStorageAccountName()}"]`,
+        `process.env["${this.envStorageTableName()}"]`,
+        `${this.initial}`,
+      ]
+    );
   }
 
   private envStorageAccountName(): string {
     return `STORAGE_ACCOUNT_${this.storageTable.node.addr.slice(-8)}`;
+  }
+
+  private envStorageTableName(): string {
+    return `TABLE_NAME_${this.storageTable.node.addr.slice(-8)}`;
   }
 }
