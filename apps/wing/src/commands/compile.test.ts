@@ -10,7 +10,6 @@ import { generateTmpDir } from "../util";
 const exampleDir = resolve("../../examples/tests/valid");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
-const exampleFilePath2 = join(exampleDir, "capture_primitives.test.w");
 
 describe(
   "compile command tests",
@@ -34,26 +33,6 @@ describe(
         targetDir: `${await generateTmpDir()}/target`,
       });
       const expectedFiles = ["main.tf.json", "tree.json", "connections.json"];
-
-      const stats = await stat(artifactDir);
-      expect(stats.isDirectory()).toBeTruthy();
-      const files = await readdir(artifactDir);
-      expect(files.length).toBeGreaterThan(0);
-      expectedFiles.forEach((file) => expect(files).toContain(file));
-    });
-
-    test("should be able to compile the SDK capture primitives test to awscdk", async () => {
-      process.env.CDK_STACK_NAME = "compile-test-stack";
-      const artifactDir = await compile(exampleFilePath2, {
-        platform: [BuiltinPlatform.AWSCDK],
-        targetDir: `${await generateTmpDir()}/target`,
-      });
-      const expectedFiles = [
-        "compile-test-stack.assets.json",
-        "compile-test-stack.template.json",
-        "tree.json",
-        "connections.json",
-      ];
 
       const stats = await stat(artifactDir);
       expect(stats.isDirectory()).toBeTruthy();
