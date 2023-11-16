@@ -27,7 +27,7 @@ test("topic with subscriber function", () => {
   const topic = new Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
   topic.onMessage(subscriber);

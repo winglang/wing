@@ -34,7 +34,7 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      "Handler",
+      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {
@@ -67,7 +67,7 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      "Handler",
+      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {
@@ -90,7 +90,7 @@ describe("function with bucket binding", () => {
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       app,
-      "Handler",
+      
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
       {
         bucket: {

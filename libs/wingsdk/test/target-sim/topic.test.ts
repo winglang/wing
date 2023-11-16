@@ -30,7 +30,7 @@ test("topic publishes messages as they are received", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(
     app,
-    "Handler",
+
     `async handle(message) { console.log("Received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");

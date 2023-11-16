@@ -16,7 +16,7 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 test("basic function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   new Function(app, "Function", inflight);
   const output = app.synth();
 
@@ -40,7 +40,7 @@ test("basic function", () => {
 test("basic function with environment variables", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   const f = new Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
@@ -71,7 +71,7 @@ test("basic function with environment variables", () => {
 test("basic function with timeout explicitly set", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   new Function(app, "Function", inflight, {
     timeout: Duration.fromMinutes(5),
   });
@@ -93,7 +93,7 @@ test("basic function with timeout explicitly set", () => {
 test("basic function with memory size specified", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   new Function(app, "Function", inflight, { memory: 512 });
   const output = app.synth();
 
@@ -113,7 +113,7 @@ test("basic function with memory size specified", () => {
 test("basic function with custom log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   new Function(app, "Function", inflight, { logRetentionDays: 7 });
   const output = app.synth();
 
@@ -129,7 +129,7 @@ test("basic function with custom log retention", () => {
 test("basic function with infinite log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(app, INFLIGHT_CODE);
   new Function(app, "Function", inflight, { logRetentionDays: -1 });
   const output = app.synth();
 

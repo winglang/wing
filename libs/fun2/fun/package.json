@@ -1,0 +1,12 @@
+{
+  "name": "fun",
+  "dependencies": {
+    "@winglang/sdk": "workspace:*",
+    "acorn": "^8.11.2",
+    "estree-walker": "^3.0.3",
+    "is-reference": "^3.0.2",
+    "tsx": "^4.1.2",
+    "typescript": "^5.2.2",
+    "constructs": "^10.2.70"
+  }
+}

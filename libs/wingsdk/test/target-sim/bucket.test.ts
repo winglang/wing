@@ -36,7 +36,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
+  const testInflight = Testing.makeHandler(app, "null");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();

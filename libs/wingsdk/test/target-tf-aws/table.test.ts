@@ -33,7 +33,7 @@ test("function with a table binding", () => {
   });
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) {
   await this.my_table.insert({ id: "test" });
 }`,

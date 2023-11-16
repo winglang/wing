@@ -120,7 +120,6 @@ function makeTest(
 ) {
   const handler = Testing.makeHandler(
     scope,
-    `${id}.handler`,
     `async handle() { ${code.join("\n")} }`,
     bindings
   );

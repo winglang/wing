@@ -39,7 +39,6 @@ export class SimApp extends App {
       id,
       Testing.makeHandler(
         this,
-        `${id}.handler`,
         `async handle() {
           ${code}
         }`

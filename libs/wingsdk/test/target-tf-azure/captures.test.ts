@@ -15,7 +15,7 @@ test("function with a bucket binding requiring read_write", () => {
   const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+
     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
     {
       bucket: {
@@ -64,7 +64,6 @@ test("function with a bucket binding requiring only read", () => {
   const bucket = new cloud.Bucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
     `async handle(event) { await this.bucket.get("hello.txt"); }`,
     {
       bucket: {

@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
-import { IInflightHost, IResource, Node, Resource } from "../std";
+import { IInflightHost, Resource } from "../std";
 
 /**
  * Test utilities.
@@ -23,10 +23,9 @@ export class Testing {
    */
   public static makeHandler(
     scope: IConstruct,
-    id: string,
     code: string,
     bindings: InflightBindings = {}
-  ): IResource {
+  ): any {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
@@ -34,49 +33,27 @@ export class Testing {
     }
 
     // implements IFunctionHandler
-    class Handler extends Resource {
-      constructor() {
-        super(scope, id);
-
-        // pretend as if we have a field for each binding
-        for (const [field, value] of Object.entries(bindings)) {
-          (this as any)[field] = value.obj;
-        }
-
-        Node.of(this).title = "Inflight";
-        Node.of(this).description = "An inflight resource";
-        Node.of(this).hidden = true;
-      }
-
-      public _supportedOps(): string[] {
-        return ["handle"];
-      }
-
-      public _toInflight(): string {
-        return `new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  ${code}
-};
-})())({
-${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client}`)
-  .join(",\n")}
-})`;
-      }
-
-      public _registerOnLift(host: IInflightHost, ops: string[]): void {
+    return {
+      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
-          Handler._registerOnLiftObject(v.obj, host, v.ops);
+          Resource._registerOnLiftObject(v.obj, host, v.ops);
         }
-        super._registerOnLift(host, ops);
-      }
-    }
-
-    return new Handler();
+      },
+      _supportedOps: () => ["handle"],
+      _toInflight: () => `new ((function(){
+        return class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }
+          }
+          ${code}
+        };
+        })())({
+        ${Object.entries(clients)
+          .map(([name, client]) => `${name}: ${client}`)
+          .join(",\n")}
+        })`,
+    };
   }
 }

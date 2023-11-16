@@ -10,7 +10,6 @@ test("create a bucket", async () => {
   const bucket = new cloud.Bucket(app, "my_bucket");
   const handler = Testing.makeHandler(
     app,
-    "Handler",
     "async handle() { return 'hello'; }"
   );
   const fn = new cloud.Function(app, "my_function", handler);

@@ -96,7 +96,6 @@ test("bucket with onCreate method", () => {
   const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
-    "Handler",
     `\
 async handle(event) {
   console.log("Received " + event.name);
@@ -128,7 +127,6 @@ test("bucket with onDelete method", () => {
   const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
-    "Handler",
     `\
 async handle(event) {
   console.log("Received " + event.name);
@@ -160,7 +158,6 @@ test("bucket with onUpdate method", () => {
   const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
-    "Handler",
     `\
 async handle(event) {
   console.log("Received " + event.name);
@@ -192,7 +189,6 @@ test("bucket with onEvent method", () => {
   const bucket = new Bucket(app, "my_bucket");
   const processor = Testing.makeHandler(
     app,
-    "Handler",
     `\
 async handle(event) {
   console.log("Received " + event.name);

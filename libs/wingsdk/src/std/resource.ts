@@ -103,7 +103,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  protected static _registerOnLiftObject(
+  public static _registerOnLiftObject(
     obj: any,
     host: IInflightHost,
     ops: string[] = []

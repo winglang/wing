@@ -16,7 +16,7 @@ test("schedule behavior with rate", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new Schedule(app, "Schedule", {
@@ -39,7 +39,7 @@ test("schedule behavior with cron", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new Schedule(app, "Schedule", {
@@ -62,7 +62,7 @@ test("schedule with two functions", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
   const fn2 = Testing.makeHandler(

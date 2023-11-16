@@ -51,7 +51,7 @@ test("function with a counter binding", () => {
   const counter = new Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+
     `async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
@@ -80,7 +80,7 @@ test("inc() policy statement", () => {
   const counter = new Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
@@ -115,7 +115,7 @@ test("dec() policy statement", () => {
   const counter = new Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) {
   const val = await this.my_counter.dec(2);
   console.log(val);
@@ -150,7 +150,7 @@ test("peek() policy statement", () => {
   const counter = new Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) {
   const val = await this.my_counter.peek();
   console.log(val);
@@ -185,7 +185,7 @@ test("set() policy statement", () => {
   const counter = new Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) {
   const val = await this.my_counter.set();
   console.log(val);

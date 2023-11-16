@@ -31,7 +31,7 @@ test("topic with subscriber function", () => {
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
 
@@ -130,7 +130,7 @@ test("topic with subscriber function timeout", () => {
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
-    "Handler",
+    
     `async handle(event) { console.log("Received: ", event); }`
   );
 
