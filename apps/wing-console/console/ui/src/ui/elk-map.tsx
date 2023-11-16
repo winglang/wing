@@ -284,9 +284,9 @@ const Graph = memo(
       <div
         className={classNames(
           "relative",
-          "transition-all",
+          "transition-transform",
           "rounded-lg",
-          nodeList.length > 0 && "bg-slate-100 dark:bg-slate-500",
+          nodeList.length > 0 && "bg-white dark:bg-slate-500",
           durationClass,
         )}
         style={{
@@ -606,7 +606,7 @@ export const ElkMap = <T extends unknown = undefined>({
 
       <ZoomPane
         ref={zoomPane}
-        className="w-full h-full bg-white dark:bg-slate-550"
+        className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
       >
         <div ref={rootElement}>

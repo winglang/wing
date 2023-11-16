@@ -385,7 +385,7 @@ jobs:
             set -o pipefail
 
             cd dist
-            PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang")
+            PACKAGES=("@winglang/sdk" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
               VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)
