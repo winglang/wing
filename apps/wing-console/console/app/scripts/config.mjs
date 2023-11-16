@@ -1,5 +1,6 @@
-import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
+
+import react from "@vitejs/plugin-react";
 import * as vite from "vite";
 
 /** @type vite.InlineConfig */

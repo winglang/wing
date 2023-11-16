@@ -470,9 +470,15 @@ importers:
       '@wingconsole/server':
         specifier: workspace:^
         version: link:../server
+      cross-spawn:
+        specifier: ^7.0.3
+        version: 7.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      picocolors:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@ibm/plex':
         specifier: ^6.3.0
@@ -730,7 +736,7 @@ importers:
         version: 4.6.10
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.31)(typescript@5.2.2)
+        version: 6.7.0(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1145,7 +1151,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(typescript@4.9.5)
+        version: 6.7.0(ts-node@10.9.1)(typescript@4.9.5)
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
@@ -14139,7 +14145,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231115
+      typescript: 5.4.0-dev.20231116
     dev: true
 
   /dset@3.1.2:
@@ -23320,7 +23326,7 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@6.7.0(typescript@4.9.5):
+  /tsup@6.7.0(typescript@5.2.2):
     resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
     engines: {node: '>=14.18'}
     hasBin: true
@@ -23344,13 +23350,13 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 3.1.4(postcss@8.4.31)
+      postcss-load-config: 3.1.4(ts-node@10.9.1)
       resolve-from: 5.0.0
       rollup: 3.29.4
       source-map: 0.8.0-beta.0
       sucrase: 3.34.0
       tree-kill: 1.2.2
-      typescript: 4.9.5
+      typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -23657,8 +23663,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231115:
-    resolution: {integrity: sha512-a+TtR81g52/m9nDePLWP1sa8gXhU+6Zgad4vMfUrMWX+dHdDmrfHx/vqEbLQotyUSNGRYcZWu97o8XxSRci/aQ==}
+  /typescript@5.4.0-dev.20231116:
+    resolution: {integrity: sha512-arT/MwHnosyqo1MQ2xN9VzwvWo1jxrhUpa1iQX1yZACfBRJb1dQ1D2MU/Ijotjr6eXw8BZ3RFdj9X/9O56iOgw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
