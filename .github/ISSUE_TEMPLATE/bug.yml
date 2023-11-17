@@ -34,7 +34,6 @@ body:
     label: "I expected this:"
     placeholder: "What did you expect to happen? Describe the output or behavior you expected to see (unless it's obvious)."
   validations:
-    required: false    
 
 - type: textarea
   id: workaround
