@@ -7,6 +7,7 @@ export enum LayoutType {
   Playground,
   Tutorial,
   Vscode,
+  wingcloud,
 }
 
 export const LayoutContext = createContext(LayoutType.Default);
@@ -78,6 +79,14 @@ export function LayoutProvider({
         bottomPanel: {
           hide: true,
         },
+        statusBar: {
+          hide: true,
+        },
+      };
+      break;
+    }
+    case LayoutType.wingcloud: {
+      layoutConfig = {
         statusBar: {
           hide: true,
         },
