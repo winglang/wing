@@ -47,6 +47,6 @@ test "rename()" {
 
   // Test renaming non-existent object
   assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
-    b.rename(UNEXISTING_KEY, "new-name.w");
+    b.rename(UNEXISTING_KEY, "new-name.txt");
   });
 }
