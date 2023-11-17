@@ -255,7 +255,7 @@ exports[`api configured for cors 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/",
+              "/*/GET/",
             ],
           ],
         },
@@ -1050,7 +1050,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/{name}/{age}",
+              "/*/GET/{name}/{age}",
             ],
           ],
         },
@@ -1472,7 +1472,7 @@ exports[`api with 'name' parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/{name}",
+              "/*/GET/{name}",
             ],
           ],
         },
@@ -1885,7 +1885,7 @@ exports[`api with CONNECT route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/CONNECT/",
+              "/*/CONNECT/",
             ],
           ],
         },
@@ -2298,7 +2298,7 @@ exports[`api with DELETE route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/DELETE/",
+              "/*/DELETE/",
             ],
           ],
         },
@@ -2711,7 +2711,7 @@ exports[`api with GET route at root 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/",
+              "/*/GET/",
             ],
           ],
         },
@@ -3166,7 +3166,7 @@ exports[`api with GET routes with common prefix 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/bat",
+              "/*/GET/hello/bat",
             ],
           ],
         },
@@ -3200,7 +3200,7 @@ exports[`api with GET routes with common prefix 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/foo",
+              "/*/GET/hello/foo",
             ],
           ],
         },
@@ -3736,7 +3736,7 @@ exports[`api with GET routes with different prefix 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/foo/bar",
+              "/*/GET/foo/bar",
             ],
           ],
         },
@@ -3770,7 +3770,7 @@ exports[`api with GET routes with different prefix 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/foo",
+              "/*/GET/hello/foo",
             ],
           ],
         },
@@ -4264,7 +4264,7 @@ exports[`api with HEAD route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/HEAD/",
+              "/*/HEAD/",
             ],
           ],
         },
@@ -4677,7 +4677,7 @@ exports[`api with OPTIONS route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/OPTIONS/",
+              "/*/OPTIONS/",
             ],
           ],
         },
@@ -5090,7 +5090,7 @@ exports[`api with PATCH route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/PATCH/",
+              "/*/PATCH/",
             ],
           ],
         },
@@ -5503,7 +5503,7 @@ exports[`api with POST route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/POST/",
+              "/*/POST/",
             ],
           ],
         },
@@ -5916,7 +5916,7 @@ exports[`api with PUT route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/PUT/",
+              "/*/PUT/",
             ],
           ],
         },
@@ -6371,7 +6371,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/bat",
+              "/*/GET/hello/bat",
             ],
           ],
         },
@@ -6405,7 +6405,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/foo",
+              "/*/GET/hello/foo",
             ],
           ],
         },
@@ -6860,7 +6860,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/foo",
+              "/*/GET/hello/foo",
             ],
           ],
         },
@@ -6894,7 +6894,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/POST/hello/bat",
+              "/*/POST/hello/bat",
             ],
           ],
         },
@@ -7430,7 +7430,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/foo",
+              "/*/GET/hello/foo",
             ],
           ],
         },
@@ -7464,7 +7464,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/POST/hello/bat",
+              "/*/POST/hello/bat",
             ],
           ],
         },
@@ -7917,7 +7917,7 @@ exports[`api with multiple methods on same route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/",
+              "/*/GET/",
             ],
           ],
         },
@@ -7951,7 +7951,7 @@ exports[`api with multiple methods on same route 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/PUT/",
+              "/*/PUT/",
             ],
           ],
         },
@@ -8373,7 +8373,7 @@ exports[`api with path parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/prod/GET/hello/{world}",
+              "/*/GET/hello/{world}",
             ],
           ],
         },
