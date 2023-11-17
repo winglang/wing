@@ -2,7 +2,8 @@ import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { simulator, cloud, std } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
