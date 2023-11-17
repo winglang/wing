@@ -382,13 +382,22 @@ export interface IBucketClient {
   /**
    * Copy an object to a new location in the bucket. If the destination object
    * already exists, it will be overwritten. Returns once the copying is finished.
-   *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    * @throws if `srcKey` object doesn't exist.
    * @inflight
    */
   copy(srcKey: string, dstKey: string): Promise<void>;
+
+  /**
+   * Move an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the renaming is finished.
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after renaming.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   * @inflight
+   */
+  rename(srcKey: string, dstKey: string): Promise<void>;
 }
 
 /**
@@ -497,4 +506,6 @@ export enum BucketInflightMethods {
   METADATA = "metadata",
   /** `Bucket.copy` */
   COPY = "copy",
+  /** `Bucket.rename` */
+  RENAME = "rename",
 }
