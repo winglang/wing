@@ -102,7 +102,7 @@ exports[`schedule behavior with cron 1`] = `
           {
             "Arn": {
               "Fn::GetAtt": [
-                "ScheduleSetConsumerc185c7e309AC31A4",
+                "ScheduleSetConsumer13079D8A7",
                 "Arn",
               ],
             },
@@ -112,12 +112,12 @@ exports[`schedule behavior with cron 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "ScheduleAllowEventRulemyprojectScheduleSetConsumerc185c7e38BBD7CF4F7734C87": {
+    "ScheduleAllowEventRulemyprojectScheduleSetConsumer17387C23E25958F88": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e309AC31A4",
+            "ScheduleSetConsumer13079D8A7",
             "Arn",
           ],
         },
@@ -131,9 +131,9 @@ exports[`schedule behavior with cron 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ScheduleSetConsumerc185c7e309AC31A4": {
+    "ScheduleSetConsumer13079D8A7": {
       "DependsOn": [
-        "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+        "ScheduleSetConsumer1ServiceRoleADB5F106",
       ],
       "Properties": {
         "Architectures": [
@@ -149,7 +149,7 @@ exports[`schedule behavior with cron 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+            "ScheduleSetConsumer1ServiceRoleADB5F106",
             "Arn",
           ],
         },
@@ -158,7 +158,7 @@ exports[`schedule behavior with cron 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ScheduleSetConsumerc185c7e3LogRetention071E5DB1": {
+    "ScheduleSetConsumer1LogRetention5AF77227": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -166,7 +166,7 @@ exports[`schedule behavior with cron 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ScheduleSetConsumerc185c7e309AC31A4",
+                "Ref": "ScheduleSetConsumer13079D8A7",
               },
             ],
           ],
@@ -181,7 +181,7 @@ exports[`schedule behavior with cron 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ScheduleSetConsumerc185c7e3ServiceRoleAA894847": {
+    "ScheduleSetConsumer1ServiceRoleADB5F106": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -345,7 +345,7 @@ exports[`schedule behavior with rate 1`] = `
           {
             "Arn": {
               "Fn::GetAtt": [
-                "ScheduleSetConsumerc185c7e309AC31A4",
+                "ScheduleSetConsumer0FE4AA829",
                 "Arn",
               ],
             },
@@ -355,12 +355,12 @@ exports[`schedule behavior with rate 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "ScheduleAllowEventRulemyprojectScheduleSetConsumerc185c7e38BBD7CF4F7734C87": {
+    "ScheduleAllowEventRulemyprojectScheduleSetConsumer001CBB81319F16E0F": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e309AC31A4",
+            "ScheduleSetConsumer0FE4AA829",
             "Arn",
           ],
         },
@@ -374,9 +374,9 @@ exports[`schedule behavior with rate 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ScheduleSetConsumerc185c7e309AC31A4": {
+    "ScheduleSetConsumer0FE4AA829": {
       "DependsOn": [
-        "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+        "ScheduleSetConsumer0ServiceRole0CE17EC9",
       ],
       "Properties": {
         "Architectures": [
@@ -392,7 +392,7 @@ exports[`schedule behavior with rate 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+            "ScheduleSetConsumer0ServiceRole0CE17EC9",
             "Arn",
           ],
         },
@@ -401,7 +401,7 @@ exports[`schedule behavior with rate 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ScheduleSetConsumerc185c7e3LogRetention071E5DB1": {
+    "ScheduleSetConsumer0LogRetentionA105F5B6": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -409,7 +409,7 @@ exports[`schedule behavior with rate 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ScheduleSetConsumerc185c7e309AC31A4",
+                "Ref": "ScheduleSetConsumer0FE4AA829",
               },
             ],
           ],
@@ -424,7 +424,7 @@ exports[`schedule behavior with rate 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ScheduleSetConsumerc185c7e3ServiceRoleAA894847": {
+    "ScheduleSetConsumer0ServiceRole0CE17EC9": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -588,7 +588,7 @@ exports[`schedule with two functions 1`] = `
           {
             "Arn": {
               "Fn::GetAtt": [
-                "ScheduleSetConsumerc185c7e309AC31A4",
+                "ScheduleSetConsumer217BD1FF7",
                 "Arn",
               ],
             },
@@ -597,7 +597,7 @@ exports[`schedule with two functions 1`] = `
           {
             "Arn": {
               "Fn::GetAtt": [
-                "ScheduleSetConsumer6e1b4252729BE1C0",
+                "ScheduleSetConsumer3A3D5E945",
                 "Arn",
               ],
             },
@@ -607,12 +607,12 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "ScheduleAllowEventRulemyprojectScheduleSetConsumer6e1b425227258B03DBB57E99": {
+    "ScheduleAllowEventRulemyprojectScheduleSetConsumer239B20C90B0AA8055": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumer6e1b4252729BE1C0",
+            "ScheduleSetConsumer217BD1FF7",
             "Arn",
           ],
         },
@@ -626,12 +626,12 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ScheduleAllowEventRulemyprojectScheduleSetConsumerc185c7e38BBD7CF4F7734C87": {
+    "ScheduleAllowEventRulemyprojectScheduleSetConsumer3CA4673372E5A29AD": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e309AC31A4",
+            "ScheduleSetConsumer3A3D5E945",
             "Arn",
           ],
         },
@@ -645,9 +645,9 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ScheduleSetConsumer6e1b4252729BE1C0": {
+    "ScheduleSetConsumer217BD1FF7": {
       "DependsOn": [
-        "ScheduleSetConsumer6e1b4252ServiceRole88F787AF",
+        "ScheduleSetConsumer2ServiceRole7850BFA8",
       ],
       "Properties": {
         "Architectures": [
@@ -663,7 +663,7 @@ exports[`schedule with two functions 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumer6e1b4252ServiceRole88F787AF",
+            "ScheduleSetConsumer2ServiceRole7850BFA8",
             "Arn",
           ],
         },
@@ -672,7 +672,7 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ScheduleSetConsumer6e1b4252LogRetention8463D9FE": {
+    "ScheduleSetConsumer2LogRetention2A0EC413": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -680,7 +680,7 @@ exports[`schedule with two functions 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ScheduleSetConsumer6e1b4252729BE1C0",
+                "Ref": "ScheduleSetConsumer217BD1FF7",
               },
             ],
           ],
@@ -695,7 +695,7 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ScheduleSetConsumer6e1b4252ServiceRole88F787AF": {
+    "ScheduleSetConsumer2ServiceRole7850BFA8": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -726,9 +726,9 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "ScheduleSetConsumerc185c7e309AC31A4": {
+    "ScheduleSetConsumer3A3D5E945": {
       "DependsOn": [
-        "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+        "ScheduleSetConsumer3ServiceRole9E5D1916",
       ],
       "Properties": {
         "Architectures": [
@@ -744,7 +744,7 @@ exports[`schedule with two functions 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ScheduleSetConsumerc185c7e3ServiceRoleAA894847",
+            "ScheduleSetConsumer3ServiceRole9E5D1916",
             "Arn",
           ],
         },
@@ -753,7 +753,7 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ScheduleSetConsumerc185c7e3LogRetention071E5DB1": {
+    "ScheduleSetConsumer3LogRetentionBEC32780": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -761,7 +761,7 @@ exports[`schedule with two functions 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ScheduleSetConsumerc185c7e309AC31A4",
+                "Ref": "ScheduleSetConsumer3A3D5E945",
               },
             ],
           ],
@@ -776,7 +776,7 @@ exports[`schedule with two functions 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ScheduleSetConsumerc185c7e3ServiceRoleAA894847": {
+    "ScheduleSetConsumer3ServiceRole9E5D1916": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [

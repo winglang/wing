@@ -45,10 +45,10 @@ test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const topic = new cloud.Topic(app, "Topic");
-  const subOne = simulator.Testing.makeHandler("Handler1",
+  const subOne = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Got Event: ", event); }`
   );
-  const subTwo = simulator.Testing.makeHandler("Handler2",
+  const subTwo = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Ohh yea!! ", event); }`
   );
 

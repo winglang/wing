@@ -533,20 +533,20 @@ exports[`default counter behavior 1`] = `
 
 exports[`function with a counter binding 1`] = `
 "new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(event) {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
 }
-        };
-        })())({
-        my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
-        })"
+  };
+})())({
+  my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
+})"
 `;
 
 exports[`function with a counter binding 2`] = `

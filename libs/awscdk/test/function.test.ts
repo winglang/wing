@@ -72,7 +72,7 @@ test("basic function with timeout explicitly set", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "Function", inflight, {
-    timeout: Duration.fromMinutes(5),
+    timeout: std.Duration.fromMinutes(5),
   });
   const output = app.synth();
 

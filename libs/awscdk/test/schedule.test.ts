@@ -55,7 +55,7 @@ test("schedule with two functions", () => {
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
-  const fn2 = simulator.Testing.makeHandler("Handler2",
+  const fn2 = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {

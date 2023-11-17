@@ -2,21 +2,21 @@
 
 exports[`captures tokens 1`] = `
 "new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(event) {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
     console.log(this.str, this.num, this.list);
   }
-        };
-        })())({
-        str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9\\"]),
+  };
+})())({
+  str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9\\"]),
 num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591388E_298\\"]),
 list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_11\\"])
-        })"
+})"
 `;
 
 exports[`captures tokens 2`] = `

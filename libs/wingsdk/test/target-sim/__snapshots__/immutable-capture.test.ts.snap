@@ -5,22 +5,22 @@ exports[`array 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.length === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 2\\"\`); }
 if (!(this.my_capture[0] === \\"hello\\")) { throw new Error(\`assertion failed: \\"this.my_capture[0] === \\\\\\"hello\\\\\\"\\"\`); }
 if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture[1] === \\\\\\"dude\\\\\\"\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: [\\"hello\\",\\"dude\\"]
-        })).handle(event);
+  };
+})())({
+  my_capture: [\\"hello\\",\\"dude\\"]
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -174,13 +174,13 @@ exports[`array of buckets 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 await this.my_buckets[0].put(\\"hello.txt\\", \\"world\\");
 const objects = await this.my_buckets[0].list();
 if (!(objects.length === 1)) { throw new Error(\`assertion failed: \\"objects.length === 1\\"\`); }
@@ -189,9 +189,9 @@ await this.my_buckets[1].put(\\"foo\\", \\"bar\\");
 if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion failed: \\"await this.my_buckets[1].get(\\\\\\"foo\\\\\\") === \\\\\\"bar\\\\\\"\\"\`); }
 
 }
-        };
-        })())({
-        my_buckets: [(function() {
+  };
+})())({
+  my_buckets: [(function() {
   let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
     throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
@@ -212,7 +212,7 @@ if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]
-        })).handle(event);
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -424,22 +424,22 @@ exports[`array of durations 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_array.length === 2)) { throw new Error(\`assertion failed: \\"this.my_array.length === 2\\"\`); }
 if (!(this.my_array[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_array[0].minutes === 10\\"\`); }
 if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\"this.my_array[1].minutes === 20\\"\`); }
 
 }
-        };
-        })())({
-        my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]
-        })).handle(event);
+  };
+})())({
+  my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -593,21 +593,21 @@ exports[`array of maps 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_array[0].get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_array[0].get('foo') === 1\\"\`); }
 if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_array[1].get('bar') === 4\\"\`); }
 
 }
-        };
-        })())({
-        my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
-        })).handle(event);
+  };
+})())({
+  my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -761,20 +761,20 @@ exports[`boolean 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.my_capture === false\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: false
-        })).handle(event);
+  };
+})())({
+  my_capture: false
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -928,22 +928,22 @@ exports[`duration 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.minutes === 120)) { throw new Error(\`assertion failed: \\"this.my_capture.minutes === 120\\"\`); }
 if (!(this.my_capture.seconds === 7200)) { throw new Error(\`assertion failed: \\"this.my_capture.seconds === 7200\\"\`); }
 if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.hours === 2\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
-        })).handle(event);
+  };
+})())({
+  my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1097,13 +1097,13 @@ exports[`map 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"foo\\\\\\")\\"\`); }
 if (!(this.my_capture.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bar\\\\\\")\\"\`); }
 if (!(this.my_capture.size === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 2\\"\`); }
@@ -1111,10 +1111,10 @@ if (!(this.my_capture.get(\\"foo\\") === 123)) { throw new Error(\`assertion fai
 if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion failed: \\"this.my_capture.get(\\\\\\"bar\\\\\\") === 456\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
-        })).handle(event);
+  };
+})())({
+  my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1268,13 +1268,13 @@ exports[`map of arrays 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_map.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"foo\\\\\\")\\"\`); }
 if (!(this.my_map.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"bar\\\\\\")\\"\`); }
 if (!(this.my_map.size === 2)) { throw new Error(\`assertion failed: \\"this.my_map.size === 2\\"\`); }
@@ -1284,10 +1284,10 @@ if (!(this.my_map.get(\\"bar\\")[0] === 3)) { throw new Error(\`assertion failed
 if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"bar\\\\\\")[1] === 4\\"\`); }
 
 }
-        };
-        })())({
-        my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
-        })).handle(event);
+  };
+})())({
+  my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1441,23 +1441,23 @@ exports[`map of arrays of durations 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_map.get('foo')[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[0].minutes === 10\\"\`); }
 if (!(this.my_map.get('foo')[1].seconds === 20 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[1].seconds === 20 * 60\\"\`); }
 if (!(this.my_map.get('bar')[0].minutes === 30)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[0].minutes === 30\\"\`); }
 if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[1].seconds === 40 * 60\\"\`); }
 
 }
-        };
-        })())({
-        my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]],[\\"bar\\",[{\\"seconds\\": 1800,\\"minutes\\": 30,\\"hours\\": 0.5,},{\\"seconds\\": 2400,\\"minutes\\": 40,\\"hours\\": 0.6666666666666666,}]]])
-        })).handle(event);
+  };
+})())({
+  my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}]],[\\"bar\\",[{\\"seconds\\": 1800,\\"minutes\\": 30,\\"hours\\": 0.5,},{\\"seconds\\": 2400,\\"minutes\\": 40,\\"hours\\": 0.6666666666666666,}]]])
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1611,21 +1611,21 @@ exports[`map of buckets 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 const foo = this.my_map.get(\\"foo\\");
 await foo.put(\\"hello.txt\\", \\"world\\");
 if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`assertion failed: \\"await foo.get(\\\\\\"hello.txt\\\\\\") === \\\\\\"world\\\\\\"\\"\`); }
 
 }
-        };
-        })())({
-        my_map: new Map([[\\"foo\\",(function() {
+  };
+})())({
+  my_map: new Map([[\\"foo\\",(function() {
   let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
     throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
@@ -1646,7 +1646,7 @@ if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`asser
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]])
-        })).handle(event);
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1858,20 +1858,20 @@ exports[`number 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"this.my_capture + 20 === 143\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: 123
-        })).handle(event);
+  };
+})())({
+  my_capture: 123
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2025,23 +2025,23 @@ exports[`set 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.has(\\"boom\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"boom\\\\\\")\\"\`); }
 if (!(this.my_capture.has(\\"bam\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bam\\\\\\")\\"\`); }
 if (!(this.my_capture.has(\\"bang\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bang\\\\\\")\\"\`); }
 if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 3\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
-        })).handle(event);
+  };
+})())({
+  my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2195,22 +2195,22 @@ exports[`set of durations 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(Array.from(this.my_set)[0].minutes === 10)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].minutes === 10\\"\`); }
 if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].hours === 0.16666666666666666\\"\`); }
 if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[1].seconds === 1200\\"\`); }
 
 }
-        };
-        })())({
-        my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}])
-        })).handle(event);
+  };
+})())({
+  my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.16666666666666666,},{\\"seconds\\": 1200,\\"minutes\\": 20,\\"hours\\": 0.3333333333333333,}])
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2364,21 +2364,21 @@ exports[`string 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.length === 11)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 11\\"\`); }
 if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion failed: \\"this.my_capture === \\\\\\"bam bam bam\\\\\\"\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: \\"bam bam bam\\"
-        })).handle(event);
+  };
+})())({
+  my_capture: \\"bam bam bam\\"
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2532,23 +2532,23 @@ exports[`struct 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_capture.hello === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture.hello === \\\\\\"dude\\\\\\"\\"\`); }
 if (!(this.my_capture.world === \\"cup\\")) { throw new Error(\`assertion failed: \\"this.my_capture.world === \\\\\\"cup\\\\\\"\\"\`); }
 if (!(this.my_capture.foo === \\"bar\\")) { throw new Error(\`assertion failed: \\"this.my_capture.foo === \\\\\\"bar\\\\\\"\\"\`); }
 if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion failed: \\"Object.keys(this.my_capture).length === 3\\"\`); }
 
 }
-        };
-        })())({
-        my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\",}
-        })).handle(event);
+  };
+})())({
+  my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\",}
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2702,23 +2702,23 @@ exports[`struct of maps 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 if (!(this.my_struct.foo.get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('foo') === 1\\"\`); }
 if (!(this.my_struct.foo.get('bar') === 2)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('bar') === 2\\"\`); }
 if (!(this.my_struct.bar.get('foo') === 3)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('foo') === 3\\"\`); }
 if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('bar') === 4\\"\`); }
 
 }
-        };
-        })())({
-        my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
-        })).handle(event);
+  };
+})())({
+  my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2872,13 +2872,13 @@ exports[`struct with resources 1`] = `
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
 const b = this.my_struct.bucky;
 await b.put(\\"hello.txt\\", \\"world\\");
 if (!(await b.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`assertion failed: \\"await b.get(\\\\\\"hello.txt\\\\\\") === \\\\\\"world\\\\\\"\\"\`); }
@@ -2889,9 +2889,9 @@ await bar.put(\\"foo\\", \\"bar\\");
 if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion failed: \\"await bar.get(\\\\\\"foo\\\\\\") === \\\\\\"bar\\\\\\"\\"\`); }
 
 }
-        };
-        })())({
-        my_struct: {\\"bucky\\": (function() {
+  };
+})())({
+  my_struct: {\\"bucky\\": (function() {
   let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
     throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
@@ -2942,7 +2942,7 @@ if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion fai
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()],},}
-        })).handle(event);
+})).handle(event);
 };",
   "connections.json": {
     "connections": [

@@ -5,17 +5,17 @@ exports[`api allows duplicates routes with different methods 1`] = `
   ".wing/onrequesthandler-5_c8573ac0.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -279,17 +279,17 @@ exports[`api handler can read the request params 2`] = `
   ".wing/onrequesthandler-17_c88775d1.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { \\"Content-Type\\": \\"application/json\\" } }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -534,17 +534,17 @@ exports[`api handler can read the request path 2`] = `
   ".wing/onrequesthandler-16_c8c927a5.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.path }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.path }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -789,17 +789,17 @@ exports[`api handler can set response headers 2`] = `
   ".wing/onrequesthandler-18_c83c7850.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1044,17 +1044,17 @@ exports[`api response returns Content-Type header from inflight 2`] = `
   ".wing/onrequesthandler-20_c8dc8ccb.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.headers, headers: { \\"Content-Type\\": \\"application/octet-stream; charset=utf-8\\" } }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.headers, headers: { \\"Content-Type\\": \\"application/octet-stream; charset=utf-8\\" } }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1299,17 +1299,17 @@ exports[`api response returns default Content-Type header 2`] = `
   ".wing/onrequesthandler-21_c879ca96.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1572,17 +1572,17 @@ exports[`api supports every method type 2`] = `
   ".wing/onrequesthandler-10_c8eb1e97.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.method }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.method }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1941,17 +1941,17 @@ exports[`api with 'name' & 'age' parameter 2`] = `
   ".wing/onrequesthandler-3_c8f8a8b3.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -2213,17 +2213,17 @@ exports[`api with 'name' parameter 2`] = `
   ".wing/onrequesthandler-2_c82e7c24.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -2459,17 +2459,17 @@ exports[`api with multiple GET routes and one lambda 1`] = `
   ".wing/onrequesthandler-9_c8a3c32b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -2737,32 +2737,32 @@ exports[`api with multiple methods on same route 2`] = `
   ".wing/onrequesthandler-11_c829255a.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: \\"boom\\" }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"boom\\" }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   ".wing/onrequesthandler-12_c8afdee7.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: \\"bang\\" }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"bang\\" }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -3081,32 +3081,32 @@ exports[`api with multiple routes 2`] = `
   ".wing/onrequesthandler-13_c8dcfe04.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: \\"boom\\" }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"boom\\" }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   ".wing/onrequesthandler-14_c8bb26d3.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: \\"bang\\" }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"bang\\" }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -3420,17 +3420,17 @@ exports[`api with one GET route 2`] = `
   ".wing/onrequesthandler-0_c83ff6f5.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: \\"boom\\" }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"boom\\" }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -3675,17 +3675,17 @@ exports[`api with one GET route with request params 2`] = `
   ".wing/onrequesthandler-1_c8825f4b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.vars ?? {} }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.vars ?? {} }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -3939,17 +3939,17 @@ exports[`api with one POST route, with body 2`] = `
   ".wing/onrequesthandler-15_c86010ac.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [

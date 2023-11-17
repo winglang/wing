@@ -5,17 +5,17 @@ exports[`create an OnDeploy 1`] = `
   ".wing/function_c83fbf14.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle() { console.log(\\"super duper success\\"); }
-        };
-        })())({
-        
-        })).handle(event);
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() { console.log(\\"super duper success\\"); }
+  };
+})())({
+  
+})).handle(event);
 };",
   "connections.json": {
     "connections": [],

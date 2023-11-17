@@ -5,20 +5,20 @@ exports[`can create sequential files in a bucket 1`] = `
   ".wing/queue-setconsumer-0_c841b972.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          async handle(event) {
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
           let next = await this.counter.inc();
           let key = \\"file-\\" + next + \\".txt\\";
           await this.bucket.put(key, event);
         }
-        };
-        })())({
-        counter: (function() {
+  };
+})())({
+  counter: (function() {
   let handle = process.env.COUNTER_HANDLE_4ecd8d46;
   if (!handle) {
     throw new Error(\\"Missing environment variable: COUNTER_HANDLE_4ecd8d46\\");
@@ -40,7 +40,7 @@ bucket: (function() {
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()
-        }), args: {} })).handle(event);
+}), args: {} })).handle(event);
 };",
   "connections.json": {
     "connections": [

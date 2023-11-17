@@ -39,20 +39,21 @@ export class Testing {
           Resource._registerOnLiftObject(v.obj, host, v.ops);
         }
       },
-      _toInflight: () => `new ((function(){
-        return class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }
-          }
-          ${code}
-        };
-        })())({
-        ${Object.entries(clients)
-          .map(([name, client]) => `${name}: ${client}`)
-          .join(",\n")}
-        })`,
+      _toInflight: () => `\
+new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    ${code}
+  };
+})())({
+  ${Object.entries(clients)
+    .map(([name, client]) => `${name}: ${client}`)
+    .join(",\n")}
+})`,
     };
   }
 }
