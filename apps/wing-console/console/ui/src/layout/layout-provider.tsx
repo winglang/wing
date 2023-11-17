@@ -7,7 +7,7 @@ export enum LayoutType {
   Playground,
   Tutorial,
   Vscode,
-  wingcloud,
+  WingCloud,
 }
 
 export const LayoutContext = createContext(LayoutType.Default);
@@ -85,7 +85,7 @@ export function LayoutProvider({
       };
       break;
     }
-    case LayoutType.wingcloud: {
+    case LayoutType.WingCloud: {
       layoutConfig = {
         statusBar: {
           hide: true,
