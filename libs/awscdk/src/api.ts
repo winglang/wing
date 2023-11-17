@@ -378,7 +378,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler._functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: this.api.arnForExecuteApi(method, path, "*"),
+      sourceArn: this.api.arnForExecuteApi(method, path),
     });
   };
 }
