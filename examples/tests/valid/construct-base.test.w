@@ -4,7 +4,7 @@ bring "constructs" as cx;
 bring "@cdktf/provider-aws" as aws;
 
 class WingResource {
-  init() {
+  new() {
     log("my id is {this.node.id}");
   }
 }

@@ -11,7 +11,7 @@ if true {
 assert(s == "top");
 
 class A {
-  init(){
+  new(){
     let s = "inResource";
     assert(s == "inResource");
     test "inflight in resource should capture the right scoped var" {

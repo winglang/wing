@@ -83,9 +83,7 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
 
   useEffect(() => {
     setLoading(
-      cloudAppState === "loadingSimulator" ||
-        cloudAppState === "compiling" ||
-        items.length === 0,
+      cloudAppState === "loadingSimulator" || cloudAppState === "compiling",
     ),
       [cloudAppState, items.length];
   });

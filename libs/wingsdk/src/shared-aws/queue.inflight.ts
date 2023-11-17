@@ -63,7 +63,7 @@ export class QueueClient implements IQueueClient {
       MaxNumberOfMessages: 1,
     });
     const data = await this.client.send(receiveCommand);
-    if (!data.Messages) {
+    if (!data.Messages || data.Messages.length === 0) {
       return undefined;
     }
 

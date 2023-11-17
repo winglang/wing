@@ -178,7 +178,7 @@ class MyClass {
     a: num;
     b: str;
 
-    init(a: num, b: str) {
+    new(a: num, b: str) {
         this.a = a;
         this.b = b;
     }
@@ -197,7 +197,7 @@ expect.notEqual(myClass, new MyClass(1, "hello world") as "yet another my class"
 //     a: num;
 //     b: str;
 
-//     init(a: num, b: str) {
+//     new(a: num, b: str) {
 //         this.a = a;
 //         this.b = b;
 //     }

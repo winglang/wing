@@ -215,6 +215,7 @@ where
 {
 	Class {
 		name: f.fold_symbol(node.name),
+		span: node.span,
 		fields: node.fields.into_iter().map(|field| f.fold_class_field(field)).collect(),
 		methods: node
 			.methods

@@ -11,13 +11,13 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      const issues = (JSON.parse("[\{\"foo\": \"bar\"}, \{\"foo\": \"baz\"}, \{\"foo\": \"qux\"}]"));
-      return ({"status": 200,"headers": ({"Content-Type": "application/json"}),"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
+      const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
+      return ({"status": 200, "headers": ({"Content-Type": "application/json"}), "body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -39,7 +39,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -189,6 +189,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
             "WING_TARGET": "tf-aws"
           }
@@ -326,14 +327,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api",cloud.Api,this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     (api.get("/foo", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:api should return a valid stringified json", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:api should return a valid stringified json", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "issue_2889.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

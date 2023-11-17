@@ -10,9 +10,6 @@
 (method_definition
   name: (identifier) @function
 )
-(inflight_method_definition
-  name: (identifier) @function
-)
 
 ; Functions
 
@@ -82,7 +79,7 @@
   "for"
   "if"
   "in"
-  "init"
+  "new"
   "let"
   "new"
   "return"

@@ -5,7 +5,7 @@ let globalB = new cloud.Bucket();
 class Test {
   b: cloud.Bucket;
 
-  init() {
+  new() {
     this.b = new cloud.Bucket();
   }
 

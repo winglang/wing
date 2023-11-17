@@ -22,7 +22,7 @@ struct Attribute {
 class DynamoTable {
   table: tfaws.dynamodbTable.DynamodbTable;
   tableName: str;
-  init() {
+  new() {
     let target = util.env("WING_TARGET");
     if target != "tf-aws" {
       throw "Unsupported target: {target} (expected 'tf-aws')";

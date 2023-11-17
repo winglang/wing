@@ -24,6 +24,7 @@ test("basic function", () => {
   expect(tfResourcesOf(output)).toEqual([
     "azurerm_application_insights",
     "azurerm_linux_function_app", // function app
+    "azurerm_log_analytics_workspace",
     "azurerm_resource_group", // resource group
     "azurerm_role_assignment", // role assignment for function app
     "azurerm_service_plan", // service plan for function app

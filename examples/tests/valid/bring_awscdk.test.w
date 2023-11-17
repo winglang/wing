@@ -3,7 +3,7 @@ bring "aws-cdk-lib" as awscdk;
 class CdkDockerImageFunction {
     function:  awscdk.aws_lambda.DockerImageFunction;
 
-    init() {
+    new() {
         this.function = new awscdk.aws_lambda.DockerImageFunction({
             code: awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"),
         }) as "DockerImageFunction";

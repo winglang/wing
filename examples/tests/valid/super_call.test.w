@@ -3,7 +3,7 @@ bring expect;
 class A {
   message: str;
 
-  init() {
+  new() {
     this.message = "A message from your ancestor";
   }
 }

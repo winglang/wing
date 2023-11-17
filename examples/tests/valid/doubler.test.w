@@ -4,7 +4,7 @@ bring cloud;
 
 class Doubler {
   func: cloud.IFunctionHandler;
-  init(func: cloud.IFunctionHandler) {
+  new(func: cloud.IFunctionHandler) {
     this.func = func;
   }
   inflight invoke(message: str): str {
