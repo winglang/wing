@@ -255,7 +255,7 @@ export class BucketClient implements IBucketClient {
       const properties = await blobClient.getProperties();
       return {
         contentType: properties.contentType,
-        lastModified: Datetime.fromIso(properties.lastModified!.toISOString()),
+        lastModified: Datetime.fromDate(properties.lastModified!),
         size: properties.contentLength!,
       };
     } catch (error) {

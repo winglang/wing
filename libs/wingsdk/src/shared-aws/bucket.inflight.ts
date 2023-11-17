@@ -374,7 +374,7 @@ export class BucketClient implements IBucketClient {
       const resp = await this.s3Client.send(command);
       return {
         contentType: resp.ContentType,
-        lastModified: Datetime.fromIso(resp.LastModified!.toISOString()),
+        lastModified: Datetime.fromDate(resp.LastModified!),
         size: resp.ContentLength!,
       };
     } catch (error) {
