@@ -62,7 +62,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     actionType: BucketEventType,
     key: string
   ): Promise<void> {
-    // console.log(this.topicHandlers[actionType]);
     if (!this.topicHandlers[actionType]) {
       return;
     }

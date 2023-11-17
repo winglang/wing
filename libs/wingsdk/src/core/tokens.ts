@@ -22,10 +22,18 @@ export interface ITokenResolver {
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
 export abstract class Tokens {
+  /**
+   * TODO Docs
+   * @param resolver -
+   */
   public static addResolver(resolver: ITokenResolver) {
     this._resolvers.push(resolver);
   }
 
+  /**
+   * TODO Docs
+   * @param value -
+   */
   public static getTokenResolver(value: any): ITokenResolver | undefined {
     return this._resolvers.find((r) => r.isToken(value));
   }
