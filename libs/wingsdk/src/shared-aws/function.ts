@@ -8,7 +8,7 @@ export interface IAwsFunction {
   /**
    * AWS Function arn
    */
-  readonly arn: string;
+  readonly functionArn: string;
 
   /**
    * AWS Function name
