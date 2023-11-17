@@ -98,7 +98,6 @@
     "@smithy/util-stream": "2.0.17",
     "@smithy/util-utf8": "2.0.0",
     "@types/aws-lambda": "^8.10.119",
-    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.17.0",
     "constructs": "~10.2.69",
     "cron-parser": "^4.9.0",
@@ -134,7 +133,6 @@
     "@smithy/util-stream",
     "@smithy/util-utf8",
     "@types/aws-lambda",
-    "aws-cdk-lib",
     "cdktf",
     "cron-parser",
     "esbuild-wasm",
@@ -170,9 +168,7 @@
     "extends": "../../package.json"
   },
   "bump-pack": {
-    "removeBundledDependencies": [
-      "aws-cdk-lib"
-    ]
+    "removeBundledDependencies": []
   },
   "files": [
     "lib",

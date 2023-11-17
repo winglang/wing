@@ -29,9 +29,7 @@ const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
-const TARGET_DEPS = {
-  awscdk: ["aws-cdk-lib@^2.64.0"],
-};
+const TARGET_DEPS: { [key: string]: string[] } = {};
 
 // we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
 // from the "package.json" just before we bundle the package and the Wing CLI will require the user

@@ -1239,9 +1239,6 @@ importers:
       '@types/aws-lambda':
         specifier: ^8.10.119
         version: 8.10.124
-      aws-cdk-lib:
-        specifier: ^2.64.0
-        version: 2.100.0(constructs@10.2.70)
       cdktf:
         specifier: 0.17.0
         version: 0.17.0(constructs@10.2.70)
@@ -14170,7 +14167,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231115
+      typescript: 5.4.0-dev.20231116
     dev: true
 
   /dset@3.1.2:
@@ -23688,8 +23685,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231115:
-    resolution: {integrity: sha512-a+TtR81g52/m9nDePLWP1sa8gXhU+6Zgad4vMfUrMWX+dHdDmrfHx/vqEbLQotyUSNGRYcZWu97o8XxSRci/aQ==}
+  /typescript@5.4.0-dev.20231116:
+    resolution: {integrity: sha512-arT/MwHnosyqo1MQ2xN9VzwvWo1jxrhUpa1iQX1yZACfBRJb1dQ1D2MU/Ijotjr6eXw8BZ3RFdj9X/9O56iOgw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

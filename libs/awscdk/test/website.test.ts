@@ -3,7 +3,8 @@ import { Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { awscdkSanitize, mkdtemp } from "@winglang/sdk/test/util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
