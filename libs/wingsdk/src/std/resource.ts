@@ -18,10 +18,9 @@ export interface IInflightHost extends IResource {
 }
 
 /**
- *
- * TODO Remove IResource
+ * TODO Docs
  */
-export interface IInflight extends ILiftable, IResource {
+export interface IInflight extends ILiftable {
   /**
    * Tracks the unique ID of this inflight object.
    * This is not hash-based and will be different for two inflight instances with the same code

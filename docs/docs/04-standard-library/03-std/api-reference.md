@@ -3160,32 +3160,13 @@ Unsafe mode to skip validation (may lead to runtime errors).
 
 ### IInflight <a name="IInflight" id="@winglang/sdk.std.IInflight"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.ILiftable">ILiftable</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.ILiftable">ILiftable</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IOnDeployHandler">IOnDeployHandler</a>, <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>, <a href="#@winglang/sdk.cloud.IServiceStopHandler">IServiceStopHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflight">IInflight</a>, <a href="#@winglang/sdk.std.ITestHandler">ITestHandler</a>, <a href="#@winglang/sdk.ui.IButtonHandler">IButtonHandler</a>, <a href="#@winglang/sdk.ui.IFieldHandler">IFieldHandler</a>, <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
 
-TODO Remove IResource.
+TODO Docs.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.IInflight.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.IInflight.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### ILiftable <a name="ILiftable" id="@winglang/sdk.std.ILiftable"></a>
 

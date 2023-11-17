@@ -242,25 +242,6 @@ Adds this trigger as a dependency on other constructs.
 A resource with an inflight "handle" method that can be used by `cloud.OnDeploy`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IOnDeployHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IOnDeployHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IOnDeployHandlerClient <a name="IOnDeployHandlerClient" id="@winglang/sdk.cloud.IOnDeployHandlerClient"></a>
 

@@ -2,12 +2,10 @@ import { inflightId, normalPath } from "./misc";
 import { IInflight } from "../std";
 
 /**
- * Convert a resource with a single method into a resource with a different
- * single method. This is useful for converting between types like
+ * Transform an inflight to one that is wrapped with another one.
+ * The new inflight can have a different signature.
+ * This is useful for converting between types like
  * IFunctionHandler and IQueueSetConsumerHandler.
- *
- * Both the input and return values of this function are expected to be
- * resources with a single method named "handle".
  */
 export function convertBetweenHandlers(
   baseHandler: IInflight,

@@ -78,9 +78,9 @@ var _id = 0;
 export function inflightId(inflight?: IInflight) {
   if (inflight?._id) {
     return inflight._id;
-  } else if (inflight?.node?.id) {
-    // TODO Remove once inflights are no longer resources
-    return inflight.node.id;
+  } else if ((inflight as any)?.node?.id) {
+    // TODO Remove this once inflights are no longer resources
+    return (inflight as any).node.id;
   } else {
     return "" + _id++;
   }
