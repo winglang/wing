@@ -12,7 +12,7 @@ export interface IAwsCounter {
   /**
    * AWS Dynamodb name
    */
-  readonly tableName: string;
+  readonly dynamoTableName: string;
 }
 
 /**
