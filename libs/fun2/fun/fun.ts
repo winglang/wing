@@ -5,35 +5,38 @@ import { Bucket, IBucketClient } from "../../wingsdk/src/cloud";
 import {
   IFunctionClient,
   IFunctionHandler,
+  IFunctionHandlerClient,
 } from "../../wingsdk/src/cloud/function";
 import { liftObject } from "../../wingsdk/src/core/internal";
-import { IInflightHost, IResource, Node, Resource } from "../../wingsdk/src/std";
-import { parse } from 'acorn';
-import { walk } from 'estree-walker';
-import is_reference from 'is-reference';
+import {
+  IInflight,
+  IInflightHost,
+  IResource,
+  Node,
+  Resource,
+} from "../../wingsdk/src/std";
+import { parse } from "acorn";
+import { walk } from "estree-walker";
+import is_reference from "is-reference";
+import { inflightId } from "../../wingsdk/src/shared/misc";
 
 type AnyFunction = (...args: any[]) => any;
 
 interface SuperInterface<THandler extends AnyFunction> {
   handle: THandler;
-  id?: string;
-  scope?: Construct;
   [key: string]: any;
 }
 
 export function inflight<THandlerClient extends { handle: AnyFunction }>(
   options: SuperInterface<THandlerClient["handle"]>
-): IResource {
+): IInflight {
   const clients: Record<string, string> = {};
   const handler = options.handle;
-  const id = options.id ?? "inflightId";
   let scope = options.scope;
 
   // get everything from the options except handle, id, and scope
   const bindings: { [key: string]: any } = options;
   delete bindings.handle;
-  delete bindings.id;
-  delete bindings.scope;
 
   if (!scope) {
     // find the first construct in the stack and use its scope
@@ -54,58 +57,38 @@ export function inflight<THandlerClient extends { handle: AnyFunction }>(
   const code = handler.toString();
   const ast = parse(code, { ecmaVersion: "latest" });
 
-  // implements IFunctionHandler
-  class Handler extends Resource {
-    constructor() {
-      super(scope!, id);
+  // inject the clients into the handler
+  const newCode = code.replace(
+    "{",
+    `{${Object.keys(bindings)
+      .map((name) => `const ${name} = this[\"${name}\"];`)
+      .join("")}`
+  );
 
-      // pretend as if we have a field for each binding
-      Object.assign(this, bindings);
-
-      Node.of(this).title = "Inflight";
-      Node.of(this).description = "An inflight resource";
-      Node.of(this).hidden = true;
-    }
-
-    public _supportedOps(): string[] {
-      return ["handle"];
-    }
-
-    public _toInflight(): string {
-      // inject the clients into the handler
-      const newCode = code.replace(
-        "{",
-        `{${Object.keys(bindings)
-          .map((name) => `const ${name} = this[\"${name}\"];`)
-          .join("")}`
-      );
-
-      return `new ((function(){
-return class Handler {
-constructor(clients) {
-  for (const [name, client] of Object.entries(clients)) {
-    this[name] = client;
-  }
-}
-${newCode}
-};
-})())({
-${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client}`)
-  .join(",\n")}
-})`;
-    }
-
-    public _registerOnLift(host: IInflightHost, ops: string[]): void {
+  return {
+    _id: inflightId(),
+    _registerOnLift: (host: IInflightHost, _ops: string[]) => {
       for (const v of Object.values(bindings)) {
-        Handler._registerOnLiftObject(v, host);
+        Resource._registerOnLiftObject(v.obj, host, v.ops);
       }
-      super._registerOnLift(host, ops);
-    }
-  }
-
-  const h = new Handler();
-  return h;
+    },
+    _supportedOps: () => [],
+    onLift: () => {},
+    _toInflight: () => `new ((function(){
+      return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      ${newCode}
+      };
+      })())({
+      ${Object.entries(clients)
+        .map(([name, client]) => `${name}: ${client}`)
+        .join(",\n")}
+      })`,
+  };
 }
 
 const app = new SimApp();
@@ -121,7 +104,7 @@ let bucket: Bucket & IBucketClient = new cloud.Bucket(app, "my_bucket") as any;
 new cloud.Function(
   app,
   "my_function",
-  inflight<IFunctionHandler>({
+  inflight<IFunctionHandlerClient>({
     bucket,
     expect,
     async handle(event) {
