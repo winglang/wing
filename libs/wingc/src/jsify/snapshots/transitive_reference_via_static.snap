@@ -99,10 +99,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyType-1.js")({
-            $b: ${context._lift(b)},
+            $b: ${MyType._lift(b)},
           })
         `;
       }
@@ -120,21 +120,21 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return ["putInBucket", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("putInBucket")) {
           MyType._registerOnLiftObject(b, host, ["put"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class YourType extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.YourType-1.js")({
-            $MyType: ${context._lift(MyType)},
+            $MyType: ${YourType._lift(MyType)},
           })
         `;
       }
@@ -164,10 +164,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t: ${context._lift(t)},
+            $t: ${$Closure1._lift(t)},
           })
         `;
       }

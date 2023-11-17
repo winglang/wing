@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Preflight-1.js")({
           })
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.OuterInflight-1.js")({
           })
@@ -219,10 +219,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Preflight: ${context._lift(Preflight)},
+            $Preflight: ${$Closure1._lift(Preflight)},
           })
         `;
       }
@@ -252,10 +252,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $OuterInflight: ${context._lift(OuterInflight)},
+            $OuterInflight: ${$Closure2._lift(OuterInflight)},
           })
         `;
       }
@@ -279,7 +279,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
           })
@@ -305,10 +305,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $util_Util: ${$Closure4._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

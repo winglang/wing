@@ -458,7 +458,7 @@ The label of the section.
 
 ### IButtonHandler <a name="IButtonHandler" id="@winglang/sdk.ui.IButtonHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.ui.IButtonHandler">IButtonHandler</a>
 
@@ -512,7 +512,7 @@ Function that peforms an action.
 
 ### IFieldHandler <a name="IFieldHandler" id="@winglang/sdk.ui.IFieldHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.ui.IFieldHandler">IFieldHandler</a>
 

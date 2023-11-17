@@ -290,13 +290,13 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $numA: ${context._lift(numA)},
-            $numB: ${context._lift(numB)},
-            $strA: ${context._lift(strA)},
-            $strB: ${context._lift(strB)},
+            $numA: ${$Closure1._lift(numA)},
+            $numB: ${$Closure1._lift(numB)},
+            $strA: ${$Closure1._lift(strA)},
+            $strB: ${$Closure1._lift(strB)},
           })
         `;
       }
@@ -329,13 +329,13 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $numA: ${context._lift(numA)},
-            $numC: ${context._lift(numC)},
-            $strA: ${context._lift(strA)},
-            $strC: ${context._lift(strC)},
+            $numA: ${$Closure2._lift(numA)},
+            $numC: ${$Closure2._lift(numC)},
+            $strA: ${$Closure2._lift(strA)},
+            $strC: ${$Closure2._lift(strC)},
           })
         `;
       }
@@ -368,11 +368,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
+            $jsonA: ${$Closure3._lift(jsonA)},
+            $jsonB: ${$Closure3._lift(jsonB)},
           })
         `;
       }
@@ -403,12 +403,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
-            $jsonC: ${context._lift(jsonC)},
+            $jsonA: ${$Closure4._lift(jsonA)},
+            $jsonB: ${$Closure4._lift(jsonB)},
+            $jsonC: ${$Closure4._lift(jsonC)},
           })
         `;
       }
@@ -440,11 +440,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $setA: ${context._lift(setA)},
-            $setB: ${context._lift(setB)},
+            $setA: ${$Closure5._lift(setA)},
+            $setB: ${$Closure5._lift(setB)},
           })
         `;
       }
@@ -475,12 +475,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure6-1.js")({
-            $setA: ${context._lift(setA)},
-            $setB: ${context._lift(setB)},
-            $setC: ${context._lift(setC)},
+            $setA: ${$Closure6._lift(setA)},
+            $setB: ${$Closure6._lift(setB)},
+            $setC: ${$Closure6._lift(setC)},
           })
         `;
       }
@@ -512,11 +512,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure7-1.js")({
-            $mapA: ${context._lift(mapA)},
-            $mapB: ${context._lift(mapB)},
+            $mapA: ${$Closure7._lift(mapA)},
+            $mapB: ${$Closure7._lift(mapB)},
           })
         `;
       }
@@ -547,12 +547,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure8-1.js")({
-            $mapA: ${context._lift(mapA)},
-            $mapB: ${context._lift(mapB)},
-            $mapC: ${context._lift(mapC)},
+            $mapA: ${$Closure8._lift(mapA)},
+            $mapB: ${$Closure8._lift(mapB)},
+            $mapC: ${$Closure8._lift(mapC)},
           })
         `;
       }
@@ -584,11 +584,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure9-1.js")({
-            $arrayA: ${context._lift(arrayA)},
-            $arrayB: ${context._lift(arrayB)},
+            $arrayA: ${$Closure9._lift(arrayA)},
+            $arrayB: ${$Closure9._lift(arrayB)},
           })
         `;
       }
@@ -619,12 +619,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure10-1.js")({
-            $arrayA: ${context._lift(arrayA)},
-            $arrayB: ${context._lift(arrayB)},
-            $arrayC: ${context._lift(arrayC)},
+            $arrayA: ${$Closure10._lift(arrayA)},
+            $arrayB: ${$Closure10._lift(arrayB)},
+            $arrayC: ${$Closure10._lift(arrayC)},
           })
         `;
       }
@@ -656,11 +656,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure11-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
+            $cat1: ${$Closure11._lift(cat1)},
+            $cat2: ${$Closure11._lift(cat2)},
           })
         `;
       }
@@ -691,12 +691,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure12-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
-            $cat3: ${context._lift(cat3)},
+            $cat1: ${$Closure12._lift(cat1)},
+            $cat2: ${$Closure12._lift(cat2)},
+            $cat3: ${$Closure12._lift(cat3)},
           })
         `;
       }

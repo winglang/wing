@@ -115,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -141,18 +141,18 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerOnLift(host, ops);
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("bar")) {
           Foo._registerOnLiftObject(Foo, host, ["foo"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Bar-1.js")({
           })
@@ -178,12 +178,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Bar: ${context._lift(Bar)},
-            $Foo: ${context._lift(Foo)},
-            $foo: ${context._lift(foo)},
+            $Bar: ${$Closure1._lift(Bar)},
+            $Foo: ${$Closure1._lift(Foo)},
+            $foo: ${$Closure1._lift(foo)},
           })
         `;
       }

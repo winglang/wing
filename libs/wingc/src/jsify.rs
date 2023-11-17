@@ -1456,7 +1456,7 @@ impl<'a> JSifier<'a> {
 
 		code.open("static _toInflightType() {");
 
-		code.open("return `\\");
+		code.open("return `");
 
 		code.open(format!("require(\"./{client_path}\")({{"));
 

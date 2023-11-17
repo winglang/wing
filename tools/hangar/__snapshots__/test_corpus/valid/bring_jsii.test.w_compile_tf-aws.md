@@ -71,11 +71,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $greeting: ${context._lift(greeting)},
-            $stuff_HelloWorld: ${context._lift($stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
+            $greeting: ${$Closure1._lift(greeting)},
+            $stuff_HelloWorld: ${$Closure1._lift($stdlib.core.toLiftableModuleType(stuff.HelloWorld, "jsii-code-samples", "HelloWorld"))},
           })
         `;
       }

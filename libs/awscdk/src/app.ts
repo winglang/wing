@@ -32,6 +32,7 @@ const {
 
 import { core, std, ex } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
+import { ITokenResolver } from "@winglang/sdk/lib/core/tokens";
 
 /**
  * AWS-CDK App props

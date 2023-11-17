@@ -1,5 +1,6 @@
 import { execFile } from "child_process";
 import { readFileSync } from "fs";
+import { IInflight } from "../std";
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -74,6 +75,13 @@ export async function runDockerImage({
 }
 
 var _id = 0;
-export function autoId() {
-  return _id++;
+export function inflightId(inflight?: IInflight) {
+  if (inflight?._id) {
+    return inflight._id;
+  } else if (inflight?.node?.id) {
+    // TODO Remove once inflights are no longer resources
+    return inflight.node.id;
+  } else {
+    return "" + _id++;
+  }
 }

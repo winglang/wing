@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Super";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Super-1.js")({
           })
@@ -165,10 +165,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${Sub._lift(Super)},
           })
         `;
       }
@@ -192,10 +192,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub1-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${Sub1._lift(Super)},
           })
         `;
       }
@@ -221,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
         this.left = left;
         this.right = right;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Node-1.js")({
           })
@@ -247,12 +247,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
-            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
+            $__payloadWithBucket_c_____null_: ${$Closure1._lift(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$Closure1._lift(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$Closure1._lift(payloadWithBucket.c)},
           })
         `;
       }

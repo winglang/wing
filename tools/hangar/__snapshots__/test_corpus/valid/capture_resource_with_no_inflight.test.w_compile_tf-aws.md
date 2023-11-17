@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
         this.field = "hey";
         this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this)};
             const client = new AClient({
-              $this_counter: ${this._lift(this.counter)},
+              $this_counter: ${A._lift(this.counter)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -146,11 +146,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $a: ${context._lift(a)},
-            $a_field: ${context._lift(a.field)},
+            $a: ${$Closure1._lift(a)},
+            $a_field: ${$Closure1._lift(a.field)},
           })
         `;
       }

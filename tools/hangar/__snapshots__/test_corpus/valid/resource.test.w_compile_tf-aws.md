@@ -243,34 +243,34 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_CloudwatchLogGroup_528E5A45": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_CloudwatchLogGroup_1215BB88": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/CloudwatchLogGroup",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_CloudwatchLogGroup_528E5A45"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/CloudwatchLogGroup",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_CloudwatchLogGroup_1215BB88"
           }
         },
-        "name": "/aws/lambda/b2-oncreate-OnMessage-59543b60-c807494b",
+        "name": "/aws/lambda/b2-oncreate-OnMessage--Closure4-c8bd107e",
         "retention_in_days": 30
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_CloudwatchLogGroup_664C62EE": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_CloudwatchLogGroup_FC0D21D4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/CloudwatchLogGroup",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_CloudwatchLogGroup_664C62EE"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/CloudwatchLogGroup",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_CloudwatchLogGroup_FC0D21D4"
           }
         },
-        "name": "/aws/lambda/cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
+        "name": "/aws/lambda/cloud-Queue-SetConsumer--Closure3-c8586b9e",
         "retention_in_days": 30
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_CloudwatchLogGroup_9D8E12ED": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_CloudwatchLogGroup_37E18BA0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/CloudwatchLogGroup",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_CloudwatchLogGroup_9D8E12ED"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/CloudwatchLogGroup",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_CloudwatchLogGroup_37E18BA0"
           }
         },
-        "name": "/aws/lambda/cloud-Topic-OnMessage-113c9059-c81d1d09",
+        "name": "/aws/lambda/cloud-Topic-OnMessage--Closure2-c876fbb8",
         "retention_in_days": 30
       }
     },
@@ -294,96 +294,96 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRole_31B64053": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRole",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/IamRole",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRole_31B64053"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRole_CBA3543A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/IamRole",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRole_CBA3543A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_IamRole_96100AC4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRole",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/IamRole",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_IamRole_96100AC4"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicy_6657EAFB": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRolePolicy_23AE063D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicy",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicy_6657EAFB"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/IamRolePolicy",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRolePolicy_23AE063D"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.name}"
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRole_31B64053.name}"
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicy_6AF2C97F": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRolePolicy_AD6A428A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicy_6AF2C97F"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/IamRolePolicy",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRolePolicy_AD6A428A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51.name}"
+        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-Closure3_IamRole_CBA3543A.name}"
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicy_51FA866C": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_IamRolePolicy_25983C2A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicy",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicy_51FA866C"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/IamRolePolicy",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_IamRolePolicy_25983C2A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A.name}"
+        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-Closure2_IamRole_96100AC4.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicyAttachment_53F63590": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRolePolicyAttachment_462C0BEF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicyAttachment",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRolePolicyAttachment_53F63590"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/IamRolePolicyAttachment",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRolePolicyAttachment_462C0BEF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.name}"
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRole_31B64053.name}"
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicyAttachment_FF25AF25": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRolePolicyAttachment_76C9D916": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicyAttachment_FF25AF25"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/IamRolePolicyAttachment",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_IamRolePolicyAttachment_76C9D916"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51.name}"
+        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-Closure3_IamRole_CBA3543A.name}"
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicyAttachment_5DDA8339": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_IamRolePolicyAttachment_DB84ACDF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicyAttachment",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicyAttachment_5DDA8339"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/IamRolePolicyAttachment",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_IamRolePolicyAttachment_DB84ACDF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A.name}"
+        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-Closure2_IamRole_96100AC4.name}"
       }
     },
     "aws_lambda_event_source_mapping": {
@@ -396,15 +396,15 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}",
-        "function_name": "${aws_lambda_function.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_67ECF75E.function_name}"
+        "function_name": "${aws_lambda_function.BigPublisher_cloudQueue-SetConsumer-Closure3_A0BEFB72.function_name}"
       }
     },
     "aws_lambda_function": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_5D18DC19": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Default",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/Default",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_5D18DC19"
           }
         },
         "architectures": [
@@ -414,29 +414,29 @@ module.exports = function({  }) {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
-            "WING_FUNCTION_NAME": "b2-oncreate-OnMessage-59543b60-c807494b",
+            "WING_FUNCTION_NAME": "b2-oncreate-OnMessage--Closure4-c8bd107e",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "b2-oncreate-OnMessage-59543b60-c807494b",
+        "function_name": "b2-oncreate-OnMessage--Closure4-c8bd107e",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_IamRole_C27B12C3.arn}",
+        "role": "${aws_iam_role.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_IamRole_31B64053.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E.key}",
+        "s3_key": "${aws_s3_object.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_S3Object_AD50EF24.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_67ECF75E": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_A0BEFB72": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Default",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_67ECF75E"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/Default",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_A0BEFB72"
           }
         },
         "architectures": [
@@ -446,29 +446,29 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer--Closure3-c8586b9e",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
+        "function_name": "cloud-Queue-SetConsumer--Closure3-c8586b9e",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51.arn}",
+        "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-Closure3_IamRole_CBA3543A.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_S3Object_D9D9B438.key}",
+        "s3_key": "${aws_s3_object.BigPublisher_cloudQueue-SetConsumer-Closure3_S3Object_3AB9526C.key}",
         "timeout": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_12D15502": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_1F2563B5": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Default",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_12D15502"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/Default",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_1F2563B5"
           }
         },
         "architectures": [
@@ -478,18 +478,18 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-113c9059-c81d1d09",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage--Closure2-c876fbb8",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-113c9059-c81d1d09",
+        "function_name": "cloud-Topic-OnMessage--Closure2-c876fbb8",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A.arn}",
+        "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-Closure2_IamRole_96100AC4.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.BigPublisher_cloudTopic-OnMessage-113c9059_S3Object_EB632F0F.key}",
+        "s3_key": "${aws_s3_object.BigPublisher_cloudTopic-OnMessage-Closure2_S3Object_B9BC9377.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -498,27 +498,27 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_permission": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_40279100": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_EF8488BA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_40279100"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141_EF8488BA"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC.function_name}",
+        "function_name": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_5D18DC19.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}"
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_BE523D68": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_4C180273": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_BE523D68"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_4C180273"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage-113c9059_12D15502.function_name}",
+        "function_name": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage-Closure2_1F2563B5.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}"
       }
@@ -588,33 +588,33 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E": {
+      "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_S3Object_AD50EF24": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/S3Object",
-            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-59543b60_S3Object_759B056E"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-$Closure4/S3Object",
+            "uniqueId": "BigPublisher_b2_b2-oncreate-OnMessage-Closure4_S3Object_AD50EF24"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_S3Object_D9D9B438": {
+      "BigPublisher_cloudQueue-SetConsumer-Closure3_S3Object_3AB9526C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
-            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_S3Object_D9D9B438"
+            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-$Closure3/S3Object",
+            "uniqueId": "BigPublisher_cloudQueue-SetConsumer-Closure3_S3Object_3AB9526C"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "BigPublisher_cloudTopic-OnMessage-113c9059_S3Object_EB632F0F": {
+      "BigPublisher_cloudTopic-OnMessage-Closure2_S3Object_B9BC9377": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/S3Object",
-            "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_S3Object_EB632F0F"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-$Closure2/S3Object",
+            "uniqueId": "BigPublisher_cloudTopic-OnMessage-Closure2_S3Object_B9BC9377"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -655,25 +655,25 @@ module.exports = function({  }) {
       }
     },
     "aws_sns_topic_subscription": {
-      "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-59543b60_9824C8F9": {
+      "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-Closure4_A284A92A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-59543b60",
-            "uniqueId": "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-59543b60_9824C8F9"
+            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-$Closure4",
+            "uniqueId": "BigPublisher_b2_b2-oncreate_b2-oncreate-TopicSubscription-Closure4_A284A92A"
           }
         },
-        "endpoint": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-59543b60_93D04CBC.arn}",
+        "endpoint": "${aws_lambda_function.BigPublisher_b2_b2-oncreate-OnMessage-Closure4_5D18DC19.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.BigPublisher_b2_b2-oncreate_B37DE1E1.arn}"
       },
-      "BigPublisher_cloudTopic_cloudTopic-TopicSubscription-113c9059_D8CEACCD": {
+      "BigPublisher_cloudTopic_cloudTopic-TopicSubscription-Closure2_F9819650": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-113c9059",
-            "uniqueId": "BigPublisher_cloudTopic_cloudTopic-TopicSubscription-113c9059_D8CEACCD"
+            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-$Closure2",
+            "uniqueId": "BigPublisher_cloudTopic_cloudTopic-TopicSubscription-Closure2_F9819650"
           }
         },
-        "endpoint": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage-113c9059_12D15502.arn}",
+        "endpoint": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage-Closure2_1F2563B5.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}"
       }
@@ -712,7 +712,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -723,7 +723,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_c: ${this._lift(this.c)},
+              $this_c: ${Foo._lift(this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -754,11 +754,11 @@ class $Root extends $stdlib.std.Resource {
         this.foo = new Foo(this, "Foo");
         this.e = e;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Bar-1.js")({
-            $Foo: ${context._lift(Foo)},
-            $MyEnum: ${context._lift(MyEnum)},
+            $Foo: ${Bar._lift(Foo)},
+            $MyEnum: ${Bar._lift(MyEnum)},
           })
         `;
       }
@@ -767,9 +767,9 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
-              $this_b: ${this._lift(this.b)},
-              $this_e: ${this._lift(this.e)},
-              $this_foo: ${this._lift(this.foo)},
+              $this_b: ${Bar._lift(this.b)},
+              $this_e: ${Bar._lift(this.e)},
+              $this_foo: ${Bar._lift(this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -803,12 +803,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bucket: ${context._lift(bucket)},
-            $res: ${context._lift(res)},
-            $res_foo: ${context._lift(res.foo)},
+            $bucket: ${$Closure1._lift(bucket)},
+            $res: ${$Closure1._lift(res)},
+            $res_foo: ${$Closure1._lift(res.foo)},
           })
         `;
       }
@@ -848,10 +848,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure2-1.js")({
-                $__parent_this_2_b: ${context._lift(__parent_this_2.b)},
+                $__parent_this_2_b: ${$Closure2._lift(__parent_this_2.b)},
               })
             `;
           }
@@ -883,10 +883,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure3-1.js")({
-                $__parent_this_3_b: ${context._lift(__parent_this_3.b)},
+                $__parent_this_3_b: ${$Closure3._lift(__parent_this_3.b)},
               })
             `;
           }
@@ -918,10 +918,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure4-1.js")({
-                $__parent_this_4_q: ${context._lift(__parent_this_4.q)},
+                $__parent_this_4_q: ${$Closure4._lift(__parent_this_4.q)},
               })
             `;
           }
@@ -948,7 +948,7 @@ class $Root extends $stdlib.std.Resource {
         }
         (this.b2.onCreate(new $Closure4(this, "$Closure4")));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.BigPublisher-1.js")({
           })
@@ -959,10 +959,10 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BigPublisherClient = ${BigPublisher._toInflightType(this)};
             const client = new BigPublisherClient({
-              $this_b: ${this._lift(this.b)},
-              $this_b2: ${this._lift(this.b2)},
-              $this_q: ${this._lift(this.q)},
-              $this_t: ${this._lift(this.t)},
+              $this_b: ${BigPublisher._lift(this.b)},
+              $this_b2: ${BigPublisher._lift(this.b2)},
+              $this_q: ${BigPublisher._lift(this.q)},
+              $this_t: ${BigPublisher._lift(this.t)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -995,10 +995,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $bigOlPublisher: ${context._lift(bigOlPublisher)},
+            $bigOlPublisher: ${$Closure5._lift(bigOlPublisher)},
           })
         `;
       }
@@ -1030,7 +1030,7 @@ class $Root extends $stdlib.std.Resource {
       static getInstance(scope) {
         return new Dummy(scope, "StaticDummy");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Dummy-1.js")({
           })
@@ -1066,7 +1066,7 @@ class $Root extends $stdlib.std.Resource {
           {((cond) => {if (!cond) throw new Error("assertion failed: x.node.path.endsWith(expected_path)")})(x.node.path.endsWith(expected_path))};
         }
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.ScopeAndIdTestClass-1.js")({
           })

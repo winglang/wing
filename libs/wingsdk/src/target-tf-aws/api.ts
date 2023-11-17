@@ -14,7 +14,7 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { autoId } from "../shared/misc";
+import { inflightId } from "../shared/misc";
 import {
   CaseConventions,
   NameOptions,
@@ -225,7 +225,7 @@ export class Api extends cloud.Api {
    * @returns
    */
   private findExistingInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflight?._id ?? autoId();
+    const inflightNodeHash = inflightId(inflight);
 
     let fn = this.node.tryFindChild(
       `${this.node.id}-OnRequest-${inflightNodeHash}`
@@ -239,7 +239,7 @@ export class Api extends cloud.Api {
    * @returns Inflight handler as a AWS Lambda Function
    */
   private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflight?._id ?? autoId();
+    const inflightNodeHash = inflightId(inflight);
 
     const functionHandler = convertBetweenHandlers(
       inflight,

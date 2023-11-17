@@ -26,7 +26,7 @@ export function inflight<THandlerClient extends { handle: AnyFunction }>(
 ): IResource {
   const clients: Record<string, string> = {};
   const handler = options.handle;
-  const id = options.id ?? "AutoId";
+  const id = options.id ?? "inflightId";
   let scope = options.scope;
 
   // get everything from the options except handle, id, and scope

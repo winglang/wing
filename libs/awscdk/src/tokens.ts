@@ -7,7 +7,7 @@ import { IInflightHost } from "@winglang/sdk/lib/std";
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
-export class CdkTokens extends ITokenResolver {
+export class CdkTokens implements ITokenResolver {
   /**
    * Returns true is the given value is a CDK token.
    */

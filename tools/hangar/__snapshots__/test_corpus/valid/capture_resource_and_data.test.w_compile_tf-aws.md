@@ -98,12 +98,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $data_size: ${context._lift(data.size)},
-            $queue: ${context._lift(queue)},
-            $res: ${context._lift(res)},
+            $data_size: ${$Closure1._lift(data.size)},
+            $queue: ${$Closure1._lift(queue)},
+            $res: ${$Closure1._lift(res)},
           })
         `;
       }

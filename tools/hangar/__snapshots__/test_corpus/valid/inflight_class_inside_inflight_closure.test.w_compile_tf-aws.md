@@ -263,10 +263,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure1-1.js")({
-                $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
+                $__parent_this_1_b: ${$Closure1._lift(__parent_this_1.b)},
               })
             `;
           }
@@ -294,7 +294,7 @@ class $Root extends $stdlib.std.Resource {
         const inflight_closure = new $Closure1(this, "$Closure1");
         return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", inflight_closure);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.PreflightClass-1.js")({
           })
@@ -320,10 +320,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $f: ${context._lift(f)},
+            $f: ${$Closure2._lift(f)},
           })
         `;
       }
@@ -353,7 +353,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
           })

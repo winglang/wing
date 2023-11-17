@@ -188,16 +188,16 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $myBool: ${context._lift(myBool)},
-            $myDur_hours: ${context._lift(myDur.hours)},
-            $myDur_minutes: ${context._lift(myDur.minutes)},
-            $myDur_seconds: ${context._lift(myDur.seconds)},
-            $myNum: ${context._lift(myNum)},
-            $mySecondBool: ${context._lift(mySecondBool)},
-            $myStr: ${context._lift(myStr)},
+            $myBool: ${$Closure1._lift(myBool)},
+            $myDur_hours: ${$Closure1._lift(myDur.hours)},
+            $myDur_minutes: ${$Closure1._lift(myDur.minutes)},
+            $myDur_seconds: ${$Closure1._lift(myDur.seconds)},
+            $myNum: ${$Closure1._lift(myNum)},
+            $mySecondBool: ${$Closure1._lift(mySecondBool)},
+            $myStr: ${$Closure1._lift(myStr)},
           })
         `;
       }

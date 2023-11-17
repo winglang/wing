@@ -1,6 +1,6 @@
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
-import { autoId } from "../shared/misc";
+import { inflightId } from "../shared/misc";
 import { IInflightHost, Resource } from "../std";
 
 /**
@@ -31,7 +31,7 @@ export class Testing {
 
     // implements IFunctionHandler
     return {
-      _id: autoId(),
+      _id: inflightId(),
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
           Resource._registerOnLiftObject(v.obj, host, v.ops);

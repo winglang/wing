@@ -320,7 +320,7 @@ The timeout for keep trying predicate.
 
 ### IPredicateHandler <a name="IPredicateHandler" id="@winglang/sdk.util.IPredicateHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
 

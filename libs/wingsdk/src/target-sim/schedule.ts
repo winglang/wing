@@ -11,7 +11,7 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { autoId } from "../shared/misc";
+import { inflightId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -34,7 +34,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),

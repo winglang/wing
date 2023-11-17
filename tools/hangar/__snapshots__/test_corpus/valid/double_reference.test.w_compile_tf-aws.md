@@ -125,10 +125,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $initCount: ${context._lift(initCount)},
+            $initCount: ${Foo._lift(initCount)},
           })
         `;
       }
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.foo = new Foo(this, "Foo");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Bar-1.js")({
           })
@@ -169,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
-              $this_foo: ${this._lift(this.foo)},
+              $this_foo: ${Bar._lift(this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -194,12 +194,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bar: ${context._lift(bar)},
-            $bar_foo: ${context._lift(bar.foo)},
-            $initCount: ${context._lift(initCount)},
+            $bar: ${$Closure1._lift(bar)},
+            $bar_foo: ${$Closure1._lift(bar.foo)},
+            $initCount: ${$Closure1._lift(initCount)},
           })
         `;
       }

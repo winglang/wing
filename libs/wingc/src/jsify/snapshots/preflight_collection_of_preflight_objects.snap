@@ -56,11 +56,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_arr_at_0__: ${context._lift((arr.at(0)))},
-            $arr_length: ${context._lift(arr.length)},
+            $_arr_at_0__: ${$Closure1._lift((arr.at(0)))},
+            $arr_length: ${$Closure1._lift(arr.length)},
           })
         `;
       }

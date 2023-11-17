@@ -79,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
         this.name = "hello";
         this.last = "world";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyType-1.js")({
           })
@@ -105,12 +105,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t_last: ${context._lift(t.last)},
-            $t_name: ${context._lift(t.name)},
-            $t_name_length: ${context._lift(t.name.length)},
+            $t_last: ${$Closure1._lift(t.last)},
+            $t_name: ${$Closure1._lift(t.name)},
+            $t_name_length: ${$Closure1._lift(t.name.length)},
           })
         `;
       }

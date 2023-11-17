@@ -80,7 +80,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.node.root.new("cdktf.S3Backend", cdktf.S3Backend, this, ({"bucket": "foo", "key": "bar"}));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })

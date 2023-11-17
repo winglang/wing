@@ -206,11 +206,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
+            $b: ${$Closure1._lift(b)},
+            $fileName: ${$Closure1._lift(fileName)},
           })
         `;
       }
@@ -241,13 +241,13 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
-            $getJson: ${context._lift(getJson)},
-            $j: ${context._lift(j)},
+            $b: ${$Closure2._lift(b)},
+            $fileName: ${$Closure2._lift(fileName)},
+            $getJson: ${$Closure2._lift(getJson)},
+            $j: ${$Closure2._lift(j)},
           })
         `;
       }

@@ -192,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
       foo() {
         return "a1";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -217,7 +217,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
           })
@@ -243,7 +243,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
           })
@@ -274,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
           foo() {
             return "e1";
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.E-1.js")({
               })
@@ -301,7 +301,7 @@ class $Root extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
             super($scope, $id);
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.F-1.js")({
               })
@@ -328,10 +328,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure2-1.js")({
-                $F: ${context._lift(F)},
+                $F: ${$Closure2._lift(F)},
               })
             `;
           }
@@ -355,7 +355,7 @@ class $Root extends $stdlib.std.Resource {
       getInner() {
         return this.inner;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.D-1.js")({
           })
@@ -366,7 +366,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DClient = ${D._toInflightType(this)};
             const client = new DClient({
-              $this_inner: ${this._lift(this.inner)},
+              $this_inner: ${D._lift(this.inner)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -391,14 +391,14 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $B: ${context._lift(B)},
-            $a: ${context._lift(a)},
-            $d: ${context._lift(d)},
-            $fn: ${context._lift(fn)},
-            $innerD: ${context._lift(innerD)},
+            $B: ${$Closure3._lift(B)},
+            $a: ${$Closure3._lift(a)},
+            $d: ${$Closure3._lift(d)},
+            $fn: ${$Closure3._lift(fn)},
+            $innerD: ${$Closure3._lift(innerD)},
           })
         `;
       }

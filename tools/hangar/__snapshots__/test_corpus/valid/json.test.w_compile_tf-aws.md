@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.SumStr = "wow!";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })

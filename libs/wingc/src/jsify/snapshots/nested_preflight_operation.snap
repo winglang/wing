@@ -93,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.YourType-1.js")({
           })
@@ -119,7 +119,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.y = new YourType(this, "YourType");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyType-1.js")({
           })
@@ -145,10 +145,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t_y_b: ${context._lift(t.y.b)},
+            $t_y_b: ${$Closure1._lift(t.y.b)},
           })
         `;
       }

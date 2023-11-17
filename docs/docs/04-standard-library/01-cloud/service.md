@@ -394,7 +394,7 @@ Environment variables to pass to the function.
 
 ### IServiceHandler <a name="IServiceHandler" id="@winglang/sdk.cloud.IServiceHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>
 
@@ -468,7 +468,7 @@ new cloud.Service(inflight () => {
 
 ### IServiceStopHandler <a name="IServiceStopHandler" id="@winglang/sdk.cloud.IServiceStopHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceStopHandler">IServiceStopHandler</a>
 

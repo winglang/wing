@@ -89,13 +89,13 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Object_keys_m__length: ${context._lift(Object.keys(m).length)},
-            $aCloned_length: ${context._lift(aCloned.length)},
-            $a_length: ${context._lift(a.length)},
-            $s_size: ${context._lift(s.size)},
+            $Object_keys_m__length: ${$Closure1._lift(Object.keys(m).length)},
+            $aCloned_length: ${$Closure1._lift(aCloned.length)},
+            $a_length: ${$Closure1._lift(a.length)},
+            $s_size: ${$Closure1._lift(s.size)},
           })
         `;
       }
@@ -128,10 +128,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $handler: ${context._lift(handler)},
+            $handler: ${$Closure2._lift(handler)},
           })
         `;
       }

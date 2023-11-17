@@ -6,7 +6,7 @@ import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-ta
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { autoId } from "../shared/misc";
+import { inflightId } from "../shared/misc";
 import { Node } from "../std";
 
 /**
@@ -46,7 +46,7 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(

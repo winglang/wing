@@ -6,7 +6,7 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { autoId } from '@winglang/sdk/lib/util/util';
+import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -32,7 +32,7 @@ export class Topic extends cloud.Topic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(

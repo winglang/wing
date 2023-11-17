@@ -145,10 +145,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure2-1.js")({
-                $s: ${context._lift(s)},
+                $s: ${$Closure2._lift(s)},
               })
             `;
           }
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
         }
         this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight in resource should capture the right scoped var", new $Closure2(this, "$Closure2"));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -201,10 +201,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $s: ${context._lift(s)},
+            $s: ${$Closure3._lift(s)},
           })
         `;
       }
@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
           })
@@ -264,10 +264,10 @@ class $Root extends $stdlib.std.Resource {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
             require("./inflight.$Closure1-1.js")({
-              $s: ${context._lift(s)},
+              $s: ${$Closure1._lift(s)},
             })
           `;
         }

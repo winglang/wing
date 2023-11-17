@@ -68,12 +68,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $SomeEnum: ${context._lift(SomeEnum)},
-            $one: ${context._lift(one)},
-            $two: ${context._lift(two)},
+            $SomeEnum: ${$Closure1._lift(SomeEnum)},
+            $one: ${$Closure1._lift(one)},
+            $two: ${$Closure1._lift(two)},
           })
         `;
       }

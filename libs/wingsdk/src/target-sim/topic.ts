@@ -7,7 +7,7 @@ import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { autoId } from "../shared/misc";
+import { inflightId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -25,7 +25,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),

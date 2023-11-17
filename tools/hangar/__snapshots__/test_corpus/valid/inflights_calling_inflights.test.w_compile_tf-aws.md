@@ -281,10 +281,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $globalBucket: ${context._lift(globalBucket)},
+            $globalBucket: ${$Closure1._lift(globalBucket)},
           })
         `;
       }
@@ -314,10 +314,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $storeInBucket: ${context._lift(storeInBucket)},
+            $storeInBucket: ${$Closure2._lift(storeInBucket)},
           })
         `;
       }
@@ -347,11 +347,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $func1: ${context._lift(func1)},
-            $globalBucket: ${context._lift(globalBucket)},
+            $func1: ${$Closure3._lift(func1)},
+            $globalBucket: ${$Closure3._lift(globalBucket)},
           })
         `;
       }
@@ -386,10 +386,10 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure4-1.js")({
-                $globalBucket: ${context._lift(globalBucket)},
+                $globalBucket: ${$Closure4._lift(globalBucket)},
               })
             `;
           }
@@ -416,7 +416,7 @@ class $Root extends $stdlib.std.Resource {
         }
         this.closure = new $Closure4(this, "$Closure4");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
           })
@@ -427,7 +427,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_closure: ${this._lift(this.closure)},
+              $this_closure: ${MyResource._lift(this.closure)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -452,10 +452,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $x: ${context._lift(x)},
+            $x: ${$Closure5._lift(x)},
           })
         `;
       }

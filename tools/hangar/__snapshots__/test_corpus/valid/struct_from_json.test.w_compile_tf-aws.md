@@ -201,11 +201,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-2.js")({
-            $cloud_BucketProps: ${context._lift($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
-            $j: ${context._lift(j)},
+            $cloud_BucketProps: ${$Closure1._lift($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
+            $j: ${$Closure1._lift(j)},
           })
         `;
       }
@@ -235,10 +235,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-2.js")({
-            $Student: ${context._lift(Student)},
+            $Student: ${$Closure2._lift(Student)},
           })
         `;
       }
@@ -262,11 +262,11 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-2.js")({
-            $Student: ${context._lift(Student)},
-            $jStudent1: ${context._lift(jStudent1)},
+            $Student: ${$Closure3._lift(Student)},
+            $jStudent1: ${$Closure3._lift(jStudent1)},
           })
         `;
       }
@@ -296,14 +296,14 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-2.js")({
-            $MyStruct: ${context._lift(MyStruct)},
-            $_schema_asStr___: ${context._lift((schema.asStr()))},
-            $expectedSchema: ${context._lift(expectedSchema)},
-            $jMyStruct: ${context._lift(jMyStruct)},
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $MyStruct: ${$Closure4._lift(MyStruct)},
+            $_schema_asStr___: ${$Closure4._lift((schema.asStr()))},
+            $expectedSchema: ${$Closure4._lift(expectedSchema)},
+            $jMyStruct: ${$Closure4._lift(jMyStruct)},
+            $std_Json: ${$Closure4._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -335,13 +335,13 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-2.js")({
-            $Student: ${context._lift(Student)},
-            $std_Boolean: ${context._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
-            $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
-            $std_String: ${context._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
+            $Student: ${$Closure5._lift(Student)},
+            $std_Boolean: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
+            $std_Number: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+            $std_String: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
           })
         `;
       }
@@ -527,7 +527,7 @@ module.exports = function({ $stdlib }) {
       super($scope, $id);
       this.someStruct = ((json, validateOptions) => (SomeStruct._fromJson(json, validateOptions)))(({"foo": "123"}));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.UsesStructInImportedFile-1.js")({
         })

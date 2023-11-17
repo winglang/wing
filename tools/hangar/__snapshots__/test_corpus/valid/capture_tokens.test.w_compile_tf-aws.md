@@ -209,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
         this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
         this.url = this.api.url;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
           })
@@ -220,8 +220,8 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_api_url: ${this._lift(this.api.url)},
-              $this_url: ${this._lift(this.url)},
+              $this_api_url: ${MyResource._lift(this.api.url)},
+              $this_url: ${MyResource._lift(this.url)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -249,10 +249,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $r: ${context._lift(r)},
+            $r: ${$Closure1._lift(r)},
           })
         `;
       }
@@ -282,12 +282,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $MyResource: ${context._lift(MyResource)},
-            $api_url: ${context._lift(api.url)},
-            $url: ${context._lift(url)},
+            $MyResource: ${$Closure2._lift(MyResource)},
+            $api_url: ${$Closure2._lift(api.url)},
+            $url: ${$Closure2._lift(url)},
           })
         `;
       }

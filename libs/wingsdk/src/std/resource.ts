@@ -17,7 +17,10 @@ export interface IInflightHost extends IResource {
   addEnvironment(name: string, value: string): void;
 }
 
-// TODO Remove IResource
+/**
+ *
+ * TODO Remove IResource
+ */
 export interface IInflight extends ILiftable, IResource {
   /**
    * Tracks the unique ID of this inflight object.
@@ -27,6 +30,9 @@ export interface IInflight extends ILiftable, IResource {
   _id: string;
 }
 
+/**
+ * TODO docs
+ */
 export interface ILiftable {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to

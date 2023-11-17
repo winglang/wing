@@ -1,4 +1,4 @@
-import { autoId, normalPath } from "./misc";
+import { inflightId, normalPath } from "./misc";
 import { IInflight } from "../std";
 
 /**
@@ -18,7 +18,7 @@ export function convertBetweenHandlers(
   const handlerClient = baseHandler._toInflight();
   const newHandler = {
     ...baseHandler,
-    _id: "" + autoId(),
+    _id: inflightId(baseHandler),
     _toInflight() {
       return `\
 new (require("${normalPath(
@@ -29,6 +29,7 @@ new (require("${normalPath(
     },
   };
 
+  // TODO Remove this once inflights are no longer resources
   Object.setPrototypeOf(newHandler, Object.getPrototypeOf(baseHandler));
 
   return newHandler;

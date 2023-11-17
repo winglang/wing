@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure1-1.js")({
               })
@@ -202,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
       onUpdate(fn) {
         this.onUpdateCallback = fn;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.KeyValueStore-1.js")({
           })
@@ -213,8 +213,8 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
             const client = new KeyValueStoreClient({
-              $this_bucket: ${this._lift(this.bucket)},
-              $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
+              $this_bucket: ${KeyValueStore._lift(this.bucket)},
+              $this_onUpdateCallback: ${KeyValueStore._lift(this.onUpdateCallback)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -244,10 +244,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $counter: ${context._lift(counter)},
+            $counter: ${$Closure2._lift(counter)},
           })
         `;
       }
@@ -277,12 +277,12 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $counter: ${context._lift(counter)},
-            $kv: ${context._lift(kv)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $counter: ${$Closure3._lift(counter)},
+            $kv: ${$Closure3._lift(kv)},
+            $util_Util: ${$Closure3._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

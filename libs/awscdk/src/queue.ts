@@ -7,7 +7,7 @@ import { Function } from "./function";
 import { std, core, cloud} from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { autoId } from '@winglang/sdk/lib/util/util';
+import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -37,7 +37,7 @@ export class Queue extends cloud.Queue {
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
     // create md5 hash of _toInflight
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(

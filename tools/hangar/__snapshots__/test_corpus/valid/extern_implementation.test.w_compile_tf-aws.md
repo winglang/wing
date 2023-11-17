@@ -120,7 +120,7 @@ class $Root extends $stdlib.std.Resource {
       static getGreeting(name) {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -152,10 +152,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $f: ${context._lift(f)},
+            $f: ${$Closure1._lift(f)},
           })
         `;
       }
@@ -185,10 +185,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Foo: ${context._lift(Foo)},
+            $Foo: ${$Closure2._lift(Foo)},
           })
         `;
       }

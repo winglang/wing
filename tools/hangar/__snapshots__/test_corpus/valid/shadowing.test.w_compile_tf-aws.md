@@ -99,10 +99,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bar: ${context._lift(bar)},
+            $bar: ${$Closure1._lift(bar)},
           })
         `;
       }
@@ -132,10 +132,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $fn: ${context._lift(fn)},
+            $fn: ${$Closure2._lift(fn)},
           })
         `;
       }

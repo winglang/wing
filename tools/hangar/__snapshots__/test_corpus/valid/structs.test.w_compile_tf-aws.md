@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.data = b;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -96,7 +96,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_data_field0: ${this._lift(this.data.field0)},
+              $this_data_field0: ${Foo._lift(this.data.field0)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
           })

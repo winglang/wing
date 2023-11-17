@@ -153,14 +153,14 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_CloudwatchLogGroup_D9692C7E": {
+      "MyResource_cloudTopic-OnMessage-R_CloudwatchLogGroup_6CF3AB8C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/CloudwatchLogGroup",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_CloudwatchLogGroup_D9692C7E"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/CloudwatchLogGroup",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_CloudwatchLogGroup_6CF3AB8C"
           }
         },
-        "name": "/aws/lambda/cloud-Topic-OnMessage-f10eb240-c8df2c86",
+        "name": "/aws/lambda/cloud-Topic-OnMessage-R-c80db460",
         "retention_in_days": 30
       }
     },
@@ -201,46 +201,46 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_iam_role": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D": {
+      "MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRole",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRole",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061": {
+      "MyResource_cloudTopic-OnMessage-R_IamRolePolicy_14AAF77D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicy",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRolePolicy",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRolePolicy_14AAF77D"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1": {
+      "MyResource_cloudTopic-OnMessage-R_IamRolePolicyAttachment_7BCEF290": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicyAttachment",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRolePolicyAttachment",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRolePolicyAttachment_7BCEF290"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.name}"
       }
     },
     "aws_lambda_function": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41": {
+      "MyResource_cloudTopic-OnMessage-R_13D3531A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/Default",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/Default",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_13D3531A"
           }
         },
         "architectures": [
@@ -251,18 +251,18 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-R-c80db460",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+        "function_name": "cloud-Topic-OnMessage-R-c80db460",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.arn}",
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD.key}",
+        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -271,15 +271,15 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_lambda_permission": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2": {
+      "MyResource_cloudTopic-OnMessage-R_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_651DF3C7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_651DF3C7"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.function_name}",
+        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-R_13D3531A.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
@@ -316,11 +316,11 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_s3_object": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD": {
+      "MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/S3Object",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/S3Object",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -340,14 +340,14 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_sns_topic_subscription": {
-      "MyResource_cloudTopic_cloudTopic-TopicSubscription-f10eb240_5B88092E": {
+      "MyResource_cloudTopic_cloudTopic-TopicSubscription-R_204292C6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-f10eb240",
-            "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-f10eb240_5B88092E"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-R",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-R_204292C6"
           }
         },
-        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.arn}",
+        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-R_13D3531A.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
@@ -373,7 +373,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.First-1.js")({
           })
@@ -400,10 +400,10 @@ class $Root extends $stdlib.std.Resource {
         this.myField = "hello!";
         this.first = new First(this, "First");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Another-1.js")({
-            $globalCounter: ${context._lift(globalCounter)},
+            $globalCounter: ${Another._lift(globalCounter)},
           })
         `;
       }
@@ -430,11 +430,11 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerOnLift(host, ops);
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("myStaticMethod")) {
           Another._registerOnLiftObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -447,11 +447,11 @@ class $Root extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
             super($scope, $id);
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.R-1.js")({
-                $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
-                $globalCounter: ${context._lift(globalCounter)},
+                $_parentThis_localCounter: ${R._lift($parentThis.localCounter)},
+                $globalCounter: ${R._lift(globalCounter)},
               })
             `;
           }
@@ -479,20 +479,20 @@ class $Root extends $stdlib.std.Resource {
         }
         (this.localTopic.onMessage(new R(this, "R")));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
-            $Another: ${context._lift(Another)},
-            $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${context._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
-            $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
-            $_globalSetOfStr_has__a___: ${context._lift((globalSetOfStr.has("a")))},
-            $globalAnother: ${context._lift(globalAnother)},
-            $globalAnother_first_myResource: ${context._lift(globalAnother.first.myResource)},
-            $globalAnother_myField: ${context._lift(globalAnother.myField)},
-            $globalBool: ${context._lift(globalBool)},
-            $globalBucket: ${context._lift(globalBucket)},
-            $globalNum: ${context._lift(globalNum)},
-            $globalStr: ${context._lift(globalStr)},
+            $Another: ${MyResource._lift(Another)},
+            $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${MyResource._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
+            $_globalArrayOfStr_at_0__: ${MyResource._lift((globalArrayOfStr.at(0)))},
+            $_globalSetOfStr_has__a___: ${MyResource._lift((globalSetOfStr.has("a")))},
+            $globalAnother: ${MyResource._lift(globalAnother)},
+            $globalAnother_first_myResource: ${MyResource._lift(globalAnother.first.myResource)},
+            $globalAnother_myField: ${MyResource._lift(globalAnother.myField)},
+            $globalBool: ${MyResource._lift(globalBool)},
+            $globalBucket: ${MyResource._lift(globalBucket)},
+            $globalNum: ${MyResource._lift(globalNum)},
+            $globalStr: ${MyResource._lift(globalStr)},
           })
         `;
       }
@@ -501,7 +501,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_localTopic: ${this._lift(this.localTopic)},
+              $this_localTopic: ${MyResource._lift(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -537,10 +537,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $res: ${context._lift(res)},
+            $res: ${$Closure1._lift(res)},
           })
         `;
       }
@@ -570,10 +570,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Another: ${context._lift(Another)},
+            $Another: ${$Closure2._lift(Another)},
           })
         `;
       }

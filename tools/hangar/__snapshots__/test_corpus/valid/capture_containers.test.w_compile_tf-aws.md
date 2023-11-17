@@ -76,18 +76,18 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
-            $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
-            $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__: ${context._lift(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"))},
-            $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
-            $_arr_at_0__: ${context._lift((arr.at(0)))},
-            $_arr_at_1__: ${context._lift((arr.at(1)))},
-            $_mySet_has__my___: ${context._lift((mySet.has("my")))},
-            $arr_length: ${context._lift(arr.length)},
-            $mySet_size: ${context._lift(mySet.size)},
+            $Object_keys_myMap__length: ${$Closure1._lift(Object.keys(myMap).length)},
+            $__bang__in___arrOfMap_at_0____: ${$Closure1._lift(("bang" in ((arrOfMap.at(0)))))},
+            $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__: ${$Closure1._lift(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"))},
+            $__world__in__myMap__: ${$Closure1._lift(("world" in (myMap)))},
+            $_arr_at_0__: ${$Closure1._lift((arr.at(0)))},
+            $_arr_at_1__: ${$Closure1._lift((arr.at(1)))},
+            $_mySet_has__my___: ${$Closure1._lift((mySet.has("my")))},
+            $arr_length: ${$Closure1._lift(arr.length)},
+            $mySet_size: ${$Closure1._lift(mySet.size)},
           })
         `;
       }

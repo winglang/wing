@@ -233,7 +233,7 @@ Adds this trigger as a dependency on other constructs.
 
 ### IOnDeployHandler <a name="IOnDeployHandler" id="@winglang/sdk.cloud.IOnDeployHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IOnDeployHandler">IOnDeployHandler</a>
 

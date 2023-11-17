@@ -9,7 +9,7 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { autoId } from '@winglang/sdk/lib/util/util';
+import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -64,7 +64,7 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props?: cloud.ScheduleOnTickOptions | undefined
   ): cloud.Function {
-    const hash = inflight._id ?? autoId();
+    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
