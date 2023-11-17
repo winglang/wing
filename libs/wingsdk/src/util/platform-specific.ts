@@ -40,7 +40,7 @@ export const getPlatformSpecificValues = (
   } else if (
     wingValues &&
     wingValues.length !== 0 &&
-    (wingValues.indexOf(".yaml") > -1 || wingValues.indexOf(".yml") > -1)
+    (!wingValues.includes(".yaml") || !wingValues.includes(".yml")
   ) {
     result = getPlatformSpecificValuesFromFile(scope.node.path, wingValues);
   }
