@@ -7,7 +7,7 @@ import { currentPackage } from "./util";
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
-if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
+if (PACKAGE_VERSION == "0.0.0" && !process.env.WING_ANALYTICS_FORCE_EXPORT) {
   process.env.WING_DISABLE_ANALYTICS = "1";
 }
 

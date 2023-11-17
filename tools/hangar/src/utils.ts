@@ -9,6 +9,7 @@ export interface RunWingCommandOptions {
   wingFile?: string;
   args: string[];
   expectFailure: boolean;
+  enableAnalytics?: boolean;
   platforms?: string[];
   env?: Record<string, string>;
 }
@@ -17,11 +18,12 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   const platformOptions: string[] = [];
   options.platforms?.forEach((p) => platformOptions.push(...["-t", `${p}`])) ??
     [];
+  const analyticsOptions = options.enableAnalytics ? [] : ["--no-analytics"];
   const out = await execa(
     wingBin,
     [
       "--no-update-check",
-      "--no-analytics",
+      ...analyticsOptions,
       ...options.args,
       options.wingFile ?? "",
       ...platformOptions,

@@ -17,6 +17,10 @@ const segmentWriteKey = "sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw";
 const segmentDebugWriteKey = "6r9ySJHdUGkDO80X8i4h2pGGHxYRwFe2";
 
 async function reportAnalytic() {
+  if (process.env.WING_ANALYTICS_FORCE_FAIL) {
+    throw new Error("Forced failure"); // for testing purposes
+  }
+
   if (process.env.DEBUG && !process.env.WING_ANALYTICS_FORCE_EXPORT) {
     // In debug mode no need to export the metrics
     exit(0);
@@ -26,8 +30,20 @@ async function reportAnalytic() {
     throw new Error("No file analytic path provided");
   }
 
+  let additionalAnalyticsOptions: any = {};
+
+  if (process.env.WING_ANALYTICS_HOST) {
+    additionalAnalyticsOptions.host = process.env.WING_ANALYTICS_HOST;
+  }
+
   const analytics = new Analytics({
-    writeKey: process.env.DEBUG ? segmentDebugWriteKey : segmentWriteKey,
+    writeKey:
+      process.env.WING_SEGMENT_WRITE_KEY ?? // allow override
+      process.env.WING_ANALYTICS_FORCE_FAIL
+        ? segmentDebugWriteKey
+        : segmentWriteKey,
+    maxEventsInBatch: 1,
+    ...additionalAnalyticsOptions,
   });
   const storage = new AnalyticsStorage();
   const event = storage.loadEvent(filePath);
@@ -64,6 +80,6 @@ void (async () => {
   try {
     await reportAnalytic();
   } catch (err: any) {
-    // TODO: add mechanism to retry maybe
+    throw err;
   }
 })();
