@@ -32,6 +32,19 @@ export class BucketClient implements IBucketClient {
     );
   }
 
+  /**
+   * Move object within the bucket
+   *
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after rename.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   */
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    return Promise.reject(
+      `rename is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+    );
+  }
+
   // check if bucket is public or not from bucket metadata
   private async isPublic(): Promise<boolean> {
     try {
