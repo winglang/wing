@@ -93,9 +93,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -124,9 +122,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -155,9 +151,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -186,9 +180,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`

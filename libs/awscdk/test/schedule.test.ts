@@ -12,10 +12,7 @@ const CDK_APP_OPTS = {
 test("schedule behavior with rate", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    app,
-    
-    `async handle(event) { console.log("Received: ", event); }`
+  const fn = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
@@ -35,10 +32,7 @@ test("schedule behavior with rate", () => {
 test("schedule behavior with cron", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    app,
-    
-    `async handle(event) { console.log("Received: ", event); }`
+  const fn = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
@@ -58,14 +52,9 @@ test("schedule behavior with cron", () => {
 test("schedule with two functions", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const fn = simulator.Testing.makeHandler(
-    app,
-    
-    `async handle(event) { console.log("Received: ", event); }`
+  const fn = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
-  const fn2 = simulator.Testing.makeHandler(
-    app,
-    "Handler2",
+  const fn2 = simulator.Testing.makeHandler("Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {

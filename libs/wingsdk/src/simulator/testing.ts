@@ -1,4 +1,3 @@
-import { IConstruct } from "constructs";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
 import { autoId } from "../shared/misc";
@@ -17,12 +16,10 @@ export class Testing {
    * `async handle(event) { ... }`, and all references to resources must be
    * made through `this.<resource>`.
    *
-   * @param scope The scope to create the handler in.
    * @param code The code of the handler.
    * @param bindings The bindings of the handler.
    */
   public static makeHandler(
-    _scope: IConstruct,
     code: string,
     bindings: InflightBindings = {}
   ): any {
@@ -40,7 +37,7 @@ export class Testing {
           Resource._registerOnLiftObject(v.obj, host, v.ops);
         }
       },
-      _supportedOps: () => ["handle"],
+      // _supportedOps: () => ["handle"],
       _toInflight: () => `new ((function(){
         return class Handler {
           constructor(clients) {

@@ -60,10 +60,7 @@ export class Bucket extends cloud.Bucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): Function {
-    const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-Handler-${hash}`,
       inflight,
       this.eventHandlerLocation(),
       `BucketEventHandlerClient`

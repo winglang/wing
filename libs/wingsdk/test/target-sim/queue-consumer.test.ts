@@ -15,7 +15,6 @@ test("pushing messages through a queue", async () => {
 
       const queue = new cloud.Queue(this, "Queue");
       const pusher = Testing.makeHandler(
-        app,
         `async handle(event) {
           console.log("Hello, world!");
           await this.queue.push(event);
@@ -29,12 +28,9 @@ test("pushing messages through a queue", async () => {
       );
       new cloud.Function(this, "Function", pusher);
 
-      const processor = Testing.makeHandler(
-        app,
-        `async handle(event) {
+      const processor = Testing.makeHandler(`async handle(event) {
           console.log("Received " + event);
-        }`
-      );
+        }`);
       const consumer = queue.setConsumer(processor);
       this.consumerPath = consumer.node.path;
     }

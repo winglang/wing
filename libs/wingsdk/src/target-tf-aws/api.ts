@@ -242,8 +242,6 @@ export class Api extends cloud.Api {
     const inflightNodeHash = (inflight as any)?._id ?? autoId();
 
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),

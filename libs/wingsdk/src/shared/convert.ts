@@ -1,5 +1,4 @@
-import { Construct } from "constructs";
-import { normalPath } from "./misc";
+import { autoId, normalPath } from "./misc";
 import { IResource } from "../std";
 
 /**
@@ -11,22 +10,26 @@ import { IResource } from "../std";
  * resources with a single method named "handle".
  */
 export function convertBetweenHandlers(
-  _scope: Construct,
-  _id: string,
   baseHandler: any,
   newHandlerClientPath: string,
   newHandlerClientClassName: string,
   args: Record<string, unknown> = {}
 ): IResource {
-  return {
+  const handlerClient = baseHandler._toInflight();
+  const newHandler = {
     ...baseHandler,
-    _toInflight(): string {
-      const handlerClient = baseHandler._toInflight();
-      return `new (require("${normalPath(
+    _id: autoId(),
+    _toInflight() {
+      return `\
+new (require("${normalPath(
         newHandlerClientPath
       )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
         args
       )} })`;
     },
   };
+
+  Object.setPrototypeOf(newHandler, Object.getPrototypeOf(baseHandler));
+
+  return newHandler;
 }

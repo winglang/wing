@@ -34,8 +34,6 @@ export class Topic extends cloud.Topic {
   ): cloud.Function {
     const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),

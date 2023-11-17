@@ -25,10 +25,7 @@ test("topic with subscriber function", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const topic = new cloud.Topic(app, "Topic");
-  const subscriber = simulator.Testing.makeHandler(
-    app,
-    
-    `async handle(event) { console.log("Received: ", event); }`
+  const subscriber = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
   topic.onMessage(subscriber);
   const output = app.synth();
@@ -48,14 +45,10 @@ test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const topic = new cloud.Topic(app, "Topic");
-  const subOne = simulator.Testing.makeHandler(
-    app,
-    "Handler1",
+  const subOne = simulator.Testing.makeHandler("Handler1",
     `async handle(event) { console.log("Got Event: ", event); }`
   );
-  const subTwo = simulator.Testing.makeHandler(
-    app,
-    "Handler2",
+  const subTwo = simulator.Testing.makeHandler("Handler2",
     `async handle(event) { console.log("Ohh yea!! ", event); }`
   );
 

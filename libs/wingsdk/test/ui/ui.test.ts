@@ -17,7 +17,6 @@ test("can obtain ui components", async () => {
 
       const section = new ui.Section(this, "Section", { label: "Overview" });
       const buttonHandler = Testing.makeHandler(
-        this,
         `async handle() { return "button worked"; }`
       );
       const button = new ui.Button(
@@ -27,7 +26,6 @@ test("can obtain ui components", async () => {
         buttonHandler
       );
       const fieldHandler = Testing.makeHandler(
-        this,
         `async handle() { return "field worked"; }`
       );
       const field = new ui.Field(this, "Field", "Field Label", fieldHandler);

@@ -175,6 +175,19 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
+   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
+   * method), this method will be called and the result will be returned. Otherwise, the value is
+   * returned as-is.
+   *
+   * @param value The value to lift.
+   * @returns a string representation of the value in an inflight context.
+   * @internal
+   */
+  protected static _lift(value: any): string {
+    return liftObject(value);
+  }
+
+  /**
    * Create an instance of this resource with the current App factory.
    * This is commonly used in the constructor of a pseudo-abstract resource class before the super() call.
    *
@@ -325,19 +338,6 @@ export abstract class Resource extends Construct implements IResource {
       this.onLift(host, Array.from(ops));
     }
   }
-
-  /**
-   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
-   * method), this method will be called and the result will be returned. Otherwise, the value is
-   * returned as-is.
-   *
-   * @param value The value to lift.
-   * @returns a string representation of the value in an inflight context.
-   * @internal
-   */
-  protected _lift(value: any): string {
-    return liftObject(value);
-  }
 }
 
 /**
@@ -366,5 +366,5 @@ function IsLiftable(t: any): t is new (...args: any[]) => IResource {
 }
 
 function isLiftableType(t: any): t is typeof Resource {
-  return typeof t._registerTypeOnLift === "function" && IsLiftable(t);
+  return typeof t._registerTypeOnLift === "function" && IsLiftable(t.prototype);
 }

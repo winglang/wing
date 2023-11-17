@@ -119,7 +119,6 @@ function makeTest(
   bindings: InflightBindings = {}
 ) {
   const handler = Testing.makeHandler(
-    scope,
     `async handle() { ${code.join("\n")} }`,
     bindings
   );

@@ -37,12 +37,9 @@ export class SimApp extends App {
     new Function(
       this,
       id,
-      Testing.makeHandler(
-        this,
-        `async handle() {
+      Testing.makeHandler(`async handle() {
           ${code}
-        }`
-      )
+        }`)
     );
 
     // returns an "invoker" for this function

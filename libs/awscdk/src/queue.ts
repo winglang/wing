@@ -39,8 +39,6 @@ export class Queue extends cloud.Queue {
     // create md5 hash of _toInflight
     const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),

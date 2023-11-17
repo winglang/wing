@@ -36,8 +36,6 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   ): cloud.Function {
     const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
       "ScheduleOnTickHandlerClient"

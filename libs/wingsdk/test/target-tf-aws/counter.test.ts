@@ -36,7 +36,6 @@ test("function with a counter binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
-    app,
     `async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
@@ -70,8 +69,6 @@ test("inc() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
-    app,
-
     `async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
@@ -95,8 +92,6 @@ test("dec() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
-    app,
-
     `async handle(event) {
   const val = await this.my_counter.dec(2);
   console.log(val);
@@ -120,8 +115,6 @@ test("peek() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
-    app,
-
     `async handle(event) {
   const val = await this.my_counter.peek();
   console.log(val);
@@ -145,8 +138,6 @@ test("set() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
-    app,
-
     `async handle(event) {
   const val = await this.my_counter.set();
   console.log(val);

@@ -1454,15 +1454,15 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::with_source(&class.name.span);
 
-		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
+		code.open("static _toInflightType() {");
 
-		code.open("return `");
+		code.open("return `\\");
 
 		code.open(format!("require(\"./{client_path}\")({{"));
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
-				let lift_type = format!("context._lift({})", capture.code);
+				let lift_type = format!("{}._lift({})", &class.name, capture.code);
 				code.line(format!("{}: ${{{}}},", token, lift_type));
 			}
 		}
@@ -1493,7 +1493,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{this._lift({obj})}},"));
+				code.line(format!("{token}: ${{{}._lift({obj})}},", resource_name.name));
 			}
 		}
 

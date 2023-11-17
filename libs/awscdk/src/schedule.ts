@@ -66,8 +66,6 @@ export class Schedule extends cloud.Schedule {
   ): cloud.Function {
     const hash = (inflight as any)._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),

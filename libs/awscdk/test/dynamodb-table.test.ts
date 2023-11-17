@@ -32,10 +32,7 @@ test("function with a table binding", () => {
     hashKey: "id",
     name: "my-wing-table",
   });
-  const inflight = simulator.Testing.makeHandler(
-    app,
-    
-    `async handle(event) {
+  const inflight = simulator.Testing.makeHandler(`async handle(event) {
   await this.my_table.putItem({ item: { id: "test" } });
   await this.my_table.scan();
 }`,

@@ -58,13 +58,10 @@ test("queue with a consumer function", () => {
   const queue = new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = Testing.makeHandler(
-    app,
-    `\
+  const processor = Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
-}`
-  );
+}`);
   const processorFn = queue.setConsumer(processor);
   const output = app.synth();
 
