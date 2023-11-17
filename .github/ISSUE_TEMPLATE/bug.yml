@@ -32,9 +32,7 @@ body:
   id: what-did-you-expect
   attributes:
     label: "I expected this:"
-    placeholder: "What did you expect to happen? Describe the output or behavior you expected to see."
-  validations:
-    required: true    
+    placeholder: "What did you expect to happen? Describe the output or behavior you expected to see (unless it's obvious)."
 
 - type: textarea
   id: workaround
