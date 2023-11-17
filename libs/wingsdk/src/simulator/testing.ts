@@ -1,7 +1,7 @@
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
 import { inflightId } from "../shared/misc";
-import { IInflightHost, Resource } from "../std";
+import { IInflight, IInflightHost, Resource } from "../std";
 
 /**
  * Test utilities.
@@ -22,7 +22,7 @@ export class Testing {
   public static makeHandler(
     code: string,
     bindings: InflightBindings = {}
-  ): any {
+  ): IInflight {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
@@ -32,12 +32,13 @@ export class Testing {
     // implements IFunctionHandler
     return {
       _id: inflightId(),
+      onLift: () => {},
+      _supportedOps: () => [],
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
           Resource._registerOnLiftObject(v.obj, host, v.ops);
         }
       },
-      // _supportedOps: () => ["handle"],
       _toInflight: () => `new ((function(){
         return class Handler {
           constructor(clients) {
