@@ -225,7 +225,7 @@ export class Api extends cloud.Api {
    * @returns
    */
   private findExistingInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = (inflight as any)?._id ?? autoId();
+    const inflightNodeHash = inflight?._id ?? autoId();
 
     let fn = this.node.tryFindChild(
       `${this.node.id}-OnRequest-${inflightNodeHash}`
@@ -239,7 +239,7 @@ export class Api extends cloud.Api {
    * @returns Inflight handler as a AWS Lambda Function
    */
   private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = (inflight as any)?._id ?? autoId();
+    const inflightNodeHash = inflight?._id ?? autoId();
 
     const functionHandler = convertBetweenHandlers(
       inflight,

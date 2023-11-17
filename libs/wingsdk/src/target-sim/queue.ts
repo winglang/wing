@@ -46,7 +46,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = (inflight as any)._id ?? autoId();
+    const hash = inflight._id ?? autoId();
 
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs

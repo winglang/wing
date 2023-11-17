@@ -1666,7 +1666,7 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerTypeOnLift"),
+			BindMethod::Type => ("static ", "_registerOnLift"),
 			BindMethod::Instance => ("", "_registerOnLift"),
 		};
 

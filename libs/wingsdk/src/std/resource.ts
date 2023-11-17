@@ -17,14 +17,20 @@ export interface IInflightHost extends IResource {
   addEnvironment(name: string, value: string): void;
 }
 
-/**
- * Abstract interface for `Resource`.
- * @skipDocs
- */
-export interface IResource extends IConstruct {
+// TODO Remove IResource
+export interface IInflight extends ILiftable, IResource {
+  /**
+   * Tracks the unique ID of this inflight object.
+   * This is not hash-based and will be different for two inflight instances with the same code
+   * @internal
+   */
+  _id: string;
+}
+
+export interface ILiftable {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
-   * use this resource inflight. The list of requested inflight methods
+   * use this object inflight. The list of requested inflight methods
    * needed by the inflight host are given by `ops`.
    *
    * This method is commonly used for adding permissions, environment variables, or
@@ -59,7 +65,13 @@ export interface IResource extends IConstruct {
    * @internal
    */
   _supportedOps(): string[];
+}
 
+/**
+ * Abstract interface for `Resource`.
+ * @skipDocs
+ */
+export interface IResource extends IConstruct, ILiftable {
   /**
    * A hook for performing operations after the tree of resources has been
    * created, but before they are synthesized.
@@ -83,7 +95,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public static _registerTypeOnLift(host: IInflightHost, ops: string[]): void {
+  public static _registerOnLift(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -163,7 +175,7 @@ export abstract class Resource extends Construct implements IResource {
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
         if (isLiftableType(obj)) {
-          obj._registerTypeOnLift(host, ops);
+          obj._registerOnLift(host, ops);
           return;
         }
         break;
@@ -357,7 +369,7 @@ export interface OperationAnnotation {
   };
 }
 
-function IsLiftable(t: any): t is new (...args: any[]) => IResource {
+function IsLiftable(t: any): t is new (...args: any[]) => ILiftable {
   return (
     t !== undefined &&
     typeof t.onLift === "function" &&
@@ -365,6 +377,6 @@ function IsLiftable(t: any): t is new (...args: any[]) => IResource {
   );
 }
 
-function isLiftableType(t: any): t is typeof Resource {
-  return typeof t._registerTypeOnLift === "function" && IsLiftable(t.prototype);
+function isLiftableType(t: any): t is ILiftable {
+  return typeof t._registerOnLift === "function" && IsLiftable(t.prototype);
 }

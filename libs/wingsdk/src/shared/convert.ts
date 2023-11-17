@@ -1,5 +1,5 @@
 import { autoId, normalPath } from "./misc";
-import { IResource } from "../std";
+import { IInflight } from "../std";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -10,15 +10,15 @@ import { IResource } from "../std";
  * resources with a single method named "handle".
  */
 export function convertBetweenHandlers(
-  baseHandler: any,
+  baseHandler: IInflight,
   newHandlerClientPath: string,
   newHandlerClientClassName: string,
   args: Record<string, unknown> = {}
-): IResource {
+): IInflight {
   const handlerClient = baseHandler._toInflight();
   const newHandler = {
     ...baseHandler,
-    _id: autoId(),
+    _id: "" + autoId(),
     _toInflight() {
       return `\
 new (require("${normalPath(

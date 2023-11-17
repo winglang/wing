@@ -56,7 +56,7 @@ export class Queue extends cloud.Queue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = (inflight as any)._id ?? autoId();
+    const hash = inflight._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(

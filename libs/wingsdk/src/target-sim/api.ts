@@ -32,7 +32,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    const hash = (inflight as any)._id ?? autoId();
+    const hash = inflight._id ?? autoId();
     const fnPath = `OnRequestHandler-${hash}`;
     const eventId = `ApiEventMapping-${hash}`;
 

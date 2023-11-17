@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
-import { IResource, Node, Resource } from "../std";
+import { Node, Resource, IInflight } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
@@ -68,7 +68,7 @@ export interface ITopicClient {
  *
  * @inflight `@winglang/sdk.cloud.ITopicOnMessageHandlerClient`
  */
-export interface ITopicOnMessageHandler extends IResource {}
+export interface ITopicOnMessageHandler extends IInflight {}
 
 /**
  * Inflight client for `ITopicOnMessageHandler`.

@@ -25,7 +25,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = (inflight as any)._id ?? autoId();
+    const hash = inflight._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),

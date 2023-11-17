@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflightHost, IResource, Node, Resource } from "../std";
+import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -154,7 +154,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource {}
+export interface IFunctionHandler extends IInflight {}
 
 /**
  * Inflight client for `IFunctionHandler`.

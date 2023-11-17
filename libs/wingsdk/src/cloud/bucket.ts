@@ -6,7 +6,7 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
+import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -133,7 +133,7 @@ export class Bucket extends Resource {
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IResource {
+  ): IInflight {
     return convertBetweenHandlers(
       inflight,
       // since uses __dirname should be specified under the target directory
@@ -414,7 +414,7 @@ export interface BucketOnEventOptions {}
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler extends IInflight {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

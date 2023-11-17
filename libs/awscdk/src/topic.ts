@@ -32,7 +32,7 @@ export class Topic extends cloud.Topic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = (inflight as any)._id ?? autoId();
+    const hash = inflight._id ?? autoId();
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
