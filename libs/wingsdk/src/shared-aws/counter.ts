@@ -7,7 +7,7 @@ export interface IAwsCounter {
   /**
    * AWS Dynamodb arn
    */
-  readonly arn: string;
+  readonly dynamoTableArn: string;
 
   /**
    * AWS Dynamodb name
