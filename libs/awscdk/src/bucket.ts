@@ -232,11 +232,11 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.bucket.bucketArn;
   }
 
-  public bucketName(): string {
+  public get bucketName(): string {
     return this.bucket.bucketName;
   }
 }

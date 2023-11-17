@@ -291,27 +291,27 @@ export class Api extends cloud.Api implements IAwsApi {
     });
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.api.api.executionArn;
   }
 
-  public restApiId(): string {
+  public get restApiId(): string {
     return this.api.api.id;
   }
 
-  public restApiName(): string {
+  public get restApiName(): string {
     return this.api.api.name;
   }
 
-  public stageName(): string {
+  public get stageName(): string {
     return this.api.stage.stageName;
   }
 
-  public invokeUrl(): string {
+  public get invokeUrl(): string {
     return this.api.stage.invokeUrl;
   }
 
-  public deploymentId(): string {
+  public get deploymentId(): string {
     return this.api.deployment.id;
   }
 }
@@ -436,7 +436,7 @@ class WingRestApi extends Construct {
     new LambdaPermission(this, `permission-${permissionId}`, {
       statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
       action: "lambda:InvokeFunction",
-      functionName: handler.functionName(),
+      functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${path}`,
     });

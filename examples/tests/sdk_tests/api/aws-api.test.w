@@ -14,29 +14,29 @@ api.get("/api", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 let getApiInfo = (a: cloud.Api): Map<str>? => {
   if let api = aws.Api.from(a) {
     return {
-      arn: api.arn(),
-      restApiId: api.restApiId(),
-      restApiName: api.restApiName(),
-      stageName: api.stageName(),
-      invokeUrl: api.invokeUrl(),
-      deploymentId: api.deploymentId(),
+      arn: api.arn,
+      restApiId: api.restApiId,
+      restApiName: api.restApiName,
+      stageName: api.stageName,
+      invokeUrl: api.invokeUrl,
+      deploymentId: api.deploymentId,
     };
   }
   return nil;
 };
 
-let apiInfo = getApiInfo(api);
+let apiName = getApiInfo(api);
 
 test "validates the AWS api name" {
-  if let api = apiInfo {    
+  if let api = apiName {    
     assert(api.get("arn").contains("arn:aws:execute-api:"));
     assert(api.get("arn").contains(api.get("restApiId")));
 
     assert(api.get("invokeUrl").contains("https://"));
     assert(api.get("invokeUrl").contains(api.get("restApiId")));
     assert(api.get("invokeUrl").contains(api.get("stageName")));
-    // assert(name.contains("api"));
+  } else {
+    // If the test is not on AWS, it should not fail, so I am returning true.
+    assert(true);
   }
-  // If the test is not on AWS, it should not fail, so I am returning true.
-  assert(true);
 }

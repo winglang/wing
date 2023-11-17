@@ -4,16 +4,15 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { core, ex, std } from "@winglang/sdk";
 import { ResourceNames } from "@winglang/sdk/lib/shared/resource-names";
-import { NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
+import { IAwsDynamodbTable, NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsTable } from "@winglang/sdk/lib/shared-aws/table";
 
 /**
  * AWS implementation of `ex.DynamodbTable`.
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
-export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
+export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable {
   private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
@@ -86,11 +85,11 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.table.tableArn;
   }
 
-  public tableName(): string {
+  public get tableName(): string {
     return this.table.tableName;
   }
 }

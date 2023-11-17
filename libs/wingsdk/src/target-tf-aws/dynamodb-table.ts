@@ -4,9 +4,8 @@ import { DynamodbTable as AwsDynamodbTable } from "../.gen/providers/aws/dynamod
 import * as core from "../core";
 import * as ex from "../ex";
 import { ResourceNames } from "../shared/resource-names";
-import { NAME_OPTS } from "../shared-aws/dynamodb-table";
+import { IAwsDynamodbTable, NAME_OPTS } from "../shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "../shared-aws/permissions";
-import { IAwsTable } from "../shared-aws/table";
 import { IInflightHost } from "../std";
 
 /**
@@ -14,7 +13,10 @@ import { IInflightHost } from "../std";
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
-export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
+export class DynamodbTable
+  extends ex.DynamodbTable
+  implements IAwsDynamodbTable
+{
   private readonly table: AwsDynamodbTable;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
@@ -81,11 +83,11 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsTable {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.table.arn;
   }
 
-  public tableName(): string {
+  public get tableName(): string {
     return this.table.name;
   }
 }

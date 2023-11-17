@@ -7,7 +7,7 @@ import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import { createEncryptedBucket } from "./bucket";
 import { core, cloud } from "@winglang/sdk/lib";
-import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
+import { IAwsWebsite } from "@winglang/sdk/lib/shared-aws";
 
 const INDEX_FILE = "index.html";
 
@@ -16,7 +16,7 @@ const INDEX_FILE = "index.html";
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export class Website extends cloud.Website implements IAwsBucket {
+export class Website extends cloud.Website implements IAwsWebsite {
   private readonly bucket: S3Bucket;
   private readonly _url: string;
 
@@ -90,11 +90,11 @@ export class Website extends cloud.Website implements IAwsBucket {
     );
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.bucket.bucketArn;
   }
 
-  public bucketName(): string {
+  public get bucketName(): string {
     return this.bucket.bucketName;
   }
 }

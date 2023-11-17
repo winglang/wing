@@ -37,7 +37,7 @@ export class OnDeploy extends cloud.OnDeploy {
     // if we want OnDeploy to only run code conditionally,
     // we can use the aws_lambda_invocation *resource* instead.
     const lambdaInvocation = new DataAwsLambdaInvocation(this, "Invocation", {
-      functionName: awsFn.functionName(),
+      functionName: awsFn.functionName,
       input: JSON.stringify({}), // call the function with an empty object
       dependsOn,
     });

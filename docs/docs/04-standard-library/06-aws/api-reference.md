@@ -145,14 +145,14 @@ new aws.Api();
 ```wing
 bring aws;
 
-aws.Api.from(api: IResource);
+aws.Api.from(api: Api);
 ```
 
 If the api is an AWS RestApi, return a helper interface for working with it.
 
 ###### `api`<sup>Required</sup> <a name="api" id="@winglang/sdk.aws.Api.from.parameter.api"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <a href="#@winglang/sdk.cloud.Api">Api</a>
 
 The cloud.Api.
 
@@ -191,16 +191,108 @@ new aws.Bucket();
 ```wing
 bring aws;
 
-aws.Bucket.from(bucket: IResource);
+aws.Bucket.from(bucket: Bucket);
 ```
 
 If the bucket is an AWS Bucket, return a helper interface for working with it.
 
 ###### `bucket`<sup>Required</sup> <a name="bucket" id="@winglang/sdk.aws.Bucket.from.parameter.bucket"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>
 
 The cloud.Bucket.
+
+---
+
+
+
+### Counter <a name="Counter" id="@winglang/sdk.aws.Counter"></a>
+
+A helper class for working with AWS Counters.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Counter.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Counter();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Counter.from">from</a></code> | If the table is an AWS Counter, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Counter.from"></a>
+
+```wing
+bring aws;
+
+aws.Counter.from(counter: Counter);
+```
+
+If the table is an AWS Counter, return a helper interface for working with it.
+
+###### `counter`<sup>Required</sup> <a name="counter" id="@winglang/sdk.aws.Counter.from.parameter.counter"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Counter">Counter</a>
+
+The cloud.Counter.
+
+---
+
+
+
+### DynamodbTable <a name="DynamodbTable" id="@winglang/sdk.aws.DynamodbTable"></a>
+
+A helper class for working with AWS DynamodbTables.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.DynamodbTable.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.DynamodbTable();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.DynamodbTable.from">from</a></code> | If the table is an AWS Dynamodb, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.DynamodbTable.from"></a>
+
+```wing
+bring aws;
+
+aws.DynamodbTable.from(dynamodb: DynamodbTable);
+```
+
+If the table is an AWS Dynamodb, return a helper interface for working with it.
+
+###### `dynamodb`<sup>Required</sup> <a name="dynamodb" id="@winglang/sdk.aws.DynamodbTable.from.parameter.dynamodb"></a>
+
+- *Type:* <a href="#@winglang/sdk.ex.DynamodbTable">DynamodbTable</a>
+
+The ex.DynamodbTable.
 
 ---
 
@@ -283,16 +375,62 @@ new aws.Queue();
 ```wing
 bring aws;
 
-aws.Queue.from(queue: IResource);
+aws.Queue.from(queue: Queue);
 ```
 
 If the queue is an AWS SQS, return a helper interface for working with it.
 
 ###### `queue`<sup>Required</sup> <a name="queue" id="@winglang/sdk.aws.Queue.from.parameter.queue"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <a href="#@winglang/sdk.cloud.Queue">Queue</a>
 
 The cloud.Queue.
+
+---
+
+
+
+### ReactApp <a name="ReactApp" id="@winglang/sdk.aws.ReactApp"></a>
+
+A helper class for working with AWS react apps.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.ReactApp.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.ReactApp();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.ReactApp.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.ReactApp.from"></a>
+
+```wing
+bring aws;
+
+aws.ReactApp.from(react: ReactApp);
+```
+
+If the bucket is an AWS Bucket, return a helper interface for working with it.
+
+###### `react`<sup>Required</sup> <a name="react" id="@winglang/sdk.aws.ReactApp.from.parameter.react"></a>
+
+- *Type:* <a href="#@winglang/sdk.ex.ReactApp">ReactApp</a>
+
+The ex.ReactApp.
 
 ---
 
@@ -329,14 +467,14 @@ new aws.Table();
 ```wing
 bring aws;
 
-aws.Table.from(table: IResource);
+aws.Table.from(table: Table);
 ```
 
 If the table is an AWS DynamoDB, return a helper interface for working with it.
 
 ###### `table`<sup>Required</sup> <a name="table" id="@winglang/sdk.aws.Table.from.parameter.table"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <a href="#@winglang/sdk.ex.Table">Table</a>
 
 The ex.Table.
 
@@ -375,16 +513,62 @@ new aws.Topic();
 ```wing
 bring aws;
 
-aws.Topic.from(topic: IResource);
+aws.Topic.from(topic: Topic);
 ```
 
 If the topic is an AWS SNS, return a helper interface for working with it.
 
 ###### `topic`<sup>Required</sup> <a name="topic" id="@winglang/sdk.aws.Topic.from.parameter.topic"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Type:* <a href="#@winglang/sdk.cloud.Topic">Topic</a>
 
 The cloud.Topic.
+
+---
+
+
+
+### Website <a name="Website" id="@winglang/sdk.aws.Website"></a>
+
+A helper class for working with AWS buckets.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.aws.Website.Initializer"></a>
+
+```wing
+bring aws;
+
+new aws.Website();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Website.from">from</a></code> | If the bucket is an AWS Bucket, return a helper interface for working with it. |
+
+---
+
+##### `from` <a name="from" id="@winglang/sdk.aws.Website.from"></a>
+
+```wing
+bring aws;
+
+aws.Website.from(website: Website);
+```
+
+If the bucket is an AWS Bucket, return a helper interface for working with it.
+
+###### `website`<sup>Required</sup> <a name="website" id="@winglang/sdk.aws.Website.from.parameter.website"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.Website">Website</a>
+
+The cloud.Bucket.
 
 ---
 
@@ -627,67 +811,91 @@ Resources.
 
 A shared interface for AWS api.
 
-#### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.arn">arn</a></code> | RestApi arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.deploymentId">deploymentId</a></code> | RestApi deployment id. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.invokeUrl">invokeUrl</a></code> | Invoke URL. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.restApiId">restApiId</a></code> | RestApi id. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.restApiName">restApiName</a></code> | RestApi id. |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.stageName">stageName</a></code> | RestApi stage name. |
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.arn">arn</a></code> | <code>str</code> | RestApi arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.deploymentId">deploymentId</a></code> | <code>str</code> | RestApi deployment id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.invokeUrl">invokeUrl</a></code> | <code>str</code> | Invoke URL. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.restApiId">restApiId</a></code> | <code>str</code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.restApiName">restApiName</a></code> | <code>str</code> | RestApi id. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.stageName">stageName</a></code> | <code>str</code> | RestApi stage name. |
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsApi.arn"></a>
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsApi.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 RestApi arn.
 
-##### `deploymentId` <a name="deploymentId" id="@winglang/sdk.aws.IAwsApi.deploymentId"></a>
+---
+
+##### `deploymentId`<sup>Required</sup> <a name="deploymentId" id="@winglang/sdk.aws.IAwsApi.property.deploymentId"></a>
 
 ```wing
-deploymentId(): str
+deploymentId: str;
 ```
+
+- *Type:* str
 
 RestApi deployment id.
 
-##### `invokeUrl` <a name="invokeUrl" id="@winglang/sdk.aws.IAwsApi.invokeUrl"></a>
+---
+
+##### `invokeUrl`<sup>Required</sup> <a name="invokeUrl" id="@winglang/sdk.aws.IAwsApi.property.invokeUrl"></a>
 
 ```wing
-invokeUrl(): str
+invokeUrl: str;
 ```
+
+- *Type:* str
 
 Invoke URL.
 
-##### `restApiId` <a name="restApiId" id="@winglang/sdk.aws.IAwsApi.restApiId"></a>
+---
+
+##### `restApiId`<sup>Required</sup> <a name="restApiId" id="@winglang/sdk.aws.IAwsApi.property.restApiId"></a>
 
 ```wing
-restApiId(): str
+restApiId: str;
 ```
+
+- *Type:* str
 
 RestApi id.
 
-##### `restApiName` <a name="restApiName" id="@winglang/sdk.aws.IAwsApi.restApiName"></a>
+---
+
+##### `restApiName`<sup>Required</sup> <a name="restApiName" id="@winglang/sdk.aws.IAwsApi.property.restApiName"></a>
 
 ```wing
-restApiName(): str
+restApiName: str;
 ```
+
+- *Type:* str
 
 RestApi id.
 
-##### `stageName` <a name="stageName" id="@winglang/sdk.aws.IAwsApi.stageName"></a>
+---
+
+##### `stageName`<sup>Required</sup> <a name="stageName" id="@winglang/sdk.aws.IAwsApi.property.stageName"></a>
 
 ```wing
-stageName(): str
+stageName: str;
 ```
+
+- *Type:* str
 
 RestApi stage name.
 
+---
 
 ### IAwsBucket <a name="IAwsBucket" id="@winglang/sdk.aws.IAwsBucket"></a>
 
@@ -695,31 +903,119 @@ RestApi stage name.
 
 A shared interface for AWS buckets.
 
-#### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsBucket.arn">arn</a></code> | AWS Bucket arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsBucket.bucketName">bucketName</a></code> | AWS Bucket name. |
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsBucket.arn"></a>
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsBucket.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 AWS Bucket arn.
 
-##### `bucketName` <a name="bucketName" id="@winglang/sdk.aws.IAwsBucket.bucketName"></a>
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.IAwsBucket.property.bucketName"></a>
 
 ```wing
-bucketName(): str
+bucketName: str;
 ```
+
+- *Type:* str
 
 AWS Bucket name.
 
+---
+
+### IAwsCounter <a name="IAwsCounter" id="@winglang/sdk.aws.IAwsCounter"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsCounter">IAwsCounter</a>
+
+A shared interface for AWS Counter.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.arn">arn</a></code> | <code>str</code> | AWS Dynamodb arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.tableName">tableName</a></code> | <code>str</code> | AWS Dynamodb name. |
+
+---
+
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsCounter.property.arn"></a>
+
+```wing
+arn: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb arn.
+
+---
+
+##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsCounter.property.tableName"></a>
+
+```wing
+tableName: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb name.
+
+---
+
+### IAwsDynamodbTable <a name="IAwsDynamodbTable" id="@winglang/sdk.aws.IAwsDynamodbTable"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsDynamodbTable">IAwsDynamodbTable</a>
+
+A shared interface for AWS Dynamodb.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.arn">arn</a></code> | <code>str</code> | AWS Dynamodb arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.tableName">tableName</a></code> | <code>str</code> | AWS Dynamodb name. |
+
+---
+
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsDynamodbTable.property.arn"></a>
+
+```wing
+arn: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb arn.
+
+---
+
+##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsDynamodbTable.property.tableName"></a>
+
+```wing
+tableName: str;
+```
+
+- *Type:* str
+
+AWS Dynamodb name.
+
+---
 
 ### IAwsFunction <a name="IAwsFunction" id="@winglang/sdk.aws.IAwsFunction"></a>
 
@@ -733,8 +1029,6 @@ A shared interface for AWS functions.
 | --- | --- |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.addPolicyStatements">addPolicyStatements</a></code> | Add policy statements to the function's IAM role. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.arn">arn</a></code> | AWS Function arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.functionName">functionName</a></code> | AWS Function name. |
 
 ---
 
@@ -772,22 +1066,38 @@ Add policy statements to the function's IAM role.
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsFunction.arn"></a>
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.arn">arn</a></code> | <code>str</code> | AWS Function arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
+
+---
+
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsFunction.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 AWS Function arn.
 
-##### `functionName` <a name="functionName" id="@winglang/sdk.aws.IAwsFunction.functionName"></a>
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="@winglang/sdk.aws.IAwsFunction.property.functionName"></a>
 
 ```wing
-functionName(): str
+functionName: str;
 ```
+
+- *Type:* str
 
 AWS Function name.
 
+---
 
 ### IAwsQueue <a name="IAwsQueue" id="@winglang/sdk.aws.IAwsQueue"></a>
 
@@ -795,40 +1105,92 @@ AWS Function name.
 
 A shared interface for AWS queues.
 
-#### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsQueue.arn">arn</a></code> | AWS Queue arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsQueue.queueName">queueName</a></code> | AWS Queue name. |
-| <code><a href="#@winglang/sdk.aws.IAwsQueue.queueUrl">queueUrl</a></code> | AWS Queue url. |
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.property.arn">arn</a></code> | <code>str</code> | AWS Queue arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.property.queueName">queueName</a></code> | <code>str</code> | AWS Queue name. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.property.queueUrl">queueUrl</a></code> | <code>str</code> | AWS Queue url. |
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsQueue.arn"></a>
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsQueue.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 AWS Queue arn.
 
-##### `queueName` <a name="queueName" id="@winglang/sdk.aws.IAwsQueue.queueName"></a>
+---
+
+##### `queueName`<sup>Required</sup> <a name="queueName" id="@winglang/sdk.aws.IAwsQueue.property.queueName"></a>
 
 ```wing
-queueName(): str
+queueName: str;
 ```
+
+- *Type:* str
 
 AWS Queue name.
 
-##### `queueUrl` <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueue.queueUrl"></a>
+---
+
+##### `queueUrl`<sup>Required</sup> <a name="queueUrl" id="@winglang/sdk.aws.IAwsQueue.property.queueUrl"></a>
 
 ```wing
-queueUrl(): str
+queueUrl: str;
 ```
+
+- *Type:* str
 
 AWS Queue url.
 
+---
+
+### IAwsReactApp <a name="IAwsReactApp" id="@winglang/sdk.aws.IAwsReactApp"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsReactApp">IAwsReactApp</a>
+
+A shared interface for AWS react app.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
+
+---
+
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsReactApp.property.arn"></a>
+
+```wing
+arn: str;
+```
+
+- *Type:* str
+
+AWS Bucket arn.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.IAwsReactApp.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+AWS Bucket name.
+
+---
 
 ### IAwsTable <a name="IAwsTable" id="@winglang/sdk.aws.IAwsTable"></a>
 
@@ -836,31 +1198,39 @@ AWS Queue url.
 
 A shared interface for AWS tables.
 
-#### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.arn">arn</a></code> | AWS Table arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.tableName">tableName</a></code> | AWS Table name. |
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.property.arn">arn</a></code> | <code>str</code> | AWS Table arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.property.tableName">tableName</a></code> | <code>str</code> | AWS Table name. |
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsTable.arn"></a>
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsTable.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 AWS Table arn.
 
-##### `tableName` <a name="tableName" id="@winglang/sdk.aws.IAwsTable.tableName"></a>
+---
+
+##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsTable.property.tableName"></a>
 
 ```wing
-tableName(): str
+tableName: str;
 ```
+
+- *Type:* str
 
 AWS Table name.
 
+---
 
 ### IAwsTopic <a name="IAwsTopic" id="@winglang/sdk.aws.IAwsTopic"></a>
 
@@ -868,31 +1238,79 @@ AWS Table name.
 
 A shared interface for AWS topics.
 
-#### Methods <a name="Methods" id="Methods"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTopic.arn">arn</a></code> | AWS Topic arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsTopic.topicName">topicName</a></code> | AWS Topic name. |
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.property.arn">arn</a></code> | <code>str</code> | AWS Topic arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.property.topicName">topicName</a></code> | <code>str</code> | AWS Topic name. |
 
 ---
 
-##### `arn` <a name="arn" id="@winglang/sdk.aws.IAwsTopic.arn"></a>
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsTopic.property.arn"></a>
 
 ```wing
-arn(): str
+arn: str;
 ```
+
+- *Type:* str
 
 AWS Topic arn.
 
-##### `topicName` <a name="topicName" id="@winglang/sdk.aws.IAwsTopic.topicName"></a>
+---
+
+##### `topicName`<sup>Required</sup> <a name="topicName" id="@winglang/sdk.aws.IAwsTopic.property.topicName"></a>
 
 ```wing
-topicName(): str
+topicName: str;
 ```
+
+- *Type:* str
 
 AWS Topic name.
 
+---
+
+### IAwsWebsite <a name="IAwsWebsite" id="@winglang/sdk.aws.IAwsWebsite"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsWebsite">IAwsWebsite</a>
+
+A shared interface for AWS website.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.aws.IAwsWebsite.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsWebsite.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
+
+---
+
+##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsWebsite.property.arn"></a>
+
+```wing
+arn: str;
+```
+
+- *Type:* str
+
+AWS Bucket arn.
+
+---
+
+##### `bucketName`<sup>Required</sup> <a name="bucketName" id="@winglang/sdk.aws.IAwsWebsite.property.bucketName"></a>
+
+```wing
+bucketName: str;
+```
+
+- *Type:* str
+
+AWS Bucket name.
+
+---
 
 ## Enums <a name="Enums" id="Enums"></a>
 

@@ -38,8 +38,8 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-        ? undefined // Negative value means Infinite retention
-        : props.logRetentionDays;
+          ? undefined // Negative value means Infinite retention
+          : props.logRetentionDays;
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
@@ -125,11 +125,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     return this.function;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.function.functionArn;
   }
 
-  public functionName(): string {
+  public get functionName(): string {
     return this.function.functionName;
   }
 }

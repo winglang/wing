@@ -76,7 +76,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       {
         topicArn: this.topic.arn,
         protocol: "lambda",
-        endpoint: fn.arn(),
+        endpoint: fn.arn,
       }
     );
 
@@ -158,11 +158,11 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.topic.arn;
   }
 
-  public topicName(): string {
+  public get topicName(): string {
     return this.topic.name;
   }
 }

@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { cloud } from "..";
 
 /**
  * A shared interface for AWS queues.
@@ -7,17 +7,17 @@ export interface IAwsQueue {
   /**
    * AWS Queue arn
    */
-  arn(): string;
+  readonly arn: string;
 
   /**
    * AWS Queue name
    */
-  queueName(): string;
+  readonly queueName: string;
 
   /**
    * AWS Queue url
    */
-  queueUrl(): string;
+  readonly queueUrl: string;
 }
 
 /**
@@ -29,7 +29,7 @@ export class Queue {
    * working with it.
    * @param queue The cloud.Queue.
    */
-  public static from(queue: IResource): IAwsQueue | undefined {
+  public static from(queue: cloud.Queue): IAwsQueue | undefined {
     if (this.isAwsQueue(queue)) {
       return queue;
     }
@@ -38,9 +38,9 @@ export class Queue {
 
   private static isAwsQueue(obj: any): obj is IAwsQueue {
     return (
-      typeof obj.arn === "function" &&
-      typeof obj.queueName === "function" &&
-      typeof obj.queueUrl === "function"
+      typeof obj.arn === "string" &&
+      typeof obj.queueName === "string" &&
+      typeof obj.queueUrl === "string"
     );
   }
 }

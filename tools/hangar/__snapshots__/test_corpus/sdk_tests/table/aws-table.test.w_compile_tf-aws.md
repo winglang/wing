@@ -1,4 +1,4 @@
-# [inner_aws_bucket.test.w](../../../../../../examples/tests/sdk_tests/bucket/inner_aws_bucket.test.w) | compile | tf-aws
+# [aws-table.test.w](../../../../../../examples/tests/sdk_tests/table/aws-table.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -30,16 +30,23 @@
     ]
   },
   "resource": {
-    "aws_s3_bucket": {
-      "aws-wing-bucket": {
+    "aws_dynamodb_table": {
+      "aws-wing-table": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/aws-wing-bucket/Default",
-            "uniqueId": "aws-wing-bucket"
+            "path": "root/Default/Default/aws-wing-table/Default",
+            "uniqueId": "aws-wing-table"
           }
         },
-        "bucket_prefix": "aws-wing-bucket-c8f5eeeb-",
-        "force_destroy": false
+        "attribute": [
+          {
+            "name": "name",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "name",
+        "name": "usersaws-wing-table-c82a4d4a"
       }
     }
   }

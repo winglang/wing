@@ -26,7 +26,7 @@ const INDEX_FILE = "index.html";
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export class Website extends cloud.Website implements aws.IAwsBucket {
+export class Website extends cloud.Website implements aws.IAwsWebsite {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
 
@@ -211,11 +211,11 @@ export class Website extends cloud.Website implements aws.IAwsBucket {
     );
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.bucket.arn;
   }
 
-  public bucketName(): string {
+  public get bucketName(): string {
     return this.bucket.bucketDomainName;
   }
 }

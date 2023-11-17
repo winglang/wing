@@ -9,8 +9,8 @@ let topic = new cloud.Topic() as "aws-wing-topic";
 let getTopicInfo = (t: cloud.Topic): Map<str>? => {
   if let topic = aws.Topic.from(t) {
     return {
-      topicName: topic.topicName(),
-      arn: topic.arn(),
+      topicName: topic.topicName,
+      arn: topic.arn,
     };
   }
   return nil;
@@ -29,7 +29,8 @@ test "validates the AWS topic name" {
       assert(topic.get("arn").contains("awswingtopic"));
       assert(topic.get("topicName").contains("awswingtopic"));
     }
+  } else {
+    // If the test is not on AWS, it should not fail, so I am returning true.
+    assert(true);
   }
-  // If the test is not on AWS, it should not fail, so I am returning true.
-  assert(true);
 }

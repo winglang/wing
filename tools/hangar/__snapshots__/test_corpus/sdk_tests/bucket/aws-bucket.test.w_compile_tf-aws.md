@@ -1,4 +1,4 @@
-# [inner_aws_topic.test.w](../../../../../../examples/tests/sdk_tests/topic/inner_aws_topic.test.w) | compile | tf-aws
+# [aws-bucket.test.w](../../../../../../examples/tests/sdk_tests/bucket/aws-bucket.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -30,15 +30,16 @@
     ]
   },
   "resource": {
-    "aws_sns_topic": {
-      "aws-wing-topic": {
+    "aws_s3_bucket": {
+      "aws-wing-bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/aws-wing-topic/Default",
-            "uniqueId": "aws-wing-topic"
+            "path": "root/Default/Default/aws-wing-bucket/Default",
+            "uniqueId": "aws-wing-bucket"
           }
         },
-        "name": "aws-wing-topic-c89ce2b1"
+        "bucket_prefix": "aws-wing-bucket-c8f5eeeb-",
+        "force_destroy": false
       }
     }
   }

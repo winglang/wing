@@ -321,7 +321,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       this,
       `InvokePermission-${source.node.addr}`,
       {
-        functionName: this.functionName(),
+        functionName: this.functionName,
         action: "lambda:InvokeFunction",
         principal: principal,
         sourceArn: sourceArn,
@@ -334,11 +334,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.function.arn;
   }
 
-  public functionName(): string {
+  public get functionName(): string {
     return this.function.functionName;
   }
 }

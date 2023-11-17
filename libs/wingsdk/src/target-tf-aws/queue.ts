@@ -97,7 +97,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn.functionName(),
+      functionName: fn.functionName,
       eventSourceArn: this.queue.arn,
       batchSize: props.batchSize ?? 1,
     });
@@ -141,15 +141,15 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 
-  public arn(): string {
+  public get arn(): string {
     return this.queue.arn;
   }
 
-  public queueName(): string {
+  public get queueName(): string {
     return this.queue.name;
   }
 
-  public queueUrl(): string {
+  public get queueUrl(): string {
     return this.queue.url;
   }
 }

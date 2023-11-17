@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { cloud } from "..";
 
 /**
  * A shared interface for AWS buckets.
@@ -7,12 +7,12 @@ export interface IAwsBucket {
   /**
    * AWS Bucket arn
    */
-  arn(): string;
+  readonly arn: string;
 
   /**
    * AWS Bucket name
    */
-  bucketName(): string;
+  readonly bucketName: string;
 }
 
 /**
@@ -24,7 +24,7 @@ export class Bucket {
    * working with it.
    * @param bucket The cloud.Bucket.
    */
-  public static from(bucket: IResource): IAwsBucket | undefined {
+  public static from(bucket: cloud.Bucket): IAwsBucket | undefined {
     if (this.isAwsBucket(bucket)) {
       return bucket;
     }
@@ -32,8 +32,6 @@ export class Bucket {
   }
 
   private static isAwsBucket(obj: any): obj is IAwsBucket {
-    return (
-      typeof obj.arn === "function" && typeof obj.bucketName === "function"
-    );
+    return typeof obj.arn === "string" && typeof obj.bucketName === "string";
   }
 }

@@ -12,10 +12,10 @@ let table = new ex.DynamodbTable(
 ) as "aws-wing-dynamodb";
 
 let getTableInfo = (t: ex.DynamodbTable): Map<str>? => {
-  if let table = aws.Table.from(t) {
+  if let table = aws.DynamodbTable.from(t) {
     return {
-      tableName: table.tableName(),
-      arn: table.arn(),
+      tableName: table.tableName,
+      arn: table.arn,
     };
   }
   return nil;
@@ -28,7 +28,8 @@ test "validates the AWS dynamodb name" {
     assert(table.get("arn").contains("arn:aws:dynamodb:"));
     assert(table.get("arn").contains("aws-wing-dynamodb"));
     assert(table.get("tableName").contains("aws-wing-dynamodb"));
+  } else {
+    // If the test is not on AWS, it should not fail, so I am returning true.
+    assert(true);
   }
-  // If the test is not on AWS, it should not fail, so I am returning true.
-  assert(true);
 }

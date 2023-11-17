@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { cloud } from "..";
 
 /**
  * A shared interface for AWS topics.
@@ -7,12 +7,12 @@ export interface IAwsTopic {
   /**
    * AWS Topic arn
    */
-  arn(): string;
+  readonly arn: string;
 
   /**
    * AWS Topic name
    */
-  topicName(): string;
+  readonly topicName: string;
 }
 
 /**
@@ -24,7 +24,7 @@ export class Topic {
    * working with it.
    * @param topic The cloud.Topic.
    */
-  public static from(topic: IResource): IAwsTopic | undefined {
+  public static from(topic: cloud.Topic): IAwsTopic | undefined {
     if (this.isAwsTopic(topic)) {
       return topic;
     }
@@ -32,6 +32,6 @@ export class Topic {
   }
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
-    return typeof obj.arn === "function" && typeof obj.topicName === "function";
+    return typeof obj.arn === "string" && typeof obj.topicName === "string";
   }
 }
