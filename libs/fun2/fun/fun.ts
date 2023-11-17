@@ -49,7 +49,7 @@ export function inflight<THandlerClient extends { handle: AnyFunction }>(
   }
 
   for (const [k, v] of Object.entries(bindings)) {
-    clients[k] = liftObject(scope, v);
+    clients[k] = liftObject(v);
   }
   const code = handler.toString();
   const ast = parse(code, { ecmaVersion: "latest" });

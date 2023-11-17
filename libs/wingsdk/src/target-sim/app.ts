@@ -38,6 +38,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
+import { Tokens } from "../core/tokens";
 import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
 import { TEST_RUNNER_FQN } from "../std";
@@ -93,6 +94,7 @@ export class App extends core.App {
     this.outdir = props.outdir ?? ".";
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new SimTokens();
+    Tokens.addResolver(this._tokens);
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
 

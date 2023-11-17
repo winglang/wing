@@ -1,23 +1,22 @@
-import { IConstruct } from "constructs";
-import { App } from "./app";
+import { Tokens } from "./tokens";
 import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
-export function liftObject(scope: IConstruct, obj: any): string {
+export function liftObject(obj: any): string {
   // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
   if (obj == null) {
     return JSON.stringify(obj);
   }
 
-  const tokens = App.of(scope)._tokens;
-  if (tokens.isToken(obj)) {
-    return tokens.lift(obj);
+  const tokenResolver = Tokens.getTokenResolver(obj);
+  if (tokenResolver) {
+    return tokenResolver.lift(obj);
   }
 
   // if the object is a type, and it has a "_toInflightType" method, we use it to serialize
   // fyi, typeof(obj) in this case is a "function".
   if (typeof obj?._toInflightType === "function") {
-    return obj._toInflightType(scope);
+    return obj._toInflightType();
   }
 
   switch (typeof obj) {
@@ -28,11 +27,11 @@ export function liftObject(scope: IConstruct, obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return `[${obj.map((o) => liftObject(scope, o)).join(",")}]`;
+        return `[${obj.map((o) => liftObject(o)).join(",")}]`;
       }
 
       if (obj instanceof Duration) {
-        return liftObject(scope, {
+        return liftObject({
           seconds: obj.seconds,
           minutes: obj.minutes,
           hours: obj.hours,
@@ -40,11 +39,11 @@ export function liftObject(scope: IConstruct, obj: any): string {
       }
 
       if (obj instanceof Set) {
-        return `new Set(${liftObject(scope, Array.from(obj))})`;
+        return `new Set(${liftObject(Array.from(obj))})`;
       }
 
       if (obj instanceof Map) {
-        return `new Map(${liftObject(scope, Array.from(obj))})`;
+        return `new Map(${liftObject(Array.from(obj))})`;
       }
 
       // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
@@ -58,7 +57,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
         const lines = [];
         lines.push("{");
         for (const [k, v] of Object.entries(obj)) {
-          lines.push(`\"${k.replace(/"/g, '\\"')}\": ${liftObject(scope, v)},`);
+          lines.push(`\"${k.replace(/"/g, '\\"')}\": ${liftObject(v)},`);
         }
         lines.push("}");
         return lines.join("");

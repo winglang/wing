@@ -22,14 +22,14 @@ export class Testing {
    * @param bindings The bindings of the handler.
    */
   public static makeHandler(
-    scope: IConstruct,
+    _scope: IConstruct,
     code: string,
     bindings: InflightBindings = {}
   ): any {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = liftObject(scope, v.obj);
+      clients[k] = liftObject(v.obj);
     }
 
     // implements IFunctionHandler

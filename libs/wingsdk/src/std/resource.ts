@@ -336,7 +336,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   protected _lift(value: any): string {
-    return liftObject(this, value);
+    return liftObject(value);
   }
 }
 

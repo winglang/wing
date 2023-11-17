@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { NotImplementedError } from "./errors";
-import { Tokens } from "./tokens";
+import { ITokenResolver } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
@@ -158,7 +158,7 @@ export abstract class App extends Construct {
    * Tokens handling for this app.
    * @internal
    */
-  public abstract readonly _tokens: Tokens;
+  public abstract readonly _tokens: ITokenResolver;
 
   /**
    * NewInstance hooks for defining resource implementations.
