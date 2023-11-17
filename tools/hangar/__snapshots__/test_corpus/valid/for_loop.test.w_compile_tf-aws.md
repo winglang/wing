@@ -247,7 +247,7 @@ class $Root extends $stdlib.std.Resource {
     for (const word of words) {
       for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};
-        {console.log("\{word}: \{number}")};
+        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
       }
     }
     let i = 0;
@@ -257,7 +257,7 @@ class $Root extends $stdlib.std.Resource {
       let postBreakHits = 0;
       for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};
-        {console.log("\{word}: \{number}")};
+        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
         preBreakHits = (preBreakHits + 1);
         if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(number,2))) {
           break;
@@ -275,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
       let postContinueHits = 0;
       for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};
-        {console.log("\{word}: \{number}")};
+        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
         preContinueHits = (preContinueHits + 1);
         if ((number > 0)) {
           continue;
