@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Node, IInflightHost, Resource, Duration, Struct } from "../std";
+import { Json, Node, IInflightHost, Resource, Duration, Struct, MutJson, JsonSchema } from "../std";
 
 /**
  * Global identifier for `Stream`
@@ -89,6 +89,13 @@ export interface StreamSetConsumerOptions extends FunctionProps {
    * @default - 10
    */
   readonly batchSize?: number;
+}
+
+export abstract class StreamData extends JsonSchema {
+  /**
+   * Some StreamData standards; currently derived from AWS Kinesis data output,
+   * Will be genericized later.
+   */
 }
 
 /**
