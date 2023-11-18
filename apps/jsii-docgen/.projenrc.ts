@@ -29,7 +29,6 @@ const project = new typescript.TypeScriptProject({
     "glob-promise",
     "glob",
     "jsii-reflect",
-    "jsii-rosetta",
     "semver",
     "yargs@^16",
   ],
