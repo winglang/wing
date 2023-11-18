@@ -90,10 +90,10 @@ let stopCounter = new cloud.Counter() as "stop counter";
 
 let handler = inflight() => {
   let i = startCounter.inc();
-  log("Service started for the {i}th time...");
+  log("Service started for the ${i}th time...");
   return () => {
     let i = stopCounter.inc();
-    log("Service stopped for the {i}th time...");
+    log("Service stopped for the ${i}th time...");
   };
 };
 

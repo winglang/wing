@@ -30,14 +30,14 @@ bring cloud;
 
 // defining a cloud.Function resource
 let countWords = new cloud.Function(inflight (s: str): str => {
-  return "{s.split(" ").length}";
+  return "${s.split(" ").length}";
 }) as "countWords";
 
 new cloud.Function(inflight () => {
   let sentence = "I am a sentence with 7 words";
   // invoking cloud.Function from inflight context
   let wordsCount = countWords.invoke(sentence);
-  log("'{sentence}' has {wordsCount} words");
+  log("'${sentence}' has ${wordsCount} words");
 }) as "Invoke Me";
 ```
 
