@@ -293,7 +293,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
     this._metadata[key] = {
       size: filestat.size,
-      lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
+      lastModified: Datetime.fromDate(filestat.mtime),
       contentType: determinedContentType,
     };
 
