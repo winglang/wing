@@ -6,7 +6,6 @@ import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsTable } from "../shared-aws/table";
 import { Json, IInflightHost } from "../std";
 
 /**
@@ -23,7 +22,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
-export class Table extends ex.Table implements IAwsTable {
+export class Table extends ex.Table {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
@@ -141,13 +140,5 @@ export class Table extends ex.Table implements IAwsTable {
 
   private columnsEnvName(): string {
     return `${this.envName()}_COLUMNS`;
-  }
-
-  public get dynamoTableArn(): string {
-    return this.table.arn;
-  }
-
-  public get dynamoTableName(): string {
-    return this.table.name;
   }
 }

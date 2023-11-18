@@ -5,14 +5,13 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { COUNTER_HASH_KEY } from "@winglang/sdk/lib/shared-aws/commons";
 import { calculateCounterPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { IAwsCounter } from "@winglang/sdk/lib/shared-aws/counter";
 
 /**
  * AWS implementation of `cloud.Counter`.
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.Counter implements IAwsCounter {
+export class Counter extends cloud.Counter {
   private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -61,13 +60,5 @@ export class Counter extends cloud.Counter implements IAwsCounter {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  public get dynamoTableArn(): string {
-    return this.table.tableArn;
-  }
-
-  public get dynamoTableName(): string {
-    return this.table.tableName;
   }
 }

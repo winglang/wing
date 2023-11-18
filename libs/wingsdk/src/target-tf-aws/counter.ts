@@ -5,7 +5,6 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
-import { IAwsCounter } from "../shared-aws/counter";
 import { calculateCounterPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -24,7 +23,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.Counter implements IAwsCounter {
+export class Counter extends cloud.Counter {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -74,13 +73,5 @@ export class Counter extends cloud.Counter implements IAwsCounter {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  public get dynamoTableArn(): string {
-    return this.table.arn;
-  }
-
-  public get dynamoTableName(): string {
-    return this.table.name;
   }
 }
