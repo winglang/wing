@@ -7,7 +7,7 @@ export interface IAwsBucket {
   /**
    * AWS Bucket arn
    */
-  readonly arn: string;
+  readonly bucketArn: string;
 
   /**
    * AWS Bucket name
@@ -32,6 +32,8 @@ export class Bucket {
   }
 
   private static isAwsBucket(obj: any): obj is IAwsBucket {
-    return typeof obj.arn === "string" && typeof obj.bucketName === "string";
+    return (
+      typeof obj.bucketArn === "string" && typeof obj.bucketName === "string"
+    );
   }
 }

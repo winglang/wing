@@ -85,11 +85,11 @@ export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get dynamoTableArn(): string {
     return this.table.tableArn;
   }
 
-  public get tableName(): string {
+  public get dynamoTableName(): string {
     return this.table.tableName;
   }
 }

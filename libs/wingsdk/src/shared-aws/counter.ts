@@ -32,6 +32,9 @@ export class Counter {
   }
 
   private static isAwsCounter(obj: any): obj is IAwsCounter {
-    return typeof obj.arn === "string" && typeof obj.tableName === "string";
+    return (
+      typeof obj.dynamoTableArn === "string" &&
+      typeof obj.dynamoTableName === "string"
+    );
   }
 }

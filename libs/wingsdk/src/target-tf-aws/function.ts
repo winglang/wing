@@ -62,11 +62,6 @@ export class Function extends cloud.Function implements IAwsFunction {
   private securityGroups?: Set<string>;
 
   /**
-   * Unqualified Function ARN
-   * @returns Unqualified ARN of the function
-   */
-  public readonly functionArn: string;
-  /**
    * Qualified Function ARN
    * @returns Qualified ARN of the function
    */
@@ -233,7 +228,6 @@ export class Function extends cloud.Function implements IAwsFunction {
       architectures: ["arm64"],
     });
 
-    this.functionArn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
 
@@ -334,7 +328,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  /**
+   * Unqualified Function ARN
+   * @returns Unqualified ARN of the function
+   */
+  public get functionArn(): string {
     return this.function.arn;
   }
 

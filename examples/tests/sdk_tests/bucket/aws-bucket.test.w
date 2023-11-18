@@ -10,7 +10,7 @@ let getBucketInfo = (b: cloud.Bucket): Map<str>? => {
   if let bucket = aws.Bucket.from(b) {
     return {
       bucketName: bucket.bucketName,
-      arn: bucket.arn,
+      bucketArn: bucket.bucketArn,
     };
   }
   return nil;
@@ -18,11 +18,14 @@ let getBucketInfo = (b: cloud.Bucket): Map<str>? => {
 
 let bucketInfo = getBucketInfo(bucket);
 
-test "validates the AWS bucket name" {
+test "validates the AWS Bucket" {
   if let bucket = bucketInfo {
     if target == "tf-aws" {
+      assert(bucket.get("bucketArn").contains("arn:aws:s3:::aws-wing-bucket"));
       assert(bucket.get("bucketName").contains("aws-wing-bucket"));
     } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
+      assert(bucket.get("bucketArn").contains("arn:aws:s3:::"));
+      assert(bucket.get("bucketArn").contains("awswingbucket"));
       assert(bucket.get("bucketName").contains("awswingbucket"));
     }
   } else {

@@ -20,7 +20,7 @@ export interface IAwsReactApp {
   /**
    * AWS Bucket arn
    */
-  readonly arn: string;
+  readonly bucketArn: string;
 
   /**
    * AWS Bucket name
@@ -45,6 +45,8 @@ export class ReactApp {
   }
 
   private static isAwsReactApp(obj: any): obj is IAwsReactApp {
-    return typeof obj.arn === "string" && typeof obj.bucketName === "string";
+    return (
+      typeof obj.bucketArn === "string" && typeof obj.bucketName === "string"
+    );
   }
 }

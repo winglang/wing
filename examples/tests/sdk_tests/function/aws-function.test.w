@@ -10,7 +10,7 @@ let getFunctionInfo = (f: cloud.Function): Map<str>? => {
   if let lambda = aws.Function.from(f) {
     return {
       functionName: lambda.functionName,
-      arn: lambda.arn,
+      functionArn: lambda.functionArn,
     };
   }
   return nil;
@@ -18,17 +18,17 @@ let getFunctionInfo = (f: cloud.Function): Map<str>? => {
 
 let functionInfo = getFunctionInfo(lambda);
 
-test "validates the AWS function name" {
+test "validates the AWS Function" {
   if let lambda = functionInfo {
     if target == "tf-aws" {      
-      assert(lambda.get("arn").contains("arn:aws:lambda:"));
-      assert(lambda.get("arn").contains(":function:"));
-      assert(lambda.get("arn").contains("aws-wing-function"));
+      assert(lambda.get("functionArn").contains("arn:aws:lambda:"));
+      assert(lambda.get("functionArn").contains(":function:"));
+      assert(lambda.get("functionArn").contains("aws-wing-function"));
       assert(lambda.get("functionName").contains("aws-wing-function"));
     } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
-      assert(lambda.get("arn").contains("arn:aws:lambda:"));
-      assert(lambda.get("arn").contains(":function:"));
-      assert(lambda.get("arn").contains("awswingfunction"));
+      assert(lambda.get("functionArn").contains("arn:aws:lambda:"));
+      assert(lambda.get("functionArn").contains(":function:"));
+      assert(lambda.get("functionArn").contains("awswingfunction"));
       assert(lambda.get("functionName").contains("awswingfunction"));
     }
   } else {

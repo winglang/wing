@@ -17,12 +17,12 @@ export interface IAwsDynamodbTable {
   /**
    * AWS Dynamodb arn
    */
-  readonly arn: string;
+  readonly dynamoTableArn: string;
 
   /**
    * AWS Dynamodb name
    */
-  readonly tableName: string;
+  readonly dynamoTableName: string;
 }
 
 /**
@@ -44,6 +44,9 @@ export class DynamodbTable {
   }
 
   private static isAwsDynamodb(obj: any): obj is IAwsDynamodbTable {
-    return typeof obj.arn === "string" && typeof obj.tableName === "string";
+    return (
+      typeof obj.dynamoTableArn === "string" &&
+      typeof obj.dynamoTableName === "string"
+    );
   }
 }

@@ -7,7 +7,7 @@ export interface IAwsTopic {
   /**
    * AWS Topic arn
    */
-  readonly arn: string;
+  readonly topicArn: string;
 
   /**
    * AWS Topic name
@@ -32,6 +32,8 @@ export class Topic {
   }
 
   private static isAwsTopic(obj: any): obj is IAwsTopic {
-    return typeof obj.arn === "string" && typeof obj.topicName === "string";
+    return (
+      typeof obj.topicArn === "string" && typeof obj.topicName === "string"
+    );
   }
 }

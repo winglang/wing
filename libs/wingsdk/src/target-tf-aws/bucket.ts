@@ -110,7 +110,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     this.notificationTopics.push({
       id: `on-${actionType.toLowerCase()}-notification`,
       events: EVENTS[actionType],
-      topicArn: handler.arn,
+      topicArn: handler.topicArn,
     });
 
     this.notificationDependencies.push(handler.permissions);
@@ -159,7 +159,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get bucketArn(): string {
     return this.bucket.arn;
   }
 

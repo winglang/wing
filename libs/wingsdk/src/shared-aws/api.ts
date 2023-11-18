@@ -7,7 +7,7 @@ export interface IAwsApi {
   /**
    * RestApi arn
    */
-  readonly arn: string;
+  readonly restApiArn: string;
 
   /**
    * RestApi id
@@ -53,7 +53,7 @@ export class Api {
 
   private static isAwsApi(obj: any): obj is IAwsApi {
     return (
-      typeof obj.arn === "string" &&
+      typeof obj.restApiArn === "string" &&
       typeof obj.restApiId === "string" &&
       typeof obj.restApiName === "string" &&
       typeof obj.stageName === "string" &&

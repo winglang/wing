@@ -89,8 +89,8 @@ export class Schedule extends cloud.Schedule {
       );
     }
 
-    this.rule.addTarget(new LambdaFunction(fn._awsFunction));
-    addLambdaPermission(this.rule, fn._awsFunction);
+    this.rule.addTarget(new LambdaFunction(fn._function));
+    addLambdaPermission(this.rule, fn._function);
 
     std.Node.of(this).addConnection({
       source: this,

@@ -46,7 +46,7 @@ export class Function {
     return (
       typeof obj.addPolicyStatements === "function" &&
       typeof obj.addEnvironment === "function" &&
-      typeof obj.arn === "string" &&
+      typeof obj.functionArn === "string" &&
       typeof obj.functionName === "string"
     );
   }

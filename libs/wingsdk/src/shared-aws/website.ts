@@ -20,7 +20,7 @@ export interface IAwsWebsite {
   /**
    * AWS Bucket arn
    */
-  readonly arn: string;
+  readonly bucketArn: string;
 
   /**
    * AWS Bucket name
@@ -45,6 +45,8 @@ export class Website {
   }
 
   private static isAwsWebsite(obj: any): obj is IAwsWebsite {
-    return typeof obj.arn === "string" && typeof obj.bucketName === "string";
+    return (
+      typeof obj.bucketArn === "string" && typeof obj.bucketName === "string"
+    );
   }
 }

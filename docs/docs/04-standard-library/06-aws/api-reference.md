@@ -816,24 +816,12 @@ A shared interface for AWS api.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsApi.property.arn">arn</a></code> | <code>str</code> | RestApi arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsApi.property.deploymentId">deploymentId</a></code> | <code>str</code> | RestApi deployment id. |
 | <code><a href="#@winglang/sdk.aws.IAwsApi.property.invokeUrl">invokeUrl</a></code> | <code>str</code> | Invoke URL. |
+| <code><a href="#@winglang/sdk.aws.IAwsApi.property.restApiArn">restApiArn</a></code> | <code>str</code> | RestApi arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsApi.property.restApiId">restApiId</a></code> | <code>str</code> | RestApi id. |
 | <code><a href="#@winglang/sdk.aws.IAwsApi.property.restApiName">restApiName</a></code> | <code>str</code> | RestApi id. |
 | <code><a href="#@winglang/sdk.aws.IAwsApi.property.stageName">stageName</a></code> | <code>str</code> | RestApi stage name. |
-
----
-
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsApi.property.arn"></a>
-
-```wing
-arn: str;
-```
-
-- *Type:* str
-
-RestApi arn.
 
 ---
 
@@ -858,6 +846,18 @@ invokeUrl: str;
 - *Type:* str
 
 Invoke URL.
+
+---
+
+##### `restApiArn`<sup>Required</sup> <a name="restApiArn" id="@winglang/sdk.aws.IAwsApi.property.restApiArn"></a>
+
+```wing
+restApiArn: str;
+```
+
+- *Type:* str
+
+RestApi arn.
 
 ---
 
@@ -908,15 +908,15 @@ A shared interface for AWS buckets.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsBucket.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsBucket.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsBucket.property.arn"></a>
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.IAwsBucket.property.bucketArn"></a>
 
 ```wing
-arn: str;
+bucketArn: str;
 ```
 
 - *Type:* str
@@ -948,15 +948,15 @@ A shared interface for AWS Counter.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.arn">arn</a></code> | <code>str</code> | AWS Dynamodb arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.tableName">tableName</a></code> | <code>str</code> | AWS Dynamodb name. |
+| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Dynamodb arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsCounter.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Dynamodb name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsCounter.property.arn"></a>
+##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsCounter.property.dynamoTableArn"></a>
 
 ```wing
-arn: str;
+dynamoTableArn: str;
 ```
 
 - *Type:* str
@@ -965,10 +965,10 @@ AWS Dynamodb arn.
 
 ---
 
-##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsCounter.property.tableName"></a>
+##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsCounter.property.dynamoTableName"></a>
 
 ```wing
-tableName: str;
+dynamoTableName: str;
 ```
 
 - *Type:* str
@@ -988,15 +988,15 @@ A shared interface for AWS Dynamodb.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.arn">arn</a></code> | <code>str</code> | AWS Dynamodb arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.tableName">tableName</a></code> | <code>str</code> | AWS Dynamodb name. |
+| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Dynamodb arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Dynamodb name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsDynamodbTable.property.arn"></a>
+##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableArn"></a>
 
 ```wing
-arn: str;
+dynamoTableArn: str;
 ```
 
 - *Type:* str
@@ -1005,10 +1005,10 @@ AWS Dynamodb arn.
 
 ---
 
-##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsDynamodbTable.property.tableName"></a>
+##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsDynamodbTable.property.dynamoTableName"></a>
 
 ```wing
-tableName: str;
+dynamoTableName: str;
 ```
 
 - *Type:* str
@@ -1070,15 +1070,15 @@ Add policy statements to the function's IAM role.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.arn">arn</a></code> | <code>str</code> | AWS Function arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionArn">functionArn</a></code> | <code>str</code> | AWS Function arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsFunction.property.functionName">functionName</a></code> | <code>str</code> | AWS Function name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsFunction.property.arn"></a>
+##### `functionArn`<sup>Required</sup> <a name="functionArn" id="@winglang/sdk.aws.IAwsFunction.property.functionArn"></a>
 
 ```wing
-arn: str;
+functionArn: str;
 ```
 
 - *Type:* str
@@ -1110,16 +1110,16 @@ A shared interface for AWS queues.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsQueue.property.arn">arn</a></code> | <code>str</code> | AWS Queue arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsQueue.property.queueArn">queueArn</a></code> | <code>str</code> | AWS Queue arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsQueue.property.queueName">queueName</a></code> | <code>str</code> | AWS Queue name. |
 | <code><a href="#@winglang/sdk.aws.IAwsQueue.property.queueUrl">queueUrl</a></code> | <code>str</code> | AWS Queue url. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsQueue.property.arn"></a>
+##### `queueArn`<sup>Required</sup> <a name="queueArn" id="@winglang/sdk.aws.IAwsQueue.property.queueArn"></a>
 
 ```wing
-arn: str;
+queueArn: str;
 ```
 
 - *Type:* str
@@ -1163,15 +1163,15 @@ A shared interface for AWS react app.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsReactApp.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsReactApp.property.arn"></a>
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.IAwsReactApp.property.bucketArn"></a>
 
 ```wing
-arn: str;
+bucketArn: str;
 ```
 
 - *Type:* str
@@ -1203,15 +1203,15 @@ A shared interface for AWS tables.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.property.arn">arn</a></code> | <code>str</code> | AWS Table arn. |
-| <code><a href="#@winglang/sdk.aws.IAwsTable.property.tableName">tableName</a></code> | <code>str</code> | AWS Table name. |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.property.dynamoTableArn">dynamoTableArn</a></code> | <code>str</code> | AWS Table arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTable.property.dynamoTableName">dynamoTableName</a></code> | <code>str</code> | AWS Table name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsTable.property.arn"></a>
+##### `dynamoTableArn`<sup>Required</sup> <a name="dynamoTableArn" id="@winglang/sdk.aws.IAwsTable.property.dynamoTableArn"></a>
 
 ```wing
-arn: str;
+dynamoTableArn: str;
 ```
 
 - *Type:* str
@@ -1220,10 +1220,10 @@ AWS Table arn.
 
 ---
 
-##### `tableName`<sup>Required</sup> <a name="tableName" id="@winglang/sdk.aws.IAwsTable.property.tableName"></a>
+##### `dynamoTableName`<sup>Required</sup> <a name="dynamoTableName" id="@winglang/sdk.aws.IAwsTable.property.dynamoTableName"></a>
 
 ```wing
-tableName: str;
+dynamoTableName: str;
 ```
 
 - *Type:* str
@@ -1243,15 +1243,15 @@ A shared interface for AWS topics.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsTopic.property.arn">arn</a></code> | <code>str</code> | AWS Topic arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsTopic.property.topicArn">topicArn</a></code> | <code>str</code> | AWS Topic arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsTopic.property.topicName">topicName</a></code> | <code>str</code> | AWS Topic name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsTopic.property.arn"></a>
+##### `topicArn`<sup>Required</sup> <a name="topicArn" id="@winglang/sdk.aws.IAwsTopic.property.topicArn"></a>
 
 ```wing
-arn: str;
+topicArn: str;
 ```
 
 - *Type:* str
@@ -1283,15 +1283,15 @@ A shared interface for AWS website.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.aws.IAwsWebsite.property.arn">arn</a></code> | <code>str</code> | AWS Bucket arn. |
+| <code><a href="#@winglang/sdk.aws.IAwsWebsite.property.bucketArn">bucketArn</a></code> | <code>str</code> | AWS Bucket arn. |
 | <code><a href="#@winglang/sdk.aws.IAwsWebsite.property.bucketName">bucketName</a></code> | <code>str</code> | AWS Bucket name. |
 
 ---
 
-##### `arn`<sup>Required</sup> <a name="arn" id="@winglang/sdk.aws.IAwsWebsite.property.arn"></a>
+##### `bucketArn`<sup>Required</sup> <a name="bucketArn" id="@winglang/sdk.aws.IAwsWebsite.property.bucketArn"></a>
 
 ```wing
-arn: str;
+bucketArn: str;
 ```
 
 - *Type:* str

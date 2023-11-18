@@ -79,7 +79,7 @@ export class ReactApp extends ex.ReactApp implements aws.IAwsReactApp {
     );
   }
 
-  public get arn(): string {
+  public get bucketArn(): string {
     return (this._host as Website).bucket.arn;
   }
 

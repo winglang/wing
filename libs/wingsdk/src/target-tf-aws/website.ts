@@ -211,7 +211,7 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     );
   }
 
-  public get arn(): string {
+  public get bucketArn(): string {
     return this.bucket.arn;
   }
 

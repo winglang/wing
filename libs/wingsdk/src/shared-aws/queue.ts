@@ -7,7 +7,7 @@ export interface IAwsQueue {
   /**
    * AWS Queue arn
    */
-  readonly arn: string;
+  readonly queueArn: string;
 
   /**
    * AWS Queue name
@@ -38,7 +38,7 @@ export class Queue {
 
   private static isAwsQueue(obj: any): obj is IAwsQueue {
     return (
-      typeof obj.arn === "string" &&
+      typeof obj.queueArn === "string" &&
       typeof obj.queueName === "string" &&
       typeof obj.queueUrl === "string"
     );

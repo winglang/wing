@@ -143,11 +143,11 @@ export class Table extends ex.Table implements IAwsTable {
     return `${this.envName()}_COLUMNS`;
   }
 
-  public get arn(): string {
+  public get dynamoTableArn(): string {
     return this.table.arn;
   }
 
-  public get tableName(): string {
+  public get dynamoTableName(): string {
     return this.table.name;
   }
 }

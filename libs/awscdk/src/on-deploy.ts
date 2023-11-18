@@ -21,7 +21,7 @@ export class OnDeploy extends cloud.OnDeploy {
     const awsFn = fn as AwsFunction;
 
     let trigger = new Trigger(this, "Trigger", {
-      handler: awsFn._awsFunction,
+      handler: awsFn._function,
     });
 
     trigger.executeAfter(...(props.executeAfter ?? []));

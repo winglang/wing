@@ -49,7 +49,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       throw new Error("Topic only supports creating awscdk.Function right now");
     }
 
-    const subscription = new LambdaSubscription(fn._awsFunction);
+    const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
     std.Node.of(this).addConnection({
@@ -94,7 +94,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get topicArn(): string {
     return this.topic.topicArn;
   }
 

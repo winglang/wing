@@ -11,7 +11,7 @@ let getQueueInfo = (q: cloud.Queue): Map<str>? => {
     return {
       queueName: queue.queueName,
       queueUrl: queue.queueUrl,
-      arn: queue.arn,
+      queueArn: queue.queueArn,
     };
   }
   return nil;
@@ -22,12 +22,12 @@ let queueInfo = getQueueInfo(queue);
 test "validates the AWS queue name" {
   if let queue = queueInfo {
     if target == "tf-aws" {
-      assert(queue.get("arn").contains("arn:aws:sqs:"));
-      assert(queue.get("arn").contains("aws-wing-queue"));
+      assert(queue.get("queueArn").contains("arn:aws:sqs:"));
+      assert(queue.get("queueArn").contains("aws-wing-queue"));
       assert(queue.get("queueName").contains("aws-wing-queue"));
     } else { // If it's not a 'tf-aws' target, it's an 'awscdk'
-    assert(queue.get("arn").contains("arn:aws:sqs:"));
-    assert(queue.get("arn").contains("awswingqueue"));
+      assert(queue.get("queueArn").contains("arn:aws:sqs:"));
+      assert(queue.get("queueArn").contains("awswingqueue"));
       assert(queue.get("queueName").contains("awswingqueue"));
     }
   } else {

@@ -14,7 +14,7 @@ api.get("/api", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 let getApiInfo = (a: cloud.Api): Map<str>? => {
   if let api = aws.Api.from(a) {
     return {
-      arn: api.arn,
+      restApiArn: api.restApiArn,
       restApiId: api.restApiId,
       restApiName: api.restApiName,
       stageName: api.stageName,
@@ -27,10 +27,10 @@ let getApiInfo = (a: cloud.Api): Map<str>? => {
 
 let apiName = getApiInfo(api);
 
-test "validates the AWS api name" {
+test "validates the AWS Api" {
   if let api = apiName {    
-    assert(api.get("arn").contains("arn:aws:execute-api:"));
-    assert(api.get("arn").contains(api.get("restApiId")));
+    assert(api.get("restApiArn").contains("arn:aws:execute-api:"));
+    assert(api.get("restApiArn").contains(api.get("restApiId")));
 
     assert(api.get("invokeUrl").contains("https://"));
     assert(api.get("invokeUrl").contains(api.get("restApiId")));

@@ -20,8 +20,6 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
  */
 export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
-  /** Function ARN */
-  public readonly functionArn: string;
 
   constructor(
     scope: Construct,
@@ -53,8 +51,6 @@ export class Function extends cloud.Function implements IAwsFunction {
       architecture: Architecture.ARM_64,
       logRetention: logRetentionDays,
     });
-
-    this.functionArn = this.function.functionArn;
   }
 
   /** @internal */
@@ -121,11 +117,12 @@ export class Function extends cloud.Function implements IAwsFunction {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  get _awsFunction() {
+  /** @internal */
+  get _function() {
     return this.function;
   }
 
-  public get arn(): string {
+  public get functionArn(): string {
     return this.function.functionArn;
   }
 

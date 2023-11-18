@@ -83,11 +83,11 @@ export class DynamodbTable
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get dynamoTableArn(): string {
     return this.table.arn;
   }
 
-  public get tableName(): string {
+  public get dynamoTableName(): string {
     return this.table.name;
   }
 }

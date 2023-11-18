@@ -291,7 +291,7 @@ export class Api extends cloud.Api implements IAwsApi {
     });
   }
 
-  public get arn(): string {
+  public get restApiArn(): string {
     return this.api.api.executionArn;
   }
 

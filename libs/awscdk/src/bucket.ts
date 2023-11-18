@@ -118,7 +118,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
   }
 
@@ -136,7 +136,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
   }
 
@@ -154,7 +154,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
   }
 
@@ -171,7 +171,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
 
     std.Node.of(this).addConnection({
@@ -181,7 +181,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
 
     std.Node.of(this).addConnection({
@@ -191,7 +191,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
-      new LambdaDestination(fn._awsFunction)
+      new LambdaDestination(fn._function)
     );
   }
 
@@ -232,7 +232,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get bucketArn(): string {
     return this.bucket.bucketArn;
   }
 

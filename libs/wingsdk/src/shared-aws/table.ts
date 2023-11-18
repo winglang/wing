@@ -7,12 +7,12 @@ export interface IAwsTable {
   /**
    * AWS Table arn
    */
-  readonly arn: string;
+  readonly dynamoTableArn: string;
 
   /**
    * AWS Table name
    */
-  readonly tableName: string;
+  readonly dynamoTableName: string;
 }
 
 /**
@@ -32,6 +32,9 @@ export class Table {
   }
 
   private static isAwsTable(obj: any): obj is IAwsTable {
-    return typeof obj.arn === "string" && typeof obj.tableName === "string";
+    return (
+      typeof obj.dynamoTableArn === "string" &&
+      typeof obj.dynamoTableName === "string"
+    );
   }
 }

@@ -141,7 +141,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 
-  public get arn(): string {
+  public get queueArn(): string {
     return this.queue.arn;
   }
 
