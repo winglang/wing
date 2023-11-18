@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-dynamodb.test.wsim » root/env0/test:validates the AWS dynamodb name
+pass ─ aws-dynamodb.test.wsim » root/env0/test:validates the AWS DynamodbTable
  
  
 Tests 1 passed (1)

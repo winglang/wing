@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-api.test.wsim » root/env0/test:validates the AWS api name
+pass ─ aws-api.test.wsim » root/env0/test:validates the AWS Api
  
  
 Tests 1 passed (1)

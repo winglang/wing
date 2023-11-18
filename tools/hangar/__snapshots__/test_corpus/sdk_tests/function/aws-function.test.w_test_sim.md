@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-pass ─ aws-function.test.wsim » root/env0/test:validates the AWS function name
+pass ─ aws-function.test.wsim » root/env0/test:validates the AWS Function
  
  
 Tests 1 passed (1)
