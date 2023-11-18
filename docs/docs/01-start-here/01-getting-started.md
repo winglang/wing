@@ -39,7 +39,7 @@ let counter = new cloud.Counter(initial: 100);
 
 queue.setConsumer(inflight (body: str): str => {
   let next = counter.inc();
-  let key = "myfile-${next}.txt";
+  let key = "myfile-{next}.txt";
   bucket.put(key, body);
 });
 ```
