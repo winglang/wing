@@ -128,6 +128,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: rename
+  kind: 2
+  detail: "inflight (srcKey: str, dstKey: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight rename: inflight (srcKey: str, dstKey: str): void\n```\n---\nMove an object to a new location in the bucket.\n### Parameters\n- `srcKey` — `str` — The key of the source object you wish to rename.\n- `dstKey` — `str` — The key of the destination object after renaming.\n\n### Remarks\nIf the destination object\nalready exists, it will be overwritten. Returns once the renaming is finished.\n\n*@throws* *if `srcKey` object doesn't exist or if it matches `dstKey`.*"
+  sortText: ff|rename
+  insertText: rename($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: signedUrl
   kind: 2
   detail: "inflight (key: str, options: BucketSignedUrlOptions?): str"
