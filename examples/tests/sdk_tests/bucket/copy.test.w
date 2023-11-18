@@ -15,7 +15,7 @@ test "copy()" {
     assert(error);
   };
   let UNEXISTING_KEY = "no-such-file.txt";
-  let OBJECT_DOES_NOT_EXIST_ERROR = "Unable to copy. Source object does not exist (srcKey=${UNEXISTING_KEY}).";
+  let OBJECT_DOES_NOT_EXIST_ERROR = "Source object does not exist (srcKey=${UNEXISTING_KEY}).";
 
   let KEY1 = "file1.main.w";
   let VALUE1 = "bring cloud;";

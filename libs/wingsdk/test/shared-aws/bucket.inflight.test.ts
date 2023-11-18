@@ -689,7 +689,6 @@ test("copy objects within the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
-
   s3Mock
     .on(CopyObjectCommand, {
       Bucket: BUCKET_NAME,
@@ -713,7 +712,6 @@ test("copy a non-existent object within the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
-
   s3Mock
     .on(CopyObjectCommand, {
       Bucket: BUCKET_NAME,
@@ -727,6 +725,66 @@ test("copy a non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    `Unable to copy. Source object does not exist (srcKey=${SRC_KEY}).`
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
+});
+
+test("rename valid object in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  s3Mock
+    .resolves({})
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .resolves({})
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: SRC_KEY })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.rename(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
+test("rename invalid object in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
   );
 });
