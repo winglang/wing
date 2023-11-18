@@ -55,6 +55,8 @@ let bloc = new cloud.Function(inflight (event: any): any => {
 }) as "TelemetryWriter";
 ```
 
+Data from the stream has the following common attributes, and they are stored as a struct within Wing called `StreamData`.
+
 While reading from a stream will look like:
 ```ts
 bring cloud;

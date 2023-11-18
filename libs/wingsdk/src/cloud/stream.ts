@@ -1,54 +1,103 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Node, Resource, Duration } from "../std"; 
+import { Json, Node, IInflightHost, Resource, Duration, Struct } from "../std";
 
 /**
  * Global identifier for `Stream`
  */
-export const STREAMS_TYPE_FQN = fqnForType("cloud.Stream");
+export const STREAMS_FQN = fqnForType("cloud.Stream");
 
+/**
+ * Options for `Stream`.
+ */
 export interface StreamProps {
-    /**
-     * The stream's name
-     * 
-     * @default - a new stream is created with a generated name
-     */
-    readonly name?: string;
-    
-    /**
-     * The stream's data horizon
-     * 
-     * This defines the last of the end of the data that will be kept in the stream
-     * Essentially, data younger than the horizon will be kept, everything else dropped
-     * 
-     * @default - 24h
-     */
-    readonly horizon?: Duration;
-    
-    /**
-     * The stream's provisioned read capacity
-     * 
-     * This is a complex calculation based on shard amount and capacity per shard
-     * 
-     * @default - 1
-     */
+  /**
+   * The stream's name
+   * @default - a new stream is created with a generated name
+   */
+  readonly name?: string;
+
+  /**
+   * The stream's data horizon.
+   * This defines the last of the end of the data that will be kept in the stream
+   * Essentially, data younger than the horizon will be kept, everything else dropped
+   * @default - 24h
+   */
+  readonly horizon?: Duration;
+
+  /**
+   * The stream's provisioned read capacity
+   * This is a complex calculation based on shard amount and capacity per shard
+   * @default - 1
+   */
+  readonly read?: number;
+
+  /**
+   * The stream's provisioned write capacity
+   * This is a complex calculation based on shard amount and capacity per shard
+   * @default - 1
+   */
+  readonly write?: number;
 }
 
 /**
- * Properties for `Streams`
+ * A stream.
+ * @inflight `@winglang/sdk.cloud.IStreamClient`
  */
-export interface StreamsProps {
+export abstract class Stream extends Resource {
   /**
-   * The name of the stream
+   * Create a new `Stream` Instance
+   * @internal
    */
-  readonly name: string;
+  public static _newStream(
+    scope: Construct,
+    id: string,
+    props: StreamProps = {}
+  ): Stream {
+    return App.of(scope).newAbstract(STREAMS_FQN, scope, id, props);
+  }
+
+  constructor(scope: Construct, id: string, props: StreamProps = {}) {
+    super(scope, id);
+
+    Node.of(this).title = "Stream";
+    Node.of(this).description =
+      "A distributed streaming data ingestion service";
+
+    props;
+  }
+
+  /** @internal */
+  public abstract _supportedOps(): string[];
+
   /**
-   * The description of the stream
+   * Create a function to consume messages from this stream
    */
-  readonly description?: string;
+  public abstract setConsumer(
+    handler: IStreamSetConsumerHandler,
+    props?: StreamSetConusmerOptions
+  ): Function;
+}
+
+/**
+ * Options for Stream.setConsumer
+ */
+export interface StreamSetConsumerOptions extends FunctionProps {
   /**
-   * The schema of the stream
+   * 
+   * @default - 10
    */
-  readonly schema: Json;
+  readonly batchSize?: number;
+}
+
+/**
+ * List of inflight operations for `Stream`.
+ * @internal
+ */
+export enum StreamInflightMethods {
+  /** `Stream.put` */
+  PUT = "put",
+  /** `Stream.get` */
+  GET = "get",
 }
