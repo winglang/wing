@@ -774,6 +774,102 @@ test("copy non-existent object within the bucket", async () => {
   await s.stop();
 });
 
+test("rename valid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename valid object with overwrite within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "to-overwrite.txt";
+  let DST_VALUE = "Hello, World!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+  await client.put(DST_KEY, DST_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename invalid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    /Renaming an object to its current name is not a valid operation/
+  );
+  await s.stop();
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    /Source object does not exist/
+  );
+  await s.stop();
+});
+
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)
 
 // test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
