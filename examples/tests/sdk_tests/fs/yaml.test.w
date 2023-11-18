@@ -8,7 +8,7 @@ let data = Json {
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
 };
 
-fs.writeFile(filepath, "invalid: {{ content }}, invalid");
+fs.writeFile(filepath, "invalid: \{\{ content }}, invalid");
 try {
     fs.readYaml(filepath);
 } catch e {
