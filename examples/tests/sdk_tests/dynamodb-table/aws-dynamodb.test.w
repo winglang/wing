@@ -1,3 +1,9 @@
+/*\
+skipPlatforms:
+  - win32
+  - darwin
+\*/
+
 bring ex;
 bring aws;
 bring util;
