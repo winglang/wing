@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { core, ex, std } from "@winglang/sdk";
 import { ResourceNames } from "@winglang/sdk/lib/shared/resource-names";
-import { NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
+import { IAwsDynamodbTable, NAME_OPTS } from "@winglang/sdk/lib/shared-aws/dynamodb-table";
 import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 
 /**
@@ -12,7 +12,7 @@ import { calculateDynamodbTablePermissions } from "@winglang/sdk/lib/shared-aws/
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
  */
-export class DynamodbTable extends ex.DynamodbTable {
+export class DynamodbTable extends ex.DynamodbTable implements IAwsDynamodbTable {
   private readonly table: Table;
 
   constructor(scope: Construct, id: string, props: ex.DynamodbTableProps) {
@@ -31,9 +31,9 @@ export class DynamodbTable extends ex.DynamodbTable {
       },
       sortKey: props.rangeKey
         ? {
-            name: props.rangeKey,
-            type: attributeDefinitions[props.rangeKey] as AttributeType,
-          }
+          name: props.rangeKey,
+          type: attributeDefinitions[props.rangeKey] as AttributeType,
+        }
         : undefined,
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -83,5 +83,13 @@ export class DynamodbTable extends ex.DynamodbTable {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  public get dynamoTableArn(): string {
+    return this.table.tableArn;
+  }
+
+  public get dynamoTableName(): string {
+    return this.table.tableName;
   }
 }
