@@ -19,7 +19,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsApi } from "../shared-aws";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -38,7 +37,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api implements IAwsApi {
+export class Api extends cloud.Api {
   private readonly api: WingRestApi;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
@@ -290,30 +289,6 @@ export class Api extends cloud.Api implements IAwsApi {
       case: CaseConventions.UPPERCASE,
     });
   }
-
-  public get restApiArn(): string {
-    return this.api.api.executionArn;
-  }
-
-  public get restApiId(): string {
-    return this.api.api.id;
-  }
-
-  public get restApiName(): string {
-    return this.api.api.name;
-  }
-
-  public get stageName(): string {
-    return this.api.stage.stageName;
-  }
-
-  public get invokeUrl(): string {
-    return this.api.stage.invokeUrl;
-  }
-
-  public get deploymentId(): string {
-    return this.api.deployment.id;
-  }
 }
 
 /**
@@ -323,7 +298,7 @@ class WingRestApi extends Construct {
   public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
-  public readonly deployment: ApiGatewayDeployment;
+  private readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
 
   constructor(
@@ -404,7 +379,7 @@ class WingRestApi extends Construct {
   private createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {
@@ -436,7 +411,7 @@ class WingRestApi extends Construct {
     new LambdaPermission(this, `permission-${permissionId}`, {
       statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
       action: "lambda:InvokeFunction",
-      functionName: handler.functionName,
+      functionName: handler._functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: `${this.api.executionArn}/*/${method}${path}`,
     });
