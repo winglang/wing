@@ -277,9 +277,7 @@ export class BucketClient implements IBucketClient {
     try {
       await dstBlobClient.syncCopyFromURL(srcBlobUrl);
     } catch (error) {
-      throw new Error(
-        `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
-      );
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
     }
   }
 

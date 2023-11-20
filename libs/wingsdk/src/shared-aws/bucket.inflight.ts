@@ -278,9 +278,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
     } catch (error) {
       if (error instanceof NotFound) {
-        throw new Error(
-          `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
-        );
+        throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
       }
       throw error;
     }
