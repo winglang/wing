@@ -19,7 +19,7 @@ export const createReactAppRouter = () => {
         if (!config || !config.props?.url) {
           return "";
         }
-        return config.attrs.url;
+        return config.props.url;
       }),
   });
 };
