@@ -75,14 +75,10 @@ export async function runDockerImage({
   return { hostPort };
 }
 
-// const hashCounters = new Map<string, number>();
+export function stableHash(text: string, length: number = 5) {
+  return createHash("md5").update(text).digest("hex").slice(0, length);
+}
 
 export function inflightId(inflight: IInflight) {
-  const hash =
-    inflight._hash ??
-    createHash("sha256").update(inflight._toInflight()).digest("hex");
-  // const counter = hashCounters.get(hash) ?? 0;
-  // hashCounters.set(hash, counter + 1);
-
-  return hash.slice(0, 5);
+  return inflight._hash ?? stableHash(inflight._toInflight(), 5);
 }

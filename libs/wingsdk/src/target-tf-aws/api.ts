@@ -40,6 +40,7 @@ const NAME_OPTS: NameOptions = {
  */
 export class Api extends cloud.Api {
   private readonly api: WingRestApi;
+  private readonly handlers: Record<string, Function> = {};
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -224,12 +225,18 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    const inflightNodeHash = inflightId(functionHandler);
-    const functionId = `${this.node.id}-OnRequest-${inflightNodeHash}`;
-    return (
-      this.node.tryFindChild(functionId) ??
-      new Function(this, functionId, functionHandler)
-    );
+    const hash = inflightId(functionHandler);
+    let func = this.handlers[hash];
+    if (!func) {
+      func = new Function(
+        this,
+        `${this.node.id}-OnRequest-${hash}`,
+        functionHandler
+      );
+      this.handlers[hash] = func;
+    }
+
+    return func;
   }
 
   /** @internal */

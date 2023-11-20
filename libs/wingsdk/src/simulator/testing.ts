@@ -47,7 +47,6 @@ new ((function(){
 })`;
 
     return {
-      _guid: nanoid(),
       _hash: createHash("sha256").update(inflightCode).digest("hex"),
       _toInflight: () => inflightCode,
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
