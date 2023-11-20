@@ -7,6 +7,16 @@ import { T1 } from "./generics";
 import { InflightClient } from "../core";
 
 /**
+ * Map entry representation
+ */
+export interface MapEntry {
+  /** The entry key */
+  readonly key: string;
+  /** The entry value */
+  readonly value: Map;
+}
+
+/**
  * Immutable Map
  *
  * @typeparam T1
@@ -17,6 +27,16 @@ export class Map {
    */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Returns the entries from the Map.
+   *
+   * @param map to get the entries from
+   * @returns the entries as Array<MapEntry>
+   */
+  public static entries(map: Map): MapEntry[] {
+    return Object.entries(map).map(([key, value]) => ({ key, value }));
   }
 
   private constructor() {}
@@ -120,6 +140,16 @@ export class MutMap {
    */
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Returns the entries from the Map.
+   *
+   * @param map to get the entries from
+   * @returns the entries as Array<MapEntry>
+   */
+  public static entries(map: Map): MapEntry[] {
+    return Object.entries(map).map(([key, value]) => ({ key, value }));
   }
 
   private constructor() {}

@@ -147,40 +147,6 @@ for i in 0..saberformNames.length {
     assert(saberformNames.at(i) == nameArr.at(i));
 }
 
-test "values()" {
-    let forceUsers = { "sith" => ["malak", "vader", "bane"], "jedi" => ["sunrider", "bastila", "bindo"]};
-    let userKeys = forceUsers.values();
-    let valArr = [["malak", "vader", "bane"], ["sunrider", "bastila", "bindo"]];
-    assert(userKeys.length == valArr.length);
-    for i in 0..userKeys.length {
-        assert(userKeys.at(i) == valArr.at(i));
-    }
-
-    let saberforms = MutMap<str> { "1st" => "shii-cho", "2nd" => "makashi", "3rd" => "soresu", "4th" => "ataru", "5th" => "shien", "6th" => "niman", "7th" => "juyo"};
-    let saberformNames = saberforms.values();
-    let nameArr = ["shii-cho", "makashi", "soresu", "ataru", "shien", "niman", "juyo"];
-    assert(saberformNames.length == nameArr.length);
-    for i in 0..saberformNames.length {
-        assert(saberformNames.at(i) == nameArr.at(i));
-    }
-}
-
-
-let lightsaberColorMap = { "red" => "sith", "blue" => "jedi" };
-let lightsaberColors = lightsaberColorMap.keys();
-let colorArr = ["red", "blue"];
-assert(lightsaberColors.length == colorArr.length);
-for i in 0..lightsaberColors.length {
-    assert(lightsaberColors.at(i) == colorArr.at(i));
-}
-
-let isMandalorianWarrior = MutMap<bool> { "bo katan" => true, "jango" => true, "satine" => false, "boba" => true};
-let mandalorianKeys = isMandalorianWarrior.keys();
-let keysArr = ["bo katan", "jango", "satine", "boba"];
-assert(mandalorianKeys.length == keysArr.length);
-for i in 0..mandalorianKeys.length {
-    assert(mandalorianKeys.at(i) == keysArr.at(i));
-}
 
 test "keys()" {
     let lightsaberColorMap = { "red" => "sith", "blue" => "jedi" };
@@ -199,6 +165,59 @@ test "keys()" {
         assert(mandalorianKeys.at(i) == keysArr.at(i));
     }
     
+}
+
+test "values()" {
+    let forceUsers = { "sith" => ["malak", "vader", "bane"], "jedi" => ["sunrider", "bastila", "bindo"]};
+    let userKeys = forceUsers.values();
+    let valArr = [["malak", "vader", "bane"], ["sunrider", "bastila", "bindo"]];
+    assert(userKeys.length == valArr.length);
+    for i in 0..userKeys.length {
+        assert(userKeys.at(i) == valArr.at(i));
+    }
+
+    let saberforms = MutMap<str> { "1st" => "shii-cho", "2nd" => "makashi", "3rd" => "soresu", "4th" => "ataru", "5th" => "shien", "6th" => "niman", "7th" => "juyo"};
+    let saberformNames = saberforms.values();
+    let nameArr = ["shii-cho", "makashi", "soresu", "ataru", "shien", "niman", "juyo"];
+    assert(saberformNames.length == nameArr.length);
+    for i in 0..saberformNames.length {
+        assert(saberformNames.at(i) == nameArr.at(i));
+    }
+}
+
+test "entries()" {
+    // Test for a regular map
+    let jediMasters = { "Yoda" => "Dagobah", "Obi-Wan" => "Tatooine", "Mace Windu" => "Coruscant" };
+    let masterLocations = Map<str>.entries(jediMasters);
+    assert(masterLocations.length == 3);
+    assert(masterLocations.contains(["Yoda", "Dagobah"]));
+    assert(masterLocations.contains(["Obi-Wan", "Tatooine"]));
+    assert(masterLocations.contains(["Mace Windu", "Coruscant"]));
+
+    // Test for a mutable map
+    let mutSithLords = MutMap<str> { "Vader" => "Mustafar", "Sidious" => "Coruscant", "Maul" => "Dathomir" };
+    let sithLocations = MutMap<str>.entries(mutSithLords);
+    assert(sithLocations.length == 3);
+    assert(sithLocations.contains(["Vader", "Mustafar"]));
+    assert(sithLocations.contains(["Sidious", "Coruscant"]));
+    assert(sithLocations.contains(["Maul", "Dathomir"]));
+}
+
+
+let lightsaberColorMap = { "red" => "sith", "blue" => "jedi" };
+let lightsaberColors = lightsaberColorMap.keys();
+let colorArr = ["red", "blue"];
+assert(lightsaberColors.length == colorArr.length);
+for i in 0..lightsaberColors.length {
+    assert(lightsaberColors.at(i) == colorArr.at(i));
+}
+
+let isMandalorianWarrior = MutMap<bool> { "bo katan" => true, "jango" => true, "satine" => false, "boba" => true};
+let mandalorianKeys = isMandalorianWarrior.keys();
+let keysArr = ["bo katan", "jango", "satine", "boba"];
+assert(mandalorianKeys.length == keysArr.length);
+for i in 0..mandalorianKeys.length {
+    assert(mandalorianKeys.at(i) == keysArr.at(i));
 }
 
 
