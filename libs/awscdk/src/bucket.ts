@@ -14,7 +14,6 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -65,7 +64,8 @@ export class Bucket extends cloud.Bucket {
       this.eventHandlerLocation(),
       `BucketEventHandlerClient`
     );
-    const hash = inflightId(functionHandler);
+    
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

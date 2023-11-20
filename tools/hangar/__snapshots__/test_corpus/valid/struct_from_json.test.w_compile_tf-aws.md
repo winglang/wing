@@ -197,6 +197,7 @@ class $Root extends $stdlib.std.Resource {
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -204,8 +205,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-2.js")({
-            $cloud_BucketProps: ${$Closure1._lift($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
-            $j: ${$Closure1._lift(j)},
+            $cloud_BucketProps: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud_BucketProps, "@winglang/sdk/cloud", "BucketProps"))},
+            $j: ${$stdlib.core.liftObject(j)},
           })
         `;
       }
@@ -231,6 +232,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -238,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-2.js")({
-            $Student: ${$Closure2._lift(Student)},
+            $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
       }
@@ -258,6 +260,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -265,8 +268,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure3-2.js")({
-            $Student: ${$Closure3._lift(Student)},
-            $jStudent1: ${$Closure3._lift(jStudent1)},
+            $Student: ${$stdlib.core.liftObject(Student)},
+            $jStudent1: ${$stdlib.core.liftObject(jStudent1)},
           })
         `;
       }
@@ -292,6 +295,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -299,11 +303,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure4-2.js")({
-            $MyStruct: ${$Closure4._lift(MyStruct)},
-            $_schema_asStr___: ${$Closure4._lift((schema.asStr()))},
-            $expectedSchema: ${$Closure4._lift(expectedSchema)},
-            $jMyStruct: ${$Closure4._lift(jMyStruct)},
-            $std_Json: ${$Closure4._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
+            $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
+            $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
+            $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -331,6 +335,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -338,10 +343,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure5-2.js")({
-            $Student: ${$Closure5._lift(Student)},
-            $std_Boolean: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
-            $std_Number: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
-            $std_String: ${$Closure5._lift($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
+            $Student: ${$stdlib.core.liftObject(Student)},
+            $std_Boolean: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Boolean, "@winglang/sdk/std", "Boolean"))},
+            $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+            $std_String: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.String, "@winglang/sdk/std", "String"))},
           })
         `;
       }

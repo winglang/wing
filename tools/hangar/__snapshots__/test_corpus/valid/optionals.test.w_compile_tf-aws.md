@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Sub-1.js")({
-            $Super: ${Sub._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -195,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Sub1-1.js")({
-            $Super: ${Sub1._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -243,6 +243,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -250,9 +251,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__payloadWithBucket_c_____null_: ${$Closure1._lift(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${$Closure1._lift(((payloadWithoutOptions.b) != null))},
-            $payloadWithBucket_c: ${$Closure1._lift(payloadWithBucket.c)},
+            $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
           })
         `;
       }

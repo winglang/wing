@@ -116,7 +116,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Cat-1.js")({
-            $Animal: ${Cat._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }
@@ -142,7 +142,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Dog-1.js")({
-            $Animal: ${Dog._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }

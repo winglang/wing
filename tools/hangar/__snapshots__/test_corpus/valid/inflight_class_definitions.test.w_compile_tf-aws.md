@@ -239,6 +239,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -324,6 +325,7 @@ class $Root extends $stdlib.std.Resource {
         }
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
@@ -331,7 +333,7 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType() {
             return `
               require("./inflight.$Closure2-1.js")({
-                $F: ${$Closure2._lift(F)},
+                $F: ${$stdlib.core.liftObject(F)},
               })
             `;
           }
@@ -366,7 +368,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DClient = ${D._toInflightType(this)};
             const client = new DClient({
-              $this_inner: ${D._lift(this.inner)},
+              $this_inner: ${$stdlib.core.liftObject(this.inner)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -387,6 +389,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -394,11 +397,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $B: ${$Closure3._lift(B)},
-            $a: ${$Closure3._lift(a)},
-            $d: ${$Closure3._lift(d)},
-            $fn: ${$Closure3._lift(fn)},
-            $innerD: ${$Closure3._lift(innerD)},
+            $B: ${$stdlib.core.liftObject(B)},
+            $a: ${$stdlib.core.liftObject(a)},
+            $d: ${$stdlib.core.liftObject(d)},
+            $fn: ${$stdlib.core.liftObject(fn)},
+            $innerD: ${$stdlib.core.liftObject(innerD)},
           })
         `;
       }

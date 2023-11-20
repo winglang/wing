@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${B._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }

@@ -14,7 +14,6 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import {
   CaseConventions,
   NameOptions,
@@ -225,7 +224,7 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
     let func = this.handlers[hash];
     if (!func) {
       func = new Function(

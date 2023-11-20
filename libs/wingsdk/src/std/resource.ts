@@ -2,7 +2,6 @@ import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
-import { liftObject } from "../core/internal";
 import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
 import { Node } from "../std";
@@ -189,19 +188,6 @@ export abstract class Resource extends Construct implements IResource {
     throw new Error(
       `unable to serialize immutable data object of type ${obj.constructor?.name}`
     );
-  }
-
-  /**
-   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
-   * method), this method will be called and the result will be returned. Otherwise, the value is
-   * returned as-is.
-   *
-   * @param value The value to lift.
-   * @returns a string representation of the value in an inflight context.
-   * @internal
-   */
-  protected static _lift(value: any): string {
-    return liftObject(value);
   }
 
   /**

@@ -202,6 +202,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -209,8 +210,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $b: ${$Closure1._lift(b)},
-            $fileName: ${$Closure1._lift(fileName)},
+            $b: ${$stdlib.core.liftObject(b)},
+            $fileName: ${$stdlib.core.liftObject(fileName)},
           })
         `;
       }
@@ -237,6 +238,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -244,10 +246,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $b: ${$Closure2._lift(b)},
-            $fileName: ${$Closure2._lift(fileName)},
-            $getJson: ${$Closure2._lift(getJson)},
-            $j: ${$Closure2._lift(j)},
+            $b: ${$stdlib.core.liftObject(b)},
+            $fileName: ${$stdlib.core.liftObject(fileName)},
+            $getJson: ${$stdlib.core.liftObject(getJson)},
+            $j: ${$stdlib.core.liftObject(j)},
           })
         `;
       }

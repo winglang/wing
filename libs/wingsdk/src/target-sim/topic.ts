@@ -7,7 +7,6 @@ import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -30,7 +29,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this,

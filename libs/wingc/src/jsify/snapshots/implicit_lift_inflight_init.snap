@@ -83,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_c: ${Foo._lift(this.c)},
+              $this_c: ${$stdlib.core.liftObject(this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

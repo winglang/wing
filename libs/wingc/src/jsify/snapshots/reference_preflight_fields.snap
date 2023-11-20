@@ -83,8 +83,8 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
-              $this_b: ${MyType._lift(this.b)},
-              $this_s_length: ${MyType._lift(this.s.length)},
+              $this_b: ${$stdlib.core.liftObject(this.b)},
+              $this_s_length: ${$stdlib.core.liftObject(this.s.length)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

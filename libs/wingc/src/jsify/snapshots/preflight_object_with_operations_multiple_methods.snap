@@ -60,7 +60,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $b: ${Foo._lift(b)},
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }

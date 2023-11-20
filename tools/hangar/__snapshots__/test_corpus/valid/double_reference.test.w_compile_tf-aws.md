@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $initCount: ${Foo._lift(initCount)},
+            $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
       }
@@ -169,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
-              $this_foo: ${Bar._lift(this.foo)},
+              $this_foo: ${$stdlib.core.liftObject(this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -190,6 +190,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -197,9 +198,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bar: ${$Closure1._lift(bar)},
-            $bar_foo: ${$Closure1._lift(bar.foo)},
-            $initCount: ${$Closure1._lift(initCount)},
+            $bar: ${$stdlib.core.liftObject(bar)},
+            $bar_foo: ${$stdlib.core.liftObject(bar.foo)},
+            $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
       }

@@ -184,6 +184,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -191,13 +192,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $myBool: ${$Closure1._lift(myBool)},
-            $myDur_hours: ${$Closure1._lift(myDur.hours)},
-            $myDur_minutes: ${$Closure1._lift(myDur.minutes)},
-            $myDur_seconds: ${$Closure1._lift(myDur.seconds)},
-            $myNum: ${$Closure1._lift(myNum)},
-            $mySecondBool: ${$Closure1._lift(mySecondBool)},
-            $myStr: ${$Closure1._lift(myStr)},
+            $myBool: ${$stdlib.core.liftObject(myBool)},
+            $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
+            $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},
+            $myDur_seconds: ${$stdlib.core.liftObject(myDur.seconds)},
+            $myNum: ${$stdlib.core.liftObject(myNum)},
+            $mySecondBool: ${$stdlib.core.liftObject(mySecondBool)},
+            $myStr: ${$stdlib.core.liftObject(myStr)},
           })
         `;
       }

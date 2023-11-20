@@ -85,6 +85,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -92,10 +93,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Object_keys_m__length: ${$Closure1._lift(Object.keys(m).length)},
-            $aCloned_length: ${$Closure1._lift(aCloned.length)},
-            $a_length: ${$Closure1._lift(a.length)},
-            $s_size: ${$Closure1._lift(s.size)},
+            $Object_keys_m__length: ${$stdlib.core.liftObject(Object.keys(m).length)},
+            $aCloned_length: ${$stdlib.core.liftObject(aCloned.length)},
+            $a_length: ${$stdlib.core.liftObject(a.length)},
+            $s_size: ${$stdlib.core.liftObject(s.size)},
           })
         `;
       }
@@ -124,6 +125,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -131,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $handler: ${$Closure2._lift(handler)},
+            $handler: ${$stdlib.core.liftObject(handler)},
           })
         `;
       }

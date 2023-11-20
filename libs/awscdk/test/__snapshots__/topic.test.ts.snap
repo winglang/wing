@@ -176,25 +176,9 @@ exports[`topic with multiple subscribers 3`] = `
     "Topic85E630E2": {
       "Type": "AWS::SNS::Topic",
     },
-    "TopicOnMessage1AllowInvokemyprojectTopic89035A096EDDC70C": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "TopicOnMessage1B4A9C9A7",
-            "Arn",
-          ],
-        },
-        "Principal": "sns.amazonaws.com",
-        "SourceArn": {
-          "Ref": "Topic85E630E2",
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "TopicOnMessage1B4A9C9A7": {
+    "TopicOnMessage8fb4ef7EBB39FC": {
       "DependsOn": [
-        "TopicOnMessage1ServiceRole816A7EBC",
+        "TopicOnMessage8fb4efServiceRole49F04E14",
       ],
       "Properties": {
         "Architectures": [
@@ -210,7 +194,7 @@ exports[`topic with multiple subscribers 3`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "TopicOnMessage1ServiceRole816A7EBC",
+            "TopicOnMessage8fb4efServiceRole49F04E14",
             "Arn",
           ],
         },
@@ -219,7 +203,23 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "TopicOnMessage1LogRetention6C723B01": {
+    "TopicOnMessage8fb4efAllowInvokemyprojectTopic89035A09A8E93494": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "TopicOnMessage8fb4ef7EBB39FC",
+            "Arn",
+          ],
+        },
+        "Principal": "sns.amazonaws.com",
+        "SourceArn": {
+          "Ref": "Topic85E630E2",
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "TopicOnMessage8fb4efLogRetention79A555B3": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -227,7 +227,7 @@ exports[`topic with multiple subscribers 3`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "TopicOnMessage1B4A9C9A7",
+                "Ref": "TopicOnMessage8fb4ef7EBB39FC",
               },
             ],
           ],
@@ -242,7 +242,7 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "TopicOnMessage1ServiceRole816A7EBC": {
+    "TopicOnMessage8fb4efServiceRole49F04E14": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -273,11 +273,11 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "TopicOnMessage1TopicCD5797FE": {
+    "TopicOnMessage8fb4efTopicCF5A0CD1": {
       "Properties": {
         "Endpoint": {
           "Fn::GetAtt": [
-            "TopicOnMessage1B4A9C9A7",
+            "TopicOnMessage8fb4ef7EBB39FC",
             "Arn",
           ],
         },
@@ -288,9 +288,9 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::SNS::Subscription",
     },
-    "TopicOnMessage21A577444": {
+    "TopicOnMessagefa4aeb651B8233": {
       "DependsOn": [
-        "TopicOnMessage2ServiceRole132EFEC9",
+        "TopicOnMessagefa4aebServiceRole515A6432",
       ],
       "Properties": {
         "Architectures": [
@@ -306,7 +306,7 @@ exports[`topic with multiple subscribers 3`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "TopicOnMessage2ServiceRole132EFEC9",
+            "TopicOnMessagefa4aebServiceRole515A6432",
             "Arn",
           ],
         },
@@ -315,12 +315,12 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "TopicOnMessage2AllowInvokemyprojectTopic89035A098C15FE68": {
+    "TopicOnMessagefa4aebAllowInvokemyprojectTopic89035A0947F2F50D": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "TopicOnMessage21A577444",
+            "TopicOnMessagefa4aeb651B8233",
             "Arn",
           ],
         },
@@ -331,7 +331,7 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "TopicOnMessage2LogRetention91BCDA2E": {
+    "TopicOnMessagefa4aebLogRetention62E04E7D": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -339,7 +339,7 @@ exports[`topic with multiple subscribers 3`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "TopicOnMessage21A577444",
+                "Ref": "TopicOnMessagefa4aeb651B8233",
               },
             ],
           ],
@@ -354,7 +354,7 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "TopicOnMessage2ServiceRole132EFEC9": {
+    "TopicOnMessagefa4aebServiceRole515A6432": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -385,11 +385,11 @@ exports[`topic with multiple subscribers 3`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "TopicOnMessage2Topic0B57567E": {
+    "TopicOnMessagefa4aebTopic8682325D": {
       "Properties": {
         "Endpoint": {
           "Fn::GetAtt": [
-            "TopicOnMessage21A577444",
+            "TopicOnMessagefa4aeb651B8233",
             "Arn",
           ],
         },
@@ -543,9 +543,9 @@ exports[`topic with subscriber function 2`] = `
     "Topic85E630E2": {
       "Type": "AWS::SNS::Topic",
     },
-    "TopicOnMessage095875841": {
+    "TopicOnMessagee78364635B90E6": {
       "DependsOn": [
-        "TopicOnMessage0ServiceRoleAA98512F",
+        "TopicOnMessagee78364ServiceRole4C44D9F3",
       ],
       "Properties": {
         "Architectures": [
@@ -561,7 +561,7 @@ exports[`topic with subscriber function 2`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "TopicOnMessage0ServiceRoleAA98512F",
+            "TopicOnMessagee78364ServiceRole4C44D9F3",
             "Arn",
           ],
         },
@@ -570,12 +570,12 @@ exports[`topic with subscriber function 2`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "TopicOnMessage0AllowInvokemyprojectTopic89035A09B33789B5": {
+    "TopicOnMessagee78364AllowInvokemyprojectTopic89035A09D0B884F9": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "TopicOnMessage095875841",
+            "TopicOnMessagee78364635B90E6",
             "Arn",
           ],
         },
@@ -586,7 +586,7 @@ exports[`topic with subscriber function 2`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "TopicOnMessage0LogRetention0619AB09": {
+    "TopicOnMessagee78364LogRetention2460D386": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -594,7 +594,7 @@ exports[`topic with subscriber function 2`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "TopicOnMessage095875841",
+                "Ref": "TopicOnMessagee78364635B90E6",
               },
             ],
           ],
@@ -609,7 +609,7 @@ exports[`topic with subscriber function 2`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "TopicOnMessage0ServiceRoleAA98512F": {
+    "TopicOnMessagee78364ServiceRole4C44D9F3": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -640,11 +640,11 @@ exports[`topic with subscriber function 2`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "TopicOnMessage0TopicAC21B170": {
+    "TopicOnMessagee78364Topic18E70F5B": {
       "Properties": {
         "Endpoint": {
           "Fn::GetAtt": [
-            "TopicOnMessage095875841",
+            "TopicOnMessagee78364635B90E6",
             "Arn",
           ],
         },

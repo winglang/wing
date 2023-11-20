@@ -1,5 +1,4 @@
-import { InflightBindings } from "../core";
-import { liftObject } from "../core/internal";
+import { InflightBindings, liftObject } from "../core";
 import { stableHash } from "../shared/misc";
 import { IInflight, IInflightHost, Resource } from "../std";
 

@@ -133,6 +133,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -140,7 +141,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-3.js")({
-            $fixture_Store: ${$Closure1._lift($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
+            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
       }
@@ -197,7 +198,7 @@ module.exports = function({ $stdlib }) {
     static _toInflightType() {
       return `
         require("./inflight.Store-2.js")({
-          $myutil_Util: ${Store._lift($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
+          $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
         })
       `;
     }
@@ -206,7 +207,7 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const StoreClient = ${Store._toInflightType(this)};
           const client = new StoreClient({
-            $this_data: ${Store._lift(this.data)},
+            $this_data: ${$stdlib.core.liftObject(this.data)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;

@@ -6,7 +6,6 @@ import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-ta
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import { Node } from "../std";
 
 /**
@@ -55,7 +54,7 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
     const functionId = `${this.node.id}-OnTick-${hash}`;
     let fn = this.node.tryFindChild(functionId);
     if (fn) {

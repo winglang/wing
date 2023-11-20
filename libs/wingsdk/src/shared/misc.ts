@@ -1,7 +1,6 @@
 import { execFile } from "child_process";
 import { createHash } from "crypto";
 import { readFileSync } from "fs";
-import { IInflight } from "../std";
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -77,8 +76,4 @@ export async function runDockerImage({
 
 export function stableHash(text: string, length: number = 6) {
   return createHash("md5").update(text).digest("hex").slice(0, length);
-}
-
-export function inflightId(inflight: IInflight) {
-  return inflight._hash ?? stableHash(inflight._toInflight());
 }

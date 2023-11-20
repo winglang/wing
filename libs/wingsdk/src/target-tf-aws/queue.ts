@@ -6,7 +6,6 @@ import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { Duration, IInflightHost, Node } from "../std";
@@ -64,7 +63,7 @@ export class Queue extends cloud.Queue {
       ),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

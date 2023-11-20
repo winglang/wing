@@ -7,7 +7,6 @@ import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -73,7 +72,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this,

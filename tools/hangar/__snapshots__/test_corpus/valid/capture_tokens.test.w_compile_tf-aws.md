@@ -220,8 +220,8 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_api_url: ${MyResource._lift(this.api.url)},
-              $this_url: ${MyResource._lift(this.url)},
+              $this_api_url: ${$stdlib.core.liftObject(this.api.url)},
+              $this_url: ${$stdlib.core.liftObject(this.url)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -245,6 +245,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -252,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $r: ${$Closure1._lift(r)},
+            $r: ${$stdlib.core.liftObject(r)},
           })
         `;
       }
@@ -278,6 +279,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -285,9 +287,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $MyResource: ${$Closure2._lift(MyResource)},
-            $api_url: ${$Closure2._lift(api.url)},
-            $url: ${$Closure2._lift(url)},
+            $MyResource: ${$stdlib.core.liftObject(MyResource)},
+            $api_url: ${$stdlib.core.liftObject(api.url)},
+            $url: ${$stdlib.core.liftObject(url)},
           })
         `;
       }

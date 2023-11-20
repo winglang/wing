@@ -6,7 +6,6 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
-import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -40,7 +39,7 @@ export class Topic extends cloud.Topic {
       ),
       "TopicOnMessageHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

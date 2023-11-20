@@ -7,7 +7,6 @@ import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscripti
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { inflightId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IInflightHost, Node, Resource } from "../std";
@@ -61,7 +60,7 @@ export class Topic extends cloud.Topic {
       ),
       "TopicOnMessageHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
     const functionId = `${this.node.id}-OnMessage-${hash}`;
     let fn = this.node.tryFindChild(functionId);
     if (fn) {

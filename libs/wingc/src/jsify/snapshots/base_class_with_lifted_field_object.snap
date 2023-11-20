@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${Derived._lift(Base)},
+            $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
       }
@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
-              $this_b: ${Derived._lift(this.b)},
+              $this_b: ${$stdlib.core.liftObject(this.b)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

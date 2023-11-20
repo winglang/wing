@@ -9,7 +9,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { inflightId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -72,7 +71,7 @@ export class Schedule extends cloud.Schedule {
       ),
       "ScheduleOnTickHandlerClient"
     );
-    const hash = inflightId(functionHandler);
+    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

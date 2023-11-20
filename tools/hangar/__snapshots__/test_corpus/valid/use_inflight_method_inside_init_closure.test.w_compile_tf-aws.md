@@ -189,6 +189,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
@@ -196,7 +197,7 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType() {
             return `
               require("./inflight.$Closure1-1.js")({
-                $__parent_this_1: ${$Closure1._lift(__parent_this_1)},
+                $__parent_this_1: ${$stdlib.core.liftObject(__parent_this_1)},
               })
             `;
           }

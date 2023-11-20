@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this)};
             const client = new AClient({
-              $this_counter: ${A._lift(this.counter)},
+              $this_counter: ${$stdlib.core.liftObject(this.counter)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -142,6 +142,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
@@ -149,8 +150,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $a: ${$Closure1._lift(a)},
-            $a_field: ${$Closure1._lift(a.field)},
+            $a: ${$stdlib.core.liftObject(a)},
+            $a_field: ${$stdlib.core.liftObject(a.field)},
           })
         `;
       }
