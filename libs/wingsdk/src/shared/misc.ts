@@ -75,10 +75,10 @@ export async function runDockerImage({
   return { hostPort };
 }
 
-export function stableHash(text: string, length: number = 5) {
+export function stableHash(text: string, length: number = 6) {
   return createHash("md5").update(text).digest("hex").slice(0, length);
 }
 
 export function inflightId(inflight: IInflight) {
-  return inflight._hash ?? stableHash(inflight._toInflight(), 5);
+  return inflight._hash ?? stableHash(inflight._toInflight());
 }

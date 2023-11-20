@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-setconsumer-318ae_c8232cdd.js": "\\"use strict\\";
+  ".wing/queue-setconsumer-33c1ea_c8535561.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
   return class Handler {
@@ -46,28 +46,28 @@ bucket: (function() {
     "connections": [
       {
         "name": "inc()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
         "target": "root/HelloWorld/Counter",
       },
       {
         "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
         "target": "root/HelloWorld/Counter",
       },
       {
         "name": "put()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
         "target": "root/HelloWorld/Bucket",
       },
       {
         "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
         "target": "root/HelloWorld/Bucket",
       },
       {
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
-        "target": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "target": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
       },
     ],
     "version": "connections-0.1",
@@ -102,13 +102,13 @@ bucket: (function() {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+        "path": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
         "props": {
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/queue-setconsumer-318ae_c8232cdd.js",
+          "sourceCodeFile": ".wing/queue-setconsumer-33c1ea_c8535561.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -125,10 +125,10 @@ bucket: (function() {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-318ae",
+        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-33c1ea",
         "props": {
           "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${wsim#root/HelloWorld/Queue/Queue-SetConsumer-318ae#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/Queue-SetConsumer-33c1ea#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -247,7 +247,7 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
-                "Queue-QueueEventMapping-318ae": {
+                "Queue-QueueEventMapping-33c1ea": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.2.70",
@@ -255,10 +255,10 @@ bucket: (function() {
                   "display": {
                     "hidden": true,
                   },
-                  "id": "Queue-QueueEventMapping-318ae",
-                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-318ae",
+                  "id": "Queue-QueueEventMapping-33c1ea",
+                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-33c1ea",
                 },
-                "Queue-SetConsumer-318ae": {
+                "Queue-SetConsumer-33c1ea": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.2.70",
@@ -268,8 +268,8 @@ bucket: (function() {
                     "sourceModule": "@winglang/sdk",
                     "title": "setConsumer()",
                   },
-                  "id": "Queue-SetConsumer-318ae",
-                  "path": "root/HelloWorld/Queue/Queue-SetConsumer-318ae",
+                  "id": "Queue-SetConsumer-33c1ea",
+                  "path": "root/HelloWorld/Queue/Queue-SetConsumer-33c1ea",
                 },
               },
               "constructInfo": {

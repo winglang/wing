@@ -1,7 +1,6 @@
-import { createHash } from "crypto";
-import { nanoid } from "nanoid";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
+import { stableHash } from "../shared/misc";
 import { IInflight, IInflightHost, Resource } from "../std";
 
 /**
@@ -47,7 +46,7 @@ new ((function(){
 })`;
 
     return {
-      _hash: createHash("sha256").update(inflightCode).digest("hex"),
+      _hash: stableHash(inflightCode),
       _toInflight: () => inflightCode,
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {

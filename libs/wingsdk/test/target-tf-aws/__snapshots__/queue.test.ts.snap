@@ -232,7 +232,7 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_151160d5\\"], \\"root/Default/Queue-SetConsumer-47664\\")"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_3288b6d4\\"], \\"root/Default/Queue-SetConsumer-b1cca9\\")"`;
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -243,54 +243,54 @@ exports[`queue with a consumer function 2`] = `
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Queue-SetConsumer-47664_CloudwatchLogGroup_3DDF1B2C": {
-        "name": "/aws/lambda/Queue-SetConsumer-47664-c8610fb5",
+      "Queue-SetConsumer-b1cca9_CloudwatchLogGroup_1FF49E73": {
+        "name": "/aws/lambda/Queue-SetConsumer-b1cca9-c81ec425",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Queue-SetConsumer-47664_IamRole_6A06BCDA": {
+      "Queue-SetConsumer-b1cca9_IamRole_5CDCA806": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Queue-SetConsumer-47664_IamRolePolicy_5BD56A19": {
+      "Queue-SetConsumer-b1cca9_IamRolePolicy_1AD7E6FA": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.Queue-SetConsumer-47664_IamRole_6A06BCDA.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-b1cca9_IamRole_5CDCA806.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Queue-SetConsumer-47664_IamRolePolicyAttachment_03BAED77": {
+      "Queue-SetConsumer-b1cca9_IamRolePolicyAttachment_738BEC2A": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Queue-SetConsumer-47664_IamRole_6A06BCDA.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-b1cca9_IamRole_5CDCA806.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
       "Queue_EventSourceMapping_8332F7DC": {
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
-        "function_name": "\${aws_lambda_function.Queue-SetConsumer-47664.function_name}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer-b1cca9.function_name}",
       },
     },
     "aws_lambda_function": {
-      "Queue-SetConsumer-47664": {
+      "Queue-SetConsumer-b1cca9": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Queue-SetConsumer-47664-c8610fb5",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer-b1cca9-c81ec425",
           },
         },
-        "function_name": "Queue-SetConsumer-47664-c8610fb5",
+        "function_name": "Queue-SetConsumer-b1cca9-c81ec425",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Queue-SetConsumer-47664_IamRole_6A06BCDA.arn}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-b1cca9_IamRole_5CDCA806.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Queue-SetConsumer-47664_S3Object_3D0D01A3.key}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer-b1cca9_S3Object_3B5025CF.key}",
         "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
@@ -304,7 +304,7 @@ exports[`queue with a consumer function 2`] = `
       },
     },
     "aws_s3_object": {
-      "Queue-SetConsumer-47664_S3Object_3D0D01A3": {
+      "Queue-SetConsumer-b1cca9_S3Object_3B5025CF": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -367,7 +367,7 @@ exports[`queue with a consumer function 3`] = `
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "Queue-SetConsumer-47664": {
+              "Queue-SetConsumer-b1cca9": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -375,7 +375,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Asset",
-                    "path": "root/Default/Queue-SetConsumer-47664/Asset",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
@@ -383,7 +383,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "CloudwatchLogGroup",
-                    "path": "root/Default/Queue-SetConsumer-47664/CloudwatchLogGroup",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -391,7 +391,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Default",
-                    "path": "root/Default/Queue-SetConsumer-47664/Default",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
@@ -399,7 +399,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRole",
-                    "path": "root/Default/Queue-SetConsumer-47664/IamRole",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
@@ -407,7 +407,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/Default/Queue-SetConsumer-47664/IamRolePolicy",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
@@ -415,7 +415,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/Default/Queue-SetConsumer-47664/IamRolePolicyAttachment",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
@@ -423,7 +423,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "S3Object",
-                    "path": "root/Default/Queue-SetConsumer-47664/S3Object",
+                    "path": "root/Default/Queue-SetConsumer-b1cca9/S3Object",
                   },
                 },
                 "constructInfo": {
@@ -434,8 +434,8 @@ exports[`queue with a consumer function 3`] = `
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Queue-SetConsumer-47664",
-                "path": "root/Default/Queue-SetConsumer-47664",
+                "id": "Queue-SetConsumer-b1cca9",
+                "path": "root/Default/Queue-SetConsumer-b1cca9",
               },
               "aws": {
                 "constructInfo": {

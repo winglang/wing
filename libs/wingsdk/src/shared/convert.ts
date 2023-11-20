@@ -1,5 +1,4 @@
-import { createHash } from "crypto";
-import { normalPath } from "./misc";
+import { normalPath, stableHash } from "./misc";
 import { IInflight } from "../std";
 
 /**
@@ -24,7 +23,7 @@ new (require("${normalPath(
 
   const newHandler = {
     ...baseHandler,
-    _hash: createHash("sha256").update(newCode).digest("hex"),
+    _hash: stableHash(newCode),
     _toInflight() {
       return newCode;
     },
