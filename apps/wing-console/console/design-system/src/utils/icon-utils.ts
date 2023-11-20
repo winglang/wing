@@ -27,6 +27,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
+import { ReactIcon } from "../icons/react-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -53,9 +54,11 @@ export const getResourceIconComponent = (
     case "@winglang/sdk.cloud.Queue": {
       return solid ? SolidQueueListIcon : QueueListIcon;
     }
-    case "@winglang/sdk.cloud.Website":
-    case "@winglang/sdk.ex.ReactApp": {
+    case "@winglang/sdk.cloud.Website": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
+    }
+    case "@winglang/sdk.ex.ReactApp": {
+      return ReactIcon;
     }
     case "@winglang/sdk.cloud.Counter": {
       return solid ? SolidCalculatorIcon : CalculatorIcon;
