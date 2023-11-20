@@ -32,7 +32,7 @@ const {
 
 import { core, std, ex } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
-import { ITokenResolver } from "@winglang/sdk/lib/core/tokens";
+import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
 
 /**
  * AWS-CDK App props
@@ -51,7 +51,6 @@ export interface CdkAppProps extends core.AppProps {
 export class App extends core.App {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
-  public readonly _tokens: ITokenResolver;
 
   public readonly _target = "awscdk";
 
@@ -113,7 +112,7 @@ export class App extends core.App {
     this.cdkStack = cdkStack;
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-    this._tokens = new CdkTokens();// TODO
+    registerTokenResolver(new CdkTokens());
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
     this.synthRoots(props, this.testRunner);

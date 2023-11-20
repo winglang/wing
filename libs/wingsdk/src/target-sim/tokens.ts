@@ -1,4 +1,4 @@
-import { ITokenResolver, Tokens } from "../core/tokens";
+import { ITokenResolver, tokenEnvName } from "../core/tokens";
 import { IInflightHost, IResource } from "../std";
 
 /**
@@ -65,7 +65,7 @@ export class SimTokens implements ITokenResolver {
   public lift(value: any): string {
     switch (typeof value) {
       case "string":
-        return `process.env[${JSON.stringify(Tokens.envName(value))}]`;
+        return `process.env[${JSON.stringify(tokenEnvName(value))}]`;
       default:
         throw new Error(`Unsupported token type`);
     }
@@ -77,7 +77,7 @@ export class SimTokens implements ITokenResolver {
   public onLiftValue(host: IInflightHost, value: any) {
     switch (typeof value) {
       case "string":
-        const envName = Tokens.envName(value);
+        const envName = tokenEnvName(value);
         host.addEnvironment(envName, value);
         break;
       default:

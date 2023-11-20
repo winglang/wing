@@ -18,7 +18,7 @@ import {
   SynthHooks,
   preSynthesizeAllConstructs,
 } from "../core";
-import { ITokenResolver, Tokens } from "../core/tokens";
+import { registerTokenResolver } from "../core/tokens";
 import { synthesizeTree } from "../core/tree";
 
 const TERRAFORM_STACK_NAME = "root";
@@ -34,7 +34,6 @@ export abstract class CdktfApp extends App {
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
-  public readonly _tokens: ITokenResolver;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
@@ -63,8 +62,7 @@ export abstract class CdktfApp extends App {
 
     this.outdir = outdir;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-    this._tokens = new CdkTfTokens();
-    Tokens.addResolver(this._tokens);
+    registerTokenResolver(new CdkTfTokens());
     this.synthHooks = props.synthHooks;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that

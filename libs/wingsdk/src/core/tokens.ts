@@ -1,5 +1,8 @@
 import { IInflightHost } from "../std";
-
+/**
+ * Represents values that can only be resolved after the app is synthesized.
+ * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
+ */
 export interface ITokenResolver {
   /**
    * Returns true is the given value is a token.
@@ -18,36 +21,31 @@ export interface ITokenResolver {
 }
 
 /**
- * Represents values that can only be resolved after the app is synthesized.
- * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
+ * Global registry of available token resolvers.
  */
-export abstract class Tokens {
-  /**
-   * TODO Docs
-   * @param resolver -
-   */
-  public static addResolver(resolver: ITokenResolver) {
-    this._resolvers.push(resolver);
-  }
+const _resolvers: ITokenResolver[] = [];
 
-  /**
-   * TODO Docs
-   * @param value -
-   */
-  public static getTokenResolver(value: any): ITokenResolver | undefined {
-    return this._resolvers.find((r) => r.isToken(value));
-  }
+/**
+ * Creates a valid environment variable name from the given token.
+ */
+export function tokenEnvName(value: string): string {
+  return `WING_TOKEN_${value
+    .replace(/([^a-zA-Z0-9]+)/g, "_")
+    .replace(/_+$/, "")
+    .replace(/^_+/, "")
+    .toUpperCase()}`;
+}
 
-  /**
-   * Creates a valid environment variable name from the given token.
-   */
-  public static envName(value: string): string {
-    return `WING_TOKEN_${value
-      .replace(/([^a-zA-Z0-9]+)/g, "_")
-      .replace(/_+$/, "")
-      .replace(/^_+/, "")
-      .toUpperCase()}`;
-  }
+/**
+ * Globally registers a new token resolver
+ */
+export function registerTokenResolver(resolver: ITokenResolver) {
+  _resolvers.push(resolver);
+}
 
-  private static _resolvers: ITokenResolver[] = [];
+/**
+ * Find the first token resolver that considers the given value a token (or containing token(s)).
+ */
+export function getTokenResolver(value: any): ITokenResolver | undefined {
+  return _resolvers.find((r) => r.isToken(value));
 }

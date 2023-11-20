@@ -3,6 +3,7 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
 import { liftObject } from "../core/internal";
+import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
 import { Node } from "../std";
 
@@ -124,8 +125,8 @@ export abstract class Resource extends Construct implements IResource {
     host: IInflightHost,
     ops: string[] = []
   ): void {
-    const tokens = App.of(host)._tokens;
-    if (tokens.isToken(obj)) {
+    const tokens = getTokenResolver(obj);
+    if (tokens) {
       return tokens.onLiftValue(host, obj);
     }
 

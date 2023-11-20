@@ -1,4 +1,4 @@
-import { Tokens } from "./tokens";
+import { getTokenResolver } from "./tokens";
 import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
@@ -8,7 +8,7 @@ export function liftObject(obj: any): string {
     return JSON.stringify(obj);
   }
 
-  const tokenResolver = Tokens.getTokenResolver(obj);
+  const tokenResolver = getTokenResolver(obj);
   if (tokenResolver) {
     return tokenResolver.lift(obj);
   }
