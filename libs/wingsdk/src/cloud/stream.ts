@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Json, Node, IInflightHost, Resource, Duration, Struct, MutJson, JsonSchema } from "../std";
+import { Json, Node, IInflightHost, Resource, Duration, Struct, MutJson, JsonSchema, IResource } from "../std";
+import { FunctionProps } from "./function";
 
 /**
  * Global identifier for `Stream`
@@ -75,20 +76,39 @@ export abstract class Stream extends Resource {
    * Create a function to consume messages from this stream
    */
   public abstract setConsumer(
-    handler: IStreamSetConsumerHandler,
-    props?: StreamSetConusmerOptions
+    handler: IStreamConsumerHandler,
+    props?: StreamConsumerOptions
   ): Function;
 }
 
 /**
+ * A resource with an inflight "handle" method that can be passed to
+ * the bucket events.
+ *
+ * @inflight  `@winglang/sdk.cloud.IStreamConsumerHandler`
+ */
+export interface IStreamConsumerHandler extends IResource {}
+
+/**
  * Options for Stream.setConsumer
  */
-export interface StreamSetConsumerOptions extends FunctionProps {
+export interface StreamConsumerOptions extends FunctionProps {
   /**
+   * Implicitely instantiates record batching in the streaming service,
+   * then defines batch size.
    * 
    * @default - 10
    */
   readonly batchSize?: number;
+}
+
+export interface IStreamConsumer {
+  /**
+   * Function that will be called when there are records to consume
+   * 
+   * @inflight
+   */
+  consume(records: StreamData[]): Promise<void>;
 }
 
 export abstract class StreamData extends JsonSchema {
@@ -96,6 +116,11 @@ export abstract class StreamData extends JsonSchema {
    * Some StreamData standards; currently derived from AWS Kinesis data output,
    * Will be genericized later.
    */
+  readonly metadata: Json
+
+  readonly data: JsonSchema
+
+  constructor()
 }
 
 /**
