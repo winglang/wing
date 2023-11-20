@@ -215,6 +215,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const w = require("./preflight.widget-1.js")({ $stdlib });
 const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
+const hasNoWingFiles = require("./preflight.subdir3-6.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -247,6 +248,17 @@ module.exports = function({ $stdlib }) {
   };
 };
 //# sourceMappingURL=preflight.subdir2-5.js.map
+```
+
+## preflight.subdir3-6.js
+```js
+"use strict";
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {
+  };
+};
+//# sourceMappingURL=preflight.subdir3-6.js.map
 ```
 
 ## preflight.widget-1.js

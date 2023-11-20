@@ -2,6 +2,7 @@ use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 use phf::{phf_map, phf_set};
+use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::{fs, str, vec};
@@ -260,6 +261,42 @@ fn parse_wing_file(
 	dependent_wing_paths
 }
 
+fn dir_contains_wing_file(dir_path: &Utf8Path) -> bool {
+	for entry in fs::read_dir(dir_path).unwrap() {
+		let entry = entry.unwrap().path();
+		let path = Utf8Path::from_path(&entry).unwrap();
+
+		if path.is_dir() {
+			if dir_contains_wing_file(&path) {
+				return true;
+			}
+		} else if path.extension() == Some("w") {
+			return true;
+		}
+	}
+	false
+}
+
+fn contains_non_symbolic(str: &str) -> bool {
+	// uses the same regex pattern from grammar.js for valid identifiers
+	let re = Regex::new(r"^([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)$").unwrap();
+	!re.is_match(str)
+}
+
+fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
+	if contains_non_symbolic(dir_path.file_name().unwrap()) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot bring Wing directories that contain invalid characters: \"{}\"",
+				dir_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		});
+	}
+}
+
 fn parse_wing_directory(
 	source_path: &Utf8Path,
 	files: &mut Files,
@@ -281,8 +318,13 @@ fn parse_wing_directory(
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
+			&& dir_contains_wing_file(&path)
 			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
+			// before we add the path, we need to check that directory names are valid
+			if path.is_dir() {
+				check_valid_wing_dir_name(&path);
+			}
 			files_and_dirs.push(path);
 		}
 	}
@@ -2646,5 +2688,16 @@ mod tests {
 		let file_path = Utf8Path::new("../foo.w");
 		let relative_to = Utf8Path::new("subdir/bar.w");
 		assert_eq!(normalize_path(file_path, Some(relative_to)), Utf8Path::new("foo.w"));
+	}
+
+	#[test]
+	fn test_contains_non_symbolic() {
+		assert_eq!(true, contains_non_symbolic("wow%zer"));
+		assert_eq!(true, contains_non_symbolic("w.owzer"));
+		assert_eq!(true, contains_non_symbolic("#wowzer"));
+		assert_eq!(true, contains_non_symbolic("wow-zer"));
+		assert_eq!(false, contains_non_symbolic("$wowzer"));
+		assert_eq!(false, contains_non_symbolic("_wowzer"));
+		assert_eq!(false, contains_non_symbolic("wowzer"));
 	}
 }

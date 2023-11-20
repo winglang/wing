@@ -1,5 +1,6 @@
 bring "./subdir2/inner/widget.w" as w;
 bring "./subdir2" as subdir;
+bring "./subdir-3" as hasNoWingFiles;
 
 let widget1 = new w.Widget();
 assert(widget1.compute() == 42);
