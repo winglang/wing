@@ -46,8 +46,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflightId(inflight);
-
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs
      * to be wrapped in some extra logic to handle batching.
@@ -75,6 +73,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
     );
+    const hash = inflightId(functionHandler);
 
     const fn = new Function(
       this,

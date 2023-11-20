@@ -67,7 +67,7 @@ export class Bucket extends cloud.Bucket {
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-${functionHandler._id}`,
+      `${this.node.id}-${event}-${functionHandler._hash}`,
       functionHandler,
       opts
     );

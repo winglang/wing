@@ -2,7 +2,7 @@
 
 exports[`api allows duplicates routes with different methods 1`] = `
 {
-  ".wing/onrequesthandler-5_c8573ac0.js": "\\"use strict\\";
+  ".wing/onrequesthandler-2055a_c8249168.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -22,12 +22,12 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-5",
+        "target": "root/my_api/OnRequestHandler-2055a",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-5",
+        "target": "root/my_api/OnRequestHandler-2055a",
       },
     ],
     "version": "connections-0.1",
@@ -44,10 +44,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-5",
+        "path": "root/my_api/OnRequestHandler-2055a",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-5_c8573ac0.js",
+          "sourceCodeFile": ".wing/onrequesthandler-2055a_c8249168.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -89,10 +89,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-5",
+        "path": "root/my_api/ApiEventMapping-2055a",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-5#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2055a#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -207,7 +207,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-5": {
+            "ApiEventMapping-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -215,10 +215,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-5",
-              "path": "root/my_api/ApiEventMapping-5",
+              "id": "ApiEventMapping-2055a",
+              "path": "root/my_api/ApiEventMapping-2055a",
             },
-            "OnRequestHandler-5": {
+            "OnRequestHandler-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -228,8 +228,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-5",
-              "path": "root/my_api/OnRequestHandler-5",
+              "id": "OnRequestHandler-2055a",
+              "path": "root/my_api/OnRequestHandler-2055a",
             },
           },
           "constructInfo": {
@@ -276,7 +276,7 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/onrequesthandler-17_c88775d1.js": "\\"use strict\\";
+  ".wing/onrequesthandler-1bfa0_c84c3de3.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -296,7 +296,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-17",
+        "target": "root/my_api/OnRequestHandler-1bfa0",
       },
     ],
     "version": "connections-0.1",
@@ -313,10 +313,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-17",
+        "path": "root/my_api/OnRequestHandler-1bfa0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-17_c88775d1.js",
+          "sourceCodeFile": ".wing/onrequesthandler-1bfa0_c84c3de3.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -348,10 +348,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-17",
+        "path": "root/my_api/ApiEventMapping-1bfa0",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-17#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-1bfa0#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -462,7 +462,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-17": {
+            "ApiEventMapping-1bfa0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -470,10 +470,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-17",
-              "path": "root/my_api/ApiEventMapping-17",
+              "id": "ApiEventMapping-1bfa0",
+              "path": "root/my_api/ApiEventMapping-1bfa0",
             },
-            "OnRequestHandler-17": {
+            "OnRequestHandler-1bfa0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -483,8 +483,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-17",
-              "path": "root/my_api/OnRequestHandler-17",
+              "id": "OnRequestHandler-1bfa0",
+              "path": "root/my_api/OnRequestHandler-1bfa0",
             },
           },
           "constructInfo": {
@@ -531,7 +531,7 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/onrequesthandler-16_c8c927a5.js": "\\"use strict\\";
+  ".wing/onrequesthandler-798f6_c8302f78.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -551,7 +551,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-16",
+        "target": "root/my_api/OnRequestHandler-798f6",
       },
     ],
     "version": "connections-0.1",
@@ -568,10 +568,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-16",
+        "path": "root/my_api/OnRequestHandler-798f6",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-16_c8c927a5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-798f6_c8302f78.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -603,10 +603,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-16",
+        "path": "root/my_api/ApiEventMapping-798f6",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-16#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-798f6#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -717,7 +717,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-16": {
+            "ApiEventMapping-798f6": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -725,10 +725,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-16",
-              "path": "root/my_api/ApiEventMapping-16",
+              "id": "ApiEventMapping-798f6",
+              "path": "root/my_api/ApiEventMapping-798f6",
             },
-            "OnRequestHandler-16": {
+            "OnRequestHandler-798f6": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -738,8 +738,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-16",
-              "path": "root/my_api/OnRequestHandler-16",
+              "id": "OnRequestHandler-798f6",
+              "path": "root/my_api/OnRequestHandler-798f6",
             },
           },
           "constructInfo": {
@@ -786,7 +786,7 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/onrequesthandler-18_c83c7850.js": "\\"use strict\\";
+  ".wing/onrequesthandler-f5865_c86ffacd.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -806,7 +806,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-18",
+        "target": "root/my_api/OnRequestHandler-f5865",
       },
     ],
     "version": "connections-0.1",
@@ -823,10 +823,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-18",
+        "path": "root/my_api/OnRequestHandler-f5865",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-18_c83c7850.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f5865_c86ffacd.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -858,10 +858,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-18",
+        "path": "root/my_api/ApiEventMapping-f5865",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-18#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f5865#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -972,7 +972,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-18": {
+            "ApiEventMapping-f5865": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -980,10 +980,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-18",
-              "path": "root/my_api/ApiEventMapping-18",
+              "id": "ApiEventMapping-f5865",
+              "path": "root/my_api/ApiEventMapping-f5865",
             },
-            "OnRequestHandler-18": {
+            "OnRequestHandler-f5865": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -993,8 +993,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-18",
-              "path": "root/my_api/OnRequestHandler-18",
+              "id": "OnRequestHandler-f5865",
+              "path": "root/my_api/OnRequestHandler-f5865",
             },
           },
           "constructInfo": {
@@ -1041,7 +1041,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
-  ".wing/onrequesthandler-20_c8dc8ccb.js": "\\"use strict\\";
+  ".wing/onrequesthandler-38bee_c812aef6.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -1061,7 +1061,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-20",
+        "target": "root/my_api/OnRequestHandler-38bee",
       },
     ],
     "version": "connections-0.1",
@@ -1078,10 +1078,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-20",
+        "path": "root/my_api/OnRequestHandler-38bee",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-20_c8dc8ccb.js",
+          "sourceCodeFile": ".wing/onrequesthandler-38bee_c812aef6.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1113,10 +1113,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-20",
+        "path": "root/my_api/ApiEventMapping-38bee",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-20#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-38bee#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1227,7 +1227,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-20": {
+            "ApiEventMapping-38bee": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1235,10 +1235,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-20",
-              "path": "root/my_api/ApiEventMapping-20",
+              "id": "ApiEventMapping-38bee",
+              "path": "root/my_api/ApiEventMapping-38bee",
             },
-            "OnRequestHandler-20": {
+            "OnRequestHandler-38bee": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1248,8 +1248,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-20",
-              "path": "root/my_api/OnRequestHandler-20",
+              "id": "OnRequestHandler-38bee",
+              "path": "root/my_api/OnRequestHandler-38bee",
             },
           },
           "constructInfo": {
@@ -1296,7 +1296,7 @@ exports[`api response returns default Content-Type header 1`] = `
 
 exports[`api response returns default Content-Type header 2`] = `
 {
-  ".wing/onrequesthandler-21_c879ca96.js": "\\"use strict\\";
+  ".wing/onrequesthandler-2055a_c8249168.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -1316,7 +1316,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-21",
+        "target": "root/my_api/OnRequestHandler-2055a",
       },
     ],
     "version": "connections-0.1",
@@ -1333,10 +1333,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-21",
+        "path": "root/my_api/OnRequestHandler-2055a",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-21_c879ca96.js",
+          "sourceCodeFile": ".wing/onrequesthandler-2055a_c8249168.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1368,10 +1368,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-21",
+        "path": "root/my_api/ApiEventMapping-2055a",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-21#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2055a#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1482,7 +1482,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-21": {
+            "ApiEventMapping-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1490,10 +1490,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-21",
-              "path": "root/my_api/ApiEventMapping-21",
+              "id": "ApiEventMapping-2055a",
+              "path": "root/my_api/ApiEventMapping-2055a",
             },
-            "OnRequestHandler-21": {
+            "OnRequestHandler-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1503,8 +1503,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-21",
-              "path": "root/my_api/OnRequestHandler-21",
+              "id": "OnRequestHandler-2055a",
+              "path": "root/my_api/OnRequestHandler-2055a",
             },
           },
           "constructInfo": {
@@ -1569,7 +1569,7 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/onrequesthandler-10_c8eb1e97.js": "\\"use strict\\";
+  ".wing/onrequesthandler-28880_c883ee39.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -1589,37 +1589,37 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "put()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "delete()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "head()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "options()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
       {
         "name": "patch()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-10",
+        "target": "root/my_api/OnRequestHandler-28880",
       },
     ],
     "version": "connections-0.1",
@@ -1636,10 +1636,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-10",
+        "path": "root/my_api/OnRequestHandler-28880",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-10_c8eb1e97.js",
+          "sourceCodeFile": ".wing/onrequesthandler-28880_c883ee39.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1731,10 +1731,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-10",
+        "path": "root/my_api/ApiEventMapping-28880",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-10#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-28880#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -1869,7 +1869,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-10": {
+            "ApiEventMapping-28880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1877,10 +1877,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-10",
-              "path": "root/my_api/ApiEventMapping-10",
+              "id": "ApiEventMapping-28880",
+              "path": "root/my_api/ApiEventMapping-28880",
             },
-            "OnRequestHandler-10": {
+            "OnRequestHandler-28880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1890,8 +1890,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-10",
-              "path": "root/my_api/OnRequestHandler-10",
+              "id": "OnRequestHandler-28880",
+              "path": "root/my_api/OnRequestHandler-28880",
             },
           },
           "constructInfo": {
@@ -1938,7 +1938,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
-  ".wing/onrequesthandler-3_c8f8a8b3.js": "\\"use strict\\";
+  ".wing/onrequesthandler-3f880_c881c7a4.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -1958,7 +1958,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-3",
+        "target": "root/my_api/OnRequestHandler-3f880",
       },
     ],
     "version": "connections-0.1",
@@ -1975,10 +1975,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-3",
+        "path": "root/my_api/OnRequestHandler-3f880",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-3_c8f8a8b3.js",
+          "sourceCodeFile": ".wing/onrequesthandler-3f880_c881c7a4.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2027,10 +2027,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-3",
+        "path": "root/my_api/ApiEventMapping-3f880",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-3#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-3f880#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2141,7 +2141,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-3": {
+            "ApiEventMapping-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2149,10 +2149,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-3",
-              "path": "root/my_api/ApiEventMapping-3",
+              "id": "ApiEventMapping-3f880",
+              "path": "root/my_api/ApiEventMapping-3f880",
             },
-            "OnRequestHandler-3": {
+            "OnRequestHandler-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2162,8 +2162,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /{name}/{age}",
               },
-              "id": "OnRequestHandler-3",
-              "path": "root/my_api/OnRequestHandler-3",
+              "id": "OnRequestHandler-3f880",
+              "path": "root/my_api/OnRequestHandler-3f880",
             },
           },
           "constructInfo": {
@@ -2210,7 +2210,7 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with 'name' parameter 2`] = `
 {
-  ".wing/onrequesthandler-2_c82e7c24.js": "\\"use strict\\";
+  ".wing/onrequesthandler-3f880_c881c7a4.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -2230,7 +2230,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-2",
+        "target": "root/my_api/OnRequestHandler-3f880",
       },
     ],
     "version": "connections-0.1",
@@ -2247,10 +2247,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-2",
+        "path": "root/my_api/OnRequestHandler-3f880",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-2_c82e7c24.js",
+          "sourceCodeFile": ".wing/onrequesthandler-3f880_c881c7a4.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2291,10 +2291,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-2",
+        "path": "root/my_api/ApiEventMapping-3f880",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-3f880#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2405,7 +2405,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-2": {
+            "ApiEventMapping-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2413,10 +2413,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-2",
-              "path": "root/my_api/ApiEventMapping-2",
+              "id": "ApiEventMapping-3f880",
+              "path": "root/my_api/ApiEventMapping-3f880",
             },
-            "OnRequestHandler-2": {
+            "OnRequestHandler-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2426,8 +2426,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /{name}",
               },
-              "id": "OnRequestHandler-2",
-              "path": "root/my_api/OnRequestHandler-2",
+              "id": "OnRequestHandler-3f880",
+              "path": "root/my_api/OnRequestHandler-3f880",
             },
           },
           "constructInfo": {
@@ -2456,7 +2456,7 @@ exports.handler = async function(event) {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/onrequesthandler-9_c8a3c32b.js": "\\"use strict\\";
+  ".wing/onrequesthandler-2055a_c8249168.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -2476,7 +2476,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-9",
+        "target": "root/my_api/OnRequestHandler-2055a",
       },
     ],
     "version": "connections-0.1",
@@ -2493,10 +2493,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-9",
+        "path": "root/my_api/OnRequestHandler-2055a",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-9_c8a3c32b.js",
+          "sourceCodeFile": ".wing/onrequesthandler-2055a_c8249168.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2540,10 +2540,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-9",
+        "path": "root/my_api/ApiEventMapping-2055a",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-9#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2055a#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2658,7 +2658,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-9": {
+            "ApiEventMapping-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2666,10 +2666,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-9",
-              "path": "root/my_api/ApiEventMapping-9",
+              "id": "ApiEventMapping-2055a",
+              "path": "root/my_api/ApiEventMapping-2055a",
             },
-            "OnRequestHandler-9": {
+            "OnRequestHandler-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2679,8 +2679,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
-              "id": "OnRequestHandler-9",
-              "path": "root/my_api/OnRequestHandler-9",
+              "id": "OnRequestHandler-2055a",
+              "path": "root/my_api/OnRequestHandler-2055a",
             },
           },
           "constructInfo": {
@@ -2734,22 +2734,7 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/onrequesthandler-11_c829255a.js": "\\"use strict\\";
-exports.handler = async function(event) {
-  return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
-    }
-    async handle(req) { return { status: 200, body: \\"boom\\" }; }
-  };
-})())({
-  
-})).handle(event);
-};",
-  ".wing/onrequesthandler-12_c8afdee7.js": "\\"use strict\\";
+  ".wing/onrequesthandler-526da_c87ac5a8.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -2764,17 +2749,32 @@ exports.handler = async function(event) {
   
 })).handle(event);
 };",
+  ".wing/onrequesthandler-f2a6d_c80f2f78.js": "\\"use strict\\";
+exports.handler = async function(event) {
+  return await (new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"boom\\" }; }
+  };
+})())({
+  
+})).handle(event);
+};",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-11",
+        "target": "root/my_api/OnRequestHandler-f2a6d",
       },
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-12",
+        "target": "root/my_api/OnRequestHandler-526da",
       },
     ],
     "version": "connections-0.1",
@@ -2791,10 +2791,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-11",
+        "path": "root/my_api/OnRequestHandler-f2a6d",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-11_c829255a.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f2a6d_c80f2f78.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2836,10 +2836,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-11",
+        "path": "root/my_api/ApiEventMapping-f2a6d",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-11#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f2a6d#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2853,10 +2853,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-12",
+        "path": "root/my_api/OnRequestHandler-526da",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-12_c8afdee7.js",
+          "sourceCodeFile": ".wing/onrequesthandler-526da_c87ac5a8.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2864,10 +2864,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-12",
+        "path": "root/my_api/ApiEventMapping-526da",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-12#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-526da#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -2978,7 +2978,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-11": {
+            "ApiEventMapping-526da": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2986,10 +2986,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-11",
-              "path": "root/my_api/ApiEventMapping-11",
+              "id": "ApiEventMapping-526da",
+              "path": "root/my_api/ApiEventMapping-526da",
             },
-            "ApiEventMapping-12": {
+            "ApiEventMapping-f2a6d": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -2997,23 +2997,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-12",
-              "path": "root/my_api/ApiEventMapping-12",
+              "id": "ApiEventMapping-f2a6d",
+              "path": "root/my_api/ApiEventMapping-f2a6d",
             },
-            "OnRequestHandler-11": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "GET /hello",
-              },
-              "id": "OnRequestHandler-11",
-              "path": "root/my_api/OnRequestHandler-11",
-            },
-            "OnRequestHandler-12": {
+            "OnRequestHandler-526da": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3023,8 +3010,21 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
-              "id": "OnRequestHandler-12",
-              "path": "root/my_api/OnRequestHandler-12",
+              "id": "OnRequestHandler-526da",
+              "path": "root/my_api/OnRequestHandler-526da",
+            },
+            "OnRequestHandler-f2a6d": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "GET /hello",
+              },
+              "id": "OnRequestHandler-f2a6d",
+              "path": "root/my_api/OnRequestHandler-f2a6d",
             },
           },
           "constructInfo": {
@@ -3078,22 +3078,7 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/onrequesthandler-13_c8dcfe04.js": "\\"use strict\\";
-exports.handler = async function(event) {
-  return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
-    }
-    async handle(req) { return { status: 200, body: \\"boom\\" }; }
-  };
-})())({
-  
-})).handle(event);
-};",
-  ".wing/onrequesthandler-14_c8bb26d3.js": "\\"use strict\\";
+  ".wing/onrequesthandler-526da_c87ac5a8.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -3108,17 +3093,32 @@ exports.handler = async function(event) {
   
 })).handle(event);
 };",
+  ".wing/onrequesthandler-f2a6d_c80f2f78.js": "\\"use strict\\";
+exports.handler = async function(event) {
+  return await (new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(req) { return { status: 200, body: \\"boom\\" }; }
+  };
+})())({
+  
+})).handle(event);
+};",
   "connections.json": {
     "connections": [
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-13",
+        "target": "root/my_api/OnRequestHandler-f2a6d",
       },
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-14",
+        "target": "root/my_api/OnRequestHandler-526da",
       },
     ],
     "version": "connections-0.1",
@@ -3135,10 +3135,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-13",
+        "path": "root/my_api/OnRequestHandler-f2a6d",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-13_c8dcfe04.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f2a6d_c80f2f78.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3182,10 +3182,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-13",
+        "path": "root/my_api/ApiEventMapping-f2a6d",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-13#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f2a6d#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3199,10 +3199,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-14",
+        "path": "root/my_api/OnRequestHandler-526da",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-14_c8bb26d3.js",
+          "sourceCodeFile": ".wing/onrequesthandler-526da_c87ac5a8.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3210,10 +3210,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-14",
+        "path": "root/my_api/ApiEventMapping-526da",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-14#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-526da#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3324,7 +3324,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-13": {
+            "ApiEventMapping-526da": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3332,10 +3332,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-13",
-              "path": "root/my_api/ApiEventMapping-13",
+              "id": "ApiEventMapping-526da",
+              "path": "root/my_api/ApiEventMapping-526da",
             },
-            "ApiEventMapping-14": {
+            "ApiEventMapping-f2a6d": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3343,23 +3343,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-14",
-              "path": "root/my_api/ApiEventMapping-14",
+              "id": "ApiEventMapping-f2a6d",
+              "path": "root/my_api/ApiEventMapping-f2a6d",
             },
-            "OnRequestHandler-13": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
-                "title": "GET /hello/world",
-              },
-              "id": "OnRequestHandler-13",
-              "path": "root/my_api/OnRequestHandler-13",
-            },
-            "OnRequestHandler-14": {
+            "OnRequestHandler-526da": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3369,8 +3356,21 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
-              "id": "OnRequestHandler-14",
-              "path": "root/my_api/OnRequestHandler-14",
+              "id": "OnRequestHandler-526da",
+              "path": "root/my_api/OnRequestHandler-526da",
+            },
+            "OnRequestHandler-f2a6d": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "GET /hello/world",
+              },
+              "id": "OnRequestHandler-f2a6d",
+              "path": "root/my_api/OnRequestHandler-f2a6d",
             },
           },
           "constructInfo": {
@@ -3417,7 +3417,7 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/onrequesthandler-0_c83ff6f5.js": "\\"use strict\\";
+  ".wing/onrequesthandler-f2a6d_c80f2f78.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -3437,7 +3437,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-0",
+        "target": "root/my_api/OnRequestHandler-f2a6d",
       },
     ],
     "version": "connections-0.1",
@@ -3454,10 +3454,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-0",
+        "path": "root/my_api/OnRequestHandler-f2a6d",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-0_c83ff6f5.js",
+          "sourceCodeFile": ".wing/onrequesthandler-f2a6d_c80f2f78.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3489,10 +3489,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-0",
+        "path": "root/my_api/ApiEventMapping-f2a6d",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-0#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-f2a6d#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3603,7 +3603,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-0": {
+            "ApiEventMapping-f2a6d": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3611,10 +3611,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-0",
-              "path": "root/my_api/ApiEventMapping-0",
+              "id": "ApiEventMapping-f2a6d",
+              "path": "root/my_api/ApiEventMapping-f2a6d",
             },
-            "OnRequestHandler-0": {
+            "OnRequestHandler-f2a6d": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3624,8 +3624,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
-              "id": "OnRequestHandler-0",
-              "path": "root/my_api/OnRequestHandler-0",
+              "id": "OnRequestHandler-f2a6d",
+              "path": "root/my_api/OnRequestHandler-f2a6d",
             },
           },
           "constructInfo": {
@@ -3672,7 +3672,7 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/onrequesthandler-1_c8825f4b.js": "\\"use strict\\";
+  ".wing/onrequesthandler-3f880_c881c7a4.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -3692,7 +3692,7 @@ exports.handler = async function(event) {
       {
         "name": "get()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-1",
+        "target": "root/my_api/OnRequestHandler-3f880",
       },
     ],
     "version": "connections-0.1",
@@ -3709,10 +3709,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-1",
+        "path": "root/my_api/OnRequestHandler-3f880",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-1_c8825f4b.js",
+          "sourceCodeFile": ".wing/onrequesthandler-3f880_c881c7a4.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3753,10 +3753,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-1",
+        "path": "root/my_api/ApiEventMapping-3f880",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-1#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-3f880#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -3867,7 +3867,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-1": {
+            "ApiEventMapping-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3875,10 +3875,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-1",
-              "path": "root/my_api/ApiEventMapping-1",
+              "id": "ApiEventMapping-3f880",
+              "path": "root/my_api/ApiEventMapping-3f880",
             },
-            "OnRequestHandler-1": {
+            "OnRequestHandler-3f880": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -3888,8 +3888,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/{name}",
               },
-              "id": "OnRequestHandler-1",
-              "path": "root/my_api/OnRequestHandler-1",
+              "id": "OnRequestHandler-3f880",
+              "path": "root/my_api/OnRequestHandler-3f880",
             },
           },
           "constructInfo": {
@@ -3936,7 +3936,7 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/onrequesthandler-15_c86010ac.js": "\\"use strict\\";
+  ".wing/onrequesthandler-2055a_c8249168.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
   return class Handler {
@@ -3956,7 +3956,7 @@ exports.handler = async function(event) {
       {
         "name": "post()",
         "source": "root/my_api",
-        "target": "root/my_api/OnRequestHandler-15",
+        "target": "root/my_api/OnRequestHandler-2055a",
       },
     ],
     "version": "connections-0.1",
@@ -3973,10 +3973,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/OnRequestHandler-15",
+        "path": "root/my_api/OnRequestHandler-2055a",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler-15_c86010ac.js",
+          "sourceCodeFile": ".wing/onrequesthandler-2055a_c8249168.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -4008,10 +4008,10 @@ exports.handler = async function(event) {
       },
       {
         "attrs": {},
-        "path": "root/my_api/ApiEventMapping-15",
+        "path": "root/my_api/ApiEventMapping-2055a",
         "props": {
           "publisher": "\${wsim#root/my_api#attrs.handle}",
-          "subscriber": "\${wsim#root/my_api/OnRequestHandler-15#attrs.handle}",
+          "subscriber": "\${wsim#root/my_api/OnRequestHandler-2055a#attrs.handle}",
           "subscriptionProps": {
             "routes": [
               {
@@ -4122,7 +4122,7 @@ exports.handler = async function(event) {
         },
         "my_api": {
           "children": {
-            "ApiEventMapping-15": {
+            "ApiEventMapping-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4130,10 +4130,10 @@ exports.handler = async function(event) {
               "display": {
                 "hidden": true,
               },
-              "id": "ApiEventMapping-15",
-              "path": "root/my_api/ApiEventMapping-15",
+              "id": "ApiEventMapping-2055a",
+              "path": "root/my_api/ApiEventMapping-2055a",
             },
-            "OnRequestHandler-15": {
+            "OnRequestHandler-2055a": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -4143,8 +4143,8 @@ exports.handler = async function(event) {
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
-              "id": "OnRequestHandler-15",
-              "path": "root/my_api/OnRequestHandler-15",
+              "id": "OnRequestHandler-2055a",
+              "path": "root/my_api/OnRequestHandler-2055a",
             },
           },
           "constructInfo": {

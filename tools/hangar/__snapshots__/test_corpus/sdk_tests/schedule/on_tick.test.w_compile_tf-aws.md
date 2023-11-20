@@ -53,46 +53,46 @@
       }
     },
     "aws_cloudwatch_event_target": {
-      "from_cron_ScheduleTarget-Closure1_EC4C6D85": {
+      "from_cron_ScheduleTarget-58c29_E31CC69F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron/ScheduleTarget-$Closure1",
-            "uniqueId": "from_cron_ScheduleTarget-Closure1_EC4C6D85"
+            "path": "root/Default/Default/from_cron/ScheduleTarget-58c29",
+            "uniqueId": "from_cron_ScheduleTarget-58c29_E31CC69F"
           }
         },
-        "arn": "${aws_lambda_function.from_cron-OnTick-Closure1.qualified_arn}",
+        "arn": "${aws_lambda_function.from_cron_from_cron-OnTick-58c29_7AF082F3.qualified_arn}",
         "rule": "${aws_cloudwatch_event_rule.from_cron_Schedule_6C1613E8.name}"
       },
-      "from_rate_ScheduleTarget-Closure2_7787BA0A": {
+      "from_rate_ScheduleTarget-06193_F9242B4B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate/ScheduleTarget-$Closure2",
-            "uniqueId": "from_rate_ScheduleTarget-Closure2_7787BA0A"
+            "path": "root/Default/Default/from_rate/ScheduleTarget-06193",
+            "uniqueId": "from_rate_ScheduleTarget-06193_F9242B4B"
           }
         },
-        "arn": "${aws_lambda_function.from_rate-OnTick-Closure2.qualified_arn}",
+        "arn": "${aws_lambda_function.from_rate_from_rate-OnTick-06193_78E43F6C.qualified_arn}",
         "rule": "${aws_cloudwatch_event_rule.from_rate_Schedule_5B82E706.name}"
       }
     },
     "aws_cloudwatch_log_group": {
-      "from_cron-OnTick-Closure1_CloudwatchLogGroup_F401EC50": {
+      "from_cron_from_cron-OnTick-58c29_CloudwatchLogGroup_E891A794": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/CloudwatchLogGroup",
-            "uniqueId": "from_cron-OnTick-Closure1_CloudwatchLogGroup_F401EC50"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/CloudwatchLogGroup",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_CloudwatchLogGroup_E891A794"
           }
         },
-        "name": "/aws/lambda/from_cron-OnTick--Closure1-c8f6fa49",
+        "name": "/aws/lambda/from_cron-OnTick-58c29-c89c73e7",
         "retention_in_days": 30
       },
-      "from_rate-OnTick-Closure2_CloudwatchLogGroup_6D9D90D0": {
+      "from_rate_from_rate-OnTick-06193_CloudwatchLogGroup_C20DAC80": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/CloudwatchLogGroup",
-            "uniqueId": "from_rate-OnTick-Closure2_CloudwatchLogGroup_6D9D90D0"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/CloudwatchLogGroup",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_CloudwatchLogGroup_C20DAC80"
           }
         },
-        "name": "/aws/lambda/from_rate-OnTick--Closure2-c87b0d0b",
+        "name": "/aws/lambda/from_rate-OnTick-06193-c8c53477",
         "retention_in_days": 30
       }
     },
@@ -133,75 +133,75 @@
       }
     },
     "aws_iam_role": {
-      "from_cron-OnTick-Closure1_IamRole_F73FA11F": {
+      "from_cron_from_cron-OnTick-58c29_IamRole_7496A829": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/IamRole",
-            "uniqueId": "from_cron-OnTick-Closure1_IamRole_F73FA11F"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/IamRole",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_IamRole_7496A829"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "from_rate-OnTick-Closure2_IamRole_AF2FA313": {
+      "from_rate_from_rate-OnTick-06193_IamRole_A4C09D7C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/IamRole",
-            "uniqueId": "from_rate-OnTick-Closure2_IamRole_AF2FA313"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/IamRole",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_IamRole_A4C09D7C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "from_cron-OnTick-Closure1_IamRolePolicy_AC358D9F": {
+      "from_cron_from_cron-OnTick-58c29_IamRolePolicy_B546388E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/IamRolePolicy",
-            "uniqueId": "from_cron-OnTick-Closure1_IamRolePolicy_AC358D9F"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/IamRolePolicy",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_IamRolePolicy_B546388E"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c1.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.from_cron-OnTick-Closure1_IamRole_F73FA11F.name}"
+        "role": "${aws_iam_role.from_cron_from_cron-OnTick-58c29_IamRole_7496A829.name}"
       },
-      "from_rate-OnTick-Closure2_IamRolePolicy_C4E85242": {
+      "from_rate_from_rate-OnTick-06193_IamRolePolicy_6CA9E787": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/IamRolePolicy",
-            "uniqueId": "from_rate-OnTick-Closure2_IamRolePolicy_C4E85242"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/IamRolePolicy",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_IamRolePolicy_6CA9E787"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.from_rate-OnTick-Closure2_IamRole_AF2FA313.name}"
+        "role": "${aws_iam_role.from_rate_from_rate-OnTick-06193_IamRole_A4C09D7C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "from_cron-OnTick-Closure1_IamRolePolicyAttachment_D56CFC97": {
+      "from_cron_from_cron-OnTick-58c29_IamRolePolicyAttachment_6824DAD7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/IamRolePolicyAttachment",
-            "uniqueId": "from_cron-OnTick-Closure1_IamRolePolicyAttachment_D56CFC97"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/IamRolePolicyAttachment",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_IamRolePolicyAttachment_6824DAD7"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.from_cron-OnTick-Closure1_IamRole_F73FA11F.name}"
+        "role": "${aws_iam_role.from_cron_from_cron-OnTick-58c29_IamRole_7496A829.name}"
       },
-      "from_rate-OnTick-Closure2_IamRolePolicyAttachment_63D5454A": {
+      "from_rate_from_rate-OnTick-06193_IamRolePolicyAttachment_CAC0C701": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/IamRolePolicyAttachment",
-            "uniqueId": "from_rate-OnTick-Closure2_IamRolePolicyAttachment_63D5454A"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/IamRolePolicyAttachment",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_IamRolePolicyAttachment_CAC0C701"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.from_rate-OnTick-Closure2_IamRole_AF2FA313.name}"
+        "role": "${aws_iam_role.from_rate_from_rate-OnTick-06193_IamRole_A4C09D7C.name}"
       }
     },
     "aws_lambda_function": {
-      "from_cron-OnTick-Closure1": {
+      "from_cron_from_cron-OnTick-58c29_7AF082F3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/Default",
-            "uniqueId": "from_cron-OnTick-Closure1"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/Default",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_7AF082F3"
           }
         },
         "architectures": [
@@ -211,29 +211,29 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "from_cron-OnTick--Closure1-c8f6fa49",
+            "WING_FUNCTION_NAME": "from_cron-OnTick-58c29-c89c73e7",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "from_cron-OnTick--Closure1-c8f6fa49",
+        "function_name": "from_cron-OnTick-58c29-c89c73e7",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.from_cron-OnTick-Closure1_IamRole_F73FA11F.arn}",
+        "role": "${aws_iam_role.from_cron_from_cron-OnTick-58c29_IamRole_7496A829.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.from_cron-OnTick-Closure1_S3Object_46F660BE.key}",
+        "s3_key": "${aws_s3_object.from_cron_from_cron-OnTick-58c29_S3Object_F1422895.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "from_rate-OnTick-Closure2": {
+      "from_rate_from_rate-OnTick-06193_78E43F6C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/Default",
-            "uniqueId": "from_rate-OnTick-Closure2"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/Default",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_78E43F6C"
           }
         },
         "architectures": [
@@ -243,18 +243,18 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "from_rate-OnTick--Closure2-c87b0d0b",
+            "WING_FUNCTION_NAME": "from_rate-OnTick-06193-c8c53477",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "from_rate-OnTick--Closure2-c87b0d0b",
+        "function_name": "from_rate-OnTick-06193-c8c53477",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.from_rate-OnTick-Closure2_IamRole_AF2FA313.arn}",
+        "role": "${aws_iam_role.from_rate_from_rate-OnTick-06193_IamRole_A4C09D7C.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.from_rate-OnTick-Closure2_S3Object_109CB3A5.key}",
+        "s3_key": "${aws_s3_object.from_rate_from_rate-OnTick-06193_S3Object_3E709CFC.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -263,30 +263,30 @@
       }
     },
     "aws_lambda_permission": {
-      "from_cron-OnTick-Closure1_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_7AB9065C": {
+      "from_cron_from_cron-OnTick-58c29_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_3EFA42CF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9",
-            "uniqueId": "from_cron-OnTick-Closure1_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_7AB9065C"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_3EFA42CF"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.from_cron-OnTick-Closure1.function_name}",
+        "function_name": "${aws_lambda_function.from_cron_from_cron-OnTick-58c29_7AF082F3.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "${aws_lambda_function.from_cron-OnTick-Closure1.version}",
+        "qualifier": "${aws_lambda_function.from_cron_from_cron-OnTick-58c29_7AF082F3.version}",
         "source_arn": "${aws_cloudwatch_event_rule.from_cron_Schedule_6C1613E8.arn}"
       },
-      "from_rate-OnTick-Closure2_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_6C217A43": {
+      "from_rate_from_rate-OnTick-06193_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_C56624BC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4",
-            "uniqueId": "from_rate-OnTick-Closure2_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_6C217A43"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_C56624BC"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.from_rate-OnTick-Closure2.function_name}",
+        "function_name": "${aws_lambda_function.from_rate_from_rate-OnTick-06193_78E43F6C.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "${aws_lambda_function.from_rate-OnTick-Closure2.version}",
+        "qualifier": "${aws_lambda_function.from_rate_from_rate-OnTick-06193_78E43F6C.version}",
         "source_arn": "${aws_cloudwatch_event_rule.from_rate_Schedule_5B82E706.arn}"
       }
     },
@@ -302,22 +302,22 @@
       }
     },
     "aws_s3_object": {
-      "from_cron-OnTick-Closure1_S3Object_46F660BE": {
+      "from_cron_from_cron-OnTick-58c29_S3Object_F1422895": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_cron-OnTick-$Closure1/S3Object",
-            "uniqueId": "from_cron-OnTick-Closure1_S3Object_46F660BE"
+            "path": "root/Default/Default/from_cron/from_cron-OnTick-58c29/S3Object",
+            "uniqueId": "from_cron_from_cron-OnTick-58c29_S3Object_F1422895"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "from_rate-OnTick-Closure2_S3Object_109CB3A5": {
+      "from_rate_from_rate-OnTick-06193_S3Object_3E709CFC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/from_rate-OnTick-$Closure2/S3Object",
-            "uniqueId": "from_rate-OnTick-Closure2_S3Object_109CB3A5"
+            "path": "root/Default/Default/from_rate/from_rate-OnTick-06193/S3Object",
+            "uniqueId": "from_rate_from_rate-OnTick-06193_S3Object_3E709CFC"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

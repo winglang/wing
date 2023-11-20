@@ -198,7 +198,7 @@ export class Api extends cloud.Api {
    * @returns AWS Lambda Function
    */
   private addHandler(inflight: cloud.IApiEndpointHandler): Function {
-    let fn = this.getExistingOrAddInflightHandler(inflight);
+    let fn = this.addInflightHandler(inflight);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -206,41 +206,12 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Check if a inflight handler already exists, if not create it.
-   * This ensures that we don't create duplicate inflight handlers.
-   * @param inflight
-   * @returns
-   */
-  private getExistingOrAddInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const existingInflightHandler = this.findExistingInflightHandler(inflight);
-    if (existingInflightHandler) {
-      return existingInflightHandler;
-    }
-    return this.addInflightHandler(inflight);
-  }
-
-  /**
-   * Find an existing inflight handler
-   * @param inflight Inflight to find
-   * @returns
-   */
-  private findExistingInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflightId(inflight);
-
-    let fn = this.node.tryFindChild(
-      `${this.node.id}-OnRequest-${inflightNodeHash}`
-    );
-    return fn;
-  }
-
-  /**
    * Add an inflight handler to the stack
+   * Ensures that we don't create duplicate inflight handlers.
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
   private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflightId(inflight);
-
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -253,10 +224,11 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    return new Function(
-      this,
-      `${this.node.id}-OnRequest-${inflightNodeHash}`,
-      functionHandler
+    const inflightNodeHash = inflightId(functionHandler);
+    const functionId = `${this.node.id}-OnRequest-${inflightNodeHash}`;
+    return (
+      this.node.tryFindChild(functionId) ??
+      new Function(this, functionId, functionHandler)
     );
   }
 

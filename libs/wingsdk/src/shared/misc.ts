@@ -1,4 +1,5 @@
 import { execFile } from "child_process";
+import { createHash } from "crypto";
 import { readFileSync } from "fs";
 import { IInflight } from "../std";
 
@@ -74,14 +75,14 @@ export async function runDockerImage({
   return { hostPort };
 }
 
-var _id = 0;
-export function inflightId(inflight?: IInflight) {
-  if (inflight?._id) {
-    return inflight._id;
-  } else if ((inflight as any)?.node?.id) {
-    // TODO Remove this once inflights are no longer resources
-    return (inflight as any).node.id;
-  } else {
-    return "" + _id++;
-  }
+// const hashCounters = new Map<string, number>();
+
+export function inflightId(inflight: IInflight) {
+  const hash =
+    inflight._hash ??
+    createHash("sha256").update(inflight._toInflight()).digest("hex");
+  // const counter = hashCounters.get(hash) ?? 0;
+  // hashCounters.set(hash, counter + 1);
+
+  return hash.slice(0, 5);
 }

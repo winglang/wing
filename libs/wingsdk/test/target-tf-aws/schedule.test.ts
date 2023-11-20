@@ -6,12 +6,12 @@ import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
+const CODE_LOG_EVENT = `async handle(event) { console.log("Received: ", event); }`;
+
 test("schedule behavior with rate", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
@@ -47,9 +47,7 @@ test("schedule behavior with rate", () => {
 test("schedule behavior with cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const fn = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
@@ -85,12 +83,8 @@ test("schedule behavior with cron", () => {
 test("schedule with two functions", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const fn1 = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
-  const fn2 = Testing.makeHandler(
-    `async handle(event) { console.log("Received: ", event); }`
-  );
+  const fn1 = Testing.makeHandler(CODE_LOG_EVENT);
+  const fn2 = Testing.makeHandler(CODE_LOG_EVENT);
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });

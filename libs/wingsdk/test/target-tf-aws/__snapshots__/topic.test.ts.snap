@@ -366,47 +366,47 @@ exports[`topic with subscriber function 2`] = `
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Topic-OnMessage-0_CloudwatchLogGroup_F086A0CD": {
-        "name": "/aws/lambda/Topic-OnMessage-0-c81ba814",
+      "Topic-OnMessage-662c7_CloudwatchLogGroup_B7B268F6": {
+        "name": "/aws/lambda/Topic-OnMessage-662c7-c833c408",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Topic-OnMessage-0_IamRole_3C4D4D24": {
+      "Topic-OnMessage-662c7_IamRole_7B5435AD": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Topic-OnMessage-0_IamRolePolicy_3011582A": {
+      "Topic-OnMessage-662c7_IamRolePolicy_B81A792E": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.Topic-OnMessage-0_IamRole_3C4D4D24.name}",
+        "role": "\${aws_iam_role.Topic-OnMessage-662c7_IamRole_7B5435AD.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Topic-OnMessage-0_IamRolePolicyAttachment_83695D73": {
+      "Topic-OnMessage-662c7_IamRolePolicyAttachment_6483E8CF": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Topic-OnMessage-0_IamRole_3C4D4D24.name}",
+        "role": "\${aws_iam_role.Topic-OnMessage-662c7_IamRole_7B5435AD.name}",
       },
     },
     "aws_lambda_function": {
-      "Topic-OnMessage-0": {
+      "Topic-OnMessage-662c7": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Topic-OnMessage-0-c81ba814",
+            "WING_FUNCTION_NAME": "Topic-OnMessage-662c7-c833c408",
           },
         },
-        "function_name": "Topic-OnMessage-0-c81ba814",
+        "function_name": "Topic-OnMessage-662c7-c833c408",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Topic-OnMessage-0_IamRole_3C4D4D24.arn}",
+        "role": "\${aws_iam_role.Topic-OnMessage-662c7_IamRole_7B5435AD.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Topic-OnMessage-0_S3Object_8ACCD8B6.key}",
+        "s3_key": "\${aws_s3_object.Topic-OnMessage-662c7_S3Object_C770261C.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -415,10 +415,11 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_lambda_permission": {
-      "Topic-OnMessage-0_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_B4182FF0": {
+      "Topic-OnMessage-662c7_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_1A248D6B": {
         "action": "lambda:InvokeFunction",
-        "function_name": "\${aws_lambda_function.Topic-OnMessage-0.function_name}",
+        "function_name": "\${aws_lambda_function.Topic-OnMessage-662c7.function_name}",
         "principal": "sns.amazonaws.com",
+        "qualifier": "\${aws_lambda_function.Topic-OnMessage-662c7.version}",
         "source_arn": "\${aws_sns_topic.Topic.arn}",
       },
     },
@@ -428,7 +429,7 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_s3_object": {
-      "Topic-OnMessage-0_S3Object_8ACCD8B6": {
+      "Topic-OnMessage-662c7_S3Object_C770261C": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -440,8 +441,8 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_sns_topic_subscription": {
-      "Topic_Topic-TopicSubscription-0_166A1D29": {
-        "endpoint": "\${aws_lambda_function.Topic-OnMessage-0.arn}",
+      "Topic_Topic-TopicSubscription-662c7_D1B43204": {
+        "endpoint": "\${aws_lambda_function.Topic-OnMessage-662c7.arn}",
         "protocol": "lambda",
         "topic_arn": "\${aws_sns_topic.Topic.arn}",
       },
@@ -476,13 +477,13 @@ exports[`topic with subscriber function 3`] = `
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
                   },
-                  "Topic-TopicSubscription-0": {
+                  "Topic-TopicSubscription-662c7": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Topic-TopicSubscription-0",
-                    "path": "root/Default/Topic/Topic-TopicSubscription-0",
+                    "id": "Topic-TopicSubscription-662c7",
+                    "path": "root/Default/Topic/Topic-TopicSubscription-662c7",
                   },
                 },
                 "constructInfo": {
@@ -496,7 +497,7 @@ exports[`topic with subscriber function 3`] = `
                 "id": "Topic",
                 "path": "root/Default/Topic",
               },
-              "Topic-OnMessage-0": {
+              "Topic-OnMessage-662c7": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -504,7 +505,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Asset",
-                    "path": "root/Default/Topic-OnMessage-0/Asset",
+                    "path": "root/Default/Topic-OnMessage-662c7/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
@@ -512,7 +513,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "CloudwatchLogGroup",
-                    "path": "root/Default/Topic-OnMessage-0/CloudwatchLogGroup",
+                    "path": "root/Default/Topic-OnMessage-662c7/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -520,7 +521,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Default",
-                    "path": "root/Default/Topic-OnMessage-0/Default",
+                    "path": "root/Default/Topic-OnMessage-662c7/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
@@ -528,7 +529,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRole",
-                    "path": "root/Default/Topic-OnMessage-0/IamRole",
+                    "path": "root/Default/Topic-OnMessage-662c7/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
@@ -536,7 +537,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/Default/Topic-OnMessage-0/IamRolePolicy",
+                    "path": "root/Default/Topic-OnMessage-662c7/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
@@ -544,7 +545,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/Default/Topic-OnMessage-0/IamRolePolicyAttachment",
+                    "path": "root/Default/Topic-OnMessage-662c7/IamRolePolicyAttachment",
                   },
                   "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2": {
                     "constructInfo": {
@@ -552,7 +553,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
-                    "path": "root/Default/Topic-OnMessage-0/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
+                    "path": "root/Default/Topic-OnMessage-662c7/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                   },
                   "S3Object": {
                     "constructInfo": {
@@ -560,7 +561,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "S3Object",
-                    "path": "root/Default/Topic-OnMessage-0/S3Object",
+                    "path": "root/Default/Topic-OnMessage-662c7/S3Object",
                   },
                 },
                 "constructInfo": {
@@ -571,8 +572,8 @@ exports[`topic with subscriber function 3`] = `
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Topic-OnMessage-0",
-                "path": "root/Default/Topic-OnMessage-0",
+                "id": "Topic-OnMessage-662c7",
+                "path": "root/Default/Topic-OnMessage-662c7",
               },
               "aws": {
                 "constructInfo": {

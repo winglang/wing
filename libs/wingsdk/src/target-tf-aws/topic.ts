@@ -53,7 +53,6 @@ export class Topic extends cloud.Topic {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -62,15 +61,16 @@ export class Topic extends cloud.Topic {
       ),
       "TopicOnMessageHandlerClient"
     );
+    const hash = inflightId(functionHandler);
+    const functionId = `${this.node.id}-OnMessage-${hash}`;
+    let fn = this.node.tryFindChild(functionId);
+    if (fn) {
+      return fn as Function;
+    }
 
-    const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
-      functionHandler,
-      props
-    );
+    fn = new Function(this.node.scope!, functionId, functionHandler, props);
 
-    // TODO: remove this constraint by adding geric permission APIs to cloud.Function
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
       throw new Error("Topic only supports creating tfaws.Function right now");
     }
@@ -85,7 +85,7 @@ export class Topic extends cloud.Topic {
       }
     );
 
-    fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
+    fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn);
 
     Node.of(this).addConnection({
       source: this,

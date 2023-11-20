@@ -46,7 +46,6 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -56,12 +55,14 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTick-${hash}`,
-      functionHandler,
-      props
-    );
+    const hash = inflightId(functionHandler);
+    const functionId = `${this.node.id}-OnTick-${hash}`;
+    let fn = this.node.tryFindChild(functionId);
+    if (fn) {
+      return fn as Function;
+    }
+
+    fn = new Function(this, functionId, functionHandler, props);
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

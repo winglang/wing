@@ -1,6 +1,7 @@
+import { createHash } from "crypto";
+import { nanoid } from "nanoid";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
-import { inflightId } from "../shared/misc";
 import { IInflight, IInflightHost, Resource } from "../std";
 
 /**
@@ -29,17 +30,7 @@ export class Testing {
       clients[k] = liftObject(v.obj);
     }
 
-    // implements IFunctionHandler
-    return {
-      _id: inflightId(),
-      onLift: () => {},
-      _supportedOps: () => [],
-      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
-        for (const v of Object.values(bindings)) {
-          Resource._registerOnLiftObject(v.obj, host, v.ops);
-        }
-      },
-      _toInflight: () => `\
+    const inflightCode = `\
 new ((function(){
   return class Handler {
     constructor(clients) {
@@ -53,7 +44,19 @@ new ((function(){
   ${Object.entries(clients)
     .map(([name, client]) => `${name}: ${client}`)
     .join(",\n")}
-})`,
+})`;
+
+    return {
+      _guid: nanoid(),
+      _hash: createHash("sha256").update(inflightCode).digest("hex"),
+      _toInflight: () => inflightCode,
+      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
+        for (const v of Object.values(bindings)) {
+          Resource._registerOnLiftObject(v.obj, host, v.ops);
+        }
+      },
+      onLift: () => {},
+      _supportedOps: () => [],
     };
   }
 }

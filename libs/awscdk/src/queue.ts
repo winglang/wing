@@ -36,8 +36,6 @@ export class Queue extends cloud.Queue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    // create md5 hash of _toInflight
-    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -46,6 +44,7 @@ export class Queue extends cloud.Queue {
       ),
       "QueueSetConsumerHandlerClient"
     );
+    const hash = inflightId(functionHandler);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

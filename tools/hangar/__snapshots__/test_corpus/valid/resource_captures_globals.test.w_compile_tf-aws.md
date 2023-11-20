@@ -153,14 +153,14 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "MyResource_cloudTopic-OnMessage-R_CloudwatchLogGroup_6CF3AB8C": {
+      "MyResource_cloudTopic-OnMessage-cebdb_CloudwatchLogGroup_28D1B51C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/CloudwatchLogGroup",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_CloudwatchLogGroup_6CF3AB8C"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/CloudwatchLogGroup",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_CloudwatchLogGroup_28D1B51C"
           }
         },
-        "name": "/aws/lambda/cloud-Topic-OnMessage-R-c80db460",
+        "name": "/aws/lambda/cloud-Topic-OnMessage-cebdb-c83ee3ae",
         "retention_in_days": 30
       }
     },
@@ -201,46 +201,46 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_iam_role": {
-      "MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786": {
+      "MyResource_cloudTopic-OnMessage-cebdb_IamRole_F73F29C7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRole",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/IamRole",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_IamRole_F73F29C7"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "MyResource_cloudTopic-OnMessage-R_IamRolePolicy_14AAF77D": {
+      "MyResource_cloudTopic-OnMessage-cebdb_IamRolePolicy_7C786E78": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRolePolicy",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRolePolicy_14AAF77D"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/IamRolePolicy",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_IamRolePolicy_7C786E78"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-cebdb_IamRole_F73F29C7.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "MyResource_cloudTopic-OnMessage-R_IamRolePolicyAttachment_7BCEF290": {
+      "MyResource_cloudTopic-OnMessage-cebdb_IamRolePolicyAttachment_C889B818": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/IamRolePolicyAttachment",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_IamRolePolicyAttachment_7BCEF290"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/IamRolePolicyAttachment",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_IamRolePolicyAttachment_C889B818"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-cebdb_IamRole_F73F29C7.name}"
       }
     },
     "aws_lambda_function": {
-      "MyResource_cloudTopic-OnMessage-R_13D3531A": {
+      "MyResource_cloudTopic-OnMessage-cebdb_B09DD81F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/Default",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_13D3531A"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/Default",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_B09DD81F"
           }
         },
         "architectures": [
@@ -251,18 +251,18 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-R-c80db460",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-cebdb-c83ee3ae",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-R-c80db460",
+        "function_name": "cloud-Topic-OnMessage-cebdb-c83ee3ae",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-R_IamRole_0D4F5786.arn}",
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-cebdb_IamRole_F73F29C7.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C.key}",
+        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-cebdb_S3Object_DEC790EF.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -271,16 +271,17 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_lambda_permission": {
-      "MyResource_cloudTopic-OnMessage-R_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_651DF3C7": {
+      "MyResource_cloudTopic-OnMessage-cebdb_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_69E7B222": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_651DF3C7"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_69E7B222"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-R_13D3531A.function_name}",
+        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-cebdb_B09DD81F.function_name}",
         "principal": "sns.amazonaws.com",
+        "qualifier": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-cebdb_B09DD81F.version}",
         "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
     },
@@ -316,11 +317,11 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_s3_object": {
-      "MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C": {
+      "MyResource_cloudTopic-OnMessage-cebdb_S3Object_DEC790EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-R/S3Object",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-R_S3Object_58C5BA8C"
+            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-cebdb/S3Object",
+            "uniqueId": "MyResource_cloudTopic-OnMessage-cebdb_S3Object_DEC790EF"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -340,14 +341,14 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_sns_topic_subscription": {
-      "MyResource_cloudTopic_cloudTopic-TopicSubscription-R_204292C6": {
+      "MyResource_cloudTopic_cloudTopic-TopicSubscription-cebdb_C1029176": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-R",
-            "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-R_204292C6"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-cebdb",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-cebdb_C1029176"
           }
         },
-        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-R_13D3531A.arn}",
+        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-cebdb_B09DD81F.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }

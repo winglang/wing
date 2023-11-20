@@ -64,7 +64,6 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props?: cloud.ScheduleOnTickOptions | undefined
   ): cloud.Function {
-    const hash = inflightId(inflight);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -73,6 +72,7 @@ export class Schedule extends cloud.Schedule {
       ),
       "ScheduleOnTickHandlerClient"
     );
+    const hash = inflightId(functionHandler);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

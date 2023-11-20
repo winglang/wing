@@ -22,11 +22,17 @@ export interface IInflightHost extends IResource {
  */
 export interface IInflight extends ILiftable {
   /**
-   * Tracks the unique ID of this inflight object.
+   * Tracks the unique ID inflight instance
    * This is not hash-based and will be different for two inflight instances with the same code
    * @internal
    */
-  _id: string;
+  _guid: string;
+
+  /**
+   * Tracks the content hash
+   * @internal
+   */
+  _hash: string;
 }
 
 /**
