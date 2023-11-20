@@ -378,7 +378,10 @@ Duration <DURATION>"
 `;
 
 exports[`bring_invalid_dir.w 1`] = `
-"error: Cannot bring Wing directories that contain invalid characters: \\"in.valid\\"
+"error: Cannot explicitly bring directory with no Wing files \\"no_wing_files\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"in.valid\\"
 
 
 error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"

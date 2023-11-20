@@ -279,7 +279,7 @@ fn dir_contains_wing_file(dir_path: &Utf8Path) -> bool {
 
 fn contains_non_symbolic(str: &str) -> bool {
 	// uses the same regex pattern from grammar.js for valid identifiers
-	let re = Regex::new(r"^([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)$").unwrap();
+	let re = Regex::new(r"^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$").unwrap();
 	!re.is_match(str)
 }
 
@@ -306,14 +306,25 @@ fn parse_wing_directory(
 ) -> Vec<Utf8PathBuf> {
 	// Collect a list of all files and subdirectories in the directory
 	let mut files_and_dirs = Vec::new();
+
+	if source_path.is_dir() && !dir_contains_wing_file(&source_path) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot explicitly bring directory with no Wing files \"{}\"",
+				source_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		})
+	}
+
 	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
 		let entry = entry.unwrap();
 		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
 
 		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
 		// or if it's a file and its extension is .w, add it
-		//
-		// TODO: skip directories that don't contain any .w files anywhere in their subtree
 		if (path.is_dir()
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
@@ -2696,7 +2707,7 @@ mod tests {
 		assert_eq!(true, contains_non_symbolic("w.owzer"));
 		assert_eq!(true, contains_non_symbolic("#wowzer"));
 		assert_eq!(true, contains_non_symbolic("wow-zer"));
-		assert_eq!(false, contains_non_symbolic("$wowzer"));
+		assert_eq!(true, contains_non_symbolic("$wowzer"));
 		assert_eq!(false, contains_non_symbolic("_wowzer"));
 		assert_eq!(false, contains_non_symbolic("wowzer"));
 	}

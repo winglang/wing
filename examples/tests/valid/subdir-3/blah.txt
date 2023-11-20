@@ -1,2 +1,0 @@
-even though this directory name is invalid for bringing we will
-ignore it since there are no wing files in it
