@@ -6,25 +6,19 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
 
 /**
  * AWS Implementation of `cloud.Topic`.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic {
+export class Topic extends cloud.Topic implements IAwsTopic {
   private readonly topic: SNSTopic;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
     this.topic = new SNSTopic(this, "Topic");
-  }
-
-  /**
-   * Topic's arn
-   */
-  public get arn(): string {
-    return this.topic.topicArn;
   }
 
   public onMessage(
@@ -96,5 +90,13 @@ export class Topic extends cloud.Topic {
 
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
+  }
+
+  public get topicArn(): string {
+    return this.topic.topicArn;
+  }
+
+  public get topicName(): string {
+    return this.topic.topicName;
   }
 }

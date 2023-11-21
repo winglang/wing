@@ -20,8 +20,6 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
  */
 export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
-  /** Function ARN */
-  public readonly arn: string;
 
   constructor(
     scope: Construct,
@@ -38,8 +36,8 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-        ? undefined // Negative value means Infinite retention
-        : props.logRetentionDays;
+          ? undefined // Negative value means Infinite retention
+          : props.logRetentionDays;
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
@@ -53,8 +51,6 @@ export class Function extends cloud.Function implements IAwsFunction {
       architecture: Architecture.ARM_64,
       logRetention: logRetentionDays,
     });
-
-    this.arn = this.function.functionArn;
   }
 
   /** @internal */
@@ -113,21 +109,24 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   /** @internal */
-  public get _functionName(): string {
-    return this.function.functionName;
-  }
-
-  /** @internal */
-  public get _function() {
-    return this.function;
-  }
-
-  /** @internal */
   public _addEventSource(eventSource: IEventSource) {
     this.function.addEventSource(eventSource);
   }
 
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  /** @internal */
+  get _function() {
+    return this.function;
+  }
+
+  public get functionArn(): string {
+    return this.function.functionArn;
+  }
+
+  public get functionName(): string {
+    return this.function.functionName;
   }
 }
