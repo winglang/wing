@@ -194,8 +194,8 @@ exports[`function with a queue binding 3`] = `
         "name": "/aws/lambda/Function-c852aba6",
         "retention_in_days": 30,
       },
-      "Queue-SetConsumer-a66b03_CloudwatchLogGroup_AF180F52": {
-        "name": "/aws/lambda/Queue-SetConsumer-a66b03-c898aaaf",
+      "Queue-SetConsumer-26287d_CloudwatchLogGroup_0C305160": {
+        "name": "/aws/lambda/Queue-SetConsumer-26287d-c892c447",
         "retention_in_days": 30,
       },
     },
@@ -203,7 +203,7 @@ exports[`function with a queue binding 3`] = `
       "Function_IamRole_678BE84C": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      "Queue-SetConsumer-a66b03_IamRole_0EB3BCC4": {
+      "Queue-SetConsumer-26287d_IamRole_9A5F6F8E": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
@@ -212,9 +212,9 @@ exports[`function with a queue binding 3`] = `
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
-      "Queue-SetConsumer-a66b03_IamRolePolicy_1FCEECFD": {
+      "Queue-SetConsumer-26287d_IamRolePolicy_F1C352BF": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.Queue-SetConsumer-a66b03_IamRole_0EB3BCC4.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-26287d_IamRole_9A5F6F8E.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
@@ -222,16 +222,16 @@ exports[`function with a queue binding 3`] = `
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
-      "Queue-SetConsumer-a66b03_IamRolePolicyAttachment_67B17122": {
+      "Queue-SetConsumer-26287d_IamRolePolicyAttachment_0CC73A61": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Queue-SetConsumer-a66b03_IamRole_0EB3BCC4.name}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-26287d_IamRole_9A5F6F8E.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
       "Queue_EventSourceMapping_8332F7DC": {
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.Queue.arn}",
-        "function_name": "\${aws_lambda_function.Queue-SetConsumer-a66b03.function_name}",
+        "function_name": "\${aws_lambda_function.Queue-SetConsumer-26287d.function_name}",
       },
     },
     "aws_lambda_function": {
@@ -260,24 +260,24 @@ exports[`function with a queue binding 3`] = `
           "subnet_ids": [],
         },
       },
-      "Queue-SetConsumer-a66b03": {
+      "Queue-SetConsumer-26287d": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Queue-SetConsumer-a66b03-c898aaaf",
+            "WING_FUNCTION_NAME": "Queue-SetConsumer-26287d-c892c447",
           },
         },
-        "function_name": "Queue-SetConsumer-a66b03-c898aaaf",
+        "function_name": "Queue-SetConsumer-26287d-c892c447",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Queue-SetConsumer-a66b03_IamRole_0EB3BCC4.arn}",
+        "role": "\${aws_iam_role.Queue-SetConsumer-26287d_IamRole_9A5F6F8E.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Queue-SetConsumer-a66b03_S3Object_77DE3D13.key}",
+        "s3_key": "\${aws_s3_object.Queue-SetConsumer-26287d_S3Object_0353544A.key}",
         "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
@@ -296,7 +296,7 @@ exports[`function with a queue binding 3`] = `
         "key": "<key>",
         "source": "<source>",
       },
-      "Queue-SetConsumer-a66b03_S3Object_77DE3D13": {
+      "Queue-SetConsumer-26287d_S3Object_0353544A": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",

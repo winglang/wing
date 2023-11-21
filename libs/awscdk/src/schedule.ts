@@ -71,7 +71,7 @@ export class Schedule extends cloud.Schedule {
       ),
       "ScheduleOnTickHandlerClient"
     );
-    const hash = functionHandler._hash.slice(0, 6);
+    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root

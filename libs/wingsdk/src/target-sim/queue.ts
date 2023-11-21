@@ -72,7 +72,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = functionHandler._hash.slice(0, 6);
+    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
       this,

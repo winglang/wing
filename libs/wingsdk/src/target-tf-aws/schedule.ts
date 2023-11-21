@@ -54,7 +54,7 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const hash = functionHandler._hash.slice(0, 6);
+    const hash = inflight._hash.slice(0, 6);
     const functionId = `${this.node.id}-OnTick-${hash}`;
     let fn = this.node.tryFindChild(functionId);
     if (fn) {

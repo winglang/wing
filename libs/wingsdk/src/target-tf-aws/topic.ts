@@ -60,7 +60,7 @@ export class Topic extends cloud.Topic {
       ),
       "TopicOnMessageHandlerClient"
     );
-    const hash = functionHandler._hash.slice(0, 6);
+    const hash = inflight._hash.slice(0, 6);
     const functionId = `${this.node.id}-OnMessage-${hash}`;
     let fn = this.node.tryFindChild(functionId);
     if (fn) {

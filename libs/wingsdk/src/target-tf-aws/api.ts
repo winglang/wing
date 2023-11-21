@@ -224,7 +224,7 @@ export class Api extends cloud.Api {
           ?.defaultResponse,
       }
     );
-    const hash = functionHandler._hash.slice(0, 6);
+    const hash = inflight._hash.slice(0, 6);
     let func = this.handlers[hash];
     if (!func) {
       func = new Function(

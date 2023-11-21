@@ -24,12 +24,12 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
+    const hash = inflight._hash.slice(0, 6);
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
     );
-    const hash = functionHandler._hash.slice(0, 6);
 
     const fn = new Function(
       this,
