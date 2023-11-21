@@ -8,7 +8,7 @@ let body = Json {"cat": "Tion"};
 let user = "guy";
 let _id = "12345";
 
-api.put("/path/\{id}/nn/\{user}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.put("/path/:id/nn/:user", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let path = "/path/{_id}/nn/{user}";
   assert(req.method == cloud.HttpMethod.PUT);
   assert(req.vars?.get("id") == _id);

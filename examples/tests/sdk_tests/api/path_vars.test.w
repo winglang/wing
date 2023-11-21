@@ -20,10 +20,10 @@ let handler_two = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 };
 
-api.get("/users/\{name}", handler);
-api.get("/path/\{name}", handler);
-api.get("/users/permission/\{name}", handler);
-api.get("/path/\{name}/\{age}", handler_two);
+api.get("/users/:name", handler);
+api.get("/path/:name", handler);
+api.get("/users/permission/:name", handler);
+api.get("/path/:name/:age", handler_two);
 
 test "test" {
   let username = "tsuf";

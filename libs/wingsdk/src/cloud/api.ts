@@ -368,14 +368,14 @@ export class Api extends Resource {
   }
   /**
    * Validating path:
-   * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
+   * if has `:` prefix - the part following that prefix is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid
    * @internal
    */
   protected _validatePath(path: string) {
     if (
-      !/^(\/[a-zA-Z0-9_\-\.]+(\/\{[a-zA-Z0-9_\-]+\}|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\{[a-zA-Z0-9_\-]+\})*\/?$/g.test(
+      !/^(\/[a-zA-Z0-9_\-\.]+(\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\:[a-zA-Z0-9_\-]+)*\/?$/g.test(
         path
       )
     ) {
@@ -419,8 +419,8 @@ export class Api extends Resource {
 
       if (
         partA !== partB &&
-        !partA.match(/^{.+?}$/) &&
-        !partB.match(/^{.+?}$/)
+        !partA.match(/^:.+?$/) &&
+        !partB.match(/^:.+?$/)
       ) {
         return false;
       }
@@ -539,11 +539,11 @@ export class Api extends Resource {
     const operationId = `${method.toLowerCase()}${
       path === "/" ? "" : path.replace("/", "-")
     }`;
-    const pathParams = path.match(/{(.*?)}/g);
+    const pathParams = path.match(/:([A-Za-z0-9_-]+)/g);
     const pathParameters: any[] = [];
     if (pathParams) {
       pathParams.forEach((param) => {
-        const paramName = param.replace("{", "").replace("}", "");
+        const paramName = param.replace(":", "");
         pathParameters.push({
           name: paramName,
           in: "path",
