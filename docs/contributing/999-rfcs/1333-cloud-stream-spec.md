@@ -10,8 +10,6 @@ description: RFC - Cloud.Stream for Streaming Data Services
 - **Stage**: {Design}
 - **Stage Date**: {2023-09-29}
 
-> One sentence which is a brief description of the feature from a user perspective.
-
 Implementing design and library spec supporting and integrating real-time streaming services.
 
 ## Background
@@ -32,7 +30,7 @@ This is implemented across varied cloud providers, specifically services like: A
 
 ## Design
 
-Traditionally, a device/user writing to a real-time streaming system would simply write to the REST API endpoint exposed by the service. While consumers of the service have to 
+Traditionally, a device/user writing to a real-time streaming system would simply write to the REST API endpoint exposed by the service. While consumers of the service would consume through polling or fan-out systems from those REST endpoints.
 
 Within wing, these endpoints and their nuance should be abstracted, so writing to or reading from a streaming system is just like writing to or reading from any persistent storage.
 
@@ -145,6 +143,8 @@ No. It's a new feature, will not break a pre-existing deployment of wing.
 
 > Describe any major open issues that this RFC did not take into account. Once the RFC is approved, create GitHub issues for these issues and update this RFC of the project board with these issue IDs.
 
+The biggest open issue is to expose/
+
 ## Appendix
 
 Real-time streaming services are often a combination of services that cover the following processes (in order of provider: AWS, GCP, Azure):
@@ -153,4 +153,17 @@ Real-time streaming services are often a combination of services that cover the 
 * Delivery - Kinesis Firehose, Cloud Storage, Functions 
 * Storage - Data Lakes/Lake Formation/S3, Cloud Storage, Blob Storage
 
-### Appendix - 
+### Appendix - Evaluating a "common" API
+
+There are several streaming data systems that provide the streaming data environment. We'll focus on understanding the various functions provided by the services and the platforms, and build a focused "streaming" API.
+
+Cloud Implementations: 
+* Kinesis - 
+* EventHubs -
+* Pub/Sub -
+
+Other Considerations:
+* Redis Streams -
+* Kafka -
+* DynamoDB Streams -
+* MongoDB Atlas -
