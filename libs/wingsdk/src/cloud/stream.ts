@@ -111,16 +111,8 @@ export interface IStreamConsumer {
   consume(records: StreamData[]): Promise<void>;
 }
 
-export abstract class StreamData extends JsonSchema {
-  /**
-   * Some StreamData standards; currently derived from AWS Kinesis data output,
-   * Will be genericized later.
-   */
-  readonly metadata: Json
-
-  readonly data: JsonSchema
-
-  constructor()
+export class StreamData {
+  
 }
 
 /**

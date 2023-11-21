@@ -43,15 +43,12 @@ Writing to a data stream from a function should look like:
 bring cloud;
 
 let stream = new cloud.Stream(
-    horizon: 48h
+  horizon: 48h
 ) as "TelemetryIngest";
 
 
-let bloc = new cloud.Function(inflight (event: any): any => {
-    stream.send(event);
-
-    let eventSize = event.count;
-    return argsCount % 2;
+new cloud.Function(inflight (event: Json) => {
+  const response = stream.send(event);
 }) as "TelemetryWriter";
 ```
 
@@ -62,14 +59,14 @@ While reading from a stream will look like:
 bring cloud;
 
 let stream = new cloud.Stream(
-    horizon: 48h
+  horizon: 48h
 ) as "TelemetryIngest";
 
 let bloc = new cloud.Function(inflight (event: Json)=> {
-    let newestBatch = stream.fetch();
+  let newestBatch = stream.fetch();
 
-    let batchSize = newestBatch.size();
-    return batchSize;
+  let batchSize = newestBatch.size();
+  return batchSize;
 }) as "telemetry-reader";
 ```
 
@@ -102,6 +99,7 @@ stream.onEvent(inflight (event: Json) => {
 - Stream-01 (P0): Create a Streaming Data Endpoint in the cloud of your choice
 - Stream-02 (P1): Read, write APIs to transparently expose the underlying endpoint
 - Stream-06 (P2): Implicit integration with Stream Aggregration services
+- Stream-07 (P2): Experiment with and get feedback about exposing stream shards and partitioning systems
 
 ### Non-Functional
 
@@ -154,3 +152,5 @@ Real-time streaming services are often a combination of services that cover the 
 * Analysis - Kinesis Data Analytics, BigQuery, Stream Analytics
 * Delivery - Kinesis Firehose, Cloud Storage, Functions 
 * Storage - Data Lakes/Lake Formation/S3, Cloud Storage, Blob Storage
+
+### Appendix - 
