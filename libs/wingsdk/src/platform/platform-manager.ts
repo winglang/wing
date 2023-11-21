@@ -159,11 +159,14 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
 
   platformRequire.resolve = requireResolve;
 
-  const platformExports = {};
+  const platformModule = {
+    exports: {},
+  };
   const context = vm.createContext({
     require: platformRequire,
     console,
-    exports: platformExports,
+    exports: platformModule.exports,
+    module: platformModule,
     process,
     __dirname: customPlatformPath,
   });
@@ -172,7 +175,7 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
     const script = new vm.Script(platformCode);
     script.runInContext(context);
-    return new (platformExports as any).Platform();
+    return new (platformModule.exports as any).Platform();
   } catch (error) {
     console.error(
       "An error occurred while loading the custom platform:",
