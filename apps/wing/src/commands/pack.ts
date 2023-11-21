@@ -22,6 +22,42 @@ export interface PackageOptions {
   readonly outfile?: string;
 }
 
+async function containsWingFile(dir: string): Promise<boolean> {
+  const files = await fs.readdir(dir);
+  return files.some((file) => file.endsWith(".w"));
+}
+
+/**
+ * This recursive function validates that all directories that contain wing files
+ * have valid naming conventions.
+ *
+ * @param dir The name of the directory to validate
+ */
+async function validateDir(dir: string) {
+  const dirEntries = await fs.readdir(dir);
+
+  for (const entry of dirEntries) {
+    const entryPath = path.join(dir, entry);
+    const stat = await fs.stat(entryPath);
+
+    if (stat.isDirectory()) {
+      if (entry === "node_modules") {
+        continue;
+      }
+
+      // if the directory contains a wing file, validate its name
+      if (await containsWingFile(entryPath)) {
+        if (!/^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$/.test(entry)) {
+          throw new Error(
+            `Directories that contain wing files cannot contain non-symbolic characters: ${entryPath}`
+          );
+        }
+        await validateDir(entryPath);
+      }
+    }
+  }
+}
+
 export async function pack(options: PackageOptions = {}): Promise<string> {
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
@@ -38,6 +74,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   // this way we can run `wing compile .` in the staging directory and be sure
   // that someone consuming the library will be able to compile it.
   const filesToCopy = await listFilesToCopy(userDir, defaultGlobs);
+  await validateDir(userDir);
 
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
