@@ -18,7 +18,16 @@ export interface IInflightHost extends IResource {
 }
 
 /**
- * TODO Docs
+ * Code that runs at runtime and implements your application's behavior.
+ * For example, handling API requests, processing queue messages, etc.
+ * Inflight code can be executed on various compute platforms in the cloud,
+ * such as function services (such as AWS Lambda or Azure Functions),
+ * containers (such as ECS or Kubernetes), VMs or even physical servers.
+ *
+ * This data represents the code together with the bindings to preflight data required to run.
+ *
+ * @link https://www.winglang.io/docs/concepts/inflights
+ * @skipDocs
  */
 export interface IInflight extends ILiftable {
   /**
@@ -29,7 +38,8 @@ export interface IInflight extends ILiftable {
 }
 
 /**
- * TODO docs
+ * Data that can be lifted into inflight.
+ * @skipDocs
  */
 export interface ILiftable {
   /**
