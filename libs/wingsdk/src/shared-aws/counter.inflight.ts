@@ -3,6 +3,7 @@ import {
   GetItemCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import { COUNTER_HASH_KEY } from "./commons";
 import type { ICounterClient } from "../cloud";
 
@@ -16,7 +17,7 @@ export class CounterClient implements ICounterClient {
   constructor(
     private readonly tableName: string,
     private readonly initial: number = 0,
-    private readonly client = new DynamoDBClient({})
+    private readonly client = captureAWSv3Client(new DynamoDBClient({}))
   ) {}
 
   public async inc(amount = 1, key = COUNTER_ID): Promise<number> {

@@ -8,6 +8,7 @@ import {
   ConditionalCheckFailedException,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import { ITableClient } from "../ex";
 import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
@@ -17,7 +18,7 @@ export class TableClient implements ITableClient {
     private readonly tableName: string,
     private readonly primaryKey: string,
     private readonly columns: string,
-    private readonly client = new DynamoDBClient({})
+    private readonly client = captureAWSv3Client(new DynamoDBClient({}))
   ) {}
 
   public async insert(key: string, row: Json): Promise<void> {

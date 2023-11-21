@@ -5,6 +5,7 @@ import {
   LogType,
 } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import { IFunctionClient } from "../cloud";
 import { Trace, TraceType } from "../std";
 
@@ -12,7 +13,7 @@ export class FunctionClient implements IFunctionClient {
   constructor(
     private readonly functionArn: string,
     private readonly constructPath: string,
-    private readonly lambdaClient = new LambdaClient({})
+    private readonly lambdaClient = captureAWSv3Client(new LambdaClient({}))
   ) {}
 
   /**

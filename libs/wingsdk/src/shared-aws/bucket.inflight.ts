@@ -18,6 +18,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import mime from "mime-types";
 import {
   IBucketClient,
@@ -31,7 +32,7 @@ import { Datetime, Json } from "../std";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly s3Client: S3Client = new S3Client({})
+    private readonly s3Client: S3Client = captureAWSv3Client(new S3Client({}))
   ) {}
 
   /**

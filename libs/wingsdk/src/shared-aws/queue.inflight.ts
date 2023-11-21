@@ -7,12 +7,13 @@ import {
   InvalidMessageContents,
   DeleteMessageCommand,
 } from "@aws-sdk/client-sqs";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import { IQueueClient } from "../cloud";
 
 export class QueueClient implements IQueueClient {
   constructor(
     private readonly queueUrl: string,
-    private readonly client: SQSClient = new SQSClient({})
+    private readonly client: SQSClient = captureAWSv3Client(new SQSClient({}))
   ) {}
 
   public async push(...messages: string[]): Promise<void> {

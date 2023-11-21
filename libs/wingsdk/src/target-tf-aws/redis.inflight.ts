@@ -2,6 +2,7 @@ import {
   DescribeCacheClustersCommand,
   ElastiCacheClient,
 } from "@aws-sdk/client-elasticache";
+import { captureAWSv3Client } from "aws-xray-sdk";
 import { RedisClientBase } from "../ex";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -12,7 +13,9 @@ export class RedisClient extends RedisClientBase {
   constructor(
     private readonly clusterId: string,
     private connection?: any,
-    private readonly elasticacheClient = new ElastiCacheClient({})
+    private readonly elasticacheClient = captureAWSv3Client(
+      new ElastiCacheClient({})
+    )
   ) {
     super();
   }
