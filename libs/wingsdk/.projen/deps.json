@@ -252,6 +252,11 @@
       "type": "bundled"
     },
     {
+      "name": "aws-xray-sdk",
+      "version": "^3.5",
+      "type": "bundled"
+    },
+    {
       "name": "cdktf",
       "version": "0.17.0",
       "type": "bundled"

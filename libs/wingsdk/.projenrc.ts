@@ -78,6 +78,7 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "mime-types",
     "mime@^3.0.0",
+    "aws-xray-sdk@^3.5",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
