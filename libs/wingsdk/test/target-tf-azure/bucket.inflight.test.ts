@@ -2,6 +2,7 @@ import { Readable } from "stream";
 import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 import {
   BlobClient,
+  BlobCopyFromURLResponse,
   BlobDeleteResponse,
   BlobDownloadResponseParsed,
   BlobExistsOptions,
@@ -9,6 +10,7 @@ import {
   BlobGetPropertiesResponse,
   BlobItem,
   BlobServiceClient,
+  BlobSyncCopyFromURLOptions,
   BlockBlobClient,
   BlockBlobUploadResponse,
   ContainerClient,
@@ -514,6 +516,52 @@ test("fetch metadata of an unexisting object from the bucket", async () => {
   );
 });
 
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(response2).toEqual(undefined);
+});
+
+test("copy a non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   public download(): Promise<BlobDownloadResponseParsed> {
@@ -591,6 +639,16 @@ class MockBlockBlobClient extends BlockBlobClient {
 
   public delete(): Promise<BlobDeleteResponse> {
     return Promise.resolve({} as any);
+  }
+
+  public syncCopyFromURL(
+    copySource: string,
+    options?: BlobSyncCopyFromURLOptions
+  ): Promise<BlobCopyFromURLResponse> {
+    if (TEST_PATH === "happy") {
+      return Promise.resolve({} as BlobCopyFromURLResponse);
+    }
+    return Promise.reject("some fake error");
   }
 }
 

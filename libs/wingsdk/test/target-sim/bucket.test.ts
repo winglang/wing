@@ -765,7 +765,7 @@ test("copy non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
-    /Unable to copy. Source object does not exist/
+    /Source object does not exist/
   );
   await s.stop();
 });
