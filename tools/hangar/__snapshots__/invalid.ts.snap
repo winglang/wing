@@ -2344,6 +2344,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`new_in_static_without_scope.test.w 1`] = `
+"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
+  |
+7 |     return new cloud.Bucket();
+  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+
+
+error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
+   |
+10 |     return new MyClass();
+   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
@@ -2554,6 +2576,16 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+error: Cannot instantiate preflight class \\"$Closure3\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/phase_mismatch.test.w:18:12
+   |  
+18 |     callback(inflight (msg: str): str => {
+   | /------------^
+19 | |     return \\"Hi \\" + msg + \\"!\\";
+20 | |   });
+   | \\\\---^ Cannot instantiate preflight class \\"$Closure3\\" in a static method without an explicit scope
 
 
  
@@ -2974,11 +3006,11 @@ exports[`scope_and_id.test.w 1`] = `
   |                         ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
-error: Expected scope to be a preflight object, instead found \\"num\\"
+error: Expected scope to be a construct, instead found \\"num\\"
   --> ../../../examples/tests/invalid/scope_and_id.test.w:8:1
   |
 8 | new PreflightClass() in x;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected scope to be a preflight object, instead found \\"num\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected scope to be a construct, instead found \\"num\\"
 
 
 error: Inflight classes cannot have an id
