@@ -10,7 +10,7 @@ a pattern for how to implement singletons in Wing.
 As an example, say we want to maintain a central bucket that can be accessed from any part of the
 application:
 
-```js
+```js playground
 bring cloud;
 
 class OneBucket {
