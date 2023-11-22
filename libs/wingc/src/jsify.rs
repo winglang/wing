@@ -7,7 +7,7 @@ use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
+use std::{borrow::Borrow, cell::RefCell, clone, cmp::Ordering, collections::BTreeMap, vec};
 
 use crate::{
 	ast::{
@@ -500,7 +500,16 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(&arg_list, scope.clone(), id, ctx);
+				let scope_arg = match scope.clone() {
+					None => None,
+					Some(scope) => Some(if scope == "this" {
+							"this".to_string()
+						} else {
+							"$scope".to_string()
+						})
+				};
+
+				let args = self.jsify_arg_list(&arg_list, scope_arg, id, ctx);
 
 				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
