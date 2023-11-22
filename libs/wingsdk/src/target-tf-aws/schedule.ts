@@ -5,8 +5,8 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
+import { makeSequentialId } from "../shared/misc";
 import { Node } from "../std";
 
 /**
@@ -63,7 +63,7 @@ export class Schedule extends cloud.Schedule {
 
     fn = new Function(
       this,
-      Counters.createId(this, "OnTick"),
+      makeSequentialId(this, "OnTick"),
       functionHandler,
       props
     );
@@ -78,7 +78,7 @@ export class Schedule extends cloud.Schedule {
 
     fn.addPermissionToInvoke(this, "events.amazonaws.com", this.rule.arn);
 
-    new CloudwatchEventTarget(this, Counters.createId(this, "ScheduleTarget"), {
+    new CloudwatchEventTarget(this, makeSequentialId(this, "ScheduleTarget"), {
       arn: fn.qualifiedArn,
       rule: this.rule.name,
     });

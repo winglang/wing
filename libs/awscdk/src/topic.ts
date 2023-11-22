@@ -7,7 +7,7 @@ import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
-import { Counters } from "@winglang/sdk/lib/core/counter";
+import { makeSequentialId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -37,7 +37,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
-      Counters.createId(this, `${this.node.id}-OnMessage`),
+      makeSequentialId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );

@@ -274,11 +274,9 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     value: string,
     contentType?: string
   ): Promise<void> {
-    // console.log(this.objectKeys);
     const actionType: BucketEventType = this.objectKeys.has(key)
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
-    // console.log(actionType);
 
     const hash = this.hashKey(key);
     const filename = join(this._fileDir, hash);

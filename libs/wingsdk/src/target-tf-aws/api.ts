@@ -13,8 +13,8 @@ import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
+import { makeSequentialId } from "../shared/misc";
 import {
   CaseConventions,
   NameOptions,
@@ -230,7 +230,7 @@ export class Api extends cloud.Api implements IAwsApi {
       );
       handler = new Function(
         this,
-        Counters.createId(this, "OnRequest"),
+        makeSequentialId(this, "OnRequest"),
         newInflight
       );
       this.handlers[inflight._hash] = handler;

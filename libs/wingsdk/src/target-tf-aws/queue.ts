@@ -5,8 +5,8 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
+import { makeSequentialId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
@@ -69,7 +69,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     const fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
-      Counters.createId(this, `${this.node.id}-SetConsumer`),
+      makeSequentialId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,

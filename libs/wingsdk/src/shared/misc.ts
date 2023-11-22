@@ -1,5 +1,7 @@
 import { execFile } from "child_process";
 import { readFileSync } from "fs";
+import { IConstruct } from "constructs";
+import { App } from "../core";
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -71,4 +73,25 @@ export async function runDockerImage({
       .HostPort;
 
   return { hostPort };
+}
+
+const SEQUENTIAL_ID_SYMBOL = Symbol.for(
+  "@winglang/sdk.shared.makeSequentialId"
+);
+
+/**
+ * Generate a unique ID for the given scope and prefix. The newly generated ID is
+ * guaranteed to be unique within the given scope.
+ * It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
+ * increasing sequence of integers starting from '0'.
+ */
+export function makeSequentialId(scope: IConstruct, prefix: string = "") {
+  const key = `${scope.node.addr}|${prefix}`;
+  const app = App.of(scope) as any;
+  app[SEQUENTIAL_ID_SYMBOL] = app[SEQUENTIAL_ID_SYMBOL] ?? {};
+  const counterMap: Record<string, number> = app[SEQUENTIAL_ID_SYMBOL];
+
+  counterMap[key] = counterMap[key] ?? 0;
+
+  return `${prefix}${counterMap[key]++}`;
 }

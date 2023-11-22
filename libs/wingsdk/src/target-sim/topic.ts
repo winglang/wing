@@ -6,8 +6,8 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
+import { makeSequentialId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -33,14 +33,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      Counters.createId(this, "OnMessage"),
+      makeSequentialId(this, "OnMessage"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onMessage()";
 
-    new EventMapping(this, Counters.createId(this, "TopicEventMapping"), {
+    new EventMapping(this, makeSequentialId(this, "TopicEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},

@@ -6,8 +6,8 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
+import { makeSequentialId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IAwsTopic } from "../shared-aws/topic";
@@ -65,7 +65,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
-      Counters.createId(this, `${this.node.id}-OnMessage`),
+      makeSequentialId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );
@@ -78,7 +78,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     new SnsTopicSubscription(
       this,
-      Counters.createId(this, "TopicSubscription"),
+      makeSequentialId(this, "TopicSubscription"),
       {
         topicArn: this.topic.arn,
         protocol: "lambda",
