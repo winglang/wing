@@ -504,15 +504,19 @@ impl<'a> JSifier<'a> {
 
 				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
-
-					// if a scope is defined, use it to find the root object, otherwise use "this"
-					let node = if let Some(scope) = scope {
+					// determine the scope to use for finding the root object
+					let node_scope = if let Some(scope) = scope {
 						scope
 					} else {
 						"this".to_string()
 					};
 
-					new_code!(expr_span, "(scope => scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node, ")")
+					// if a scope is defined, use it to find the root object, otherwise use "this"
+					if node_scope != "this" {
+						new_code!(expr_span, "($scope => $scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node_scope, ")")
+					} else {
+						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+					}
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
