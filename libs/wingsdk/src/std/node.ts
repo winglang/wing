@@ -9,6 +9,7 @@ import {
 import { Connections } from "../core";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
+export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.App");
 
 export const CONNECTIONS_FILE_PATH = "connections.json";
 export const SDK_SOURCE_MODULE = "@winglang/sdk";
@@ -53,10 +54,14 @@ export class Node {
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
+  private readonly _app: IApp;
 
   private constructor(construct: IConstruct) {
     this._constructsNode = construct.node;
     this._connections = Connections.of(construct); // tree-unique instance
+
+    // find the root app
+    this._app = this.findApp(construct);
   }
 
   /**
@@ -253,11 +258,25 @@ export class Node {
   }
 
   /**
-   * Returns the root of the construct tree.
+   * Returns the root of the construct tree (the `cloud.App` object).
+   * 
+   * Similar to `app`.
+   * 
    * @returns The root of the construct tree.
    */
-  public get root() {
-    return this._constructsNode.root;
+  public get root(): IApp {
+    return this._app;
+  }
+
+  /**
+   * Returns the root of the construct tree (the `cloud.App` object).
+   * 
+   * Similar to `root`.
+   * 
+   * @returns The root of the construct tree.
+   */
+  public get app(): IApp {
+    return this._app;
   }
 
   /**
@@ -326,6 +345,21 @@ export class Node {
   public lock() {
     this._constructsNode.lock();
   }
+
+  /**
+   * Returns the root app.
+   */
+  public findApp(scope: IConstruct): IApp {
+    if ((scope as IApp)[APP_SYMBOL]) {
+      return scope as IApp;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root app");
+    }
+
+    return this.findApp(scope.node.scope);
+  }
 }
 
 /**
@@ -346,4 +380,21 @@ export interface AddConnectionProps {
    * A name for the connection.
    */
   readonly name: string;
+}
+
+export interface IApp extends IConstruct {
+  readonly workdir: string;
+  readonly isTestEnvironment: boolean;
+  readonly entrypointDir: string;
+
+  tryFindChild(uid: string): IConstruct | undefined;
+
+  // marker symbol
+  /** @internal */
+  readonly [APP_SYMBOL]: true;
+}
+
+
+export interface IGetOrCreateFactory {
+  handle(): IConstruct;
 }

@@ -24,7 +24,7 @@ use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
 	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT, CONSTRUCT_BASE_INTERFACE,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1075,7 +1075,8 @@ impl TypeRef {
 	}
 
 	pub fn is_option(&self) -> bool {
-		matches!(**self, Type::Optional(_))
+		// "any" can also be `nil`
+		matches!(**self, Type::Optional(_) | Type::Anything)
 	}
 
 	pub fn is_immutable_collection(&self) -> bool {
@@ -1565,6 +1566,17 @@ impl Types {
 			.0
 			.as_type()
 			.expect("Resouce base class to be a type")
+	}
+
+	pub fn construct_interface(&self) -> TypeRef {
+		// let fqn = format!("{}.{}", CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCT_BASE_INTERFACE);
+		self
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
+			.expect("Construct interface to be loaded")
+			.0
+			.as_type()
+			.expect("Construct interface to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -2094,13 +2106,13 @@ impl<'a> TypeChecker<'a> {
 						obj_scope_type
 					};
 
-					// Verify the object scope is an actually resource
+					// Verify the object scope is a construct
 					if let Some(obj_scope_type) = obj_scope_type {
-						if !obj_scope_type.is_preflight_class() {
+						if !obj_scope_type.is_subtype_of(&self.types.construct_interface()) {
 							self.spanned_error(
 								exp,
 								format!(
-									"Expected scope to be a preflight object, instead found \"{}\"",
+									"Expected scope to be a construct, instead found \"{}\"",
 									obj_scope_type
 								),
 							);
@@ -5944,5 +5956,11 @@ mod tests {
 		// in place of a function that accepts a "string", but not vice versa
 		assert!(opt_str_fn.is_subtype_of(&str_fn));
 		assert!(!str_fn.is_subtype_of(&opt_str_fn));
+	}
+
+	#[test]
+	fn any_is_optional() {
+		let any = UnsafeRef::<Type>(&Type::Anything);
+		assert!(any.is_option());
 	}
 }
