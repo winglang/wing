@@ -33,7 +33,7 @@ async function containsWingFile(dir: string): Promise<boolean> {
  *
  * @param dir The name of the directory to validate
  */
-async function validateDir(dir: string) {
+async function validateWingDir(dir: string) {
   const dirEntries = await fs.readdir(dir);
 
   for (const entry of dirEntries) {
@@ -52,7 +52,7 @@ async function validateDir(dir: string) {
             `Directories that contain wing files cannot contain non-symbolic characters: ${entryPath}`
           );
         }
-        await validateDir(entryPath);
+        await validateWingDir(entryPath);
       }
     }
   }
@@ -69,12 +69,14 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
   }
 
+  // check that all wing directories are valid (for now that just means named correctly)
+  await validateWingDir(userDir);
+
   // collect a list of files to copy to the staging directory.
   // only the files that will be included in the tarball will be copied
   // this way we can run `wing compile .` in the staging directory and be sure
   // that someone consuming the library will be able to compile it.
   const filesToCopy = await listFilesToCopy(userDir, defaultGlobs);
-  await validateDir(userDir);
 
   // perform our work in a staging directory to avoid making a mess in the user's current directory
   return withTempDir(async (workdir) => {
