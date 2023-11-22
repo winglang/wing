@@ -1,6 +1,6 @@
 // since MyClass is a preflight class, it can only be created in from a static context with an
 // explicit `scope`.
- bring cloud;
+bring cloud;
 
 class MyClass {
   pub static createBucket(): cloud.Bucket {
