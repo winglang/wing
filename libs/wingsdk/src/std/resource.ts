@@ -169,7 +169,7 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // if the object is a resource (i.e. has a "lift" method"), register a lifting between it and the host.
+        // if the object is a liftable resource (i.e. also has a "_addOnLift" method"), register a lifting between it and the host.
         if (isLiftable(obj) && "_addOnLift" in obj) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
@@ -370,7 +370,7 @@ export interface OperationAnnotation {
   };
 }
 
-function isLiftable(t: any): t is new (...args: any[]) => ILiftable {
+function isLiftable(t: any): t is ILiftable {
   return (
     t !== undefined &&
     typeof t.onLift === "function" &&
