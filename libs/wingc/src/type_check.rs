@@ -2015,6 +2015,21 @@ impl<'a> TypeChecker<'a> {
 							self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
 						}
 
+						// if this is preflight class, and scope is not explicitly defined, make sure we are
+						// either in the entrypoint (no parent environment) or that we have "this" in the
+						// current environment (we are not in a static method) because that's the default scope.
+						if class.phase == Phase::Preflight && obj_scope.is_none() && env.parent.is_some() {
+							if env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_none() {
+								self.spanned_error(
+									exp,
+									format!(
+										"Cannot instantiate preflight class \"{}\" without an explicit scope inside a static method",
+										class.name
+									),
+								);
+							}
+						}
+
 						if class.phase == Phase::Independent || env.phase == class.phase {
 							(&class.env, &class.name)
 						} else {

@@ -500,11 +500,19 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
+				let args = self.jsify_arg_list(&arg_list, scope.clone(), id, ctx);
 
 				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
-					new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+
+					// if a scope is defined, use it to find the root object, otherwise use "this"
+					let node = if let Some(scope) = scope {
+						scope
+					} else {
+						"this".to_string()
+					};
+
+					new_code!(expr_span, "(scope => scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node, ")")
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
