@@ -1,4 +1,5 @@
 import { IConstruct } from "constructs";
+import { App } from "./app";
 
 const COUNTERS_SYMBOL = Symbol.for("@winglang/sdk.core.Counter");
 
@@ -10,11 +11,11 @@ export class Counters {
    * Returns the singleton instance of the `Counters` class.
    */
   public static of(construct: IConstruct): Counters {
-    let connections = (construct.node.root as any)[COUNTERS_SYMBOL];
+    let connections = (App.of(construct) as any)[COUNTERS_SYMBOL];
 
     if (!connections) {
       connections = new Counters();
-      (construct.node.root as any)[COUNTERS_SYMBOL] = connections;
+      (App.of(construct) as any)[COUNTERS_SYMBOL] = connections;
     }
 
     return connections;
