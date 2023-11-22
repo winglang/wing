@@ -326,12 +326,12 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
    | api.get(\\"<ABSOLUTE>/path\\", handler);
-12 | api.get(\\"<ABSOLUTE>/\\\\{variable\\\\}\\", handler);
+12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
 at (<ABSOLUTE>:LINE:COL)
  
