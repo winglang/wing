@@ -4,7 +4,7 @@ import { App } from "./app";
 const COUNTERS_SYMBOL = Symbol.for("@winglang/sdk.core.Counter");
 
 /**
- * A class that generates unique sequenced IDs for constructs.
+ * A class that generates tree-unique sequenced IDs for constructs.
  */
 export class Counters {
   /**
