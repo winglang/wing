@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { SnsTopic } from "../.gen/providers/aws/sns-topic";
 import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
@@ -7,7 +8,6 @@ import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscripti
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { makeSequentialId } from "../shared/misc";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { IAwsTopic } from "../shared-aws/topic";
@@ -65,7 +65,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
-      makeSequentialId(this, `${this.node.id}-OnMessage`),
+      App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );
@@ -78,7 +78,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     new SnsTopicSubscription(
       this,
-      makeSequentialId(this, "TopicSubscription"),
+      App.of(this).makeId(this, "TopicSubscription"),
       {
         topicArn: this.topic.arn,
         protocol: "lambda",

@@ -1,4 +1,4 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { IResource } from "../std/resource";
@@ -144,6 +144,11 @@ export abstract class App extends Construct {
   public readonly entrypointDir: string;
 
   /**
+   * Used in `makeId` to keep track of known IDs
+   */
+  private readonly _idCounters: Record<string, number> = {};
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -188,6 +193,20 @@ export abstract class App extends Construct {
    * Synthesize the app into an artifact.
    */
   public abstract synth(): string;
+
+  /**
+   * Generate a unique ID for the given scope and prefix. The newly generated ID is
+   * guaranteed to be unique within the given scope.
+   * It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
+   * increasing sequence of integers starting from '0'.
+   */
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
+  }
 
   /**
    * Creates a new object of the given FQN.

@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -6,7 +7,6 @@ import { ApiSchema, ApiRoute } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { makeSequentialId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -50,7 +50,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      makeSequentialId(this, "OnRequestHandler"),
+      App.of(this).makeId(this, "OnRequestHandler"),
       inflight,
       props
     ) as Function;
@@ -59,7 +59,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const eventMapping = new EventMapping(
       this,
-      makeSequentialId(this, "ApiEventMapping"),
+      App.of(this).makeId(this, "ApiEventMapping"),
       {
         publisher: this,
         subscriber: fn,

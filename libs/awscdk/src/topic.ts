@@ -3,11 +3,11 @@ import { Topic as SNSTopic } from "aws-cdk-lib/aws-sns";
 import { LambdaSubscription } from "aws-cdk-lib/aws-sns-subscriptions";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { App } from "./app";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateTopicPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsTopic } from "@winglang/sdk/lib/shared-aws/topic";
-import { makeSequentialId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -37,7 +37,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
-      makeSequentialId(this, `${this.node.id}-OnMessage`),
+      App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );

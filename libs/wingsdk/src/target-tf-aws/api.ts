@@ -14,7 +14,6 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { makeSequentialId } from "../shared/misc";
 import {
   CaseConventions,
   NameOptions,
@@ -230,7 +229,7 @@ export class Api extends cloud.Api implements IAwsApi {
       );
       handler = new Function(
         this,
-        makeSequentialId(this, "OnRequest"),
+        App.of(this).makeId(this, "OnRequest"),
         newInflight
       );
       this.handlers[inflight._hash] = handler;

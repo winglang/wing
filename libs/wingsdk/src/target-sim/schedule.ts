@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -11,7 +12,6 @@ import {
 } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
-import { makeSequentialId } from "../shared/misc";
 import { BaseResourceSchema } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
@@ -42,14 +42,14 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      makeSequentialId(this, "OnTick"),
+      App.of(this).makeId(this, "OnTick"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onTick()";
 
-    new EventMapping(this, makeSequentialId(this, "OnTickMapping"), {
+    new EventMapping(this, App.of(this).makeId(this, "OnTickMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},

@@ -4,11 +4,11 @@ import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
-import { makeSequentialId } from "@winglang/sdk/lib/shared/misc";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -49,7 +49,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     const fn = new Function(
       // ok since we're not a tree root
       this.node.scope!,
-      makeSequentialId(this, `${this.node.id}-SetConsumer`),
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,
