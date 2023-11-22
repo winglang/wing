@@ -214,25 +214,24 @@ export class Api extends cloud.Api implements IAwsApi {
    * @returns Inflight handler as a AWS Lambda Function
    */
   private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const functionHandler = convertBetweenHandlers(
-      inflight,
-      join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "api.onrequest.inflight.js"
-      ),
-      "ApiOnRequestHandlerClient",
-      {
-        corsHeaders: this._generateCorsHeaders(this.corsOptions)
-          ?.defaultResponse,
-      }
-    );
-
     let handler = this.handlers[inflight._hash];
-    if (handler) {
+    if (!handler) {
+      const newInflight = convertBetweenHandlers(
+        inflight,
+        join(
+          __dirname.replace("target-tf-aws", "shared-aws"),
+          "api.onrequest.inflight.js"
+        ),
+        "ApiOnRequestHandlerClient",
+        {
+          corsHeaders: this._generateCorsHeaders(this.corsOptions)
+            ?.defaultResponse,
+        }
+      );
       handler = new Function(
         this,
         Counters.createId(this, "OnRequest"),
-        functionHandler
+        newInflight
       );
       this.handlers[inflight._hash] = handler;
     }

@@ -125,7 +125,7 @@ bucket: (function() {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue/QueueEventMapping-e050d7",
+        "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
           "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
@@ -247,7 +247,7 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
-                "QueueEventMapping-e050d7": {
+                "QueueEventMapping0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.2.70",
@@ -255,8 +255,8 @@ bucket: (function() {
                   "display": {
                     "hidden": true,
                   },
-                  "id": "QueueEventMapping-e050d7",
-                  "path": "root/HelloWorld/Queue/QueueEventMapping-e050d7",
+                  "id": "QueueEventMapping0",
+                  "path": "root/HelloWorld/Queue/QueueEventMapping0",
                 },
                 "SetConsumer0": {
                   "constructInfo": {
