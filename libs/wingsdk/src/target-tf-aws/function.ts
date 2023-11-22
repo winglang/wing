@@ -10,6 +10,7 @@ import { LambdaFunction } from "../.gen/providers/aws/lambda-function";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
+import { IFunctionHandler } from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
@@ -233,6 +234,25 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
+  }
+
+  /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+    lines.push(`const AWSXRay = require('aws-xray-sdk');`);
+    lines.push(`AWSXRay.captureHTTPsGlobal(require('http'));`);
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push("};");
+
+    return lines;
   }
 
   /** @internal */
