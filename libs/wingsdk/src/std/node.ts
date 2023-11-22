@@ -259,9 +259,9 @@ export class Node {
 
   /**
    * Returns the root of the construct tree (the `cloud.App` object).
-   * 
+   *
    * Similar to `app`.
-   * 
+   *
    * @returns The root of the construct tree.
    */
   public get root(): IApp {
@@ -270,9 +270,9 @@ export class Node {
 
   /**
    * Returns the root of the construct tree (the `cloud.App` object).
-   * 
+   *
    * Similar to `root`.
-   * 
+   *
    * @returns The root of the construct tree.
    */
   public get app(): IApp {
@@ -387,7 +387,13 @@ export interface AddConnectionProps {
  */
 export interface IApp extends IConstruct {
   /**
-   * The .wing directory into which you can emit artifacts.
+   * Type marker.
+   * @internal
+   **/
+  readonly [APP_SYMBOL]: true;
+
+  /**
+   * The `.wing` directory into which you can emit artifacts during preflight.
    */
   readonly workdir: string;
 
@@ -406,8 +412,4 @@ export interface IApp extends IConstruct {
    * @param id the node id
    */
   tryFindChild(id: string): IConstruct | undefined;
-
-  // marker symbol
-  /** @internal */
-  readonly [APP_SYMBOL]: true;
 }

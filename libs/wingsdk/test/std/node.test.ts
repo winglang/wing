@@ -1,8 +1,8 @@
+import { Construct, IConstruct } from "constructs";
 import { expect, test } from "vitest";
-import { SimApp } from "../sim-app";
 import { Bucket, BucketInflightMethods } from "../../src/cloud";
 import { IGetOrCreateFactory, Node } from "../../src/std";
-import { Construct, IConstruct } from "constructs";
+import { SimApp } from "../sim-app";
 
 test("Node.of(scope).app returns the root app", () => {
   const app = new SimApp();
@@ -11,7 +11,7 @@ test("Node.of(scope).app returns the root app", () => {
 
   const a1 = Node.of(myBucket).app;
 
-  expect(a1.node).toBe(app.node)
+  expect(a1.node).toBe(app.node);
   expect(a1.workdir).toBe(app.workdir);
   expect(a1.isTestEnvironment).toBe(app.isTestEnvironment);
   expect(a1.entrypointDir).toBe(app.entrypointDir);

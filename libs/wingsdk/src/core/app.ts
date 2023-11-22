@@ -2,9 +2,9 @@ import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
-import { APP_SYMBOL, IApp, Node } from "../std/node";
 
 /**
  * Props for all `App` classes.
@@ -93,13 +93,13 @@ export interface SynthHooks {
  * A Wing application.
  */
 export abstract class App extends Construct implements IApp {
-    /**
+  /**
    * Returns the root app.
    */
-    public static of(scope: Construct): App {
-      return Node.of(scope).app as App;
-    }
-  
+  public static of(scope: Construct): App {
+    return Node.of(scope).app as App;
+  }
+
   /**
    * Loads the `App` class for the given target.
    * @param target one of the supported targets
@@ -120,6 +120,9 @@ export abstract class App extends Construct implements IApp {
       throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
     }
   }
+
+  /** @internal */
+  public readonly [APP_SYMBOL] = true;
 
   /**
    * The name of the compilation target.
@@ -168,9 +171,6 @@ export abstract class App extends Construct implements IApp {
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
   }
-  
-  /** @internal */
-  public readonly [APP_SYMBOL] = true;
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit

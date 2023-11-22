@@ -9,35 +9,20 @@ assert(app.isTestEnvironment);
 assert(app.entrypointDir.endsWith("/sdk_tests/std"));
 expect.equal(std.Node.of(app).id, "root");
 
-class Singleton {
-  pub static of(scope: std.IResource): Singleton {
-    let uid = "MySingleton";
+class SingletonBucket {
+  pub static of(scope: std.IResource): cloud.Bucket {
+    let uid = "SingletonBucket";
     let root = std.Node.of(scope).root;
-    
-    return unsafeCast(root.tryFindChild(uid)) ?? new Singleton() as uid in root;
-  }
-
-  s: cloud.Bucket;
-
-  new() {
-    this.s = new cloud.Bucket() as "central_store";
-  }
-
-  pub inflight store(data: str) {
-    this.s.put("data.txt", data);
-  }
-
-  pub inflight load(): str? {
-    return this.s.tryGet("data.txt");
+    return unsafeCast(root.tryFindChild(uid)) ?? new cloud.Bucket() as uid in root;
   }
 }
 
 let q1 = new cloud.Queue() as "q1";
 let q2 = new cloud.Queue() as "q2";
-let store1 = Singleton.of(q1);
-let store2 = Singleton.of(q2);
+let store1 = SingletonBucket.of(q1);
+let store2 = SingletonBucket.of(q2);
 
 test "singleton" {
-  store1.store("hello");
-  expect.equal(store2.load(), "hello");
+  store1.put("hello", "world");
+  expect.equal(store2.get("hello"), "world");
 }
