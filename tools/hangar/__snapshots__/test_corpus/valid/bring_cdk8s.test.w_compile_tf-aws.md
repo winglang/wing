@@ -47,7 +47,7 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const app = this.node.root.new("cdk8s.App", cdk8s.App, );
     const chart = this.node.root.new("cdk8s.Chart", cdk8s.Chart, this, "cdk8s.Chart");
-    const deploy = this.node.root.new("cdk8s-plus-27.Deployment", kplus.Deployment, chart, "kplus.Deployment");
+    const deploy = ($scope => $scope.node.root.new("cdk8s-plus-27.Deployment", kplus.Deployment, chart, "kplus.Deployment"))(chart);
     (deploy.addContainer(({"image": "hashicorp/http-echo", "args": ["-text", "text"], "portNumber": 5678})));
   }
 }
