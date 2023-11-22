@@ -63,6 +63,26 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
+      "b1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b1/Default",
+            "uniqueId": "b1"
+          }
+        },
+        "bucket_prefix": "b1-c88fb896-",
+        "force_destroy": false
+      },
+      "b2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/b2/Default",
+            "uniqueId": "b2"
+          }
+        },
+        "bucket_prefix": "b2-c844cd88-",
+        "force_destroy": false
+      },
       "cConstruct_cloudBucket_63D47E7B": {
         "//": {
           "metadata": {
@@ -71,16 +91,6 @@ module.exports = function({  }) {
           }
         },
         "bucket_prefix": "cloud-bucket-c8e0ff1c-",
-        "force_destroy": false
-      },
-      "cloudBucket": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
-          }
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
       }
     }
@@ -106,7 +116,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static createBucket(scope) {
-        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, scope, "cloud.Bucket"))(scope);
+        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(scope);
       }
       static createMyClass(scope) {
         return new MyClass(scope, "MyClass");
@@ -165,11 +175,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
+    const createBucket = (() => {
+      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+    });
     if (true) {
-      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     }
     const scope = this.node.root.new("constructs.Construct", c.Construct, this, "c.Construct");
     const bucket = (MyClass.createBucket(scope));
+    const bucket2 = (createBucket());
     const my = (MyClass.createMyClass(scope));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with bucket", new $Closure1(this, "$Closure1"));
   }
