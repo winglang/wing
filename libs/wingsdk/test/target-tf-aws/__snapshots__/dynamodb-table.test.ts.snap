@@ -27,19 +27,19 @@ exports[`default dynamodb table behavior 1`] = `
 
 exports[`function with a table binding 1`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle(event) {
+  }
+  async handle(event) {
   await this.my_table.putItem({ item: { id: \\"test\\" } });
   await this.my_table.scan();
 }
-  };
+};
 })())({
-  my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight\\")).DynamodbTableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"])
+my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/dynamodb-table.inflight\\")).DynamodbTableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"])
 })"
 `;
 

@@ -30,18 +30,18 @@ export class Testing {
 
     const inflightCode = `\
 new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    ${code}
-  };
+  }
+  ${code}
+};
 })())({
-  ${Object.entries(clients)
-    .map(([name, client]) => `${name}: ${client}`)
-    .join(",\n")}
+${Object.entries(clients)
+  .map(([name, client]) => `${name}: ${client}`)
+  .join(",\n")}
 })`;
 
     return {

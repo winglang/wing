@@ -6,18 +6,18 @@ exports[`create a service with on start method 1`] = `
 let $obj;
 async function $initOnce() {
   $obj = $obj || (await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
   console.log(\\"start!\\");
 }
-  };
+};
 })())({
-  
+
 })));
   return $obj;
 };

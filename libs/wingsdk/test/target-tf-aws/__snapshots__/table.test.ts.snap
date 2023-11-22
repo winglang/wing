@@ -27,18 +27,18 @@ exports[`default table behavior 1`] = `
 
 exports[`function with a table binding 1`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle(event) {
+  }
+  async handle(event) {
   await this.my_table.insert({ id: \\"test\\" });
 }
-  };
+};
 })())({
-  my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/table.inflight\\")).TableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_COLUMNS\\"])
+my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/table.inflight\\")).TableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_COLUMNS\\"])
 })"
 `;
 

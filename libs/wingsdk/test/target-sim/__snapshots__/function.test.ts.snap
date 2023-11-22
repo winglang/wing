@@ -5,13 +5,13 @@ exports[`create a function 1`] = `
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(event) {
   event = JSON.parse(event);
   let msg;
@@ -25,9 +25,9 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {
@@ -194,13 +194,13 @@ exports[`invoke function fails 2`] = `
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(event) {
   event = JSON.parse(event);
   let msg;
@@ -214,9 +214,9 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {
@@ -381,13 +381,13 @@ exports[`invoke function succeeds 2`] = `
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(event) {
   event = JSON.parse(event);
   let msg;
@@ -401,9 +401,9 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {
@@ -568,13 +568,13 @@ exports[`invoke function with environment variables 2`] = `
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(event) {
   event = JSON.parse(event);
   let msg;
@@ -588,9 +588,9 @@ async handle(event) {
   }
   return JSON.stringify({ msg });
 }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {
@@ -757,19 +757,19 @@ exports[`invoke function with process.exit(1) 2`] = `
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle() {
   process.exit(1);
 }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {
@@ -924,81 +924,81 @@ exports[`runtime environment tests 1`] = `
   ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
           
     const query = \\"q=URLUtils.searchParams&topic=api\\";
     const p = new URLSearchParams(query);
     return p.get(\\"topic\\");
   
         }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   ".wing/function.1_c89ed254.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
           
     return typeof fetch;
   
         }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
           
     const c = require(\\"crypto\\");
     return typeof c.createHash;
   
         }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   ".wing/function.3_c8badafa.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
           
     const { nanoid } = await import(\\"nanoid\\");
     return nanoid();
   
         }
-  };
+};
 })())({
-  
+
 })).handle(event);
 };",
   "connections.json": {

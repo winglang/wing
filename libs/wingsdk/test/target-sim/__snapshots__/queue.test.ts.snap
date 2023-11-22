@@ -169,21 +169,21 @@ exports[`messages are not requeued if the function fails before timeout 2`] = `
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
   }
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -409,21 +409,21 @@ exports[`messages are requeued if the function fails after timeout 2`] = `
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
   }
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -949,13 +949,13 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   ".wing/function_c8ab799f.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
   await this.queue.push(\\"A\\");
   await this.queue.push(\\"B\\");
   await this.queue.push(\\"C\\");
@@ -963,9 +963,9 @@ exports.handler = async function(event) {
   await this.queue.push(\\"E\\");
   await this.queue.push(\\"F\\");
 }
-  };
+};
 })())({
-  queue: (function() {
+queue: (function() {
   let handle = process.env.QUEUE_HANDLE_54fcf4cd;
   if (!handle) {
     throw new Error(\\"Missing environment variable: QUEUE_HANDLE_54fcf4cd\\");
@@ -981,21 +981,21 @@ exports.handler = async function(event) {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
   }
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -1261,21 +1261,21 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
   if (message === \\"BAD MESSAGE\\") {
     throw new Error(\\"ERROR\\");
   }
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {

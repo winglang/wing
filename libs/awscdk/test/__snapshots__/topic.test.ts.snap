@@ -51,31 +51,31 @@ exports[`default topic behavior 1`] = `
 
 exports[`topic with multiple subscribers 1`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle(event) { console.log(\\"Got Event: \\", event); }
-  };
+  }
+  async handle(event) { console.log(\\"Got Event: \\", event); }
+};
 })())({
-  
+
 })"
 `;
 
 exports[`topic with multiple subscribers 2`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle(event) { console.log(\\"Ohh yea!! \\", event); }
-  };
+  }
+  async handle(event) { console.log(\\"Ohh yea!! \\", event); }
+};
 })())({
-  
+
 })"
 `;
 
@@ -433,16 +433,16 @@ exports[`topic with multiple subscribers 3`] = `
 
 exports[`topic with subscriber function 1`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle(event) { console.log(\\"Received: \\", event); }
-  };
+  }
+  async handle(event) { console.log(\\"Received: \\", event); }
+};
 })())({
-  
+
 })"
 `;
 

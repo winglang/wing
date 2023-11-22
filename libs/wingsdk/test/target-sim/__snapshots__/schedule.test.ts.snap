@@ -151,19 +151,19 @@ exports[`schedule with one task using rate of 3h 1`] = `
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -368,19 +368,19 @@ exports[`schedule with one task using rate of 10m 1`] = `
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {
@@ -585,19 +585,19 @@ exports[`schedule with one task with cron 1`] = `
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    
+  }
+  
 async handle(message) {
 console.log(\\"Hello from schedule!\\");
 }
-  };
+};
 })())({
-  
+
 }), args: {} })).handle(event);
 };",
   "connections.json": {

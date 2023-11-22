@@ -2,18 +2,18 @@
 
 exports[`inflight function uses a logger 1`] = `
 "new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
     }
-    async handle() {
+  }
+  async handle() {
       console.log(\\"hello world!\\");
     }
-  };
+};
 })())({
-  
+
 })"
 `;
 
