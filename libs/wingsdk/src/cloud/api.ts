@@ -185,7 +185,6 @@ export class Api extends Resource {
 
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
-    openapi: "3.0.3",
     paths: {},
   };
 
@@ -536,9 +535,8 @@ export class Api extends Resource {
         `Endpoint for path '${path}' and method '${method}' is ambiguous - it conflicts with existing endpoint for path '${ambiguousPath}'`
       );
     }
-    const operationId = `${method.toLowerCase()}${
-      path === "/" ? "" : path.replace("/", "-")
-    }`;
+    const operationId = `${method.toLowerCase()}${path === "/" ? "" : path.replace("/", "-")
+      }`;
     const pathParams = path.match(/:([A-Za-z0-9_-]+)/g);
     const pathParameters: any[] = [];
     if (pathParams) {
@@ -578,57 +576,67 @@ export class Api extends Resource {
   }
 
   /**
-   * Return the api spec.
+   * Return the OpenAPI spec for this Api.
    * @internal */
-  public _getApiSpec(): OpenApiSpec {
-    return this.apiSpec;
+  public _getOpenApiSpec(): OpenApiSpec {
+    // Convert our paths to valid OpenAPI paths
+    let paths: { [key: string]: any } = {};
+    Object.keys(this.apiSpec.paths).forEach((key) => {
+      paths[key.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}")] = this.apiSpec.paths[key];
+    });
+
+    // https://spec.openapis.org/oas/v3.0.3
+    return {
+      openapi: "3.0.3",
+      paths: paths,
+    };
   }
 }
 
 /**
  * Options for Api get endpoint.
  */
-export interface ApiGetOptions {}
+export interface ApiGetOptions { }
 
 /**
  * Options for Api post endpoint.
  */
-export interface ApiPostOptions {}
+export interface ApiPostOptions { }
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiPutOptions {}
+export interface ApiPutOptions { }
 
 /**
  * Options for Api put endpoint.
  */
-export interface ApiDeleteOptions {}
+export interface ApiDeleteOptions { }
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiPatchOptions {}
+export interface ApiPatchOptions { }
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiOptionsOptions {}
+export interface ApiOptionsOptions { }
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiHeadOptions {}
+export interface ApiHeadOptions { }
 
 /**
  * Options for Api patch endpoint.
  */
-export interface ApiConnectOptions {}
+export interface ApiConnectOptions { }
 
 /**
  * Inflight methods and members of `cloud.Api`.
  */
-export interface IApiClient {}
+export interface IApiClient { }
 
 /**
  * Allowed HTTP methods for a endpoint.
@@ -688,7 +696,7 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IResource {}
+export interface IApiEndpointHandler extends IResource { }
 
 /**
  * Inflight client for `IApiEndpointHandler`.
