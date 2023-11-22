@@ -448,16 +448,16 @@ class $Root extends $stdlib.std.Resource {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"")))};
     });
-    (testInvalidPath("/test/:sup\{er/:annoying//path"));
-    (testInvalidPath("/test/\{::another:annoying:path}"));
+    (testInvalidPath("/test/:sup{er/:annoying//path"));
+    (testInvalidPath("/test/{::another:annoying:path}"));
     (testInvalidPath("/test/n0t_alphanumer1cPa*th"));
-    (testInvalidPath("/test/path/:with/:two\{invali4d#/variables"));
+    (testInvalidPath("/test/path/:with/:two{invali4d#/variables"));
     (testInvalidPath("/test/path/:/empty"));
     (testInvalidPath("/test/m:issplaced"));
     (testInvalidPath("/test/misspla:/ced"));
-    (testInvalidPath("/:sup\{er/\{annoying//path}"));
+    (testInvalidPath("/:sup{er/{annoying//path}"));
     (testInvalidPath("/:^^another^annoying^path"));
-    (testInvalidPath("/n0t_alphanumer1cPa\{th"));
+    (testInvalidPath("/n0t_alphanumer1cPa{th"));
     (testInvalidPath("/:with/:two}invali4d#/variables"));
     (testInvalidPath("/m:issplaced"));
     (testInvalidPath("/missplaced:"));
