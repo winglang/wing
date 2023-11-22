@@ -1569,7 +1569,6 @@ impl Types {
 	}
 
 	pub fn construct_interface(&self) -> TypeRef {
-		// let fqn = format!("{}.{}", CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCT_BASE_INTERFACE);
 		self
 			.libraries
 			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
