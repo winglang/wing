@@ -1925,7 +1925,6 @@ The internal node of a construct.
 | <code><a href="#@winglang/sdk.std.Node.addMetadata">addMetadata</a></code> | Adds a metadata entry to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.addValidation">addValidation</a></code> | Adds a validation to this construct. |
 | <code><a href="#@winglang/sdk.std.Node.findAll">findAll</a></code> | Return this construct and all of its children in the given order. |
-| <code><a href="#@winglang/sdk.std.Node.findApp">findApp</a></code> | Returns the root app. |
 | <code><a href="#@winglang/sdk.std.Node.findChild">findChild</a></code> | Return a direct child by id. |
 | <code><a href="#@winglang/sdk.std.Node.getContext">getContext</a></code> | Retrieves a value from tree context if present. Otherwise, would throw an error. |
 | <code><a href="#@winglang/sdk.std.Node.lock">lock</a></code> | Locks this construct from allowing more children to be added. |
@@ -2040,14 +2039,6 @@ Return this construct and all of its children in the given order.
 - *Type:* constructs.ConstructOrder
 
 ---
-
-##### `findApp` <a name="findApp" id="@winglang/sdk.std.Node.findApp"></a>
-
-```wing
-findApp(): IApp
-```
-
-Returns the root app.
 
 ##### `findChild` <a name="findChild" id="@winglang/sdk.std.Node.findChild"></a>
 
