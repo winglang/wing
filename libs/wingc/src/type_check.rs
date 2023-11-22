@@ -2018,15 +2018,22 @@ impl<'a> TypeChecker<'a> {
 						// error if we are trying to instantiate a preflight in a static method
 						// without an explicit scope (there is no "this" to use as the scope)
 						if class.phase == Phase::Preflight && obj_scope.is_none() {
-							let is_static = self.ctx().current_function().and_then(|f| Some(f.is_static));
-							if let Some(true) = is_static {
-								self.spanned_error(
-									exp,
-									format!(
-										"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
-										class.name
-									),
-								);
+							// check if there is a "this" symbol in the current environment
+							let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_none();
+							// if we have a "this", it means we can use it as a default scope, so we are fine
+							if !has_this {
+								// we don't have a "this", so we need to check if we are in a static method
+								// because the entrypoint scope doesn't have a "this" but it is not static
+								let is_static = self.ctx().current_function().and_then(|f| Some(f.is_static));
+								if let Some(true) = is_static {
+									self.spanned_error(
+										exp,
+										format!(
+											"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
+											class.name
+										),
+									);
+								}
 							}
 						}
 
@@ -2125,7 +2132,10 @@ impl<'a> TypeChecker<'a> {
 						if !obj_scope_type.is_subtype_of(&self.types.construct_interface()) {
 							self.spanned_error(
 								exp,
-								format!("Expected scope to be a construct, instead found \"{}\"", obj_scope_type),
+								format!(
+									"Expected scope to be a preflight object, instead found \"{}\"",
+									obj_scope_type
+								),
 							);
 						}
 					}
