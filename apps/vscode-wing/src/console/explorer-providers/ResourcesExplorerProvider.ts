@@ -203,8 +203,7 @@ export class ResourceItem extends TreeItem {
       case "@winglang/sdk.cloud.Queue": {
         return "queue-list";
       }
-      case "@winglang/sdk.cloud.Website":
-      case "@winglang/sdk.cloud.Endpoint": {
+      case "@winglang/sdk.cloud.Website": {
         return "globe-alt";
       }
       case "@winglang/sdk.cloud.Counter": {
