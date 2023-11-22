@@ -1,5 +1,5 @@
+import { createHash } from "crypto";
 import { InflightBindings, liftObject } from "../core";
-import { stableHash } from "../shared/misc";
 import { IInflight, IInflightHost, Resource } from "../std";
 
 /**
@@ -45,7 +45,7 @@ ${Object.entries(clients)
 })`;
 
     return {
-      _hash: stableHash(inflightCode),
+      _hash: createHash("md5").update(inflightCode).digest("hex"),
       _toInflight: () => inflightCode,
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {

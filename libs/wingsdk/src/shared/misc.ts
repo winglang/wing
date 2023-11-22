@@ -1,5 +1,4 @@
 import { execFile } from "child_process";
-import { createHash } from "crypto";
 import { readFileSync } from "fs";
 
 export function readJsonSync(file: string) {
@@ -72,8 +71,4 @@ export async function runDockerImage({
       .HostPort;
 
   return { hostPort };
-}
-
-export function stableHash(text: string, length: number = 6) {
-  return createHash("md5").update(text).digest("hex").slice(0, length);
 }
