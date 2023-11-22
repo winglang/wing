@@ -349,7 +349,7 @@ export class Node {
   /**
    * Returns the root app.
    */
-  public findApp(scope: IConstruct): IApp {
+  private findApp(scope: IConstruct): IApp {
     if ((scope as IApp)[APP_SYMBOL]) {
       return scope as IApp;
     }
