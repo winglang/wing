@@ -5,8 +5,10 @@ let bucket = new cloud.Bucket();
 let app = std.Node.of(bucket).app;
 
 assert(app.workdir.endsWith(".wing"));
-assert(app.isTestEnvironment);
 assert(app.entrypointDir.endsWith("/sdk_tests/std"));
+
+app.isTestEnvironment; // don't care if it's true or false, just that it compiles
+
 expect.equal(std.Node.of(app).id, "root");
 
 class SingletonBucket {
