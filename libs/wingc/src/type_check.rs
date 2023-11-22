@@ -2019,7 +2019,8 @@ impl<'a> TypeChecker<'a> {
 						// without an explicit scope (there is no "this" to use as the scope)
 						if class.phase == Phase::Preflight && obj_scope.is_none() {
 							// check if there is a "this" symbol in the current environment
-							let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_none();
+							let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
+
 							// if we have a "this", it means we can use it as a default scope, so we are fine
 							if !has_this {
 								// we don't have a "this", so we need to check if we are in a static method
