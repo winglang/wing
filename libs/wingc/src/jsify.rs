@@ -7,7 +7,7 @@ use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cell::RefCell, clone, cmp::Ordering, collections::BTreeMap, vec};
+use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
 
 use crate::{
 	ast::{

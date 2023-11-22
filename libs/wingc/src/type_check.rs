@@ -2024,7 +2024,7 @@ impl<'a> TypeChecker<'a> {
 							if !has_this {
 								// we don't have a "this", so we need to check if we are in a static method
 								// because the entrypoint scope doesn't have a "this" but it is not static
-								let is_static = self.ctx().current_function().and_then(|f| Some(f.is_static));
+								let is_static = self.ctx().current_function().map(|f| f.is_static);
 								if let Some(true) = is_static {
 									self.spanned_error(
 										exp,
