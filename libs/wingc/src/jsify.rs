@@ -500,18 +500,23 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let scope_arg = match scope.clone() {
-					None => None,
-					Some(scope) => Some(if scope == "this" {
-							"this".to_string()
-						} else {
-							"$scope".to_string()
-						})
+				let fqn = class_type.fqn.clone();
+
+				let scope_arg = if fqn.is_none() {
+					scope.clone()
+				} else {
+					match scope.clone() {
+						None => None,
+						Some(scope) => Some(if scope == "this" {
+								"this".to_string()
+							} else {
+								"$scope".to_string()
+							})
+					}
 				};
 
 				let args = self.jsify_arg_list(&arg_list, scope_arg, id, ctx);
 
-				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
 					// determine the scope to use for finding the root object
 					let node_scope = if let Some(scope) = scope {
