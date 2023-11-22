@@ -6,6 +6,7 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
@@ -28,6 +29,7 @@ const NAME_OPTS: NameOptions = {
  */
 export class Topic extends cloud.Topic implements IAwsTopic {
   private readonly topic: SnsTopic;
+  private readonly handlers: Record<string, Function> = {};
   /**
    * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
@@ -54,14 +56,20 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       ),
       "TopicOnMessageHandlerClient"
     );
-    const hash = inflight._hash.slice(0, 6);
-    const functionId = `${this.node.id}-OnMessage-${hash}`;
-    let fn = this.node.tryFindChild(functionId);
+
+    let fn = this.handlers[inflight._hash];
     if (fn) {
-      return fn as Function;
+      return fn;
     }
 
-    fn = new Function(this.node.scope!, functionId, functionHandler, props);
+    fn = new Function(
+      // ok since we're not a tree root
+      this.node.scope!,
+      Counters.createId(this, `${this.node.id}-OnMessage`),
+      functionHandler,
+      props
+    );
+    this.handlers[inflight._hash] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
@@ -70,7 +78,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
 
     new SnsTopicSubscription(
       this,
-      `${this.node.id}-TopicSubscription-${hash}`,
+      Counters.createId(this, "TopicSubscription"),
       {
         topicArn: this.topic.arn,
         protocol: "lambda",

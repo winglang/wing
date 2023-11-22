@@ -52,14 +52,14 @@ module.exports = function({ $bucket, $counter }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "cloudQueue-SetConsumer-2c8fa7_CloudwatchLogGroup_7136C47C": {
+      "cloudQueue-SetConsumer0_CloudwatchLogGroup_FCFCF419": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/CloudwatchLogGroup",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7_CloudwatchLogGroup_7136C47C"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer0_CloudwatchLogGroup_FCFCF419"
           }
         },
-        "name": "/aws/lambda/cloud-Queue-SetConsumer-2c8fa7-c8aad158",
+        "name": "/aws/lambda/cloud-Queue-SetConsumer0-c8b576c9",
         "retention_in_days": 30
       }
     },
@@ -83,38 +83,38 @@ module.exports = function({ $bucket, $counter }) {
       }
     },
     "aws_iam_role": {
-      "cloudQueue-SetConsumer-2c8fa7_IamRole_14E37985": {
+      "cloudQueue-SetConsumer0_IamRole_968DB138": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/IamRole",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7_IamRole_14E37985"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRole",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRole_968DB138"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudQueue-SetConsumer-2c8fa7_IamRolePolicy_558A7E10": {
+      "cloudQueue-SetConsumer0_IamRolePolicy_3E29E517": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/IamRolePolicy",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7_IamRolePolicy_558A7E10"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRolePolicy",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRolePolicy_3E29E517"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-2c8fa7_IamRole_14E37985.name}"
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudQueue-SetConsumer-2c8fa7_IamRolePolicyAttachment_70B9104B": {
+      "cloudQueue-SetConsumer0_IamRolePolicyAttachment_B207137A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/IamRolePolicyAttachment",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7_IamRolePolicyAttachment_70B9104B"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRolePolicyAttachment",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRolePolicyAttachment_B207137A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-2c8fa7_IamRole_14E37985.name}"
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.name}"
       }
     },
     "aws_lambda_event_source_mapping": {
@@ -127,15 +127,15 @@ module.exports = function({ $bucket, $counter }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.cloudQueue.arn}",
-        "function_name": "${aws_lambda_function.cloudQueue-SetConsumer-2c8fa7.function_name}"
+        "function_name": "${aws_lambda_function.cloudQueue-SetConsumer0.function_name}"
       }
     },
     "aws_lambda_function": {
-      "cloudQueue-SetConsumer-2c8fa7": {
+      "cloudQueue-SetConsumer0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/Default",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/Default",
+            "uniqueId": "cloudQueue-SetConsumer0"
           }
         },
         "architectures": [
@@ -146,18 +146,18 @@ module.exports = function({ $bucket, $counter }) {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-2c8fa7-c8aad158",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer0-c8b576c9",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-SetConsumer-2c8fa7-c8aad158",
+        "function_name": "cloud-Queue-SetConsumer0-c8b576c9",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-2c8fa7_IamRole_14E37985.arn}",
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-2c8fa7_S3Object_75998944.key}",
+        "s3_key": "${aws_s3_object.cloudQueue-SetConsumer0_S3Object_52D070FF.key}",
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
@@ -187,11 +187,11 @@ module.exports = function({ $bucket, $counter }) {
       }
     },
     "aws_s3_object": {
-      "cloudQueue-SetConsumer-2c8fa7_S3Object_75998944": {
+      "cloudQueue-SetConsumer0_S3Object_52D070FF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-2c8fa7/S3Object",
-            "uniqueId": "cloudQueue-SetConsumer-2c8fa7_S3Object_75998944"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/S3Object",
+            "uniqueId": "cloudQueue-SetConsumer0_S3Object_52D070FF"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

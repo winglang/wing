@@ -5,6 +5,7 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsQueue } from "../shared-aws";
@@ -64,11 +65,11 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       ),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumer-${hash}`,
+      // ok since we're not a tree root
+      this.node.scope!,
+      Counters.createId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,

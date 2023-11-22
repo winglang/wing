@@ -8,6 +8,7 @@ import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
+import { Counters } from "@winglang/sdk/lib/core/counter";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -44,11 +45,11 @@ export class Queue extends cloud.Queue implements IAwsQueue {
       ),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumer-${hash}`,
+      // ok since we're not a tree root
+      this.node.scope!,
+      Counters.createId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,

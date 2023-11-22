@@ -13,6 +13,7 @@ import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
@@ -225,18 +226,18 @@ export class Api extends cloud.Api implements IAwsApi {
           ?.defaultResponse,
       }
     );
-    const hash = inflight._hash.slice(0, 6);
-    let func = this.handlers[hash];
-    if (!func) {
-      func = new Function(
+
+    let handler = this.handlers[inflight._hash];
+    if (handler) {
+      handler = new Function(
         this,
-        `${this.node.id}-OnRequest-${hash}`,
+        Counters.createId(this, "OnRequest"),
         functionHandler
       );
-      this.handlers[hash] = func;
+      this.handlers[inflight._hash] = handler;
     }
 
-    return func;
+    return handler;
   }
 
   /** @internal */

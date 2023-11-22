@@ -5,6 +5,7 @@ import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Node } from "../std";
 
@@ -16,6 +17,7 @@ import { Node } from "../std";
 export class Schedule extends cloud.Schedule {
   private readonly scheduleExpression: string;
   private readonly rule: CloudwatchEventRule;
+  private readonly handlers: Record<string, Function> = {};
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
@@ -54,14 +56,18 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const hash = inflight._hash.slice(0, 6);
-    const functionId = `${this.node.id}-OnTick-${hash}`;
-    let fn = this.node.tryFindChild(functionId);
+    let fn = this.handlers[inflight._hash];
     if (fn) {
-      return fn as Function;
+      return fn;
     }
 
-    fn = new Function(this, functionId, functionHandler, props);
+    fn = new Function(
+      this,
+      Counters.createId(this, "OnTick"),
+      functionHandler,
+      props
+    );
+    this.handlers[inflight._hash] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
@@ -72,7 +78,7 @@ export class Schedule extends cloud.Schedule {
 
     fn.addPermissionToInvoke(this, "events.amazonaws.com", this.rule.arn);
 
-    new CloudwatchEventTarget(this, `ScheduleTarget-${hash}`, {
+    new CloudwatchEventTarget(this, Counters.createId(this, "ScheduleTarget"), {
       arn: fn.qualifiedArn,
       rule: this.rule.name,
     });

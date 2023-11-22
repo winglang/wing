@@ -6,6 +6,7 @@ import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -72,18 +73,17 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
     );
-    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
       this,
-      `${this.node.id}-SetConsumer-${hash}`,
+      Counters.createId(this, "SetConsumer"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "setConsumer()";
 
-    new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
+    new EventMapping(this, Counters.createId(this, "QueueEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {

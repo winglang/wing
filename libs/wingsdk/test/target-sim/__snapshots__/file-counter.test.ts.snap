@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-setconsumer-e050d7_c8d1fbf8.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e82e9f.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
   return class Handler {
@@ -46,28 +46,28 @@ bucket: (function() {
     "connections": [
       {
         "name": "inc()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Counter",
       },
       {
         "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Counter",
       },
       {
         "name": "put()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
       },
       {
         "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
       },
       {
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
-        "target": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "target": "root/HelloWorld/Queue/SetConsumer0",
       },
     ],
     "version": "connections-0.1",
@@ -102,13 +102,13 @@ bucket: (function() {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+        "path": "root/HelloWorld/Queue/SetConsumer0",
         "props": {
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${wsim#root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${wsim#root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/queue-setconsumer-e050d7_c8d1fbf8.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e82e9f.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -125,10 +125,10 @@ bucket: (function() {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-e050d7",
+        "path": "root/HelloWorld/Queue/QueueEventMapping-e050d7",
         "props": {
           "publisher": "\${wsim#root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${wsim#root/HelloWorld/Queue/Queue-SetConsumer-e050d7#attrs.handle}",
+          "subscriber": "\${wsim#root/HelloWorld/Queue/SetConsumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -247,7 +247,7 @@ bucket: (function() {
             },
             "Queue": {
               "children": {
-                "Queue-QueueEventMapping-e050d7": {
+                "QueueEventMapping-e050d7": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.2.70",
@@ -255,10 +255,10 @@ bucket: (function() {
                   "display": {
                     "hidden": true,
                   },
-                  "id": "Queue-QueueEventMapping-e050d7",
-                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-e050d7",
+                  "id": "QueueEventMapping-e050d7",
+                  "path": "root/HelloWorld/Queue/QueueEventMapping-e050d7",
                 },
-                "Queue-SetConsumer-e050d7": {
+                "SetConsumer0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.2.70",
@@ -268,8 +268,8 @@ bucket: (function() {
                     "sourceModule": "@winglang/sdk",
                     "title": "setConsumer()",
                   },
-                  "id": "Queue-SetConsumer-e050d7",
-                  "path": "root/HelloWorld/Queue/Queue-SetConsumer-e050d7",
+                  "id": "SetConsumer0",
+                  "path": "root/HelloWorld/Queue/SetConsumer0",
                 },
               },
               "constructInfo": {

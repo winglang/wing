@@ -87,10 +87,7 @@ export class Bucket extends Resource {
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = new Topic(
-      this,
-      `${this.node.id}-${actionType.toLowerCase()}`
-    );
+    const topic = new Topic(this, actionType.toLowerCase());
 
     this.node.addDependency(topic);
 

@@ -10,6 +10,7 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
+import { Counters } from "../core/counter";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator";
 import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -38,18 +39,17 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       join(__dirname, "schedule.ontick.inflight.js"),
       "ScheduleOnTickHandlerClient"
     );
-    const hash = inflight._hash.slice(0, 6);
 
     const fn = new Function(
       this,
-      `${this.node.id}-OnTick-${hash}`,
+      Counters.createId(this, "OnTick"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onTick()";
 
-    new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
+    new EventMapping(this, Counters.createId(this, "OnTickMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},

@@ -56,50 +56,50 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "cloudQueue-SetConsumer-84a3bb_CloudwatchLogGroup_818C8D53": {
+      "cloudQueue-SetConsumer0_CloudwatchLogGroup_FCFCF419": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/CloudwatchLogGroup",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb_CloudwatchLogGroup_818C8D53"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/CloudwatchLogGroup",
+            "uniqueId": "cloudQueue-SetConsumer0_CloudwatchLogGroup_FCFCF419"
           }
         },
-        "name": "/aws/lambda/cloud-Queue-SetConsumer-84a3bb-c86d41cb",
+        "name": "/aws/lambda/cloud-Queue-SetConsumer0-c8b576c9",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "cloudQueue-SetConsumer-84a3bb_IamRole_8DC32FC3": {
+      "cloudQueue-SetConsumer0_IamRole_968DB138": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/IamRole",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb_IamRole_8DC32FC3"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRole",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRole_968DB138"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudQueue-SetConsumer-84a3bb_IamRolePolicy_235F4A81": {
+      "cloudQueue-SetConsumer0_IamRolePolicy_3E29E517": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/IamRolePolicy",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb_IamRolePolicy_235F4A81"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRolePolicy",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRolePolicy_3E29E517"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-84a3bb_IamRole_8DC32FC3.name}"
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudQueue-SetConsumer-84a3bb_IamRolePolicyAttachment_855D2A9F": {
+      "cloudQueue-SetConsumer0_IamRolePolicyAttachment_B207137A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/IamRolePolicyAttachment",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb_IamRolePolicyAttachment_855D2A9F"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/IamRolePolicyAttachment",
+            "uniqueId": "cloudQueue-SetConsumer0_IamRolePolicyAttachment_B207137A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-84a3bb_IamRole_8DC32FC3.name}"
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.name}"
       }
     },
     "aws_lambda_event_source_mapping": {
@@ -112,15 +112,15 @@ module.exports = function({  }) {
         },
         "batch_size": 1,
         "event_source_arn": "${aws_sqs_queue.cloudQueue.arn}",
-        "function_name": "${aws_lambda_function.cloudQueue-SetConsumer-84a3bb.function_name}"
+        "function_name": "${aws_lambda_function.cloudQueue-SetConsumer0.function_name}"
       }
     },
     "aws_lambda_function": {
-      "cloudQueue-SetConsumer-84a3bb": {
+      "cloudQueue-SetConsumer0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/Default",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/Default",
+            "uniqueId": "cloudQueue-SetConsumer0"
           }
         },
         "architectures": [
@@ -129,18 +129,18 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-84a3bb-c86d41cb",
+            "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer0-c8b576c9",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Queue-SetConsumer-84a3bb-c86d41cb",
+        "function_name": "cloud-Queue-SetConsumer0-c8b576c9",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudQueue-SetConsumer-84a3bb_IamRole_8DC32FC3.arn}",
+        "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudQueue-SetConsumer-84a3bb_S3Object_0052D665.key}",
+        "s3_key": "${aws_s3_object.cloudQueue-SetConsumer0_S3Object_52D070FF.key}",
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [],
@@ -160,11 +160,11 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "cloudQueue-SetConsumer-84a3bb_S3Object_0052D665": {
+      "cloudQueue-SetConsumer0_S3Object_52D070FF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-SetConsumer-84a3bb/S3Object",
-            "uniqueId": "cloudQueue-SetConsumer-84a3bb_S3Object_0052D665"
+            "path": "root/Default/Default/cloud.Queue-SetConsumer0/S3Object",
+            "uniqueId": "cloudQueue-SetConsumer0_S3Object_52D070FF"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

@@ -15,53 +15,53 @@ exports[`schedule behavior with cron 1`] = `
       },
     },
     "aws_cloudwatch_event_target": {
-      "Schedule_ScheduleTarget-dd70f3_966D41A8": {
-        "arn": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.qualified_arn}",
+      "Schedule_ScheduleTarget0_12D341DB": {
+        "arn": "\${aws_lambda_function.Schedule_OnTick0_958638E3.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
     "aws_cloudwatch_log_group": {
-      "Schedule_Schedule-OnTick-dd70f3_CloudwatchLogGroup_F39A1361": {
-        "name": "/aws/lambda/Schedule-OnTick-dd70f3-c8cb9a18",
+      "Schedule_OnTick0_CloudwatchLogGroup_A06DC96E": {
+        "name": "/aws/lambda/OnTick0-c8e1d4a8",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E": {
+      "Schedule_OnTick0_IamRole_478B0576": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicy_12ACE302": {
+      "Schedule_OnTick0_IamRolePolicy_708CFC38": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicyAttachment_9FE73603": {
+      "Schedule_OnTick0_IamRolePolicyAttachment_5885D6B3": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_lambda_function": {
-      "Schedule_Schedule-OnTick-dd70f3_9E3CE5EA": {
+      "Schedule_OnTick0_958638E3": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Schedule-OnTick-dd70f3-c8cb9a18",
+            "WING_FUNCTION_NAME": "OnTick0-c8e1d4a8",
           },
         },
-        "function_name": "Schedule-OnTick-dd70f3-c8cb9a18",
+        "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.arn}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48.key}",
+        "s3_key": "\${aws_s3_object.Schedule_OnTick0_S3Object_95D0AF10.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -70,11 +70,11 @@ exports[`schedule behavior with cron 1`] = `
       },
     },
     "aws_lambda_permission": {
-      "Schedule_Schedule-OnTick-dd70f3_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_3F769D5F": {
+      "Schedule_OnTick0_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_17682171": {
         "action": "lambda:InvokeFunction",
-        "function_name": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.function_name}",
+        "function_name": "\${aws_lambda_function.Schedule_OnTick0_958638E3.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.version}",
+        "qualifier": "\${aws_lambda_function.Schedule_OnTick0_958638E3.version}",
         "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
       },
     },
@@ -84,7 +84,7 @@ exports[`schedule behavior with cron 1`] = `
       },
     },
     "aws_s3_object": {
-      "Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48": {
+      "Schedule_OnTick0_S3Object_95D0AF10": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -112,15 +112,7 @@ exports[`schedule behavior with cron 2`] = `
               },
               "Schedule": {
                 "children": {
-                  "Schedule": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Schedule",
-                    "path": "root/Default/Schedule/Schedule",
-                  },
-                  "Schedule-OnTick-dd70f3": {
+                  "OnTick0": {
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -128,7 +120,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Asset",
+                        "path": "root/Default/Schedule/OnTick0/Asset",
                       },
                       "CloudwatchLogGroup": {
                         "constructInfo": {
@@ -136,7 +128,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "CloudwatchLogGroup",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/CloudwatchLogGroup",
+                        "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -144,7 +136,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Default",
+                        "path": "root/Default/Schedule/OnTick0/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -152,7 +144,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRole",
+                        "path": "root/Default/Schedule/OnTick0/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -160,7 +152,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicy",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -168,7 +160,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicyAttachment",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
@@ -176,7 +168,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                        "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -184,7 +176,7 @@ exports[`schedule behavior with cron 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/S3Object",
+                        "path": "root/Default/Schedule/OnTick0/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -195,16 +187,24 @@ exports[`schedule behavior with cron 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "Schedule-OnTick-dd70f3",
-                    "path": "root/Default/Schedule/Schedule-OnTick-dd70f3",
+                    "id": "OnTick0",
+                    "path": "root/Default/Schedule/OnTick0",
                   },
-                  "ScheduleTarget-dd70f3": {
+                  "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "ScheduleTarget-dd70f3",
-                    "path": "root/Default/Schedule/ScheduleTarget-dd70f3",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
+                  },
+                  "ScheduleTarget0": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ScheduleTarget0",
+                    "path": "root/Default/Schedule/ScheduleTarget0",
                   },
                 },
                 "constructInfo": {
@@ -300,53 +300,53 @@ exports[`schedule behavior with rate 1`] = `
       },
     },
     "aws_cloudwatch_event_target": {
-      "Schedule_ScheduleTarget-dd70f3_966D41A8": {
-        "arn": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.qualified_arn}",
+      "Schedule_ScheduleTarget0_12D341DB": {
+        "arn": "\${aws_lambda_function.Schedule_OnTick0_958638E3.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
     "aws_cloudwatch_log_group": {
-      "Schedule_Schedule-OnTick-dd70f3_CloudwatchLogGroup_F39A1361": {
-        "name": "/aws/lambda/Schedule-OnTick-dd70f3-c8cb9a18",
+      "Schedule_OnTick0_CloudwatchLogGroup_A06DC96E": {
+        "name": "/aws/lambda/OnTick0-c8e1d4a8",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E": {
+      "Schedule_OnTick0_IamRole_478B0576": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicy_12ACE302": {
+      "Schedule_OnTick0_IamRolePolicy_708CFC38": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicyAttachment_9FE73603": {
+      "Schedule_OnTick0_IamRolePolicyAttachment_5885D6B3": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_lambda_function": {
-      "Schedule_Schedule-OnTick-dd70f3_9E3CE5EA": {
+      "Schedule_OnTick0_958638E3": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Schedule-OnTick-dd70f3-c8cb9a18",
+            "WING_FUNCTION_NAME": "OnTick0-c8e1d4a8",
           },
         },
-        "function_name": "Schedule-OnTick-dd70f3-c8cb9a18",
+        "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.arn}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48.key}",
+        "s3_key": "\${aws_s3_object.Schedule_OnTick0_S3Object_95D0AF10.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -355,11 +355,11 @@ exports[`schedule behavior with rate 1`] = `
       },
     },
     "aws_lambda_permission": {
-      "Schedule_Schedule-OnTick-dd70f3_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_3F769D5F": {
+      "Schedule_OnTick0_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_17682171": {
         "action": "lambda:InvokeFunction",
-        "function_name": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.function_name}",
+        "function_name": "\${aws_lambda_function.Schedule_OnTick0_958638E3.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.version}",
+        "qualifier": "\${aws_lambda_function.Schedule_OnTick0_958638E3.version}",
         "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
       },
     },
@@ -369,7 +369,7 @@ exports[`schedule behavior with rate 1`] = `
       },
     },
     "aws_s3_object": {
-      "Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48": {
+      "Schedule_OnTick0_S3Object_95D0AF10": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -397,15 +397,7 @@ exports[`schedule behavior with rate 2`] = `
               },
               "Schedule": {
                 "children": {
-                  "Schedule": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Schedule",
-                    "path": "root/Default/Schedule/Schedule",
-                  },
-                  "Schedule-OnTick-dd70f3": {
+                  "OnTick0": {
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -413,7 +405,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Asset",
+                        "path": "root/Default/Schedule/OnTick0/Asset",
                       },
                       "CloudwatchLogGroup": {
                         "constructInfo": {
@@ -421,7 +413,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "CloudwatchLogGroup",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/CloudwatchLogGroup",
+                        "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -429,7 +421,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Default",
+                        "path": "root/Default/Schedule/OnTick0/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -437,7 +429,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRole",
+                        "path": "root/Default/Schedule/OnTick0/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -445,7 +437,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicy",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -453,7 +445,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicyAttachment",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
@@ -461,7 +453,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                        "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -469,7 +461,7 @@ exports[`schedule behavior with rate 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/S3Object",
+                        "path": "root/Default/Schedule/OnTick0/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -480,16 +472,24 @@ exports[`schedule behavior with rate 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "Schedule-OnTick-dd70f3",
-                    "path": "root/Default/Schedule/Schedule-OnTick-dd70f3",
+                    "id": "OnTick0",
+                    "path": "root/Default/Schedule/OnTick0",
                   },
-                  "ScheduleTarget-dd70f3": {
+                  "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "ScheduleTarget-dd70f3",
-                    "path": "root/Default/Schedule/ScheduleTarget-dd70f3",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
+                  },
+                  "ScheduleTarget0": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ScheduleTarget0",
+                    "path": "root/Default/Schedule/ScheduleTarget0",
                   },
                 },
                 "constructInfo": {
@@ -585,53 +585,53 @@ exports[`schedule with two functions 1`] = `
       },
     },
     "aws_cloudwatch_event_target": {
-      "Schedule_ScheduleTarget-dd70f3_966D41A8": {
-        "arn": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.qualified_arn}",
+      "Schedule_ScheduleTarget0_12D341DB": {
+        "arn": "\${aws_lambda_function.Schedule_OnTick0_958638E3.qualified_arn}",
         "rule": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.name}",
       },
     },
     "aws_cloudwatch_log_group": {
-      "Schedule_Schedule-OnTick-dd70f3_CloudwatchLogGroup_F39A1361": {
-        "name": "/aws/lambda/Schedule-OnTick-dd70f3-c8cb9a18",
+      "Schedule_OnTick0_CloudwatchLogGroup_A06DC96E": {
+        "name": "/aws/lambda/OnTick0-c8e1d4a8",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E": {
+      "Schedule_OnTick0_IamRole_478B0576": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicy_12ACE302": {
+      "Schedule_OnTick0_IamRolePolicy_708CFC38": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Schedule_Schedule-OnTick-dd70f3_IamRolePolicyAttachment_9FE73603": {
+      "Schedule_OnTick0_IamRolePolicyAttachment_5885D6B3": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.name}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
     "aws_lambda_function": {
-      "Schedule_Schedule-OnTick-dd70f3_9E3CE5EA": {
+      "Schedule_OnTick0_958638E3": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Schedule-OnTick-dd70f3-c8cb9a18",
+            "WING_FUNCTION_NAME": "OnTick0-c8e1d4a8",
           },
         },
-        "function_name": "Schedule-OnTick-dd70f3-c8cb9a18",
+        "function_name": "OnTick0-c8e1d4a8",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Schedule_Schedule-OnTick-dd70f3_IamRole_3BF19D4E.arn}",
+        "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48.key}",
+        "s3_key": "\${aws_s3_object.Schedule_OnTick0_S3Object_95D0AF10.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -640,11 +640,11 @@ exports[`schedule with two functions 1`] = `
       },
     },
     "aws_lambda_permission": {
-      "Schedule_Schedule-OnTick-dd70f3_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_3F769D5F": {
+      "Schedule_OnTick0_InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3_17682171": {
         "action": "lambda:InvokeFunction",
-        "function_name": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.function_name}",
+        "function_name": "\${aws_lambda_function.Schedule_OnTick0_958638E3.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "\${aws_lambda_function.Schedule_Schedule-OnTick-dd70f3_9E3CE5EA.version}",
+        "qualifier": "\${aws_lambda_function.Schedule_OnTick0_958638E3.version}",
         "source_arn": "\${aws_cloudwatch_event_rule.Schedule_15669BF1.arn}",
       },
     },
@@ -654,7 +654,7 @@ exports[`schedule with two functions 1`] = `
       },
     },
     "aws_s3_object": {
-      "Schedule_Schedule-OnTick-dd70f3_S3Object_61AB7C48": {
+      "Schedule_OnTick0_S3Object_95D0AF10": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -682,15 +682,7 @@ exports[`schedule with two functions 2`] = `
               },
               "Schedule": {
                 "children": {
-                  "Schedule": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "Schedule",
-                    "path": "root/Default/Schedule/Schedule",
-                  },
-                  "Schedule-OnTick-dd70f3": {
+                  "OnTick0": {
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -698,7 +690,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Asset",
+                        "path": "root/Default/Schedule/OnTick0/Asset",
                       },
                       "CloudwatchLogGroup": {
                         "constructInfo": {
@@ -706,7 +698,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "CloudwatchLogGroup",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/CloudwatchLogGroup",
+                        "path": "root/Default/Schedule/OnTick0/CloudwatchLogGroup",
                       },
                       "Default": {
                         "constructInfo": {
@@ -714,7 +706,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/Default",
+                        "path": "root/Default/Schedule/OnTick0/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -722,7 +714,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRole",
+                        "path": "root/Default/Schedule/OnTick0/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -730,7 +722,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicy",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -738,7 +730,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/IamRolePolicyAttachment",
+                        "path": "root/Default/Schedule/OnTick0/IamRolePolicyAttachment",
                       },
                       "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
                         "constructInfo": {
@@ -746,7 +738,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                        "path": "root/Default/Schedule/OnTick0/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -754,7 +746,7 @@ exports[`schedule with two functions 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/Schedule/Schedule-OnTick-dd70f3/S3Object",
+                        "path": "root/Default/Schedule/OnTick0/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -765,16 +757,24 @@ exports[`schedule with two functions 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "Schedule-OnTick-dd70f3",
-                    "path": "root/Default/Schedule/Schedule-OnTick-dd70f3",
+                    "id": "OnTick0",
+                    "path": "root/Default/Schedule/OnTick0",
                   },
-                  "ScheduleTarget-dd70f3": {
+                  "Schedule": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "ScheduleTarget-dd70f3",
-                    "path": "root/Default/Schedule/ScheduleTarget-dd70f3",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
+                  },
+                  "ScheduleTarget0": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ScheduleTarget0",
+                    "path": "root/Default/Schedule/ScheduleTarget0",
                   },
                 },
                 "constructInfo": {
