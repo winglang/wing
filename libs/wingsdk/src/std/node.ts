@@ -382,19 +382,32 @@ export interface AddConnectionProps {
   readonly name: string;
 }
 
+/**
+ * Represents a Wing application.
+ */
 export interface IApp extends IConstruct {
+  /**
+   * The .wing directory into which you can emit artifacts.
+   */
   readonly workdir: string;
+
+  /**
+   * `true` if this is a testing environment
+   */
   readonly isTestEnvironment: boolean;
+
+  /**
+   * The directory of the entrypoint of the current program.
+   */
   readonly entrypointDir: string;
 
-  tryFindChild(uid: string): IConstruct | undefined;
+  /**
+   * Looks up a node with a given id in under the application (non-recursively).
+   * @param id the node id
+   */
+  tryFindChild(id: string): IConstruct | undefined;
 
   // marker symbol
   /** @internal */
   readonly [APP_SYMBOL]: true;
-}
-
-
-export interface IGetOrCreateFactory {
-  handle(): IConstruct;
 }
