@@ -227,8 +227,8 @@ export abstract class Resource extends Construct implements IResource {
     let appScope: App | undefined;
     let findScope: IConstruct | undefined = scope;
     while (findScope !== undefined) {
-      if (findScope instanceof App) {
-        appScope = findScope;
+      if ((findScope as any)._isApp) {
+        appScope = findScope as App;
         break;
       }
       findScope = findScope.node.scope;
