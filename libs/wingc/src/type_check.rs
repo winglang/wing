@@ -2015,15 +2015,15 @@ impl<'a> TypeChecker<'a> {
 							self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
 						}
 
-						// if this is preflight class, and scope is not explicitly defined, make sure we are
-						// either in the entrypoint (no parent environment) or that we have "this" in the
-						// current environment (we are not in a static method) because that's the default scope.
-						if class.phase == Phase::Preflight && obj_scope.is_none() && env.parent.is_some() {
-							if env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_none() {
+						// error if we are trying to instantiate a preflight in a static method
+						// without an explicit scope (there is no "this" to use as the scope)
+						if class.phase == Phase::Preflight && obj_scope.is_none() {
+							let is_static = self.ctx().current_function().and_then(|f| Some(f.is_static));
+							if let Some(true) = is_static {
 								self.spanned_error(
 									exp,
 									format!(
-										"Cannot instantiate preflight class \"{}\" without an explicit scope inside a static method",
+										"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
 										class.name
 									),
 								);
@@ -2703,7 +2703,7 @@ impl<'a> TypeChecker<'a> {
 		));
 		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
-		self.with_function_def(None, &func_def.signature, function_env, |tc| {
+		self.with_function_def(None, &func_def.signature, func_def.is_static, function_env, |tc| {
 			// Type check the function body
 			if let FunctionBody::Statements(scope) = &func_def.body {
 				tc.types.set_scope_env(scope, function_env);
@@ -4475,21 +4475,27 @@ impl<'a> TypeChecker<'a> {
 		}
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
 
-		self.with_function_def(Some(method_name), &method_def.signature, method_env, |tc| {
-			if let FunctionBody::Statements(scope) = &method_def.body {
-				tc.types.set_scope_env(scope, method_env);
-				tc.inner_scopes.push((scope, tc.ctx.clone()));
-			}
-
-			if let FunctionBody::External(_) = &method_def.body {
-				if !method_def.is_static {
-					tc.spanned_error(
-						method_name,
-						"Extern methods must be declared \"static\" (they cannot access instance members)",
-					);
+		self.with_function_def(
+			Some(method_name),
+			&method_def.signature,
+			method_def.is_static,
+			method_env,
+			|tc| {
+				if let FunctionBody::Statements(scope) = &method_def.body {
+					tc.types.set_scope_env(scope, method_env);
+					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
-			}
-		});
+
+				if let FunctionBody::External(_) = &method_def.body {
+					if !method_def.is_static {
+						tc.spanned_error(
+							method_name,
+							"Extern methods must be declared \"static\" (they cannot access instance members)",
+						);
+					}
+				}
+			},
+		);
 	}
 
 	fn add_method_to_class_env(

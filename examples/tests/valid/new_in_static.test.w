@@ -13,6 +13,11 @@ class MyClass {
   }
 }
 
+// there is an implicit "this" in this scope (the app)
+if true {
+  new cloud.Bucket();
+}
+
 let scope = new c.Construct();
 let bucket = MyClass.createBucket(scope);
 let my = MyClass.createMyClass(scope);
