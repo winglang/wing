@@ -176,6 +176,16 @@ export type CorsHeaders = {
 
 export class Api extends Resource {
   /**
+   * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
+   * @param path The path to convert (assumes path is valid)
+   * @returns OpenAPI path
+   * @internal
+   */
+  public static _toOpenApiPath(path: string) {
+    return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
+  }
+
+  /**
    * The base URL of the API endpoint.
    * @abstract
    */
@@ -570,16 +580,6 @@ export class Api extends Resource {
       ...this.apiSpec.paths[path],
       ...methodSpec,
     };
-  }
-
-  /**
-   * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
-   * @param path The path to convert (assumes path is valid)
-   * @returns OpenAPI path
-   * @internal
-   */
-  public static _toOpenApiPath(path: string) {
-    return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
   }
 
   /**
