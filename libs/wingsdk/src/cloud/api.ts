@@ -573,14 +573,23 @@ export class Api extends Resource {
   }
 
   /**
+   * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
+   * @param path The path to convert (assumes path is valid)
+   * @returns OpenAPI path
+   * @internal
+   */
+  public static _toOpenApiPath(path: string) {
+    return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
+  }
+
+  /**
    * Return the OpenAPI spec for this Api.
    * @internal */
   public _getOpenApiSpec(): OpenApiSpec {
     // Convert our paths to valid OpenAPI paths
     let paths: { [key: string]: any } = {};
     Object.keys(this.apiSpec.paths).forEach((key) => {
-      paths[key.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}")] =
-        this.apiSpec.paths[key];
+      paths[Api._toOpenApiPath(key)] = this.apiSpec.paths[key];
     });
 
     // https://spec.openapis.org/oas/v3.0.3
