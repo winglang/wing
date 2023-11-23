@@ -8,7 +8,7 @@ let root = std.Node.of(bucket).root;
 assert(app.workdir.endsWith(".wing"));
 expect.equal(app.workdir, root.workdir);
 
-assert(app.entrypointDir.endsWith("/sdk_tests/std"));
+assert(app.entrypointDir.endsWith("/sdk_tests/std") || app.entrypointDir.endsWith("\\sdk_tests\\std"));
 expect.equal(app.entrypointDir, root.entrypointDir);
 
 app.isTestEnvironment; // don't care if it's true or false, just that it compiles
