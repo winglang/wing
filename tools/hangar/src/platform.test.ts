@@ -60,6 +60,33 @@ describe("Platform examples", () => {
 
   });
 
+  describe("Platform folder with relative dependencies", () => {
+    const args = ["compile"];
+    const basePlatforms = ["tf-aws"]
+
+    test("compile local package from folder", async () => {
+      const platform = path.join(platformsDir, "local-package");
+      await runWingCommand({
+        cwd: tmpDir,
+        platforms: [...basePlatforms, platform],
+        wingFile: appFile,
+        args,
+        expectFailure: false
+      });
+    })
+
+    test("compile local package from file", async () => {
+      const platform = path.join(platformsDir, "local-package", "index.js");
+      await runWingCommand({
+        cwd: tmpDir,
+        platforms: [...basePlatforms, platform],
+        wingFile: appFile,
+        args,
+        expectFailure: false
+      });
+    })
+  });
+
   describe("AWS target platform", () => {
     const args = ["compile"];
     const basePlatforms = ["tf-aws"]
@@ -67,7 +94,7 @@ describe("Platform examples", () => {
 
     test("permission-boundary.js", async () => {
       const platform = path.join(platformsDir, "permission-boundary.js");
-  
+
       const expectedPermissionBoundaryArn = "some:fake:arn:SUPERADMIN";
       process.env.PERMISSION_BOUNDARY_ARN = expectedPermissionBoundaryArn;
       await runWingCommand({
@@ -171,7 +198,7 @@ describe("Platform examples", () => {
 
       test("gcp backend", async () => {
         const platform = path.join(platformsDir, tfBackendPluginName);
-        
+
         const tfBackend = "gcs";
         const tfBackendBucket = "my-wing-bucket";
         const stateFile = "some-state-file.tfstate";

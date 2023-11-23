@@ -136,11 +136,17 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     ? join(platformDir, `${customPlatformPath}/lib/index.js`)
     : `${customPlatformPath}/index.js`;
 
+  // enable relative imports from the platform file
+  const customPlatformBaseDir = customPlatformPath.endsWith(".js")
+    ? dirname(customPlatformPath)
+    : customPlatformPath;
+
   const cwdNodeModules = join(cwd(), "node_modules");
   const customPlatformLib = join(cwdNodeModules, customPlatformPath, "lib");
 
   const resolvablePaths = [
     ...module.paths,
+    customPlatformBaseDir,
     platformDir,
     cwdNodeModules,
     customPlatformLib,
