@@ -34,7 +34,7 @@ for value in iterable {
 ```ts playground
 // print numbers from 0 to 9
 for value in 0..10 {
-  log("${value}");
+  log("{value}");
 }
 ```
 
@@ -57,11 +57,11 @@ let grade = (score: num): str => {
     }
 };
 
-log("54 is ${grade(54)}"); // 54 is F
-log("62 is ${grade(62)}"); // 62 is C
-log("68 is ${grade(68)}"); // 68 is B
-log("99 is ${grade(99)}"); // 99 is A
-log("101 is ${grade(101)}"); // 101 is Invalid grade
+log("54 is {grade(54)}"); // 54 is F
+log("62 is {grade(62)}"); // 62 is C
+log("68 is {grade(68)}"); // 68 is B
+log("99 is {grade(99)}"); // 99 is A
+log("101 is {grade(101)}"); // 101 is Invalid grade
 ```
 
 ### While 
@@ -78,7 +78,7 @@ while i < 100 {
     // continue for even numbers
     continue;
   }
-  log("${i}");
+  log("{i}");
 }
 /** 
  * prints

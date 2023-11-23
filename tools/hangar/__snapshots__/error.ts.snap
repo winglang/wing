@@ -82,8 +82,8 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   --> ../../../examples/tests/error/repeat_construct_id2.test.w:8:15
   | };
   | 
-  | let bucket1 = new cloud.Bucket() as \\"\${make_name()}\\";
-8 | let bucket2 = new cloud.Bucket() as \\"\${make_name()}\\";
+  | let bucket1 = new cloud.Bucket() as \\"{make_name()}\\";
+8 | let bucket2 = new cloud.Bucket() as \\"{make_name()}\\";
   |               ^
 at (<ABSOLUTE>:LINE:COL)
  
