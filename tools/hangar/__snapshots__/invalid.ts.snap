@@ -2345,16 +2345,20 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"runtime error: Cannot read properties of undefined (reading 'addChild')
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
-  | // explicit \`scope\`.
-  |  bring cloud;
-  | 
-5 | class MyClass {
-  |       ^
-at new MyClass (<ABSOLUTE>:LINE:COL)
-at createMyClass (<ABSOLUTE>:LINE:COL)
-at (<ABSOLUTE>:LINE:COL)
+"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
+  |
+7 |     return new cloud.Bucket();
+  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+
+
+error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
+   |
+10 |     return new MyClass();
+   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+
+
  
  
 Tests 1 failed (1)
@@ -2572,6 +2576,13 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
+  |
+1 | let my_func1 = (callback: inflight (num): num) => {  };
+  | ^ Unknown symbol \\"this\\"
 
 
  
