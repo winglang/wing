@@ -16,7 +16,7 @@ class B extends A {
 
 class C extends B {
   pub description(): str {
-    return "C extends ${super.description()}";
+    return "C extends {super.description()}";
   }
 }
 
@@ -26,7 +26,7 @@ class D extends C {
 
 class E extends D {
   pub description(): str {
-    return "E extends ${super.description()}";
+    return "E extends {super.description()}";
   }
 }
 
@@ -43,7 +43,7 @@ inflight class InflightA {
 // Test super calls on inflight classes
 inflight class InflightB extends InflightA {
   pub description(): str {
-    return "InflightB extends ${super.description()}";
+    return "InflightB extends {super.description()}";
   }
 }
 
