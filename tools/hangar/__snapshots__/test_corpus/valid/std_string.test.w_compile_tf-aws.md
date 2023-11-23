@@ -118,7 +118,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("   some string   ".trim()),"some string")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleUpperCase(),"SOME STRING")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello" + " world"),"hello world")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello {\"funky\"}\n world\" == \"hello funky\\n world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["hello ", "\n world"] }, "funky"),"hello funky\n world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello ${\"funky\"}\n world\" == \"hello funky\\n world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["hello ", "\n world"] }, "funky"),"hello funky\n world")))};
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:string", new $Closure1(this, "$Closure1"));
   }
 }

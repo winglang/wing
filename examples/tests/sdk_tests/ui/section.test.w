@@ -24,11 +24,11 @@ class WidgetService {
 
   inflight addWidget() {
     let id = this.counter.inc();
-    this.data.put("widget-{id}", "my data");
+    this.data.put("widget-${id}", "my data");
   }
 
   inflight countWidgets(): str {
-    return "{this.data.list().length}";
+    return "${this.data.list().length}";
   }
 }
 

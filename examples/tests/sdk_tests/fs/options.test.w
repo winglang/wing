@@ -30,7 +30,7 @@ test "write file with `flag` option" {
 
     let content = fs.readFile(filepath);
 
-    expect.equal(content, "{data}{appendData}");
+    expect.equal(content, "${data}${appendData}");
 
     fs.remove(tmpdir, { recursive: true });
     assert(fs.exists(tmpdir) == false);
@@ -38,7 +38,7 @@ test "write file with `flag` option" {
 
 test "removing non-existent file with `force: false` raises error" {
     let tmpdir = fs.mkdtemp();
-    let nonExistentFilePath = "{tmpdir}/non-existent.txt";
+    let nonExistentFilePath = "${tmpdir}/non-existent.txt";
     let var errorCaught = false;
 
     try {
@@ -55,7 +55,7 @@ test "removing non-existent file with `force: false` raises error" {
 
 test "removing directory with `recursive: false` raises error" {
     let tmpdir = fs.mkdtemp();
-    let dirpath = "{tmpdir}/testdir";
+    let dirpath = "${tmpdir}/testdir";
     let filename = "sample.txt";
     let var errorCaught = false;
 

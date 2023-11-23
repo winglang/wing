@@ -20,7 +20,7 @@ class ReplayableQueue {
   
   inflight push(m: str) {
     this.queue.push(m);
-    this.bucket.put("messages/{this.counter.inc()}", m);
+    this.bucket.put("messages/${this.counter.inc()}", m);
   }
   
   inflight replay(){
@@ -35,7 +35,7 @@ class ReplayableQueue {
 class RemoteControl { 
   new(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      log("setConsumer got triggered with {m}");
+      log("setConsumer got triggered with ${m}");
     };
       
     q.setConsumer(f);

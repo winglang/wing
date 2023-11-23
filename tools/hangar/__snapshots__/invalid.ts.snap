@@ -326,12 +326,12 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"runtime error: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
    | api.get(\\"<ABSOLUTE>/path\\", handler);
-12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
+12 | api.get(\\"<ABSOLUTE>/{variable}\\", handler);
    | ^
 at (<ABSOLUTE>:LINE:COL)
  
@@ -821,7 +821,7 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
-4 | |   return \\"Hello {name}\\";
+4 | |   return \\"Hello \${name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   |  
@@ -3366,10 +3366,10 @@ error: Cannot call super method inside of a static method
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.test.w:52:48
+   --> ../../../examples/tests/invalid/super_call.test.w:52:50
    |
-52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
-   |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
+   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
  
@@ -3429,8 +3429,8 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:10:10
    |
-10 | let e3 = \\"{strExample}!\\" * numExample;
-   |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+10 | let e3 = \\"\${strExample}!\\" * numExample;
+   |          ^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -3595,17 +3595,17 @@ Duration <DURATION>"
 
 exports[`use_before_defined.test.w 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:7
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:8
   |
-1 | log(\\"{y}\\"); // Access y before it's defined
-  |       ^ Unknown symbol \\"y\\"
+1 | log(\\"\${y}\\"); // Access y before it's defined
+  |        ^ Unknown symbol \\"y\\"
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:9
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:10
   |
-5 |   log(\\"{x}\\");
-  |         ^ Symbol \\"x\\" used before being defined
+5 |   log(\\"\${x}\\");
+  |          ^ Symbol \\"x\\" used before being defined
   .
 8 | let x = \\"hi\\";
   |     - defined later here
