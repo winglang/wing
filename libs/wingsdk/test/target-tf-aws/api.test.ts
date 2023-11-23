@@ -154,7 +154,7 @@ test("api with path parameter", () => {
 
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
-  api.get("/hello/{world}", inflight);
+  api.get("/hello/:world", inflight);
 
   const output = app.synth();
 
@@ -171,7 +171,7 @@ test("api with 'name' parameter", () => {
 
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
-  api.get("/{name}", inflight);
+  api.get("/:name", inflight);
 
   const output = app.synth();
 
@@ -188,7 +188,7 @@ test("api with 'name' & 'age' parameter", () => {
 
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
-  api.get("/{name}/{age}", inflight);
+  api.get("/:name/:age", inflight);
 
   const output = app.synth();
 

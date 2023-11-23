@@ -139,7 +139,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "paths": {
     "/{name}/{age}": {
       "get": {
-        "operationId": "get-{name}/{age}",
+        "operationId": "get-:name/:age",
         "parameters": [
           {
             "in": "path",
@@ -234,7 +234,7 @@ exports[`api with 'name' parameter 1`] = `
   "paths": {
     "/{name}": {
       "get": {
-        "operationId": "get-{name}",
+        "operationId": "get-:name",
         "parameters": [
           {
             "in": "path",
@@ -1555,7 +1555,7 @@ exports[`api with path parameter 1`] = `
   "paths": {
     "/hello/{world}": {
       "get": {
-        "operationId": "get-hello/{world}",
+        "operationId": "get-hello/:world",
         "parameters": [
           {
             "in": "path",

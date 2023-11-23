@@ -21,8 +21,8 @@ api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 });
 
 let handler = inflight (message: str): str => {
-  bucket.put("hello.txt", "Hello, ${message}!");
-  log("Hello, ${message}!");
+  bucket.put("hello.txt", "Hello, {message}!");
+  log("Hello, {message}!");
   return message;
 };
 
@@ -31,22 +31,22 @@ queue.setConsumer(handler);
 let counter = new cloud.Counter(initial: 0);
 new cloud.Function(inflight (message: str): str => {
   counter.inc();
-  log("Counter is now ${counter.inc(0)}");
+  log("Counter is now {counter.inc(0)}");
   return message;
 }) as "IncrementCounter";
 
 let topic = new cloud.Topic() as "Topic";
 topic.onMessage(inflight (message: str): str => {
-  log("Topic subscriber #1: ${message}");
+  log("Topic subscriber #1: {message}");
   return message;
 });
 
 // let r = new ex.Redis();
 // new cloud.Function(inflight (message :str) :str => {
-//   log("${r.url()}");
+//   log("{r.url()}");
 //   r.set("wing", message);
 //   let value = r.get("wing");
-//   log("${value}");
+//   log("{value}");
 //   return r.url();
 // }) as "Redis interaction";
 
@@ -88,7 +88,7 @@ let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
 
 test "Increment counter" {
   let previous = counter.inc();
-  log("Assertion should fail: ${previous} === ${counter.peek()}");
+  log("Assertion should fail: {previous} === {counter.peek()}");
   assert(previous == 1);
 }
 
@@ -107,9 +107,9 @@ test "without assertions nor prints" {
 test "Add fixtures" {
   let arr = [1, 2, 3, 4, 5];
 
-  log("Adding ${arr.length} files in the bucket..");
+  log("Adding {arr.length} files in the bucket..");
   for item in arr {
-    bucket.put("fixture_${item}.txt", "Content for the fixture_${item}!");
+    bucket.put("fixture_{item}.txt", "Content for the fixture_{item}!");
   }
 
   log("Publishing to the topic..");
