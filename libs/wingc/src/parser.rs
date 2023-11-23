@@ -1523,12 +1523,7 @@ impl<'s> Parser<'s> {
 			None => phase,
 		};
 
-		let is_static = if name.is_none() {
-			// Anonymous closures are always static
-			true
-		} else {
-			self.get_modifier("static", &modifiers)?.is_some()
-		};
+		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
