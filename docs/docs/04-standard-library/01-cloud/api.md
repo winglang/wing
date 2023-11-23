@@ -20,7 +20,7 @@ The `cloud.Api` resource represents a collection of HTTP endpoints that can be i
 APIs often serve as the front door for applications to access data, business logic, or functionality from your backend services.
 
 The `Api` resource models an endpoint as a collection of routes, each mapped to an event handler function.
-A route is a combination of a path, like `"/users/{userid}"` and a set of HTTP methods, like `GET`, `POST`, or `DELETE`.
+A route is a combination of a path, like `"/users/:userid"` and a set of HTTP methods, like `GET`, `POST`, or `DELETE`.
 When a client invokes a route, the corresponding event handler function executes.
 
 ## Usage
@@ -59,7 +59,7 @@ api.get("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse =>
 });
 
 
-api.get("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+api.get("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let employee = db.get(request.vars.get("id"));
   return cloud.ApiResponse {
     status: 200,
@@ -70,7 +70,7 @@ api.get("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRespon
 api.post("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
    if let body = request.body {
     let employeeData = Json.parse(body);
-    let id = "${counter.inc()}";
+    let id = "{counter.inc()}";
     db.insert(id, employeeData);
     return cloud.ApiResponse {
       status: 201,
@@ -79,7 +79,7 @@ api.post("/employees", inflight (request: cloud.ApiRequest): cloud.ApiResponse =
    }
 });
 
-api.put("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+api.put("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   if let body = request.body {
     let employeeData = Json.parse(body);
     let id = request.vars.get("id");
@@ -91,7 +91,7 @@ api.put("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRespon
   }
 });
 
-api.delete("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+api.delete("/employees/:id", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let id = request.vars.get("id");
   db.delete(id);
   return cloud.ApiResponse {

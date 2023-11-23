@@ -558,7 +558,11 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Literal(lit) => match lit {
 				Literal::Nil => new_code!(expr_span, "undefined"),
-				Literal::String(s) => new_code!(expr_span, s),
+				Literal::String(s) => {
+					// Unescape our string interpolation braces because in JS they don't need escaping
+					let s = s.replace("\\{", "{");
+					new_code!(expr_span, s)
+				}
 				Literal::InterpolatedString(s) => {
 					let statics = s
 						.parts

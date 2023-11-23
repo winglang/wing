@@ -2,13 +2,13 @@ bring fs;
 bring regex;
 
 let tmpdir = fs.mkdtemp();
-let filepath = "${tmpdir}/test-preflight.yaml";
+let filepath = "{tmpdir}/test-preflight.yaml";
 let data = Json {
     "foo": "bar", 
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
 };
 
-fs.writeFile(filepath, "invalid: {{ content }}, invalid");
+fs.writeFile(filepath, "invalid: \{\{ content }}, invalid");
 try {
     fs.readYaml(filepath);
 } catch e {
@@ -31,7 +31,7 @@ assert(fs.exists(tmpdir) == false);
 
 test "inflight yaml operations" {
     let tmpdir = fs.mkdtemp();
-    let filepath = "${tmpdir}/test-inflight.yaml";
+    let filepath = "{tmpdir}/test-inflight.yaml";
 
     fs.writeYaml(filepath, data, data);
     assert(fs.exists(filepath) == true);

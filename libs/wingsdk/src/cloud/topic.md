@@ -36,7 +36,7 @@ bring cloud;
 let topic = new cloud.Topic();
 
 topic.onMessage(inflight (message: str) => {
-  log("Topic published message: ${message}");
+  log("Topic published message: {message}");
 });
 ```
 
@@ -67,7 +67,7 @@ let topic = new cloud.Topic();
 
 // Then we define a consumer inflight handler
 let consumerHandler = inflight(message: str) => {
-  log("Doing some work with message: ${message}");
+  log("Doing some work with message: {message}");
 };
 
 // Now we can use a preflight method of topic to register the consumer handler

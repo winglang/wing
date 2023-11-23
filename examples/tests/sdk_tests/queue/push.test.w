@@ -42,7 +42,7 @@ new std.Test(inflight () => {
 
   q.purge(); // the message deletion process takes up to 60 seconds. (https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/purgequeuecommand.html)
   util.sleep(1m);
-  q.push("123", "\r", "${obj}");
+  q.push("123", "\r", "{obj}");
 
   assert(util.waitUntil((): bool => {
     return q.approxSize() == 3;
