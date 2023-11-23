@@ -3,7 +3,7 @@ bring regex;
 bring expect;
 
 let tmpdir = fs.mkdtemp();
-let dirpath = "${tmpdir}/wingdir-preflight";
+let dirpath = "{tmpdir}/wingdir-preflight";
 let filename = "temp.txt";
 
 fs.mkdir(dirpath);
@@ -27,7 +27,7 @@ assert(nilFiles == nil);
 
 test "inflight create normal directory" {
     let tmpdir = fs.mkdtemp();
-    let dirpath = "${tmpdir}/wingdir-inflight";
+    let dirpath = "{tmpdir}/wingdir-inflight";
 
     fs.mkdir(dirpath);
     assert(fs.exists(dirpath) == true);
@@ -51,7 +51,7 @@ test "inflight create normal directory" {
 
 test "cannot overwrite directory with a file" {
     let tmpdir = fs.mkdtemp();
-    let dirpath = "${tmpdir}/test-overwrite-dir";
+    let dirpath = "{tmpdir}/test-overwrite-dir";
     let var errorCaught = false;
 
     fs.mkdir(dirpath);

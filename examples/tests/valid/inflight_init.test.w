@@ -68,7 +68,7 @@ test "inflight class inherits form JSII class" {
 
     new(x: num, y: str) {
       super(x); // Call non-inflight parent's init
-      this.foo_str = "${y} ${x}"; // Use init args in inflight's init 
+      this.foo_str = "{y} {x}"; // Use init args in inflight's init 
       this.foo_num = this.get_six(); // Call inflight method in inflight's init
     }
   }
