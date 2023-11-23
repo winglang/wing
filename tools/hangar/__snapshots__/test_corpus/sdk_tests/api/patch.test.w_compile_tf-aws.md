@@ -178,7 +178,7 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/PATCH/path/:id",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/PATCH/path/{id}",
         "statement_id": "AllowExecutionFromAPIGateway-PATCH-b2e416be"
       }
     },

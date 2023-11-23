@@ -197,7 +197,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/t/:param",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/t/{param}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-07205281"
       },
       "cloudApi_api_permission-GET-16d10b32_CE016FD4": {
@@ -210,7 +210,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/path/.withDots/:param/:param-dash/x",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/path/.withDots/{param}/{param-dash}/x",
         "statement_id": "AllowExecutionFromAPIGateway-GET-16d10b32"
       },
       "cloudApi_api_permission-GET-1dad4331_94C4E99B": {
@@ -223,7 +223,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/:param",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/{param}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-1dad4331"
       },
       "cloudApi_api_permission-GET-4835e6c5_11B675C1": {
@@ -236,7 +236,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/path/:param",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/path/{param}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-4835e6c5"
       },
       "cloudApi_api_permission-GET-525feabe_D7999357": {
@@ -249,7 +249,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/param/is/:last",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/param/is/{last}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-525feabe"
       },
       "cloudApi_api_permission-GET-815194c4_CF55A67A": {
@@ -262,7 +262,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/pa-th/:with/two/:variable_s/f?bla=5&b=6",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6",
         "statement_id": "AllowExecutionFromAPIGateway-GET-815194c4"
       },
       "cloudApi_api_permission-GET-83a11f17_B40DCB9A": {
@@ -327,7 +327,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/regular/path/:param",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/regular/path/{param}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-d0938f9f"
       },
       "cloudApi_api_permission-GET-ecbc2deb_13109BA2": {
@@ -340,7 +340,7 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/segment1/:param1/segment2?query1=value1?query2=value2",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/test/segment1/{param1}/segment2?query1=value1?query2=value2",
         "statement_id": "AllowExecutionFromAPIGateway-GET-ecbc2deb"
       },
       "cloudApi_api_permission-GET-f2bb7c42_70EF6671": {
