@@ -185,20 +185,6 @@ export abstract class App extends Construct implements IApp {
   public abstract synth(): string;
 
   /**
-   * Generate a unique ID for the given scope and prefix. The newly generated ID is
-   * guaranteed to be unique within the given scope.
-   * It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
-   * increasing sequence of integers starting from '0'.
-   */
-  public makeId(scope: IConstruct, prefix: string = "") {
-    const key = `${scope.node.addr}|${prefix}`;
-
-    this._idCounters[key] = this._idCounters[key] ?? 0;
-
-    return `${prefix}${this._idCounters[key]++}`;
-  }
-
-  /**
    * Creates a new object of the given FQN.
    * @param fqn the fqn of the class to instantiate
    * @param ctor the constructor of the class to instantiate (undefined for abstract classes)
@@ -244,6 +230,14 @@ export abstract class App extends Construct implements IApp {
     }
 
     return instance;
+  }
+
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
   }
 
   public tryFindChild(id: string): IConstruct | undefined {

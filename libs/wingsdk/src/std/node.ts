@@ -408,6 +408,17 @@ export interface IApp extends IConstruct {
   readonly entrypointDir: string;
 
   /**
+   * Generate a unique ID for the given scope and prefix. The newly generated ID is
+   * guaranteed to be unique within the given scope.
+   * It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
+   * increasing sequence of integers starting from '0'.
+   *
+   * @param scope to guarantee uniqueness in
+   * @param prefix prepended to the unique identifier
+   */
+  makeId(scope: IConstruct, prefix?: string): string;
+
+  /**
    * Looks up a node with a given id in under the application (non-recursively).
    * @param id the node id
    */
