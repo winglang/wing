@@ -223,24 +223,7 @@ export abstract class Resource extends Construct implements IResource {
     id: string,
     ...props: any[]
   ): TResource {
-    // Find the nearest wing App (can't use App.of() because that may throw unhelpfully)
-    let appScope: App | undefined;
-    let findScope: IConstruct | undefined = scope;
-    while (findScope !== undefined) {
-      if ((findScope as any)._isApp) {
-        appScope = findScope as App;
-        break;
-      }
-      findScope = findScope.node.scope;
-    }
-
-    if (appScope) {
-      return appScope.newAbstract(fqn, scope, id, ...props);
-    } else {
-      throw new Error(
-        "This is an abstract class and can only be instantiated in the scope of a Wing App"
-      );
-    }
+    return App.of(scope).newAbstract(fqn, scope, id, ...props);
   }
 
   private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();

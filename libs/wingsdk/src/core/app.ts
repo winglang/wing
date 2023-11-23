@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
@@ -90,20 +91,12 @@ export interface SynthHooks {
 /**
  * A Wing application.
  */
-export abstract class App extends Construct {
+export abstract class App extends Construct implements IApp {
   /**
    * Returns the root app.
    */
   public static of(scope: Construct): App {
-    if ((scope as any)._isApp) {
-      return scope as any;
-    }
-
-    if (!scope.node.scope) {
-      throw new Error("Cannot find root app");
-    }
-
-    return App.of(scope.node.scope);
+    return Node.of(scope).app as App;
   }
 
   /**
@@ -126,6 +119,9 @@ export abstract class App extends Construct {
       throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
     }
   }
+
+  /** @internal */
+  public readonly [APP_SYMBOL] = true;
 
   /**
    * The name of the compilation target.
@@ -163,12 +159,6 @@ export abstract class App extends Construct {
    * @internal
    */
   public readonly _newInstanceOverrides: any[];
-
-  /**
-   * Used to identify App instances
-   * @internal
-   */
-  public readonly _isApp = true;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -254,6 +244,10 @@ export abstract class App extends Construct {
     }
 
     return instance;
+  }
+
+  public tryFindChild(id: string): IConstruct | undefined {
+    return this.node.tryFindChild(id);
   }
 
   /**

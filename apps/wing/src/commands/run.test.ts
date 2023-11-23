@@ -103,7 +103,7 @@ test("wing it throws error for a directory with more than one entrypoint file", 
     writeFileSync("foo.main.w", "bring cloud;");
 
     await expect(run).rejects.toThrow(
-      "Multiple entrypoints found in the current directory (main.w, foo.main.w). Please specify which one to use."
+      "Multiple entrypoints found in the current directory (foo.main.w, main.w). Please specify which one to use."
     );
   } finally {
     process.chdir(prevdir);

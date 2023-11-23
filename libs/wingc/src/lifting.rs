@@ -324,6 +324,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.ctx.push_function_definition(
 					node.name.as_ref(),
 					&node.signature,
+					node.is_static,
 					self.jsify.types.get_scope_env(&scope),
 				);
 

@@ -377,6 +377,23 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`bring_invalid_dir.w 1`] = `
+"error: Cannot explicitly bring directory with no Wing files \\"no_wing_files\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"in.valid\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`bring_jsii.test.w 1`] = `
 "error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.test.w:1:1
@@ -2344,6 +2361,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`new_in_static_without_scope.test.w 1`] = `
+"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
+  |
+7 |     return new cloud.Bucket();
+  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+
+
+error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
+   |
+10 |     return new MyClass();
+   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
@@ -2554,6 +2593,13 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
+  |
+1 | let my_func1 = (callback: inflight (num): num) => {  };
+  | ^ Unknown symbol \\"this\\"
 
 
  
