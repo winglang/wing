@@ -1875,7 +1875,7 @@ class TaskList {
   }
 
   // Load js helper file
-  extern "./helpers.js" static inflight makeId(): str;
+  pub extern "./helpers.js" static inflight makeId(): str;
 } 
 
 // helpers.js
