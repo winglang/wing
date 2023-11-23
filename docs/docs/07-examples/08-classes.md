@@ -30,15 +30,15 @@ class Foo  {
 
   pub inflight doStuff() {
     // all code is async and runs on the cloud
-    log("field3[0]='{this.field3.at(0)}'");
+    log("field3[0]='${this.field3.at(0)}'");
     util.sleep(1s);
     log("done");
   }
 }
 
 let f = new Foo();
-log("field1={f.field1}");
-log("field2={f.field2}");
+log("field1=${f.field1}");
+log("field2=${f.field2}");
 
 new cloud.Function(inflight () => {
   f.doStuff();
@@ -143,7 +143,7 @@ let testKv = inflight (kv: IKVStore):void => {
     value: "v" 
   });
   let result = kv.get("k");
-  log("{result.get("value")}");
+  log("${result.get("value")}");
   assert("v" == str.fromJson(result.get("value")));
 };
 

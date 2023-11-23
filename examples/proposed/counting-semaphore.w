@@ -69,7 +69,7 @@ queue.add_consumer(inflight (message: str) => {
   }
 
   // real work
-  log("all resources are acquired, processing message: {message}");
+  log("all resources are acquired, processing message: ${message}");
 
   resource_1.release();
   resource_2.release();

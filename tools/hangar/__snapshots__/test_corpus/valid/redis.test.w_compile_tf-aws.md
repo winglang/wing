@@ -37,7 +37,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       (await $util_Util.waitUntil(async () => {
         return (((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $r.get("hello")),undefined));
       }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"{r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"${r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
     }
   }
   return $Closure2;
