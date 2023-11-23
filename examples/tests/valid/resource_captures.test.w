@@ -70,7 +70,7 @@ class MyResource {
   pub inflight testNoCapture() {
     let arr = [1,2,3];
     assert(arr.length == 3);
-    log("array.len={arr.length}");
+    log("array.len=${arr.length}");
   }
 
   pub inflight testCaptureCollectionsOfData() {
@@ -106,13 +106,13 @@ class MyResource {
 
   pub inflight testNestedInflightField() {
     assert(this.another.myField == "hello!");
-    log("field={this.another.myField}");
+    log("field=${this.another.myField}");
   }
 
   pub inflight testNestedResource() {
     assert(this.another.first.myResource.list().length == 0);
     this.another.first.myResource.put("hello", this.myStr);
-    log("this.another.first.myResource:{this.another.first.myResource.get("hello")}");
+    log("this.another.first.myResource:${this.another.first.myResource.get("hello")}");
   }
 
   // expression within an expression

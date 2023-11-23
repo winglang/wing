@@ -367,14 +367,14 @@ module.exports = grammar({
         ),
         '"'
       ),
-    template_substitution: ($) => seq("{", $.expression, "}"),
-    _string_fragment: ($) => token.immediate(prec(1, /[^{"\\]+/)),
+    template_substitution: ($) => seq("${", $.expression, "}"),
+    _string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(
           "\\",
           choice(
-            "{",
+            "$",
             /[^xu0-7]/,
             /[0-7]{1,3}/,
             /x[0-9a-fA-F]{2}/,

@@ -65,7 +65,7 @@ class Bar {
     // Call static method in a user defined resource that's no myself
     let s = Foo.fooStatic();
     // Call SDK built in resource's client
-    this.b.put("foo", "counter is: {this.foo.fooGet()}");
+    this.b.put("foo", "counter is: ${this.foo.fooGet()}");
     return this.b.get("foo");
   }
 
@@ -162,8 +162,8 @@ class ScopeAndIdTestClass {
     assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"));
     // Generate multiple Dummys with different id's
     for i in 0..3 {
-      let x = new Dummy() as "tc{i}";
-      let expected_path = "/ScopeAndIdTestClass/tc{i}";
+      let x = new Dummy() as "tc${i}";
+      let expected_path = "/ScopeAndIdTestClass/tc${i}";
       assert(x.node.path.endsWith(expected_path));
     }
   }
