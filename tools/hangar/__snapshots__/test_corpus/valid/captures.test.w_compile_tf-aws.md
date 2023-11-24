@@ -688,18 +688,10 @@ class $Root extends $stdlib.std.Resource {
     const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler, { batchSize: 5 }));
-    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler, { env: (() => { let m = {}; 
-      return m;
-    })() });
-    const emptyEnv = (() => { let m = {}; 
-      return m;
-    })();
+    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler, { env: ({}) });
+    const emptyEnv = ({});
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
-    const headers = (() => { let m = {}; 
-      m["my-fancy-header"] = "my-fancy-value";
-      m["not-even-real\""] = "wow` !";
-      return m;
-    })();
+    const headers = ({["my-fancy-header"]: "my-fancy-value", ["not-even-real\""]: "wow` !"});
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     (api.get("/hello", new $Closure2(this, "$Closure2")));
   }
