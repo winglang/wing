@@ -766,13 +766,13 @@ impl<'a> JSifier<'a> {
 			ExprKind::MapLiteral { fields, .. } => {
 				let mut code = CodeMaker::with_source(expr_span);
 				code.open("(() => { let m = {}; ");
-		
+
 				for (key, value) in fields.iter() {
 					let mut kv = new_code!(&key.span, "m[", self.jsify_expression(key, ctx), "] = ");
 					kv.append(new_code!(&value.span, self.jsify_expression(value, ctx), ";\n"));
 					code.add_code(kv);
 				}
-		
+
 				code.line("return m;");
 				code.close("})()");
 				code
