@@ -100,7 +100,12 @@ class $Root extends $stdlib.std.Resource {
     const jsonNumber = 123;
     const jsonBool = true;
     const jsonArray = [1, 2, 3];
-    const jsonMap = ({"1": 1, "2": 2, "3": 3});
+    const jsonMap = (() => { let m = {}; 
+      m["1"] = 1;
+      m["2"] = 2;
+      m["3"] = 3;
+      return m;
+    })();
     const jsonObj = ({"boom": 123});
     for (const j of [jsonNumber, jsonBool, jsonArray, jsonMap, jsonObj]) {
       {((cond) => {if (!cond) throw new Error("assertion failed: j == Json.parse(Json.stringify(j))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(j,(JSON.parse(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([j]))))))};
@@ -220,8 +225,14 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty, "something"]),false)))};
     const arrayStruct = [({"foo": "", "stuff": []})];
     const setStruct = new Set([({"foo": "", "stuff": []})]);
-    const mapStruct = ({"1": ({"foo": "", "stuff": []})});
-    const deepCollectionStruct = ({"1": [new Set([({"foo": "", "stuff": []})])]});
+    const mapStruct = (() => { let m = {}; 
+      m["1"] = ({"foo": "", "stuff": []});
+      return m;
+    })();
+    const deepCollectionStruct = (() => { let m = {}; 
+      m["1"] = [new Set([({"foo": "", "stuff": []})])];
+      return m;
+    })();
     const notJsonMissingField = ({"foo": "bar", "stuff": []});
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
