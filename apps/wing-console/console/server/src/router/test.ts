@@ -136,7 +136,7 @@ export const createTestRouter = () => {
         });
       }
 
-      const testPassed = result.filter((r) => r.error === undefined);
+      const testPassed = result.filter((r) => r.pass);
       const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
 
       const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
