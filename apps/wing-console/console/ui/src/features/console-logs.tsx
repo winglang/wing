@@ -139,6 +139,7 @@ const LogEntryRow = memo(
             <pre
               className={classNames(
                 "inline",
+                expanded && "whitespace-pre-wrap break-words",
                 log.ctx?.messageType === "info" && theme.text2,
                 log.ctx?.messageType === "title" && theme.text1,
                 log.ctx?.messageType === "success" &&

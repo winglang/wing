@@ -252,11 +252,6 @@
       "type": "bundled"
     },
     {
-      "name": "aws-cdk-lib",
-      "version": "^2.64.0",
-      "type": "bundled"
-    },
-    {
       "name": "cdktf",
       "version": "0.17.0",
       "type": "bundled"

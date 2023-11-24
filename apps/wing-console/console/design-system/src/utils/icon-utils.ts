@@ -27,6 +27,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { DynamoDBIcon } from "../icons/dynamodb-icon.js";
+import { ReactIcon } from "../icons/react-icon.js";
 import { RedisIcon } from "../icons/redis-icon.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -53,9 +54,11 @@ export const getResourceIconComponent = (
     case "@winglang/sdk.cloud.Queue": {
       return solid ? SolidQueueListIcon : QueueListIcon;
     }
-    case "@winglang/sdk.cloud.Website":
-    case "@winglang/sdk.cloud.Endpoint": {
+    case "@winglang/sdk.cloud.Website": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
+    }
+    case "@winglang/sdk.ex.ReactApp": {
+      return ReactIcon;
     }
     case "@winglang/sdk.cloud.Counter": {
       return solid ? SolidCalculatorIcon : CalculatorIcon;
@@ -120,14 +123,6 @@ export const getResourceIconColors = (options: {
         options.forceDarken && "text-emerald-600 dark:text-emerald-300",
       ];
     }
-    case "@winglang/sdk.cloud.Endpoint": {
-      return [
-        "text-sky-500 dark:text-sky-400",
-        options.darkenOnGroupHover &&
-          "group-hover:text-sky-600 dark:group-hover:text-sky-300",
-        options.forceDarken && "text-sky-600 dark:text-sky-300",
-      ];
-    }
     case "@winglang/sdk.cloud.Counter": {
       return [
         "text-lime-500 dark:text-lime-400",
@@ -182,6 +177,14 @@ export const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-violet-700 dark:group-hover:text-violet-300",
         options.forceDarken && "text-violet-700 dark:text-violet-300",
+      ];
+    }
+    case "@winglang/sdk.ex.ReactApp": {
+      return [
+        "text-sky-500 dark:text-sky-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-sky-600 dark:group-hover:text-sky-300",
+        options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
     }
     default: {

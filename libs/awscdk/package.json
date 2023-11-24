@@ -1,0 +1,42 @@
+{
+  "name": "@winglang/platform-awscdk",
+  "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/awscdk"
+  },
+  "description": "Wing Platform for AWS CDK",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "tag": "latest"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "aws-cdk-lib": "^2.64.0",
+    "constructs": "~10.2.69",
+    "safe-stable-stringify": "^2.4.3",
+    "@winglang/sdk": "workspace:^"
+  },
+  "devDependencies": {
+    "bump-pack": "workspace:^",
+    "typescript": "^4.9.5",
+    "tsup": "^6.7.0",
+    "vitest": "^0.32.4"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "package": "bump-pack -b",
+    "test": "vitest run --passWithNoTests"
+  },
+  "files": [
+    "lib"
+  ]
+}
