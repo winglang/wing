@@ -19,6 +19,7 @@ import {
 } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
+import { throttle } from "./utils/throttle.js";
 
 export type {
   TestsStateManager,
@@ -100,7 +101,9 @@ export const createConsoleServer = async ({
 
   const consoleLogger: ConsoleLogger = createConsoleLogger({
     onLog: (level, message) => {
-      invalidateQuery("app.logs");
+      throttle(() => {
+        invalidateQuery("app.logs");
+      }, 100);
     },
     log,
   });
