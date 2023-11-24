@@ -99,11 +99,13 @@ export const createConsoleServer = async ({
   };
   config?.addEventListener("config-change", invalidateConfig);
 
+  const throttledInvalidateQuery = throttle(() => {
+    invalidateQuery("app.logs");
+  }, 100);
+
   const consoleLogger: ConsoleLogger = createConsoleLogger({
     onLog: (level, message) => {
-      throttle(() => {
-        invalidateQuery("app.logs");
-      }, 100);
+      throttledInvalidateQuery();
     },
     log,
   });
