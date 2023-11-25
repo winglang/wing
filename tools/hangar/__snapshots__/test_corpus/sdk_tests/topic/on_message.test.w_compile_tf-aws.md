@@ -212,7 +212,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudTopic-OnMessage0.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudTopic-OnMessage0.version}",
         "source_arn": "${aws_sns_topic.cloudTopic.arn}"
       },
       "cloudTopic-OnMessage1_InvokePermission-c82b57aa3e58b626b884e8374e59ec192cf61df91b_3F1C0938": {
@@ -225,7 +224,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudTopic-OnMessage1.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudTopic-OnMessage1.version}",
         "source_arn": "${aws_sns_topic.cloudTopic.arn}"
       }
     },

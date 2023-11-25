@@ -531,7 +531,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_oncreate-OnMessage0_0B1CA993.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_oncreate-OnMessage0_0B1CA993.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_oncreate_BF58CCF3.arn}"
       },
       "cloudBucket_oncreate-OnMessage1_InvokePermission-c8f9c22ef33cda1b8ee1583450fa95d2a469b4ca3b_42E7BD52": {
@@ -544,7 +543,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_oncreate-OnMessage1_46B1E9AC.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_oncreate-OnMessage1_46B1E9AC.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_oncreate_BF58CCF3.arn}"
       },
       "cloudBucket_ondelete-OnMessage0_InvokePermission-c82a684284f1978ef059ff478889b7d0422cd30e56_39B5412A": {
@@ -557,7 +555,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_ondelete-OnMessage0_31BC8C5B.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_ondelete-OnMessage0_31BC8C5B.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_ondelete_5C7719AC.arn}"
       },
       "cloudBucket_ondelete-OnMessage1_InvokePermission-c82a684284f1978ef059ff478889b7d0422cd30e56_55397F0C": {
@@ -570,7 +567,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_ondelete-OnMessage1_97EDDB9C.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_ondelete-OnMessage1_97EDDB9C.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_ondelete_5C7719AC.arn}"
       },
       "cloudBucket_onupdate-OnMessage0_InvokePermission-c8223d472543ef1fe5e1f0eacaf63338362fb1a751_3E88DA77": {
@@ -583,7 +579,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_onupdate-OnMessage0_7E23A21E.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_onupdate-OnMessage0_7E23A21E.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_onupdate_34404C29.arn}"
       },
       "cloudBucket_onupdate-OnMessage1_InvokePermission-c8223d472543ef1fe5e1f0eacaf63338362fb1a751_F065AB16": {
@@ -596,7 +591,6 @@
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudBucket_onupdate-OnMessage1_AD4C1239.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudBucket_onupdate-OnMessage1_AD4C1239.version}",
         "source_arn": "${aws_sns_topic.cloudBucket_onupdate_34404C29.arn}"
       }
     },

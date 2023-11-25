@@ -242,7 +242,6 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.cloudTopic-OnMessage0.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.cloudTopic-OnMessage0.version}",
         "source_arn": "${aws_sns_topic.cloudTopic.arn}"
       }
     },
