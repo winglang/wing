@@ -77,7 +77,7 @@ export abstract class Stream extends Resource {
    */
   public abstract setConsumer(
     handler: IStreamConsumerHandler,
-    props?: StreamConsumerOptions
+    props?: Json
   ): Json;
 
 
@@ -117,7 +117,7 @@ export interface IStreamClient {
    * @returns A single record, or a set of records; or `nil` if the stream is empty.
    * @inflight
    */
-  get(): Promise<IStreamData | IStreamData[] | undefined>;
+  get(limit: number): Promise<IStreamData | IStreamData[] | undefined>;
 
   /**
    * Retrieve the stream's metadata.

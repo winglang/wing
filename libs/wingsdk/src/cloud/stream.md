@@ -17,7 +17,7 @@ sidebar_position: 1
 The `cloud.Stream` resource represents a real-time streaming service typically used to ingest continuous data transmissions.
 They typically involve high throughput, low size transmissions like: sensors, mobile devices, web servers, etc.
 
-When a data stream is created in a cloud provider, it typically exposes an endpoint acting as a "put" endpoint for all data sources. The cloud provider manages the ingest and temporary storage of your data. 
+When a data stream is created in a cloud provider, it typically exposes an endpoint acting as a "put" endpoint for all data sources. The cloud provider manages the ingest and temporary storage of your data.
 
 Most cloud providers have a data horizon for their streaming data to help providers reduce cost, prevent unbounded data growth, encourage real-time processing, and implement data governance best practices. However, developers have the ability to modify the data horizon.
 
