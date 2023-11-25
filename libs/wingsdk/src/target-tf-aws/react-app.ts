@@ -38,10 +38,14 @@ export class ReactApp extends ex.ReactApp implements aws.IAwsReactApp {
       unlinkSync(join(this._buildPath, ex.WING_JS));
     }
 
-    const host: cloud.Website = new cloud.Website(this, "host", {
-      ...this._hostProps,
-      path: this._buildPath,
-    });
+    const host: cloud.Website = new cloud.Website(
+      this,
+      `${this.node.id}-host`,
+      {
+        ...this._hostProps,
+        path: this._buildPath,
+      }
+    );
 
     this.node.addDependency(host);
     Connections.of(this).add({

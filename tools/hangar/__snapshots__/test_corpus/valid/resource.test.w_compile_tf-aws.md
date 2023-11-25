@@ -508,7 +508,6 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.BigPublisher_b2_oncreate-OnMessage0_3ECAAB35.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.BigPublisher_b2_oncreate-OnMessage0_3ECAAB35.version}",
         "source_arn": "${aws_sns_topic.BigPublisher_b2_oncreate_44F68983.arn}"
       },
       "BigPublisher_cloudTopic-OnMessage0_InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec_1514C2B7": {
@@ -521,7 +520,6 @@ module.exports = function({  }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage0_EB3C5802.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.BigPublisher_cloudTopic-OnMessage0_EB3C5802.version}",
         "source_arn": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}"
       }
     },

@@ -86,7 +86,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       }
     );
 
-    fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn);
+    fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
     Node.of(this).addConnection({
       source: this,

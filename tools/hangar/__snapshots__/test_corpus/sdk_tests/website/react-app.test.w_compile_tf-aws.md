@@ -21,11 +21,11 @@
   },
   "data": {
     "aws_iam_policy_document": {
-      "exReactApp_host_AllowDistributionReadOnly_8D92A42B": {
+      "exReactApp_exReactApp-host_AllowDistributionReadOnly_449FAF0F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/AllowDistributionReadOnly",
-            "uniqueId": "exReactApp_host_AllowDistributionReadOnly_8D92A42B"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/AllowDistributionReadOnly",
+            "uniqueId": "exReactApp_exReactApp-host_AllowDistributionReadOnly_449FAF0F"
           }
         },
         "statement": [
@@ -37,7 +37,7 @@
               {
                 "test": "StringEquals",
                 "values": [
-                  "${aws_cloudfront_distribution.exReactApp_host_Distribution_80D4F09F.arn}"
+                  "${aws_cloudfront_distribution.exReactApp_exReactApp-host_Distribution_FE9291B1.arn}"
                 ],
                 "variable": "AWS:SourceArn"
               }
@@ -51,7 +51,7 @@
               }
             ],
             "resources": [
-              "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.arn}/*"
+              "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.arn}/*"
             ]
           }
         ]
@@ -125,11 +125,11 @@
       }
     },
     "aws_cloudfront_distribution": {
-      "exReactApp_host_Distribution_80D4F09F": {
+      "exReactApp_exReactApp-host_Distribution_FE9291B1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/Distribution",
-            "uniqueId": "exReactApp_host_Distribution_80D4F09F"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/Distribution",
+            "uniqueId": "exReactApp_exReactApp-host_Distribution_FE9291B1"
           }
         },
         "default_cache_behavior": {
@@ -158,8 +158,8 @@
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.bucket_regional_domain_name}",
-            "origin_access_control_id": "${aws_cloudfront_origin_access_control.exReactApp_host_CloudfrontOac_B3662149.id}",
+            "domain_name": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket_regional_domain_name}",
+            "origin_access_control_id": "${aws_cloudfront_origin_access_control.exReactApp_exReactApp-host_CloudfrontOac_B85B4BF9.id}",
             "origin_id": "s3Origin"
           }
         ],
@@ -176,14 +176,14 @@
       }
     },
     "aws_cloudfront_origin_access_control": {
-      "exReactApp_host_CloudfrontOac_B3662149": {
+      "exReactApp_exReactApp-host_CloudfrontOac_B85B4BF9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/CloudfrontOac",
-            "uniqueId": "exReactApp_host_CloudfrontOac_B3662149"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/CloudfrontOac",
+            "uniqueId": "exReactApp_exReactApp-host_CloudfrontOac_B85B4BF9"
           }
         },
-        "name": "host-c800784c-cloudfront-oac",
+        "name": "ex-React-c8e2f35e-cloudfront-oac",
         "origin_access_control_origin_type": "s3",
         "signing_behavior": "always",
         "signing_protocol": "sigv4"
@@ -294,38 +294,38 @@
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "exReactApp_host_WebsiteBucket_E907A639": {
+      "exReactApp_exReactApp-host_WebsiteBucket_FE5E163A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/WebsiteBucket",
-            "uniqueId": "exReactApp_host_WebsiteBucket_E907A639"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/WebsiteBucket",
+            "uniqueId": "exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
           }
         },
-        "bucket_prefix": "host-c800784c-",
+        "bucket_prefix": "ex-reactapp-host-c8e2f35e-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_policy": {
-      "exReactApp_host_DistributionS3BucketPolicy_35DF3F39": {
+      "exReactApp_exReactApp-host_DistributionS3BucketPolicy_2BAB64DC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/DistributionS3BucketPolicy",
-            "uniqueId": "exReactApp_host_DistributionS3BucketPolicy_35DF3F39"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/DistributionS3BucketPolicy",
+            "uniqueId": "exReactApp_exReactApp-host_DistributionS3BucketPolicy_2BAB64DC"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.id}",
-        "policy": "${data.aws_iam_policy_document.exReactApp_host_AllowDistributionReadOnly_8D92A42B.json}"
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.id}",
+        "policy": "${data.aws_iam_policy_document.exReactApp_exReactApp-host_AllowDistributionReadOnly_449FAF0F.json}"
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "exReactApp_host_BucketWebsiteConfiguration_42D0C3CB": {
+      "exReactApp_exReactApp-host_BucketWebsiteConfiguration_BDF89618": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/BucketWebsiteConfiguration",
-            "uniqueId": "exReactApp_host_BucketWebsiteConfiguration_42D0C3CB"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/BucketWebsiteConfiguration",
+            "uniqueId": "exReactApp_exReactApp-host_BucketWebsiteConfiguration_BDF89618"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
@@ -343,50 +343,50 @@
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "exReactApp_host_File--indexhtml_5B099546": {
+      "exReactApp_exReactApp-host_File--indexhtml_B6124CA6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/File--index.html",
-            "uniqueId": "exReactApp_host_File--indexhtml_5B099546"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File--index.html",
+            "uniqueId": "exReactApp_exReactApp-host_File--indexhtml_B6124CA6"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
-      "exReactApp_host_File--indexjs_5855D501": {
+      "exReactApp_exReactApp-host_File--indexjs_212AAA99": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/File--index.js",
-            "uniqueId": "exReactApp_host_File--indexjs_5855D501"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File--index.js",
+            "uniqueId": "exReactApp_exReactApp-host_File--indexjs_212AAA99"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
         "content_type": "application/javascript; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
         ],
         "key": "/index.js",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },
-      "exReactApp_host_File-wingjs_960752D0": {
+      "exReactApp_exReactApp-host_File-wingjs_43F0A844": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.ReactApp/host/File-wing.js",
-            "uniqueId": "exReactApp_host_File-wingjs_960752D0"
+            "path": "root/Default/Default/ex.ReactApp/ex.ReactApp-host/File-wing.js",
+            "uniqueId": "exReactApp_exReactApp-host_File-wingjs_43F0A844"
           }
         },
-        "bucket": "${aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639.bucket}",
+        "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
         "content": "// This file is generated by wing\nwindow.wingEnv = {\n  \"apiUrl\": \"https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}\",\n  \"anotherEnvVar\": \"preflight variable\"\n};",
         "content_type": "text/javascript",
         "depends_on": [
-          "aws_s3_bucket.exReactApp_host_WebsiteBucket_E907A639"
+          "aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A"
         ],
         "key": "wing.js"
       }

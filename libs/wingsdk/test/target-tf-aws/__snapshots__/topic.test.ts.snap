@@ -419,7 +419,6 @@ exports[`topic with subscriber function 2`] = `
         "action": "lambda:InvokeFunction",
         "function_name": "\${aws_lambda_function.Topic-OnMessage0.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "\${aws_lambda_function.Topic-OnMessage0.version}",
         "source_arn": "\${aws_sns_topic.Topic.arn}",
       },
     },

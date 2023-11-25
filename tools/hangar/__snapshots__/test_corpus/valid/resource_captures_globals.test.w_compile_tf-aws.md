@@ -281,7 +281,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "action": "lambda:InvokeFunction",
         "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage0_F8F986EA.function_name}",
         "principal": "sns.amazonaws.com",
-        "qualifier": "${aws_lambda_function.MyResource_cloudTopic-OnMessage0_F8F986EA.version}",
         "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
     },
