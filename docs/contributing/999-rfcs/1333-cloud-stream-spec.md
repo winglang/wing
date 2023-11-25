@@ -47,8 +47,8 @@ let stream = new cloud.Stream(
 ) as "TelemetryIngest";
 
 
-new cloud.Function(inflight (event: Json) => {
-  const response = stream.send(event);
+new cloud.Function(inflight (event: IStreamData) => {
+  const response = stream.put(event);
 }) as "TelemetryWriter";
 ```
 
@@ -63,7 +63,7 @@ let stream = new cloud.Stream(
   horizon: 48h
 ) as "TelemetryIngest";
 
-let bloc = new cloud.Function(inflight (event: Json)=> {
+let bloc = new cloud.Function(inflight (event: IStreamData)=> {
   let newestBatch = stream.fetch();
 
   let batchSize = newestBatch.size();
@@ -81,7 +81,7 @@ let stream = new cloud.Stream(
   horizon: 48h
 ) as "TelemetryIngest";
 
-stream.onEvent(inflight (event: Json) => {
+stream.onEvent(inflight (event: IStreamData) => {
   /**
    * data returned by stream has some common information
    * Other data is as the user sets it.
