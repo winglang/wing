@@ -48,10 +48,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyType-1.js")({
-            $s: ${context._lift(s)},
+            $s: ${$stdlib.core.liftObject(s)},
           })
         `;
       }
@@ -69,11 +69,11 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return ["staticMethod", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("staticMethod")) {
           MyType._registerOnLiftObject(s, host, []);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     const s = "hello";

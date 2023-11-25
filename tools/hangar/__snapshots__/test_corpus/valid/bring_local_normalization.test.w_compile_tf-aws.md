@@ -83,7 +83,7 @@ module.exports = function({ $stdlib }) {
     static bar() {
       return "bar";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Bar-1.js")({
         })
@@ -121,7 +121,7 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return "baz";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Baz-2.js")({
         })
@@ -167,7 +167,7 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return (baz.Baz.baz());
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-3.js")({
         })

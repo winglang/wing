@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.WingResource-1.js")({
           })

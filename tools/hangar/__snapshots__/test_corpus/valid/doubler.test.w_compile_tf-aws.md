@@ -266,7 +266,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.func = func;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Doubler-1.js")({
           })
@@ -277,7 +277,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DoublerClient = ${Doubler._toInflightType(this)};
             const client = new DoublerClient({
-              $this_func: ${this._lift(this.func)},
+              $this_func: ${$stdlib.core.liftObject(this.func)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -298,11 +298,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
           })
@@ -330,16 +331,17 @@ class $Root extends $stdlib.std.Resource {
       makeFunc(handler) {
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure2-1.js")({
-                $handler: ${context._lift(handler)},
-                $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-                $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+                $handler: ${$stdlib.core.liftObject(handler)},
+                $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+                $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
               })
             `;
           }
@@ -366,7 +368,7 @@ class $Root extends $stdlib.std.Resource {
         }
         return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Doubler2-1.js")({
           })
@@ -388,11 +390,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
           })
@@ -414,14 +417,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $f: ${context._lift(f)},
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }

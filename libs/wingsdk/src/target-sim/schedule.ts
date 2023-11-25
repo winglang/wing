@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -33,10 +34,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
       "ScheduleOnTickHandlerClient"
@@ -44,14 +42,14 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      `${this.node.id}-OnTick-${hash}`,
+      App.of(this).makeId(this, "OnTick"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onTick()";
 
-    new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "OnTickMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},

@@ -54,7 +54,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.arr = ["hello", "world"];
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $_this_arr_at_1__: ${this._lift((this.arr.at(1)))},
+              $_this_arr_at_1__: ${$stdlib.core.liftObject((this.arr.at(1)))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

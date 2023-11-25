@@ -53,10 +53,7 @@ test("queue with a consumer function", () => {
   const queue = new cloud.Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`

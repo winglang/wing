@@ -19,7 +19,7 @@ test("api with GET route at root", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/", inflight);
 
@@ -38,7 +38,7 @@ test("api with multiple methods on same route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/", inflight);
   api.put("/", inflight);
@@ -58,8 +58,8 @@ test("api with GET routes with common prefix", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const inflight2 = Testing.makeHandler(app, "Handler2", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  const inflight2 = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/foo", inflight);
   api.get("/hello/bat", inflight2);
@@ -68,7 +68,7 @@ test("api with GET routes with common prefix", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 
@@ -77,8 +77,8 @@ test("api with GET routes with different prefix", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const inflight2 = Testing.makeHandler(app, "Handler2", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  const inflight2 = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/foo", inflight);
   api.get("/foo/bar", inflight2);
@@ -87,7 +87,7 @@ test("api with GET routes with different prefix", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 
@@ -96,7 +96,7 @@ test("api with multiple GET route and one lambda", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/foo", inflight);
   api.get("/hello/bat", inflight);
@@ -115,8 +115,8 @@ test("api with multiple methods and multiple lambda", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const inflight2 = Testing.makeHandler(app, "Handler2", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  const inflight2 = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/foo", inflight);
   api.post("/hello/bat", inflight2);
@@ -125,7 +125,7 @@ test("api with multiple methods and multiple lambda", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 
@@ -134,7 +134,7 @@ test("api with multiple methods and one lambda", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/foo", inflight);
   api.post("/hello/bat", inflight);
@@ -152,7 +152,7 @@ test("api with path parameter", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/hello/:world", inflight);
 
@@ -169,7 +169,7 @@ test("api with 'name' parameter", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/:name", inflight);
 
@@ -186,7 +186,7 @@ test("api with 'name' & 'age' parameter", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.get("/:name/:age", inflight);
 
@@ -203,7 +203,7 @@ test("api with POST route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.post("/", inflight);
 
@@ -222,7 +222,7 @@ test("api with PUT route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.put("/", inflight);
 
@@ -241,7 +241,7 @@ test("api with PATCH route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.patch("/", inflight);
 
@@ -260,7 +260,7 @@ test("api with DELETE route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.delete("/", inflight);
 
@@ -279,7 +279,7 @@ test("api with OPTIONS route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.options("/", inflight);
 
@@ -298,7 +298,7 @@ test("api with HEAD route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.head("/", inflight);
 
@@ -317,7 +317,7 @@ test("api with CONNECT route", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
 
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   api.connect("/", inflight);
 
@@ -335,7 +335,7 @@ test("api url can be used as environment variable", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api");
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Fn", handler, {
     env: {
       API_URL: api.url,
@@ -357,7 +357,7 @@ test("api configured for cors", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const api = new Api(app, "Api", { cors: true });
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   api.get("/", handler);
 
   const output = app.synth();

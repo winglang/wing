@@ -98,19 +98,6 @@ exports[`create an OnDeploy 2`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -373,19 +360,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -672,19 +646,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {

@@ -72,7 +72,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.f = x;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Base-1.js")({
           })
@@ -97,10 +97,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${context._lift(Base)},
+            $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
       }
@@ -109,7 +109,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
-              $this_f: ${this._lift(this.f)},
+              $this_f: ${$stdlib.core.liftObject(this.f)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

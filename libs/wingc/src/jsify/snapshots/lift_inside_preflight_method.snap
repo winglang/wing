@@ -80,14 +80,15 @@ class $Root extends $stdlib.std.Resource {
         const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, name);
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure1-1.js")({
-                $b: ${context._lift(b)},
+                $b: ${$stdlib.core.liftObject(b)},
               })
             `;
           }
@@ -114,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
         }
         new $Closure1(this, "$Closure1");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })

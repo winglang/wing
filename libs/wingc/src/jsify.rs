@@ -38,6 +38,7 @@ use self::codemaker::CodeMaker;
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
+const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
@@ -48,7 +49,7 @@ const PLATFORMS_VAR: &str = "$platforms";
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
-const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{}", CLASS_INFLIGHT_INIT_NAME);
+const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
@@ -1401,6 +1402,11 @@ impl<'a> JSifier<'a> {
 			code.append(" {");
 			code.indent();
 
+			// TODO Hack to make sure closures match the IInflight contract from wingsdk
+			if class_type.is_closure() {
+				code.line("_hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');")
+			}
+
 			// emit the preflight constructor
 			code.add_code(self.jsify_preflight_constructor(&class, ctx));
 
@@ -1484,7 +1490,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::with_source(&class.name.span);
 
-		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
+		code.open("static _toInflightType() {");
 
 		code.open("return `");
 
@@ -1492,7 +1498,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
-				let lift_type = format!("context._lift({})", capture.code);
+				let lift_type = format!("{STDLIB_CORE}.liftObject({})", capture.code);
 				code.line(format!("{}: ${{{}}},", token, lift_type));
 			}
 		}
@@ -1523,7 +1529,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{this._lift({obj})}},"));
+				code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
 			}
 		}
 
@@ -1696,7 +1702,7 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerTypeOnLift"),
+			BindMethod::Type => ("static ", "_registerOnLift"),
 			BindMethod::Instance => ("", "_registerOnLift"),
 		};
 

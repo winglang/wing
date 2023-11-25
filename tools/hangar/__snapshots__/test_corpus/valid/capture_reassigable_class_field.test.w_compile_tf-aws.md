@@ -172,11 +172,12 @@ class $Root extends $stdlib.std.Resource {
         this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure1-1.js")({
               })
@@ -202,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
       onUpdate(fn) {
         this.onUpdateCallback = fn;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.KeyValueStore-1.js")({
           })
@@ -213,8 +214,8 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
             const client = new KeyValueStoreClient({
-              $this_bucket: ${this._lift(this.bucket)},
-              $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
+              $this_bucket: ${$stdlib.core.liftObject(this.bucket)},
+              $this_onUpdateCallback: ${$stdlib.core.liftObject(this.onUpdateCallback)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -240,14 +241,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $counter: ${context._lift(counter)},
+            $counter: ${$stdlib.core.liftObject(counter)},
           })
         `;
       }
@@ -273,16 +275,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $counter: ${context._lift(counter)},
-            $kv: ${context._lift(kv)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $counter: ${$stdlib.core.liftObject(counter)},
+            $kv: ${$stdlib.core.liftObject(kv)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }

@@ -88,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Animal-1.js")({
           })
@@ -113,10 +113,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Cat-1.js")({
-            $Animal: ${context._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }
@@ -139,10 +139,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Dog-1.js")({
-            $Animal: ${context._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }

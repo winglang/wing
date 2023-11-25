@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
-import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { IResource } from "../std/resource";
@@ -141,6 +140,11 @@ export abstract class App extends Construct implements IApp {
   public readonly entrypointDir: string;
 
   /**
+   * Used in `makeId` to keep track of known IDs
+   */
+  private readonly _idCounters: Record<string, number> = {};
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -149,12 +153,6 @@ export abstract class App extends Construct implements IApp {
    * Whether or not this app is being synthesized into a test environment.
    */
   public abstract readonly isTestEnvironment: boolean;
-
-  /**
-   * Tokens handling for this app.
-   * @internal
-   */
-  public abstract readonly _tokens: Tokens;
 
   /**
    * NewInstance hooks for defining resource implementations.
@@ -232,6 +230,14 @@ export abstract class App extends Construct implements IApp {
     }
 
     return instance;
+  }
+
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
   }
 
   public tryFindChild(id: string): IConstruct | undefined {

@@ -216,19 +216,6 @@ exports[`function with a table binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "Table": {
                 "children": {
                   "Default": {

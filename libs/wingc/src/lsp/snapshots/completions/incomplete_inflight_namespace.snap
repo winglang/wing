@@ -323,7 +323,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IApiEndpointHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (request: ApiRequest): ApiResponse` — Inflight that will be called when a request is made to the endpoint.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IApiEndpointHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — `inflight (request: ApiRequest): ApiResponse` — Inflight that will be called when a request is made to the endpoint.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
@@ -341,7 +341,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IBucketEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (key: str, type: BucketEventType): void` — Function that will be called when an event notification is fired.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IBucketEventHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — `inflight (key: str, type: BucketEventType): void` — Function that will be called when an event notification is fired.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
@@ -371,7 +371,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (event: str): void` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IFunctionHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — `inflight (event: str): void` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
@@ -389,7 +389,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (): void` — Entrypoint function that will be called when the app is deployed.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IOnDeployHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — `inflight (): void` — Entrypoint function that will be called when the app is deployed.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IOnDeployHandler
 - label: IOnDeployHandlerClient
   kind: 8
@@ -407,7 +407,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueSetConsumerHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (message: str): void` — Function that will be called when a message is received from the queue.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IQueueSetConsumerHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — `inflight (message: str): void` — Function that will be called when a message is received from the queue.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
@@ -425,7 +425,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IScheduleOnTickHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (): void` — Function that will be called when a message is received from the schedule.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IScheduleOnTickHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — `inflight (): void` — Function that will be called when a message is received from the schedule.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
@@ -449,7 +449,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceHandler extends IResource\n```\n---\nExecuted when a `cloud.Service` is started.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (): inflight (): void?` — Handler to run when the service starts.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IServiceHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is started.\n### Methods\n- `handle` — `inflight (): inflight (): void?` — Handler to run when the service starts.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IServiceHandler
 - label: IServiceHandlerClient
   kind: 8
@@ -461,7 +461,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IServiceStopHandler extends IResource\n```\n---\nExecuted when a `cloud.Service` is stopped.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (): void` — Handler to run when the service stops.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IServiceStopHandler extends IInflight\n```\n---\nExecuted when a `cloud.Service` is stopped.\n### Methods\n- `handle` — `inflight (): void` — Handler to run when the service stops.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IServiceStopHandler
 - label: IServiceStopHandlerClient
   kind: 8
@@ -479,7 +479,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface ITopicOnMessageHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Fields\n- `node` — `Node`\n### Methods\n- `handle` — `inflight (event: str): void` — Function that will be called when a message is received from the topic.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface ITopicOnMessageHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — `inflight (event: str): void` — Function that will be called when a message is received from the topic.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8

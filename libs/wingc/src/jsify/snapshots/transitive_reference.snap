@@ -93,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyType-1.js")({
           })
@@ -104,7 +104,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
-              $this_b: ${this._lift(this.b)},
+              $this_b: ${$stdlib.core.liftObject(this.b)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -128,14 +128,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t: ${context._lift(t)},
+            $t: ${$stdlib.core.liftObject(t)},
           })
         `;
       }

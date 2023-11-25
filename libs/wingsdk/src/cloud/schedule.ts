@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
-import { Duration, IResource, Node, Resource } from "../std";
+import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Schedule`.
@@ -95,7 +95,7 @@ export interface ScheduleOnTickOptions extends FunctionProps {}
  *
  * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`
  */
-export interface IScheduleOnTickHandler extends IResource {}
+export interface IScheduleOnTickHandler extends IInflight {}
 
 /**
  * Inflight interface for `Schedule`.

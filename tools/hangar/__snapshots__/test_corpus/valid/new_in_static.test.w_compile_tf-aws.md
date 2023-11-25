@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
       static createMyClass(scope) {
         return new MyClass(scope, "MyClass");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyClass-1.js")({
           })
@@ -143,14 +143,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bucket: ${context._lift(bucket)},
+            $bucket: ${$stdlib.core.liftObject(bucket)},
           })
         `;
       }

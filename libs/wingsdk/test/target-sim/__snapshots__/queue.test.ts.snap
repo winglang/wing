@@ -166,7 +166,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -189,19 +189,9 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/my_queue/SetConsumer0",
       },
     ],
     "version": "connections-0.1",
@@ -218,10 +208,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -238,10 +228,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -332,19 +322,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -360,7 +337,7 @@ async handle(message) {
         },
         "my_queue": {
           "children": {
-            "my_queue-QueueEventMapping-e645076f": {
+            "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -368,10 +345,10 @@ async handle(message) {
               "display": {
                 "hidden": true,
               },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+              "id": "QueueEventMapping0",
+              "path": "root/my_queue/QueueEventMapping0",
             },
-            "my_queue-SetConsumer-e645076f": {
+            "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -381,19 +358,8 @@ async handle(message) {
                 "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
-              "id": "my_queue-SetConsumer-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-            },
-            "my_queue-SetConsumerHandler-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-SetConsumerHandler-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
+              "id": "SetConsumer0",
+              "path": "root/my_queue/SetConsumer0",
             },
           },
           "constructInfo": {
@@ -440,7 +406,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -463,19 +429,9 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/my_queue/SetConsumer0",
       },
     ],
     "version": "connections-0.1",
@@ -492,10 +448,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -512,10 +468,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -606,19 +562,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -634,7 +577,7 @@ async handle(message) {
         },
         "my_queue": {
           "children": {
-            "my_queue-QueueEventMapping-e645076f": {
+            "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -642,10 +585,10 @@ async handle(message) {
               "display": {
                 "hidden": true,
               },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+              "id": "QueueEventMapping0",
+              "path": "root/my_queue/QueueEventMapping0",
             },
-            "my_queue-SetConsumer-e645076f": {
+            "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -655,19 +598,8 @@ async handle(message) {
                 "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
-              "id": "my_queue-SetConsumer-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-            },
-            "my_queue-SetConsumerHandler-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-SetConsumerHandler-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
+              "id": "SetConsumer0",
+              "path": "root/my_queue/SetConsumer0",
             },
           },
           "constructInfo": {
@@ -1046,7 +978,7 @@ queue: (function() {
 })()
 })).handle(event);
 };",
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -1069,19 +1001,9 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/my_queue/SetConsumer0",
       },
       {
         "name": "push()",
@@ -1108,10 +1030,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1128,10 +1050,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 5,
           },
@@ -1243,32 +1165,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
-        "OnDeployHandler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "OnDeployHandler",
-          "path": "root/OnDeployHandler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1284,7 +1180,7 @@ async handle(message) {
         },
         "my_queue": {
           "children": {
-            "my_queue-QueueEventMapping-e645076f": {
+            "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1292,10 +1188,10 @@ async handle(message) {
               "display": {
                 "hidden": true,
               },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+              "id": "QueueEventMapping0",
+              "path": "root/my_queue/QueueEventMapping0",
             },
-            "my_queue-SetConsumer-e645076f": {
+            "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1305,19 +1201,8 @@ async handle(message) {
                 "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
-              "id": "my_queue-SetConsumer-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-            },
-            "my_queue-SetConsumerHandler-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-SetConsumerHandler-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
+              "id": "SetConsumer0",
+              "path": "root/my_queue/SetConsumer0",
             },
           },
           "constructInfo": {
@@ -1373,7 +1258,7 @@ async handle(message) {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
-  ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "\\"use strict\\";
+  ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -1396,19 +1281,9 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "name": "handle()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
-        "name": "$inflight_init()",
-        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
-        "target": "root/Handler",
-      },
-      {
         "name": "setConsumer()",
         "source": "root/my_queue",
-        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/my_queue/SetConsumer0",
       },
     ],
     "version": "connections-0.1",
@@ -1425,10 +1300,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js",
+          "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1445,10 +1320,10 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "path": "root/my_queue/QueueEventMapping0",
         "props": {
           "publisher": "\${wsim#root/my_queue#attrs.handle}",
-          "subscriber": "\${wsim#root/my_queue/my_queue-SetConsumer-e645076f#attrs.handle}",
+          "subscriber": "\${wsim#root/my_queue/SetConsumer0#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -1539,19 +1414,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1567,7 +1429,7 @@ async handle(message) {
         },
         "my_queue": {
           "children": {
-            "my_queue-QueueEventMapping-e645076f": {
+            "QueueEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1575,10 +1437,10 @@ async handle(message) {
               "display": {
                 "hidden": true,
               },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+              "id": "QueueEventMapping0",
+              "path": "root/my_queue/QueueEventMapping0",
             },
-            "my_queue-SetConsumer-e645076f": {
+            "SetConsumer0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -1588,19 +1450,8 @@ async handle(message) {
                 "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
-              "id": "my_queue-SetConsumer-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumer-e645076f",
-            },
-            "my_queue-SetConsumerHandler-e645076f": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.2.70",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-SetConsumerHandler-e645076f",
-              "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
+              "id": "SetConsumer0",
+              "path": "root/my_queue/SetConsumer0",
             },
           },
           "constructInfo": {

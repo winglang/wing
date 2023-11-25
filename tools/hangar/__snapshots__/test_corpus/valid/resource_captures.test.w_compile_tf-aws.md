@@ -262,7 +262,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.First-1.js")({
           })
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
         this.myField = "hello!";
         this.first = new First(this, "First");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Another-1.js")({
           })
@@ -330,7 +330,7 @@ class $Root extends $stdlib.std.Resource {
       helloPreflight() {
         return this.another;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
           })
@@ -341,25 +341,25 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $___this_setOfStr_has__s3____: ${this._lift((!(this.setOfStr.has("s3"))))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
-              $_this_arrayOfStr_at_0__: ${this._lift((this.arrayOfStr.at(0)))},
-              $_this_arrayOfStr_at_1__: ${this._lift((this.arrayOfStr.at(1)))},
-              $_this_myOptStr_______: ${this._lift((this.myOptStr ?? ""))},
-              $_this_setOfStr_has__s1___: ${this._lift((this.setOfStr.has("s1")))},
-              $_this_setOfStr_has__s2___: ${this._lift((this.setOfStr.has("s2")))},
-              $this_another: ${this._lift(this.another)},
-              $this_another_first_myResource: ${this._lift(this.another.first.myResource)},
-              $this_another_myField: ${this._lift(this.another.myField)},
-              $this_arrayOfStr_length: ${this._lift(this.arrayOfStr.length)},
-              $this_extBucket: ${this._lift(this.extBucket)},
-              $this_extNum: ${this._lift(this.extNum)},
-              $this_myBool: ${this._lift(this.myBool)},
-              $this_myNum: ${this._lift(this.myNum)},
-              $this_myQueue: ${this._lift(this.myQueue)},
-              $this_myResource: ${this._lift(this.myResource)},
-              $this_myStr: ${this._lift(this.myStr)},
+              $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
+              $_this_arrayOfStr_at_0__: ${$stdlib.core.liftObject((this.arrayOfStr.at(0)))},
+              $_this_arrayOfStr_at_1__: ${$stdlib.core.liftObject((this.arrayOfStr.at(1)))},
+              $_this_myOptStr_______: ${$stdlib.core.liftObject((this.myOptStr ?? ""))},
+              $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
+              $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
+              $this_another: ${$stdlib.core.liftObject(this.another)},
+              $this_another_first_myResource: ${$stdlib.core.liftObject(this.another.first.myResource)},
+              $this_another_myField: ${$stdlib.core.liftObject(this.another.myField)},
+              $this_arrayOfStr_length: ${$stdlib.core.liftObject(this.arrayOfStr.length)},
+              $this_extBucket: ${$stdlib.core.liftObject(this.extBucket)},
+              $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
+              $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
+              $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
+              $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
+              $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
+              $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -434,14 +434,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $r: ${context._lift(r)},
+            $r: ${$stdlib.core.liftObject(r)},
           })
         `;
       }

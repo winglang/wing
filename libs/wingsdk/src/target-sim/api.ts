@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -15,7 +16,10 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
-  private eventMappings: { [key: string]: EventMapping } = {};
+  private readonly handlers: Record<
+    string,
+    { func: Function; mapping: EventMapping }
+  > = {};
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -31,42 +35,48 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    const hash = inflight.node.addr.slice(-8);
-    const fnPath = `OnRequestHandler-${hash}`;
-    const eventId = `ApiEventMapping-${hash}`;
+    let handler = this.handlers[inflight._hash];
 
-    let existingFn = this.node.tryFindChild(fnPath) as Function;
-
-    if (existingFn) {
-      const event = this.eventMappings[eventId];
-      const routes = (event.eventProps.subscriptionProps as any)
+    if (handler) {
+      const routes = (handler.mapping.eventProps.subscriptionProps as any)
         .routes as ApiRoute[];
       routes.push({
         path,
         method,
       });
 
-      this.eventMappings[eventId] = event;
-      return existingFn;
+      return handler.func;
     }
 
-    const fn = new Function(this, fnPath, inflight, props) as Function;
+    const fn = new Function(
+      this,
+      App.of(this).makeId(this, "OnRequestHandler"),
+      inflight,
+      props
+    ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${path}`;
 
-    const eventMapping = new EventMapping(this, eventId, {
-      publisher: this,
-      subscriber: fn,
-      subscriptionProps: {
-        routes: [
-          {
-            path,
-            method,
-          },
-        ],
-      },
-    });
-    this.eventMappings[eventId] = eventMapping;
+    const eventMapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "ApiEventMapping"),
+      {
+        publisher: this,
+        subscriber: fn,
+        subscriptionProps: {
+          routes: [
+            {
+              path,
+              method,
+            },
+          ],
+        },
+      }
+    );
+    this.handlers[inflight._hash] = {
+      func: fn,
+      mapping: eventMapping,
+    };
 
     return fn;
   }

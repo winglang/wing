@@ -1,4 +1,4 @@
-import { Tokens } from "../core/tokens";
+import { ITokenResolver, tokenEnvName } from "../core/tokens";
 import { IInflightHost, IResource } from "../std";
 
 /**
@@ -47,7 +47,7 @@ export function isSimulatorToken(value: string) {
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
-export class SimTokens extends Tokens {
+export class SimTokens implements ITokenResolver {
   /**
    * Returns true is the given value is a Simulator token.
    */
@@ -65,7 +65,7 @@ export class SimTokens extends Tokens {
   public lift(value: any): string {
     switch (typeof value) {
       case "string":
-        return `process.env[${JSON.stringify(this.envName(value))}]`;
+        return `process.env[${JSON.stringify(tokenEnvName(value))}]`;
       default:
         throw new Error(`Unsupported token type`);
     }
@@ -77,7 +77,7 @@ export class SimTokens extends Tokens {
   public onLiftValue(host: IInflightHost, value: any) {
     switch (typeof value) {
       case "string":
-        const envName = this.envName(value);
+        const envName = tokenEnvName(value);
         host.addEnvironment(envName, value);
         break;
       default:

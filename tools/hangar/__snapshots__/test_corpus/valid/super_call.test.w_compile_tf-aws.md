@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.message = "A message from your ancestor";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -262,10 +262,10 @@ class $Root extends $stdlib.std.Resource {
       description() {
         return "B";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -291,10 +291,10 @@ class $Root extends $stdlib.std.Resource {
       description() {
         return String.raw({ raw: ["C extends ", ""] }, (super.description()));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C-1.js")({
-            $B: ${context._lift(B)},
+            $B: ${$stdlib.core.liftObject(B)},
           })
         `;
       }
@@ -317,10 +317,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.D-1.js")({
-            $C: ${context._lift(C)},
+            $C: ${$stdlib.core.liftObject(C)},
           })
         `;
       }
@@ -346,10 +346,10 @@ class $Root extends $stdlib.std.Resource {
       description() {
         return String.raw({ raw: ["E extends ", ""] }, (super.description()));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.E-1.js")({
-            $D: ${context._lift(D)},
+            $D: ${$stdlib.core.liftObject(D)},
           })
         `;
       }
@@ -372,7 +372,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.InflightA-1.js")({
           })
@@ -397,10 +397,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.InflightB-1.js")({
-            $InflightA: ${context._lift(InflightA)},
+            $InflightA: ${$stdlib.core.liftObject(InflightA)},
           })
         `;
       }
@@ -420,15 +420,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $InflightB: ${context._lift(InflightB)},
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $InflightB: ${$stdlib.core.liftObject(InflightB)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -451,10 +452,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.BaseClass-1.js")({
-            $b: ${context._lift(b)},
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }
@@ -483,11 +484,11 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.ExtendedClass-1.js")({
-            $BaseClass: ${context._lift(BaseClass)},
-            $b: ${context._lift(b)},
+            $BaseClass: ${$stdlib.core.liftObject(BaseClass)},
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }
@@ -513,15 +514,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $extended: ${context._lift(extended)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $extended: ${$stdlib.core.liftObject(extended)},
           })
         `;
       }

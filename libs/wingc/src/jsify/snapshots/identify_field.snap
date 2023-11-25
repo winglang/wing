@@ -54,7 +54,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.bucket_this = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this)};
             const client = new AClient({
-              $this_bucket_this: ${this._lift(this.bucket_this)},
+              $this_bucket_this: ${$stdlib.core.liftObject(this.bucket_this)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

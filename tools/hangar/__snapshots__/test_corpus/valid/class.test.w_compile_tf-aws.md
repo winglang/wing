@@ -361,7 +361,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C1-1.js")({
           })
@@ -387,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.x = 1;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C2-1.js")({
           })
@@ -416,7 +416,7 @@ class $Root extends $stdlib.std.Resource {
           this.y = b;
         }
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C3-1.js")({
           })
@@ -444,7 +444,7 @@ class $Root extends $stdlib.std.Resource {
       static m() {
         return 1;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C4-1.js")({
           })
@@ -469,7 +469,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C5-1.js")({
           })
@@ -491,14 +491,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $c5: ${context._lift(c5)},
+            $c5: ${$stdlib.core.liftObject(c5)},
           })
         `;
       }
@@ -528,7 +529,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = name;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Person-1.js")({
           })
@@ -554,10 +555,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id, name);
         this.major = major;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Student-1.js")({
-            $Person: ${context._lift(Person)},
+            $Person: ${$stdlib.core.liftObject(Person)},
           })
         `;
       }
@@ -581,10 +582,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id, name, major);
         this.hrlyWage = hrlyWage;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.PaidStudent-1.js")({
-            $Student: ${context._lift(Student)},
+            $Student: ${$stdlib.core.liftObject(Student)},
           })
         `;
       }
@@ -604,16 +605,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $student_hrlyWage: ${context._lift(student.hrlyWage)},
-            $student_major: ${context._lift(student.major)},
-            $student_name: ${context._lift(student.name)},
+            $student_hrlyWage: ${$stdlib.core.liftObject(student.hrlyWage)},
+            $student_major: ${$stdlib.core.liftObject(student.major)},
+            $student_name: ${$stdlib.core.liftObject(student.name)},
           })
         `;
       }
@@ -645,10 +647,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id, name, major, hrlyWage);
         this.hrlyWage = 10;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.TeacherAid-1.js")({
-            $PaidStudent: ${context._lift(PaidStudent)},
+            $PaidStudent: ${$stdlib.core.liftObject(PaidStudent)},
           })
         `;
       }
@@ -668,14 +670,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $ta_hrlyWage: ${context._lift(ta.hrlyWage)},
+            $ta_hrlyWage: ${$stdlib.core.liftObject(ta.hrlyWage)},
           })
         `;
       }
@@ -704,7 +707,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -735,10 +738,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -758,14 +761,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $B: ${context._lift(B)},
+            $B: ${$stdlib.core.liftObject(B)},
           })
         `;
       }
@@ -788,7 +792,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Bar-1.js")({
           })
@@ -813,10 +817,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id, );
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $Bar: ${context._lift(Bar)},
+            $Bar: ${$stdlib.core.liftObject(Bar)},
           })
         `;
       }
@@ -839,10 +843,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Baz-1.js")({
-            $Bar: ${context._lift(Bar)},
+            $Bar: ${$stdlib.core.liftObject(Bar)},
           })
         `;
       }
@@ -865,7 +869,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Boom-1.js")({
           })
@@ -890,10 +894,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Bam-1.js")({
-            $Boom: ${context._lift(Boom)},
+            $Boom: ${$stdlib.core.liftObject(Boom)},
           })
         `;
       }

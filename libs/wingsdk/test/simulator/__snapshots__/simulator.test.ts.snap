@@ -43,19 +43,6 @@ exports[`provides raw tree data 1`] = `
         "id": "test",
         "path": "root/test",
       },
-      "test.handler": {
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.2.70",
-        },
-        "display": {
-          "description": "An inflight resource",
-          "hidden": true,
-          "title": "Inflight",
-        },
-        "id": "test.handler",
-        "path": "root/test.handler",
-      },
     },
     "constructInfo": {
       "fqn": "constructs.Construct",

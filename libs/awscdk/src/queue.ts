@@ -4,6 +4,7 @@ import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { App } from "./app";
 import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
@@ -36,10 +37,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
@@ -49,8 +47,9 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     );
 
     const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumer-${hash}`,
+      // ok since we're not a tree root
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,

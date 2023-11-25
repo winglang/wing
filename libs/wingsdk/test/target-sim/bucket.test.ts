@@ -36,7 +36,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler(app, "inflight_test", "null");
+  const testInflight = Testing.makeHandler("null");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -60,8 +60,6 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
   const testInflight = Testing.makeHandler(
-    app,
-    "inflight_test",
     `async handle(key, event) { await this.bucket.put(key, event); }`,
     {
       bucket: {
@@ -370,8 +368,6 @@ test("removing a key will call onDelete method", async () => {
 
   const bucket = new cloud.Bucket(app, bucketName);
   const testInflight = Testing.makeHandler(
-    app,
-    "inflight_test",
     `async handle(key) { console.log("Received " + key); }`
   );
   bucket.onDelete(testInflight);

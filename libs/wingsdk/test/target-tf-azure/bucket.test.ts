@@ -154,7 +154,7 @@ test("bucket onEvent is not implemented yet", () => {
   try {
     const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
     const bucket = new Bucket(app, "my_bucket", { public: true });
-    const testInflight = Testing.makeHandler(app, "bucket-inflight", "null");
+    const testInflight = Testing.makeHandler("null");
     bucket.onEvent(testInflight);
     app.synth();
   } catch (err) {

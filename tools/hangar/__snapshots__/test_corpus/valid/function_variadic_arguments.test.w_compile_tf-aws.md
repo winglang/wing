@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -136,10 +136,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }

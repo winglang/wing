@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Node, Resource } from "../std";
+import { IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `OnDeploy`.
@@ -57,7 +57,7 @@ export class OnDeploy extends Resource {
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployHandlerClient`
  */
-export interface IOnDeployHandler extends IResource {}
+export interface IOnDeployHandler extends IInflight {}
 
 /**
  * Inflight client for `IOnDeployHandler`.
