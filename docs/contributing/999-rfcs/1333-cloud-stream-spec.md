@@ -167,9 +167,21 @@ There are several streaming data systems that provide the streaming data environ
 
 Cloud Implementations:
 
-- Kinesis -
-- EventHubs -
-- Pub/Sub -
+- Kinesis
+  - [Kinesis Documentation](https://docs.aws.amazon.com/kinesis/latest/APIReference/Welcome.html)
+  - no automatic checkpointing outside of AWS Lambda; manual checkpointing with DynamoDb
+  - support through Kinesis Firehose to directly store ingested streams into S3
+  - get_records, put_record, put_records
+- EventHubs
+  - [EventHubs Documentation](https://learn.microsoft.com/en-us/rest/api/eventhub/)
+  - manual checkpointing with blobs
+  - support to automatically store data in Azure Blob storage using EventHubs Capture
+  - send_event, send_partition_event, send_batch_events, receive
+- Pub/Sub
+  - [Pub/Sub Documentation](https://cloud.google.com/pubsub/docs/reference/rest)
+  - no need for checkpointing as it's solely a message broker system
+  - support to automatically store data in cloud storage through Dataflow
+  - create_subscription, pull_messages, seek, ack, create_topic, publish
 
 Other Considerations:
 
