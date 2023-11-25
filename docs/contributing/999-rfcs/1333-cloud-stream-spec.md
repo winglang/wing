@@ -15,16 +15,17 @@ Implementing design and library spec supporting and integrating real-time stream
 ## Background
 
 Typically streaming data services form an integral backbone of high throughput systems. Specific scenarios where Data Streams are used are:
-* Real-time analytics - Analyzing real-time data from sensors, applications, social media etc. to gain instant insights.
-* Monitoring - Tracking performance metrics of infrastructure and applications in real-time to identify issues.
-* Messaging - High throughput order-agnostic messaging between applications and services.
-* ETL - Streaming ETL workflows for real-time data integration.
-* Fast Data - Applying complex analytics and machine learning on streaming data for low latency inference.
-* User Engagement - Analyzing user actions and behavior as they occur to provide personalized and real-time recommendations.
-* IoT - Collecting and processing telemetry streams from IoT devices.
-* Gaming - Processing real-time game data streams for features like leaderboards or in-game alerts.
-* Financial Services - Performing real-time analytics and complex event processing on financial data feeds.
-* E-Commerce - Real-time monitoring of buying behaviour, stock levels, logistics data to enable instant actions.
+
+- Real-time analytics - Analyzing real-time data from sensors, applications, social media etc. to gain instant insights.
+- Monitoring - Tracking performance metrics of infrastructure and applications in real-time to identify issues.
+- Messaging - High throughput order-agnostic messaging between applications and services.
+- ETL - Streaming ETL workflows for real-time data integration.
+- Fast Data - Applying complex analytics and machine learning on streaming data for low latency inference.
+- User Engagement - Analyzing user actions and behavior as they occur to provide personalized and real-time recommendations.
+- IoT - Collecting and processing telemetry streams from IoT devices.
+- Gaming - Processing real-time game data streams for features like leaderboards or in-game alerts.
+- Financial Services - Performing real-time analytics and complex event processing on financial data feeds.
+- E-Commerce - Real-time monitoring of buying behaviour, stock levels, logistics data to enable instant actions.
 
 This is implemented across varied cloud providers, specifically services like: AWS Kinesis Data Streams, Google Cloud Pub/Sub, Azure Event Hubs and in open source solutions like Apache Kafka, Apache Pulsar, etc.
 
@@ -37,6 +38,7 @@ Within wing, these endpoints and their nuance should be abstracted, so writing t
 For example:
 
 Writing to a data stream from a function should look like:
+
 ```ts
 bring cloud;
 
@@ -53,6 +55,7 @@ new cloud.Function(inflight (event: Json) => {
 Data from the stream has the following common attributes, and they are stored as a struct within Wing called `StreamData`.
 
 While reading from a stream will look like:
+
 ```ts
 bring cloud;
 
@@ -68,7 +71,7 @@ let bloc = new cloud.Function(inflight (event: Json)=> {
 }) as "telemetry-reader";
 ```
 
-Reading from the stream should also be possible through an `onEvent` function which sets up an event trigger to read all 
+Reading from the stream should also be possible through an `onEvent` function which sets up an event trigger to read all
 events from the stream:
 
 ```ts
@@ -131,6 +134,7 @@ Streaming data services allow real-time processing of continuously generated hig
 > This is a good place to reference a prototype or proof of concept, which is highly recommended for most RFCs.
 
 ### Is this a breaking change?
+
 No. It's a new feature, will not break a pre-existing deployment of wing.
 
 ### What is the high-level project plan?
@@ -143,27 +147,33 @@ No. It's a new feature, will not break a pre-existing deployment of wing.
 
 > Describe any major open issues that this RFC did not take into account. Once the RFC is approved, create GitHub issues for these issues and update this RFC of the project board with these issue IDs.
 
-The biggest open issue is to expose/
+The biggest open issue is the strategy for exposing both the data stored within the stream and the metadata surrounding the stream itself. There are two prominent thoughts:
+
+- Implicit management - Wing abstracts away the stored data and only expects an inflight struct to encode on ingest, and decode on egress; while abstracting partitioning, sharding, and scaling nuances.
+- Explicit management - Wing directly exposest the partitioning, sharding, and scaling strategies; expects the user know/understand the nuances of streaming systems. This will not include converting the data to stream compatible format (as this will be a provider feature).
 
 ## Appendix
 
 Real-time streaming services are often a combination of services that cover the following processes (in order of provider: AWS, GCP, Azure):
-* Ingest - Kinesis Data Streams, Pub/Sub, Event Hubs
-* Analysis - Kinesis Data Analytics, BigQuery, Stream Analytics
-* Delivery - Kinesis Firehose, Cloud Storage, Functions 
-* Storage - Data Lakes/Lake Formation/S3, Cloud Storage, Blob Storage
+
+- Ingest - Kinesis Data Streams, Pub/Sub, Event Hubs
+- Analysis - Kinesis Data Analytics, BigQuery, Stream Analytics
+- Delivery - Kinesis Firehose, Cloud Storage, Functions
+- Storage - Data Lakes/Lake Formation/S3, Cloud Storage, Blob Storage
 
 ### Appendix - Evaluating a "common" API
 
 There are several streaming data systems that provide the streaming data environment. We'll focus on understanding the various functions provided by the services and the platforms, and build a focused "streaming" API.
 
-Cloud Implementations: 
-* Kinesis - 
-* EventHubs -
-* Pub/Sub -
+Cloud Implementations:
+
+- Kinesis -
+- EventHubs -
+- Pub/Sub -
 
 Other Considerations:
-* Redis Streams -
-* Kafka -
-* DynamoDB Streams -
-* MongoDB Atlas -
+
+- Redis Streams -
+- Kafka -
+- DynamoDB Streams -
+- MongoDB Atlas -
