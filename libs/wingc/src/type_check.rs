@@ -2372,20 +2372,6 @@ impl<'a> TypeChecker<'a> {
 						element_type = self.types.add_type(Type::Json(Some(json_data)));
 					}
 
-					// TODO: what's this?
-					// Augment the json list data with the new element type
-					// if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
-					// 	if let JsonDataKind::Fields(ref mut fields) = kind {
-					// 		fields.insert(
-					// 			key.clone(),
-					// 			SpannedTypeInfo {
-					// 				type_: t,
-					// 				span: value.span(),
-					// 			},
-					// 		);
-					// 	}
-					// }
-
 					self.validate_type(t, element_type, value);
 					element_type = self.types.maybe_unwrap_inference(element_type);
 
