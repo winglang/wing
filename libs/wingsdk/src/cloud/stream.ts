@@ -78,41 +78,72 @@ export abstract class Stream extends Resource {
   public abstract setConsumer(
     handler: IStreamConsumerHandler,
     props?: StreamConsumerOptions
-  ): Function;
-}
+  ): Json;
 
-/**
- * A resource with an inflight "handle" method that can be passed to
- * the bucket events.
- *
- * @inflight  `@winglang/sdk.cloud.IStreamConsumerHandler`
- */
-export interface IStreamConsumerHandler extends IResource {}
 
-/**
- * Options for Stream.setConsumer
- */
-export interface StreamConsumerOptions extends FunctionProps {
   /**
-   * Implicitely instantiates record batching in the streaming service,
-   * then defines batch size.
-   * 
-   * @default - 10
+   * Convert the incoming data into the stream's ingestion format
    */
-  readonly batchSize?: number;
+  public abstract ingest(data: IStreamData): Json;
 }
 
-export interface IStreamConsumer {
+export interface IStreamData {
+  readonly id: string;
+
+  readonly timestamp: EpochTimeStamp;
+
+  readonly data: Json;
+
+  readonly schema: JsonSchema;
+
+  encode(): string;
+
+  decode(data: string): IStreamData;
+}
+
+/**
+ * Inflight interface for stream
+ */
+export interface IStreamClient {
   /**
-   * Function that will be called when there are records to consume
-   * 
+   * Put one or more messages to the queue.
+   * @param messages Data to send to the queue. Each message must be non-empty.
    * @inflight
    */
-  consume(records: StreamData[]): Promise<void>;
+  put(...messages: IStreamData[]): Promise<void>;
+
+  /**
+   * Retrive a message from the stream.
+   * @returns A single record, or a set of records; or `nil` if the stream is empty.
+   * @inflight
+   */
+  get(): Promise<IStreamData | IStreamData[] | undefined>;
+
+  /**
+   * Retrieve the stream's metadata.
+   * @inflight
+   */
+  metadata(): Promise<Struct>;
+
+  /**
+   * Retrieve the stream's schema.
+   * @inflight
+   */
+  schema(): Promise<IStreamData>;
+
+  /**
+   * Retrieve the stream's configuration.
+   * @inflight
+   */
+  config(): Promise<Json>;
 }
 
-export class StreamData {
-  
+export interface IStreamConsumerHandler {
+  /**
+   * Handle messages.
+   * @param data Messages.
+   */
+  handle(data: IStreamData[]): Promise<void>;
 }
 
 /**
