@@ -78,7 +78,7 @@ test("api with one GET route", async () => {
 
 test("api with one GET route with request params", async () => {
   // GIVEN
-  const ROUTE = "/users/{name}";
+  const ROUTE = "/users/:name";
 
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
@@ -102,7 +102,7 @@ test("api with one GET route with request params", async () => {
 
 test("api with 'name' parameter", async () => {
   // GIVEN
-  const ROUTE = "/{name}";
+  const ROUTE = "/:name";
 
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
@@ -126,7 +126,7 @@ test("api with 'name' parameter", async () => {
 
 test("api with 'name' & 'age' parameter", async () => {
   // GIVEN
-  const ROUTE = "/{name}/{age}";
+  const ROUTE = "/:name/:age";
 
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
@@ -179,12 +179,12 @@ test("api doesn't allow ambiguous routes", () => {
   // GIVEN
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
-  const path = "/api/hello/{name}";
+  const path = "/api/hello/:name";
   const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/api/{name}/hello";
+  const ambiguousPath = "/api/:name/hello";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
@@ -196,12 +196,12 @@ test("api doesn't allow ambiguous routes containing only variables", () => {
   // GIVEN
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
-  const path = "/{age}";
+  const path = "/:age";
   const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/{name}";
+  const ambiguousPath = "/:name";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
@@ -213,12 +213,12 @@ test("api doesn't allow ambiguous routes containing different number of varaible
   // GIVEN
   const app = new SimApp();
   const api = new cloud.Api(app, "my_api");
-  const path = "/{param}/{something}";
+  const path = "/:param/:something";
   const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/path/{something}";
+  const ambiguousPath = "/path/:something";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(

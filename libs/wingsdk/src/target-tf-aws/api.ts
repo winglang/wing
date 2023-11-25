@@ -45,7 +45,7 @@ export class Api extends cloud.Api implements IAwsApi {
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
     this.api = new WingRestApi(this, "api", {
-      apiSpec: this._getApiSpec(),
+      getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
   }
@@ -306,7 +306,7 @@ class WingRestApi extends Construct {
     scope: Construct,
     id: string,
     props: {
-      apiSpec: OpenApiSpec;
+      getApiSpec: () => OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
     }
   ) {
@@ -327,7 +327,7 @@ class WingRestApi extends Construct {
             };
             return openApiSpec;
           };
-          return JSON.stringify(injectGreedy404Handler(props.apiSpec));
+          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
         },
       }),
       lifecycle: {
@@ -414,7 +414,9 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: `${this.api.executionArn}/*/${method}${path}`,
+      sourceArn: `${this.api.executionArn}/*/${method}${Api._toOpenApiPath(
+        path
+      )}`,
     });
   };
 }

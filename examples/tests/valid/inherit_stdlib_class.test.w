@@ -11,6 +11,6 @@ api.get("/", inflight () => {
 
 bring http;
 test "can inherit std lib preflight class" {
-  let response = http.get("${api.url}/");
+  let response = http.get("{api.url}/");
   assert(response.status == 200);
 }

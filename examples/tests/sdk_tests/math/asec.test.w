@@ -1,7 +1,7 @@
 bring math;
 
 try {
-  log("${math.asec(0.5)}");
+  log("{math.asec(0.5)}");
 } catch e {
   assert(e == "Input value must be equal or greater than |1|.");
 }
@@ -14,7 +14,7 @@ assert(math.asec(-2) == 2.0943951023931957);
 
 test "inflight arc cosecant" {
   try {
-    log("${math.asec(0.5)}");
+    log("{math.asec(0.5)}");
   } catch e {
     assert(e == "Input value must be equal or greater than |1|.");
   }

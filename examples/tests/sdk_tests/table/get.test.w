@@ -13,7 +13,7 @@ test "get" {
   let COLUMN_VALUE="male";
   let VALID_KEY = "foo";
   let NON_EXISTENT_KEY = "bar";
-  let ROW_DOES_NOT_EXIST_ERROR = "Row does not exist (key=${NON_EXISTENT_KEY})";
+  let ROW_DOES_NOT_EXIST_ERROR = "Row does not exist (key={NON_EXISTENT_KEY})";
 
   let assertThrows = (expected: str, block: (): void) => {
     let var error = false;

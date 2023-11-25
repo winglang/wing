@@ -22,7 +22,7 @@ if util.env("WING_TARGET") == "sim" {
   
         return () => {
           log("stopping service");
-          log("state is: ${state}");
+          log("state is: {state}");
     
           // make sure inflight state is presistent across onStart/onStop
           assert(state == 456);
