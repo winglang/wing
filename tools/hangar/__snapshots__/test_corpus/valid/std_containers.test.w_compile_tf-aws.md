@@ -192,18 +192,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.has(\"one\")")})((sSet.has("one")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sSet.size,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutSet.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutSet.size,3)))};
-    const sMap = (() => { let m = {}; 
-      m["one"] = 1;
-      m["two"] = 2;
-      return m;
-    })();
-    const nestedMap = (() => { let m = {}; 
-      m["a"] = (() => { let m = {}; 
-        m["b"] = ({"c": "hello"});
-        return m;
-      })();
-      return m;
-    })();
+    const sMap = ({["one"]: 1, ["two"]: 2});
+    const nestedMap = ({["a"]: ({["b"]: ({"c": "hello"})})});
     const mutMap = {...(sMap)};
     ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five", 5]);
     const immutMap = ({...(mutMap)});
@@ -214,11 +204,7 @@ class $Root extends $stdlib.std.Resource {
     const heterogeneousArray = [new Cat(this, "C1"), new Dog(this, "D1")];
     const heterogeneousDoubleArray = [[new Cat(this, "C2")], [new Cat(this, "C3"), new Dog(this, "D2")], [new Animal(this, "A1")]];
     const heterogeneousSet = new Set([new Cat(this, "C4"), new Dog(this, "D3")]);
-    const heterogeneousMap = (() => { let m = {}; 
-      m["cat"] = new Cat(this, "C5");
-      m["dog"] = new Dog(this, "D4");
-      return m;
-    })();
+    const heterogeneousMap = ({["cat"]: new Cat(this, "C5"), ["dog"]: new Dog(this, "D4")});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

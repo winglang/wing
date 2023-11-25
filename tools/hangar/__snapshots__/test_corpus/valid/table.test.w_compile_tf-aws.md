@@ -65,12 +65,7 @@ const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const t = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: (() => { let m = {}; 
-      m["id"] = ex.ColumnType.STRING;
-      m["name"] = ex.ColumnType.STRING;
-      m["age"] = ex.ColumnType.NUMBER;
-      return m;
-    })() });
+    const t = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "simple-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

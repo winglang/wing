@@ -122,15 +122,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const arr = ["hello", "world"];
     const mySet = new Set(["my", "my", "set"]);
-    const myMap = (() => { let m = {}; 
-      m["hello"] = 123;
-      m["world"] = 999;
-      return m;
-    })();
-    const arrOfMap = [(() => { let m = {}; 
-      m["bang"] = 123;
-      return m;
-    })()];
+    const myMap = ({["hello"]: 123, ["world"]: 999});
+    const arrOfMap = [({["bang"]: 123})];
     const j = ({"a": "hello", "b": "world"});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:capture_containers", new $Closure1(this, "$Closure1"));
   }
