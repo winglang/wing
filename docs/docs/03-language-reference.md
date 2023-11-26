@@ -1972,8 +1972,8 @@ assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
 assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"a" => "1", "b" => "2"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"b" => "2", "a" => "1"});
 
 assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
 assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
