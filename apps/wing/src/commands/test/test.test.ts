@@ -68,7 +68,9 @@ describe("wing test (custom platform)", () => {
 
     process.chdir(outDir);
     fs.writeFileSync("foo.test.w", `bring cloud;`);
-    fs.writeFileSync("custom-platform.js", `
+    fs.writeFileSync(
+      "custom-platform.js",
+      `
       const tfaws = require("${targetTfAws}");
       class Platform {
         target = "tf-aws";
