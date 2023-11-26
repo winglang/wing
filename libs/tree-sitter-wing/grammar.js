@@ -637,8 +637,7 @@ module.exports = grammar({
         braced(commaSep(field("fields", $.struct_literal_member)))
       ),
 
-    map_literal_member: ($) =>
-      seq(choice($.string), "=>", $.expression),
+    map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),

@@ -693,7 +693,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler, { env: ({}) });
     const emptyEnv = ({});
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
-    const headers = ({"my-fancy-header": "my-fancy-value", "not-even-real\"": "wow` !"});
+    const headers = ({["my-fancy-header"]: "my-fancy-value", ["not-even-real\""]: "wow` !"});
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     (api.get("/hello", new $Closure2(this, "$Closure2")));
   }

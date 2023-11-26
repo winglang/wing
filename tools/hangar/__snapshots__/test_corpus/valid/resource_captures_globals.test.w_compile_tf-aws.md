@@ -607,7 +607,7 @@ class $Root extends $stdlib.std.Resource {
     const globalBool = true;
     const globalNum = 42;
     const globalArrayOfStr = ["hello", "world"];
-    const globalMapOfNum = ({"a": (-5), "b": 2});
+    const globalMapOfNum = ({["a"]: (-5), ["b"]: 2});
     const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this, "Another");
     const res = new MyResource(this, "MyResource");

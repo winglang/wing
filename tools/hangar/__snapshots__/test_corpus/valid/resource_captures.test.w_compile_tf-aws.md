@@ -319,7 +319,7 @@ class $Root extends $stdlib.std.Resource {
         this.myBool = true;
         this.myOptStr = "myOptString";
         this.arrayOfStr = ["s1", "s2"];
-        this.mapOfNum = ({"k1": 11, "k2": 22});
+        this.mapOfNum = ({["k1"]: 11, ["k2"]: 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
         this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");

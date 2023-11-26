@@ -2172,7 +2172,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"json_map_literal" => {
-				let fields = self.build_map_fields(expression_node, phase)?;
+				let fields = self.build_json_map_fields(expression_node, phase)?;
 				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
 			}
 			"map_literal" => {
@@ -2291,7 +2291,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
+	fn build_json_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -2315,6 +2315,23 @@ impl<'s> Parser<'s> {
 			} else {
 				fields.insert(key, self.build_expression(&value_node, phase)?);
 			}
+		}
+		Ok(fields)
+	}
+
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Vec<(Expr, Expr)>, ()> {
+		let mut fields = vec![];
+		let mut cursor = expression_node.walk();
+		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+			if field_node.is_extra() {
+				continue;
+			}
+			let key_node = field_node.named_child(0).unwrap();
+			let value_node = field_node.named_child(1).unwrap();
+			fields.push((
+				self.build_expression(&key_node, phase)?,
+				self.build_expression(&value_node, phase)?,
+			));
 		}
 		Ok(fields)
 	}
