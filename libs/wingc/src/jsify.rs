@@ -749,7 +749,7 @@ impl<'a> JSifier<'a> {
 				ctx.visit_ctx.pop_json();
 				js_out
 			}
-			ExprKind::JsonMapLiteral { fields } | ExprKind::MapLiteral { fields, .. } => {
+			ExprKind::JsonMapLiteral { fields } => {
 				let f = fields
 					.iter()
 					.map(|(key, expr)| {
@@ -760,6 +760,17 @@ impl<'a> JSifier<'a> {
 							"\": ",
 							self.jsify_expression(expr, ctx)
 						)
+					})
+					.collect_vec();
+				new_code!(expr_span, "({", f, "})")
+			}
+			ExprKind::MapLiteral { fields, .. } => {
+				let f = fields
+					.iter()
+					.map(|(key, value)| {
+						let mut kv = new_code!(&key.span, "[", self.jsify_expression(key, ctx), "]: ");
+						kv.append(new_code!(&value.span, self.jsify_expression(value, ctx)));
+						kv
 					})
 					.collect_vec();
 				new_code!(expr_span, "({", f, "})")

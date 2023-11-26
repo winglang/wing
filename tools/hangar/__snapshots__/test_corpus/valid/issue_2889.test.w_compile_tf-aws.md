@@ -12,7 +12,7 @@ module.exports = function({ $std_Json }) {
     }
     async handle(req) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
-      return ({"status": 200, "headers": ({"Content-Type": "application/json"}), "body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
+      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
     }
   }
   return $Closure1;

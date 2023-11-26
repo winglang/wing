@@ -2360,9 +2360,9 @@ impl<'a> TypeChecker<'a> {
 					(self.types.add_type(Type::Map(inner_type)), inner_type)
 				};
 
-				// Verify all types are the same as the inferred type
-				for (sym, field) in fields {
-					let (t, _) = self.type_check_exp(field, env);
+				// Verify all types are the same as the inferred type and that all keys are of string type
+				for (key, value) in fields {
+					let (t, _) = self.type_check_exp(value, env);
 					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
 						// This is an field of JSON, change the element type to reflect that
 						let json_data = JsonData {
@@ -2372,21 +2372,12 @@ impl<'a> TypeChecker<'a> {
 						element_type = self.types.add_type(Type::Json(Some(json_data)));
 					}
 
-					// Augment the json list data with the new element type
-					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
-						if let JsonDataKind::Fields(ref mut fields) = kind {
-							fields.insert(
-								sym.clone(),
-								SpannedTypeInfo {
-									type_: t,
-									span: field.span(),
-								},
-							);
-						}
-					}
-
-					self.validate_type(t, element_type, field);
+					self.validate_type(t, element_type, value);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+
+					// Verify that the key is a string
+					let (key_type, _) = self.type_check_exp(key, env);
+					self.validate_type(key_type, self.types.string(), key);
 				}
 
 				if let Type::Map(ref mut inner) | Type::MutMap(ref mut inner) = &mut *container_type {

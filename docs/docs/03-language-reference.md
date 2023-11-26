@@ -92,7 +92,7 @@ These don't affect the value of the number or how they are printed:
 | Name          | Extra information                               |
 | ------------- | ----------------------------------------------- |
 | `Array<T>`    | variable size array of a certain type           |
-| `Map<T>`      | map type (key-value with string keys)           |
+| `Map<T>`      | map type (key-value with string keys, keys may be any expression evaluating to a string)|
 | `Set<T>`      | set type (unordered collection of unique items) |
 | `MutArray<T>` | mutable array type                              |
 | `MutMap<T>`   | mutable map type                                |

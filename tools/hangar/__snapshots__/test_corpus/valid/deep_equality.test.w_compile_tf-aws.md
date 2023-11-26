@@ -753,9 +753,9 @@ class $Root extends $stdlib.std.Resource {
     const setC = new Set([4, 5, 6]);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
-    const mapA = ({"a": 1, "b": 2});
-    const mapB = ({"a": 1, "b": 2});
-    const mapC = ({"c": 10, "b": 2});
+    const mapA = ({["a"]: 1, ["b"]: 2});
+    const mapB = ({["a"]: 1, ["b"]: 2});
+    const mapC = ({["c"]: 10, ["b"]: 2});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure8(this, "$Closure8"));
     const arrayA = [1, 2, 3];

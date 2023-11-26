@@ -331,8 +331,9 @@ j.get("hello").get("world");
 	test_hover_list!(
 		map_element,
 		r#"
-{ "hi" => "" }
- //^
+let k = "hi";
+{ k => "" }
+//^
 "#
 	);
 

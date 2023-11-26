@@ -116,6 +116,25 @@ try {
   assert(err.contains("does not contain key: \"def-fake\""));
 }
 
+// Map literal initialization with key expressions
+let num9 = 9;
+let m10 = {
+  // Just a string
+  "a" => 1, 
+  // Same string again (should overwrite)
+  "a" => 2, 
+  // Interpolation
+  "{num9+1}" => 9,
+  // Same interpolation again (should overwrite)
+  "{num9+1}" => 10,
+  // Complex expression
+  () => { return "{num9}9";}() => 99,
+};
+assert(m10.size() == 3);
+assert(m10.get("a") == 2);
+assert(m10.get("10") == 10);
+assert(m10.get("99") == 99);
+
 //Set tests
 let emptySet = Set<num>{};
 assert(emptySet.size == 0);
