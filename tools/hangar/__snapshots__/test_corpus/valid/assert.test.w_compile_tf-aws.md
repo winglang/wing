@@ -18,19 +18,19 @@ module.exports = function({ $s1, $s2 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("``","``")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`s1`","`s1`")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s1,$s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" == \"${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" != \"${s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s2))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" == \"a${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["a", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" != \"b${s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["b", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" == \"${s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "a"] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" != \"${s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "b"] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'${s1}\" == \"`\'${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, $s1),String.raw({ raw: ["`'", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}b${s2}c\" == \"a${s1}b${s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2),String.raw({ raw: ["a", "b", "c"] }, $s1, $s2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" == \"{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" != \"{s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" == \"a{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["a", ""] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" != \"b{s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["b", ""] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" == \"{s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "a"] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" != \"{s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "b"] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'{s1}\" == \"`\'{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, $s1),String.raw({ raw: ["`'", ""] }, $s1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2),String.raw({ raw: ["a", "b", "c"] }, $s1, $s2))))};
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -77,15 +77,16 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $s1: ${context._lift(s1)},
-            $s2: ${context._lift(s2)},
+            $s1: ${$stdlib.core.liftObject(s1)},
+            $s2: ${$stdlib.core.liftObject(s2)},
           })
         `;
       }
@@ -120,20 +121,20 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("``","``")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`s1`","`s1`")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" == \"${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" != \"${s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s2))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" == \"a${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["a", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" != \"b${s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["b", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" == \"${s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "a"] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" != \"${s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "b"] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'${s1}\" == \"`\'${s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, s1),String.raw({ raw: ["`'", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}b${s2}c\" == \"a${s1}b${s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, s1, s2),String.raw({ raw: ["a", "b", "c"] }, s1, s2))))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:assert works inflight", new $Closure1(this, "$Closure1"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" == \"{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" != \"{s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s2))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" == \"a{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["a", ""] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" != \"b{s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["b", ""] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" == \"{s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "a"] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" != \"{s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "b"] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'{s1}\" == \"`\'{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, s1),String.raw({ raw: ["`'", ""] }, s1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, s1, s2),String.raw({ raw: ["a", "b", "c"] }, s1, s2))))};
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:assert works inflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "assert.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

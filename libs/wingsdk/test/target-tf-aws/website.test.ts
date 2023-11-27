@@ -14,7 +14,7 @@ import {
 test("default website behavior", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  cloud.Website._newWebsite(app, "Website", {
+  new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
   const output = app.synth();
@@ -48,7 +48,7 @@ test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    cloud.Website._newWebsite(app, "Website", {
+    new cloud.Website(app, "Website", {
       path: "/absolute/non-existent",
     });
     app.synth();
@@ -62,7 +62,7 @@ test("website with invalid path should throw error", () => {
 test("website with addFile", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const website = cloud.Website._newWebsite(app, "Website", {
+  const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
   website.addFile("addition.html", "<html>Hello world!</html>", "text/html");
@@ -99,7 +99,7 @@ test("website with addFile", () => {
 test("website with addJson", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const website = cloud.Website._newWebsite(app, "Website", {
+  const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
   website.addJson("config.json", Object({ version: "8.31.0" }));
@@ -137,7 +137,7 @@ test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-    const website = cloud.Website._newWebsite(app, "Website", {
+    const website = new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "../test-files/website"),
     });
     website.addJson(

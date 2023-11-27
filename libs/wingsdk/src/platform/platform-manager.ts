@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
+import { cwd } from "process";
 import * as vm from "vm";
 import { IPlatform } from "./platform";
 import { App, AppProps, SynthHooks } from "../core";
@@ -12,7 +13,7 @@ interface PlatformManagerOptions {
   readonly platformPaths?: string[];
 }
 
-const BUILTIN_PLATFORMS = ["awscdk", "tf-aws", "tf-azure", "tf-gcp", "sim"];
+const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 
 /** @internal */
 export class PlatformManager {
@@ -35,9 +36,11 @@ export class PlatformManager {
       ? join(__dirname, `../target-${platformName}/platform`)
       : join(platformPath);
 
-    isBuiltin
-      ? this.loadBuiltinPlatform(pathToRead)
-      : this.loadCustomPlatform(pathToRead);
+    this.platformInstances.push(
+      isBuiltin
+        ? this.loadBuiltinPlatform(pathToRead)
+        : _loadCustomPlatform(pathToRead)
+    );
   }
 
   /**
@@ -45,7 +48,7 @@ export class PlatformManager {
    *
    * @param builtinPlatformPath path to a builtin platform
    */
-  private loadBuiltinPlatform(builtinPlatformPath: string) {
+  private loadBuiltinPlatform(builtinPlatformPath: string): any {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const loadedPlatform = require(builtinPlatformPath);
     if (!loadedPlatform || !loadedPlatform.Platform) {
@@ -53,46 +56,7 @@ export class PlatformManager {
       return;
     }
 
-    this.platformInstances.push(new loadedPlatform.Platform());
-  }
-
-  /**
-   * Custom platforms need to be loaded into a custom context in order to
-   * resolve their dependencies correctly.
-   *
-   * @param customPlatformPath path to a custom platform
-   */
-  private loadCustomPlatform(customPlatformPath: string) {
-    const modulePaths = module.paths;
-    const platformDir = dirname(customPlatformPath);
-
-    const requireResolve = (path: string) =>
-      require.resolve(path, {
-        paths: [...modulePaths, platformDir],
-      });
-
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const platformRequire = (path: string) => require(requireResolve(path));
-    platformRequire.resolve = requireResolve;
-
-    const platformExports = {};
-    const context = vm.createContext({
-      require: platformRequire,
-      console,
-      exports: platformExports,
-      process,
-      __dirname: customPlatformPath,
-    });
-
-    const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
-      ? customPlatformPath
-      : `${customPlatformPath}/index.js`;
-
-    const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
-    const script = new vm.Script(platformCode);
-    script.runInContext(context);
-
-    this.platformInstances.push(new (platformExports as any).Platform());
+    return new loadedPlatform.Platform();
   }
 
   private createPlatformInstances() {
@@ -142,5 +106,86 @@ export class PlatformManager {
     });
 
     return appCall!({ ...appProps, synthHooks, newInstanceOverrides }) as App;
+  }
+}
+
+/**
+ * Custom platforms need to be loaded into a custom context in order to
+ * resolve their dependencies correctly.
+ *
+ * @internal
+ */
+export function _loadCustomPlatform(customPlatformPath: string): any {
+  const isScoped = customPlatformPath.startsWith("@");
+
+  const platformBaseDir = isScoped
+    ? dirname(dirname(customPlatformPath))
+    : dirname(customPlatformPath);
+
+  const platformDir = join(platformBaseDir, "node_modules");
+
+  /**
+   * Support platforms that are provided as:
+   * - A single js file (e.g. "/some/path/to/platform.js")
+   * - A scoped package (e.g. "@scope/platform")
+   * - A non-scoped package (e.g. "/some/path/platform")
+   */
+  const fullCustomPlatformPath = customPlatformPath.endsWith(".js")
+    ? customPlatformPath
+    : isScoped
+    ? join(platformDir, `${customPlatformPath}/lib/index.js`)
+    : `${customPlatformPath}/index.js`;
+
+  // enable relative imports from the platform file
+  const customPlatformBaseDir = customPlatformPath.endsWith(".js")
+    ? dirname(customPlatformPath)
+    : customPlatformPath;
+
+  const cwdNodeModules = join(cwd(), "node_modules");
+  const customPlatformLib = join(cwdNodeModules, customPlatformPath, "lib");
+
+  const resolvablePaths = [
+    ...module.paths,
+    customPlatformBaseDir,
+    platformDir,
+    cwdNodeModules,
+    customPlatformLib,
+  ];
+
+  const requireResolve = (path: string) => {
+    return require.resolve(path, {
+      paths: resolvablePaths,
+    });
+  };
+
+  const platformRequire = (path: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require(requireResolve(path));
+  };
+
+  platformRequire.resolve = requireResolve;
+
+  const platformModule = {
+    exports: {},
+  };
+  const context = vm.createContext({
+    require: platformRequire,
+    console,
+    exports: platformModule.exports,
+    module: platformModule,
+    process,
+    __dirname: customPlatformPath,
+  });
+
+  try {
+    const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
+    const script = new vm.Script(platformCode);
+    script.runInContext(context);
+    return new (platformModule.exports as any).Platform();
+  } catch (error) {
+    console.error(
+      "An error occurred while loading the custom platform:",
+      error
+    );
   }
 }

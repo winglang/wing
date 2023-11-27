@@ -7,7 +7,7 @@ class MyResource {
 class Test {
   r: MyResource;
 
-  init() {
+  new() {
     this.r = new MyResource();
   }
 

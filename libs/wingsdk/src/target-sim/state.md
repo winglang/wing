@@ -40,7 +40,7 @@ bring sim;
 class MyService {
   startTime: str;
 
-  init() {
+  new() {
     let state = new sim.State();
 
     new cloud.Service(inflight () => {
@@ -60,7 +60,7 @@ naturally:
 let s = new MyService();
 
 new cloud.Function(inflight () => {
-  log("service start time is ${s}");
+  log("service start time is {s}");
 });
 ```
 

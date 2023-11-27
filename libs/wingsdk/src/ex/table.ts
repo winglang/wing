@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -54,34 +54,27 @@ export interface TableProps {
 /**
  * A NoSQL database table that can be used to store and query data.
  * @inflight `@winglang/sdk.ex.ITableClient`
+ * @abstract
  */
-export abstract class Table extends Resource {
-  /**
-   * Create a new `Table` instance.
-   * @internal
-   */
-  public static _newTable(
-    scope: Construct,
-    id: string,
-    props: TableProps = {}
-  ): Table {
-    return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
-  }
-
+export class Table extends Resource {
   /**
    * Table name
    */
-  public readonly name: string;
+  public readonly name!: string;
   /**
    * Table primary key name
    */
-  public readonly primaryKey: string;
+  public readonly primaryKey!: string;
   /**
    * Table columns
    */
-  public readonly columns: { [key: string]: ColumnType };
+  public readonly columns!: { [key: string]: ColumnType };
 
   constructor(scope: Construct, id: string, props: TableProps) {
+    if (new.target === Table) {
+      return Resource._newFromFactory(TABLE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Table";
@@ -103,13 +96,15 @@ export abstract class Table extends Resource {
     this.columns = props.columns;
   }
 
-  /** @internal */
-  public abstract _supportedOps(): string[];
-
   /**
    * Add a row to the table that is created when the app is deployed.
+   * @abstract
    */
-  public abstract addRow(key: string, row: Json): void;
+  public addRow(key: string, row: Json): void {
+    key;
+    row;
+    throw new AbstractMemberError();
+  }
 }
 
 /**

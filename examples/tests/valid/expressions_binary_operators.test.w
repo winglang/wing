@@ -17,3 +17,6 @@ assert(xyznfj == -5);
 let xynfj = -501.9 \ (-99.1 - 0.91);
 assert(xynfj == 5);
 
+let price = 0012.34;
+let twentyThousand = 20_000;
+let aBitMore = 20_000.000_1;

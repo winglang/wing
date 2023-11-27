@@ -11,9 +11,9 @@ api.get("/hello", inflight (req) => {
 });
 
 test "it responds with 404" {
-    let url = "${api.url}/does-not-exists";
+    let url = "{api.url}/does-not-exists";
     let response = http.get(url);
 
     assert(response.status == 404);
-    assert(response.body?.contains("Error") == true);
+    assert(response.body.contains("Error") == true);
 }

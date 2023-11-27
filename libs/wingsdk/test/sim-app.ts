@@ -34,16 +34,12 @@ export class SimApp extends App {
    */
   public newCloudFunction(code: string) {
     const id = `Function.${this.functionIndex++}`;
-    Function._newFunction(
+    new Function(
       this,
       id,
-      Testing.makeHandler(
-        this,
-        `${id}.handler`,
-        `async handle() {
+      Testing.makeHandler(`async handle() {
           ${code}
-        }`
-      )
+        }`)
     );
 
     // returns an "invoker" for this function

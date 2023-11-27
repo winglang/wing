@@ -10,7 +10,7 @@ let handler = inflight (s: str): str => {
   log(myStr);
 
   let n = myNum;
-  log("${n}");
+  log("{n}");
 
   assert(mySecondBool == false);
 
@@ -23,7 +23,7 @@ let handler = inflight (s: str): str => {
   let min = myDur.minutes;
   let sec = myDur.seconds;
   let hr  = myDur.hours;
-  let split = "min=${min} sec=${sec} hr=${hr}".split(" ");
+  let split = "min={min} sec={sec} hr={hr}".split(" ");
   assert(split.length == 3);
 };
 

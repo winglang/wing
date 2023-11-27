@@ -15,7 +15,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -33,7 +33,7 @@ module.exports = function({  }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -51,7 +51,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.C-1.js
@@ -68,7 +68,7 @@ module.exports = function({  }) {
   }
   return C;
 }
-
+//# sourceMappingURL=inflight.C-1.js.map
 ```
 
 ## main.tf.json
@@ -115,11 +115,12 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
           })
@@ -141,11 +142,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
           })
@@ -167,11 +169,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
           })
@@ -200,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
       }
       my_method2(x) {
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.C-1.js")({
           })
@@ -237,6 +240,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "function_type.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

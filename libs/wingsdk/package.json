@@ -52,6 +52,7 @@
     "aws-sdk-client-mock-jest": "^2.2.0",
     "bump-pack": "workspace:^",
     "cdktf-cli": "0.17.0",
+    "chalk": "^4.1.2",
     "constructs": "~10.2.69",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
@@ -64,7 +65,6 @@
     "jsii": "5.0.11",
     "jsii-diff": "^1.88.0",
     "jsii-pacmak": "^1.88.0",
-    "jsii-rosetta": "5.0.11",
     "mock-gcs": "^1.0.0",
     "nanoid": "^3.3.4",
     "npm-check-updates": "^16",
@@ -80,17 +80,17 @@
     "constructs": "~10.2.69"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudwatch-logs": "3.438.0",
-    "@aws-sdk/client-dynamodb": "3.438.0",
-    "@aws-sdk/client-elasticache": "3.438.0",
-    "@aws-sdk/client-lambda": "3.438.0",
-    "@aws-sdk/client-s3": "3.438.0",
-    "@aws-sdk/client-secrets-manager": "3.438.0",
-    "@aws-sdk/client-sns": "3.438.0",
-    "@aws-sdk/client-sqs": "3.438.0",
-    "@aws-sdk/s3-request-presigner": "3.438.0",
-    "@aws-sdk/types": "3.433.0",
-    "@aws-sdk/util-dynamodb": "3.438.0",
+    "@aws-sdk/client-cloudwatch-logs": "3.449.0",
+    "@aws-sdk/client-dynamodb": "3.449.0",
+    "@aws-sdk/client-elasticache": "3.449.0",
+    "@aws-sdk/client-lambda": "3.449.0",
+    "@aws-sdk/client-s3": "3.449.0",
+    "@aws-sdk/client-secrets-manager": "3.449.0",
+    "@aws-sdk/client-sns": "3.449.0",
+    "@aws-sdk/client-sqs": "3.449.0",
+    "@aws-sdk/s3-request-presigner": "3.449.0",
+    "@aws-sdk/types": "3.449.0",
+    "@aws-sdk/util-dynamodb": "3.449.0",
     "@azure/core-paging": "^1.5.0",
     "@azure/identity": "3.1.3",
     "@azure/storage-blob": "12.14.0",
@@ -98,7 +98,6 @@
     "@smithy/util-stream": "2.0.17",
     "@smithy/util-utf8": "2.0.0",
     "@types/aws-lambda": "^8.10.119",
-    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.17.0",
     "constructs": "~10.2.69",
     "cron-parser": "^4.9.0",
@@ -110,6 +109,7 @@
     "mime-types": "^2.1.35",
     "nanoid": "^3.3.6",
     "safe-stable-stringify": "^2.4.3",
+    "stacktracey": "^2.1.8",
     "undici": "^5.25.4",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
@@ -133,7 +133,6 @@
     "@smithy/util-stream",
     "@smithy/util-utf8",
     "@types/aws-lambda",
-    "aws-cdk-lib",
     "cdktf",
     "cron-parser",
     "esbuild-wasm",
@@ -144,6 +143,7 @@
     "mime-types",
     "nanoid",
     "safe-stable-stringify",
+    "stacktracey",
     "undici",
     "uuid",
     "yaml"
@@ -168,9 +168,7 @@
     "extends": "../../package.json"
   },
   "bump-pack": {
-    "removeBundledDependencies": [
-      "aws-cdk-lib"
-    ]
+    "removeBundledDependencies": []
   },
   "files": [
     "lib",

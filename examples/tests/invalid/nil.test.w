@@ -5,7 +5,7 @@ let x: str = nil;
 
 class Foo {
   inflight var bar: num;
-  inflight init() {
+  inflight new() {
     this.bar = 1;
   }
 

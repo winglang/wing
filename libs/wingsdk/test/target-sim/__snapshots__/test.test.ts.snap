@@ -42,7 +42,7 @@ async handle(event) {
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
-            "root/test:my_test": "\${root/test:my_test/Handler#attrs.handle}",
+            "root/test:my_test": "\${wsim#root/test:my_test/Handler#attrs.handle}",
           },
         },
         "type": "@winglang/sdk.std.TestRunner",
@@ -131,19 +131,6 @@ async handle(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",

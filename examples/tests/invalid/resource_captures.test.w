@@ -4,7 +4,7 @@ class Foo {
   bucket: cloud.Bucket;
   collectionOfResources: Array<cloud.Bucket>;
 
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
     this.collectionOfResources = Array<cloud.Bucket>[];
   }

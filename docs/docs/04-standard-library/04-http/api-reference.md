@@ -431,11 +431,23 @@ let Response = http.Response{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string representation of the body contents. |
 | <code><a href="#@winglang/sdk.http.Response.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The map of header information associated with the response. |
 | <code><a href="#@winglang/sdk.http.Response.property.ok">ok</a></code> | <code>bool</code> | A boolean indicating whether the response was successful (status in the range 200 – 299) or not. |
 | <code><a href="#@winglang/sdk.http.Response.property.status">status</a></code> | <code>num</code> | The status code of the response. |
 | <code><a href="#@winglang/sdk.http.Response.property.url">url</a></code> | <code>str</code> | The URL of the response. |
-| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string representation of the body contents. |
+
+---
+
+##### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.http.Response.property.body"></a>
+
+```wing
+body: str;
+```
+
+- *Type:* str
+
+A string representation of the body contents.
 
 ---
 
@@ -486,18 +498,6 @@ url: str;
 - *Type:* str
 
 The URL of the response.
-
----
-
-##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.http.Response.property.body"></a>
-
-```wing
-body: str;
-```
-
-- *Type:* str
-
-A string representation of the body contents.
 
 ---
 

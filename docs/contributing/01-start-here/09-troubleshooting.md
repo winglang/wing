@@ -52,3 +52,17 @@ Try to move to [rustup]:
 - Install `rustup` (via `brew install rustup` or https://sh.rustup.rs)
 
 [rustup]: https://sh.rustup.rs
+
+## `pnpm install` fails
+
+`Error: ENOENT: no such file or directory ...`
+
+`Error: Command failed: tools/bump-pack/node_modules/.bin/tsx`
+
+Try to remove and re-install the project's dependencies.
+(Before running these commands, make sure `git status` says your working tree is clean).
+
+```
+git clean -fdX
+pnpm install
+```

@@ -1,4 +1,9 @@
-import { InvokeCommand, LambdaClient, LogType } from "@aws-sdk/client-lambda";
+import {
+  InvokeCommand,
+  InvokeCommandOutput,
+  LambdaClient,
+  LogType,
+} from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@smithy/util-utf8";
 import { IFunctionClient } from "../cloud";
 import { Trace, TraceType } from "../std";
@@ -21,17 +26,11 @@ export class FunctionClient implements IFunctionClient {
     });
     const response = await this.lambdaClient.send(command);
 
-    if (response.FunctionError) {
-      throw new Error(
-        `Invoke failed with message: "${
-          response.FunctionError
-        }". Full error: "${toUtf8(response.Payload!)}"`
-      );
-    }
-    if (!response.Payload) {
+    const value = parseCommandOutput(response, this.functionArn);
+
+    if (!value) {
       return "";
     }
-    const value = JSON.parse(toUtf8(response.Payload)) ?? "";
     if (typeof value !== "string") {
       throw new Error(
         `function returned value of type ${typeof value}, not string`
@@ -56,17 +55,11 @@ export class FunctionClient implements IFunctionClient {
     const logs = Buffer.from(response.LogResult ?? "", "base64").toString();
     const traces = parseLogs(logs, this.constructPath);
 
-    if (response.FunctionError) {
-      throw new Error(
-        `Invoke failed with message: "${
-          response.FunctionError
-        }". Full error: "${toUtf8(response.Payload!)}"`
-      );
-    }
-    if (!response.Payload) {
+    const value = parseCommandOutput(response, this.functionArn);
+
+    if (!value) {
       return ["", traces];
     }
-    const value = JSON.parse(toUtf8(response.Payload)) ?? "";
     if (typeof value !== "string") {
       throw new Error(
         `function returned value of type ${typeof value}, not string`
@@ -74,6 +67,47 @@ export class FunctionClient implements IFunctionClient {
     }
     return ["", traces];
   }
+}
+
+function parseCommandOutput(
+  payload: InvokeCommandOutput,
+  functionArn: string
+): any | undefined {
+  if (payload.FunctionError) {
+    let errorText = toUtf8(payload.Payload!);
+    let errorData;
+    try {
+      errorData = JSON.parse(errorText);
+    } catch (_) {}
+
+    if (errorData && "errorMessage" in errorData) {
+      const newError = new Error(
+        `Invoke failed with message: "${
+          errorData.errorMessage
+        }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
+      );
+      newError.name = errorData.errorType;
+      newError.stack = errorData.trace?.join("\n");
+      throw newError;
+    }
+    throw new Error(
+      `Invoke failed with message: "${
+        payload.FunctionError
+      }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
+    );
+  } else {
+    if (!payload.Payload) {
+      return undefined;
+    } else {
+      return JSON.parse(toUtf8(payload.Payload));
+    }
+  }
+}
+
+function cloudwatchLogsPath(functionArn: string): string {
+  const functionName = encodeURIComponent(functionArn.split(":").slice(-1)[0]);
+  const region = functionArn.split(":")[3];
+  return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/%2Faws%2Flambda%2F${functionName}`;
 }
 
 export function parseLogs(logs: string, sourcePath: string) {

@@ -19,8 +19,6 @@ test("captures tokens", () => {
   });
 
   const inflight = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) {
     console.log(this.str, this.num, this.list);
   }`,

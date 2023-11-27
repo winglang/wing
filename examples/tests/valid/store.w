@@ -9,7 +9,7 @@ pub class Util {}
 
 pub class Store {
   b: cloud.Bucket;
-  init() {
+  new() {
     this.b = new cloud.Bucket();
 
     let prefill = new cloud.OnDeploy(inflight () => {

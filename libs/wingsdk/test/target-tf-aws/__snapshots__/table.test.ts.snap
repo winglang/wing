@@ -96,6 +96,7 @@ exports[`function with a table binding 2`] = `
             "DYNAMODB_TABLE_NAME_e7245baa": "\${aws_dynamodb_table.Table.name}",
             "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\\"name\\":0}",
             "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -215,19 +216,6 @@ exports[`function with a table binding 3`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "Table": {
                 "children": {

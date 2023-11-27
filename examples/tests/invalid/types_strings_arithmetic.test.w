@@ -7,5 +7,5 @@ let e2 = 2 == "2";
 let strExample = "Hello World";
 let numExample = 2;
 
-let e3 = "${strExample}!" * numExample;
+let e3 = "{strExample}!" * numExample;
 // ERR   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot multiply a string with a number

@@ -81,6 +81,16 @@ export class Datetime {
   }
 
   /**
+   * Create a Datetime from a JavaScript Date object.
+   *
+   * @param date The JavaScript Date object.
+   * @returns a new `Datetime` instance.
+   */
+  public static fromDate(date: Date): Datetime {
+    return this.fromIso(date.toISOString());
+  }
+
+  /**
    * Create a Datetime from Datetime components
    *
    * @param c DatetimeComponents
