@@ -445,12 +445,6 @@ export interface IApp extends IConstruct {
    * @param prefix prepended to the unique identifier
    */
   makeId(scope: IConstruct, prefix?: string): string;
-
-  /**
-   * Looks up a node with a given id in under the application (non-recursively).
-   * @param id the node id
-   */
-  tryFindChild(id: string): IConstruct | undefined;
 }
 
 function isApp(x: any): x is IApp {
