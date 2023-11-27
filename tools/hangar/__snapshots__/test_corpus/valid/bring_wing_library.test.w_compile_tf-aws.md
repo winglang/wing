@@ -133,14 +133,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-3.js")({
-            $fixture_Store: ${context._lift($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
+            $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
       }
@@ -194,10 +195,10 @@ module.exports = function({ $stdlib }) {
     static makeKey(name) {
       return (require("<ABSOLUTE_PATH>/util.js")["makeKey"])(name)
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Store-2.js")({
-          $myutil_Util: ${context._lift($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
+          $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
         })
       `;
     }
@@ -206,7 +207,7 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const StoreClient = ${Store._toInflightType(this)};
           const client = new StoreClient({
-            $this_data: ${this._lift(this.data)},
+            $this_data: ${$stdlib.core.liftObject(this.data)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
@@ -267,7 +268,7 @@ module.exports = function({ $stdlib }) {
     constructor($scope, $id, ) {
       super($scope, $id);
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Util-1.js")({
         })

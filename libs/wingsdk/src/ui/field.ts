@@ -3,7 +3,7 @@ import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
-import { Duration, IResource } from "../std";
+import { Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Field`.
@@ -91,7 +91,7 @@ export class Field extends VisualComponent {
  *
  * @inflight `@winglang/sdk.ui.IFieldHandlerClient`
  */
-export interface IFieldHandler extends IResource {}
+export interface IFieldHandler extends IInflight {}
 
 /**
  * Inflight client for `IFieldHandler`.

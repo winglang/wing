@@ -66,7 +66,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.s1 = "hello";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.R-1.js")({
           })
@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this)};
             const client = new RClient({
-              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
+              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

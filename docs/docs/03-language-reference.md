@@ -92,7 +92,7 @@ These don't affect the value of the number or how they are printed:
 | Name          | Extra information                               |
 | ------------- | ----------------------------------------------- |
 | `Array<T>`    | variable size array of a certain type           |
-| `Map<T>`      | map type (key-value with string keys)           |
+| `Map<T>`      | map type (key-value with string keys, keys may be any expression evaluating to a string)|
 | `Set<T>`      | set type (unordered collection of unique items) |
 | `MutArray<T>` | mutable array type                              |
 | `MutMap<T>`   | mutable map type                                |
@@ -1972,8 +1972,8 @@ assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
 assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"a" => "1", "b" => "2"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"b" => "2", "a" => "1"});
 
 assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
 assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);

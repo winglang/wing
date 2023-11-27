@@ -8,11 +8,7 @@ test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const handler = Testing.makeHandler(
-    app,
-    "Handler",
-    "async handle() { return 'hello'; }"
-  );
+  const handler = Testing.makeHandler("async handle() { return 'hello'; }");
   const fn = new cloud.Function(app, "my_function", handler);
 
   // WHEN

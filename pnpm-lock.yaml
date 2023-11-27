@@ -470,9 +470,15 @@ importers:
       '@wingconsole/server':
         specifier: workspace:^
         version: link:../server
+      cross-spawn:
+        specifier: ^7.0.3
+        version: 7.0.3
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      picocolors:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@ibm/plex':
         specifier: ^6.3.0
@@ -14167,7 +14173,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231120
+      typescript: 5.4.0-dev.20231124
     dev: true
 
   /dset@3.1.2:
@@ -23682,8 +23688,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231120:
-    resolution: {integrity: sha512-MG4Zg5HXb8bnvGdZrMeLBekqbCjHjaMPewXh3wVrNgTF+toQ4BrdhXnYiqMU0pLLxcsxRSMPB5MzB7YHgr67Cg==}
+  /typescript@5.4.0-dev.20231124:
+    resolution: {integrity: sha512-XGgnXNUfccFaEWyWZ0i/JuPNbHzutjS/vKgpz5TpEjmwFYwyQMSr06Nicv0HJBw/8WQ7m8EoKbyyXN8wdWmoVg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

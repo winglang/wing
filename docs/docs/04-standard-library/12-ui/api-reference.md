@@ -458,7 +458,7 @@ The label of the section.
 
 ### IButtonHandler <a name="IButtonHandler" id="@winglang/sdk.ui.IButtonHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.ui.IButtonHandler">IButtonHandler</a>
 
@@ -467,25 +467,6 @@ The label of the section.
 A resource with an inflight "handle" method that can be passed to `Button`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ui.IButtonHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.IButtonHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IButtonHandlerClient <a name="IButtonHandlerClient" id="@winglang/sdk.ui.IButtonHandlerClient"></a>
 
@@ -512,7 +493,7 @@ Function that peforms an action.
 
 ### IFieldHandler <a name="IFieldHandler" id="@winglang/sdk.ui.IFieldHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.ui.IFieldHandler">IFieldHandler</a>
 
@@ -521,25 +502,6 @@ Function that peforms an action.
 A resource with an inflight "handle" method that can be passed to `addField`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ui.IFieldHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.ui.IFieldHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IFieldHandlerClient <a name="IFieldHandlerClient" id="@winglang/sdk.ui.IFieldHandlerClient"></a>
 

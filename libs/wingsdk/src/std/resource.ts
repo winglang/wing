@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
-import { liftObject } from "../core/internal";
+import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
 import { Node } from "../std";
 
@@ -18,13 +18,33 @@ export interface IInflightHost extends IResource {
 }
 
 /**
- * Abstract interface for `Resource`.
+ * Code that runs at runtime and implements your application's behavior.
+ * For example, handling API requests, processing queue messages, etc.
+ * Inflight code can be executed on various compute platforms in the cloud,
+ * such as function services (such as AWS Lambda or Azure Functions),
+ * containers (such as ECS or Kubernetes), VMs or even physical servers.
+ *
+ * This data represents the code together with the bindings to preflight data required to run.
+ *
+ * @link https://www.winglang.io/docs/concepts/inflights
  * @skipDocs
  */
-export interface IResource extends IConstruct {
+export interface IInflight extends ILiftable {
+  /**
+   * Tracks the content hash
+   * @internal
+   */
+  _hash: string;
+}
+
+/**
+ * Data that can be lifted into inflight.
+ * @skipDocs
+ */
+export interface ILiftable {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
-   * use this resource inflight. The list of requested inflight methods
+   * use this object inflight. The list of requested inflight methods
    * needed by the inflight host are given by `ops`.
    *
    * This method is commonly used for adding permissions, environment variables, or
@@ -59,7 +79,13 @@ export interface IResource extends IConstruct {
    * @internal
    */
   _supportedOps(): string[];
+}
 
+/**
+ * Abstract interface for `Resource`.
+ * @skipDocs
+ */
+export interface IResource extends IConstruct, ILiftable {
   /**
    * A hook for performing operations after the tree of resources has been
    * created, but before they are synthesized.
@@ -83,7 +109,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public static _registerTypeOnLift(host: IInflightHost, ops: string[]): void {
+  public static _registerOnLift(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -103,13 +129,13 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  protected static _registerOnLiftObject(
+  public static _registerOnLiftObject(
     obj: any,
     host: IInflightHost,
     ops: string[] = []
   ): void {
-    const tokens = App.of(host)._tokens;
-    if (tokens.isToken(obj)) {
+    const tokens = getTokenResolver(obj);
+    if (tokens) {
       return tokens.onLiftValue(host, obj);
     }
 
@@ -143,11 +169,11 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // if the object is a resource (i.e. has a "lift" method"), register a lifting between it and the host.
-        if (isResource(obj)) {
+        // if the object is a resource, register a lifting between it and the host.
+        if (obj instanceof Resource) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._addOnLift(host, [...ops, "$inflight_init"]);
+          (obj as any)._addOnLift(host, [...ops, "$inflight_init"]);
           return;
         }
 
@@ -162,8 +188,8 @@ export abstract class Resource extends Construct implements IResource {
 
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-        if (isResourceType(obj)) {
-          obj._registerTypeOnLift(host, ops);
+        if (isLiftableType(obj)) {
+          obj._registerOnLift(host, ops);
           return;
         }
         break;
@@ -251,7 +277,7 @@ export abstract class Resource extends Construct implements IResource {
    * @param host The host to bind to
    * @param ops The operations that may access this resource
    * @returns `true` if a new bind was added or `false` if there was already a bind
-   */
+   */ // @ts-ignore
   private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
       `Registering a binding for a resource (${this.node.path}) to a host (${
@@ -308,19 +334,6 @@ export abstract class Resource extends Construct implements IResource {
       this.onLift(host, Array.from(ops));
     }
   }
-
-  /**
-   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
-   * method), this method will be called and the result will be returned. Otherwise, the value is
-   * returned as-is.
-   *
-   * @param value The value to lift.
-   * @returns a string representation of the value in an inflight context.
-   * @internal
-   */
-  protected _lift(value: any): string {
-    return liftObject(this, value);
-  }
 }
 
 /**
@@ -340,19 +353,14 @@ export interface OperationAnnotation {
   };
 }
 
-function isResource(obj: any): obj is Resource {
-  return isIResourceType(obj.constructor);
-}
-
-function isIResourceType(t: any): t is new (...args: any[]) => IResource {
+function isLiftable(t: any): t is ILiftable {
   return (
-    t instanceof Function &&
-    "prototype" in t &&
-    typeof t.prototype.onLift === "function" &&
-    typeof t.prototype._registerOnLift === "function"
+    t !== undefined &&
+    typeof t.onLift === "function" &&
+    typeof t._registerOnLift === "function"
   );
 }
 
-function isResourceType(t: any): t is typeof Resource {
-  return typeof t._registerTypeOnLift === "function" && isIResourceType(t);
+function isLiftableType(t: any): t is ILiftable {
+  return typeof t._registerOnLift === "function" && isLiftable(t.prototype);
 }

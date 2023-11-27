@@ -71,7 +71,7 @@ module.exports = function({ $stdlib }) {
     constructor($scope, $id, ) {
       super($scope, $id);
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Util-1.js")({
         })
@@ -98,14 +98,15 @@ module.exports = function({ $stdlib }) {
       this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
             require("./inflight.$Closure1-1.js")({
-              $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
+              $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
             })
           `;
         }
@@ -132,7 +133,7 @@ module.exports = function({ $stdlib }) {
       }
       const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Store-1.js")({
         })
@@ -143,7 +144,7 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const StoreClient = ${Store._toInflightType(this)};
           const client = new StoreClient({
-            $this_b: ${this._lift(this.b)},
+            $this_b: ${$stdlib.core.liftObject(this.b)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;

@@ -69,7 +69,7 @@ class $Root extends $stdlib.std.Resource {
       bar() {
         {console.log(x)};
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Base-1.js")({
           })
@@ -97,10 +97,10 @@ class $Root extends $stdlib.std.Resource {
       foo() {
         (this.bar());
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${context._lift(Base)},
+            $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
       }

@@ -8,7 +8,7 @@ import { mkdtemp } from "../util";
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", "async handle() {}");
+  const inflight = Testing.makeHandler("async handle() {}");
   new Function(app, "Function", inflight);
   new Function(app, "Function2", inflight);
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;

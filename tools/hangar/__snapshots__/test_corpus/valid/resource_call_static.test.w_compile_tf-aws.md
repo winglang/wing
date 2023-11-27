@@ -104,10 +104,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Another-1.js")({
-            $globalCounter: ${context._lift(globalCounter)},
+            $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
       }
@@ -125,22 +125,23 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return ["myStaticMethod", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("myStaticMethod")) {
           Another._registerOnLiftObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Another: ${context._lift(Another)},
+            $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
       }

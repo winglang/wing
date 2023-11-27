@@ -137,7 +137,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "S3BucketNotification",
                             "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
                           },
-                          "b2-oncreate": {
+                          "oncreate": {
                             "children": {
                               "Default": {
                                 "constructInfo": {
@@ -145,7 +145,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/Default",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate/Default",
                               },
                               "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad": {
                                 "constructInfo": {
@@ -153,15 +153,15 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                               },
-                              "b2-oncreate-TopicSubscription-59543b60": {
+                              "TopicSubscription0": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.17.0",
                                 },
-                                "id": "b2-oncreate-TopicSubscription-59543b60",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-59543b60",
+                                "id": "TopicSubscription0",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate/TopicSubscription0",
                               },
                             },
                             "constructInfo": {
@@ -172,10 +172,10 @@ exports[`tree.json for an app with many resources 1`] = `
                               "description": "A pub/sub notification topic",
                               "title": "Topic",
                             },
-                            "id": "b2-oncreate",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate",
+                            "id": "oncreate",
+                            "path": "root/Default/Default/BigPublisher/b2/oncreate",
                           },
-                          "b2-oncreate-OnMessage-59543b60": {
+                          "oncreate-OnMessage0": {
                             "children": {
                               "Asset": {
                                 "constructInfo": {
@@ -183,7 +183,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Asset",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Asset",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/Asset",
                               },
                               "CloudwatchLogGroup": {
                                 "constructInfo": {
@@ -191,7 +191,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "CloudwatchLogGroup",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/CloudwatchLogGroup",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/CloudwatchLogGroup",
                               },
                               "Default": {
                                 "constructInfo": {
@@ -199,7 +199,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/Default",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/Default",
                               },
                               "IamRole": {
                                 "constructInfo": {
@@ -207,7 +207,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRole",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRole",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRole",
                               },
                               "IamRolePolicy": {
                                 "constructInfo": {
@@ -215,7 +215,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRolePolicy",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicy",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRolePolicy",
                               },
                               "IamRolePolicyAttachment": {
                                 "constructInfo": {
@@ -223,15 +223,15 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "IamRolePolicyAttachment",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/IamRolePolicyAttachment",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRolePolicyAttachment",
                               },
-                              "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141": {
+                              "InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.17.0",
                                 },
-                                "id": "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+                                "id": "InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a",
                               },
                               "S3Object": {
                                 "constructInfo": {
@@ -239,7 +239,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "version": "0.17.0",
                                 },
                                 "id": "S3Object",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60/S3Object",
+                                "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/S3Object",
                               },
                             },
                             "constructInfo": {
@@ -250,30 +250,8 @@ exports[`tree.json for an app with many resources 1`] = `
                               "description": "A cloud function (FaaS)",
                               "title": "Function",
                             },
-                            "id": "b2-oncreate-OnMessage-59543b60",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-59543b60",
-                          },
-                          "b2-oncreate-OnMessageHandler-59543b60": {
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "hidden": true,
-                            },
-                            "id": "b2-oncreate-OnMessageHandler-59543b60",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessageHandler-59543b60",
-                          },
-                          "b2-oncreate-eventHandler-fe70cb1e": {
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "hidden": true,
-                            },
-                            "id": "b2-oncreate-eventHandler-fe70cb1e",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
+                            "id": "oncreate-OnMessage0",
+                            "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0",
                           },
                         },
                         "constructInfo": {
@@ -339,7 +317,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "cloud.Queue",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue",
                       },
-                      "cloud.Queue-SetConsumer-c50bc9ef": {
+                      "cloud.Queue-SetConsumer0": {
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -347,7 +325,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "Asset",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/Asset",
                           },
                           "CloudwatchLogGroup": {
                             "constructInfo": {
@@ -355,7 +333,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "CloudwatchLogGroup",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/CloudwatchLogGroup",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/CloudwatchLogGroup",
                           },
                           "Default": {
                             "constructInfo": {
@@ -363,7 +341,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "Default",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/Default",
                           },
                           "IamRole": {
                             "constructInfo": {
@@ -371,7 +349,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRole",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRole",
                           },
                           "IamRolePolicy": {
                             "constructInfo": {
@@ -379,7 +357,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRolePolicy",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRolePolicy",
                           },
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
@@ -387,7 +365,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRolePolicyAttachment",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRolePolicyAttachment",
                           },
                           "S3Object": {
                             "constructInfo": {
@@ -395,7 +373,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "S3Object",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/S3Object",
                           },
                         },
                         "constructInfo": {
@@ -406,19 +384,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
                         },
-                        "id": "cloud.Queue-SetConsumer-c50bc9ef",
-                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
-                      },
-                      "cloud.Queue-SetConsumerHandler-c50bc9ef": {
-                        "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
-                        },
-                        "display": {
-                          "hidden": true,
-                        },
-                        "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
-                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
+                        "id": "cloud.Queue-SetConsumer0",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0",
                       },
                       "cloud.Topic": {
                         "children": {
@@ -430,13 +397,13 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/Default",
                           },
-                          "cloud.Topic-TopicSubscription-113c9059": {
+                          "TopicSubscription0": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
                               "version": "0.17.0",
                             },
-                            "id": "cloud.Topic-TopicSubscription-113c9059",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-TopicSubscription-113c9059",
+                            "id": "TopicSubscription0",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic/TopicSubscription0",
                           },
                         },
                         "constructInfo": {
@@ -450,7 +417,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "cloud.Topic",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic",
                       },
-                      "cloud.Topic-OnMessage-113c9059": {
+                      "cloud.Topic-OnMessage0": {
                         "children": {
                           "Asset": {
                             "constructInfo": {
@@ -458,7 +425,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "Asset",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/Asset",
                           },
                           "CloudwatchLogGroup": {
                             "constructInfo": {
@@ -466,7 +433,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "CloudwatchLogGroup",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/CloudwatchLogGroup",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/CloudwatchLogGroup",
                           },
                           "Default": {
                             "constructInfo": {
@@ -474,7 +441,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "Default",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/Default",
                           },
                           "IamRole": {
                             "constructInfo": {
@@ -482,7 +449,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRole",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRole",
                           },
                           "IamRolePolicy": {
                             "constructInfo": {
@@ -490,7 +457,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRolePolicy",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRolePolicy",
                           },
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
@@ -498,7 +465,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "IamRolePolicyAttachment",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRolePolicyAttachment",
                           },
                           "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
                             "constructInfo": {
@@ -506,7 +473,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
                           },
                           "S3Object": {
                             "constructInfo": {
@@ -514,7 +481,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "version": "0.17.0",
                             },
                             "id": "S3Object",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/S3Object",
                           },
                         },
                         "constructInfo": {
@@ -525,19 +492,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
                         },
-                        "id": "cloud.Topic-OnMessage-113c9059",
-                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
-                      },
-                      "cloud.Topic-OnMessageHandler-113c9059": {
-                        "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
-                        },
-                        "display": {
-                          "hidden": true,
-                        },
-                        "id": "cloud.Topic-OnMessageHandler-113c9059",
-                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessageHandler-113c9059",
+                        "id": "cloud.Topic-OnMessage0",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0",
                       },
                     },
                     "constructInfo": {

@@ -18,7 +18,7 @@ test("create an OnDeploy", () => {
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
   });
-  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
   new cloud.OnDeploy(app, "my_on_deploy", handler);
   const output = app.synth();
 
@@ -36,7 +36,7 @@ test("execute OnDeploy after other resources", () => {
     ...CDK_APP_OPTS,
   });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
   new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeAfter: [bucket],
   });
@@ -59,7 +59,7 @@ test("execute OnDeploy before other resources", () => {
     ...CDK_APP_OPTS,
   });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const handler = simulator.Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = simulator.Testing.makeHandler(INFLIGHT_CODE);
   new cloud.OnDeploy(app, "my_on_deploy", handler, {
     executeBefore: [bucket],
   });

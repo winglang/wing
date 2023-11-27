@@ -1,33 +1,51 @@
 import { IInflightHost } from "../std";
-
 /**
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
-export abstract class Tokens {
+export interface ITokenResolver {
   /**
    * Returns true is the given value is a token.
    */
-  public abstract isToken(value: any): boolean;
+  isToken(value: any): boolean;
 
   /**
    * "Lifts" a value into an inflight context.
    */
-  public abstract lift(value: any): string;
+  lift(value: any): string;
 
   /**
    * Lifts the given token to the host.
    */
-  public abstract onLiftValue(host: IInflightHost, value: any): void;
+  onLiftValue(host: IInflightHost, value: any): void;
+}
 
-  /**
-   * Creates a valid environment variable name from the given token.
-   */
-  protected envName(value: string): string {
-    return `WING_TOKEN_${value
-      .replace(/([^a-zA-Z0-9]+)/g, "_")
-      .replace(/_+$/, "")
-      .replace(/^_+/, "")
-      .toUpperCase()}`;
-  }
+/**
+ * Global registry of available token resolvers.
+ */
+const _resolvers: ITokenResolver[] = [];
+
+/**
+ * Creates a valid environment variable name from the given token.
+ */
+export function tokenEnvName(value: string): string {
+  return `WING_TOKEN_${value
+    .replace(/([^a-zA-Z0-9]+)/g, "_")
+    .replace(/_+$/, "")
+    .replace(/^_+/, "")
+    .toUpperCase()}`;
+}
+
+/**
+ * Globally registers a new token resolver
+ */
+export function registerTokenResolver(resolver: ITokenResolver) {
+  _resolvers.push(resolver);
+}
+
+/**
+ * Find the first token resolver that considers the given value a token (or containing token(s)).
+ */
+export function getTokenResolver(value: any): ITokenResolver | undefined {
+  return _resolvers.find((r) => r.isToken(value));
 }

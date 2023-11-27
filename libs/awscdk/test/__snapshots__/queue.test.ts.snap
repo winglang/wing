@@ -55,7 +55,7 @@ exports[`default queue behavior 1`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/awscdk/src/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_b3dcdeaa\\"], \\"my-project/Default/Queue-SetConsumer-c185c7e3\\")"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/awscdk/src/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_27b8b1c8\\"], \\"my-project/Default/Queue-SetConsumer0\\")"`;
 
 exports[`queue with a consumer function 2`] = `
 {
@@ -160,10 +160,10 @@ exports[`queue with a consumer function 2`] = `
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
     },
-    "QueueSetConsumerc185c7e3BBF127FC": {
+    "QueueSetConsumer06749388A": {
       "DependsOn": [
-        "QueueSetConsumerc185c7e3ServiceRoleDefaultPolicy707C955E",
-        "QueueSetConsumerc185c7e3ServiceRole98E9022D",
+        "QueueSetConsumer0ServiceRoleDefaultPolicy5F91E830",
+        "QueueSetConsumer0ServiceRoleB6E3A7B7",
       ],
       "Properties": {
         "Architectures": [
@@ -179,7 +179,7 @@ exports[`queue with a consumer function 2`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "QueueSetConsumerc185c7e3ServiceRole98E9022D",
+            "QueueSetConsumer0ServiceRoleB6E3A7B7",
             "Arn",
           ],
         },
@@ -188,7 +188,7 @@ exports[`queue with a consumer function 2`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "QueueSetConsumerc185c7e3LogRetention988E9F20": {
+    "QueueSetConsumer0LogRetention860508CE": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -196,7 +196,7 @@ exports[`queue with a consumer function 2`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "QueueSetConsumerc185c7e3BBF127FC",
+                "Ref": "QueueSetConsumer06749388A",
               },
             ],
           ],
@@ -211,7 +211,7 @@ exports[`queue with a consumer function 2`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "QueueSetConsumerc185c7e3ServiceRole98E9022D": {
+    "QueueSetConsumer0ServiceRoleB6E3A7B7": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -242,7 +242,7 @@ exports[`queue with a consumer function 2`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "QueueSetConsumerc185c7e3ServiceRoleDefaultPolicy707C955E": {
+    "QueueSetConsumer0ServiceRoleDefaultPolicy5F91E830": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -265,16 +265,16 @@ exports[`queue with a consumer function 2`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "QueueSetConsumerc185c7e3ServiceRoleDefaultPolicy707C955E",
+        "PolicyName": "QueueSetConsumer0ServiceRoleDefaultPolicy5F91E830",
         "Roles": [
           {
-            "Ref": "QueueSetConsumerc185c7e3ServiceRole98E9022D",
+            "Ref": "QueueSetConsumer0ServiceRoleB6E3A7B7",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "QueueSetConsumerc185c7e3SqsEventSourcemyprojectQueue97F83A7BF9F5BDF6": {
+    "QueueSetConsumer0SqsEventSourcemyprojectQueue97F83A7B68430FE8": {
       "Properties": {
         "BatchSize": 1,
         "EventSourceArn": {
@@ -284,7 +284,7 @@ exports[`queue with a consumer function 2`] = `
           ],
         },
         "FunctionName": {
-          "Ref": "QueueSetConsumerc185c7e3BBF127FC",
+          "Ref": "QueueSetConsumer06749388A",
         },
       },
       "Type": "AWS::Lambda::EventSourceMapping",

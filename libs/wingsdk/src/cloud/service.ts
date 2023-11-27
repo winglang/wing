@@ -5,7 +5,7 @@ import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { IInflightHost, IResource, Node, Resource } from "../std";
+import { IInflight, IInflightHost, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -153,7 +153,7 @@ export interface IServiceClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
-export interface IServiceHandler extends IResource {}
+export interface IServiceHandler extends IInflight {}
 
 /**
  * Inflight client for `IServiceHandler`.
@@ -190,7 +190,7 @@ export interface IServiceHandlerClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
  */
-export interface IServiceStopHandler extends IResource {}
+export interface IServiceStopHandler extends IInflight {}
 
 /**
  * Inflight client for `IServiceStopHandler`.

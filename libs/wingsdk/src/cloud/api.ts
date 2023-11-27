@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
-import { IResource, Node, Resource, Duration } from "../std";
+import { Node, Resource, Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -703,7 +703,7 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IResource {}
+export interface IApiEndpointHandler extends IInflight {}
 
 /**
  * Inflight client for `IApiEndpointHandler`.

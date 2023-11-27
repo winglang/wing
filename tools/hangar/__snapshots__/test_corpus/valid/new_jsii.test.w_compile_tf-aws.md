@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         count += 1;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.CustomScope-1.js")({
           })

@@ -60,10 +60,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-Handler-${hash}`,
       inflight,
       this.eventHandlerLocation(),
       `BucketEventHandlerClient`
@@ -71,7 +68,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-${hash}`,
+      App.of(this).makeId(this, `${this.node.id}-${event}`),
       functionHandler,
       opts
     );

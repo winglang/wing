@@ -869,9 +869,9 @@ error: Unknown parser error
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:37:24
+   --> ../../../examples/tests/invalid/container_types.test.w:41:24
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                        ^^^ Unknown parser error
 
 
@@ -938,87 +938,94 @@ error: Unknown symbol \\"someRandomMethod\\"
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:20:24
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:20:35
    |
-20 | let s1: Set<num> = {1, \\"2\\", 3};
+20 | let m5 = {\\"a\\" => 1, \\"{1+1}\\" => 2, 1+1 => 3};
+   |                                   ^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:24:24
+   |
+24 | let s1: Set<num> = {1, \\"2\\", 3};
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:21:10
+   --> ../../../examples/tests/invalid/container_types.test.w:25:10
    |
-21 | let s2 = Set<num> [1, \\"2\\", 3];
+25 | let s2 = Set<num> [1, \\"2\\", 3];
    |          ^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:24
+   --> ../../../examples/tests/invalid/container_types.test.w:26:24
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:20
+   --> ../../../examples/tests/invalid/container_types.test.w:26:20
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^ Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:24:20
+   --> ../../../examples/tests/invalid/container_types.test.w:28:20
    |
-24 | let s5: Set<str> = s4;
+28 | let s5: Set<str> = s4;
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
 error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:25:4
+   --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
-25 | s1.someRandomMethod();
+29 | s1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:27:21
+   --> ../../../examples/tests/invalid/container_types.test.w:31:21
    |
-27 | let a: Array<str> = MutArray<str>[];
+31 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:30:24
+   --> ../../../examples/tests/invalid/container_types.test.w:34:24
    |
-30 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
+34 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:33:15
+   --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
-33 | let mm3 = mm2.copyMut();
+37 | let mm3 = mm2.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:37:27
+   --> ../../../examples/tests/invalid/container_types.test.w:41:27
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:39:37
+   --> ../../../examples/tests/invalid/container_types.test.w:43:37
    |
-39 | let ss2: MutSet<num> = MutSet<num> {true};
+43 | let ss2: MutSet<num> = MutSet<num> {true};
    |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:42:15
+   --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
-42 | let ss4 = ss3.copyMut();
+46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 

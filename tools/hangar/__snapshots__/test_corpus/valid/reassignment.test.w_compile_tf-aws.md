@@ -67,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
       inc() {
         this.f = (this.f + 1);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.R-1.js")({
           })

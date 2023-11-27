@@ -3187,7 +3187,29 @@ Represents a Wing application.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.IApp.makeId">makeId</a></code> | Generate a unique ID for the given scope and prefix. |
 | <code><a href="#@winglang/sdk.std.IApp.tryFindChild">tryFindChild</a></code> | Looks up a node with a given id in under the application (non-recursively). |
+
+---
+
+##### `makeId` <a name="makeId" id="@winglang/sdk.std.IApp.makeId"></a>
+
+```wing
+makeId(prefix?: str): str
+```
+
+Generate a unique ID for the given scope and prefix.
+
+The newly generated ID is
+guaranteed to be unique within the given scope.
+It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
+increasing sequence of integers starting from '0'.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.std.IApp.makeId.parameter.prefix"></a>
+
+- *Type:* str
+
+prepended to the unique identifier.
 
 ---
 
