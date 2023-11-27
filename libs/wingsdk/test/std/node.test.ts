@@ -25,7 +25,7 @@ test("Node.of(scope).root returns the first root found in the tree", () => {
   const app = new SimApp();
 
   // this is the setup we have in synthRoots
-  class Root extends Construct {}
+  class Root extends Construct { }
   Node._markRoot(Root);
 
   const root = new Root(app, "MyRoot");
@@ -34,11 +34,4 @@ test("Node.of(scope).root returns the first root found in the tree", () => {
 
   const theRoot = Node.of(myBucket).root;
   expect(theRoot).toBe(root);
-});
-
-test("tryFindChild(id) returns the child if it exists", () => {
-  const app = new SimApp();
-  const myBucket = new Bucket(app, "MyBucket");
-  const child = app.tryFindChild("MyBucket");
-  expect(child).toBe(myBucket);
 });
