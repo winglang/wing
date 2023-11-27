@@ -46,6 +46,50 @@ describe("printing test reports", () => {
   });
 });
 
+describe("wing test (custom platform)", () => {
+  let logSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    logSpy = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
+    logSpy.mockRestore();
+  });
+
+  test("test runner is loaded properly for customized tf-aws platform", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    // can't be resolved within tmp directory
+    const targetTfAws = require.resolve("@winglang/sdk/lib/target-tf-aws");
+
+    process.chdir(outDir);
+    fs.writeFileSync("foo.test.w", `bring cloud;`);
+    fs.writeFileSync(
+      "custom-platform.js",
+      `
+      const tfaws = require("${targetTfAws}");
+      class Platform {
+        target = "tf-aws";
+
+        newApp(appProps) {
+          return new tfaws.App(appProps);
+        }
+      }
+      module.exports = { Platform }`
+    );
+
+    await wingTest([], { clean: true, platform: ["./custom-platform.js"] });
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
+    );
+  });
+});
+
 describe("wing test (no options)", () => {
   let logSpy: SpyInstance;
 
