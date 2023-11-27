@@ -215,6 +215,7 @@ where
 {
 	Class {
 		name: f.fold_symbol(node.name),
+		span: node.span,
 		fields: node.fields.into_iter().map(|field| f.fold_class_field(field)).collect(),
 		methods: node
 			.methods
@@ -328,7 +329,7 @@ where
 			type_: type_.map(|t| f.fold_type_annotation(t)),
 			fields: fields
 				.into_iter()
-				.map(|(key, value)| (key, f.fold_expr(value)))
+				.map(|(key, value)| (f.fold_expr(key), f.fold_expr(value)))
 				.collect(),
 		},
 		ExprKind::SetLiteral { type_, items } => ExprKind::SetLiteral {

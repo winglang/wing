@@ -2,7 +2,7 @@ bring cloud;
 
 class PreflightClass {
   b: cloud.Bucket;
-  init() {
+  new() {
     this.b = new cloud.Bucket();
   }
   pub preflight_method(): cloud.Function {
@@ -10,7 +10,7 @@ class PreflightClass {
       this.b.put("k","v");  // Here `this` is the parent class instance
       inflight class InflightClass {
         field: str;
-        init() {
+        new() {
           this.field = "value";
         }
         pub inflight method() {

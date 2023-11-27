@@ -1,9 +1,9 @@
 inflight class Foo {
-  init() {
+  new() {
 
   }
 
-  inflight init() {
+  inflight new() {
 
   }
 //^ Multiple inflight initializers defined in class Foo

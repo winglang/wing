@@ -5,7 +5,7 @@ let globalQueue = new cloud.Queue();
 class Another {
   myQueue: cloud.Queue;
 
-  init () {
+  new() {
     this.myQueue = new cloud.Queue();
   }
 
@@ -23,7 +23,7 @@ class Another {
 class Test {
   another: Another;
 
-  init() {
+  new() {
     this.another = new Another();
   }
 

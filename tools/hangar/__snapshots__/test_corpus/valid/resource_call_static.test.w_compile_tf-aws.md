@@ -16,7 +16,7 @@ module.exports = function({ $Another }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Another-1.js
@@ -32,7 +32,7 @@ module.exports = function({ $globalCounter }) {
   }
   return Another;
 }
-
+//# sourceMappingURL=inflight.Another-1.js.map
 ```
 
 ## main.tf.json
@@ -104,10 +104,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Another-1.js")({
-            $globalCounter: ${context._lift(globalCounter)},
+            $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
       }
@@ -125,22 +125,23 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return ["myStaticMethod", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("myStaticMethod")) {
           Another._registerOnLiftObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Another: ${context._lift(Another)},
+            $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
       }
@@ -165,13 +166,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access cloud resource through static methods only", new $Closure1(this, "$Closure1"));
+    const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access cloud resource through static methods only", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_call_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

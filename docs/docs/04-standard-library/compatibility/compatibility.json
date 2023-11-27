@@ -115,7 +115,7 @@
     "metadata": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 4333 },
+      "tf-azure": { "implemented": true },
       "tf-gcp": { "implemented": false, "issue": 4332 },
       "awscdk": { "implemented": true }
     },
@@ -129,7 +129,7 @@
     "copy": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 4397 },
+      "tf-azure": { "implemented": true },
       "tf-gcp": { "implemented": false, "issue": 4398 },
       "awscdk": { "implemented": true }
     },

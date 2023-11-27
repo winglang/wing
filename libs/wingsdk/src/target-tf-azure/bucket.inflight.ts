@@ -12,7 +12,7 @@ import {
   BucketDeleteOptions,
   BucketSignedUrlOptions,
 } from "../cloud";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
@@ -245,24 +245,40 @@ export class BucketClient implements IBucketClient {
 
   /**
    * Get the metadata of an object in the bucket.
-   * @throws if the object does not exist.
    * @param key Key of the object.
+   * @throws if the object does not exist.
    */
   public async metadata(key: string): Promise<ObjectMetadata> {
-    return Promise.reject(`metadata is not implemented: (key=${key})`);
+    const blobClient = this.containerClient.getBlobClient(key);
+
+    try {
+      const properties = await blobClient.getProperties();
+      return {
+        contentType: properties.contentType,
+        lastModified: Datetime.fromDate(properties.lastModified!),
+        size: properties.contentLength!,
+      };
+    } catch (error) {
+      throw new Error(`Failed to get metadata for object. (key=${key})`);
+    }
   }
 
   /**
-   * Copy object within the container
+   * Copy object within the bucket
    *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    * @throws if `srcKey` object doesn't exist.
    */
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    const srcBlobUrl = this.containerClient.getBlobClient(srcKey).url;
+    const dstBlobClient = this.containerClient.getBlockBlobClient(dstKey);
+
+    try {
+      await dstBlobClient.syncCopyFromURL(srcBlobUrl);
+    } catch (error) {
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+    }
   }
 
   /**

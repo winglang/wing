@@ -22,7 +22,7 @@ test "inflights can call other inflights" {
 class MyResource {
   closure: inflight (str): str;
 
-  init() {
+  new() {
     this.closure = inflight (s: str): str => {
       globalBucket.list();
       return "hello";

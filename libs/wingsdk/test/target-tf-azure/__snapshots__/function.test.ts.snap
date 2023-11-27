@@ -14,6 +14,7 @@ exports[`basic function 1`] = `
         "location": "\${azurerm_resource_group.ResourceGroup.location}",
         "name": "application-insights",
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
       },
     },
     "azurerm_linux_function_app": {
@@ -39,6 +40,13 @@ exports[`basic function 1`] = `
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
       },
     },
     "azurerm_resource_group": {
@@ -176,18 +184,13 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
+              "LogAnalyticsWorkspace": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
                 },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {
@@ -294,6 +297,7 @@ exports[`basic function with environment variables 1`] = `
         "location": "\${azurerm_resource_group.ResourceGroup.location}",
         "name": "application-insights",
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
       },
     },
     "azurerm_linux_function_app": {
@@ -321,6 +325,13 @@ exports[`basic function with environment variables 1`] = `
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
       },
     },
     "azurerm_resource_group": {
@@ -458,18 +469,13 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
+              "LogAnalyticsWorkspace": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
                 },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {
@@ -576,6 +582,7 @@ exports[`replace invalid character from function name 1`] = `
         "location": "\${azurerm_resource_group.ResourceGroup.location}",
         "name": "application-insights",
         "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
       },
     },
     "azurerm_linux_function_app": {
@@ -601,6 +608,13 @@ exports[`replace invalid character from function name 1`] = `
         },
         "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
         "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
       },
     },
     "azurerm_resource_group": {
@@ -670,18 +684,13 @@ exports[`replace invalid character from function name 2`] = `
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
               },
-              "Handler": {
+              "LogAnalyticsWorkspace": {
                 "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
                 },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
               },
               "ResourceGroup": {
                 "constructInfo": {

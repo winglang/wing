@@ -13,7 +13,7 @@ test "parseUrl()" {
     };
 
     let INVALID_URL_STRING = "hello world";
-    let INVALID_URL_ERROR = "Invalid URL: ${INVALID_URL_STRING}";
+    let INVALID_URL_ERROR = "Invalid URL: {INVALID_URL_STRING}";
     let URL_STRING = "http://username:password@www.example.com:3000/pathname?search=test#hash";
 
     let urlStruct = {

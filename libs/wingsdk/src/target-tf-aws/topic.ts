@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { SnsTopic } from "../.gen/providers/aws/sns-topic";
 import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
@@ -9,6 +10,7 @@ import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
+import { IAwsTopic } from "../shared-aws/topic";
 import { IInflightHost, Node, Resource } from "../std";
 
 /**
@@ -25,8 +27,9 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.Topic {
+export class Topic extends cloud.Topic implements IAwsTopic {
   private readonly topic: SnsTopic;
+  private readonly handlers: Record<string, Function> = {};
   /**
    * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
@@ -41,21 +44,11 @@ export class Topic extends cloud.Topic {
     });
   }
 
-  /**
-   * Topic's arn
-   */
-  public get arn(): string {
-    return this.topic.arn;
-  }
-
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
@@ -64,25 +57,32 @@ export class Topic extends cloud.Topic {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+    let fn = this.handlers[inflight._hash];
+    if (fn) {
+      return fn;
+    }
+
+    fn = new Function(
+      // ok since we're not a tree root
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-OnMessage`),
       functionHandler,
       props
     );
+    this.handlers[inflight._hash] = fn;
 
-    // TODO: remove this constraint by adding geric permission APIs to cloud.Function
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
       throw new Error("Topic only supports creating tfaws.Function right now");
     }
 
     new SnsTopicSubscription(
       this,
-      `${this.node.id}-TopicSubscription-${hash}`,
+      App.of(this).makeId(this, "TopicSubscription"),
       {
         topicArn: this.topic.arn,
         protocol: "lambda",
-        endpoint: fn.arn,
+        endpoint: fn.functionArn,
       }
     );
 
@@ -155,8 +155,20 @@ export class Topic extends cloud.Topic {
       [`process.env["${this.envName()}"]`]
     );
   }
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
+  }
 
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
+  }
+
+  public get topicArn(): string {
+    return this.topic.arn;
+  }
+
+  public get topicName(): string {
+    return this.topic.name;
   }
 }

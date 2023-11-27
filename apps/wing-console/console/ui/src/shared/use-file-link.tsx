@@ -11,7 +11,7 @@ export const createHtmlLink = (
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll(
-      /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
+      /\B((?:[a-z]:)?\.{0,2}[/\\]\S+):(\d+):(\d+)/gi,
       (match, path, line, column) => {
         return `<a class="${className}" path="${path}" line="${line}" column="${column}" >${match}</a>`;
       },

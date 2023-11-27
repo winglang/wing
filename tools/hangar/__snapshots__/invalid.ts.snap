@@ -4,7 +4,7 @@ exports[`access_hidden_namespace.test.w 1`] = `
 "error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.test.w:7:5
   |
-7 | new core.NodeJsCode(\\"<ABSOLUTE_PATH>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
+7 | new core.NodeJsCode(\\"<ABSOLUTE>/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^ Unknown symbol \\"core\\"
 
 
@@ -326,15 +326,14 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"ERROR: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
-
-../../../examples/tests/invalid/target/test/ambiguous_api_paths.test.wsim.[REDACTED].tmp/.wing/preflight.js:39
-       const handler = new $Closure1(this, \\"$Closure1\\");
-       (api.get(\\"<ABSOLUTE_PATH>/path\\", handler));
->>     (api.get(\\"<ABSOLUTE_PATH>/{variable}\\", handler));
-     }
-   }
-
+"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+   --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
+   | };
+   | 
+   | api.get(\\"<ABSOLUTE>/path\\", handler);
+12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
+   | ^
+at (<ABSOLUTE>:LINE:COL)
  
  
 Tests 1 failed (1)
@@ -378,6 +377,23 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`bring_invalid_dir.w 1`] = `
+"error: Cannot explicitly bring directory with no Wing files \\"no_wing_files\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"in.valid\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`bring_jsii.test.w 1`] = `
 "error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.test.w:1:1
@@ -386,11 +402,11 @@ exports[`bring_jsii.test.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
+error: Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
   --> ../../../examples/tests/invalid/bring_jsii.test.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE_PATH>/bring_jsii.test.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^ Unable to load \\"foobar\\": Module not found in \\"<ABSOLUTE>/bring_jsii.test.w\\"
 
 
  
@@ -408,18 +424,18 @@ exports[`bring_local_dir.test.w 1`] = `
   |       ^^^^^^^^^ Cannot bring \\"/subdir\\" since it is not a relative path
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   --> ../../../examples/tests/invalid/subdir/other.w:1:1
   |
 1 | bring \\"./inner\\" as inner;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
-error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+error: Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
   --> ../../../examples/tests/invalid/bring_local_dir.test.w:1:1
   |
 1 | bring \\"./subdir\\" as subdir;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE_PATH>/inner\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^ Symbol \\"Foo\\" has multiple definitions in \\"<ABSOLUTE>/inner\\"
 
 
  
@@ -618,10 +634,10 @@ error: Reserved method name. Initializers are declared with \\"init\\"
 
 
 error: Expected block
-   --> ../../../examples/tests/invalid/class.test.w:17:17
+   --> ../../../examples/tests/invalid/class.test.w:17:16
    |
-17 |   init(foo: str)
-   |                 ^ Expected block
+17 |   new(foo: str)
+   |                ^ Expected block
 
 
 error: Preflight field \\"x\\" is not initialized
@@ -743,6 +759,13 @@ error: Unknown symbol \\"C11\\"
    |                   ^^^ Unknown symbol \\"C11\\"
 
 
+error: Cannot instantiate abstract class \\"Resource\\"
+    --> ../../../examples/tests/invalid/class.test.w:165:1
+    |
+165 | new std.Resource();
+    | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.test.w:31:14
    |
@@ -798,7 +821,7 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
-4 | |   return \\"Hello \${name}\\";
+4 | |   return \\"Hello {name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   |  
@@ -846,9 +869,9 @@ error: Unknown parser error
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:37:24
+   --> ../../../examples/tests/invalid/container_types.test.w:41:24
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                        ^^^ Unknown parser error
 
 
@@ -915,87 +938,94 @@ error: Unknown symbol \\"someRandomMethod\\"
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:20:24
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:20:35
    |
-20 | let s1: Set<num> = {1, \\"2\\", 3};
+20 | let m5 = {\\"a\\" => 1, \\"{1+1}\\" => 2, 1+1 => 3};
+   |                                   ^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:24:24
+   |
+24 | let s1: Set<num> = {1, \\"2\\", 3};
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:21:10
+   --> ../../../examples/tests/invalid/container_types.test.w:25:10
    |
-21 | let s2 = Set<num> [1, \\"2\\", 3];
+25 | let s2 = Set<num> [1, \\"2\\", 3];
    |          ^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:24
+   --> ../../../examples/tests/invalid/container_types.test.w:26:24
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:20
+   --> ../../../examples/tests/invalid/container_types.test.w:26:20
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^ Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:24:20
+   --> ../../../examples/tests/invalid/container_types.test.w:28:20
    |
-24 | let s5: Set<str> = s4;
+28 | let s5: Set<str> = s4;
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
 error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:25:4
+   --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
-25 | s1.someRandomMethod();
+29 | s1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:27:21
+   --> ../../../examples/tests/invalid/container_types.test.w:31:21
    |
-27 | let a: Array<str> = MutArray<str>[];
+31 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:30:24
+   --> ../../../examples/tests/invalid/container_types.test.w:34:24
    |
-30 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
+34 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:33:15
+   --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
-33 | let mm3 = mm2.copyMut();
+37 | let mm3 = mm2.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:37:27
+   --> ../../../examples/tests/invalid/container_types.test.w:41:27
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:39:37
+   --> ../../../examples/tests/invalid/container_types.test.w:43:37
    |
-39 | let ss2: MutSet<num> = MutSet<num> {true};
+43 | let ss2: MutSet<num> = MutSet<num> {true};
    |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:42:15
+   --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
-42 | let ss4 = ss3.copyMut();
+46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
@@ -1007,24 +1037,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring1.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring3.w
-- <ABSOLUTE_PATH>/cyclic_bring2.w
-- <ABSOLUTE_PATH>/cyclic_bring1.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring3.w
+- <ABSOLUTE>/cyclic_bring2.w
+- <ABSOLUTE>/cyclic_bring1.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
  
@@ -1035,24 +1065,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring2.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring1.w
-- <ABSOLUTE_PATH>/cyclic_bring3.w
-- <ABSOLUTE_PATH>/cyclic_bring2.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring1.w
+- <ABSOLUTE>/cyclic_bring3.w
+- <ABSOLUTE>/cyclic_bring2.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
  
@@ -1063,24 +1093,24 @@ Duration <DURATION>"
 `;
 
 exports[`cyclic_bring3.w 1`] = `
-"error: Could not compile \\"<ABSOLUTE_PATH>/cyclic_bring3.w\\" due to cyclic bring statements:
-- <ABSOLUTE_PATH>/cyclic_bring2.w
-- <ABSOLUTE_PATH>/cyclic_bring1.w
-- <ABSOLUTE_PATH>/cyclic_bring3.w
+"error: Could not compile \\"<ABSOLUTE>/cyclic_bring3.w\\" due to cyclic bring statements:
+- <ABSOLUTE>/cyclic_bring2.w
+- <ABSOLUTE>/cyclic_bring1.w
+- <ABSOLUTE>/cyclic_bring3.w
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring1.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring1.w\\" due to cyclic bring statements
 
 
-error: Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+error: Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE_PATH>/cyclic_bring2.w\\" due to cyclic bring statements
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"<ABSOLUTE>/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  
@@ -1805,7 +1835,7 @@ exports[`inflight_class_dup_init.test.w 1`] = `
 "error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.test.w:6:3
   |  
-6 | /   inflight init() {
+6 | /   inflight new() {
 7 | | 
 8 | |   }
   | \\\\---^ Multiple inflight initializers defined in class Foo
@@ -2338,6 +2368,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`new_in_static_without_scope.test.w 1`] = `
+"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
+  |
+7 |     return new cloud.Bucket();
+  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+
+
+error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
+   |
+10 |     return new MyClass();
+   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
@@ -2550,6 +2602,13 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
 
 
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
+  |
+1 | let my_func1 = (callback: inflight (num): num) => {  };
+  | ^ Unknown symbol \\"this\\"
+
+
  
  
 Tests 1 failed (1)
@@ -2700,6 +2759,135 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`redundant_modifiers.w 1`] = `
+"error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:3:3
+  |
+3 |   pub pub m1() {}
+  |   ^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+  --> ../../../examples/tests/invalid/redundant_modifiers.w:7:3
+  |
+7 |   pub protected m2() {}
+  |   ^^^^^^^^^^^^^
+  |   |   |
+  |   |   possible redundant modifier
+  |   Multiple or ambiguous modifiers found
+  |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:11:3
+   |
+11 |   static pub static m3() {}
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:15:3
+   |
+15 |   pub inflight static inflight m4() {}
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |   |               |
+   |   |   |               possible redundant modifier
+   |   |   possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:19:3
+   |
+19 |   static extern \\"x.js\\" pub extern \\"y.js\\" m5();
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |      |                 |
+   |   |      |                 possible redundant modifier
+   |   |      possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:23:3
+   |
+23 |   protected protected f1: str;
+   |   ^^^^^^^^^^^^^^^^^^^
+   |   |         |
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:27:3
+   |
+27 |   protected inflight inflight f2: str;
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |   |         |        |
+   |   |         |        possible redundant modifier
+   |   |         possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:31:3
+   |
+31 |   static pub static f3: str;
+   |   ^^^^^^^^^^^^^^^^^
+   |   |          |
+   |   |          possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:35:3
+   |
+35 |   var pub var f4: str;
+   |   ^^^^^^^^^^^
+   |   |       |
+   |   |       possible redundant modifier
+   |   Multiple or ambiguous modifiers found
+   |   possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:40:1
+   |
+40 | inflight inflight class Foo {}
+   | ^^^^^^^^^^^^^^^^^
+   | |        |
+   | |        possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+error: Multiple or ambiguous modifiers found
+   --> ../../../examples/tests/invalid/redundant_modifiers.w:43:1
+   |
+43 | pub inflight pub class Foo {}
+   | ^^^^^^^^^^^^^^^^
+   | |            |
+   | |            possible redundant modifier
+   | Multiple or ambiguous modifiers found
+   | possible redundant modifier
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`resource_access_field_as_method.test.w 1`] = `
 "error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.test.w:9:1
@@ -2756,29 +2944,29 @@ exports[`resource_init.test.w 1`] = `
 "error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:3:3
   |
-3 |   init() {}
-  |   ^^^^^^^^^ Multiple initializers defined in class R
+3 |   new() {}
+  |   ^^^^^^^^ Multiple initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:6:3
   |
-6 |   inflight init() {}
-  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+6 |   inflight new() {}
+  |   ^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Multiple inflight initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.test.w:9:3
   |
-9 |   inflight init(x: num) {}
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+9 |   inflight new(x: num) {}
+  |   ^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
 error: Inflight initializers cannot have parameters
-  --> ../../../examples/tests/invalid/resource_init.test.w:9:16
+  --> ../../../examples/tests/invalid/resource_init.test.w:9:15
   |
-9 |   inflight init(x: num) {}
-  |                ^^^^^^^^ Inflight initializers cannot have parameters
+9 |   inflight new(x: num) {}
+  |               ^^^^^^^^ Inflight initializers cannot have parameters
 
 
  
@@ -3185,10 +3373,10 @@ error: Cannot call super method inside of a static method
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.test.w:52:50
+   --> ../../../examples/tests/invalid/super_call.test.w:52:48
    |
-52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
-   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
+   |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
  
@@ -3248,8 +3436,8 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:10:10
    |
-10 | let e3 = \\"\${strExample}!\\" * numExample;
-   |          ^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+10 | let e3 = \\"{strExample}!\\" * numExample;
+   |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -3414,17 +3602,17 @@ Duration <DURATION>"
 
 exports[`use_before_defined.test.w 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:8
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:7
   |
-1 | log(\\"\${y}\\"); // Access y before it's defined
-  |        ^ Unknown symbol \\"y\\"
+1 | log(\\"{y}\\"); // Access y before it's defined
+  |       ^ Unknown symbol \\"y\\"
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:10
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:9
   |
-5 |   log(\\"\${x}\\");
-  |          ^ Symbol \\"x\\" used before being defined
+5 |   log(\\"{x}\\");
+  |         ^ Symbol \\"x\\" used before being defined
   .
 8 | let x = \\"hi\\";
   |     - defined later here

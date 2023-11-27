@@ -278,9 +278,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
     } catch (error) {
       if (error instanceof NotFound) {
-        throw new Error(
-          `Unable to copy. Source object does not exist (srcKey=${srcKey}).`
-        );
+        throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
       }
       throw error;
     }
@@ -374,7 +372,7 @@ export class BucketClient implements IBucketClient {
       const resp = await this.s3Client.send(command);
       return {
         contentType: resp.ContentType,
-        lastModified: Datetime.fromIso(resp.LastModified!.toISOString()),
+        lastModified: Datetime.fromDate(resp.LastModified!),
         size: resp.ContentLength!,
       };
     } catch (error) {

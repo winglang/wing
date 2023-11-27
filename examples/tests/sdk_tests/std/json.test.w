@@ -88,8 +88,8 @@ test "stringify()" {
   let stringified = Json.stringify(obj);
   let stringifiedIndent = Json.stringify(obj, indent: 2);
 
-  assert(stringified == "{\"a\":1,\"b\":2}");
-  assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
+  assert(stringified == "\{\"a\":1,\"b\":2}");
+  assert(stringifiedIndent == "\{\n  \"a\": 1,\n  \"b\": 2\n}");
 }
 
 test "keys(), values(), entries()" {
@@ -113,7 +113,7 @@ test "keys(), values(), entries()" {
 
 test "parse()" {
   let obj = Json { key1: 1, key2: 2};
-  let String = "{\"key\":1,\"key2\":2}";
+  let String = "\{\"key\":1,\"key2\":2}";
 
   assert(Json.parse("123") == 123);
   assert(Json.parse("true") == true);
@@ -133,7 +133,7 @@ test "parse()" {
 
 test "tryParse()" {
   let obj = Json { key1: 1, key2: 2};
-  let String = "{\"key\":1,\"key2\":2}";
+  let String = "\{\"key\":1,\"key2\":2}";
 
   assert(Json.tryParse("123") == 123);
   assert(Json.tryParse("true") == true);

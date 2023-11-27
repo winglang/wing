@@ -43,19 +43,6 @@ exports[`provides raw tree data 1`] = `
         "id": "test",
         "path": "root/test",
       },
-      "test.handler": {
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.2.70",
-        },
-        "display": {
-          "description": "An inflight resource",
-          "hidden": true,
-          "title": "Inflight",
-        },
-        "id": "test.handler",
-        "path": "root/test.handler",
-      },
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
@@ -133,7 +120,7 @@ exports[`run single test > test failure 1`] = `
   "error": "Error: test failed
 <sanitized>
 <sanitized>
-    at evalmachine.<anonymous>:<sanitized>
+<sanitized>
     at Script.runInContext (node:vm:<sanitized>)
     at Object.runInContext (node:vm:<sanitized>)
 <sanitized>

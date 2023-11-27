@@ -8,7 +8,7 @@ inflight class Foo {
     return 6;
   }
 
-  init(f2: num) {
+  new(f2: num) {
     this.field1 = this.get_six();
     this.field2 = f2;
   }
@@ -17,7 +17,7 @@ inflight class Foo {
 inflight class FooChild extends Foo {
   pub field3: num;
 
-  init() {
+  new() {
     super(5);
     this.field3 = 4;
   }
@@ -46,7 +46,7 @@ test "inflight calls parent's init when non exists" {
   class FooChild extends FooNoInit {
     pub field: num;
 
-    init() {
+    new() {
       super();
       this.field = this.leet();
     }
@@ -66,9 +66,9 @@ test "inflight class inherits form JSII class" {
       return 6;
     }
 
-    init(x: num, y: str) {
+    new(x: num, y: str) {
       super(x); // Call non-inflight parent's init
-      this.foo_str = "${y} ${x}"; // Use init args in inflight's init 
+      this.foo_str = "{y} {x}"; // Use init args in inflight's init 
       this.foo_num = this.get_six(); // Call inflight method in inflight's init
     }
   }
@@ -80,7 +80,7 @@ test "inflight class inherits form JSII class" {
   class FooChild extends Foo {
     pub child_field: num;
 
-    init() {
+    new() {
       super(2, "FooChild"); // Call parent's init which will also handle the JSII class's init
       this.child_field = this.get_six() + 1;
     }

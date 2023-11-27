@@ -9,8 +9,8 @@ const INFLIGHT_CODE = `async handle() { console.log("super duper success"); }`;
 test("create an OnDeploy", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.OnDeploy._newOnDeploy(app, "my_on_deploy", handler);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.OnDeploy(app, "my_on_deploy", handler);
   const s = await app.startSimulator();
 
   // THEN

@@ -5,8 +5,7 @@ import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@heroicons/react/24/solid";
-import { Toolbar, ToolbarButton, useTheme } from "@wingconsole/design-system";
-import classNames from "classnames";
+import { Toolbar, ToolbarButton } from "@wingconsole/design-system";
 import { useContext } from "react";
 
 import { TestsContext } from "../tests-context.js";
@@ -34,7 +33,7 @@ export const MapControls = ({}: MapControlsProps) => {
             <MagnifyingGlassPlusIcon className="w-4 h-4" />
           </ToolbarButton>
 
-          <ToolbarButton title="Zoom to fit" onClick={() => zoomToFit()}>
+          <ToolbarButton title="Zoom to fit" onClick={zoomToFit}>
             <ArrowsPointingOutIcon className="w-4 h-4" />
           </ToolbarButton>
 

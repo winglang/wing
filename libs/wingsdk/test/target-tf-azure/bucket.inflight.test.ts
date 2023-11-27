@@ -2,11 +2,15 @@ import { Readable } from "stream";
 import { PagedAsyncIterableIterator, PageSettings } from "@azure/core-paging";
 import {
   BlobClient,
+  BlobCopyFromURLResponse,
   BlobDeleteResponse,
   BlobDownloadResponseParsed,
   BlobExistsOptions,
+  BlobGetPropertiesOptions,
+  BlobGetPropertiesResponse,
   BlobItem,
   BlobServiceClient,
+  BlobSyncCopyFromURLOptions,
   BlockBlobClient,
   BlockBlobUploadResponse,
   ContainerClient,
@@ -14,6 +18,7 @@ import {
   ContainerListBlobsOptions,
 } from "@azure/storage-blob";
 import { test, expect, beforeEach, vi } from "vitest";
+import { Datetime } from "../../src/std";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
 
 vi.mock("@azure/storage-blob");
@@ -465,6 +470,98 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   expect(response).toEqual(expectedUrl);
 });
 
+test("fetch metadata of an existing object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const response = await client.metadata(KEY);
+
+  // THEN
+  expect(response).toEqual({
+    contentType: "text/plain",
+    lastModified: Datetime.fromIso("2023-01-02T12:00:00Z"),
+    size: 19,
+  });
+});
+
+test("fetch metadata of an unexisting object from the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  // THEN
+  await expect(() => client.metadata(KEY)).rejects.toThrowError(
+    `Failed to get metadata for object. (key=${KEY})`
+  );
+});
+
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "happy";
+
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(response2).toEqual(undefined);
+});
+
+test("copy a non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    false,
+    mockBlobServiceClient
+  );
+  TEST_PATH = "sad";
+
+  // THEN
+  await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
+});
+
 // Mock Clients
 class MockBlobClient extends BlobClient {
   public download(): Promise<BlobDownloadResponseParsed> {
@@ -491,6 +588,35 @@ class MockBlobClient extends BlobClient {
     }
   }
 
+  public async getProperties(
+    options?: BlobGetPropertiesOptions
+  ): Promise<BlobGetPropertiesResponse> {
+    options;
+    if (TEST_PATH === "happy") {
+      return Promise.resolve({
+        metadata: {
+          releasedby: "Jill",
+          reviewedby: "Bob",
+        },
+        blobType: "BlockBlob",
+        leaseStatus: "unlocked",
+        leaseState: "available",
+        contentLength: 19,
+        creationTime: new Date("2023-01-01T12:00:00Z"),
+        lastModified: new Date("2023-01-02T12:00:00Z"),
+        etag: "0x8DA23D1EBA8E607",
+        contentType: "text/plain",
+        contentEncoding: "utf-8",
+        contentLanguage: "en-us",
+        serverEncrypted: true,
+        accessTier: "Hot",
+        accessTierInferred: true,
+        _response: null as any,
+      });
+    }
+    return Promise.reject("some fake error");
+  }
+
   public exists(options?: BlobExistsOptions | undefined): Promise<boolean> {
     options;
     switch (TEST_PATH) {
@@ -513,6 +639,16 @@ class MockBlockBlobClient extends BlockBlobClient {
 
   public delete(): Promise<BlobDeleteResponse> {
     return Promise.resolve({} as any);
+  }
+
+  public syncCopyFromURL(
+    copySource: string,
+    options?: BlobSyncCopyFromURLOptions
+  ): Promise<BlobCopyFromURLResponse> {
+    if (TEST_PATH === "happy") {
+      return Promise.resolve({} as BlobCopyFromURLResponse);
+    }
+    return Promise.reject("some fake error");
   }
 }
 

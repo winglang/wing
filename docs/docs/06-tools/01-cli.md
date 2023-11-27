@@ -165,12 +165,14 @@ The `wing test` command can be used to compile and execute tests in Wing applica
 Usage:
 
 ```sh
-$ wing test [entrypoint...] [--test-filter <regex>]
+$ wing test [entrypoint...] [--test-filter <regex>] [--retry [retries]]
 ```
 
 `[entrypoint...]` specifies the entrypoint list of files that will be compiled and tested. A file is considered a valid entrypoint if its name ends with `.w`.
 
 `[--test-filter <regex>]` option to run only specific tests within the entrypoints based on a provided regex.
+
+`[--retry [retries]]` option specifies the number of retries for failed tests. If no number is specified, the default number of retries is `3`.
 
 For example ([test_bucket.test.w](https://github.com/winglang/wing/tree/main/examples/tests/valid/test_bucket.test.w)):
 

@@ -16,7 +16,7 @@ module.exports = function({ $globalBucket }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -35,7 +35,7 @@ module.exports = function({ $storeInBucket }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
@@ -55,7 +55,7 @@ module.exports = function({ $func1, $globalBucket }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.$Closure4-1.js
@@ -75,7 +75,7 @@ module.exports = function({ $globalBucket }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## inflight.$Closure5-1.js
@@ -95,7 +95,7 @@ module.exports = function({ $x }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=inflight.$Closure5-1.js.map
 ```
 
 ## inflight.MyResource-1.js
@@ -112,7 +112,7 @@ module.exports = function({  }) {
   }
   return MyResource;
 }
-
+//# sourceMappingURL=inflight.MyResource-1.js.map
 ```
 
 ## main.tf.json
@@ -206,6 +206,7 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
           }
@@ -276,14 +277,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $globalBucket: ${context._lift(globalBucket)},
+            $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
           })
         `;
       }
@@ -309,14 +311,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $storeInBucket: ${context._lift(storeInBucket)},
+            $storeInBucket: ${$stdlib.core.liftObject(storeInBucket)},
           })
         `;
       }
@@ -342,15 +345,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $func1: ${context._lift(func1)},
-            $globalBucket: ${context._lift(globalBucket)},
+            $func1: ${$stdlib.core.liftObject(func1)},
+            $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
           })
         `;
       }
@@ -381,14 +385,15 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
               require("./inflight.$Closure4-1.js")({
-                $globalBucket: ${context._lift(globalBucket)},
+                $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
               })
             `;
           }
@@ -415,7 +420,7 @@ class $Root extends $stdlib.std.Resource {
         }
         this.closure = new $Closure4(this, "$Closure4");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
           })
@@ -426,7 +431,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_closure: ${this._lift(this.closure)},
+              $this_closure: ${$stdlib.core.liftObject(this.closure)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -447,14 +452,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $x: ${context._lift(x)},
+            $x: ${$stdlib.core.liftObject(x)},
           })
         `;
       }
@@ -479,18 +485,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+    const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const storeInBucket = new $Closure1(this, "$Closure1");
     const handler1 = new $Closure2(this, "$Closure2");
-    const func1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "func1", handler1);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
+    const func1 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "func1", handler1);
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflights can call other inflights", new $Closure3(this, "$Closure3"));
     const x = new MyResource(this, "MyResource");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:variable can be an inflight closure", new $Closure5(this, "$Closure5"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflights_calling_inflights.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

@@ -11,7 +11,9 @@ import {
 } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
 import classNames from "classnames";
+import { memo, useMemo } from "react";
 
+import { NoResources } from "./no-resources.js";
 import { TreeMenuItem } from "./use-tree-menu-items.js";
 
 const renderTreeItems = (items: TreeMenuItem[]) => {
@@ -54,7 +56,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
 export interface ExplorerProps {
   loading?: boolean;
   items: TreeMenuItem[] | undefined;
-  selectedItems: string[];
+  selectedItemId: string | undefined;
   expandedItems: string[];
   "data-testid"?: string;
   onSelectedItemsChange: (ids: string[]) => void;
@@ -63,8 +65,22 @@ export interface ExplorerProps {
   onCollapseAll(): void;
 }
 
-export const Explorer = (props: ExplorerProps) => {
+export const Explorer = memo((props: ExplorerProps) => {
+  const {
+    selectedItemId,
+    onSelectedItemsChange,
+    onExpandAll,
+    loading,
+    onCollapseAll,
+    expandedItems,
+    onExpandedItemsChange,
+    items,
+  } = props;
   const { theme } = useTheme();
+  const selectedItems = useMemo(
+    () => (selectedItemId ? [selectedItemId] : []),
+    [selectedItemId],
+  );
   return (
     <div
       className={classNames("w-full h-full flex flex-col", theme.bg3)}
@@ -72,17 +88,17 @@ export const Explorer = (props: ExplorerProps) => {
     >
       <Toolbar title="Explorer">
         <ToolbarButton
-          onClick={props.onExpandAll}
+          onClick={onExpandAll}
           title="Expand All"
-          disabled={props.loading}
+          disabled={loading}
         >
           <SquareStackPlusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
 
         <ToolbarButton
-          onClick={props.onCollapseAll}
+          onClick={onCollapseAll}
           title="Collapse All"
-          disabled={props.loading}
+          disabled={loading}
         >
           <SquareStackMinusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
@@ -99,13 +115,14 @@ export const Explorer = (props: ExplorerProps) => {
             )}
           >
             <div className="flex flex-col">
+              {expandedItems.length === 0 && <NoResources />}
               <TreeView
-                expandedItems={props.expandedItems}
-                onExpandedItemsChange={props.onExpandedItemsChange}
-                selectedItems={props.selectedItems}
-                onSelectedItemsChange={props.onSelectedItemsChange}
+                expandedItems={expandedItems}
+                onExpandedItemsChange={onExpandedItemsChange}
+                selectedItems={selectedItems}
+                onSelectedItemsChange={onSelectedItemsChange}
               >
-                {props.items && renderTreeItems(props.items)}
+                {items && renderTreeItems(items)}
               </TreeView>
             </div>
           </ScrollableArea>
@@ -113,4 +130,4 @@ export const Explorer = (props: ExplorerProps) => {
       </div>
     </div>
   );
-};
+});

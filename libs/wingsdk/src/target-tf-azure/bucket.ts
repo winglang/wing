@@ -77,7 +77,7 @@ export class Bucket extends cloud.Bucket {
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
       storageAccountName: this.storageAccount.name,
-      containerAccessType: this.public ? "public" : "private",
+      containerAccessType: this.public ? "blob" : "private",
     });
   }
 
@@ -112,6 +112,8 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_GET,
       cloud.BucketInflightMethods.TRY_GET_JSON,
       cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
     ];
   }
 
@@ -123,20 +125,25 @@ export class Bucket extends cloud.Bucket {
     // TODO: investigate customized roles over builtin for finer grained access control
     if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT) ||
       ops.includes(cloud.BucketInflightMethods.PUT_JSON)
     ) {
-      host.addPermission(this, {
-        scope: `${this.storageAccount.id}`,
+      host.addPermission(this.storageAccount, {
+        scope: this.storageAccount.id,
         roleDefinitionName: StorageAccountPermissions.READ_WRITE,
       });
     } else if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
+      ops.includes(cloud.BucketInflightMethods.EXISTS)
     ) {
-      host.addPermission(this, {
-        scope: `${this.storageAccount.id}`,
+      host.addPermission(this.storageAccount, {
+        scope: this.storageAccount.id,
         roleDefinitionName: StorageAccountPermissions.READ,
       });
     }

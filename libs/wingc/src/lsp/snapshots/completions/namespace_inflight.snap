@@ -119,7 +119,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `headers` — `Map<str>` — The map of header information associated with the response.\n- `ok` — `bool` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — `num` — The status code of the response.\n- `url` — `str` — The URL of the response.\n- `body?` — `str?` — A string representation of the body contents."
+    value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `body` — `str` — A string representation of the body contents.\n- `headers` — `Map<str>` — The map of header information associated with the response.\n- `ok` — `bool` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — `num` — The status code of the response.\n- `url` — `str` — The URL of the response."
   sortText: hh|Response
 - label: Url
   kind: 22

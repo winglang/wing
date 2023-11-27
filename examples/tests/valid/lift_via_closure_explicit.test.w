@@ -2,7 +2,7 @@ bring cloud;
 
 class MyClosure {
   q: cloud.Queue;
-  init() {
+  new() {
     this.q = new cloud.Queue();
   }
 

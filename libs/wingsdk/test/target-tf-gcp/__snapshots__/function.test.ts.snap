@@ -125,42 +125,6 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -341,42 +305,6 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -556,42 +484,6 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -770,42 +662,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "google": {
                 "constructInfo": {

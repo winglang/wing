@@ -47,6 +47,7 @@ exports[`create an OnDeploy 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c88c90bc",
           },
         },
@@ -96,19 +97,6 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -318,6 +306,7 @@ exports[`execute OnDeploy after other resources 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c88c90bc",
           },
         },
@@ -371,19 +360,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -613,6 +589,7 @@ exports[`execute OnDeploy before other resources 1`] = `
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c88c90bc",
           },
         },
@@ -669,19 +646,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {

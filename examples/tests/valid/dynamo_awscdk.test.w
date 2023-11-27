@@ -22,10 +22,10 @@ struct Attribute {
 class DynamoTable {
   table: awscdk.aws_dynamodb.Table;
   tableName: str;
-  init() {
+  new() {
     let target = util.env("WING_TARGET");
     if target != "awscdk" {
-      throw "Unsupported target: ${target} (expected 'awscdk')";
+      throw "Unsupported target: {target} (expected 'awscdk')";
     }
 
     this.table = new awscdk.aws_dynamodb.Table(

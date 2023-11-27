@@ -1,7 +1,7 @@
 bring fs;
 
 let tmpdir = fs.mkdtemp();
-let filepath = "${tmpdir}/hello-preflight.txt";
+let filepath = "{tmpdir}/hello-preflight.txt";
 let data = "Hello, Wing!";
 
 fs.writeFile(filepath, data);
@@ -21,7 +21,7 @@ assert(fs.exists(tmpdir) == false);
 
 test "inflight file basic operations" {
     let tmpdir = fs.mkdtemp();
-    let filepath = "${tmpdir}/hello-inflight.txt";
+    let filepath = "{tmpdir}/hello-inflight.txt";
 
     fs.writeFile(filepath, data);
     assert(fs.exists(filepath) == true);
