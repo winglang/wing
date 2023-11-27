@@ -64,11 +64,13 @@ export const createCompiler = (wingfile: string): Compiler => {
   };
 
   const dirname = path.dirname(wingfile);
-  //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3956
+  //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3730
   const ignoreList = [
     `${dirname}/target/**`,
     "**/node_modules/**",
     "**/.git/**",
+    "**/public/**", // we need it for react website
+    "**/src/**", // we need it for react website
   ];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
