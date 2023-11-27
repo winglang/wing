@@ -69,8 +69,10 @@ export const createCompiler = (wingfile: string): Compiler => {
     `${dirname}/target/**`,
     "**/node_modules/**",
     "**/.git/**",
-    "**/public/**", // we need it for react website
+    "**/**/wing.js", // we need it for react website
     "**/src/**", // we need it for react website
+    "**/build/**", // we need it for react website
+    "**/public/**", // we need it for react website
   ];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
