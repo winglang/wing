@@ -1,8 +1,8 @@
+import { Construct } from "constructs";
 import { expect, test } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
-import { Construct } from "constructs";
 
 test("Node.of(scope).app returns the root app", () => {
   const app = new SimApp();
@@ -25,7 +25,7 @@ test("Node.of(scope).root returns the first root found in the tree", () => {
   const app = new SimApp();
 
   // this is the setup we have in synthRoots
-  class Root extends Construct { };
+  class Root extends Construct {}
   Node._markRoot(Root);
 
   const root = new Root(app, "MyRoot");

@@ -2170,7 +2170,7 @@ Invokes the `validate()` method on all validations added through
 | <code><a href="#@winglang/sdk.std.Node.property.locked">locked</a></code> | <code>bool</code> | Returns true if this construct or the scopes in which it is defined are locked. |
 | <code><a href="#@winglang/sdk.std.Node.property.metadata">metadata</a></code> | <code>MutArray&lt;constructs.MetadataEntry&gt;</code> | An immutable array of metadata objects associated with this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.path">path</a></code> | <code>str</code> | The full, absolute path of this construct in the tree. |
-| <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code><a href="#@winglang/sdk.std.IApp">IApp</a></code> | Returns the root of the construct tree (the `cloud.App` object). |
+| <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree (the `cloud.App` object). |
 | <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
@@ -2305,10 +2305,10 @@ Components are separated by '/'.
 ##### `root`<sup>Required</sup> <a name="root" id="@winglang/sdk.std.Node.property.root"></a>
 
 ```wing
-root: IApp;
+root: IConstruct;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.IApp">IApp</a>
+- *Type:* constructs.IConstruct
 
 Returns the root of the construct tree (the `cloud.App` object).
 
