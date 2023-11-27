@@ -3188,7 +3188,6 @@ Represents a Wing application.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.IApp.makeId">makeId</a></code> | Generate a unique ID for the given scope and prefix. |
-| <code><a href="#@winglang/sdk.std.IApp.tryFindChild">tryFindChild</a></code> | Looks up a node with a given id in under the application (non-recursively). |
 
 ---
 
@@ -3212,14 +3211,6 @@ increasing sequence of integers starting from '0'.
 prepended to the unique identifier.
 
 ---
-
-##### `tryFindChild` <a name="tryFindChild" id="@winglang/sdk.std.IApp.tryFindChild"></a>
-
-```wing
-tryFindChild(): IConstruct
-```
-
-Looks up a node with a given id in under the application (non-recursively).
 
 #### Properties <a name="Properties" id="Properties"></a>
 

@@ -25,7 +25,7 @@ test("Node.of(scope).root returns the first root found in the tree", () => {
   const app = new SimApp();
 
   // this is the setup we have in synthRoots
-  class Root extends Construct { }
+  class Root extends Construct {}
   Node._markRoot(Root);
 
   const root = new Root(app, "MyRoot");
