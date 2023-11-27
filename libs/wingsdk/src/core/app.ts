@@ -245,10 +245,6 @@ export abstract class App extends Construct implements IApp {
     return `${prefix}${this._idCounters[key]++}`;
   }
 
-  public tryFindChild(id: string): IConstruct | undefined {
-    return this.node.tryFindChild(id);
-  }
-
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
