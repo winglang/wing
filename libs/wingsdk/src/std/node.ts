@@ -64,16 +64,12 @@ export class Node {
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
-  private readonly _app: IApp;
-  private readonly _root: IConstruct;
+  private _app: IApp | undefined;
+  private _root: IConstruct | undefined;
 
-  private constructor(construct: IConstruct) {
+  private constructor(private readonly construct: IConstruct) {
     this._constructsNode = construct.node;
     this._connections = Connections.of(construct); // tree-unique instance
-
-    // find the root app
-    this._app = this.findApp(construct);
-    this._root = this.findRoot(construct);
   }
 
   /**
@@ -277,6 +273,10 @@ export class Node {
    * @returns The root of the construct tree.
    */
   public get root(): IConstruct {
+    if (!this._root) {
+      this._root = this.findRoot(this.construct);
+    }
+
     return this._root;
   }
 
@@ -288,6 +288,10 @@ export class Node {
    * @returns The root of the construct tree.
    */
   public get app(): IApp {
+    if (!this._app) {
+      this._app = this.findApp(this.construct);
+    }
+
     return this._app;
   }
 
