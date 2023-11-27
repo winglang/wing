@@ -34,7 +34,7 @@
       "SingletonBucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/SingletonBucket/Default",
+            "path": "root/Default/Default/SingletonBucket/Default",
             "uniqueId": "SingletonBucket"
           }
         },
