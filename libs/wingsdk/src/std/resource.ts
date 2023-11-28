@@ -169,6 +169,14 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
+        // structs are just plain objects
+        if (obj.constructor.name === "Object") {
+          Object.values(obj).forEach((item) =>
+            this._registerOnLiftObject(item, host, ops)
+          );
+          return;
+        }
+
         // if the object is a resource, register a lifting between it and the host.
         if (typeof obj._addOnLift === "function") {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
@@ -177,13 +185,6 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // structs are just plain objects
-        if (obj.constructor.name === "Object") {
-          Object.values(obj).forEach((item) =>
-            this._registerOnLiftObject(item, host, ops)
-          );
-          return;
-        }
         break;
 
       case "function":
