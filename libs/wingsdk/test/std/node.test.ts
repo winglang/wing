@@ -1,7 +1,7 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { expect, test } from "vitest";
-import { Bucket, BucketInflightMethods } from "../../src/cloud";
-import { IGetOrCreateFactory, Node } from "../../src/std";
+import { Bucket } from "../../src/cloud";
+import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 test("Node.of(scope).app returns the root app", () => {
@@ -21,9 +21,17 @@ test("Node.of(scope).app returns the root app", () => {
   expect(Node.of(myBucket).app).toBe(a1);
 });
 
-test("tryFindChild(id) returns the child if it exists", () => {
+test("Node.of(scope).root returns the first root found in the tree", () => {
   const app = new SimApp();
-  const myBucket = new Bucket(app, "MyBucket");
-  const child = app.tryFindChild("MyBucket");
-  expect(child).toBe(myBucket);
+
+  // this is the setup we have in synthRoots
+  class Root extends Construct {}
+  Node._markRoot(Root);
+
+  const root = new Root(app, "MyRoot");
+
+  const myBucket = new Bucket(root, "MyBucket");
+
+  const theRoot = Node.of(myBucket).root;
+  expect(theRoot).toBe(root);
 });
