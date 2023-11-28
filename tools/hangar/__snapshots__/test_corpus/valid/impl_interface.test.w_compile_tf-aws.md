@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -182,7 +182,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -219,7 +219,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["method2", "$inflight_init"];
+        return [...super._supportedOps(), "method2", "$inflight_init"];
       }
     }
     class Dog extends $stdlib.std.Resource {
@@ -244,7 +244,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["eat", "$inflight_init"];
+        return [...super._supportedOps(), "eat", "$inflight_init"];
       }
     }
     class Terrier extends Dog {
@@ -270,7 +270,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["eat", "$inflight_init"];
+        return [...super._supportedOps(), "eat", "$inflight_init"];
       }
     }
     const x = new A(this, "A");
