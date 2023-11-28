@@ -731,7 +731,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
+        return [...super._supportedOps(), "inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -777,7 +777,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
+        return [...super._supportedOps(), "barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -825,7 +825,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -869,7 +869,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
@@ -905,7 +905,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
@@ -941,7 +941,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
@@ -974,7 +974,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["publish", "getObjectCount", "$inflight_init"];
+        return [...super._supportedOps(), "publish", "getObjectCount", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -1019,7 +1019,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -1053,7 +1053,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
@@ -1089,7 +1089,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const MyEnum =

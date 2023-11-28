@@ -231,10 +231,9 @@ export abstract class Resource extends Construct implements IResource {
 
   /**
    * @internal
-   * @abstract
    * */
   public _supportedOps(): string[] {
-    throw new AbstractMemberError();
+    return [];
   }
 
   /**

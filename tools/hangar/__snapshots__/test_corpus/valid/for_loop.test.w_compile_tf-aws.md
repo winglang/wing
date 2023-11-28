@@ -215,7 +215,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class Foo extends $stdlib.std.Resource {
@@ -240,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["hello", "$inflight_init"];
+        return [...super._supportedOps(), "hello", "$inflight_init"];
       }
     }
     const words = ["wing", "lang", "dang"];
