@@ -103,7 +103,7 @@ class $Root extends $stdlib.std.Resource {
               `;
             }
             _supportedOps() {
-              return ["handle", "$inflight_init"];
+              return [...super._supportedOps(), "handle", "$inflight_init"];
             }
           }
           new $Closure1(this, "$Closure1");
@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     new Foo(this, "Foo");

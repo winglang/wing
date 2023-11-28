@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class B extends A {
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");

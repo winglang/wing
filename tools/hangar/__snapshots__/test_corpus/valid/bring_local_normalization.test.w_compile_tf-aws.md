@@ -101,7 +101,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
@@ -139,7 +139,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Baz };
@@ -185,7 +185,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };

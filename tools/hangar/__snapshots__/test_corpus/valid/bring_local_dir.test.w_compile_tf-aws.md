@@ -120,7 +120,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };
@@ -160,7 +160,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Foo extends $stdlib.std.Resource {
@@ -185,7 +185,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
@@ -282,7 +282,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Widget };
