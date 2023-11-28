@@ -118,7 +118,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["putInBucket", "$inflight_init"];
+        return [...super._supportedOps(), "putInBucket", "$inflight_init"];
       }
       static _registerOnLift(host, ops) {
         if (ops.includes("putInBucket")) {
@@ -150,7 +150,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["putIndirect", "$inflight_init"];
+        return [...super._supportedOps(), "putIndirect", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("putIndirect")) {
@@ -184,7 +184,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

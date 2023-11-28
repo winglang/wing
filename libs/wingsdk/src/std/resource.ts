@@ -280,7 +280,8 @@ export abstract class Resource extends Construct implements IResource {
    */ // @ts-ignore
   private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
