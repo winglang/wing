@@ -9,7 +9,8 @@ import {
 import { Connections } from "../core";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
-export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.App");
+export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
+const ROOT_SYMBOL = Symbol.for("@winglang/sdk.std.Node/root");
 
 export const CONNECTIONS_FILE_PATH = "connections.json";
 export const SDK_SOURCE_MODULE = "@winglang/sdk";
@@ -18,6 +19,15 @@ export const SDK_SOURCE_MODULE = "@winglang/sdk";
  * The internal node of a construct.
  */
 export class Node {
+  /**
+   * Marks a type as the root of the tree.
+   * @param rootConstructor
+   * @internal
+   */
+  public static _markRoot(rootConstructor: any) {
+    rootConstructor[ROOT_SYMBOL] = true;
+  }
+
   /**
    * Return the internal construct node.
    */
@@ -54,14 +64,12 @@ export class Node {
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
-  private readonly _app: IApp;
+  private _app: IApp | undefined;
+  private _root: IConstruct | undefined;
 
-  private constructor(construct: IConstruct) {
+  private constructor(private readonly construct: IConstruct) {
     this._constructsNode = construct.node;
     this._connections = Connections.of(construct); // tree-unique instance
-
-    // find the root app
-    this._app = this.findApp(construct);
   }
 
   /**
@@ -264,8 +272,12 @@ export class Node {
    *
    * @returns The root of the construct tree.
    */
-  public get root(): IApp {
-    return this._app;
+  public get root(): IConstruct {
+    if (!this._root) {
+      this._root = this.findRoot(this.construct);
+    }
+
+    return this._root;
   }
 
   /**
@@ -276,6 +288,10 @@ export class Node {
    * @returns The root of the construct tree.
    */
   public get app(): IApp {
+    if (!this._app) {
+      this._app = this.findApp(this.construct);
+    }
+
     return this._app;
   }
 
@@ -350,7 +366,7 @@ export class Node {
    * Returns the root app.
    */
   private findApp(scope: IConstruct): IApp {
-    if ((scope as IApp)[APP_SYMBOL]) {
+    if (isApp(scope)) {
       return scope as IApp;
     }
 
@@ -359,6 +375,18 @@ export class Node {
     }
 
     return this.findApp(scope.node.scope);
+  }
+
+  private findRoot(scope: IConstruct): IConstruct {
+    if (isRoot(scope)) {
+      return scope;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root construct");
+    }
+
+    return this.findRoot(scope.node.scope);
   }
 }
 
@@ -417,10 +445,12 @@ export interface IApp extends IConstruct {
    * @param prefix prepended to the unique identifier
    */
   makeId(scope: IConstruct, prefix?: string): string;
+}
 
-  /**
-   * Looks up a node with a given id in under the application (non-recursively).
-   * @param id the node id
-   */
-  tryFindChild(id: string): IConstruct | undefined;
+function isApp(x: any): x is IApp {
+  return x && x[APP_SYMBOL];
+}
+
+function isRoot(x: any): boolean {
+  return x && x.constructor && x.constructor[ROOT_SYMBOL];
 }

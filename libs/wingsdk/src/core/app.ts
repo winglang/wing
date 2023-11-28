@@ -166,6 +166,11 @@ export abstract class App extends Construct implements IApp {
       throw new Error("Missing environment variable: WING_SOURCE_DIR");
     }
 
+    // the app is also marked as root in the case where there is no root construct
+    if (!props.rootConstruct) {
+      Node._markRoot(this.constructor);
+    }
+
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
   }
@@ -240,10 +245,6 @@ export abstract class App extends Construct implements IApp {
     return `${prefix}${this._idCounters[key]++}`;
   }
 
-  public tryFindChild(id: string): IConstruct | undefined {
-    return this.node.tryFindChild(id);
-  }
-
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
@@ -296,6 +297,11 @@ export abstract class App extends Construct implements IApp {
   protected synthRoots(props: AppProps, testRunner: TestRunner) {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
+
+      // mark the root type so that we can find it later through
+      // Node.of(root).root
+      Node._markRoot(Root);
+
       if (this.isTestEnvironment) {
         new Root(this, "env0");
         const tests = testRunner.findTests();
