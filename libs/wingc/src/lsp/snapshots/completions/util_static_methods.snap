@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(stringToDecode: str, url: bool?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n### Parameters\n- `stringToDecode` — `str` — base64 string to decode.\n- `url` — `bool?` — If `true`, the source is expected to be a URL-safe base64 string.\n\n### Returns\nThe UTF-8 string."
+    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n### Parameters\n- `stringToDecode` — `str` — base64 string to decode.\n- `stringToDecode` — `str` — base64 string to decode.\n- `url` — `bool?` — If `true`, the source is expected to be a URL-safe base64 string.\n- `url` — `bool?` — If `true`, the source is expected to be a URL-safe base64 string.\n\n### Returns\nThe UTF-8 string."
   sortText: ff|base64Decode
   insertText: base64Decode($1)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(stringToEncode: str, url: bool?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n### Parameters\n- `stringToEncode` — `str` — The name of the UTF-8 string to encode.\n- `url` — `bool?` — If `true`, a URL-safe base64 string is returned.\n\n### Returns\nThe base64 string."
+    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n### Parameters\n- `stringToEncode` — `str` — The name of the UTF-8 string to encode.\n- `stringToEncode` — `str` — The name of the UTF-8 string to encode.\n- `url` — `bool?` — If `true`, a URL-safe base64 string is returned.\n- `url` — `bool?` — If `true`, a URL-safe base64 string is returned.\n\n### Returns\nThe base64 string."
   sortText: ff|base64Encode
   insertText: base64Encode($1)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(name: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n\n### Remarks\nThrows if not found or empty."
+    value: "```wing\nstatic env: (name: str): str\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n- `name` — `str` — The name of the environment variable.\n\n### Remarks\nThrows if not found or empty."
   sortText: ff|env
   insertText: env($1)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n### Parameters\n- `...options` — `NanoidOptions?` — - Optional options object for generating the ID.\n  \n  - `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n  - `size?` — `num?` — Size of ID.\n\n### Remarks\n# @link https://github.com/ai/nanoid"
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n### Parameters\n- `options` — `NanoidOptions?` — - Optional options object for generating the ID.\n- `...options` — `NanoidOptions?` — - Optional options object for generating the ID.\n  \n  - `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n  - `size?` — `num?` — Size of ID.\n\n### Remarks\n# @link https://github.com/ai/nanoid"
   sortText: ff|nanoid
   insertText: nanoid($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(data: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data.\n### Parameters\n- `data` — `str` — - The string to be hashed."
+    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data.\n### Parameters\n- `data` — `str` — - The string to be hashed.\n- `data` — `str` — - The string to be hashed."
   sortText: ff|sha256
   insertText: sha256($1)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(name: str): str?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
+    value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n- `name` — `str` — The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
   sortText: ff|tryEnv
   insertText: tryEnv($1)
   insertTextFormat: 2

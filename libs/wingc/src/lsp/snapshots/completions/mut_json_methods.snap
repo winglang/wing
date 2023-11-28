@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): MutJson"
   documentation:
     kind: markdown
-    value: "```wing\nget: (key: str): MutJson\n```\n---\nReturns the value associated with the specified Json key.\n### Parameters\n- `key` — `str` — The key of the Json property.\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
+    value: "```wing\nget: (key: str): MutJson\n```\n---\nReturns the value associated with the specified Json key.\n### Parameters\n- `key` — `str` — The key of the Json property.\n- `key` — `str` — The key of the Json property.\n\n### Returns\nThe value associated with the specified Json key\n\n*@throws* *Json property does not exist if the given key is not part of an existing property*"
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): MutJson"
   documentation:
     kind: markdown
-    value: "```wing\ngetAt: (index: num): MutJson\n```\n---\nReturns a specified element at a given index from MutJson Array.\n### Parameters\n- `index` — `num` — The index of the element in the MutJson Array to return.\n\n### Returns\nThe element at given index in MutJson Array\n\n*@throws* *index out of bounds error if the given index does not exist for the MutJson Array*"
+    value: "```wing\ngetAt: (index: num): MutJson\n```\n---\nReturns a specified element at a given index from MutJson Array.\n### Parameters\n- `index` — `num` — The index of the element in the MutJson Array to return.\n- `index` — `num` — The index of the element in the MutJson Array to return.\n\n### Returns\nThe element at given index in MutJson Array\n\n*@throws* *index out of bounds error if the given index does not exist for the MutJson Array*"
   sortText: ff|getAt
   insertText: getAt($1)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str, value: MutJson): void"
   documentation:
     kind: markdown
-    value: "```wing\nset: (key: str, value: MutJson): void\n```\n---\nAdds or updates an element in MutJson with a specific key and value.\n### Parameters\n- `key` — `str` — The key of the element to add.\n- `value` — `MutJson` — The value of the element to add."
+    value: "```wing\nset: (key: str, value: MutJson): void\n```\n---\nAdds or updates an element in MutJson with a specific key and value.\n### Parameters\n- `key` — `str` — The key of the element to add.\n- `key` — `str` — The key of the element to add.\n- `value` — `MutJson` — The value of the element to add.\n- `value` — `MutJson` — The value of the element to add."
   sortText: ff|set
   insertText: set($1)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num, value: MutJson): void"
   documentation:
     kind: markdown
-    value: "```wing\nsetAt: (index: num, value: MutJson): void\n```\n---\nSet element in MutJson Array with a specific key and value.\n### Parameters\n- `index` — `num`\n- `value` — `MutJson` — The value of the element to set."
+    value: "```wing\nsetAt: (index: num, value: MutJson): void\n```\n---\nSet element in MutJson Array with a specific key and value.\n### Parameters\n- `index` — `num`\n- `index` — `num`\n- `value` — `MutJson` — The value of the element to set.\n- `value` — `MutJson` — The value of the element to set."
   sortText: ff|setAt
   insertText: setAt($1)
   insertTextFormat: 2
@@ -102,7 +102,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(key: str): MutJson?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGet: (key: str): MutJson?\n```\n---\nOptionally returns an specified element from the Json.\n### Parameters\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+    value: "```wing\ntryGet: (key: str): MutJson?\n```\n---\nOptionally returns an specified element from the Json.\n### Parameters\n- `key` — `str` — The key of the element to return.\n- `key` — `str` — The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
   sortText: ff|tryGet
   insertText: tryGet($1)
   insertTextFormat: 2
@@ -114,7 +114,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(index: num): MutJson?"
   documentation:
     kind: markdown
-    value: "```wing\ntryGetAt: (index: num): MutJson?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n### Parameters\n- `index` — `num` — The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+    value: "```wing\ntryGetAt: (index: num): MutJson?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n### Parameters\n- `index` — `num` — The index of the element in the Json Array to return.\n- `index` — `num` — The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
   sortText: ff|tryGetAt
   insertText: tryGetAt($1)
   insertTextFormat: 2

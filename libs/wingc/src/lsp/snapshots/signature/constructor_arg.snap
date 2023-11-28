@@ -5,7 +5,7 @@ signatures:
   - label: "(...props): Bucket"
     documentation:
       kind: markdown
-      value: "### Parameters\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
+      value: "### Parameters\n- `props` — `BucketProps?`\n- `...props` — `BucketProps?`\n  \n  - `public?` — `bool?` — Whether the bucket's objects should be publicly accessible."
     parameters:
       - label: "...props"
         documentation:
