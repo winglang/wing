@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::collections::HashSet;
 
 use itertools::Itertools;
 
@@ -213,6 +214,7 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 
 fn render_signature_help(f: &FunctionSignature) -> String {
 	let mut markdown = CodeMaker::default();
+	let mut unique_suggestions = HashSet::new();
 
 	for (param_idx, param) in f.parameters.iter().enumerate() {
 		let param_type = param.typeref;
@@ -224,11 +226,19 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		} else {
 			param.name.clone()
 		};
+		let suggestion_identifier: String = format!("{}/{}", param_name, param_type);
+
 		let detail_text = if let Some(summary) = &param.docs.summary {
 			format!("— `{param_type}` — {summary}")
 		} else {
 			format!("— `{param_type}`")
 		};
+
+		if !unique_suggestions.contains(&suggestion_identifier) {
+			markdown.line(format!("- `{param_name}` {detail_text}"));
+
+			unique_suggestions.insert(suggestion_identifier);
+		}
 
 		if !is_last || !param_type_unwrapped.is_struct() {
 			markdown.line(format!("- `{param_name}` {detail_text}"));
