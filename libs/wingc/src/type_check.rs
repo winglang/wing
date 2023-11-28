@@ -5587,7 +5587,7 @@ fn add_parent_members_to_iface_env(
 						sym.clone(),
 						member_type,
 						false,
-						true,
+						false,
 						iface_env.phase,
 						AccessModifier::Public,
 						None,
