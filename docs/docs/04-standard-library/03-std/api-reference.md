@@ -3201,8 +3201,8 @@ Generate a unique ID for the given scope and prefix.
 
 The newly generated ID is
 guaranteed to be unique within the given scope.
-It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
-increasing sequence of integers starting from '0'.
+It will have the form '{prefix}{n}', where '{prefix}' is the given prefix and '{n}' is an
+ascending sequence of integers starting from '0'.
 
 ###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.std.IApp.makeId.parameter.prefix"></a>
 
