@@ -65,6 +65,15 @@ module.exports = function({ $cloud_Api }) {
     "outputs": {
       "root": {
         "Default": {
+          "Default": {
+            "AnApi": {
+              "api": {
+                "Endpoint": {
+                  "Url": "AnApi_api_Endpoint_Url_9FC1BBB1"
+                }
+              }
+            }
+          },
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
@@ -85,6 +94,9 @@ module.exports = function({ $cloud_Api }) {
     }
   },
   "output": {
+    "AnApi_api_Endpoint_Url_9FC1BBB1": {
+      "value": "https://${aws_api_gateway_rest_api.AnApi_api_99502955.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.AnApi_api_stage_1FA14C2C.stage_name}"
+    },
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
     }

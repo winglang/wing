@@ -107,6 +107,15 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
     "outputs": {
       "root": {
         "Default": {
+          "Default": {
+            "cloud.Api": {
+              "api": {
+                "Endpoint": {
+                  "Url": "cloudApi_api_Endpoint_Url_C5BCE922"
+                }
+              }
+            }
+          },
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
@@ -129,6 +138,9 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
   "output": {
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
+    },
+    "cloudApi_api_Endpoint_Url_C5BCE922": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {

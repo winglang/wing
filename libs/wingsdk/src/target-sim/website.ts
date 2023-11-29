@@ -15,6 +15,8 @@ export class Website extends cloud.Website implements ISimulatorResource {
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
+
+    new cloud.Endpoint(this, "Endpoint", this.url);
   }
 
   /** The url of the website */

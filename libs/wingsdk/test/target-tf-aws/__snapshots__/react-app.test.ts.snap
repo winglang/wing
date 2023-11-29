@@ -39,6 +39,9 @@ exports[`Testing ReactApp > default React App behavior 1`] = `
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
+    },
   },
   "resource": {
     "aws_cloudfront_distribution": {
@@ -191,6 +194,28 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                         },
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
+                      },
+                      "Endpoint": {
+                        "children": {
+                          "Url": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformOutput",
+                              "version": "0.17.0",
+                            },
+                            "id": "Url",
+                            "path": "root/Default/Website/Website-host/Endpoint/Url",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.70",
+                        },
+                        "display": {
+                          "description": "A cloud endpoint",
+                          "title": "Endpoint",
+                        },
+                        "id": "Endpoint",
+                        "path": "root/Default/Website/Website-host/Endpoint",
                       },
                       "File--index.html": {
                         "constructInfo": {
@@ -346,6 +371,9 @@ exports[`Testing ReactApp > website with addEnvironment 1`] = `
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
+    },
   },
   "resource": {
     "aws_cloudfront_distribution": {
@@ -500,6 +528,28 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                         },
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
+                      },
+                      "Endpoint": {
+                        "children": {
+                          "Url": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformOutput",
+                              "version": "0.17.0",
+                            },
+                            "id": "Url",
+                            "path": "root/Default/Website/Website-host/Endpoint/Url",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.70",
+                        },
+                        "display": {
+                          "description": "A cloud endpoint",
+                          "title": "Endpoint",
+                        },
+                        "id": "Endpoint",
+                        "path": "root/Default/Website/Website-host/Endpoint",
                       },
                       "File--index.html": {
                         "constructInfo": {

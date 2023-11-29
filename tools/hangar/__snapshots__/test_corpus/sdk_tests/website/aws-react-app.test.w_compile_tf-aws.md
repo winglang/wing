@@ -12,6 +12,15 @@
     "outputs": {
       "root": {
         "Default": {
+          "Default": {
+            "aws-wing-react-app": {
+              "aws-wing-react-app-host": {
+                "Endpoint": {
+                  "Url": "aws-wing-react-app_aws-wing-react-app-host_Endpoint_Url_6E5C5D26"
+                }
+              }
+            }
+          },
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
@@ -61,6 +70,9 @@
   "output": {
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
+    },
+    "aws-wing-react-app_aws-wing-react-app-host_Endpoint_Url_6E5C5D26": {
+      "value": "https://${aws_cloudfront_distribution.aws-wing-react-app_aws-wing-react-app-host_Distribution_4EBFE5E4.domain_name}"
     }
   },
   "provider": {

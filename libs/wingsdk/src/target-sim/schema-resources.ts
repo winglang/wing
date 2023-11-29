@@ -6,6 +6,7 @@ import {
   COUNTER_FQN,
   CorsHeaders,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   HttpMethod,
   ON_DEPLOY_FQN,
@@ -323,5 +324,11 @@ export interface StateSchema extends BaseResourceSchema {
 /** Schema for cloud.Domain */
 export interface DomainSchema extends BaseResourceSchema {
   readonly type: typeof DOMAIN_FQN;
+  readonly props: {};
+}
+
+/** Schema for cloud.Endpoint */
+export interface EndpointSchema extends BaseResourceSchema {
+  readonly type: typeof ENDPOINT_FQN;
   readonly props: {};
 }

@@ -73,6 +73,24 @@ module.exports = function({  }) {
     "outputs": {
       "root": {
         "Default": {
+          "Default": {
+            "MyResource": {
+              "cloud.Api": {
+                "api": {
+                  "Endpoint": {
+                    "Url": "MyResource_cloudApi_api_Endpoint_Url_D45E57C5"
+                  }
+                }
+              }
+            },
+            "cloud.Api": {
+              "api": {
+                "Endpoint": {
+                  "Url": "cloudApi_api_Endpoint_Url_C5BCE922"
+                }
+              }
+            }
+          },
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
@@ -93,8 +111,14 @@ module.exports = function({  }) {
     }
   },
   "output": {
+    "MyResource_cloudApi_api_Endpoint_Url_D45E57C5": {
+      "value": "https://${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.stage_name}"
+    },
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]"
+    },
+    "cloudApi_api_Endpoint_Url_C5BCE922": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {

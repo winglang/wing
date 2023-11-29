@@ -39,6 +39,9 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
     },
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
+    },
   },
   "resource": {
     "aws_cloudfront_distribution": {
@@ -221,6 +224,28 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
                       },
+                      "Endpoint": {
+                        "children": {
+                          "Url": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformOutput",
+                              "version": "0.17.0",
+                            },
+                            "id": "Url",
+                            "path": "root/Default/Website/Website-host/Endpoint/Url",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.70",
+                        },
+                        "display": {
+                          "description": "A cloud endpoint",
+                          "title": "Endpoint",
+                        },
+                        "id": "Endpoint",
+                        "path": "root/Default/Website/Website-host/Endpoint",
+                      },
                       "File--index.html": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -382,6 +407,9 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
   "output": {
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
+    },
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
     },
   },
   "resource": {
@@ -565,6 +593,28 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         "id": "DistributionS3BucketPolicy",
                         "path": "root/Default/Website/Website-host/DistributionS3BucketPolicy",
                       },
+                      "Endpoint": {
+                        "children": {
+                          "Url": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformOutput",
+                              "version": "0.17.0",
+                            },
+                            "id": "Url",
+                            "path": "root/Default/Website/Website-host/Endpoint/Url",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.70",
+                        },
+                        "display": {
+                          "description": "A cloud endpoint",
+                          "title": "Endpoint",
+                        },
+                        "id": "Endpoint",
+                        "path": "root/Default/Website/Website-host/Endpoint",
+                      },
                       "File--index.html": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
@@ -726,6 +776,9 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
   "output": {
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
+    },
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -917,6 +970,28 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.17.0",
+                        },
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud endpoint",
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -1074,6 +1149,9 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
   "output": {
     "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
       "value": "[]",
+    },
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -1264,6 +1342,28 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                     },
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
+                  },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.17.0",
+                        },
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "A cloud endpoint",
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
                   },
                   "File--b.html": {
                     "constructInfo": {
