@@ -5,9 +5,11 @@ import {
 } from "aws-cdk-lib/aws-kinesis";
 
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import * as core from "../core";
-import { IInflightHost, Json, Duration as StdDuration } from "../std";
+import * as cloud from "@winglang/sdk/src/cloud";
+import * as core from "@winglang/sdk/src/core";
+import { IInflightHost, Json, Duration as StdDuration } from "@winglang/sdk/src/std";
+import {convertBetweenHandlers} from "@winglang/sdk/src/shared/convert";
+import {join} from "path";
 
 /**
 * AWS implementation of `cloud.Stream`
@@ -28,20 +30,27 @@ export class Stream extends cloud.Stream {
     });
     
   }
-  
-  
+
   public _supportedOps(): string[] {
     return [
       cloud.StreamInflightMethods.PUT,
       cloud.StreamInflightMethods.GET,
     ];
   }
-  public setConsumer(handler: cloud.IStreamConsumerHandler, props?: any): Json {
+  public setConsumer(inflight: cloud.IStreamSetConsumerHandlerClient, props?: any = {}): cloud.Function {
+
+    const functionHandler = convertBetweenHandlers(
+      inflight,
+      join(
+        __dirname.replace("target-awscdk", "shared-aws"),
+        "stream.setconsumer.inflight.js"
+      ),
+      "StreamSetConsumerHandler"
+    );
+
     throw new Error("Method not implemented.");
   }
-  public ingest(data: cloud.IStreamData): Json {
-    throw new Error("Method not implemented.");
-  }
+
   public _toInflight(): string {
     throw new Error("Method not implemented.");
   }

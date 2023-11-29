@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { Function, FunctionProps } from "./function";
 import { App } from "../core";
-import { Json, Node, IInflightHost, Resource, Duration, Struct, MutJson, JsonSchema, IResource } from "../std";
-import { FunctionProps } from "./function";
+import {Json, Node, Resource, Duration, Struct, JsonSchema, IInflight} from "../std";
 
 /**
  * Global identifier for `Stream`
@@ -76,17 +76,14 @@ export abstract class Stream extends Resource {
    * Create a function to consume messages from this stream
    */
   public abstract setConsumer(
-    handler: IStreamConsumerHandler,
-    props?: Json
-  ): Json;
-
-
-  /**
-   * Convert the incoming data into the stream's ingestion format
-   */
-  public abstract ingest(data: IStreamData): Json;
+    handler: IStreamSetConsumerHandlerClient,
+    props?: StreamSetConsumerOptions
+  ): Function;
 }
 
+/**
+ *
+ */
 export interface IStreamData {
   readonly id: string;
 
@@ -95,10 +92,14 @@ export interface IStreamData {
   readonly data: Json;
 
   readonly schema: JsonSchema;
+}
 
-  encode(): string;
-
-  decode(data: string): IStreamData;
+export interface StreamSetConsumerOptions extends FunctionProps {
+  /**
+   * The maximum number of messages sent to this subscriber at once.
+   * @default 1
+   */
+  readonly batchSize?: number;
 }
 
 /**
@@ -138,7 +139,18 @@ export interface IStreamClient {
   config(): Promise<Json>;
 }
 
-export interface IStreamConsumerHandler {
+/**
+ * A resource with an inflight "handle" method that can be passed
+ * to `Stream.setConsumer`.
+ *
+ * @inflight `@winglang/sdk.cloud.IStreamSetConsumerHandlerClient`
+ */
+export interface IStreamSetConsumerHandler extends IInflight {}
+
+/**
+ * Inflight client for `IStreamSetConsumerHandler`.
+ */
+export interface IStreamSetConsumerHandlerClient {
   /**
    * Handle messages.
    * @param data Messages.
