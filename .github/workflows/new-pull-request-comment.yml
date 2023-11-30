@@ -1,0 +1,48 @@
+name: PR Creation Comment
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on new PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Thanks for opening this pull request! :tada:
+            Please consult the [contributing guidelines](https://www.winglang.io/contributing) for information on how to contribute to this project.
+            Below is the list of owners for the different areas of this project:
+            | Owner(s)                                   | Area                                                          |
+            |--------------------------------------------|---------------------------------------------------------------|
+            | @eladb                                     | Language design                                               |
+            | @yoav-steinberg                            | Inflight/lifting                                              |
+            |                                            | Compiler architecture                                         |
+            | @chriscbr                                  | Libraries                                                     |
+            |                                            | Containers                                                    |
+            |                                            | SDK API design + architecture                                 |
+            |                                            | /apps/wing-api-checker                                        |
+            |                                            | Standard utils                                                |
+            | @markmcculloh                              | Build+infra (CI/CD)                                           |
+            |                                            | /tools                                                        |
+            |                                            | /libs/wingii                                                  |
+            |                                            | /libs/wingc/src/lsp                                           |
+            |                                            | /apps/vscode-wing                                             |
+            |                                            | /libs/tree-sitter-wing                                        |
+            |                                            | /apps/wing (CLI)                                              |
+            |                                            | /libs/wingcompiler                                            |
+            | @hasanaburayyan                            | Platforms                                                     |
+            |                                            | Json & Struct                                                 |
+            |                                            | Standard types (Array, Map, etc.)                             |
+            |                                            | /docs                                                         |
+            | @tsuf239                                   | Cloud coverage (/examples)                                    |
+            |                                            | Wing test                                                     |
+            |                                            | On-call                                                       |
+            |                                            | /apps/jsii-docgen                                             |
+            | @ainvoner, @skyrpex, @polamoros, @eladcon  | Wing Console, Wing Cloud, Docsite, Playground, Learn          |
+            | @skorfmann                                 | Examples repo                                                 |
+          comment_tag: New PR
+          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
