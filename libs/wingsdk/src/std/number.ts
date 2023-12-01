@@ -25,7 +25,7 @@ export class Number {
   /**
    * Parse a number from string.
    *
-   * @macro ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })($args$)
+   * @macro ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return new Number(args) })($args$)
    *
    * @param str to parse number from.
    * @returns a number.
