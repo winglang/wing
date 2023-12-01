@@ -216,6 +216,24 @@ describe("test-filter option", () => {
     expect(filteredTests[0]).toBe("root/env0/test:get()");
     expect(filteredTests[1]).toBe("root/env1/test:get:At()");
   });
+
+  // use-case:
+  // an external platform overrides the test generation logic
+  // in https://github.com/winglang/wing/blob/9573195e753fa0d303e65d8237d3902159708457/libs/wingsdk/src/core/app.ts#L297-L316
+  // to generate all tests in a single Default environment
+  test("wing test with single Default environment", () => {
+    const testNames = [
+      "root/Default/test:get()",
+      "root/Default/test:get:At()",
+      "root/Default/test:stringify()",
+    ];
+    const filteredTests = pickOneTestPerEnvironment(filterTests(testNames));
+
+    expect(filteredTests.length).toBe(3);
+    expect(filteredTests[0]).toBe("root/Default/test:get()");
+    expect(filteredTests[1]).toBe("root/Default/test:get:At()");
+    expect(filteredTests[2]).toBe("root/Default/test:stringify()");
+  });
 });
 
 describe("retry option", () => {

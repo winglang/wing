@@ -496,6 +496,12 @@ export function pickOneTestPerEnvironment(testPaths: string[]) {
   const envs = new Set<string>();
 
   for (const testPath of testPaths) {
+    if (testPath.startsWith("root/Default/")) {
+      const testName = testPath.substring(testPath.lastIndexOf("/") + 1);
+      tests.set(testName, testPath);
+      continue;
+    }
+
     const testSuffix = testPath.substring(testPath.indexOf("env") + 1); // "<env #>/<path to test>"
     const env = testSuffix.substring(0, testSuffix.indexOf("/")); // "<env #>"
     const testName = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
