@@ -438,8 +438,8 @@ export interface IApp extends IConstruct {
   /**
    * Generate a unique ID for the given scope and prefix. The newly generated ID is
    * guaranteed to be unique within the given scope.
-   * It will have the form '<prefix><n>', where '<prefix>' is the given prefix and '<n>' is an
-   * increasing sequence of integers starting from '0'.
+   * It will have the form '{prefix}{n}', where '{prefix}' is the given prefix and '{n}' is an
+   * ascending sequence of integers starting from '0'.
    *
    * @param scope to guarantee uniqueness in
    * @param prefix prepended to the unique identifier
