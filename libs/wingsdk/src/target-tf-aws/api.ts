@@ -18,9 +18,9 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
+import { IAwsApi } from "../shared-aws";
 import { STAGE_NAME } from "../shared-aws/api";
 import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
-import { IAwsApi } from "../shared-aws";
 import { IInflightHost, Node } from "../std";
 
 /**

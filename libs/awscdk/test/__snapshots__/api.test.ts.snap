@@ -73,7 +73,7 @@ exports[`api configured for cors 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -218,7 +218,7 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Abe10265012f9e469b001cff9bdfe2bcb": {
+    "ApiApiApideploymentAD95F77A48c901a0184e2fc3b5ade66a2c13bea7": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -232,7 +232,7 @@ exports[`api configured for cors 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -268,7 +268,7 @@ exports[`api configured for cors 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Abe10265012f9e469b001cff9bdfe2bcb",
+          "Ref": "ApiApiApideploymentAD95F77A48c901a0184e2fc3b5ade66a2c13bea7",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -277,9 +277,9 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -295,7 +295,7 @@ exports[`api configured for cors 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -304,7 +304,7 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -312,7 +312,7 @@ exports[`api configured for cors 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -327,7 +327,7 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -855,7 +855,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
           "paths": {
             "/{name}/{age}": {
               "get": {
-                "operationId": "get-{name}/{age}",
+                "operationId": "get-:name/:age",
                 "parameters": [
                   {
                     "in": "path",
@@ -901,7 +901,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -1013,7 +1013,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ad604423fead1ca701242738f03ce2549": {
+    "ApiApiApideploymentAD95F77Ab8bc208617766e7315bcf3ecd3bd3ae8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1023,11 +1023,11 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGETe6c024e8D8DF8C95": {
+    "ApiApiApipermissionGET7583b4d75A392565": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1050,7 +1050,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/*/GET/{name}/{age}",
+              "/*/GET/:name/:age",
             ],
           ],
         },
@@ -1063,7 +1063,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ad604423fead1ca701242738f03ce2549",
+          "Ref": "ApiApiApideploymentAD95F77Ab8bc208617766e7315bcf3ecd3bd3ae8",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -1072,9 +1072,9 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -1090,7 +1090,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -1099,7 +1099,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -1107,7 +1107,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -1122,7 +1122,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1285,7 +1285,7 @@ exports[`api with 'name' parameter 1`] = `
           "paths": {
             "/{name}": {
               "get": {
-                "operationId": "get-{name}",
+                "operationId": "get-:name",
                 "parameters": [
                   {
                     "in": "path",
@@ -1323,7 +1323,7 @@ exports[`api with 'name' parameter 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -1435,7 +1435,7 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A38a20ea6d691f541c2d4cd7d50c51e50": {
+    "ApiApiApideploymentAD95F77A53c693f8cf38ea27b804447a02dea7f4": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1445,11 +1445,11 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGETda43a2f24D2CA9DC": {
+    "ApiApiApipermissionGET8602bc8a743DD738": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1472,7 +1472,7 @@ exports[`api with 'name' parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/*/GET/{name}",
+              "/*/GET/:name",
             ],
           ],
         },
@@ -1485,7 +1485,7 @@ exports[`api with 'name' parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A38a20ea6d691f541c2d4cd7d50c51e50",
+          "Ref": "ApiApiApideploymentAD95F77A53c693f8cf38ea27b804447a02dea7f4",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -1494,9 +1494,9 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -1512,7 +1512,7 @@ exports[`api with 'name' parameter 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -1521,7 +1521,7 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -1529,7 +1529,7 @@ exports[`api with 'name' parameter 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -1544,7 +1544,7 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1736,7 +1736,7 @@ exports[`api with CONNECT route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -1848,7 +1848,7 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ac2d8d7494b83aed61629c73d178d55f8": {
+    "ApiApiApideploymentAD95F77Abcd0aecc81f893248cd21e717d56b8b8": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -1862,7 +1862,7 @@ exports[`api with CONNECT route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -1898,7 +1898,7 @@ exports[`api with CONNECT route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ac2d8d7494b83aed61629c73d178d55f8",
+          "Ref": "ApiApiApideploymentAD95F77Abcd0aecc81f893248cd21e717d56b8b8",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -1907,9 +1907,9 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -1925,7 +1925,7 @@ exports[`api with CONNECT route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -1934,7 +1934,7 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -1942,7 +1942,7 @@ exports[`api with CONNECT route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -1957,7 +1957,7 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2149,7 +2149,7 @@ exports[`api with DELETE route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -2261,7 +2261,7 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Aa2cee560bc8d990674706493710a42f0": {
+    "ApiApiApideploymentAD95F77A7cb3035d1ac71c63e2dcf6b97f0418d3": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -2275,7 +2275,7 @@ exports[`api with DELETE route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -2311,7 +2311,7 @@ exports[`api with DELETE route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Aa2cee560bc8d990674706493710a42f0",
+          "Ref": "ApiApiApideploymentAD95F77A7cb3035d1ac71c63e2dcf6b97f0418d3",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -2320,9 +2320,9 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -2338,7 +2338,7 @@ exports[`api with DELETE route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -2347,7 +2347,7 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -2355,7 +2355,7 @@ exports[`api with DELETE route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -2370,7 +2370,7 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2562,7 +2562,7 @@ exports[`api with GET route at root 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -2674,7 +2674,7 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A0d0b20fa7690edc8f773a41f35b547ba": {
+    "ApiApiApideploymentAD95F77A6c0f5c6500bd8fafa9adcede8308098e": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -2688,7 +2688,7 @@ exports[`api with GET route at root 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -2724,7 +2724,7 @@ exports[`api with GET route at root 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A0d0b20fa7690edc8f773a41f35b547ba",
+          "Ref": "ApiApiApideploymentAD95F77A6c0f5c6500bd8fafa9adcede8308098e",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -2733,9 +2733,9 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -2751,7 +2751,7 @@ exports[`api with GET route at root 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -2760,7 +2760,7 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -2768,7 +2768,7 @@ exports[`api with GET route at root 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -2783,7 +2783,7 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2975,7 +2975,7 @@ exports[`api with GET routes with common prefix 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequest6e1b42522C08E04B",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -3017,7 +3017,7 @@ exports[`api with GET routes with common prefix 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -3129,7 +3129,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A59de9c6dcc217b8d2b4b484193f1a4af": {
+    "ApiApiApideploymentAD95F77A255b762ca45814b35c1ebe0f31fcf22d": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -3143,7 +3143,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -3177,7 +3177,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -3213,7 +3213,7 @@ exports[`api with GET routes with common prefix 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A59de9c6dcc217b8d2b4b484193f1a4af",
+          "Ref": "ApiApiApideploymentAD95F77A255b762ca45814b35c1ebe0f31fcf22d",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -3222,9 +3222,9 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequest6e1b42522C08E04B": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -3240,7 +3240,7 @@ exports[`api with GET routes with common prefix 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -3249,7 +3249,7 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -3257,7 +3257,7 @@ exports[`api with GET routes with common prefix 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -3272,88 +3272,7 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3545,7 +3464,7 @@ exports[`api with GET routes with different prefix 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequest6e1b42522C08E04B",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -3587,7 +3506,7 @@ exports[`api with GET routes with different prefix 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -3699,7 +3618,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A376647f53e567309b656c871c18834c6": {
+    "ApiApiApideploymentAD95F77A960b72032ef6c5ad660aebb8b36fb982": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -3713,7 +3632,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -3747,7 +3666,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -3783,7 +3702,7 @@ exports[`api with GET routes with different prefix 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A376647f53e567309b656c871c18834c6",
+          "Ref": "ApiApiApideploymentAD95F77A960b72032ef6c5ad660aebb8b36fb982",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -3792,9 +3711,9 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequest6e1b42522C08E04B": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -3810,7 +3729,7 @@ exports[`api with GET routes with different prefix 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -3819,7 +3738,7 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -3827,7 +3746,7 @@ exports[`api with GET routes with different prefix 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -3842,88 +3761,7 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -4115,7 +3953,7 @@ exports[`api with HEAD route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -4227,7 +4065,7 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A472038678666bb44e02a31ce0c5f8a72": {
+    "ApiApiApideploymentAD95F77Ad7a860d112b739e8b474520e399d270c": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -4241,7 +4079,7 @@ exports[`api with HEAD route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -4277,7 +4115,7 @@ exports[`api with HEAD route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A472038678666bb44e02a31ce0c5f8a72",
+          "Ref": "ApiApiApideploymentAD95F77Ad7a860d112b739e8b474520e399d270c",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -4286,9 +4124,9 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -4304,7 +4142,7 @@ exports[`api with HEAD route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -4313,7 +4151,7 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -4321,7 +4159,7 @@ exports[`api with HEAD route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -4336,7 +4174,7 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -4528,7 +4366,7 @@ exports[`api with OPTIONS route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -4640,7 +4478,7 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Abbfb5affc0f3d104d39bdd88b19c68ed": {
+    "ApiApiApideploymentAD95F77A522c94dc95fd73adff9d8b57dd1093a7": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -4654,7 +4492,7 @@ exports[`api with OPTIONS route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -4690,7 +4528,7 @@ exports[`api with OPTIONS route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Abbfb5affc0f3d104d39bdd88b19c68ed",
+          "Ref": "ApiApiApideploymentAD95F77A522c94dc95fd73adff9d8b57dd1093a7",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -4699,9 +4537,9 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -4717,7 +4555,7 @@ exports[`api with OPTIONS route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -4726,7 +4564,7 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -4734,7 +4572,7 @@ exports[`api with OPTIONS route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -4749,7 +4587,7 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -4941,7 +4779,7 @@ exports[`api with PATCH route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -5053,7 +4891,7 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A3f5ae94cc1b358a3bdcb529a4a9f1615": {
+    "ApiApiApideploymentAD95F77A7147d0d036ad08252ab291567faf09a6": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -5067,7 +4905,7 @@ exports[`api with PATCH route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -5103,7 +4941,7 @@ exports[`api with PATCH route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A3f5ae94cc1b358a3bdcb529a4a9f1615",
+          "Ref": "ApiApiApideploymentAD95F77A7147d0d036ad08252ab291567faf09a6",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -5112,9 +4950,9 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -5130,7 +4968,7 @@ exports[`api with PATCH route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -5139,7 +4977,7 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -5147,7 +4985,7 @@ exports[`api with PATCH route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -5162,7 +5000,7 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -5354,7 +5192,7 @@ exports[`api with POST route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -5466,7 +5304,7 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A7e8e4600c2d47aa9aa79bc7b4d240d3a": {
+    "ApiApiApideploymentAD95F77Aad04994de4aee624c2c600033a0fb1aa": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -5480,7 +5318,7 @@ exports[`api with POST route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -5516,7 +5354,7 @@ exports[`api with POST route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A7e8e4600c2d47aa9aa79bc7b4d240d3a",
+          "Ref": "ApiApiApideploymentAD95F77Aad04994de4aee624c2c600033a0fb1aa",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -5525,9 +5363,9 @@ exports[`api with POST route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -5543,7 +5381,7 @@ exports[`api with POST route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -5552,7 +5390,7 @@ exports[`api with POST route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -5560,7 +5398,7 @@ exports[`api with POST route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -5575,7 +5413,7 @@ exports[`api with POST route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -5767,7 +5605,7 @@ exports[`api with PUT route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -5879,7 +5717,7 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Aa769c5967cd6499659da1b0ab60d5d60": {
+    "ApiApiApideploymentAD95F77Aab6e4a94f6e890019f8c9fcebc892d23": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -5893,7 +5731,7 @@ exports[`api with PUT route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -5929,7 +5767,7 @@ exports[`api with PUT route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Aa769c5967cd6499659da1b0ab60d5d60",
+          "Ref": "ApiApiApideploymentAD95F77Aab6e4a94f6e890019f8c9fcebc892d23",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -5938,9 +5776,9 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -5956,7 +5794,7 @@ exports[`api with PUT route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -5965,7 +5803,7 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -5973,7 +5811,7 @@ exports[`api with PUT route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -5988,7 +5826,7 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -6180,7 +6018,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -6222,7 +6060,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -6334,7 +6172,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A4669673aa35a0add9d8182172f818231": {
+    "ApiApiApideploymentAD95F77A255b762ca45814b35c1ebe0f31fcf22d": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -6348,7 +6186,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -6382,7 +6220,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -6418,7 +6256,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A4669673aa35a0add9d8182172f818231",
+          "Ref": "ApiApiApideploymentAD95F77A255b762ca45814b35c1ebe0f31fcf22d",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -6427,9 +6265,9 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -6445,7 +6283,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -6454,7 +6292,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -6462,7 +6300,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -6477,7 +6315,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -6669,7 +6507,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequest6e1b42522C08E04B",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -6711,7 +6549,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -6823,7 +6661,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ab962ba42c934da41c706f5a9a6e37206": {
+    "ApiApiApideploymentAD95F77Ad1cf9efb91cd90e7cd3486b7fd705a8b": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -6837,7 +6675,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -6871,7 +6709,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -6907,7 +6745,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ab962ba42c934da41c706f5a9a6e37206",
+          "Ref": "ApiApiApideploymentAD95F77Ad1cf9efb91cd90e7cd3486b7fd705a8b",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -6916,9 +6754,9 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequest6e1b42522C08E04B": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -6934,7 +6772,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -6943,7 +6781,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequest6e1b4252LogRetention09E9630A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -6951,7 +6789,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequest6e1b42522C08E04B",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -6966,88 +6804,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequest6e1b4252ServiceRoleEE1C8A8B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ApiApiOnRequestc185c7e32908D5D4": {
-      "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-      ],
-      "Properties": {
-        "Architectures": [
-          "arm64",
-        ],
-        "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "<S3Key>",
-        },
-        "Handler": "index.handler",
-        "MemorySize": 1024,
-        "Role": {
-          "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Timeout": 60,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
-      "Properties": {
-        "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/lambda/",
-              {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
-              },
-            ],
-          ],
-        },
-        "RetentionInDays": 30,
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::LogRetention",
-    },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -7239,7 +6996,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -7281,7 +7038,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -7393,7 +7150,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A69a7e1bbe2ef554d2e9fdd471e5e2208": {
+    "ApiApiApideploymentAD95F77Ad1cf9efb91cd90e7cd3486b7fd705a8b": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -7407,7 +7164,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -7441,7 +7198,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -7477,7 +7234,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A69a7e1bbe2ef554d2e9fdd471e5e2208",
+          "Ref": "ApiApiApideploymentAD95F77Ad1cf9efb91cd90e7cd3486b7fd705a8b",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -7486,9 +7243,9 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -7504,7 +7261,7 @@ exports[`api with multiple methods and one lambda 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -7513,7 +7270,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -7521,7 +7278,7 @@ exports[`api with multiple methods and one lambda 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -7536,7 +7293,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -7728,7 +7485,7 @@ exports[`api with multiple methods on same route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -7768,7 +7525,7 @@ exports[`api with multiple methods on same route 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -7880,7 +7637,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A4486442159facc2962824026cb4d4c27": {
+    "ApiApiApideploymentAD95F77A0e9060d7e0059f1f2d93fac4412840b1": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -7894,7 +7651,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -7928,7 +7685,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -7964,7 +7721,7 @@ exports[`api with multiple methods on same route 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A4486442159facc2962824026cb4d4c27",
+          "Ref": "ApiApiApideploymentAD95F77A0e9060d7e0059f1f2d93fac4412840b1",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -7973,9 +7730,9 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -7991,7 +7748,7 @@ exports[`api with multiple methods on same route 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -8000,7 +7757,7 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -8008,7 +7765,7 @@ exports[`api with multiple methods on same route 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -8023,7 +7780,7 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -8186,7 +7943,7 @@ exports[`api with path parameter 1`] = `
           "paths": {
             "/hello/{world}": {
               "get": {
-                "operationId": "get-hello/{world}",
+                "operationId": "get-hello/:world",
                 "parameters": [
                   {
                     "in": "path",
@@ -8224,7 +7981,7 @@ exports[`api with path parameter 1`] = `
                         ":lambda:path/2015-03-31/functions/",
                         {
                           "Fn::GetAtt": [
-                            "ApiApiOnRequestc185c7e32908D5D4",
+                            "ApiOnRequest0F5BBA8E4",
                             "Arn",
                           ],
                         },
@@ -8336,7 +8093,7 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Afddc54fcd988fc74ce7401b07292dd21": {
+    "ApiApiApideploymentAD95F77A59642ca550f026aff110b61be5fd9698": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
@@ -8346,11 +8103,11 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET01369a0aFFE307B5": {
+    "ApiApiApipermissionGET0781b9f9CF0DCD4E": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+          "Ref": "ApiOnRequest0F5BBA8E4",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -8373,7 +8130,7 @@ exports[`api with path parameter 1`] = `
               {
                 "Ref": "ApiApiApiapi76C34A06",
               },
-              "/*/GET/hello/{world}",
+              "/*/GET/hello/:world",
             ],
           ],
         },
@@ -8386,7 +8143,7 @@ exports[`api with path parameter 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Afddc54fcd988fc74ce7401b07292dd21",
+          "Ref": "ApiApiApideploymentAD95F77A59642ca550f026aff110b61be5fd9698",
         },
         "RestApiId": {
           "Ref": "ApiApiApiapi76C34A06",
@@ -8395,9 +8152,9 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "ApiApiOnRequestc185c7e32908D5D4": {
+    "ApiOnRequest0F5BBA8E4": {
       "DependsOn": [
-        "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+        "ApiOnRequest0ServiceRole2BA4A3CE",
       ],
       "Properties": {
         "Architectures": [
@@ -8413,7 +8170,7 @@ exports[`api with path parameter 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "ApiApiOnRequestc185c7e3ServiceRoleB27988EE",
+            "ApiOnRequest0ServiceRole2BA4A3CE",
             "Arn",
           ],
         },
@@ -8422,7 +8179,7 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "ApiApiOnRequestc185c7e3LogRetention4CE6017A": {
+    "ApiOnRequest0LogRetention1C048710": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -8430,7 +8187,7 @@ exports[`api with path parameter 1`] = `
             [
               "/aws/lambda/",
               {
-                "Ref": "ApiApiOnRequestc185c7e32908D5D4",
+                "Ref": "ApiOnRequest0F5BBA8E4",
               },
             ],
           ],
@@ -8445,7 +8202,7 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "Custom::LogRetention",
     },
-    "ApiApiOnRequestc185c7e3ServiceRoleB27988EE": {
+    "ApiOnRequest0ServiceRole2BA4A3CE": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [

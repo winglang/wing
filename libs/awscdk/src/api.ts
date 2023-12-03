@@ -21,11 +21,12 @@ import { API_CORS_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.cors
  */
 export class Api extends cloud.Api {
   private readonly api: WingRestApi;
+  private readonly handlers: Record<string, Function> = {};
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
     this.api = new WingRestApi(this, `${id}Api`, {
-      apiSpec: this._getApiSpec(),
+      getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
   }
@@ -179,7 +180,7 @@ export class Api extends cloud.Api {
    * @returns AWS Lambda Function
    */
   private addHandler(inflight: cloud.IApiEndpointHandler): Function {
-    let fn = this.getExistingOrAddInflightHandler(inflight);
+    let fn = this.addInflightHandler(inflight);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -187,60 +188,36 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Check if a inflight handler already exists, if not create it.
-   * This ensures that we don't create duplicate inflight handlers.
-   * @param inflight
-   * @returns
-   */
-  private getExistingOrAddInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const existingInflightHandler = this.findExistingInflightHandler(inflight);
-    if (existingInflightHandler) {
-      return existingInflightHandler;
-    }
-    return this.addInflightHandler(inflight);
-  }
-
-  /**
-   * Find an existing inflight handler
-   * @param inflight Inflight to find
-   * @returns
-   */
-  private findExistingInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflight.node.addr.slice(-8);
-
-    let fn = this.node.tryFindChild(
-      `${this.node.id}-OnRequest-${inflightNodeHash}`
-    );
-    return fn;
-  }
-
-  /**
    * Add an inflight handler to the stack
+   * Ensures that we don't create duplicate inflight handlers.
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
   private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
-    const inflightNodeHash = inflight.node.addr.slice(-8);
+    let handler = this.handlers[inflight._hash];
 
-    const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
-      inflight,
-      join(
-        __dirname.replace("target-awscdk", "shared-aws"),
-        "api.onrequest.inflight.js"
-      ),
-      "ApiOnRequestHandlerClient",
-      {
-        corsHeaders: this._generateCorsHeaders(this.corsOptions)
-          ?.defaultResponse,
-      }
-    );
-    return new Function(
-      this,
-      `${this.node.id}-OnRequest-${inflightNodeHash}`,
-      functionHandler
-    );
+    if (!handler) {
+      const newInflight = convertBetweenHandlers(
+        inflight,
+        join(
+          __dirname.replace("target-tf-aws", "shared-aws"),
+          "api.onrequest.inflight.js"
+        ),
+        "ApiOnRequestHandlerClient",
+        {
+          corsHeaders: this._generateCorsHeaders(this.corsOptions)
+            ?.defaultResponse,
+        }
+      );
+      handler = new Function(
+        this,
+        App.of(this).makeId(this, "OnRequest"),
+        newInflight
+      );
+      this.handlers[inflight._hash] = handler;
+    }
+
+    return handler;
   }
 
   /** @internal */
@@ -282,7 +259,7 @@ class WingRestApi extends Construct {
     scope: Construct,
     id: string,
     props: {
-      apiSpec: cloud.OpenApiSpec;
+      getApiSpec: () => cloud.OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
     }
   ) {
@@ -302,7 +279,7 @@ class WingRestApi extends Construct {
               };
               return openApiSpec;
             };
-            return injectGreedy404Handler(props.apiSpec);
+            return injectGreedy404Handler(props.getApiSpec());
           },
         })
       ),
@@ -345,7 +322,7 @@ class WingRestApi extends Construct {
   private createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.arn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {
@@ -376,7 +353,7 @@ class WingRestApi extends Construct {
     const permissionId = `${method}-${pathHash}`;
     new CfnPermission(this, `permission-${permissionId}`, {
       action: "lambda:InvokeFunction",
-      functionName: handler._functionName,
+      functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
       sourceArn: this.api.arnForExecuteApi(method, path),
     });
