@@ -370,12 +370,12 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreatec185c7e3C8EEFD1BC224D064": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnCreatec185c7e3D8FD482A",
+            "mybucketOnCreate071865324",
             "Arn",
           ],
         },
@@ -416,7 +416,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreatec185c7e3C8EEFD1BC224D064",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnCreate0523E7CD109C74964",
       ],
       "Properties": {
         "BucketName": {
@@ -431,7 +431,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnCreatec185c7e3D8FD482A",
+                  "mybucketOnCreate071865324",
                   "Arn",
                 ],
               },
@@ -447,9 +447,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnCreatec185c7e3D8FD482A": {
+    "mybucketOnCreate071865324": {
       "DependsOn": [
-        "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
+        "mybucketOnCreate0ServiceRole8EB9AE15",
       ],
       "Properties": {
         "Architectures": [
@@ -465,7 +465,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD",
+            "mybucketOnCreate0ServiceRole8EB9AE15",
             "Arn",
           ],
         },
@@ -474,7 +474,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnCreatec185c7e3LogRetention1086748F": {
+    "mybucketOnCreate0LogRetention8E65097C": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -482,7 +482,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             [
               "/aws/lambda/",
               {
-                "Ref": "mybucketOnCreatec185c7e3D8FD482A",
+                "Ref": "mybucketOnCreate071865324",
               },
             ],
           ],
@@ -497,7 +497,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::LogRetention",
     },
-    "mybucketOnCreatec185c7e3ServiceRoleE5FE1BDD": {
+    "mybucketOnCreate0ServiceRole8EB9AE15": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -827,12 +827,12 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnDeletec185c7e3D8631D576F9BD325": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnDeletec185c7e3A022E7E6",
+            "mybucketOnDelete0BC86CC27",
             "Arn",
           ],
         },
@@ -873,7 +873,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnDeletec185c7e3D8631D576F9BD325",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnDelete07E2A93E8688C7533",
       ],
       "Properties": {
         "BucketName": {
@@ -888,7 +888,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnDeletec185c7e3A022E7E6",
+                  "mybucketOnDelete0BC86CC27",
                   "Arn",
                 ],
               },
@@ -904,9 +904,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnDeletec185c7e3A022E7E6": {
+    "mybucketOnDelete0BC86CC27": {
       "DependsOn": [
-        "mybucketOnDeletec185c7e3ServiceRole113BE170",
+        "mybucketOnDelete0ServiceRole57A03DE1",
       ],
       "Properties": {
         "Architectures": [
@@ -922,7 +922,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnDeletec185c7e3ServiceRole113BE170",
+            "mybucketOnDelete0ServiceRole57A03DE1",
             "Arn",
           ],
         },
@@ -931,7 +931,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnDeletec185c7e3LogRetention96A89A03": {
+    "mybucketOnDelete0LogRetentionD5F6857F": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -939,7 +939,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             [
               "/aws/lambda/",
               {
-                "Ref": "mybucketOnDeletec185c7e3A022E7E6",
+                "Ref": "mybucketOnDelete0BC86CC27",
               },
             ],
           ],
@@ -954,7 +954,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::LogRetention",
     },
-    "mybucketOnDeletec185c7e3ServiceRole113BE170": {
+    "mybucketOnDelete0ServiceRole57A03DE1": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1284,12 +1284,12 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnEventc185c7e377677C50BE271300": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnEventc185c7e3FD4D7BFF",
+            "mybucketOnEvent02DE25E3B",
             "Arn",
           ],
         },
@@ -1330,7 +1330,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnEventc185c7e377677C50BE271300",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnEvent02929E14ED42BAD44",
       ],
       "Properties": {
         "BucketName": {
@@ -1345,7 +1345,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "mybucketOnEvent02DE25E3B",
                   "Arn",
                 ],
               },
@@ -1356,7 +1356,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "mybucketOnEvent02DE25E3B",
                   "Arn",
                 ],
               },
@@ -1367,7 +1367,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnEventc185c7e3FD4D7BFF",
+                  "mybucketOnEvent02DE25E3B",
                   "Arn",
                 ],
               },
@@ -1383,9 +1383,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnEventc185c7e3FD4D7BFF": {
+    "mybucketOnEvent02DE25E3B": {
       "DependsOn": [
-        "mybucketOnEventc185c7e3ServiceRole3C4A0154",
+        "mybucketOnEvent0ServiceRole1D46FF9D",
       ],
       "Properties": {
         "Architectures": [
@@ -1401,7 +1401,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnEventc185c7e3ServiceRole3C4A0154",
+            "mybucketOnEvent0ServiceRole1D46FF9D",
             "Arn",
           ],
         },
@@ -1410,7 +1410,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnEventc185c7e3LogRetention2725C497": {
+    "mybucketOnEvent0LogRetentionAC7E64C8": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -1418,7 +1418,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             [
               "/aws/lambda/",
               {
-                "Ref": "mybucketOnEventc185c7e3FD4D7BFF",
+                "Ref": "mybucketOnEvent02DE25E3B",
               },
             ],
           ],
@@ -1433,7 +1433,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::LogRetention",
     },
-    "mybucketOnEventc185c7e3ServiceRole3C4A0154": {
+    "mybucketOnEvent0ServiceRole1D46FF9D": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1763,12 +1763,12 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::IAM::Policy",
     },
-    "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdatec185c7e33DF9CD21169809C3": {
+    "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "mybucketOnUpdatec185c7e36237E59F",
+            "mybucketOnUpdate06503D6F0",
             "Arn",
           ],
         },
@@ -1809,7 +1809,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
     },
     "mybucketNotificationsB76B6B79": {
       "DependsOn": [
-        "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdatec185c7e33DF9CD21169809C3",
+        "mybucketAllowBucketNotificationsTomyprojectmybucketOnUpdate036B5F47FED7981DE",
       ],
       "Properties": {
         "BucketName": {
@@ -1824,7 +1824,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
               ],
               "LambdaFunctionArn": {
                 "Fn::GetAtt": [
-                  "mybucketOnUpdatec185c7e36237E59F",
+                  "mybucketOnUpdate06503D6F0",
                   "Arn",
                 ],
               },
@@ -1840,9 +1840,9 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::S3BucketNotifications",
     },
-    "mybucketOnUpdatec185c7e36237E59F": {
+    "mybucketOnUpdate06503D6F0": {
       "DependsOn": [
-        "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
+        "mybucketOnUpdate0ServiceRoleAF91E9C7",
       ],
       "Properties": {
         "Architectures": [
@@ -1858,7 +1858,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD",
+            "mybucketOnUpdate0ServiceRoleAF91E9C7",
             "Arn",
           ],
         },
@@ -1867,7 +1867,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "AWS::Lambda::Function",
     },
-    "mybucketOnUpdatec185c7e3LogRetention44B84A58": {
+    "mybucketOnUpdate0LogRetention8435180A": {
       "Properties": {
         "LogGroupName": {
           "Fn::Join": [
@@ -1875,7 +1875,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             [
               "/aws/lambda/",
               {
-                "Ref": "mybucketOnUpdatec185c7e36237E59F",
+                "Ref": "mybucketOnUpdate06503D6F0",
               },
             ],
           ],
@@ -1890,7 +1890,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
       },
       "Type": "Custom::LogRetention",
     },
-    "mybucketOnUpdatec185c7e3ServiceRoleA530B9CD": {
+    "mybucketOnUpdate0ServiceRoleAF91E9C7": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [

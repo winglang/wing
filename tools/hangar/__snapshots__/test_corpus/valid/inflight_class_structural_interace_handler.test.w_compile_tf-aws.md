@@ -92,7 +92,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.NotGoo-1.js")({
           })
@@ -110,18 +110,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $NotGoo: ${context._lift(NotGoo)},
+            $NotGoo: ${$stdlib.core.liftObject(NotGoo)},
           })
         `;
       }
@@ -137,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:structure interface types for 'handle'", new $Closure1(this, "$Closure1"));

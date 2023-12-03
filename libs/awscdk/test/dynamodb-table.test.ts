@@ -2,7 +2,8 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, simulator, ex } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -32,10 +33,7 @@ test("function with a table binding", () => {
     hashKey: "id",
     name: "my-wing-table",
   });
-  const inflight = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) {
+  const inflight = simulator.Testing.makeHandler(`async handle(event) {
   await this.my_table.putItem({ item: { id: "test" } });
   await this.my_table.scan();
 }`,

@@ -255,7 +255,7 @@ export class BucketClient implements IBucketClient {
       const properties = await blobClient.getProperties();
       return {
         contentType: properties.contentType,
-        lastModified: Datetime.fromIso(properties.lastModified!.toISOString()),
+        lastModified: Datetime.fromDate(properties.lastModified!),
         size: properties.contentLength!,
       };
     } catch (error) {
@@ -264,16 +264,21 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Copy object within the container
+   * Copy object within the bucket
    *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    * @throws if `srcKey` object doesn't exist.
    */
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    const srcBlobUrl = this.containerClient.getBlobClient(srcKey).url;
+    const dstBlobClient = this.containerClient.getBlockBlobClient(dstKey);
+
+    try {
+      await dstBlobClient.syncCopyFromURL(srcBlobUrl);
+    } catch (error) {
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+    }
   }
 
   /**

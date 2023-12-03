@@ -1,20 +1,23 @@
-import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import { Resource } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-const HANDLER_WITH_START_AND_STOP = `
+const HANDLER_WITH_START = `\
+async handle() {
+  console.log("start!");
+}`;
+
+const HANDLER_WITH_START_AND_STOP = `\
+async handle() {
   console.log("start!");
   return () => console.log("stop!");
-`;
+}`;
 
 test("create a service with on start method", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new ServiceHandler(app, "Handler", `console.log("hi");`);
-  new cloud.Service(app, "my_service", handler);
+  new cloud.Service(app, "my_service", Testing.makeHandler(HANDLER_WITH_START));
 
   // WHEN
   const s = await app.startSimulator();
@@ -43,7 +46,7 @@ test("create a service with a on stop method", async () => {
   new cloud.Service(
     app,
     "my_service",
-    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP)
+    Testing.makeHandler(HANDLER_WITH_START_AND_STOP)
   );
 
   // WHEN
@@ -83,7 +86,7 @@ test("create a service without autostart", async () => {
   new cloud.Service(
     app,
     "my_service",
-    new ServiceHandler(app, "Handler", `console.log("hi");`),
+    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
     { autoStart: false }
   );
 
@@ -123,7 +126,7 @@ test("start and stop service", async () => {
   new cloud.Service(
     app,
     "my_service",
-    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
+    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
     {
       autoStart: false,
     }
@@ -158,7 +161,7 @@ test("consecutive start and stop service", async () => {
   new cloud.Service(
     app,
     "my_service",
-    new ServiceHandler(app, "Handler", HANDLER_WITH_START_AND_STOP),
+    Testing.makeHandler(HANDLER_WITH_START_AND_STOP),
     {
       autoStart: false,
     }
@@ -182,19 +185,3 @@ test("consecutive start and stop service", async () => {
       .map((trace) => trace.data.message)
   ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
 });
-
-class ServiceHandler extends Resource implements cloud.IServiceHandler {
-  constructor(scope: Construct, id: string, private readonly code: string) {
-    super(scope, id);
-  }
-  public _supportedOps(): string[] {
-    throw new Error("Method not implemented.");
-  }
-  public _toInflight(): string {
-    return `{
-      handle: async () => {
-        ${this.code}
-      }
-    }`;
-  }
-}

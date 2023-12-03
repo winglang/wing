@@ -2,8 +2,8 @@ import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { std, simulator, cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
-import { sanitizeCode } from "./util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { sanitizeCode, awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -53,10 +53,7 @@ test("queue with a consumer function", () => {
   const queue = new cloud.Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`

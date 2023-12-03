@@ -120,7 +120,7 @@ class $Root extends $stdlib.std.Resource {
       static getGreeting(name) {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -138,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
+        return [...super._supportedOps(), "regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("call")) {
@@ -148,14 +148,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $f: ${context._lift(f)},
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }
@@ -171,7 +172,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -181,14 +182,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Foo: ${context._lift(Foo)},
+            $Foo: ${$stdlib.core.liftObject(Foo)},
           })
         `;
       }
@@ -204,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

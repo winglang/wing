@@ -353,7 +353,7 @@ The maximum number of messages to send to subscribers at once.
 
 ### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
 
@@ -362,25 +362,6 @@ The maximum number of messages to send to subscribers at once.
 A resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IQueueSetConsumerHandlerClient <a name="IQueueSetConsumerHandlerClient" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient"></a>
 

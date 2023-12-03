@@ -2163,13 +2163,14 @@ Invokes the `validate()` method on all validations added through
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.std.Node.property.addr">addr</a></code> | <code>str</code> | Returns an opaque tree-unique address for this construct. |
+| <code><a href="#@winglang/sdk.std.Node.property.app">app</a></code> | <code><a href="#@winglang/sdk.std.IApp">IApp</a></code> | Returns the root of the construct tree (the `cloud.App` object). |
 | <code><a href="#@winglang/sdk.std.Node.property.children">children</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All direct children of this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.dependencies">dependencies</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | Return all dependencies registered on this node (non-recursive). |
 | <code><a href="#@winglang/sdk.std.Node.property.id">id</a></code> | <code>str</code> | The id of this construct within the current scope. |
 | <code><a href="#@winglang/sdk.std.Node.property.locked">locked</a></code> | <code>bool</code> | Returns true if this construct or the scopes in which it is defined are locked. |
 | <code><a href="#@winglang/sdk.std.Node.property.metadata">metadata</a></code> | <code>MutArray&lt;constructs.MetadataEntry&gt;</code> | An immutable array of metadata objects associated with this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.path">path</a></code> | <code>str</code> | The full, absolute path of this construct in the tree. |
-| <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree. |
+| <code><a href="#@winglang/sdk.std.Node.property.root">root</a></code> | <code>constructs.IConstruct</code> | Returns the root of the construct tree (the `cloud.App` object). |
 | <code><a href="#@winglang/sdk.std.Node.property.scopes">scopes</a></code> | <code>MutArray&lt;constructs.IConstruct&gt;</code> | All parent scopes of this construct. |
 | <code><a href="#@winglang/sdk.std.Node.property.scope">scope</a></code> | <code>constructs.IConstruct</code> | Returns the scope in which this construct is defined. |
 | <code><a href="#@winglang/sdk.std.Node.property.defaultChild">defaultChild</a></code> | <code>constructs.IConstruct</code> | Returns the child construct that has the id `Default` or `Resource"`. |
@@ -2208,6 +2209,20 @@ same tree may have the same addreess.
 c83a2846e506bcc5f10682b564084bca2d275709ee
 ```
 
+
+##### `app`<sup>Required</sup> <a name="app" id="@winglang/sdk.std.Node.property.app"></a>
+
+```wing
+app: IApp;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.IApp">IApp</a>
+
+Returns the root of the construct tree (the `cloud.App` object).
+
+Similar to `root`.
+
+---
 
 ##### `children`<sup>Required</sup> <a name="children" id="@winglang/sdk.std.Node.property.children"></a>
 
@@ -2295,7 +2310,9 @@ root: IConstruct;
 
 - *Type:* constructs.IConstruct
 
-Returns the root of the construct tree.
+Returns the root of the construct tree (the `cloud.App` object).
+
+Similar to `app`.
 
 ---
 
@@ -3156,4 +3173,101 @@ Unsafe mode to skip validation (may lead to runtime errors).
 
 ---
 
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IApp <a name="IApp" id="@winglang/sdk.std.IApp"></a>
+
+- *Extends:* constructs.IConstruct
+
+- *Implemented By:* <a href="#@winglang/sdk.core.App">App</a>, <a href="#@winglang/sdk.std.IApp">IApp</a>
+
+Represents a Wing application.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.IApp.makeId">makeId</a></code> | Generate a unique ID for the given scope and prefix. |
+
+---
+
+##### `makeId` <a name="makeId" id="@winglang/sdk.std.IApp.makeId"></a>
+
+```wing
+makeId(prefix?: str): str
+```
+
+Generate a unique ID for the given scope and prefix.
+
+The newly generated ID is
+guaranteed to be unique within the given scope.
+It will have the form '{prefix}{n}', where '{prefix}' is the given prefix and '{n}' is an
+ascending sequence of integers starting from '0'.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.std.IApp.makeId.parameter.prefix"></a>
+
+- *Type:* str
+
+prepended to the unique identifier.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.std.IApp.property.entrypointDir">entrypointDir</a></code> | <code>str</code> | The directory of the entrypoint of the current program. |
+| <code><a href="#@winglang/sdk.std.IApp.property.isTestEnvironment">isTestEnvironment</a></code> | <code>bool</code> | `true` if this is a testing environment. |
+| <code><a href="#@winglang/sdk.std.IApp.property.workdir">workdir</a></code> | <code>str</code> | The `.wing` directory into which you can emit artifacts during preflight. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.IApp.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `entrypointDir`<sup>Required</sup> <a name="entrypointDir" id="@winglang/sdk.std.IApp.property.entrypointDir"></a>
+
+```wing
+entrypointDir: str;
+```
+
+- *Type:* str
+
+The directory of the entrypoint of the current program.
+
+---
+
+##### `isTestEnvironment`<sup>Required</sup> <a name="isTestEnvironment" id="@winglang/sdk.std.IApp.property.isTestEnvironment"></a>
+
+```wing
+isTestEnvironment: bool;
+```
+
+- *Type:* bool
+
+`true` if this is a testing environment.
+
+---
+
+##### `workdir`<sup>Required</sup> <a name="workdir" id="@winglang/sdk.std.IApp.property.workdir"></a>
+
+```wing
+workdir: str;
+```
+
+- *Type:* str
+
+The `.wing` directory into which you can emit artifacts during preflight.
+
+---
 

@@ -6,7 +6,7 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
+import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -87,10 +87,7 @@ export class Bucket extends Resource {
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = new Topic(
-      this,
-      `${this.node.id}-${actionType.toLowerCase()}`
-    );
+    const topic = new Topic(this, actionType.toLowerCase());
 
     this.node.addDependency(topic);
 
@@ -133,11 +130,8 @@ export class Bucket extends Resource {
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IResource {
-    const hash = inflight.node.addr.slice(-8);
+  ): IInflight {
     return convertBetweenHandlers(
-      this,
-      `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
       inflight,
       // since uses __dirname should be specified under the target directory
       this.eventHandlerLocation(),
@@ -417,7 +411,7 @@ export interface BucketOnEventOptions {}
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler extends IInflight {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

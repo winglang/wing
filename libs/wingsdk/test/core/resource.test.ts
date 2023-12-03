@@ -46,7 +46,7 @@ describe("resource _addOnLift", () => {
     const notApp = new Construct(undefined as any, "notApp");
 
     expect(() => new ExampleAbstract(notApp, "example")).toThrow(
-      `This is an abstract class and can only be instantiated in the scope of a Wing App`
+      `Cannot find root app`
     );
   });
 });

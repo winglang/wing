@@ -16,12 +16,12 @@ assert("   some string   ".trim() == "some string");
 assert("Some String".uppercase() == "SOME STRING");
 assert("hello" + " world" == "hello world");
 assert(
-"hello ${"funky"}
+"hello {"funky"}
  world" == "hello funky\n world");
   
 // For debugging the test
 test "string" {
-  log("index of \"s\" in s1 is ${s1.indexOf("s")}");
+  log("index of \"s\" in s1 is {s1.indexOf("s")}");
   log(s1.split(" ").at(1));
   log(s1.concat(s2));
 }

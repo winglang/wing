@@ -1,7 +1,7 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
-import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
@@ -91,20 +91,12 @@ export interface SynthHooks {
 /**
  * A Wing application.
  */
-export abstract class App extends Construct {
+export abstract class App extends Construct implements IApp {
   /**
    * Returns the root app.
    */
   public static of(scope: Construct): App {
-    if ((scope as any)._isApp) {
-      return scope as any;
-    }
-
-    if (!scope.node.scope) {
-      throw new Error("Cannot find root app");
-    }
-
-    return App.of(scope.node.scope);
+    return Node.of(scope).app as App;
   }
 
   /**
@@ -128,6 +120,9 @@ export abstract class App extends Construct {
     }
   }
 
+  /** @internal */
+  public readonly [APP_SYMBOL] = true;
+
   /**
    * The name of the compilation target.
    * @internal
@@ -145,6 +140,11 @@ export abstract class App extends Construct {
   public readonly entrypointDir: string;
 
   /**
+   * Used in `makeId` to keep track of known IDs
+   */
+  private readonly _idCounters: Record<string, number> = {};
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -155,27 +155,20 @@ export abstract class App extends Construct {
   public abstract readonly isTestEnvironment: boolean;
 
   /**
-   * Tokens handling for this app.
-   * @internal
-   */
-  public abstract readonly _tokens: Tokens;
-
-  /**
    * NewInstance hooks for defining resource implementations.
    * @internal
    */
   public readonly _newInstanceOverrides: any[];
 
-  /**
-   * Used to identify App instances
-   * @internal
-   */
-  public readonly _isApp = true;
-
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
       throw new Error("Missing environment variable: WING_SOURCE_DIR");
+    }
+
+    // the app is also marked as root in the case where there is no root construct
+    if (!props.rootConstruct) {
+      Node._markRoot(this.constructor);
     }
 
     this.entrypointDir = props.entrypointDir;
@@ -244,6 +237,14 @@ export abstract class App extends Construct {
     return instance;
   }
 
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
+  }
+
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
@@ -296,6 +297,11 @@ export abstract class App extends Construct {
   protected synthRoots(props: AppProps, testRunner: TestRunner) {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;
+
+      // mark the root type so that we can find it later through
+      // Node.of(root).root
+      Node._markRoot(Root);
+
       if (this.isTestEnvironment) {
         new Root(this, "env0");
         const tests = testRunner.findTests();

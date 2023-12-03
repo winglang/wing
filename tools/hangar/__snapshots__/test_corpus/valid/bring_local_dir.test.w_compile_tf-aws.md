@@ -102,7 +102,7 @@ module.exports = function({ $stdlib }) {
     checkWidget(widget) {
       return ((widget.compute()) + (blah.Widget.staticCompute()));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-2.js")({
         })
@@ -120,7 +120,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };
@@ -142,7 +142,7 @@ module.exports = function({ $stdlib }) {
       (util.Util.nanoid());
       return "bar";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Bar-3.js")({
         })
@@ -160,14 +160,14 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Foo extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-3.js")({
         })
@@ -185,7 +185,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
@@ -264,7 +264,7 @@ module.exports = function({ $stdlib }) {
     static staticCompute() {
       return 1337;
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Widget-1.js")({
         })
@@ -282,7 +282,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Widget };

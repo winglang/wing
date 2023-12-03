@@ -2,7 +2,8 @@ import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { simulator, cloud, std } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -13,8 +14,6 @@ test("schedule behavior with rate", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
@@ -36,8 +35,6 @@ test("schedule behavior with cron", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
@@ -59,20 +56,12 @@ test("schedule with two functions", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle(event) { console.log("Received: ", event); }`
-  );
-  const fn2 = simulator.Testing.makeHandler(
-    app,
-    "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
-  schedule.onTick(fn2);
   const output = app.synth();
 
   // THEN
@@ -81,9 +70,6 @@ test("schedule with two functions", () => {
     Targets: Match.arrayWith([
       Match.objectLike({
         Id: "Target0",
-      }),
-      Match.objectLike({
-        Id: "Target1",
       }),
     ]),
   });

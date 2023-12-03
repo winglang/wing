@@ -63,7 +63,7 @@ export interface CompileOptions {
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
-    const wingFiles = await glob("{main,*.main}.w");
+    const wingFiles = (await glob("{main,*.main}.w")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
         "Cannot find entrypoint files (main.w or *.main.w) in the current directory."

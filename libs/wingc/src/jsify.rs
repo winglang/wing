@@ -38,6 +38,7 @@ use self::codemaker::CodeMaker;
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
+const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
@@ -48,7 +49,7 @@ const PLATFORMS_VAR: &str = "$platforms";
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
-const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{}", CLASS_INFLIGHT_INIT_NAME);
+const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
@@ -500,11 +501,37 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
-
 				let fqn = class_type.fqn.clone();
+
+				let scope_arg = if fqn.is_none() {
+					scope.clone()
+				} else {
+					match scope.clone() {
+						None => None,
+						Some(scope) => Some(if scope == "this" {
+								"this".to_string()
+							} else {
+								"$scope".to_string()
+							})
+					}
+				};
+
+				let args = self.jsify_arg_list(&arg_list, scope_arg, id, ctx);
+
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
-					new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+					// determine the scope to use for finding the root object
+					let node_scope = if let Some(scope) = scope {
+						scope
+					} else {
+						"this".to_string()
+					};
+
+					// if a scope is defined, use it to find the root object, otherwise use "this"
+					if node_scope != "this" {
+						new_code!(expr_span, "($scope => $scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node_scope, ")")
+					} else {
+						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+					}
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
 					// make sure it's called before we return the object.
@@ -532,7 +559,11 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Literal(lit) => match lit {
 				Literal::Nil => new_code!(expr_span, "undefined"),
-				Literal::String(s) => new_code!(expr_span, s),
+				Literal::String(s) => {
+					// Unescape our string interpolation braces because in JS they don't need escaping
+					let s = s.replace("\\{", "{");
+					new_code!(expr_span, s)
+				}
 				Literal::InterpolatedString(s) => {
 					let statics = s
 						.parts
@@ -718,7 +749,7 @@ impl<'a> JSifier<'a> {
 				ctx.visit_ctx.pop_json();
 				js_out
 			}
-			ExprKind::JsonMapLiteral { fields } | ExprKind::MapLiteral { fields, .. } => {
+			ExprKind::JsonMapLiteral { fields } => {
 				let f = fields
 					.iter()
 					.map(|(key, expr)| {
@@ -729,6 +760,17 @@ impl<'a> JSifier<'a> {
 							"\": ",
 							self.jsify_expression(expr, ctx)
 						)
+					})
+					.collect_vec();
+				new_code!(expr_span, "({", f, "})")
+			}
+			ExprKind::MapLiteral { fields, .. } => {
+				let f = fields
+					.iter()
+					.map(|(key, value)| {
+						let mut kv = new_code!(&key.span, "[", self.jsify_expression(key, ctx), "]: ");
+						kv.append(new_code!(&value.span, self.jsify_expression(value, ctx)));
+						kv
 					})
 					.collect_vec();
 				new_code!(expr_span, "({", f, "})")
@@ -1371,6 +1413,11 @@ impl<'a> JSifier<'a> {
 			code.append(" {");
 			code.indent();
 
+			// TODO Hack to make sure closures match the IInflight contract from wingsdk
+			if class_type.is_closure() {
+				code.line("_hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');")
+			}
+
 			// emit the preflight constructor
 			code.add_code(self.jsify_preflight_constructor(&class, ctx));
 
@@ -1444,7 +1491,7 @@ impl<'a> JSifier<'a> {
 			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
 		}
 
-		code.line(format!("return [{}];", ops.join(", ")));
+		code.line(format!("return [...super._supportedOps(), {}];", ops.join(", ")));
 		code.close("}");
 		code
 	}
@@ -1454,7 +1501,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::with_source(&class.name.span);
 
-		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
+		code.open("static _toInflightType() {");
 
 		code.open("return `");
 
@@ -1462,7 +1509,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
-				let lift_type = format!("context._lift({})", capture.code);
+				let lift_type = format!("{STDLIB_CORE}.liftObject({})", capture.code);
 				code.line(format!("{}: ${{{}}},", token, lift_type));
 			}
 		}
@@ -1493,7 +1540,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{this._lift({obj})}},"));
+				code.line(format!("{token}: ${{{STDLIB_CORE}.liftObject({obj})}},"));
 			}
 		}
 
@@ -1666,7 +1713,7 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerTypeOnLift"),
+			BindMethod::Type => ("static ", "_registerOnLift"),
 			BindMethod::Instance => ("", "_registerOnLift"),
 		};
 

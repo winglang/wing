@@ -2,7 +2,8 @@ import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
-import { mkdtemp, awscdkSanitize } from "@winglang/sdk/test/util";
+import { mkdtemp } from "@winglang/sdk/test/util";
+import { awscdkSanitize } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -93,10 +94,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -125,10 +123,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -157,10 +152,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`
@@ -189,10 +181,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const processor = simulator.Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = simulator.Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
 }`

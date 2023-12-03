@@ -156,19 +156,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -419,19 +406,6 @@ my_buckets: [(function() {
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -601,19 +575,6 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -782,19 +743,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -961,19 +909,6 @@ my_capture: false
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1143,19 +1078,6 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1327,19 +1249,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1514,19 +1423,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1696,19 +1592,6 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1957,19 +1840,6 @@ my_map: new Map([[\\"foo\\",(function() {
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -2136,19 +2006,6 @@ my_capture: 123
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2320,19 +2177,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -2502,19 +2346,6 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -2682,19 +2513,6 @@ my_capture: \\"bam bam bam\\"
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2866,19 +2684,6 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -3048,19 +2853,6 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -3427,19 +3219,6 @@ my_struct: {\\"bucky\\": (function() {
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {

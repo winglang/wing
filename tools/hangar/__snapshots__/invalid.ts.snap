@@ -326,12 +326,12 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/{variable}' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
    | api.get(\\"<ABSOLUTE>/path\\", handler);
-12 | api.get(\\"<ABSOLUTE>/{variable}\\", handler);
+12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
 at (<ABSOLUTE>:LINE:COL)
  
@@ -368,6 +368,23 @@ error: \\"cloud\\" is already defined
   |
 4 | bring cloud;
   |       ^^^^^ \\"cloud\\" is already defined
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`bring_invalid_dir.w 1`] = `
+"error: Cannot explicitly bring directory with no Wing files \\"no_wing_files\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"in.valid\\"
+
+
+error: Cannot bring Wing directories that contain invalid characters: \\"not-valid\\"
 
 
  
@@ -804,7 +821,7 @@ exports[`cloud_function_expects_inflight.test.w 1`] = `
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
-4 | |   return \\"Hello \${name}\\";
+4 | |   return \\"Hello {name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   |  
@@ -852,9 +869,9 @@ error: Unknown parser error
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.test.w:37:24
+   --> ../../../examples/tests/invalid/container_types.test.w:41:24
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                        ^^^ Unknown parser error
 
 
@@ -921,87 +938,94 @@ error: Unknown symbol \\"someRandomMethod\\"
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:20:24
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:20:35
    |
-20 | let s1: Set<num> = {1, \\"2\\", 3};
+20 | let m5 = {\\"a\\" => 1, \\"{1+1}\\" => 2, 1+1 => 3};
+   |                                   ^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/container_types.test.w:24:24
+   |
+24 | let s1: Set<num> = {1, \\"2\\", 3};
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:21:10
+   --> ../../../examples/tests/invalid/container_types.test.w:25:10
    |
-21 | let s2 = Set<num> [1, \\"2\\", 3];
+25 | let s2 = Set<num> [1, \\"2\\", 3];
    |          ^^^^^^^^ Expected \\"Array\\" or \\"MutArray\\", found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:24
+   --> ../../../examples/tests/invalid/container_types.test.w:26:24
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:22:20
+   --> ../../../examples/tests/invalid/container_types.test.w:26:20
    |
-22 | let s3: Set<num> = [1, \\"2\\", 3];
+26 | let s3: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^ Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:24:20
+   --> ../../../examples/tests/invalid/container_types.test.w:28:20
    |
-24 | let s5: Set<str> = s4;
+28 | let s5: Set<str> = s4;
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
 error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:25:4
+   --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
-25 | s1.someRandomMethod();
+29 | s1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:27:21
+   --> ../../../examples/tests/invalid/container_types.test.w:31:21
    |
-27 | let a: Array<str> = MutArray<str>[];
+31 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:30:24
+   --> ../../../examples/tests/invalid/container_types.test.w:34:24
    |
-30 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
+34 | let mm1: MutMap<num> = { \\"a\\" => 1, \\"b\\" => 2, \\"c\\" => 3 };
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:33:15
+   --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
-33 | let mm3 = mm2.copyMut();
+37 | let mm3 = mm2.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:37:27
+   --> ../../../examples/tests/invalid/container_types.test.w:41:27
    |
-37 | let ss1: MutSet<str> = Set{\\"c\\"};
+41 | let ss1: MutSet<str> = Set{\\"c\\"};
    |                           ^^^^^ Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/container_types.test.w:39:37
+   --> ../../../examples/tests/invalid/container_types.test.w:43:37
    |
-39 | let ss2: MutSet<num> = MutSet<num> {true};
+43 | let ss2: MutSet<num> = MutSet<num> {true};
    |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
 error: Unknown symbol \\"copyMut\\"
-   --> ../../../examples/tests/invalid/container_types.test.w:42:15
+   --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
-42 | let ss4 = ss3.copyMut();
+46 | let ss4 = ss3.copyMut();
    |               ^^^^^^^ Unknown symbol \\"copyMut\\"
 
 
@@ -2344,6 +2368,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`new_in_static_without_scope.test.w 1`] = `
+"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
+  |
+7 |     return new cloud.Bucket();
+  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
+
+
+error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
+   |
+10 |     return new MyClass();
+   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`nil.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"nil\\" instead
   --> ../../../examples/tests/invalid/nil.test.w:3:14
@@ -2554,6 +2600,13 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
+  |
+1 | let my_func1 = (callback: inflight (num): num) => {  };
+  | ^ Unknown symbol \\"this\\"
 
 
  
@@ -3320,10 +3373,10 @@ error: Cannot call super method inside of a static method
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.test.w:52:50
+   --> ../../../examples/tests/invalid/super_call.test.w:52:48
    |
-52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
-   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
+   |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
  
@@ -3383,8 +3436,8 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:10:10
    |
-10 | let e3 = \\"\${strExample}!\\" * numExample;
-   |          ^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+10 | let e3 = \\"{strExample}!\\" * numExample;
+   |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -3549,17 +3602,17 @@ Duration <DURATION>"
 
 exports[`use_before_defined.test.w 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:8
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:1:7
   |
-1 | log(\\"\${y}\\"); // Access y before it's defined
-  |        ^ Unknown symbol \\"y\\"
+1 | log(\\"{y}\\"); // Access y before it's defined
+  |       ^ Unknown symbol \\"y\\"
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:10
+  --> ../../../examples/tests/invalid/use_before_defined.test.w:5:9
   |
-5 |   log(\\"\${x}\\");
-  |          ^ Symbol \\"x\\" used before being defined
+5 |   log(\\"{x}\\");
+  |         ^ Symbol \\"x\\" used before being defined
   .
 8 | let x = \\"hi\\";
   |     - defined later here

@@ -57,10 +57,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $b: ${context._lift(b)},
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["put", "list", "$inflight_init"];
+        return [...super._supportedOps(), "put", "list", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("list")) {

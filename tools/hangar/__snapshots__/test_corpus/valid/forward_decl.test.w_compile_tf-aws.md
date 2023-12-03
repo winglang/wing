@@ -68,7 +68,7 @@ class $Root extends $stdlib.std.Resource {
       }
       method1() {
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.R-1.js")({
           })
@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const x = "hi";

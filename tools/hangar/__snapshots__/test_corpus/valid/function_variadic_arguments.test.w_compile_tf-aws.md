@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class B extends A {
@@ -136,10 +136,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");

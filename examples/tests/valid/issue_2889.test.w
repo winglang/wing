@@ -4,7 +4,7 @@ bring http;
 let api = new cloud.Api();
 
 api.get("/foo", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let issues = Json.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]");
+  let issues = Json.parse("[\{\"foo\": \"bar\"}, \{\"foo\": \"baz\"}, \{\"foo\": \"qux\"}]");
 
   return cloud.ApiResponse {
     status: 200,

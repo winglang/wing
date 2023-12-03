@@ -72,10 +72,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Base-1.js")({
-            $x: ${context._lift(x)},
+            $x: ${$stdlib.core.liftObject(x)},
           })
         `;
       }
@@ -91,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["bar", "$inflight_init"];
+        return [...super._supportedOps(), "bar", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("bar")) {
@@ -104,10 +104,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${context._lift(Base)},
+            $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
       }
@@ -123,7 +123,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("foo")) {

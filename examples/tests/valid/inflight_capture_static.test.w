@@ -2,7 +2,7 @@ bring util;
 
 class Preflight {
   pub static inflight staticMethod(a: num): str {
-    return "foo-${a}";
+    return "foo-{a}";
   }
 }
 
@@ -30,7 +30,7 @@ test "call static method of an inner inflight class" {
 
 test "call static method of a namespaced type" {
   if let target = util.tryEnv("WING_TARGET") {
-    log("WING_TARGET=${target}");
+    log("WING_TARGET={target}");
   } else {
     assert(false /* target not defined*/);
   }

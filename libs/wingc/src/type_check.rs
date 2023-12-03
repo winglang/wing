@@ -22,9 +22,9 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION,
-	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME,
+	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON,
+	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -1075,7 +1075,8 @@ impl TypeRef {
 	}
 
 	pub fn is_option(&self) -> bool {
-		matches!(**self, Type::Optional(_))
+		// "any" can also be `nil`
+		matches!(**self, Type::Optional(_) | Type::Anything)
 	}
 
 	pub fn is_immutable_collection(&self) -> bool {
@@ -1567,6 +1568,16 @@ impl Types {
 			.expect("Resouce base class to be a type")
 	}
 
+	pub fn construct_interface(&self) -> TypeRef {
+		self
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_INTERFACE, None)
+			.expect("Construct interface to be loaded")
+			.0
+			.as_type()
+			.expect("Construct interface to be a type")
+	}
+
 	/// Stores the type and phase of a given expression node.
 	pub fn assign_type_to_expr(&mut self, expr: &Expr, type_: TypeRef, phase: Phase) {
 		let expr_idx = expr.id;
@@ -2004,6 +2015,29 @@ impl<'a> TypeChecker<'a> {
 							self.spanned_error(exp, format!("Cannot instantiate abstract class \"{}\"", class.name));
 						}
 
+						// error if we are trying to instantiate a preflight in a static method
+						// without an explicit scope (there is no "this" to use as the scope)
+						if class.phase == Phase::Preflight && obj_scope.is_none() {
+							// check if there is a "this" symbol in the current environment
+							let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
+
+							// if we have a "this", it means we can use it as a default scope, so we are fine
+							if !has_this {
+								// we don't have a "this", so we need to check if we are in a static method
+								// because the entrypoint scope doesn't have a "this" but it is not static
+								let is_static = self.ctx().current_function().map(|f| f.is_static);
+								if let Some(true) = is_static {
+									self.spanned_error(
+										exp,
+										format!(
+											"Cannot instantiate preflight class \"{}\" in a static method without an explicit scope",
+											class.name
+										),
+									);
+								}
+							}
+						}
+
 						if class.phase == Phase::Independent || env.phase == class.phase {
 							(&class.env, &class.name)
 						} else {
@@ -2094,9 +2128,9 @@ impl<'a> TypeChecker<'a> {
 						obj_scope_type
 					};
 
-					// Verify the object scope is an actually resource
+					// Verify the object scope is a construct
 					if let Some(obj_scope_type) = obj_scope_type {
-						if !obj_scope_type.is_preflight_class() {
+						if !obj_scope_type.is_subtype_of(&self.types.construct_interface()) {
 							self.spanned_error(
 								exp,
 								format!(
@@ -2326,9 +2360,9 @@ impl<'a> TypeChecker<'a> {
 					(self.types.add_type(Type::Map(inner_type)), inner_type)
 				};
 
-				// Verify all types are the same as the inferred type
-				for (sym, field) in fields {
-					let (t, _) = self.type_check_exp(field, env);
+				// Verify all types are the same as the inferred type and that all keys are of string type
+				for (key, value) in fields {
+					let (t, _) = self.type_check_exp(value, env);
 					if t.is_json() && !matches!(*element_type, Type::Json(Some(..))) {
 						// This is an field of JSON, change the element type to reflect that
 						let json_data = JsonData {
@@ -2338,21 +2372,12 @@ impl<'a> TypeChecker<'a> {
 						element_type = self.types.add_type(Type::Json(Some(json_data)));
 					}
 
-					// Augment the json list data with the new element type
-					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
-						if let JsonDataKind::Fields(ref mut fields) = kind {
-							fields.insert(
-								sym.clone(),
-								SpannedTypeInfo {
-									type_: t,
-									span: field.span(),
-								},
-							);
-						}
-					}
-
-					self.validate_type(t, element_type, field);
+					self.validate_type(t, element_type, value);
 					element_type = self.types.maybe_unwrap_inference(element_type);
+
+					// Verify that the key is a string
+					let (key_type, _) = self.type_check_exp(key, env);
+					self.validate_type(key_type, self.types.string(), key);
 				}
 
 				if let Type::Map(ref mut inner) | Type::MutMap(ref mut inner) = &mut *container_type {
@@ -2680,7 +2705,7 @@ impl<'a> TypeChecker<'a> {
 		));
 		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
-		self.with_function_def(None, &func_def.signature, function_env, |tc| {
+		self.with_function_def(None, &func_def.signature, func_def.is_static, function_env, |tc| {
 			// Type check the function body
 			if let FunctionBody::Statements(scope) = &func_def.body {
 				tc.types.set_scope_env(scope, function_env);
@@ -4452,21 +4477,27 @@ impl<'a> TypeChecker<'a> {
 		}
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
 
-		self.with_function_def(Some(method_name), &method_def.signature, method_env, |tc| {
-			if let FunctionBody::Statements(scope) = &method_def.body {
-				tc.types.set_scope_env(scope, method_env);
-				tc.inner_scopes.push((scope, tc.ctx.clone()));
-			}
-
-			if let FunctionBody::External(_) = &method_def.body {
-				if !method_def.is_static {
-					tc.spanned_error(
-						method_name,
-						"Extern methods must be declared \"static\" (they cannot access instance members)",
-					);
+		self.with_function_def(
+			Some(method_name),
+			&method_def.signature,
+			method_def.is_static,
+			method_env,
+			|tc| {
+				if let FunctionBody::Statements(scope) = &method_def.body {
+					tc.types.set_scope_env(scope, method_env);
+					tc.inner_scopes.push((scope, tc.ctx.clone()));
 				}
-			}
-		});
+
+				if let FunctionBody::External(_) = &method_def.body {
+					if !method_def.is_static {
+						tc.spanned_error(
+							method_name,
+							"Extern methods must be declared \"static\" (they cannot access instance members)",
+						);
+					}
+				}
+			},
+		);
 	}
 
 	fn add_method_to_class_env(
@@ -5556,7 +5587,7 @@ fn add_parent_members_to_iface_env(
 						sym.clone(),
 						member_type,
 						false,
-						true,
+						false,
 						iface_env.phase,
 						AccessModifier::Public,
 						None,
@@ -5944,5 +5975,11 @@ mod tests {
 		// in place of a function that accepts a "string", but not vice versa
 		assert!(opt_str_fn.is_subtype_of(&str_fn));
 		assert!(!str_fn.is_subtype_of(&opt_str_fn));
+	}
+
+	#[test]
+	fn any_is_optional() {
+		let any = UnsafeRef::<Type>(&Type::Anything);
+		assert!(any.is_option());
 	}
 }

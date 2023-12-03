@@ -22,6 +22,42 @@ export interface PackageOptions {
   readonly outfile?: string;
 }
 
+async function containsWingFile(dir: string): Promise<boolean> {
+  const files = await fs.readdir(dir);
+  return files.some((file) => file.endsWith(".w"));
+}
+
+/**
+ * This recursive function validates that all directories that contain wing files
+ * have valid naming conventions.
+ *
+ * @param dir The name of the directory to validate
+ */
+async function validateWingDir(dir: string) {
+  const dirEntries = await fs.readdir(dir);
+
+  for (const entry of dirEntries) {
+    const entryPath = path.join(dir, entry);
+    const stat = await fs.stat(entryPath);
+
+    if (stat.isDirectory()) {
+      if (entry === "node_modules") {
+        continue;
+      }
+
+      // if the directory contains a wing file, validate its name
+      if (await containsWingFile(entryPath)) {
+        if (!/^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$/.test(entry)) {
+          throw new Error(
+            `Directories that contain wing files cannot contain non-symbolic characters: ${entryPath}`
+          );
+        }
+        await validateWingDir(entryPath);
+      }
+    }
+  }
+}
+
 export async function pack(options: PackageOptions = {}): Promise<string> {
   const userDir = process.cwd();
   const outfile = options.outfile ? resolve(options.outfile) : undefined;
@@ -32,6 +68,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
   if (!(await exists(originalPkgJsonPath))) {
     throw new Error(`No package.json found in the current directory. Run \`npm init\` first.`);
   }
+
+  // check that all wing directories are valid (for now that just means named correctly)
+  await validateWingDir(userDir);
 
   // collect a list of files to copy to the staging directory.
   // only the files that will be included in the tarball will be copied

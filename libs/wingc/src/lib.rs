@@ -114,6 +114,7 @@ const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";

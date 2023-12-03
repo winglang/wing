@@ -4,16 +4,18 @@ import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
-import { std, core, cloud} from "@winglang/sdk";
+import { App } from "./app";
+import { std, core, cloud } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateQueuePermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { IAwsQueue } from "@winglang/sdk/lib/shared-aws/queue";
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.Queue {
+export class Queue extends cloud.Queue implements IAwsQueue {
   private readonly queue: SQSQueue;
   private readonly timeout: std.Duration;
 
@@ -35,10 +37,7 @@ export class Queue extends cloud.Queue {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
@@ -48,8 +47,9 @@ export class Queue extends cloud.Queue {
     );
 
     const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-SetConsumer-${hash}`,
+      // ok since we're not a tree root
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
       functionHandler,
       {
         ...props,
@@ -116,5 +116,17 @@ export class Queue extends cloud.Queue {
 
   private envName(): string {
     return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
+  }
+
+  public get queueArn(): string {
+    return this.queue.queueArn;
+  }
+
+  public get queueName(): string {
+    return this.queue.queueName;
+  }
+
+  public get queueUrl(): string {
+    return this.queue.queueUrl;
   }
 }

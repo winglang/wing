@@ -141,19 +141,6 @@ async handle(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -341,19 +328,6 @@ async handle(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -541,19 +515,6 @@ async handle(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -743,19 +704,6 @@ async handle(event) {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -933,19 +881,6 @@ async handle() {
   "tree.json": {
     "tree": {
       "children": {
-        "Handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Handler",
-          "path": "root/Handler",
-        },
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1220,19 +1155,6 @@ return class Handler {
           "id": "Function.0",
           "path": "root/Function.0",
         },
-        "Function.0.handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Function.0.handler",
-          "path": "root/Function.0.handler",
-        },
         "Function.1": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1244,19 +1166,6 @@ return class Handler {
           },
           "id": "Function.1",
           "path": "root/Function.1",
-        },
-        "Function.1.handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Function.1.handler",
-          "path": "root/Function.1.handler",
         },
         "Function.2": {
           "constructInfo": {
@@ -1270,19 +1179,6 @@ return class Handler {
           "id": "Function.2",
           "path": "root/Function.2",
         },
-        "Function.2.handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Function.2.handler",
-          "path": "root/Function.2.handler",
-        },
         "Function.3": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1294,19 +1190,6 @@ return class Handler {
           },
           "id": "Function.3",
           "path": "root/Function.3",
-        },
-        "Function.3.handler": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "Function.3.handler",
-          "path": "root/Function.3.handler",
         },
         "cloud.TestRunner": {
           "constructInfo": {

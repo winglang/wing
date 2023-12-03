@@ -16,6 +16,10 @@ let m3 = Map<str>{"h" => "h"};
 let m4: Map<num> = m3;
 m1.someRandomMethod();
 
+// Map keys must be strings
+let m5 = {"a" => 1, "{1+1}" => 2, 1+1 => 3};
+//                               ^^^ Expected type to be "str", but got "num" instead
+
 //Set tests
 let s1: Set<num> = {1, "2", 3};
 let s2 = Set<num> [1, "2", 3];

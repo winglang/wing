@@ -366,47 +366,47 @@ exports[`topic with subscriber function 2`] = `
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "Topic-OnMessage-c5395e41_CloudwatchLogGroup_6929CC03": {
-        "name": "/aws/lambda/Topic-OnMessage-c5395e41-c8eb4431",
+      "Topic-OnMessage0_CloudwatchLogGroup_DE4DF0A1": {
+        "name": "/aws/lambda/Topic-OnMessage0-c85d7820",
         "retention_in_days": 30,
       },
     },
     "aws_iam_role": {
-      "Topic-OnMessage-c5395e41_IamRole_6C4D2D29": {
+      "Topic-OnMessage0_IamRole_64DD36FA": {
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "Topic-OnMessage-c5395e41_IamRolePolicy_E008396D": {
+      "Topic-OnMessage0_IamRolePolicy_F5EE09D8": {
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}",
+        "role": "\${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "Topic-OnMessage-c5395e41_IamRolePolicyAttachment_936AE21F": {
+      "Topic-OnMessage0_IamRolePolicyAttachment_091E665D": {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}",
+        "role": "\${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.name}",
       },
     },
     "aws_lambda_function": {
-      "Topic-OnMessage-c5395e41": {
+      "Topic-OnMessage0": {
         "architectures": [
           "arm64",
         ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "Topic-OnMessage-c5395e41-c8eb4431",
+            "WING_FUNCTION_NAME": "Topic-OnMessage0-c85d7820",
           },
         },
-        "function_name": "Topic-OnMessage-c5395e41-c8eb4431",
+        "function_name": "Topic-OnMessage0-c85d7820",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.arn}",
+        "role": "\${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
-        "s3_key": "\${aws_s3_object.Topic-OnMessage-c5395e41_S3Object_7A3438DE.key}",
+        "s3_key": "\${aws_s3_object.Topic-OnMessage0_S3Object_D41E9C10.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -415,9 +415,9 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_lambda_permission": {
-      "Topic-OnMessage-c5395e41_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_DC3A27DA": {
+      "Topic-OnMessage0_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_2E2D0106": {
         "action": "lambda:InvokeFunction",
-        "function_name": "\${aws_lambda_function.Topic-OnMessage-c5395e41.function_name}",
+        "function_name": "\${aws_lambda_function.Topic-OnMessage0.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "\${aws_sns_topic.Topic.arn}",
       },
@@ -428,7 +428,7 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_s3_object": {
-      "Topic-OnMessage-c5395e41_S3Object_7A3438DE": {
+      "Topic-OnMessage0_S3Object_D41E9C10": {
         "bucket": "\${aws_s3_bucket.Code.bucket}",
         "key": "<key>",
         "source": "<source>",
@@ -440,8 +440,8 @@ exports[`topic with subscriber function 2`] = `
       },
     },
     "aws_sns_topic_subscription": {
-      "Topic_Topic-TopicSubscription-c5395e41_5CA277EA": {
-        "endpoint": "\${aws_lambda_function.Topic-OnMessage-c5395e41.arn}",
+      "Topic_TopicSubscription0_0EA5CC90": {
+        "endpoint": "\${aws_lambda_function.Topic-OnMessage0.arn}",
         "protocol": "lambda",
         "topic_arn": "\${aws_sns_topic.Topic.arn}",
       },
@@ -466,19 +466,6 @@ exports[`topic with subscriber function 3`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "Topic": {
                 "children": {
                   "Default": {
@@ -489,13 +476,13 @@ exports[`topic with subscriber function 3`] = `
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
                   },
-                  "Topic-TopicSubscription-c5395e41": {
+                  "TopicSubscription0": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "Topic-TopicSubscription-c5395e41",
-                    "path": "root/Default/Topic/Topic-TopicSubscription-c5395e41",
+                    "id": "TopicSubscription0",
+                    "path": "root/Default/Topic/TopicSubscription0",
                   },
                 },
                 "constructInfo": {
@@ -509,7 +496,7 @@ exports[`topic with subscriber function 3`] = `
                 "id": "Topic",
                 "path": "root/Default/Topic",
               },
-              "Topic-OnMessage-c5395e41": {
+              "Topic-OnMessage0": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -517,7 +504,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Asset",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/Asset",
+                    "path": "root/Default/Topic-OnMessage0/Asset",
                   },
                   "CloudwatchLogGroup": {
                     "constructInfo": {
@@ -525,7 +512,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "CloudwatchLogGroup",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/CloudwatchLogGroup",
+                    "path": "root/Default/Topic-OnMessage0/CloudwatchLogGroup",
                   },
                   "Default": {
                     "constructInfo": {
@@ -533,7 +520,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "Default",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/Default",
+                    "path": "root/Default/Topic-OnMessage0/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
@@ -541,7 +528,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRole",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/IamRole",
+                    "path": "root/Default/Topic-OnMessage0/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
@@ -549,7 +536,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/IamRolePolicy",
+                    "path": "root/Default/Topic-OnMessage0/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
@@ -557,7 +544,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/IamRolePolicyAttachment",
+                    "path": "root/Default/Topic-OnMessage0/IamRolePolicyAttachment",
                   },
                   "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2": {
                     "constructInfo": {
@@ -565,7 +552,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
+                    "path": "root/Default/Topic-OnMessage0/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                   },
                   "S3Object": {
                     "constructInfo": {
@@ -573,7 +560,7 @@ exports[`topic with subscriber function 3`] = `
                       "version": "0.17.0",
                     },
                     "id": "S3Object",
-                    "path": "root/Default/Topic-OnMessage-c5395e41/S3Object",
+                    "path": "root/Default/Topic-OnMessage0/S3Object",
                   },
                 },
                 "constructInfo": {
@@ -584,19 +571,8 @@ exports[`topic with subscriber function 3`] = `
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Topic-OnMessage-c5395e41",
-                "path": "root/Default/Topic-OnMessage-c5395e41",
-              },
-              "Topic-OnMessageHandler-c5395e41": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "hidden": true,
-                },
-                "id": "Topic-OnMessageHandler-c5395e41",
-                "path": "root/Default/Topic-OnMessageHandler-c5395e41",
+                "id": "Topic-OnMessage0",
+                "path": "root/Default/Topic-OnMessage0",
               },
               "aws": {
                 "constructInfo": {
