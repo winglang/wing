@@ -23,8 +23,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-
-    new cloud.Endpoint(this, "Endpoint", this.url);
   }
 
   public get url(): string {

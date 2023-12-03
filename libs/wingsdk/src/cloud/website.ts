@@ -114,6 +114,13 @@ export class Website extends Resource implements IWebsite {
     options;
     throw new AbstractMemberError();
   }
+
+  /** @internal */
+  public _preSynthesize() {
+    super._preSynthesize();
+
+    new cloud.Endpoint(this, "Endpoint", this.url);
+  }
 }
 
 /**

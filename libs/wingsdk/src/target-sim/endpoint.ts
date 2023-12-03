@@ -22,7 +22,9 @@ export class Endpoint extends cloud.Endpoint {
     return {
       type: cloud.ENDPOINT_FQN,
       path: this.node.path,
-      props: {},
+      props: {
+        url: this.url,
+      },
       attrs: {},
     };
   }

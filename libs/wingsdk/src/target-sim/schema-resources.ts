@@ -327,8 +327,17 @@ export interface DomainSchema extends BaseResourceSchema {
   readonly props: {};
 }
 
+/** Runtime attributes for cloud.Endpoint */
+export interface EndpointAttributes {
+  /** The URL of the Endpoint. */
+  readonly url: string;
+}
+
 /** Schema for cloud.Endpoint */
 export interface EndpointSchema extends BaseResourceSchema {
   readonly type: typeof ENDPOINT_FQN;
-  readonly props: {};
+  readonly props: {
+    /** The URL of the Endpoint. */
+    readonly url: string;
+  };
 }

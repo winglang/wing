@@ -13,7 +13,7 @@ export const ENDPOINT_FQN = fqnForType("cloud.Endpoint");
  */
 export class Endpoint extends Resource {
   /** @internal */
-  protected _url!: string;
+  private _url!: string;
 
   /**
    * The endpoint url.

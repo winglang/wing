@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
 import { Node, Resource, Duration, IInflight } from "../std";
@@ -597,6 +598,13 @@ export class Api extends Resource {
       openapi: "3.0.3",
       paths: paths,
     };
+  }
+
+  /** @internal */
+  public _preSynthesize() {
+    super._preSynthesize();
+
+    new cloud.Endpoint(this, "Endpoint", this.url);
   }
 }
 

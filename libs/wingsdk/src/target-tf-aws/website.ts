@@ -153,8 +153,6 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     }
 
     this._url = `https://${distribution.domainName}`;
-
-    new cloud.Endpoint(this, "Endpoint", this.url);
   }
 
   public get url(): string {
