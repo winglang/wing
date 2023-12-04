@@ -51,8 +51,11 @@ export async function runDockerImage({
   containerPort,
 }: runDockerImageProps): Promise<{ hostPort: string }> {
   // Pull docker image
-  await runCommand("docker", ["pull", imageName]);
-
+  try {
+    await runCommand("docker", ["inspect", imageName]);
+  } catch {
+    await runCommand("docker", ["pull", imageName]);
+  }
   // Run the container and allow docker to assign a host port dynamically
   await runCommand("docker", [
     "run",
