@@ -1,6 +1,6 @@
 ---
-title: json_schema
-id: json_schema
+title: jsonSchema
+id: jsonSchema
 ---
 
 

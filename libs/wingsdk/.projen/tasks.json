@@ -394,7 +394,7 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/json.md"
         },
         {
-          "exec": "echo \"---\ntitle: json_schema\nid: json_schema\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/json_schema.md"
+          "exec": "echo \"---\ntitle: jsonSchema\nid: jsonSchema\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/json_schema.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/json_schema"

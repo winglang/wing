@@ -282,6 +282,9 @@ for (const mod of publicModules) {
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const UNDOCUMENTED_EX_FILES = ["index"];
 
+const toCamelCase = (str: string) =>
+  str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
+
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
@@ -314,7 +317,9 @@ function generateResourceApiDocs(
     if (undocumentedResources.includes(mod)) {
       // adding a title
       docgen.exec(
-        `echo "---\ntitle: ${mod}\nid: ${mod}\n---\n\n" > ${docsPath}${mod}.md`
+        `echo "---\ntitle: ${toCamelCase(mod)}\nid: ${toCamelCase(
+          mod
+        )}\n---\n\n" > ${docsPath}${mod}.md`
       );
     }
     docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
