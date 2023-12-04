@@ -83,10 +83,12 @@ export function makeSimulatorClient(url: string, handle: string) {
 
       if (parsed.error) {
         // objects with "then" methods are special-cased by the JS runtime
-        // because they are assumed to be promises, and can be awaited.
-        // however, we don't know ahead of time what methods will be on the
+        // because they are assumed to be promises, and can be awaited. [0]
+        // however, this client don't know ahead of time what methods are on the
         // object, so we have to assume that it has a "then" method until
         // we get an error back from the server saying that it doesn't.
+        //
+        // [0]: https://stackoverflow.com/questions/55262996/does-awaiting-a-non-promise-have-any-detectable-effect
         if (
           method === "then" &&
           parsed.error &&
