@@ -52,7 +52,7 @@ class $Root extends $stdlib.std.Resource {
     if ((stringy.includes("60") && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((stringy.split(":")).at(0)),"60")))) {
       {console.log(String.raw({ raw: ["", "!"] }, stringy.length))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123"),123)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("123"),123)))};
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
