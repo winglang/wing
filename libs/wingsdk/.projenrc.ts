@@ -1,5 +1,6 @@
 import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
+import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
@@ -11,18 +12,11 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = [
-  "std",
-  "http",
-  "util",
-  "aws",
-  "math",
-  "regex",
-  "sim",
-  "fs",
-  "expect",
-  "ui",
-];
+// those will be skipped out of the docs
+const SKIPPED_MODULES = ["cloud", "ex", "simulator", "core"];
+const publicModules = Object.keys(cloud).filter(
+  (item) => !SKIPPED_MODULES.includes(item)
+);
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
@@ -276,8 +270,8 @@ docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
-for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 3, mod);
+for (const mod of publicModules) {
+  const prefix = docsPrefix(publicModules.indexOf(mod) + 3, mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
