@@ -31,10 +31,10 @@ module.exports = function({ $i }) {
     }
     async handle() {
       const arr = [0];
-      ((obj, args) => { obj.push(...args); })(arr, [$i]);
+      (await arr.push($i));
       if (true) {
         const i = 2;
-        ((obj, args) => { obj.push(...args); })(arr, [i]);
+        (await arr.push(i));
       }
     }
   }
