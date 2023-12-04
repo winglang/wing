@@ -95,7 +95,12 @@ export class App extends CdktfApp {
       );
     }
 
-    new AzurermProvider(this, "azure", { features: {} });
+    new AzurermProvider(this, "azure", {
+      features: {
+        // To be able to run terraform destroy during tests, and in a reasonable time
+        resourceGroup: { preventDeletionIfContainsResources: false },
+      },
+    });
 
     Object.defineProperty(this, APP_AZURE_TF_SYMBOL, {
       value: this,

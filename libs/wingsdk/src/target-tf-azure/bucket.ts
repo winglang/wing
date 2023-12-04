@@ -107,7 +107,6 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.LIST,
       cloud.BucketInflightMethods.PUT,
       cloud.BucketInflightMethods.PUT_JSON,
-      cloud.BucketInflightMethods.PUBLIC_URL,
       cloud.BucketInflightMethods.EXISTS,
       cloud.BucketInflightMethods.TRY_GET,
       cloud.BucketInflightMethods.TRY_GET_JSON,
@@ -150,7 +149,6 @@ export class Bucket extends cloud.Bucket {
 
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
-    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
     super.onLift(host, ops);
   }
 
@@ -207,11 +205,7 @@ export class Bucket extends cloud.Bucket {
     return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.envStorageAccountName()}"]`,
-      `process.env["${this.isPublicEnvName()}"]`,
     ]);
-  }
-  private isPublicEnvName(): string {
-    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {
