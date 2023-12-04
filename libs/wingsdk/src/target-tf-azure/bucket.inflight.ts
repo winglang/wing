@@ -19,17 +19,14 @@ export class BucketClient implements IBucketClient {
   private readonly storageAccount: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
-  private readonly _public: boolean;
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
   constructor(
     bucketName: string,
     storageAccount: string,
-    isPublic: boolean = false,
     blobServiceClient?: BlobServiceClient
   ) {
-    this._public = isPublic;
     this.bucketName = bucketName;
     this.storageAccount = storageAccount;
     this.blobServiceClient =
@@ -176,10 +173,13 @@ export class BucketClient implements IBucketClient {
       await blockBlobClient.delete();
     } catch (err) {
       const error = err as any;
-      if (!mustExist && error.details.errorCode === "BlobNotFound") {
-        return;
+      if (error.details.errorCode === "BlobNotFound") {
+        if (mustExist) {
+          throw new Error(`Object does not exist (key=${key}).`);
+        } else {
+          return;
+        }
       }
-
       throw Error(`unable to delete "${key}": ${error.details.message}`);
     }
   }
@@ -228,8 +228,11 @@ export class BucketClient implements IBucketClient {
    * Returns a url to the given file.
    * @Throws if the file is not public or if object does not exist.
    */
+  // TODO: NOT SUPPORTED!! - see https://github.com/winglang/wing/issues/5117
   public async publicUrl(key: string): Promise<string> {
-    if (!this._public) {
+    // this returns an optional `blobPublicAccess` prop - if exists the bucket is public
+    const accessPolicy = await this.containerClient.getAccessPolicy();
+    if (!accessPolicy?.blobPublicAccess) {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
     if (!(await this.exists(key))) {
@@ -259,7 +262,7 @@ export class BucketClient implements IBucketClient {
         size: properties.contentLength!,
       };
     } catch (error) {
-      throw new Error(`Failed to get metadata for object. (key=${key})`);
+      throw new Error(`Object does not exist (key=${key}).`);
     }
   }
 

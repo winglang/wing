@@ -11,7 +11,7 @@ return class Handler {
   async handle(event) { await this.bucket.get(\\"hello.txt\\"); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
 })"
 `;
 
@@ -36,7 +36,6 @@ exports[`function with a bucket binding requiring only read 2`] = `
       "Function_042596DC": {
         "app_settings": {
           "BUCKET_NAME_e51fbb13": "\${azurerm_storage_container.Bucket_DC7D6F65.name}",
-          "BUCKET_NAME_e51fbb13_IS_PUBLIC": "false",
           "FUNCTIONS_WORKER_RUNTIME": "node",
           "STORAGE_ACCOUNT_e51fbb13": "\${azurerm_storage_account.StorageAccount.name}",
           "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
@@ -134,7 +133,7 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"], process.env[\\"BUCKET_NAME_e51fbb13_IS_PUBLIC\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
 })"
 `;
 
@@ -159,7 +158,6 @@ exports[`function with a bucket binding requiring read_write 2`] = `
       "Function_042596DC": {
         "app_settings": {
           "BUCKET_NAME_e51fbb13": "\${azurerm_storage_container.Bucket_DC7D6F65.name}",
-          "BUCKET_NAME_e51fbb13_IS_PUBLIC": "false",
           "FUNCTIONS_WORKER_RUNTIME": "node",
           "STORAGE_ACCOUNT_e51fbb13": "\${azurerm_storage_account.StorageAccount.name}",
           "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
