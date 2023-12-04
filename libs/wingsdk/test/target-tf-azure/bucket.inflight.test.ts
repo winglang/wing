@@ -29,7 +29,6 @@ let TEST_PATH: TestPath;
 const mockBlobServiceClient = new BlobServiceClient(
   "https://some-fake-url.com"
 );
-
 mockBlobServiceClient.getContainerClient = vi.fn(() => {
   return new MockContainerClient("");
 });
@@ -50,6 +49,7 @@ test("put an object into the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.put(KEY, VALUE);
@@ -70,6 +70,7 @@ test("put an object into the bucket specifying the content-type", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.put(KEY, VALUE, { contentType: CONTENT_TYPE });
@@ -89,6 +90,7 @@ test("putJson an object into the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.putJson(KEY, VALUE as any);
@@ -107,6 +109,7 @@ test("get an object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -127,6 +130,7 @@ test("get a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -147,6 +151,7 @@ test("getJson an object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happyJson";
@@ -167,6 +172,7 @@ test("getJson a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -187,6 +193,7 @@ test("delete object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.delete(KEY);
@@ -204,6 +211,7 @@ test("List objects from bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.list();
@@ -221,6 +229,7 @@ test("check that an object exists in the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -240,6 +249,7 @@ test("check that an object doesn't exist in the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -260,6 +270,7 @@ test("tryGet an existing object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -280,6 +291,7 @@ test("tryGet a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -300,6 +312,7 @@ test("tryGetJson an existing object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happyJson";
@@ -320,6 +333,7 @@ test("tryGetJson a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -340,6 +354,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sadJson";
@@ -359,6 +374,7 @@ test("tryDelete an existing object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -379,6 +395,7 @@ test("tryDelete a non-existent object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -399,6 +416,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -419,14 +437,10 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    true,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
-  // @ts-expect-error - accessing private property
-  client.containerClient.getAccessPolicy = vi
-    .fn()
-    .mockResolvedValue({ blobPublicAccess: "container" });
-  client.exists = vi.fn().mockResolvedValue(false);
 
   // THEN
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
@@ -444,14 +458,10 @@ test("Given a public bucket, when giving one of its keys, we should get its publ
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    true,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
-
-  // @ts-expect-error - accessing private property
-  client.containerClient.getAccessPolicy = vi
-    .fn()
-    .mockResolvedValue({ blobPublicAccess: "container" });
 
   const expectedUrl = `https://${STORAGE_NAME}.blob.core.windows.net/${BUCKET_NAME}/${KEY}`;
   const response = await client.publicUrl(KEY);
@@ -470,6 +480,7 @@ test("fetch metadata of an existing object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -494,13 +505,14 @@ test("fetch metadata of an unexisting object from the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
 
   // THEN
   await expect(() => client.metadata(KEY)).rejects.toThrowError(
-    `Object does not exist (key=${KEY}).`
+    `Failed to get metadata for object. (key=${KEY})`
   );
 });
 
@@ -515,6 +527,7 @@ test("copy objects within the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "happy";
@@ -538,6 +551,7 @@ test("copy a non-existent object within the bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   TEST_PATH = "sad";
@@ -642,6 +656,7 @@ class MockContainerClient extends ContainerClient {
   public getBlobClient(key: string): BlobClient {
     return new MockBlobClient(key);
   }
+
   public getBlockBlobClient(blobName: string): BlockBlobClient {
     return new MockBlockBlobClient(blobName);
   }

@@ -15,9 +15,6 @@ export class FunctionClient implements IFunctionClient {
         `https://${this.functionName}.azurewebsites.net/api/${this.functionName}`,
         { body: payload }
       );
-      if (!res.ok) {
-        throw new Error(res.body || "Invocation Error");
-      }
       return res.body ?? "";
     } catch (error) {
       throw new Error(
