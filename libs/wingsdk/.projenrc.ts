@@ -13,13 +13,14 @@ const CDKTF_PROVIDERS = [
 ];
 
 // those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "simulator", "core"];
+const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core"];
 const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
+const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/03-std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -285,7 +286,8 @@ function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
   docsPath: string,
-  excludedFiles: string[] = []
+  excludedFiles: string[] = [],
+  allowUndocumented = false
 ) {
   const cloudFiles = readdirSync(pathToFolder);
 
@@ -299,7 +301,7 @@ function generateResourceApiDocs(
     (file) => !cloudFiles.includes(`${file}.md`)
   );
 
-  if (undocumentedResources.length) {
+  if (undocumentedResources.length && !allowUndocumented) {
     throw new Error(
       `Detected undocumented resources: ${undocumentedResources.join(
         ", "
@@ -309,6 +311,12 @@ function generateResourceApiDocs(
 
   // generate api reference for each cloud/submodule and append it to the doc file
   for (const mod of cloudResources) {
+    if (undocumentedResources.includes(mod)) {
+      // adding a title
+      docgen.exec(
+        `echo "---\ntitle: ${mod}\nid: ${mod}\n---\n\n" > ${docsPath}${mod}.md`
+      );
+    }
     docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
     docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
   }
@@ -325,6 +333,14 @@ generateResourceApiDocs(
   "./src/ex",
   EX_DOCS_PREFIX,
   UNDOCUMENTED_EX_FILES
+);
+
+generateResourceApiDocs(
+  "std",
+  "./src/std",
+  STD_DOCS_PREFIX,
+  ["README", "index", "test-runner", "resource", "test", "range", "generics"],
+  true
 );
 
 docgen.exec("rm API.md");
