@@ -15,6 +15,7 @@ const skip = [
   "std.TraceType",
   "std.TEST_RUNNER_FQN",
   "std.Resource",
+  "std.APP_SYMBOL",
   "std.CONNECTIONS_FILE_PATH",
   "std.SDK_SOURCE_MODULE",
   "std.Node",

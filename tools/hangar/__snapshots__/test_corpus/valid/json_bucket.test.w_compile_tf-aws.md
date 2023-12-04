@@ -17,7 +17,7 @@ module.exports = function({ $b, $fileName }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -37,7 +37,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## main.tf.json
@@ -131,6 +131,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
@@ -201,15 +202,16 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
+            $b: ${$stdlib.core.liftObject(b)},
+            $fileName: ${$stdlib.core.liftObject(fileName)},
           })
         `;
       }
@@ -225,7 +227,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -236,17 +238,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
-            $getJson: ${context._lift(getJson)},
-            $j: ${context._lift(j)},
+            $b: ${$stdlib.core.liftObject(b)},
+            $fileName: ${$stdlib.core.liftObject(fileName)},
+            $getJson: ${$stdlib.core.liftObject(getJson)},
+            $j: ${$stdlib.core.liftObject(j)},
           })
         `;
       }
@@ -262,7 +265,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -274,16 +277,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const fileName = "file.json";
-    const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
-    const getJson = this.node.root.new("@winglang/sdk.cloud.Function",cloud.Function,this, "cloud.Function", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:put", new $Closure2(this, "$Closure2"));
+    const j = ({"persons": [({"age": 30, "name": "hasan", "fears": ["heights", "failure"]})]});
+    const getJson = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:put", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json_bucket.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

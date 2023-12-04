@@ -17,7 +17,7 @@ module.exports = function({ $Foo, $myConst }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -31,7 +31,7 @@ module.exports = function({ $myConst }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -82,10 +82,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $myConst: ${context._lift(myConst)},
+            $myConst: ${$stdlib.core.liftObject(myConst)},
           })
         `;
       }
@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["getValue", "$inflight_init"];
+        return [...super._supportedOps(), "getValue", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("getValue")) {
@@ -111,15 +111,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Foo: ${context._lift(Foo)},
-            $myConst: ${context._lift(myConst)},
+            $Foo: ${$stdlib.core.liftObject(Foo)},
+            $myConst: ${$stdlib.core.liftObject(myConst)},
           })
         `;
       }
@@ -135,7 +136,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -145,12 +146,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const myConst = "bang bang";
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight class captures const", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class captures const", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_capture_const.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

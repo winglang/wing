@@ -2,7 +2,7 @@ bring fs;
 bring regex;
 
 let tmpdir = fs.mkdtemp();
-let filepath = "${tmpdir}/test-preflight.json";
+let filepath = "{tmpdir}/test-preflight.json";
 let data = Json {
     "foo": "bar", 
     "arr": [1, 2, 3, "test", { "foo": "bar" }]
@@ -31,7 +31,7 @@ assert(fs.exists(tmpdir) == false);
 
 test "inflight json operations" {
     let tmpdir = fs.mkdtemp();
-    let filepath = "${tmpdir}/test-inflight.json";
+    let filepath = "{tmpdir}/test-inflight.json";
 
     try {
         fs.writeFile(filepath, "invalid content");

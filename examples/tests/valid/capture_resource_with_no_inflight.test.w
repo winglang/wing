@@ -4,7 +4,7 @@ class A {
   pub field: str;
   counter: cloud.Counter;
 
-  init() { 
+  new() { 
     this.field = "hey"; 
     this.counter = new cloud.Counter();
   }

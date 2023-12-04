@@ -15,7 +15,7 @@ test "copy()" {
     assert(error);
   };
   let UNEXISTING_KEY = "no-such-file.txt";
-  let OBJECT_DOES_NOT_EXIST_ERROR = "Unable to copy. Source object does not exist (srcKey=${UNEXISTING_KEY}).";
+  let OBJECT_DOES_NOT_EXIST_ERROR = "Source object does not exist (srcKey={UNEXISTING_KEY}).";
 
   let KEY1 = "file1.main.w";
   let VALUE1 = "bring cloud;";
@@ -31,9 +31,9 @@ test "copy()" {
   util.sleep(2s);
 
   b.copy(KEY1, KEY1);
-  b.copy(KEY2, "dir/${KEY2}");
+  b.copy(KEY2, "dir/{KEY2}");
   let file1DstMetadata = b.metadata(KEY1);
-  let file2DstMetadata = b.metadata("dir/${KEY2}");
+  let file2DstMetadata = b.metadata("dir/{KEY2}");
 
   assert(file1SrcMetadata.contentType == file1DstMetadata.contentType);
   assert(file1SrcMetadata.size == file1DstMetadata.size);
@@ -42,7 +42,7 @@ test "copy()" {
   assert(file2SrcMetadata.contentType == file2DstMetadata.contentType);
   assert(file2SrcMetadata.size == file2DstMetadata.size);
   assert(file2SrcMetadata.lastModified != file2DstMetadata.lastModified);
-  assert(b.get(KEY2) == b.get("dir/${KEY2}"));
+  assert(b.get(KEY2) == b.get("dir/{KEY2}"));
 
   assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, () => {
     b.copy(UNEXISTING_KEY, KEY1);

@@ -16,9 +16,6 @@ const getResourceBorderColor = (
     case "@winglang/sdk.cloud.Queue": {
       return "border-t border-t-emerald-500 group-hover:border-t-emerald-500 group-focus:border-t-emerald-500 dark:border-t-emerald-500 dark:group-hover:border-t-emerald-500 dark:group-focus:border-t-emerald-500";
     }
-    case "@winglang/sdk.cloud.Endpoint": {
-      return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
-    }
     case "@winglang/sdk.cloud.Counter": {
       return "border-t border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500 dark:border-t-lime-500 dark:group-hover:border-t-lime-500 dark:group-focus:border-t-lime-500";
     }
@@ -39,6 +36,9 @@ const getResourceBorderColor = (
     }
     case "@winglang/sdk.cloud.Website": {
       return "border-t border-t-violet-500 group-hover:border-t-violet-500 group-focus:border-t-violet-500 dark:border-t-violet-500 dark:group-hover:border-t-violet-500 dark:group-focus:border-t-violet-500";
+    }
+    case "@winglang/sdk.ex.ReactApp": {
+      return "border-t border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
     }
   }
 };
@@ -188,8 +188,8 @@ export const ContainerNode = memo(
               className={classNames(
                 "flex-1 rounded-b",
                 depth % 2 === 0
-                  ? "bg-slate-50 dark:bg-slate-500"
-                  : "bg-white dark:bg-slate-550",
+                  ? "bg-white dark:bg-slate-500"
+                  : "bg-slate-50 dark:bg-slate-550",
                 // The classes below are commented out because they cause rendering flashes while zooming.
                 // "border-x border-b border-dashed",
                 // "group-focus:border-sky-300 dark:group-focus:border-sky-500",

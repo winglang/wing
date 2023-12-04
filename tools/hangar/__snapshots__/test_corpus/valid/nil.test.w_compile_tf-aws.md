@@ -17,7 +17,7 @@ module.exports = function({ $foo }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
@@ -42,7 +42,7 @@ module.exports = function({ $foo }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.Foo-1.js
@@ -70,7 +70,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
@@ -121,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -139,18 +139,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["optionalVar", "returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init"];
+        return [...super._supportedOps(), "optionalVar", "returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $foo: ${context._lift(foo)},
+            $foo: ${$stdlib.core.liftObject(foo)},
           })
         `;
       }
@@ -166,7 +167,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -176,14 +177,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $foo: ${context._lift(foo)},
+            $foo: ${$stdlib.core.liftObject(foo)},
           })
         `;
       }
@@ -199,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -209,13 +211,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:nil return", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:optional instance variable", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:nil return", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:optional instance variable", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "nil.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

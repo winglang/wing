@@ -42,13 +42,6 @@ export class Secret extends cloud.Secret {
     }
   }
 
-  /**
-   * Secret's arn
-   */
-  public get arn(): string {
-    return this.secret.arn;
-  }
-
   /** @internal */
   public _supportedOps(): string[] {
     return [

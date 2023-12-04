@@ -32,10 +32,10 @@ test "api url" {
 // Initialize the API in resource
 class A {
   api: cloud.Api;
-  init() {
+  new() {
     this.api = new cloud.Api();
     this.api.get("/endpoint1", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let text = "${this.api.url}/endpoint2";
+      let text = "{this.api.url}/endpoint2";
       return cloud.ApiResponse {
         status: 200,
         body: text,

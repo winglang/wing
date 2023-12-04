@@ -62,7 +62,7 @@ describe("When creating a Redis resource", () => {
         entrypointDir: __dirname,
       });
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
-      const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+      const inflight = Testing.makeHandler(INFLIGHT_CODE);
       const func = new Function(app, "Function", inflight);
       redisCluster.onLift(func, ["set", "get"]);
 
@@ -109,7 +109,7 @@ describe("When creating multiple Redis resources", () => {
       });
       const redisCluster = new ex.Redis(app, "Redis") as ex.Redis;
       const otherCluster = new ex.Redis(app, "OtherRedis") as ex.Redis;
-      const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+      const inflight = Testing.makeHandler(INFLIGHT_CODE);
       const func = new Function(app, "Function", inflight);
       redisCluster.onLift(func, ["set", "get"]);
       otherCluster.onLift(func, ["set", "get"]);

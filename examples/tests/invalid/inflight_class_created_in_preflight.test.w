@@ -4,7 +4,7 @@ new Foo();
 
 // ^^^^^^^^^ Cannot create inflight class "Foo" in preflight phase
 class PreflightClass {
-  init() {
+  new() {
     new Foo();
 //  ^^^^^^^^^ Cannot create inflight class "Foo" in preflight phase
   }

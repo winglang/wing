@@ -966,7 +966,7 @@ export interface IDynamodbTableClient {
   ): Promise<DynamodbTablePutItemResult>;
 
   /**
-   * Get an item from the table.
+   * Edit an existing item's attributes, or add a new item to the table if it does not already exist.
    * @param options dynamodb UpdateItem options.
    * @inflight
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html

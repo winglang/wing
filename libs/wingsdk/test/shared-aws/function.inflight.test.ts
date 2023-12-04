@@ -63,7 +63,7 @@ test("invoke - sad path", async () => {
   // THEN
   const client = new FunctionClient("FUNCTION_NAME", "root/Function");
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
-    /Invoke failed with message: "Unhandled". Full error:/
+    /Invoke failed with message: "I don't like your input!"/
   );
 });
 

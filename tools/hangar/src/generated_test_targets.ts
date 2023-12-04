@@ -47,6 +47,10 @@ export async function compileTest(
   const include = ["preflight.", "inflight.", "extern/", "proc", ".Struct.js"];
 
   for await (const dotFile of walkdir(dotWing)) {
+    if (dotFile.endsWith(".map")) {
+      // exclude sourcemaps
+      continue;
+    }
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
     if (!include.find((f) => subpath.includes(f))) {
       continue;

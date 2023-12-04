@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
-import { IResource, Node, Resource, Duration } from "../std";
+import { Node, Resource, Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -176,6 +176,16 @@ export type CorsHeaders = {
 
 export class Api extends Resource {
   /**
+   * Converts input path to a valid OpenAPI path (replaces `:` based path params with `{}`)
+   * @param path The path to convert (assumes path is valid)
+   * @returns OpenAPI path
+   * @internal
+   */
+  public static _toOpenApiPath(path: string) {
+    return path.replace(/\/:([A-Za-z0-9_-]+)/g, "/{$1}");
+  }
+
+  /**
    * The base URL of the API endpoint.
    * @abstract
    */
@@ -185,7 +195,6 @@ export class Api extends Resource {
 
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
-    openapi: "3.0.3",
     paths: {},
   };
 
@@ -368,14 +377,14 @@ export class Api extends Resource {
   }
   /**
    * Validating path:
-   * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
+   * if has `:` prefix - the part following that prefix is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid
    * @internal
    */
   protected _validatePath(path: string) {
     if (
-      !/^(\/[a-zA-Z0-9_\-\.]+(\/\{[a-zA-Z0-9_\-]+\}|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\{[a-zA-Z0-9_\-]+\})*\/?$/g.test(
+      !/^(\/[a-zA-Z0-9_\-\.]+(\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\:[a-zA-Z0-9_\-]+)*\/?$/g.test(
         path
       )
     ) {
@@ -417,11 +426,7 @@ export class Api extends Resource {
       const partA = partsA[i];
       const partB = partsB[i];
 
-      if (
-        partA !== partB &&
-        !partA.match(/^{.+?}$/) &&
-        !partB.match(/^{.+?}$/)
-      ) {
+      if (partA !== partB && !partA.match(/^:.+?$/) && !partB.match(/^:.+?$/)) {
         return false;
       }
     }
@@ -539,11 +544,11 @@ export class Api extends Resource {
     const operationId = `${method.toLowerCase()}${
       path === "/" ? "" : path.replace("/", "-")
     }`;
-    const pathParams = path.match(/{(.*?)}/g);
+    const pathParams = path.match(/:([A-Za-z0-9_-]+)/g);
     const pathParameters: any[] = [];
     if (pathParams) {
       pathParams.forEach((param) => {
-        const paramName = param.replace("{", "").replace("}", "");
+        const paramName = param.replace(":", "");
         pathParameters.push({
           name: paramName,
           in: "path",
@@ -578,10 +583,20 @@ export class Api extends Resource {
   }
 
   /**
-   * Return the api spec.
+   * Return the OpenAPI spec for this Api.
    * @internal */
-  public _getApiSpec(): OpenApiSpec {
-    return this.apiSpec;
+  public _getOpenApiSpec(): OpenApiSpec {
+    // Convert our paths to valid OpenAPI paths
+    let paths: { [key: string]: any } = {};
+    Object.keys(this.apiSpec.paths).forEach((key) => {
+      paths[Api._toOpenApiPath(key)] = this.apiSpec.paths[key];
+    });
+
+    // https://spec.openapis.org/oas/v3.0.3
+    return {
+      openapi: "3.0.3",
+      paths: paths,
+    };
   }
 }
 
@@ -688,7 +703,7 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IResource {}
+export interface IApiEndpointHandler extends IInflight {}
 
 /**
  * Inflight client for `IApiEndpointHandler`.

@@ -1,27 +1,9 @@
 import { readFile } from "node:fs/promises";
-import { relative } from "node:path";
+import { relative, resolve } from "node:path";
 
 import { CompileError, PreflightError } from "@winglang/compiler";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
-
-function annotatePreflightError(error: Error): Error {
-  if (error.message.startsWith("There is already a Construct with name")) {
-    const newMessage = [];
-    newMessage.push(
-      error.message,
-      "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:",
-      '> new cloud.Bucket() as "MyBucket";',
-      "For more information, see https://www.winglang.io/docs/concepts/application-tree",
-    );
-
-    // eslint-disable-next-line unicorn/error-message
-    const newError = new Error(newMessage.join("\n\n"), { cause: error });
-    newError.stack = error.stack;
-    return newError;
-  }
-
-  return error;
-}
 
 function offsetFromLineAndColumn(source: string, line: number, column: number) {
   const lines = source.split("\n");
@@ -33,10 +15,9 @@ function offsetFromLineAndColumn(source: string, line: number, column: number) {
   return offset;
 }
 
-export const formatWingError = async (error: unknown) => {
+export const formatWingError = async (error: unknown, entryPoint?: string) => {
   try {
     if (error instanceof CompileError) {
-      console.log(error.diagnostics);
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
@@ -95,7 +76,6 @@ export const formatWingError = async (error: unknown) => {
           });
         }
 
-        console.log("pre diagnostic");
         const diagnosticText = emitDiagnostic(
           files,
           {
@@ -112,49 +92,19 @@ export const formatWingError = async (error: unknown) => {
         result.push(diagnosticText);
       }
       return result.join("\n");
-    }
-    if (error instanceof PreflightError) {
-      const causedBy = annotatePreflightError(error.causedBy);
-
+    } else if (error instanceof PreflightError) {
       const output = new Array<string>();
 
-      output.push(`ERROR: ${causedBy.message}`);
-
-      if (
-        causedBy.stack &&
-        causedBy.stack.includes("evalmachine.<anonymous>:")
-      ) {
-        const lineNumber =
-          Number.parseInt(
-            causedBy.stack.split("evalmachine.<anonymous>:")[1]!.split(":")[0]!,
-          ) - 1;
-        const relativeArtifactPath = relative(
-          process.cwd(),
-          error.artifactPath,
-        );
-
-        output.push("", `${relativeArtifactPath}:${lineNumber}`);
-
-        const lines = error.artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
-
-        // print line and its surrounding lines
-        for (let index = startLine; index <= finishLine; index++) {
-          if (index === lineNumber) {
-            output.push(">> " + lines[index]);
-          } else {
-            output.push("   " + lines[index]);
-          }
-        }
-
-        output.push("");
-      }
+      output.push(
+        await prettyPrintError(error.causedBy, {
+          sourceEntrypoint: resolve(entryPoint ?? "."),
+        }),
+      );
 
       if (process.env.DEBUG) {
         output.push(
-          "--------------------------------- STACK TRACE ---------------------------------",
-          error.stack ?? "",
+          "--------------------------------- ORIGINAL STACK TRACE ---------------------------------",
+          error.stack ?? "(no stacktrace available)",
         );
       }
 

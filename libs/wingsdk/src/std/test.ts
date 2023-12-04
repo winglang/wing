@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { IResource, Resource } from "./resource";
+import { Resource } from "./resource";
 import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Node } from "../std";
+import { Node, IInflight } from "../std";
 
 /**
  * Global identifier for `Test`.
@@ -66,7 +66,7 @@ export class Test extends Resource {
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
  * @skipDocs
  */
-export interface ITestHandler extends IResource {}
+export interface ITestHandler extends IInflight {}
 
 /**
  * Inflight client for `ITestHandler`.

@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=inflight.Bar-3.js.map
 ```
 
 ## inflight.Foo-2.js
@@ -23,7 +23,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-2.js.map
 ```
 
 ## inflight.Foo-3.js
@@ -36,7 +36,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=inflight.Foo-3.js.map
 ```
 
 ## inflight.Widget-1.js
@@ -49,7 +49,7 @@ module.exports = function({  }) {
   }
   return Widget;
 }
-
+//# sourceMappingURL=inflight.Widget-1.js.map
 ```
 
 ## main.tf.json
@@ -102,7 +102,7 @@ module.exports = function({ $stdlib }) {
     checkWidget(widget) {
       return ((widget.compute()) + (blah.Widget.staticCompute()));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-2.js")({
         })
@@ -120,12 +120,12 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };
 };
-
+//# sourceMappingURL=preflight.file1-3.js.map
 ```
 
 ## preflight.file2-4.js
@@ -142,7 +142,7 @@ module.exports = function({ $stdlib }) {
       (util.Util.nanoid());
       return "bar";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Bar-3.js")({
         })
@@ -160,14 +160,14 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Foo extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-3.js")({
         })
@@ -185,12 +185,12 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
 };
-
+//# sourceMappingURL=preflight.file2-4.js.map
 ```
 
 ## preflight.inner-2.js
@@ -202,7 +202,7 @@ module.exports = function({ $stdlib }) {
     ...require("./preflight.widget-1.js")({ $stdlib }),
   };
 };
-
+//# sourceMappingURL=preflight.inner-2.js.map
 ```
 
 ## preflight.js
@@ -232,7 +232,7 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 
 ## preflight.subdir2-5.js
@@ -246,7 +246,7 @@ module.exports = function({ $stdlib }) {
     ...require("./preflight.file1-3.js")({ $stdlib }),
   };
 };
-
+//# sourceMappingURL=preflight.subdir2-5.js.map
 ```
 
 ## preflight.widget-1.js
@@ -264,7 +264,7 @@ module.exports = function({ $stdlib }) {
     static staticCompute() {
       return 1337;
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Widget-1.js")({
         })
@@ -282,11 +282,11 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Widget };
 };
-
+//# sourceMappingURL=preflight.widget-1.js.map
 ```
 

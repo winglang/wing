@@ -7,14 +7,14 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Base {
       protected inflight f: str;
-      inflight init() {
+      inflight new() {
         this.f = "hello";
       }
     }
 
     class Derived extends Base {
       inflight g: str;
-      inflight init() {
+      inflight new() {
         this.g = "world";
       }
 
@@ -40,6 +40,7 @@ module.exports = function({  }) {
   }
   return Base;
 }
+//# sourceMappingURL=inflight.Base-1.js.map
 ```
 
 ## inflight.Derived-1.js
@@ -61,6 +62,7 @@ module.exports = function({ $Base }) {
   }
   return Derived;
 }
+//# sourceMappingURL=inflight.Derived-1.js.map
 ```
 
 ## preflight.js
@@ -79,7 +81,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Base-1.js")({
           })
@@ -97,17 +99,17 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["f", "$inflight_init"];
+        return [...super._supportedOps(), "f", "$inflight_init"];
       }
     }
     class Derived extends Base {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${context._lift(Base)},
+            $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
       }
@@ -123,7 +125,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["g", "foo", "$inflight_init"];
+        return [...super._supportedOps(), "g", "foo", "$inflight_init"];
       }
     }
   }
@@ -131,5 +133,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

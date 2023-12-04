@@ -365,8 +365,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for (name, val) in fields.iter() {
-				v.visit_symbol(name);
+			for (key, val) in fields.iter() {
+				v.visit_expr(key);
 				v.visit_expr(val);
 			}
 		}

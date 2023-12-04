@@ -394,7 +394,7 @@ Environment variables to pass to the function.
 
 ### IServiceHandler <a name="IServiceHandler" id="@winglang/sdk.cloud.IServiceHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceHandler">IServiceHandler</a>
 
@@ -403,25 +403,6 @@ Environment variables to pass to the function.
 Executed when a `cloud.Service` is started.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IServiceHandlerClient <a name="IServiceHandlerClient" id="@winglang/sdk.cloud.IServiceHandlerClient"></a>
 
@@ -468,7 +449,7 @@ new cloud.Service(inflight () => {
 
 ### IServiceStopHandler <a name="IServiceStopHandler" id="@winglang/sdk.cloud.IServiceStopHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceStopHandler">IServiceStopHandler</a>
 
@@ -477,25 +458,6 @@ new cloud.Service(inflight () => {
 Executed when a `cloud.Service` is stopped.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceStopHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IServiceStopHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IServiceStopHandlerClient <a name="IServiceStopHandlerClient" id="@winglang/sdk.cloud.IServiceStopHandlerClient"></a>
 

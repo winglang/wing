@@ -31,6 +31,7 @@ module.exports = function({  }) {
   }
   return A;
 }
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -45,6 +46,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## preflight.js
@@ -63,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -81,17 +83,17 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -107,13 +109,13 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["bar", "$inflight_init"];
+        return [...super._supportedOps(), "bar", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("bar")) {
           B._registerOnLiftObject(A, host, ["foo"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }
@@ -121,5 +123,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

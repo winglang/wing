@@ -26,7 +26,7 @@ k2 = Json.keys(m);
 assert(k2.length == 1);
 
 // Parse string
-let s = "{\"a\": 123, \"b\": {\"c\": 456, \"d\": 789}}";
+let s = "\{\"a\": 123, \"b\": \{\"c\": 456, \"d\": 789}}";
 let j = Json.parse(s);
 assert(Json.keys(j).length == 2);
 
@@ -38,10 +38,10 @@ assert(tryParsed.get("key") == "value");
 // Format to string
 let jj = Json {a: 123, b: {c : 456, d : 789}};
 let ss = Json.stringify(jj);
-assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
+assert(ss == "\{\"a\":123,\"b\":\{\"c\":456,\"d\":789}}");
 
 let ss2 = Json.stringify(jj, indent: 2);
-assert(ss2 == "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
+assert(ss2 == "\{\n  \"a\": 123,\n  \"b\": \{\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
 
 // From Json Methods
 let jsonOfMany = Json {a: 123, b: "hello", c: true};
@@ -52,7 +52,7 @@ assert(bool.fromJson(jsonOfMany.get("c")));
 // Inflight access
 test "Access Json static inflight" {
   let ss = Json.stringify(jj);
-  assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
+  assert(ss == "\{\"a\":123,\"b\":\{\"c\":456,\"d\":789}}");
 }
 
 // Check whether some key exists in a json

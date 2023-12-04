@@ -26,7 +26,7 @@
     "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
     "watch": "tsc --watch",
-    "test": "vitest run",
+    "test": "vitest run --update",
     "dev": "./bin/wing",
     "package": "bump-pack -b"
   },

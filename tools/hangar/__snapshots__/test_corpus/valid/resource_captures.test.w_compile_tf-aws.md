@@ -26,7 +26,7 @@ module.exports = function({ $r }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Another-1.js
@@ -45,7 +45,7 @@ module.exports = function({  }) {
   }
   return Another;
 }
-
+//# sourceMappingURL=inflight.Another-1.js.map
 ```
 
 ## inflight.First-1.js
@@ -58,7 +58,7 @@ module.exports = function({  }) {
   }
   return First;
 }
-
+//# sourceMappingURL=inflight.First-1.js.map
 ```
 
 ## inflight.MyResource-1.js
@@ -144,7 +144,7 @@ module.exports = function({  }) {
   }
   return MyResource;
 }
-
+//# sourceMappingURL=inflight.MyResource-1.js.map
 ```
 
 ## main.tf.json
@@ -260,9 +260,9 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.First-1.js")({
           })
@@ -280,7 +280,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
         this.myField = "hello!";
         this.first = new First(this, "First");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Another-1.js")({
           })
@@ -307,30 +307,30 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["meaningOfLife", "anotherFunc", "$inflight_init"];
+        return [...super._supportedOps(), "meaningOfLife", "anotherFunc", "$inflight_init"];
       }
     }
     class MyResource extends $stdlib.std.Resource {
       constructor($scope, $id, externalBucket, externalNum) {
         super($scope, $id);
-        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+        this.myResource = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
         this.myOptStr = "myOptString";
         this.arrayOfStr = ["s1", "s2"];
-        this.mapOfNum = ({"k1": 11,"k2": 22});
+        this.mapOfNum = ({["k1"]: 11, ["k2"]: 22});
         this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue",cloud.Queue,this, "cloud.Queue");
+        this.myQueue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter",cloud.Counter,this, "cloud.Counter");
+        this.unusedResource = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
       helloPreflight() {
         return this.another;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.MyResource-1.js")({
           })
@@ -341,25 +341,25 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $___this_setOfStr_has__s3____: ${this._lift((!(this.setOfStr.has("s3"))))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${this._lift(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
-              $_this_arrayOfStr_at_0__: ${this._lift((this.arrayOfStr.at(0)))},
-              $_this_arrayOfStr_at_1__: ${this._lift((this.arrayOfStr.at(1)))},
-              $_this_myOptStr_______: ${this._lift((this.myOptStr ?? ""))},
-              $_this_setOfStr_has__s1___: ${this._lift((this.setOfStr.has("s1")))},
-              $_this_setOfStr_has__s2___: ${this._lift((this.setOfStr.has("s2")))},
-              $this_another: ${this._lift(this.another)},
-              $this_another_first_myResource: ${this._lift(this.another.first.myResource)},
-              $this_another_myField: ${this._lift(this.another.myField)},
-              $this_arrayOfStr_length: ${this._lift(this.arrayOfStr.length)},
-              $this_extBucket: ${this._lift(this.extBucket)},
-              $this_extNum: ${this._lift(this.extNum)},
-              $this_myBool: ${this._lift(this.myBool)},
-              $this_myNum: ${this._lift(this.myNum)},
-              $this_myQueue: ${this._lift(this.myQueue)},
-              $this_myResource: ${this._lift(this.myResource)},
-              $this_myStr: ${this._lift(this.myStr)},
+              $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
+              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
+              $_this_arrayOfStr_at_0__: ${$stdlib.core.liftObject((this.arrayOfStr.at(0)))},
+              $_this_arrayOfStr_at_1__: ${$stdlib.core.liftObject((this.arrayOfStr.at(1)))},
+              $_this_myOptStr_______: ${$stdlib.core.liftObject((this.myOptStr ?? ""))},
+              $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
+              $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
+              $this_another: ${$stdlib.core.liftObject(this.another)},
+              $this_another_first_myResource: ${$stdlib.core.liftObject(this.another.first.myResource)},
+              $this_another_myField: ${$stdlib.core.liftObject(this.another.myField)},
+              $this_arrayOfStr_length: ${$stdlib.core.liftObject(this.arrayOfStr.length)},
+              $this_extBucket: ${$stdlib.core.liftObject(this.extBucket)},
+              $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
+              $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
+              $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
+              $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
+              $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
+              $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["inflightField", "testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init"];
+        return [...super._supportedOps(), "inflightField", "testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -434,14 +434,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $r: ${context._lift(r)},
+            $r: ${$stdlib.core.liftObject(r)},
           })
         `;
       }
@@ -457,7 +458,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -466,14 +467,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket",cloud.Bucket,this, "cloud.Bucket");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const r = new MyResource(this, "MyResource", b, 12);
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "resource_captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.js.map
 ```
 

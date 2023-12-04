@@ -10,7 +10,7 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
 test("basic function", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight);
   const output = app.synth();
 
@@ -38,7 +38,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
@@ -63,7 +63,7 @@ test("basic function with environment variables", () => {
 
 test("function name valid", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   const func = new Function(app, "The-Mighty_Function-01", inflight);
   const output = app.synth();
 
@@ -79,7 +79,7 @@ test("function name valid", () => {
 
 test("replace invalid character from function name", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   const func = new Function(app, "The%Mighty$Function", inflight);
   const output = app.synth();
 
@@ -95,7 +95,7 @@ test("replace invalid character from function name", () => {
 
 test("basic function with timeout explicitly set", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight, {
     timeout: Duration.fromSeconds(30),
   });
@@ -112,7 +112,7 @@ test("basic function with timeout explicitly set", () => {
 
 test("basic function with memory size specified", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight, { memory: 512 });
   const output = app.synth();
 
@@ -131,7 +131,7 @@ test("basic function with memory size specified", () => {
 
 test("basic function with custom log retention", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight, { logRetentionDays: 7 });
   const output = app.synth();
 
@@ -150,7 +150,7 @@ test("basic function with custom log retention", () => {
 
 test("basic function with infinite log retention", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   new Function(app, "Function", inflight, { logRetentionDays: -1 });
   const output = app.synth();
 
@@ -169,7 +169,7 @@ test("asset path is stripped of spaces", () => {
   const some_name = "I have a space in my name";
   const expectedReplacement = "i_have_a_space_in_my_name";
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   const f = new Function(app, some_name, inflight);
   // WHEN
   app.synth();

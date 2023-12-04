@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { CloudwatchEventRule } from "../.gen/providers/aws/cloudwatch-event-rule";
 import { CloudwatchEventTarget } from "../.gen/providers/aws/cloudwatch-event-target";
@@ -16,6 +17,7 @@ import { Node } from "../std";
 export class Schedule extends cloud.Schedule {
   private readonly scheduleExpression: string;
   private readonly rule: CloudwatchEventRule;
+  private readonly handlers: Record<string, Function> = {};
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
@@ -45,10 +47,7 @@ export class Schedule extends cloud.Schedule {
     inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
@@ -57,12 +56,18 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = new Function(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnTick-${hash}`,
+    let fn = this.handlers[inflight._hash];
+    if (fn) {
+      return fn;
+    }
+
+    fn = new Function(
+      this,
+      App.of(this).makeId(this, "OnTick"),
       functionHandler,
       props
     );
+    this.handlers[inflight._hash] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
@@ -73,10 +78,14 @@ export class Schedule extends cloud.Schedule {
 
     fn.addPermissionToInvoke(this, "events.amazonaws.com", this.rule.arn);
 
-    new CloudwatchEventTarget(this, `ScheduleTarget-${hash}`, {
-      arn: fn.qualifiedArn,
-      rule: this.rule.name,
-    });
+    new CloudwatchEventTarget(
+      this,
+      App.of(this).makeId(this, "ScheduleTarget"),
+      {
+        arn: fn.qualifiedArn,
+        rule: this.rule.name,
+      }
+    );
 
     Node.of(this).addConnection({
       source: this,
