@@ -246,9 +246,8 @@ project.tasks
 
 // --------------- docs -----------------
 
-const docsPrefix = (idx: number, name: string) => {
-  const prefix = idx.toString().padStart(2, "0");
-  return `../../docs/docs/04-standard-library/${prefix}-${name}`;
+const docsPrefix = (name: string) => {
+  return `../../docs/docs/04-standard-library/${name}`;
 };
 const docsFrontMatter = (name: string) => `---
 title: API reference
@@ -271,7 +270,7 @@ docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
 for (const mod of publicModules) {
-  const prefix = docsPrefix(publicModules.indexOf(mod) + 3, mod);
+  const prefix = docsPrefix(mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
