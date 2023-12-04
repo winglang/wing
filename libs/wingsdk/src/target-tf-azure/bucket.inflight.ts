@@ -232,7 +232,7 @@ export class BucketClient implements IBucketClient {
   public async publicUrl(key: string): Promise<string> {
     // this returns an optional `blobPublicAccess` prop - if exists the bucket is public
     const accessPolicy = await this.containerClient.getAccessPolicy();
-    if (!accessPolicy.blobPublicAccess) {
+    if (!accessPolicy?.blobPublicAccess) {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
     if (!(await this.exists(key))) {
