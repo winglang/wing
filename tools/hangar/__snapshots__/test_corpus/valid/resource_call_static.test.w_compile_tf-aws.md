@@ -123,7 +123,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["myStaticMethod", "$inflight_init"];
+        return [...super._supportedOps(), "myStaticMethod", "$inflight_init"];
       }
       static _registerOnLift(host, ops) {
         if (ops.includes("myStaticMethod")) {
@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

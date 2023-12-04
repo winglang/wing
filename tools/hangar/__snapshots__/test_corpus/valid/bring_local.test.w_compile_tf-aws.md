@@ -324,7 +324,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -358,7 +358,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Util extends $stdlib.std.Resource {
@@ -383,7 +383,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const store = new file1.Store(this, "file1.Store");
@@ -431,7 +431,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
@@ -464,7 +464,7 @@ module.exports = function({ $stdlib }) {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -494,7 +494,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["store", "$inflight_init"];
+      return [...super._supportedOps(), "store", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -547,7 +547,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["greet", "$inflight_init"];
+      return [...super._supportedOps(), "greet", "$inflight_init"];
     }
   }
   return { Q };

@@ -13,17 +13,18 @@ application:
 ```js playground
 bring cloud;
 
-class OneBucket {
+class SingletonBucket {
   pub static of(scope: std.IResource): cloud.Bucket {
-    let uid = "OneBucketSingleton";
+    let uid = "SingletonBucket";
     let root = std.Node.of(scope).root;
-    return unsafeCast(root.tryFindChild(uid)) ?? new cloud.Bucket() as uid in root;
+    let rootNode = std.Node.of(root);
+    return unsafeCast(rootNode.tryFindChild(uid)) ?? new cloud.Bucket() as uid in root;
   }
 }
 ```
 
-The `OneBucket.of()` static method uses `std.Node.of(scope).root` to find the root node of the app.
-Then, if there is already a child with the identifier `OneBucketSingleton` at that level, it returns
+The `SingletonBucket.of()` static method uses `std.Node.of(scope).root` to find the root node of the app.
+Then, if there is already a child with the identifier `SingletonBucket` at that level, it returns
 it or otherwise it creates a new bucket with this id (`as uid`) under the root node (`in root`).
 
 > `unsafeCast()` is needed here to cast the returned object from `tryFindChild()` to `cloud.Bucket`.
@@ -31,7 +32,7 @@ it or otherwise it creates a new bucket with this id (`as uid`) under the root n
 Now, in order to access our bucket from anywhere within the app, I can just use:
 
 ```js
-let bucket = OneBucket.of(this);
+let bucket = SingletonBucket.of(this);
 ```
 
 And we will always get the same bucket.
