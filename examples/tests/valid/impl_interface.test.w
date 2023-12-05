@@ -41,7 +41,7 @@ let i3 = (): I3 => {
   return new r();
 }();
 assert(i3.method1(1) == 1);
-test "can all inherited inflight interface method" {
+test "can call inherited inflight interface method" {
   assert(i3.method2("hello") == "hello");
 }
 assert(i3.method3([1, 2, 3]) == [1, 2, 3]);
