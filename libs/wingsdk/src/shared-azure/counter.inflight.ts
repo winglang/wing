@@ -22,7 +22,7 @@ export class CounterClient implements ICounterClient {
     key: string = COUNTER_ID
   ): Promise<number> {
     const entity = await this._getEntity(key);
-    const newValue = (entity?.counter_value || this.initial) + amount;
+    const newValue = (entity?.counterValue || this.initial) + amount;
     await this._upsertEntity(key, newValue);
     return newValue;
   }
@@ -43,7 +43,7 @@ export class CounterClient implements ICounterClient {
     try {
       return await this.client.getEntity("partitionKey", key);
     } catch (error) {
-      return null;
+      return undefined;
     }
   }
 
@@ -51,7 +51,7 @@ export class CounterClient implements ICounterClient {
     const entity = {
       partitionKey: "partitionKey",
       rowKey: key,
-      counter_value: value,
+      counterValue: value,
     };
     await this.client.upsertEntity(entity);
   }
