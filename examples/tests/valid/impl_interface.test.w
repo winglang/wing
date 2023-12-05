@@ -36,7 +36,7 @@ class r impl I3 {
   }
 }
 
-// create an instance of I3 an make sure we can call the methods
+// create an instance of I3 and make sure we can call the methods
 let i3 = (): I3 => {
   return new r();
 }();
