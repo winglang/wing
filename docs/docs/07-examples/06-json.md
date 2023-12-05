@@ -15,19 +15,19 @@ let j = Json {
     k1: [1, "a", true, {} ]
   }
 };
-log("${j}");
+log("{j}");
 
 let jsonStrValue = Json "Hello";
-log("${jsonStrValue}");
+log("{jsonStrValue}");
 
 let jsonNumValue = Json 42;
-log("${jsonNumValue}");
+log("{jsonNumValue}");
 
 let jsonBoolValue = Json true;
-log("${jsonBoolValue}");
+log("{jsonBoolValue}");
 
 let jsonHomogeneousArrayValue = Json ["a", "b"];
-log("${jsonHomogeneousArrayValue}");
+log("{jsonHomogeneousArrayValue}");
 ```
 
 ### From existing variables
@@ -35,23 +35,23 @@ log("${jsonHomogeneousArrayValue}");
 ```js playground
 let x: num = 42;
 let jsonNum = Json x;
-log("${jsonNum}"); // 42
+log("{jsonNum}"); // 42
 
 let chars = Array<str>["a", "b"];
 let jsonChars = Json chars;
-log("${jsonChars}"); // ["a","b"]
+log("{jsonChars}"); // ["a","b"]
 
 let jsonComplex = Json { "first": x, "second": chars };
-log("${jsonComplex}"); // {"first": 42, "second": ["a","b"]}
+log("{jsonComplex}"); // {"first": 42, "second": ["a","b"]}
 ```
 
 ### Parsing `str`
 ```js playground
 let jsonFromParse = Json.parse("{\"k1\":\"v\"}");
-log("${jsonFromParse}");
+log("{jsonFromParse}");
 
 if let jsonFromTryParse = Json.tryParse("{\"k1\":\"v\"}") {
-  log("${jsonFromTryParse}");
+  log("{jsonFromTryParse}");
 } else {
   log("failed to parse string to JSON");
 }
@@ -66,7 +66,7 @@ let j = Json {
 };
 for k in Json.keys(j) {
   let value = j.get(k);
-  log("found key ${k} with value ${value}");
+  log("found key {k} with value {value}");
 }
 ```
 ### Over values
@@ -76,7 +76,7 @@ let j = Json {
     k2: "v2"
 };
 for value in Json.values(j) {
-  log("found value ${value}");
+  log("found value {value}");
 }
 ```
 

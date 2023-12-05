@@ -23,7 +23,7 @@ let table = new ex.Table(
 
 
 let logHistory = inflight (key: str, operation: str, source: Source) => {
-  table.insert("${idsCounter.inc()}", Json { key: key, operation: operation, source: "${source}"  });
+  table.insert("{idsCounter.inc()}", Json { key: key, operation: operation, source: "{source}"  });
 };
 
 
@@ -41,7 +41,7 @@ b.onCreate(inflight (key: str) => {
 });
 
 b.onEvent(inflight (key: str, event: cloud.BucketEventType) => { 
-  logHistory(key, "${event}()", Source.onEvent);
+  logHistory(key, "{event}()", Source.onEvent);
 });
 
 let wait = inflight (pred: inflight (): bool): bool => {
@@ -73,7 +73,7 @@ let checkHitCount = inflight (opts: CheckHitCountOptions): inflight (): bool => 
     let var count = 0;
     for u in table.list() {
       
-      if (u.get("key") == opts.key && u.get("operation") == opts.type && u.get("source") == "${opts.source}") {
+      if (u.get("key") == opts.key && u.get("operation") == opts.type && u.get("source") == "{opts.source}") {
         count = count + 1;
       }
     }

@@ -108,7 +108,7 @@ function resolveSynthDir(
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
   if (platforms.length === 0) { return ""; }
-  // determine model based on first platform
+  // determine target based on first platform
   const platform = platforms[0];
 
   // If its a builtin platform just return
@@ -116,10 +116,9 @@ export function determineTargetFromPlatforms(platforms: string[]): string {
     return platform;
   }
 
-  // If its a custom platform, then we need to load it and get the model
-  const platformPath = resolve(platform);
-
-  return new (require(platformPath)).Platform().target;
+  // load custom platform to retrieve the target
+  const { _loadCustomPlatform } = require("@winglang/sdk/lib/platform");
+  return _loadCustomPlatform(platform).target;
 }
 
 /**
@@ -301,7 +300,9 @@ async function runPreflightCodeInVm(
   });
 
   try {
-    vm.runInContext(artifact, context);
+    vm.runInContext(artifact, context, {
+      filename: artifactPath
+    });
   } catch (error) {
     throw new PreflightError(error as any, artifactPath, artifact);
   }
@@ -317,6 +318,10 @@ async function runPreflightCodeInVm(
 function resolvePlatformPaths(platform: string[]): string {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of platform) {
+    if (plugin.startsWith("@")) {
+      resolvedPluginPaths.push(plugin);
+      continue;
+    }
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths.join(";");

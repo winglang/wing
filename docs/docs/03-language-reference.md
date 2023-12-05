@@ -92,7 +92,7 @@ These don't affect the value of the number or how they are printed:
 | Name          | Extra information                               |
 | ------------- | ----------------------------------------------- |
 | `Array<T>`    | variable size array of a certain type           |
-| `Map<T>`      | map type (key-value with string keys)           |
+| `Map<T>`      | map type (key-value with string keys, keys may be any expression evaluating to a string)|
 | `Set<T>`      | set type (unordered collection of unique items) |
 | `MutArray<T>` | mutable array type                              |
 | `MutMap<T>`   | mutable map type                                |
@@ -179,7 +179,7 @@ let response = http.get("/employees");
 let employees = Array<Employee>.fromJson(response.get("items")); //NOTE: Array.fromJson is currently not implemented
 
 for e in employees {
-  log("hello, ${e.name}, your employee id is ${e.id}");
+  log("hello, {e.name}, your employee id is {e.id}");
 }
 ```
 In the above example, the `http.get` function returns a `Json` object from the server that has a
@@ -226,7 +226,7 @@ let boom: Json = jsonObj.get("boom");
 Trying to access a non-existent field will fail at runtime. For example:
 
 ```TS
-log("${jsonObj.get("boom").get("dude").get("world")}");
+log("{jsonObj.get("boom").get("dude").get("world")}");
 // ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
@@ -441,9 +441,9 @@ let o = Json.tryParse("xxx") ?? Json [1,2,3];
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
 ```TS
-log("my object is: ${jsonObj}");
+log("my object is: {jsonObj}");
 // is equivalent to
-log("my object is: ${Json.stringify(jsonObj)}");
+log("my object is: {Json.stringify(jsonObj)}");
 ```
 
 This will output:
@@ -536,12 +536,12 @@ A few examples:
 
 ```TS
 let now = Datetime.utcNow();
-log("It is now ${now.month}/${now.dayOfMonth}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+log("It is now {now.month}/{now.dayOfMonth}/{now.year} at {now.hours}:{now.min}:{now.sec})");
 assert(now.timezone == 0); // UTC
 
 let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
-log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
-log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
+log("Timezone is GMT{d.timezone() / 60}"); // output: Timezone is GMT-2
+log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
 
@@ -554,7 +554,7 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
-> log("Hello ${name}");
+> log("Hello {name}");
 > assert(x > 0);
 > ```
 
@@ -938,7 +938,7 @@ let tryParseName = (fullName: str): Name? => {
 
 // since result is optional, it needs to be unwrapped in order to be used
 if let name = tryParseName("Neo Matrix") {
-  log("Hello, ${name.first}!");
+  log("Hello, {name.first}!");
 }
 ```
 
@@ -980,7 +980,7 @@ optional is defined and *unwrap* it into a non-optional variable defined inside 
 
 ```TS
 if let address = myPerson.address {
-  log("${address.length}");
+  log("{address.length}");
   log(address); // type of address is `str`
 }
 ```
@@ -1007,7 +1007,7 @@ which must be unwrapped in order to be used.
 let ipAddress: str? = options.networking?.ipAddress;
 
 if let ip = ipAddress {
-  log("the ip address is defined and it is: ${ip}");
+  log("the ip address is defined and it is: {ip}");
 }
 ```
 
@@ -1179,7 +1179,7 @@ this document: [Module System](#4-module-system).
 >   if i > 5 {
 >     break;
 >   }
->   log("${i}");
+>   log("{i}");
 > }
 > ```
 
@@ -1197,7 +1197,7 @@ includes for and while loops currently.
 >   if i > 5 {
 >     continue;
 >   }
->   log("${i}");
+>   log("{i}");
 > }
 > ```
 
@@ -1255,13 +1255,13 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > let arr = [1, 2, 3];
 > let items = Set<num>[1, 2, 3];
 > for item in arr {
->   log("${item}");
+>   log("{item}");
 > }
 > for item in items {
->   log("${item}");
+>   log("{item}");
 > }
 > for item in 0..100 {
->   log("${item}"); // prints 0 to 99
+>   log("{item}"); // prints 0 to 99
 > }
 > ```
 
@@ -1400,7 +1400,7 @@ class Bar {
     this.log(); // OK to call here
   }
   pub log() {
-    log("${this.y}");
+    log("{this.y}");
   }
 }
 let a = new Bar();
@@ -1598,7 +1598,7 @@ Interface fields are not supported.
 >     this.field2 = "sample";
 >   }
 >   method1(x: num): str {
->     return "sample: ${x}";
+>     return "sample: {x}";
 >   }
 >   inflight method3(): void { }
 >   method2(): str {
@@ -1650,14 +1650,14 @@ However, it is possible to create anonymous closures and assign to variables
 
 > ```TS
 > // preflight closure:
-> let f1 = (a: num, b: num) => { log("${a + b}"); };
+> let f1 = (a: num, b: num) => { log("{a + b}"); };
 > // inflight closure:
-> let f2 = inflight (a: num, b: num) => { log("${a + b}"); };
+> let f2 = inflight (a: num, b: num) => { log("{a + b}"); };
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): void => { log("${a + b}"); };
+> let f4 = (a: num, b: num): void => { log("{a + b}"); };
 > // inflight closure:
-> let f5 = inflight (a: num, b: num): void => { log("${a + b}"); };
+> let f5 = inflight (a: num, b: num): void => { log("{a + b}"); };
 > ```
 
 [`▲ top`][top]
@@ -1684,7 +1684,7 @@ struct MyStruct {
   field2: num;
 }
 let f = (x: num, y: num, z: MyStruct) => {
-  log("${x + y + z.field1 + z.field2}");
+  log("{x + y + z.field1 + z.field2}");
 };
 // last arguments are expanded into their struct
 f(1, 2, field1: 3, field2: 4);
@@ -1698,7 +1698,7 @@ Inside the function, these arguments can be accessed using the designated variab
 just as you would with a regular array instance.
 ```TS
 let f = (x: num, ...args: Array<num>) => {
-  log("${x + args.length}");
+  log("{x + args.length}");
 };
 // last arguments are expanded into their array
 f(4, 8, 15, 16, 23, 42); // logs 9
@@ -1875,7 +1875,7 @@ class TaskList {
   }
 
   // Load js helper file
-  extern "./helpers.js" static inflight makeId(): str;
+  pub extern "./helpers.js" static inflight makeId(): str;
 } 
 
 // helpers.js
@@ -1972,8 +1972,8 @@ assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
 assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"a" => "1", "b" => "2"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"b" => "2", "a" => "1"});
 
 assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
 assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
@@ -2104,14 +2104,14 @@ All string declaration variants are multi-line.
 #### 6.2.1 Normal strings "..."
 
 The string inside the double quotes is processed, and all notations of form
-`${<expression>}` are substituted from their respective scopes. The behavior is
+`{<expression>}` are substituted from their respective scopes. The behavior is
 similar to `` `text ${sub.prop}` `` notation in JavaScript.  
 Processing unicode escape sequences happens in these strings.  
-`"` can be escaped with backslash `\` inside string substitutions.
+`"` and `{` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
 > let name = "World";
-> let s = "Hello, ${name}!";
+> let s = "Hello, {name}!";
 > let l = s.length;
 > ```
 

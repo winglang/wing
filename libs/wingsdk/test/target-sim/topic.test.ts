@@ -29,8 +29,6 @@ test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(message) { console.log("Received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
@@ -55,12 +53,10 @@ test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    app,
     "Handler1",
     `async handle(message) { console.log("Received " + message); }`
   );
   const otherHandler = Testing.makeHandler(
-    app,
     "Handler2",
     `async handle(message) { console.log("Also received " + message); }`
   );

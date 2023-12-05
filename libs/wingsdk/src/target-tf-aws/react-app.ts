@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
+import { Website } from "./website";
 import { core } from "..";
 
 import * as cloud from "../cloud";
@@ -14,7 +15,7 @@ import * as aws from "../shared-aws";
  *
  * @inflight `@winglang/sdk.cloud.IReactAppClient`
  */
-export class ReactApp extends ex.ReactApp {
+export class ReactApp extends ex.ReactApp implements aws.IAwsReactApp {
   private _host: cloud.Website;
   constructor(scope: Construct, id: string, props: aws.AwsReactAppProps) {
     super(scope, id, props);
@@ -76,5 +77,13 @@ export class ReactApp extends ex.ReactApp {
       "ReactAppClient",
       []
     );
+  }
+
+  public get bucketArn(): string {
+    return (this._host as Website).bucket.arn;
+  }
+
+  public get bucketName(): string {
+    return (this._host as Website).bucket.bucketDomainName;
   }
 }

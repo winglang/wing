@@ -1,0 +1,1 @@
+export { DynamodbTableClient } from "@winglang/sdk/lib/shared-aws/dynamodb-table.inflight";

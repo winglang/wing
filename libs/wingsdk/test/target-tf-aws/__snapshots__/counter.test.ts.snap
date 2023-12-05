@@ -296,6 +296,7 @@ exports[`dec() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -437,19 +438,6 @@ exports[`dec() policy statement 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -613,6 +601,7 @@ exports[`function with a counter binding 2`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -755,19 +744,6 @@ exports[`function with a counter binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -887,6 +863,7 @@ exports[`inc() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1029,19 +1006,6 @@ exports[`inc() policy statement 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -1161,6 +1125,7 @@ exports[`peek() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1302,19 +1267,6 @@ exports[`peek() policy statement 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {
@@ -1557,6 +1509,7 @@ exports[`set() policy statement 1`] = `
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_6cb5a3a4": "\${aws_dynamodb_table.Counter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -1698,19 +1651,6 @@ exports[`set() policy statement 2`] = `
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
-              },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
               },
               "aws": {
                 "constructInfo": {

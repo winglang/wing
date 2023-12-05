@@ -21,11 +21,11 @@ Arguments:
   entrypoint                    program .w entrypoint
 
 Options:
-  -t, --platform <platform> --platform <platform>  Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk) (default: [sim])
+  -t, --platform <platform> --platform <platform>  Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp) (default: [sim])
   -h, --help                    display help for command
 ```
 
-Wing is shipped with several builtin platforms such as `sim`, `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`, but it is also possible to create and use [custom platforms](#custom-platforms) to fully control how Wing resources are deployed to the cloud.
+Wing is shipped with several builtin platforms such as `sim`, `tf-aws`, `tf-azure`, and `tf-gcp` but it is also possible to create and use [custom platforms](#custom-platforms) to fully control how Wing resources are deployed to the cloud.
 
 These providers contain a combination of provision engine and cloud environment in their names, we refer to these as the platform target (which is discussed in more detail below). The only exception is `sim`, which is a special platform for testing and simulating applications locally.
 
@@ -48,7 +48,7 @@ Understanding the differences between provisioning engines will help as we dive 
 
 ### Platform Targets
 
-Platform targets are the combination of a provisioning engine and a cloud environment. For example, `tf-aws` is a platform target that uses Terraform as the provisioning engine and AWS as the cloud environment. Similarly, `awscdk` is a platform target that uses AWS CDK as the provisioning engine and AWS as the cloud environment.
+Platform targets are the combination of a provisioning engine and a cloud environment. For example, `tf-aws` is a platform target that uses Terraform as the provisioning engine and AWS as the cloud environment.
 
 It is worth noting that the platform names are not guaranteed to match their targets, we will see this more as we delve into the idea of Custom Platforms below.
 
@@ -82,7 +82,7 @@ new cloud.Function(inflight ()=> {
     log("Running on the cloud, sleeping for 30s");
     util.sleep(30s);
   }
-  log("Function invoked ${invocationCounter.peek()} times");
+  log("Function invoked {invocationCounter.peek()} times");
 });
 
 ```
@@ -114,6 +114,9 @@ export interface IPlatform {
 
   // Define the App that will be used for creating resources
   newApp?(appProps: AppProps): App;
+
+  // Define overrides for concrete resources
+  newInstance?(type: string, scope: Construct, id: string, props: any): any;
 
   // Synthesis Hooks
   preSynth?(app: Construct): void;

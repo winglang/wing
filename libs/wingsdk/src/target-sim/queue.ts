@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -45,8 +46,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     inflight: cloud.IQueueSetConsumerHandler,
     props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs
      * to be wrapped in some extra logic to handle batching.
@@ -70,8 +69,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
@@ -79,14 +76,14 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      `${this.node.id}-SetConsumer-${hash}`,
+      App.of(this).makeId(this, "SetConsumer"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "setConsumer()";
 
-    new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "QueueEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {

@@ -5,13 +5,14 @@ import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
 import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
 import { withSpinner, normalPath } from "../../util";
-import { compile, CompileOptions, NotImplementedError } from "../compile";
+import { compile, CompileOptions } from "../compile";
 
 const log = debug("wing:test");
 
@@ -72,16 +73,16 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     try {
       const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
-    } catch (error) {
-      console.log((error as Error).message);
+    } catch (error: any) {
+      console.log(error.message);
       results.push({
         testName: generateTestName(entrypoint),
         results: [
           {
             pass: false,
-            unsupported: error instanceof NotImplementedError,
+            unsupported: error.name === "NotImplementedError",
             path: "",
-            error: (error as Error).message,
+            error: error.message,
             traces: [],
           },
         ],
@@ -92,7 +93,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
-    writeResultsToFile(results, testDuration, options.outputFile);
+    await writeResultsToFile(results, testDuration, options.outputFile);
   }
 
   // if we have any failures, exit with 1
@@ -135,7 +136,10 @@ async function testOne(entrypoint: string, options: TestOptions) {
 /**
  * Render a test report for printing out to the console.
  */
-export function renderTestReport(entrypoint: string, results: std.TestResult[]): string {
+export async function renderTestReport(
+  entrypoint: string,
+  results: std.TestResult[]
+): Promise<string> {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
@@ -172,7 +176,8 @@ export function renderTestReport(entrypoint: string, results: std.TestResult[]):
 
     // if the test failed, add the error message and trace
     if (result.error) {
-      details.push(...result.error.split("\n").map((l) => chalk.red(l)));
+      const err = await prettyPrintError(result.error, { chalk });
+      details.push(...err.split("\n"));
     }
 
     // construct the first row of the test result by collecting the various components and joining
@@ -282,7 +287,8 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const results = await runTestsWithRetry(testRunner, filteredTests, retry ?? 0);
 
   await s.stop();
-  const testReport = renderTestReport(synthDir, results);
+
+  const testReport = await renderTestReport(synthDir, results);
   console.log(testReport);
 
   if (clean) {
@@ -309,10 +315,11 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const target = determineTargetFromPlatforms(platform);
+      const testRunnerPath = `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`;
+
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
-      const { TestRunnerClient } = await import(
-        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
-      );
+      const { TestRunnerClient } = await import(testRunnerPath);
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
@@ -324,7 +331,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
       return runTestsWithRetry(testRunner, tests, retry ?? 0);
     });
 
-    const testReport = renderTestReport(synthDir, results);
+    const testReport = await renderTestReport(synthDir, results);
     console.log(testReport);
 
     if (testResultsContainsFailure(results)) {
@@ -374,7 +381,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       return runTestsWithRetry(testRunner, tests, retry ?? 0);
     });
 
-    const testReport = renderTestReport(synthDir, results);
+    const testReport = await renderTestReport(synthDir, results);
     console.log(testReport);
 
     if (testResultsContainsFailure(results)) {

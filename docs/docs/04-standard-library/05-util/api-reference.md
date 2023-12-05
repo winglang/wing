@@ -320,7 +320,7 @@ The timeout for keep trying predicate.
 
 ### IPredicateHandler <a name="IPredicateHandler" id="@winglang/sdk.util.IPredicateHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflight">IInflight</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
 
@@ -329,25 +329,6 @@ The timeout for keep trying predicate.
 A predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.IPredicateHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.util.IPredicateHandler.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### IPredicateHandlerClient <a name="IPredicateHandlerClient" id="@winglang/sdk.util.IPredicateHandlerClient"></a>
 

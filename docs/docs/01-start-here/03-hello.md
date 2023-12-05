@@ -29,12 +29,12 @@ let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (message: str) => {
   let index = counter.inc();
-  bucket.put("wing-${index}.txt", "Hello, ${message}");
-  log("file wing-${index}.txt created");
+  bucket.put("wing-{index}.txt", "Hello, {message}");
+  log("file wing-{index}.txt created");
 });
 ```
 
 This code should be mostly self explanatory. We define a queue and a counter, and every time a
-message is added to the queue, a handler is triggered and creates a file named `wing-<counter-index>.txt` with `"Hello, ${message}!"` content, and the counter is incremented by 1.
+message is added to the queue, a handler is triggered and creates a file named `wing-<counter-index>.txt` with `"Hello, {message}!"` content, and the counter is incremented by 1.
 
 Now that we've written this program, let's run and test it using the **Wing Console**.

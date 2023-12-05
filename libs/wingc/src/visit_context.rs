@@ -6,12 +6,19 @@ use crate::{
 };
 
 #[derive(Clone)]
+pub struct FunctionContext {
+	pub name: Option<Symbol>,
+	pub sig: FunctionSignature,
+	pub is_static: bool,
+}
+
+#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
 	function_env: Vec<SymbolEnvRef>,
 	property: Vec<Symbol>,
-	function: Vec<(Option<Symbol>, FunctionSignature)>,
+	function: Vec<FunctionContext>,
 	class: Vec<UserDefinedType>,
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
@@ -101,10 +108,15 @@ impl VisitContext {
 		&mut self,
 		function_name: Option<&Symbol>,
 		sig: &FunctionSignature,
+		is_static: bool,
 		env: SymbolEnvRef,
 	) {
 		self.push_phase(sig.phase);
-		self.function.push((function_name.cloned(), sig.clone()));
+		self.function.push(FunctionContext {
+			name: function_name.cloned(),
+			sig: sig.clone(),
+			is_static,
+		});
 		self.function_env.push(env);
 	}
 
@@ -116,15 +128,16 @@ impl VisitContext {
 
 	pub fn current_method(&self) -> Option<(Symbol, FunctionSignature)> {
 		// return the first none-None method in the stack (from the end)
-		self
-			.function
-			.iter()
-			.rev()
-			.find(|(m, _)| m.is_some())
-			.map(|(m, sig)| (m.clone().unwrap(), sig.clone()))
+		for m in self.function.iter().rev() {
+			if let Some(name) = &m.name {
+				return Some((name.clone(), m.sig.clone()));
+			}
+		}
+
+		None
 	}
 
-	pub fn current_function(&self) -> Option<(Option<Symbol>, FunctionSignature)> {
+	pub fn current_function(&self) -> Option<FunctionContext> {
 		self.function.last().cloned()
 	}
 
@@ -135,8 +148,8 @@ impl VisitContext {
 	pub fn current_method_env(&self) -> Option<&SymbolEnvRef> {
 		// Get the env of the first named function in the stack (non named functions are closures)
 		self.function.iter().zip(self.function_env.iter()).rev().find_map(
-			|((m, _), e)| {
-				if m.is_some() {
+			|(f, e)| {
+				if f.name.is_some() {
 					Some(e)
 				} else {
 					None
@@ -221,10 +234,11 @@ pub trait VisitorWithContext {
 		&mut self,
 		function_name: Option<&Symbol>,
 		sig: &FunctionSignature,
+		is_static: bool,
 		env: SymbolEnvRef,
 		f: impl FnOnce(&mut Self) -> T,
 	) -> T {
-		self.ctx().push_function_definition(function_name, sig, env);
+		self.ctx().push_function_definition(function_name, sig, is_static, env);
 		let res = f(self);
 		self.ctx().pop_function_definition();
 		res

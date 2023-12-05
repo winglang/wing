@@ -1,5 +1,6 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -24,10 +25,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
@@ -35,14 +33,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     const fn = new Function(
       this,
-      `${this.node.id}-OnMessage-${hash}`,
+      App.of(this).makeId(this, "OnMessage"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onMessage()";
 
-    new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},

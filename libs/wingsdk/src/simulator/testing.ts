@@ -1,7 +1,6 @@
-import { IConstruct } from "constructs";
-import { InflightBindings } from "../core";
-import { liftObject } from "../core/internal";
-import { IInflightHost, IResource, Node, Resource } from "../std";
+import { createHash } from "crypto";
+import { InflightBindings, liftObject } from "../core";
+import { IInflight, IInflightHost, Resource } from "../std";
 
 /**
  * Test utilities.
@@ -16,44 +15,21 @@ export class Testing {
    * `async handle(event) { ... }`, and all references to resources must be
    * made through `this.<resource>`.
    *
-   * @param scope The scope to create the handler in.
-   * @param id The ID of the handler.
    * @param code The code of the handler.
    * @param bindings The bindings of the handler.
    */
   public static makeHandler(
-    scope: IConstruct,
-    id: string,
     code: string,
     bindings: InflightBindings = {}
-  ): IResource {
+  ): IInflight {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = liftObject(scope, v.obj);
+      clients[k] = liftObject(v.obj);
     }
 
-    // implements IFunctionHandler
-    class Handler extends Resource {
-      constructor() {
-        super(scope, id);
-
-        // pretend as if we have a field for each binding
-        for (const [field, value] of Object.entries(bindings)) {
-          (this as any)[field] = value.obj;
-        }
-
-        Node.of(this).title = "Inflight";
-        Node.of(this).description = "An inflight resource";
-        Node.of(this).hidden = true;
-      }
-
-      public _supportedOps(): string[] {
-        return ["handle"];
-      }
-
-      public _toInflight(): string {
-        return `new ((function(){
+    const inflightCode = `\
+new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -67,16 +43,17 @@ ${Object.entries(clients)
   .map(([name, client]) => `${name}: ${client}`)
   .join(",\n")}
 })`;
-      }
 
-      public _registerOnLift(host: IInflightHost, ops: string[]): void {
+    return {
+      _hash: createHash("md5").update(inflightCode).digest("hex"),
+      _toInflight: () => inflightCode,
+      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
-          Handler._registerOnLiftObject(v.obj, host, v.ops);
+          Resource._registerOnLiftObject(v.obj, host, v.ops);
         }
-        super._registerOnLift(host, ops);
-      }
-    }
-
-    return new Handler();
+      },
+      onLift: () => {},
+      _supportedOps: () => [],
+    };
   }
 }

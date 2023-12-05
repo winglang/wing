@@ -121,6 +121,12 @@ impl Into<Range> for &WingSpan {
 	}
 }
 
+impl From<&WingSpan> for WingSpan {
+	fn from(span: &WingSpan) -> Self {
+		span.clone()
+	}
+}
+
 impl WingSpan {
 	/// Checks if the given span is contained within this span
 	pub fn contains_span(&self, position: &Self) -> bool {
@@ -225,7 +231,7 @@ impl Display for WingSpan {
 		write!(
 			f,
 			"{}:{}:{}",
-			Utf8Path::new(&self.file_id).file_name().expect("invalid file id"),
+			Utf8Path::new(&self.file_id).file_name().unwrap_or("<unknown>"),
 			self.start.line + 1,
 			self.start.col + 1
 		)
