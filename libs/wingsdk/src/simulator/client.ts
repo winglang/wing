@@ -91,9 +91,7 @@ export function makeSimulatorClient(url: string, handle: string) {
         // [0]: https://stackoverflow.com/questions/55262996/does-awaiting-a-non-promise-have-any-detectable-effect
         if (
           method === "then" &&
-          parsed.error &&
-          parsed.error.message &&
-          parsed.error.message.startsWith("Method then not found on resource")
+          parsed.error?.message?.startsWith("Method then not found on resource")
         ) {
           hasThenMethod = false;
           // args[0] is the onFulfilled callback passed to the then method.
