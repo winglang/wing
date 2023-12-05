@@ -189,6 +189,13 @@ export const createConsoleServer = async ({
     }
     if (trace.data.status === "failure") {
       let output = await prettyPrintError(trace.data.error);
+
+      // Remove ANSI escape codes
+      const regex =
+        /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+      output = output.replaceAll(regex, "");
+
       consoleLogger.error(output, "user", {
         sourceType: trace.sourceType,
         sourcePath: trace.sourcePath,
