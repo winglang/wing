@@ -90,7 +90,7 @@ class $Root extends $stdlib.std.Resource {
     (arr3.push(bucket3));
     {((cond) => {if (!cond) throw new Error("assertion failed: arr2.pop() == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr2.pop()),4)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: arr1.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr1.length,4)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr4.at(0)),"a")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 0),"a")))};
     const s1 = new Set([1, 2, 3, 3]);
     const s2 = new Set(["hello", "world", "hello"]);
     const s3 = new Set([bucket1, bucket2, bucket2]);

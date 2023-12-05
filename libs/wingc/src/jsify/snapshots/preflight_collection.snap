@@ -17,7 +17,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
-module.exports = function({ $_a_at_0__, $a_length }) {
+module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_, $a_length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,7 +26,7 @@ module.exports = function({ $_a_at_0__, $a_length }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a_length,2)))};
-      {console.log($_a_at_0__)};
+      {console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_)};
     }
   }
   return $Closure1;
@@ -55,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_a_at_0__: ${$stdlib.core.liftObject((a.at(0)))},
+            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0))},
             $a_length: ${$stdlib.core.liftObject(a.length)},
           })
         `;
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject((a.at(0)), host, []);
+          $Closure1._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(a, 0), host, []);
           $Closure1._registerOnLiftObject(a.length, host, []);
         }
         super._registerOnLift(host, ops);

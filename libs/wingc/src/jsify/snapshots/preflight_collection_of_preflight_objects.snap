@@ -21,7 +21,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
-module.exports = function({ $_arr_at_0__, $arr_length }) {
+module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_, $arr_length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -30,7 +30,7 @@ module.exports = function({ $_arr_at_0__, $arr_length }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr_length,2)))};
-      (await $_arr_at_0__.put("hello", "world"));
+      (await $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_.put("hello", "world"));
     }
   }
   return $Closure1;
@@ -60,7 +60,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_arr_at_0__: ${$stdlib.core.liftObject((arr.at(0)))},
+            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0))},
             $arr_length: ${$stdlib.core.liftObject(arr.length)},
           })
         `;
@@ -81,7 +81,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject((arr.at(0)), host, ["put"]);
+          $Closure1._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), host, ["put"]);
           $Closure1._registerOnLiftObject(arr.length, host, []);
         }
         super._registerOnLift(host, ops);
