@@ -28,7 +28,7 @@ export interface CreateCompilerProps {
 
 export const createCompiler = ({
   wingfile,
-  platform: platform = [wing.BuiltinPlatform.SIM],
+  platform = [wing.BuiltinPlatform.SIM],
 }: CreateCompilerProps): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
