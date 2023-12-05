@@ -64,6 +64,7 @@ export interface CreateConsoleServerOptions {
   onExpressCreated?: (app: Express) => void;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  platforms?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -78,6 +79,7 @@ export const createConsoleServer = async ({
   onExpressCreated,
   requireAcceptTerms,
   layoutConfig,
+  platforms,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -105,7 +107,7 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler(wingfile);
+  const compiler = createCompiler({ wingfile, platforms });
   let isStarting = false;
   let isStopping = false;
 
