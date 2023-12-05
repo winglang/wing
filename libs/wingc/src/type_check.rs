@@ -23,8 +23,9 @@ use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME,
-	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON,
-	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE,
+	WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -2672,12 +2673,23 @@ impl<'a> TypeChecker<'a> {
 		// Verify variadic args
 		if let Some(variadic_index) = variadic_index {
 			let variadic_args_param = func_sig.parameters.get(variadic_index).unwrap();
-			let variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
+			let mut variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
 
 			for (arg_expr, arg_type) in izip!(
 				arg_list.pos_args.iter().skip(variadic_index),
 				arg_list_types.pos_args.iter().skip(variadic_index),
 			) {
+				// If your calling a method on some container type, and it takes a generic variadic argument,
+				// then substitute that argument type (T1) with the container's element type when typechecking the function arguments
+				if let Some(element_type) = func_sig.this_type.and_then(|x| x.collection_item_type()) {
+					if let Some(object) = variadic_args_inner_type.as_class() {
+						if let Some(fqn) = &object.fqn {
+							if fqn.contains(WINGSDK_GENERIC) {
+								variadic_args_inner_type = element_type;
+							}
+						}
+					}
+				}
 				self.validate_type(*arg_type, variadic_args_inner_type, arg_expr);
 			}
 		}

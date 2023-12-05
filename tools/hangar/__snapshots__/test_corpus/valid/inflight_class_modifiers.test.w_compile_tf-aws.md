@@ -83,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["field", "method", "$inflight_init"];
+        return [...super._supportedOps(), "field", "method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {

@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -215,7 +215,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["makeKeyInflight", "set", "$inflight_init"];
+      return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -286,7 +286,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["double", "$inflight_init"];
+      return [...super._supportedOps(), "double", "$inflight_init"];
     }
   }
   return { Util };
