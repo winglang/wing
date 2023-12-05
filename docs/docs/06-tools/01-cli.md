@@ -225,7 +225,7 @@ See [Libraries](../05-libraries.md) for more details on packaging and consuming 
 
 ## Environment Variables
 
-For development and testing, Wing can automatically read environment variables from `.env` files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv`.
+For development and testing, Wing can automatically read environment variables from `.env` files in your current working directory. These environment variables can be accessed in Wing code using `util.env` and `util.tryEnv` in both preflight. In inflight these functions can also be used but note that the variables are not automatically available, if desired they must be passed explicitly when used like in `cloud.Function`.
 
 ### Supported `.env` files
 
