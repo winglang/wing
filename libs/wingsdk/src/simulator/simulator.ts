@@ -469,7 +469,9 @@ export class Simulator {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
               serializeValue({
-                error: `Resource ${handle} not found. It may not have been initialized yet.`,
+                error: {
+                  message: `Resource ${handle} not found. It may not have been initialized yet.`,
+                },
               }),
               "utf-8"
             );
@@ -478,7 +480,9 @@ export class Simulator {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
               serializeValue({
-                error: `Resource ${handle} not found. It may have been cleaned up already.`,
+                error: {
+                  message: `Resource ${handle} not found. It may have been cleaned up already.`,
+                },
               }),
               "utf-8"
             );
@@ -486,6 +490,20 @@ export class Simulator {
           } else {
             throw new Error(`Internal error - resource ${handle} not found.`);
           }
+        }
+
+        const methodExists = (resource as any)[method] !== undefined;
+        if (!methodExists) {
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(
+            serializeValue({
+              error: {
+                message: `Method ${method} not found on resource ${handle}.`,
+              },
+            }),
+            "utf-8"
+          );
+          return;
         }
 
         (resource as any)
