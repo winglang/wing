@@ -5587,7 +5587,7 @@ fn add_parent_members_to_iface_env(
 						member_var.type_,
 						member_var.reassignable,
 						member_var.kind == VariableKind::StaticMember,
-						iface_env.phase,
+						member_var.phase,
 						AccessModifier::Public,
 						None,
 					),
