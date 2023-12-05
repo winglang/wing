@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 
 import * as wing from "@winglang/compiler";
@@ -21,7 +22,27 @@ export interface Compiler {
   ): void;
 }
 
+export const createSimfileCompiler = (simfile: string): Compiler => {
+  const events = new Emittery<CompilerEvents>();
+  process.nextTick(async () => {
+    await events.emit("compiled", { simfile });
+  });
+
+  return {
+    async start() {},
+    async stop() {},
+    on(event, listener) {
+      events.on(event, listener);
+    },
+  };
+};
+
 export const createCompiler = (wingfile: string): Compiler => {
+  // if wingfile is actually a simfile
+  if (wingfile.endsWith(".wsim") && fs.statSync(wingfile).isDirectory()) {
+    return createSimfileCompiler(wingfile);
+  }
+
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
