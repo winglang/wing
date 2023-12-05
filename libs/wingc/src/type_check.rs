@@ -94,7 +94,7 @@ pub enum SymbolKind {
 	Namespace(NamespaceRef),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum VariableKind {
 	/// a free variable not associated with a specific type
 	Free,
@@ -5557,20 +5557,19 @@ fn add_parent_members_to_iface_env(
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_iface.env.iter(true) {
-			let member_type = parent_member
+			let member_var = parent_member
 				.as_variable()
-				.expect("Expected interface member to be a variable")
-				.type_;
+				.expect("Expected interface member to be a variable");
 			if let Some(existing_type) = iface_env.lookup(&parent_member_name.as_str().into(), None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected interface member to be a variable")
 					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+				if !existing_type.is_same_type_as(&member_var.type_) {
 					return Err(TypeError {
 						message: format!(
 							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, member_var.type_, existing_type
 						),
 						span: name.span.clone(),
 						annotations: vec![],
@@ -5585,9 +5584,9 @@ fn add_parent_members_to_iface_env(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
-						false,
-						true,
+						member_var.type_,
+						member_var.reassignable,
+						member_var.kind == VariableKind::StaticMember,
 						iface_env.phase,
 						AccessModifier::Public,
 						None,
