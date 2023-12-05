@@ -1,8 +1,6 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { App } from "../../src/core/app";
-import { Tokens } from "../../src/core/tokens";
-import { App as AwsCdkApp } from "../../src/target-awscdk/app";
 import { App as SimApp } from "../../src/target-sim/app";
 import { App as TfAwsApp } from "../../src/target-tf-aws/app";
 import { App as TfAzureApp } from "../../src/target-tf-azure/app";
@@ -44,7 +42,6 @@ describe("appForTarget", () => {
     "tf-aws": TfAwsApp,
     "tf-azure": TfAzureApp,
     "tf-gcp": TfGcpApp,
-    awscdk: AwsCdkApp,
   };
 
   for (const [target, app] of Object.entries(map)) {
@@ -58,7 +55,6 @@ describe("appForTarget", () => {
 class MyApp extends App {
   public outdir: string = "outdir";
   public isTestEnvironment: boolean = true;
-  public readonly _tokens: Tokens;
   public readonly _target = "awscdk";
 
   constructor() {

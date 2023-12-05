@@ -1,5 +1,5 @@
 import { createPersistentState } from "@wingconsole/use-persistent-state";
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 
 import { useOpenExternal } from "../services/use-open-external.js";
 import { useRedis } from "../services/use-redis.js";
@@ -13,7 +13,7 @@ export interface RedisViewProps {
 
 const REDIS_HELP_URL = "https://redis.io/commands";
 
-export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
+export const RedisInteractionView = memo(({ resourcePath }: RedisViewProps) => {
   const { usePersistentState } = createPersistentState(resourcePath);
 
   const [command, setCommand] = usePersistentState("");
@@ -77,39 +77,43 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
     ],
   );
 
-  const handleOnInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCommand(event.target.value);
-    if (cmdIndex === 0) {
-      updateCommandHistory(event.target.value);
-    }
-  };
+  const handleOnInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCommand(event.target.value);
+      if (cmdIndex === 0) {
+        updateCommandHistory(event.target.value);
+      }
+    },
+    [cmdIndex, setCommand, updateCommandHistory],
+  );
 
-  const handleOnEnter = async () => {
+  const handleOnEnter = useCallback(async () => {
     await executeCommand(command);
     setCommand("");
-  };
+  }, [command, executeCommand, setCommand]);
 
-  const handleOnArrowUp = async (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    event.preventDefault();
-    const newIndex = Math.min(commandHistory.length - 1, cmdIndex + 1);
-    setCmdIndex(newIndex);
-    setCommand(commandHistory[newIndex] ?? "");
-  };
+  const handleOnArrowUp = useCallback(
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      const newIndex = Math.min(commandHistory.length - 1, cmdIndex + 1);
+      setCmdIndex(newIndex);
+      setCommand(commandHistory[newIndex] ?? "");
+    },
+    [cmdIndex, commandHistory, setCmdIndex, setCommand],
+  );
 
-  const handleOnArrowDown = async (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
-    event.preventDefault();
-    const newIndex = Math.max(0, cmdIndex - 1);
-    setCmdIndex(newIndex);
-    setCommand(commandHistory[newIndex] ?? "");
-  };
+  const handleOnArrowDown = useCallback(
+    async (event: React.KeyboardEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      const newIndex = Math.max(0, cmdIndex - 1);
+      setCmdIndex(newIndex);
+      setCommand(commandHistory[newIndex] ?? "");
+    },
+    [cmdIndex, commandHistory, setCmdIndex, setCommand],
+  );
 
   return (
     <RedisInteraction
-      resourceId={resourcePath}
       isLoading={isLoading}
       url={redisUrl}
       currentCommand={command}
@@ -120,4 +124,4 @@ export const RedisInteractionView = ({ resourcePath }: RedisViewProps) => {
       onArrowDown={handleOnArrowDown}
     />
   );
-};
+});

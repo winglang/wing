@@ -1,5 +1,5 @@
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-import { fromUtf8 } from "@aws-sdk/util-utf8-node";
+import { fromUtf8 } from "@smithy/util-utf8";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
 import {
@@ -63,7 +63,7 @@ test("invoke - sad path", async () => {
   // THEN
   const client = new FunctionClient("FUNCTION_NAME", "root/Function");
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
-    /Invoke failed with message: "Unhandled". Full error:/
+    /Invoke failed with message: "I don't like your input!"/
   );
 });
 

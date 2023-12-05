@@ -1,7 +1,7 @@
 bring cloud;
 bring ex;
 bring http;
-bring "./assertions.w" as t;
+bring expect;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api(
@@ -36,7 +36,7 @@ let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
 let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  let body: Json = Json.parse(req.body ?? Json.stringify({name: "", age: "", id: ""}));
+  let body = Json.parse(req.body ?? "");
   if (body.get("name") == "" || body.get("age")  == "" || body.get("id")  == "") {
     return cloud.ApiResponse {
       body: Json.stringify({ error: "incomplete details" }),
@@ -64,14 +64,14 @@ test "GET /users" {
   });
 
 let headers = response.headers;
-  t.Assert.equalNum(response.status, 200);
-  t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
-  
-  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
-  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
+  expect.equal(response.status, 200);
 
-  t.Assert.isNil(headers.tryGet("access-control-allow-headers"));
-  t.Assert.isNil(headers.tryGet("access-control-allow-methods"));
+  expect.equal(headers.tryGet("access-control-allow-origin"), "*");
+  expect.equal(headers.tryGet("access-control-expose-headers"), "Content-Type");
+  expect.equal(headers.tryGet("access-control-allow-credentials"), "false");
+
+  expect.nil(headers.tryGet("access-control-allow-headers"));
+  expect.nil(headers.tryGet("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {
@@ -83,7 +83,7 @@ test "OPTIONS /users" {
   });
 
   let headers = response.headers;
-  t.Assert.equalNum(response.status, 204);
-  t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
-  t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
+  expect.equal(response.status, 204);
+  expect.equal(headers.tryGet("access-control-allow-methods"), "GET,POST,OPTIONS");
+  expect.equal(headers.tryGet("access-control-allow-headers"), "Content-Type");
 }

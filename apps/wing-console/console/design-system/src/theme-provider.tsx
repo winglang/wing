@@ -280,9 +280,9 @@ export const ThemeProvider = ({
     setThemeMode(mode);
   }, []);
 
-  setThemeMode(mode);
-
   useEffect(() => {
+    setThemeMode(mode);
+
     const reloadThemeMode = () => {
       setThemeMode();
     };
@@ -295,7 +295,7 @@ export const ThemeProvider = ({
         .matchMedia("(prefers-color-scheme: dark)")
         .removeEventListener("change", reloadThemeMode);
     };
-  }, []);
+  }, [mode]);
 
   return (
     <ThemeContext.Provider

@@ -2,10 +2,10 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { createConsoleServer } from "@wingconsole/server";
-import open from "open";
 import { createServer as createViteServer } from "vite";
 
 import { viteConfig } from "./config.mjs";
+import { openBrowser } from "./open.mjs";
 
 const options = parseArgs({
   options: {
@@ -35,7 +35,7 @@ const consoleServer = await createConsoleServer({
   },
   hostUtils: {
     async openExternal(url) {
-      await open(url);
+      openBrowser(url, {});
     },
   },
   requireAcceptTerms: true,

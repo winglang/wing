@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
-import { Bucket, ITestRunnerClient, TestResult } from "../../src/cloud";
+import { Bucket } from "../../src/cloud";
 import { InflightBindings } from "../../src/core";
 import { Testing } from "../../src/simulator";
-import { Test } from "../../src/std";
+import { ITestRunnerClient, Test, TestResult } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 describe("run single test", () => {
@@ -47,7 +47,7 @@ describe("run single test", () => {
 
   test("not a function", async () => {
     const app = new SimApp();
-    Bucket._newBucket(app, "test");
+    new Bucket(app, "test");
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -87,7 +87,7 @@ describe("run all tests", () => {
     makeTest(app, "test", ["console.log('hi');"]);
     makeTest(app, "test:bla", ["console.log('hi');"]);
     makeTest(app, "test:blue", ["console.log('hi');"]);
-    Bucket._newBucket(app, "mytestbucket");
+    new Bucket(app, "mytestbucket");
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -119,8 +119,6 @@ function makeTest(
   bindings: InflightBindings = {}
 ) {
   const handler = Testing.makeHandler(
-    scope,
-    `${id}.handler`,
     `async handle() { ${code.join("\n")} }`,
     bindings
   );

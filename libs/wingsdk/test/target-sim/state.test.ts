@@ -13,20 +13,15 @@ test("state can be resolved at any time", async () => {
   // WHEN
   const tokenKey = "myKey";
   const token = state.token(tokenKey);
-  console.log(token);
 
-  const fn = cloud.Function._newFunction(
+  const fn = new cloud.Function(
     app,
     "MyFunction",
-    Testing.makeHandler(
-      app,
-      "MyHandler",
-      `
+    Testing.makeHandler(`
       async handle(event) {
         return process.env.MY_KEY;
       }
-      `
-    ),
+      `),
     {
       env: {
         MY_KEY: token,
@@ -34,12 +29,10 @@ test("state can be resolved at any time", async () => {
     }
   );
 
-  OnDeploy._newOnDeploy(
+  new OnDeploy(
     app,
     "MyOnDeploy",
     Testing.makeHandler(
-      app,
-      "OnDeployHandler",
       `
       async handle() {
         console.log("setting ${tokenKey}");

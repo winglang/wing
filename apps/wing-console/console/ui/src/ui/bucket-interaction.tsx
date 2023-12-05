@@ -15,7 +15,14 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { FormEvent, useContext, useMemo, useRef, useState } from "react";
+import {
+  FormEvent,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { LayoutContext, LayoutType } from "../layout/layout-provider.js";
 
@@ -33,6 +40,7 @@ export interface BucketInteractionProps {
   onSelectedEntriesChange: (entries: string[]) => void;
   onCurrentEntryChange: (index: string | undefined) => void;
 }
+
 export const BucketInteraction = ({
   selectedEntries,
   entries,
@@ -54,17 +62,25 @@ export const BucketInteraction = ({
     return getPreviewType(selectedFile ?? "");
   }, [selectedFile]);
 
-  const validPreviewTypes = new Set(["image", "video", "pdf", "text"]);
+  const [validPreviewTypes] = useState(
+    () => new Set(["image", "video", "pdf", "text"]),
+  );
   const [showPreview, setShowPreview] = useState(false);
 
   const currentRef = useRef<HTMLButtonElement>(null);
 
-  const closePreview = () => {
+  const closePreview = useCallback(() => {
     setShowPreview(false);
     currentRef.current?.focus();
-  };
+  }, []);
 
   const layoutType = useContext(LayoutContext);
+
+  const onOpenEntry = useCallback(() => {
+    if (validPreviewTypes.has(previewType)) {
+      setShowPreview(true);
+    }
+  }, [previewType, validPreviewTypes]);
 
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
@@ -124,11 +140,7 @@ export const BucketInteraction = ({
           selectedEntries={selectedEntries}
           onCurrentChange={onCurrentEntryChange}
           onSelectionChange={onSelectedEntriesChange}
-          onOpenEntry={() => {
-            if (validPreviewTypes.has(previewType)) {
-              setShowPreview(true);
-            }
-          }}
+          onOpenEntry={onOpenEntry}
           dataTestid="cloud.bucket:files"
           className={classNames(
             "overflow-y-auto resize-y",

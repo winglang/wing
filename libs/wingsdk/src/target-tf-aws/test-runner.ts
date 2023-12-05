@@ -74,7 +74,7 @@ export class TestRunner extends std.TestRunner {
             `Unsupported test function type, ${test._fn.node.path} was not a tfaws.Function`
           );
         }
-        arns.set(test.node.path, (test._fn as AwsFunction).arn);
+        arns.set(test.node.path, (test._fn as AwsFunction).functionArn);
       }
     }
     return arns;

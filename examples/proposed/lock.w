@@ -18,13 +18,13 @@ bring cloud;
  */
 resource Lock {
   counter: cloud.Counter;
-  init() {
+  new() {
     this.counter = new cloud.Counter();
   }
 
   pub inflight var is_locked: bool;
 
-  inflight init() {
+  inflight new() {
     this.is_locked = false;
   }
 

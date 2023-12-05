@@ -1,6 +1,6 @@
 # [website_with_api.test.w](../../../../../examples/tests/valid/website_with_api.test.w) | compile | tf-aws
 
-## inflight.$Closure1-2.js
+## inflight.$Closure1-1.js
 ```js
 "use strict";
 module.exports = function({ $std_Json, $usersTable }) {
@@ -11,15 +11,15 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]), "status": 200});
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
-## inflight.$Closure2-2.js
+## inflight.$Closure2-1.js
 ```js
 "use strict";
 module.exports = function({ $std_Json, $usersTable }) {
@@ -30,23 +30,23 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"name": "","age": "","id": ""})]))));
+      const body = (JSON.parse((req.body ?? "")));
       if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),"")))) {
-        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]),"status": 400});
+        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]), "status": 400});
       }
       (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]), body));
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]),"status": 201});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")})]), "status": 201});
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
-## inflight.$Closure3-2.js
+## inflight.$Closure3-1.js
 ```js
 "use strict";
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
+module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -54,25 +54,25 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.GET, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status, 200));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-origin"), "*"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-expose-headers"), "Content-Type"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-credentials"), "false"));
-      (await $t_Assert.isNil((headers)["access-control-allow-headers"]));
-      (await $t_Assert.isNil((headers)["access-control-allow-methods"]));
+      (await $expect_Util.equal(response.status, 200));
+      (await $expect_Util.equal((headers)["access-control-allow-origin"], "*"));
+      (await $expect_Util.equal((headers)["access-control-expose-headers"], "Content-Type"));
+      (await $expect_Util.equal((headers)["access-control-allow-credentials"], "false"));
+      (await $expect_Util.nil((headers)["access-control-allow-headers"]));
+      (await $expect_Util.nil((headers)["access-control-allow-methods"]));
     }
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
-## inflight.$Closure4-2.js
+## inflight.$Closure4-1.js
 ```js
 "use strict";
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert }) {
+module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -80,56 +80,16 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $t_Assert })
       return $obj;
     }
     async handle() {
-      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS,"headers": ({"Content-Type": "text/json"})})));
+      const response = (await $http_Util.fetch(($api_url + "/users"), ({"method": $http_HttpMethod.OPTIONS, "headers": ({"Content-Type": "text/json"})})));
       const headers = response.headers;
-      (await $t_Assert.equalNum(response.status, 204));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-methods"), "GET,POST,OPTIONS"));
-      (await $t_Assert.equalStr(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(headers, "access-control-allow-headers"), "Content-Type"));
+      (await $expect_Util.equal(response.status, 204));
+      (await $expect_Util.equal((headers)["access-control-allow-methods"], "GET,POST,OPTIONS"));
+      (await $expect_Util.equal((headers)["access-control-allow-headers"], "Content-Type"));
     }
   }
   return $Closure4;
 }
-
-```
-
-## inflight.Assert-1.js
-```js
-"use strict";
-module.exports = function({  }) {
-  class Assert {
-    static async equalStr(a, b) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
-      }
-    }
-    static async isNil(a) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,undefined)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected '", "' to be nil"] }, a));
-      }
-    }
-    static async equalNum(a, b) {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: a == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(a,b)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {console.log(e)};
-        throw new Error(String.raw({ raw: ["expected: ", " got: ", ""] }, b, a));
-      }
-    }
-  }
-  return Assert;
-}
-
+//# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
 ## main.tf.json
@@ -236,7 +196,10 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users\":{\"get\":{\"operationId\":\"get-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}},\"post\":{\"operationId\":\"post-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-86898773_701F5CA7.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                #if ($context.httpMethod == \\\"OPTIONS\\\")\\n                    {\\\"statusCode\\\": 204}\\n                #else\\n                    {\\\"statusCode\\\": 404}\\n                #end\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"204\":{\"statusCode\":\"204\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\",\"method.response.header.Access-Control-Allow-Origin\":\"'*'\",\"method.response.header.Access-Control-Allow-Methods\":\"'GET,POST,OPTIONS'\",\"method.response.header.Access-Control-Allow-Headers\":\"'Content-Type'\"},\"responseTemplates\":{\"application/json\":\"{}\"}},\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"204\":{\"description\":\"204 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"},\"Access-Control-Allow-Origin\":{\"type\":\"string\"},\"Access-Control-Allow-Methods\":{\"type\":\"string\"},\"Access-Control-Allow-Headers\":{\"type\":\"string\"}}},\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users\":{\"get\":{\"operationId\":\"get-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}},\"post\":{\"operationId\":\"post-users\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{},\"headers\":{\"Access-Control-Allow-Origin\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Methods\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Allow-Headers\":{\"schema\":{\"type\":\"string\"}},\"Access-Control-Max-Age\":{\"schema\":{\"type\":\"string\"}}}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_OnRequest1_3D65B7B4.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                #if ($context.httpMethod == \\\"OPTIONS\\\")\\n                    {\\\"statusCode\\\": 204}\\n                #else\\n                    {\\\"statusCode\\\": 404}\\n                #end\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"204\":{\"statusCode\":\"204\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\",\"method.response.header.Access-Control-Allow-Origin\":\"'*'\",\"method.response.header.Access-Control-Allow-Methods\":\"'GET,POST,OPTIONS'\",\"method.response.header.Access-Control-Allow-Headers\":\"'Content-Type'\"},\"responseTemplates\":{\"application/json\":\"{}\"}},\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"204\":{\"description\":\"204 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"},\"Access-Control-Allow-Origin\":{\"type\":\"string\"},\"Access-Control-Allow-Methods\":{\"type\":\"string\"},\"Access-Control-Allow-Headers\":{\"type\":\"string\"}}},\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "lifecycle": {
+          "create_before_destroy": true
+        },
         "name": "api-c895068c"
       }
     },
@@ -319,24 +282,24 @@ module.exports = function({  }) {
       }
     },
     "aws_cloudwatch_log_group": {
-      "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53": {
+      "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/CloudwatchLogGroup",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_CloudwatchLogGroup_B4816A53"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E"
           }
         },
-        "name": "/aws/lambda/cloud-Api-OnRequest-86898773-c8ed6547",
+        "name": "/aws/lambda/OnRequest0-c8dd1349",
         "retention_in_days": 30
       },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26": {
+      "cloudApi_OnRequest1_CloudwatchLogGroup_167919D9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/CloudwatchLogGroup",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_CloudwatchLogGroup_B50BDB26"
+            "path": "root/Default/Default/cloud.Api/OnRequest1/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_OnRequest1_CloudwatchLogGroup_167919D9"
           }
         },
-        "name": "/aws/lambda/cloud-Api-OnRequest-cdafee6e-c8147384",
+        "name": "/aws/lambda/OnRequest1-c8a86267",
         "retention_in_days": 30
       }
     },
@@ -360,75 +323,75 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F": {
+      "cloudApi_OnRequest0_IamRole_0E0166CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/IamRole",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRole",
+            "uniqueId": "cloudApi_OnRequest0_IamRole_0E0166CB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
+      "cloudApi_OnRequest1_IamRole_9911D256": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRole",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442"
+            "path": "root/Default/Default/cloud.Api/OnRequest1/IamRole",
+            "uniqueId": "cloudApi_OnRequest1_IamRole_9911D256"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudApi_cloudApi-OnRequest-86898773_IamRolePolicy_DAC639E5": {
+      "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/IamRolePolicy",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_IamRolePolicy_DAC639E5"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.name}"
-      },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicy",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicy",
+            "uniqueId": "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
+      },
+      "cloudApi_OnRequest1_IamRolePolicy_7A5A1217": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/OnRequest1/IamRolePolicy",
+            "uniqueId": "cloudApi_OnRequest1_IamRolePolicy_7A5A1217"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.cloudApi_OnRequest1_IamRole_9911D256.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudApi_cloudApi-OnRequest-86898773_IamRolePolicyAttachment_6E485A17": {
+      "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/IamRolePolicyAttachment",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_IamRolePolicyAttachment_6E485A17"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicyAttachment",
+            "uniqueId": "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.name}"
+        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
       },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2": {
+      "cloudApi_OnRequest1_IamRolePolicyAttachment_741E736E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicyAttachment",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2"
+            "path": "root/Default/Default/cloud.Api/OnRequest1/IamRolePolicyAttachment",
+            "uniqueId": "cloudApi_OnRequest1_IamRolePolicyAttachment_741E736E"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+        "role": "${aws_iam_role.cloudApi_OnRequest1_IamRole_9911D256.name}"
       }
     },
     "aws_lambda_function": {
-      "cloudApi_cloudApi-OnRequest-86898773_701F5CA7": {
+      "cloudApi_OnRequest0_E65A93DD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/Default",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_701F5CA7"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/Default",
+            "uniqueId": "cloudApi_OnRequest0_E65A93DD"
           }
         },
         "architectures": [
@@ -439,28 +402,30 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "OnRequest0-c8dd1349",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Api-OnRequest-86898773-c8ed6547",
+        "function_name": "OnRequest0-c8dd1349",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.arn}",
+        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-86898773_S3Object_12D28469.key}",
+        "s3_key": "${aws_s3_object.cloudApi_OnRequest0_S3Object_FDBBBF9D.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F": {
+      "cloudApi_OnRequest1_3D65B7B4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/Default",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
+            "path": "root/Default/Default/cloud.Api/OnRequest1/Default",
+            "uniqueId": "cloudApi_OnRequest1_3D65B7B4"
           }
         },
         "architectures": [
@@ -471,17 +436,19 @@ module.exports = function({  }) {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
             "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
-            "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "OnRequest1-c8a86267",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
+        "function_name": "OnRequest1-c8a86267",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
+        "role": "${aws_iam_role.cloudApi_OnRequest1_IamRole_9911D256.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
+        "s3_key": "${aws_s3_object.cloudApi_OnRequest1_S3Object_DB31ECF4.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -498,7 +465,7 @@ module.exports = function({  }) {
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/users",
         "statement_id": "AllowExecutionFromAPIGateway-GET-41f0e61d"
@@ -511,7 +478,7 @@ module.exports = function({  }) {
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-86898773_701F5CA7.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_OnRequest1_3D65B7B4.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/POST/users",
         "statement_id": "AllowExecutionFromAPIGateway-POST-41f0e61d"
@@ -565,22 +532,22 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "cloudApi_cloudApi-OnRequest-86898773_S3Object_12D28469": {
+      "cloudApi_OnRequest0_S3Object_FDBBBF9D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-86898773/S3Object",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_S3Object_12D28469"
+            "path": "root/Default/Default/cloud.Api/OnRequest0/S3Object",
+            "uniqueId": "cloudApi_OnRequest0_S3Object_FDBBBF9D"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF": {
+      "cloudApi_OnRequest1_S3Object_DB31ECF4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
-            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
+            "path": "root/Default/Default/cloud.Api/OnRequest1/S3Object",
+            "uniqueId": "cloudApi_OnRequest1_S3Object_DB31ECF4"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -611,7 +578,7 @@ module.exports = function({  }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "content": "{\"apiUrl\":\"${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}\"}",
+        "content": "{\"apiUrl\":\"https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}\"}",
         "content_type": "application/json",
         "depends_on": [
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
@@ -623,66 +590,32 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.assertions-1.js
-```js
-"use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  class Assert extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType(context) {
-      return `
-        require("./inflight.Assert-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const AssertClient = ${Assert._toInflightType(this)};
-          const client = new AssertClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return ["equalStr", "isNil", "equalNum", "$inflight_init"];
-    }
-  }
-  return { Assert };
-};
-
-```
-
 ## preflight.js
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const http = $stdlib.http;
-const t = require("./preflight.assertions-1.js")({ $stdlib });
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-2.js")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-            $usersTable: ${context._lift(usersTable)},
+          require("./inflight.$Closure1-1.js")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $usersTable: ${$stdlib.core.liftObject(usersTable)},
           })
         `;
       }
@@ -698,7 +631,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -708,15 +641,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-2.js")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-            $usersTable: ${context._lift(usersTable)},
+          require("./inflight.$Closure2-1.js")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $usersTable: ${$stdlib.core.liftObject(usersTable)},
           })
         `;
       }
@@ -732,7 +666,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -742,17 +676,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-2.js")({
-            $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "", "Assert"))},
+          require("./inflight.$Closure3-1.js")({
+            $api_url: ${$stdlib.core.liftObject(api.url)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $http_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
@@ -768,7 +703,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -778,17 +713,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-2.js")({
-            $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $t_Assert: ${context._lift($stdlib.core.toLiftableModuleType(t.Assert, "", "Assert"))},
+          require("./inflight.$Closure4-1.js")({
+            $api_url: ${$stdlib.core.liftObject(api.url)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $http_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
@@ -804,7 +740,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -813,20 +749,21 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"],"allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS],"allowHeaders": ["Content-Type"],"allowCredentials": false,"exposeHeaders": ["Content-Type"],"maxAge": (std.Duration.fromSeconds(600))}) });
-    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website_with_api" });
-    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
+    const website = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "cloud.Website", { path: "./website_with_api" });
+    const usersTable = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "users-table", primaryKey: "id", columns: ({["id"]: ex.ColumnType.STRING, ["name"]: ex.ColumnType.STRING, ["age"]: ex.ColumnType.NUMBER}) });
     const getHandler = new $Closure1(this, "$Closure1");
     const postHandler = new $Closure2(this, "$Closure2");
     (api.get("/users", getHandler));
     (api.post("/users", postHandler));
     (website.addJson("config.json", ({"apiUrl": api.url})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:GET /users", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users", new $Closure4(this, "$Closure4"));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "website_with_api.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "website_with_api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

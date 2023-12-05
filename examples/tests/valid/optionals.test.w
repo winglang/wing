@@ -11,13 +11,13 @@ assert(y == 4);
 
 class Super {
   pub name: str;
-  init() { this.name = "Super"; }
+  new() { this.name = "Super"; }
 }
 class Sub extends Super {
-  init() { this.name = "Sub"; }
+  new() { this.name = "Sub"; }
 }
 class Sub1 extends Super {
-  init() { this.name = "Sub"; }
+  new() { this.name = "Sub"; }
 }
 
 let optionalSup: Super? = new Super();
@@ -140,7 +140,7 @@ class Node {
   pub left: Node?;
   pub right: Node?;
 
-  init(value: num, left: Node?, right: Node?) {
+  new(value: num, left: Node?, right: Node?) {
     this.value = value;
     this.left = left;
     this.right = right;
@@ -194,4 +194,13 @@ test "t" {
   if (payloadWithBucket.c?) {
     payloadWithBucket.c?.put("x.txt", "something");
   }
+}
+
+let str1: str? = nil;
+let str2: str? = nil;
+
+if let s1 = str1 {
+  assert(false); // Should not happen
+} elif let s2 = str2 {
+  assert(true);
 }

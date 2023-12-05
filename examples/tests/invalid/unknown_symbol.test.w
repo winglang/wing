@@ -12,7 +12,7 @@ let x = 2 + y;
 class SomeResource {
   bucket: cloud.Bucket;
 
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
 

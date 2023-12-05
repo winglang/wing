@@ -349,6 +349,7 @@ pub struct ElifLetBlock {
 #[derive(Debug)]
 pub struct Class {
 	pub name: Symbol,
+	pub span: WingSpan,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub initializer: FunctionDefinition,
@@ -424,6 +425,8 @@ pub struct Interface {
 #[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
+	/// The name of the trusted module, and the path to the library (usually inside node_modules)
+	TrustedModule(Symbol, Utf8PathBuf),
 	/// The name of the library, and the path to the library (usually inside node_modules)
 	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),
@@ -591,8 +594,7 @@ pub enum ExprKind {
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
-		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: IndexMap<Symbol, Expr>,
+		fields: Vec<(Expr, Expr)>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,

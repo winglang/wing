@@ -4,7 +4,7 @@ bring util;
 class KeyValueStore {
   bucket: cloud.Bucket;
   var onUpdateCallback : inflight (str): void;
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
     this.onUpdateCallback = inflight (k: str) => {};
   }

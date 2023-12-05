@@ -92,12 +92,14 @@
           "variables": {
             "FOO1": "bar",
             "FOO2": "baz",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",

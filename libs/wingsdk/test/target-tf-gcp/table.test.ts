@@ -12,7 +12,7 @@ const GCP_APP_OPTS = {
 
 test("create a table", () => {
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  Table._newTable(app, "my_table", {
+  new Table(app, "my_table", {
     primaryKey: "id",
     columns: { name: ColumnType.STRING },
     name: "simple-table",

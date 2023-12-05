@@ -54,7 +54,7 @@ For example, adding a `log()` statement to your preflight code will result in Wi
 
 ```js
 // hello.w
-log("7 * 6 = ${7 * 6}");
+log("7 * 6 = {7 * 6}");
 ```
 
 ```bash
@@ -139,7 +139,7 @@ bring cloud;
 let bucket = new cloud.Bucket();
 
 let saveCalculation = inflight () => {
-  bucket.addObject("file1", "${2 ** 10}"); // error: Cannot call into preflight phase while inflight
+  bucket.addObject("file1", "{2 ** 10}"); // error: Cannot call into preflight phase while inflight
 };
 ```
 
@@ -171,7 +171,7 @@ class ReplayableQueue {
   bucket: cloud.Bucket; 
   counter: cloud.Counter;
   
-  init() {
+  new() {
     this.queue = new cloud.Queue();
     this.bucket = new cloud.Bucket();
     this.counter = new cloud.Counter();
@@ -183,7 +183,7 @@ class ReplayableQueue {
   
   inflight push(m: str) {
     this.queue.push(m);
-    this.bucket.put("messages/${this.counter.inc()}", m);
+    this.bucket.put("messages/{this.counter.inc()}", m);
   }
   
   inflight replay(){
@@ -208,13 +208,13 @@ inflight () => {
     name: str;
     age: num;
 
-    init(name: str, age: num) {
+    new(name: str, age: num) {
       this.name = name;
       this.age = age;
     }
 
     inflight greet() {
-      log("Hello, ${this.name}!");
+      log("Hello, {this.name}!");
     }
   }
 
@@ -244,7 +244,7 @@ api.get("/test", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 let checkEndpoint = inflight () => {
   let url = api.url; // this is OK
-  let path = "${url}/test";
+  let path = "{url}/test";
   let response = http.get(path);
   assert(response.status == 200);
 };

@@ -9,6 +9,7 @@ export interface CounterInteractionProps {
   handleReset: () => void;
   currentValue: number;
 }
+
 export const CounterInteraction = ({
   handleDecrement,
   handleIncrement,
@@ -35,7 +36,7 @@ export const CounterInteraction = ({
             small
             icon={MinusSmallIcon}
             className="px-0.5"
-            onClick={() => handleDecrement()}
+            onClick={handleDecrement}
             dataTestid="cloud.counter:decrease"
           />
           <input
@@ -55,7 +56,7 @@ export const CounterInteraction = ({
             small
             icon={PlusSmallIcon}
             className="px-0.5"
-            onClick={() => handleIncrement()}
+            onClick={handleIncrement}
             dataTestid="cloud.counter:increase"
           />
         </div>
@@ -72,7 +73,7 @@ export const CounterInteraction = ({
           id={resetValueElementId}
           title="Reset value"
           label="Reset value"
-          onClick={() => handleReset()}
+          onClick={handleReset}
           dataTestid="cloud.counter:reset"
         />
       </div>

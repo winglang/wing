@@ -9,12 +9,12 @@ export interface SandboxOptions {
   readonly env?: { [key: string]: string };
   readonly context?: { [key: string]: any };
   readonly timeout?: number;
-  readonly log?: (level: string, message: string) => void;
+  readonly log?: (internal: boolean, level: string, message: string) => void;
 }
 
 export class Sandbox {
   private loaded = false; // "true" after first run (module is loaded into context)
-  private readonly entrypoint: string;
+  private entrypoint: string;
   private readonly options: SandboxOptions;
   private readonly context: any = {};
 
@@ -41,7 +41,7 @@ export class Sandbox {
     for (const level of levels) {
       sandboxConsole[level] = (...args: any[]) => {
         const message = util.format(...args);
-        this.options.log?.(level, message);
+        this.options.log?.(false, level, message);
       };
     }
 
@@ -96,11 +96,18 @@ export class Sandbox {
 
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
     const bundle = createBundle(this.entrypoint, workdir);
-    const code = await readFile(bundle.entrypointPath, "utf-8");
+    this.entrypoint = bundle.entrypointPath;
+
+    const code = await readFile(this.entrypoint, "utf-8");
+
+    if (process.env.DEBUG) {
+      const bundleSize = Buffer.byteLength(code, "utf-8");
+      this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    }
 
     // this will add stuff to the "exports" object within our context
     vm.runInContext(code, this.context, {
-      filename: bundle.entrypointPath,
+      filename: this.entrypoint,
     });
 
     this.loaded = true;
@@ -129,6 +136,7 @@ export class Sandbox {
         ","
       )}).then($resolve).catch($reject);`;
       vm.runInContext(code, this.context, {
+        filename: this.entrypoint,
         timeout: this.options.timeout,
       });
     });

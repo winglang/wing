@@ -1,12 +1,12 @@
 import classNames from "classnames";
-import { createRef, ReactNode, useState } from "react";
+import { createRef, memo, ReactNode, useState } from "react";
 
 export interface RightResizableWidgetProps {
   className?: string;
   children?: ReactNode | undefined;
 }
 
-export function RightResizableWidget(props: RightResizableWidgetProps) {
+export const RightResizableWidget = memo((props: RightResizableWidgetProps) => {
   const { className, children } = props;
 
   const [offset, setOffset] = useState(0);
@@ -49,4 +49,4 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
       {children}
     </div>
   );
-}
+});
