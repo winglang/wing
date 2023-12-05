@@ -37,7 +37,7 @@ export interface CreateConsoleAppOptions {
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
-  platforms?: string[];
+  platform?: string[];
 }
 
 const staticDir = `${__dirname}/vite`;
