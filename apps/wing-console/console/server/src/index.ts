@@ -190,7 +190,7 @@ export const createConsoleServer = async ({
     if (trace.data.status === "failure") {
       let output = await prettyPrintError(trace.data.error);
 
-      // Remove ANSI escape codes
+      // Remove ANSI color codes
       const regex =
         /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
 
