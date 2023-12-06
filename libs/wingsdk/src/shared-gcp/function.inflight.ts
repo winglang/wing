@@ -84,7 +84,7 @@ export class FunctionClient implements IFunctionClient {
     token: string
   ): Promise<[string, Trace[]]> {
     console.error("Test invocation on tf-gcp doesn't include logs yet");
-    //TODO: add traces to tf-azure tests- https://github.com/winglang/wing/issues/4904
+    //TODO: add traces to tf-gcp tests- https://github.com/winglang/wing/issues/4904
     return [await this._invokeLocally(payload, token), []];
   }
 }
