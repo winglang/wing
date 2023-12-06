@@ -82,12 +82,6 @@ jobs:
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
             target='["tf-azure"]'
           else
-          if [ "${{env.TARGET}}" = "all-stable" ]; then
-            target='["tf-aws"]'
-          else
-          if [ "${{env.TARGET}}" = "all-unstable" ]; then
-            target='["tf-azure"]'
-          else
            target='["${{env.TARGET}}"]'
           fi
           echo "targets=$target" >> $GITHUB_OUTPUT
