@@ -59,7 +59,6 @@ website.addEnvironment("another", "some string variable");
 ```
 
 Then in the React app use `window.wingEnv`:
-(accessible after adding `<script src="./wing.js"></script>` to the index file)
 
 ```ts
 const { apiUrl } = window.wingEnv;
