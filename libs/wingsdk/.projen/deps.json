@@ -291,6 +291,10 @@
       "type": "bundled"
     },
     {
+      "name": "node-html-parser",
+      "type": "bundled"
+    },
+    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },

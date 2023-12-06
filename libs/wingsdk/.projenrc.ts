@@ -59,6 +59,7 @@ const project = new cdk.JsiiProject({
     // preflight dependencies
     "esbuild-wasm",
     "safe-stable-stringify",
+    "node-html-parser",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
