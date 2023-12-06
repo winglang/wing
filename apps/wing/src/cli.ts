@@ -3,10 +3,10 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
-export const PACKAGE_VERSION = currentPackage.version;
-let analyticsExportFile: Promise<string | undefined>;
 
+export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
   process.env.WING_DISABLE_ANALYTICS = "1";
 }
@@ -17,8 +17,13 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
+let analyticsExportFile: Promise<string | undefined>;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
+  loadEnvVariables({
+    mode: subCommand,
+  });
+
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
@@ -86,7 +91,6 @@ async function main() {
   checkNodeVersion();
 
   const program = new Command();
-
   program.configureHelp({
     sortOptions: true,
     showGlobalOptions: true,
