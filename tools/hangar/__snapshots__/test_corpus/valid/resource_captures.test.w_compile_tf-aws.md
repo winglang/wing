@@ -66,26 +66,21 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
-      this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_;
-      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_;
-      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
-      this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
+    constructor({ $_this_myOptStr_______, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr, $this_extBucket, $this_extNum, $this_mapOfNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr, $this_setOfStr }) {
       this.$_this_myOptStr_______ = $_this_myOptStr_______;
-      this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
-      this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
       this.$this_another = $this_another;
       this.$this_another_first_myResource = $this_another_first_myResource;
       this.$this_another_myField = $this_another_myField;
-      this.$this_arrayOfStr_length = $this_arrayOfStr_length;
+      this.$this_arrayOfStr = $this_arrayOfStr;
       this.$this_extBucket = $this_extBucket;
       this.$this_extNum = $this_extNum;
+      this.$this_mapOfNum = $this_mapOfNum;
       this.$this_myBool = $this_myBool;
       this.$this_myNum = $this_myNum;
       this.$this_myQueue = $this_myQueue;
       this.$this_myResource = $this_myResource;
       this.$this_myStr = $this_myStr;
+      this.$this_setOfStr = $this_setOfStr;
     }
     async testNoCapture() {
       const arr = [1, 2, 3];
@@ -93,14 +88,14 @@ module.exports = function({  }) {
       {console.log(String.raw({ raw: ["array.len=", ""] }, arr.length))};
     }
     async testCaptureCollectionsOfData() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_arrayOfStr_length,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(0) == \"s1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_,"s1")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(1) == \"s2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_,"s2")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__,11)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__,22)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s1\")")})(this.$_this_setOfStr_has__s1___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s2\")")})(this.$_this_setOfStr_has__s2___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !this.setOfStr.has(\"s3\")")})(this.$___this_setOfStr_has__s3____)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_arrayOfStr.length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(0) == \"s1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 0),"s1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(1) == \"s2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.$this_arrayOfStr, 1),"s2")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k1"),11)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.$this_mapOfNum, "k2"),22)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s1\")")})((await this.$this_setOfStr.has("s1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s2\")")})((await this.$this_setOfStr.has("s2")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !this.setOfStr.has(\"s3\")")})((!(await this.$this_setOfStr.has("s3"))))};
     }
     async testCapturePrimitives() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.myStr == \"myString\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$this_myStr,"myString")))};
@@ -341,25 +336,20 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0))},
-              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
-              $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
               $_this_myOptStr_______: ${$stdlib.core.liftObject((this.myOptStr ?? ""))},
-              $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
-              $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
               $this_another: ${$stdlib.core.liftObject(this.another)},
               $this_another_first_myResource: ${$stdlib.core.liftObject(this.another.first.myResource)},
               $this_another_myField: ${$stdlib.core.liftObject(this.another.myField)},
-              $this_arrayOfStr_length: ${$stdlib.core.liftObject(this.arrayOfStr.length)},
+              $this_arrayOfStr: ${$stdlib.core.liftObject(this.arrayOfStr)},
               $this_extBucket: ${$stdlib.core.liftObject(this.extBucket)},
               $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
+              $this_mapOfNum: ${$stdlib.core.liftObject(this.mapOfNum)},
               $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
               $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
               $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
               $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
               $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
+              $this_setOfStr: ${$stdlib.core.liftObject(this.setOfStr)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -371,35 +361,25 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
           MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
           MyResource._registerOnLiftObject(this.another, host, []);
           MyResource._registerOnLiftObject(this.another.first.myResource, host, []);
           MyResource._registerOnLiftObject(this.another.myField, host, []);
-          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
+          MyResource._registerOnLiftObject(this.arrayOfStr, host, []);
           MyResource._registerOnLiftObject(this.extBucket, host, []);
           MyResource._registerOnLiftObject(this.extNum, host, []);
+          MyResource._registerOnLiftObject(this.mapOfNum, host, []);
           MyResource._registerOnLiftObject(this.myBool, host, []);
           MyResource._registerOnLiftObject(this.myNum, host, []);
           MyResource._registerOnLiftObject(this.myQueue, host, []);
           MyResource._registerOnLiftObject(this.myResource, host, []);
           MyResource._registerOnLiftObject(this.myStr, host, []);
+          MyResource._registerOnLiftObject(this.setOfStr, host, []);
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
-          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
-          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
+          MyResource._registerOnLiftObject(this.arrayOfStr, host, ["at", "length"]);
+          MyResource._registerOnLiftObject(this.mapOfNum, host, ["get"]);
+          MyResource._registerOnLiftObject(this.setOfStr, host, ["has"]);
         }
         if (ops.includes("testCaptureOptional")) {
           MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
