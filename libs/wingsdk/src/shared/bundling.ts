@@ -16,9 +16,14 @@ export interface Bundle {
  * Bundles a javascript entrypoint into a single file.
  * @param entrypoint The javascript entrypoint
  * @param outputDir Defaults to `${entrypoint}.bundle`
+ * @param external external packages
  * @returns Bundle information
  */
-export function createBundle(entrypoint: string, outputDir?: string): Bundle {
+export function createBundle(
+  entrypoint: string,
+  external: string[] = [],
+  outputDir?: string
+): Bundle {
   const originalEntrypointDir = normalPath(resolve(entrypoint, ".."));
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
@@ -49,6 +54,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     sourcemap: "external",
     platform: "node",
     target: "node18",
+    external,
     write: false,
   });
 

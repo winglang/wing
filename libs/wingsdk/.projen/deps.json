@@ -269,6 +269,10 @@
       "type": "bundled"
     },
     {
+      "name": "google-auth-library",
+      "type": "bundled"
+    },
+    {
       "name": "ioredis",
       "type": "bundled"
     },
