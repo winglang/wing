@@ -10,6 +10,7 @@ const GCP_APP_OPTS = {
   projectId: "my-project",
   region: "us-central1",
   entrypointDir: __dirname,
+  zone: "us-central1",
 };
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
@@ -26,6 +27,7 @@ test("basic function", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
+    "google_service_account",
     "google_storage_bucket",
     "google_storage_bucket_object",
     "random_id",
