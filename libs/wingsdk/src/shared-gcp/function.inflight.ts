@@ -10,13 +10,16 @@ export class FunctionClient implements IFunctionClient {
     private readonly region: string
   ) {}
 
+  private get functionURL(): string {
+    return `https://${this.region}-${this.projectId}.cloudfunctions.net/${this.functionName}`;
+  }
+
   private async _invokeLocally(
     payload: string,
     token: string
   ): Promise<string> {
-    const url = `https://${this.region}-${this.projectId}.cloudfunctions.net/${this.functionName}`;
     try {
-      const res = await http.post(url, {
+      const res = await http.post(this.functionURL, {
         headers: {
           body: payload,
           "Content-Type": "text/plain",
@@ -42,13 +45,12 @@ export class FunctionClient implements IFunctionClient {
    *  @returns the function returned payload only
    */
   public async invoke(payload: string): Promise<string> {
-    const url = `https://${this.region}-${this.projectId}.cloudfunctions.net/${this.functionName}`;
     try {
       const auth = new GoogleAuth();
-      const client = await auth.getIdTokenClient(url);
+      const client = await auth.getIdTokenClient(this.functionURL);
 
       const res = await client.request({
-        url,
+        url: this.functionURL,
         method: "POST",
         body: payload,
         headers: {
@@ -63,7 +65,6 @@ export class FunctionClient implements IFunctionClient {
           },
         },
       });
-      console.log({ status: res.status });
       return (res.data as string) ?? "";
     } catch (error) {
       throw new Error(

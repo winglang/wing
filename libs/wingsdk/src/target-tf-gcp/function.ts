@@ -65,11 +65,6 @@ export class Function extends cloud.Function {
           main: "index.js",
           dependencies: {
             "@google-cloud/functions-framework": "^3.0.0",
-            // nanoid: "^3.3.4",
-            // constructs: "~10.2.69",
-            // jsonschema: "^1.4.1",
-            // "@google-cloud/storage": "6.9.5",
-            // "google-auth-library": "^8.9.0",
           },
         },
         null,
@@ -164,7 +159,6 @@ export class Function extends cloud.Function {
     lines.push(`functions.http('handler', async (req, res) => {`);
     lines.push("  res.set('Access-Control-Allow-Origin', '*')");
     lines.push("  res.set('Access-Control-Allow-Methods', 'GET, POST')");
-    lines.push("  console.log(req.headers)");
 
     lines.push("  try {");
     lines.push(
