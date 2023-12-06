@@ -30,9 +30,6 @@ export class TestRunnerClient implements ITestRunnerClient {
       throw new Error(`No test found with path "${path}"`);
     }
 
-    // console.log("waiting 45s for resources to go up...");
-    // await Util.sleep(Duration.fromSeconds(80));
-    // console.log("Done waiting");
 
     const client = new FunctionClient(
       functionArn,
