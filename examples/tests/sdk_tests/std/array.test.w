@@ -30,6 +30,34 @@ assert(buckets.at(0).node.id == "myBucket");
 test "at()" {
   assert(["hello"].at(0) == "hello");
   assert(MutArray<str>["hello", "world"].at(1) == "world");
+
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+  let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    ["hello"].at(-1);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    ["hello"].at(20);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    MutArray<str>["hello"].at(20);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    MutArray<str>["hello"].at(-1);
+  });
 }
 
 //-----------------------------------------------------------------------------
