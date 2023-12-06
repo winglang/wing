@@ -99,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {

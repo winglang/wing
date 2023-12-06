@@ -42,6 +42,10 @@ export class Sandbox {
       sandboxConsole[level] = (...args: any[]) => {
         const message = util.format(...args);
         this.options.log?.(false, level, message);
+        // also log to stderr if DEBUG is set
+        if (process.env.DEBUG) {
+          console.error(message);
+        }
       };
     }
 

@@ -1491,7 +1491,7 @@ impl<'a> JSifier<'a> {
 			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
 		}
 
-		code.line(format!("return [{}];", ops.join(", ")));
+		code.line(format!("return [...super._supportedOps(), {}];", ops.join(", ")));
 		code.close("}");
 		code
 	}

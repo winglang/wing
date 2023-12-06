@@ -16,6 +16,7 @@ describe("run single test", () => {
     await expect(testRunner.runTest("test_not_found")).rejects.toThrowError(
       'No test found at path "test_not_found"'
     );
+    await sim.stop();
   });
 
   test("happy path", async () => {
@@ -27,6 +28,7 @@ describe("run single test", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
+    await sim.stop();
     expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
@@ -42,6 +44,7 @@ describe("run single test", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
+    await sim.stop();
     expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
@@ -56,6 +59,7 @@ describe("run single test", () => {
     await expect(testRunner.runTest("root/test")).rejects.toThrowError(
       'No test found at path "root/test"'
     );
+    await sim.stop();
   });
 });
 
@@ -67,6 +71,7 @@ describe("run all tests", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const tests = await testRunner.listTests();
+    await sim.stop();
     expect(tests).toEqual([]);
   });
 
@@ -79,6 +84,7 @@ describe("run all tests", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
+    await sim.stop();
     expect(results.map(sanitizeResult)).toMatchSnapshot();
   });
 
@@ -94,6 +100,7 @@ describe("run all tests", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
+    await sim.stop();
     expect(results.length).toEqual(3);
     expect(results.map((r) => r.path).sort()).toStrictEqual([
       "root/test",
@@ -103,11 +110,33 @@ describe("run all tests", () => {
   });
 });
 
+test("await client is a no-op", async () => {
+  const app = new SimApp();
+  new Bucket(app, "test");
+  const sim = await app.startSimulator();
+  const bucketClient = sim.getResource("/test");
+  expect(await bucketClient).toBe(bucketClient);
+  await sim.stop();
+});
+
+test("calling an invalid method returns an error to the client", async () => {
+  // as opposed to, say, crashing the server
+  const app = new SimApp();
+  new Bucket(app, "test");
+  const sim = await app.startSimulator();
+  const bucketClient = sim.getResource("/test");
+  await expect(bucketClient.invalidMethod()).rejects.toThrowError(
+    /Method invalidMethod not found on resource/
+  );
+  await sim.stop();
+});
+
 test("provides raw tree data", async () => {
   const app = new SimApp();
   makeTest(app, "test", ["console.log('hi');"]);
   const sim = await app.startSimulator();
   const treeData = sim.tree().rawData();
+  await sim.stop();
   expect(treeData).toBeDefined();
   expect(treeData).toMatchSnapshot();
 });

@@ -17,11 +17,11 @@ module.exports = function({  }) {
         async dang() {
           (await y.push(2));
           i = (i + 1);
-          return ((await y.at(0)) + 10);
+          return (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0) + 10);
         }
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await (await (async () => {const o = new Inner(); await o.$inflight_init?.(); return o; })()).dang()),11)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.at(1)),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 1),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: i == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,11)))};
     }
   }
@@ -98,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inner inflight class capture immutable", new $Closure1(this, "$Closure1"));

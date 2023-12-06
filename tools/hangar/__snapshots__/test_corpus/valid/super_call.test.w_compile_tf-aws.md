@@ -252,7 +252,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class B extends A {
@@ -281,7 +281,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class C extends B {
@@ -310,7 +310,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class D extends C {
@@ -336,7 +336,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class E extends D {
@@ -365,7 +365,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class InflightA extends $stdlib.std.Resource {
@@ -390,7 +390,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["description", "$inflight_init"];
+        return [...super._supportedOps(), "description", "$inflight_init"];
       }
     }
     class InflightB extends InflightA {
@@ -416,7 +416,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["description", "$inflight_init"];
+        return [...super._supportedOps(), "description", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -445,7 +445,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class BaseClass extends $stdlib.std.Resource {
@@ -471,7 +471,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["do", "$inflight_init"];
+        return [...super._supportedOps(), "do", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("do")) {
@@ -504,7 +504,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["do", "$inflight_init"];
+        return [...super._supportedOps(), "do", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("do")) {
@@ -539,7 +539,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

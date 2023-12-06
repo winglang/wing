@@ -40,6 +40,9 @@ export function createBundle(
     outdir: originalEntrypointDir,
     sourceRoot: originalEntrypointDir + "/",
     absWorkingDir: originalEntrypointDir,
+    // otherwise there are problems with running azure cloud functions:
+    // https://stackoverflow.com/questions/70332883/webpack-azure-storage-blob-node-fetch-abortsignal-issue
+    keepNames: true,
     // if the user has specified a node_modules directory to resolve from
     nodePaths: process.env.WING_NODE_MODULES
       ? [normalPath(process.env.WING_NODE_MODULES as string)]

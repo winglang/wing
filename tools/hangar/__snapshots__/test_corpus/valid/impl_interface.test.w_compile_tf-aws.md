@@ -19,6 +19,25 @@ module.exports = function({ $x }) {
 //# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
+## inflight.$Closure2-1.js
+```js
+"use strict";
+module.exports = function({ $i3 }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: i3.method2(\"hello\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $i3.method2("hello")),"hello")))};
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.js.map
+```
+
 ## inflight.A-1.js
 ```js
 "use strict";
@@ -154,7 +173,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -182,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -219,7 +238,41 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["method2", "$inflight_init"];
+        return [...super._supportedOps(), "method2", "$inflight_init"];
+      }
+    }
+    class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure2-1.js")({
+            $i3: ${$stdlib.core.liftObject(i3)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerOnLiftObject(i3, host, ["method2"]);
+        }
+        super._registerOnLift(host, ops);
       }
     }
     class Dog extends $stdlib.std.Resource {
@@ -244,7 +297,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["eat", "$inflight_init"];
+        return [...super._supportedOps(), "eat", "$inflight_init"];
       }
     }
     class Terrier extends Dog {
@@ -270,11 +323,17 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["eat", "$inflight_init"];
+        return [...super._supportedOps(), "eat", "$inflight_init"];
       }
     }
     const x = new A(this, "A");
     const y = new $Closure1(this, "$Closure1");
+    const i3 = ((() => {
+      return new r(this, "r");
+    })());
+    {((cond) => {if (!cond) throw new Error("assertion failed: i3.method1(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i3.method1(1)),1)))};
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can call inherited inflight interface method", new $Closure2(this, "$Closure2"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: i3.method3([1, 2, 3]) == [1, 2, 3]")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i3.method3([1, 2, 3])),[1, 2, 3])))};
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
   }

@@ -17,11 +17,11 @@ module.exports = function({ $b }) {
       (await $b.put("foo/bar/", "text"));
       (await $b.put("foo/bar/baz", "text"));
       const objs = (await $b.list());
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(0) == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(0)),"foo")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(1) == \"foo/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(1)),"foo/")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(2) == \"foo/bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(2)),"foo/bar")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(3) == \"foo/bar/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(3)),"foo/bar/")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(4) == \"foo/bar/baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await objs.at(4)),"foo/bar/baz")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(0) == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 0),"foo")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(1) == \"foo/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 1),"foo/")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(2) == \"foo/bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 2),"foo/bar")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(3) == \"foo/bar/\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 3),"foo/bar/")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(4) == \"foo/bar/baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 4),"foo/bar/baz")))};
     }
   }
   return $Closure1;
@@ -112,7 +112,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

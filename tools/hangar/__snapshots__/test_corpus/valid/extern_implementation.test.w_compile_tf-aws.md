@@ -138,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
+        return [...super._supportedOps(), "regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("call")) {
@@ -172,7 +172,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

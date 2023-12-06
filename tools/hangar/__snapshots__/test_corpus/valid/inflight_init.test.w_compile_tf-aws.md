@@ -224,7 +224,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["field1", "field2", "get_six", "$inflight_init"];
+        return [...super._supportedOps(), "field1", "field2", "get_six", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -256,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["field3", "$inflight_init"];
+        return [...super._supportedOps(), "field3", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -290,7 +290,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -318,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -345,7 +345,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -373,7 +373,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class init", new $Closure1(this, "$Closure1"));

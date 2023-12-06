@@ -50,7 +50,7 @@
       "patterns": [
         {
           "name": "meta.template.expression.wing",
-          "begin": "\\$\\{",
+          "begin": "\\{",
           "beginCaptures": {
             "0": {
               "name": "punctuation.definition.template-expression.begin.wing"

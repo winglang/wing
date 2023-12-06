@@ -64,6 +64,7 @@ export interface CreateConsoleServerOptions {
   onExpressCreated?: (app: Express) => void;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  platform?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -78,6 +79,7 @@ export const createConsoleServer = async ({
   onExpressCreated,
   requireAcceptTerms,
   layoutConfig,
+  platform,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -105,7 +107,7 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler(wingfile);
+  const compiler = createCompiler({ wingfile, platform });
   let isStarting = false;
   let isStopping = false;
 
@@ -189,6 +191,13 @@ export const createConsoleServer = async ({
     }
     if (trace.data.status === "failure") {
       let output = await prettyPrintError(trace.data.error);
+
+      // Remove ANSI color codes
+      const regex =
+        /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+      output = output.replaceAll(regex, "");
+
       consoleLogger.error(output, "user", {
         sourceType: trace.sourceType,
         sourcePath: trace.sourcePath,
