@@ -165,9 +165,8 @@ jobs:
             if  ${{ env.MANUAL == 'true' }}
             then
                pnpm install
-               WING_CLI=$(realpath node_modules/.bin/wing)
                cd ${{ matrix.test.directory }}
-               $WING_CLI test -t ${{ matrix.target }} *.test.w
+               pnpm --workspace-root wing test -t ${{ matrix.target }} *.test.w
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
                cd ${{ matrix.test.directory }}
