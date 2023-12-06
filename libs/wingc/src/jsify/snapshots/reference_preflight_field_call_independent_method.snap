@@ -25,11 +25,11 @@ source: libs/wingc/src/jsify/tests.rs
 "use strict";
 module.exports = function({  }) {
   class Foo {
-    constructor({ $_this_arr_at_1__ }) {
-      this.$_this_arr_at_1__ = $_this_arr_at_1__;
+    constructor({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__1_ }) {
+      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__1_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__1_;
     }
     async method() {
-      this.$_this_arr_at_1__;
+      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__1_;
     }
   }
   return Foo;
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $_this_arr_at_1__: ${$stdlib.core.liftObject((this.arr.at(1)))},
+              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 1))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -77,10 +77,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject((this.arr.at(1)), host, []);
+          Foo._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 1), host, []);
         }
         if (ops.includes("method")) {
-          Foo._registerOnLiftObject((this.arr.at(1)), host, []);
+          Foo._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 1), host, []);
         }
         super._registerOnLift(host, ops);
       }

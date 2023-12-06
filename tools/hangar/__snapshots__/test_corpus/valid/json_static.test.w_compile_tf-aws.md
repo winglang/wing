@@ -152,7 +152,7 @@ class $Root extends $stdlib.std.Resource {
     const k = (Object.keys(x));
     {((cond) => {if (!cond) throw new Error("assertion failed: k.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k.length,2)))};
     const v = (Object.values(x));
-    {((cond) => {if (!cond) throw new Error("assertion failed: v.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((v.at(0)),123)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: v.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(v, 0),123)))};
     const m = (JSON.parse(JSON.stringify(x)));
     ((obj, args) => { obj[args[0]] = args[1]; })(m, ["a", 321]);
     {((cond) => {if (!cond) throw new Error("assertion failed: m.get(\"a\") == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(m, "a"),321)))};
