@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { Theme, useTheme } from "./theme-provider.js";
 
@@ -45,37 +45,39 @@ const highlightJson = (value: string, theme: Theme) => {
     )}${formatted.slice(CHAR_LIMIT)}`;
 };
 
-export const TextHighlight = ({
-  id,
-  text,
-  className = "",
-  json = true,
-  dataTestid,
-}: TextHighlightProps) => {
-  const { theme } = useTheme();
-
-  const [highlightedText, setHighlightedText] = useState<string | undefined>(
+export const TextHighlight = memo(
+  ({
+    id,
     text,
-  );
+    className = "",
+    json = true,
+    dataTestid,
+  }: TextHighlightProps) => {
+    const { theme } = useTheme();
 
-  useEffect(() => {
-    if (!json) {
-      setHighlightedText(undefined);
-      return;
-    }
-    setHighlightedText(highlightJson(text, theme));
-  }, [text, json, theme]);
+    const [highlightedText, setHighlightedText] = useState<string | undefined>(
+      text,
+    );
 
-  return (
-    <div className={className} data-testid={dataTestid}>
-      {json && highlightedText ? (
-        <div
-          id={id}
-          dangerouslySetInnerHTML={{ __html: highlightedText }}
-        ></div>
-      ) : (
-        <div>{text}</div>
-      )}
-    </div>
-  );
-};
+    useEffect(() => {
+      if (!json) {
+        setHighlightedText(undefined);
+        return;
+      }
+      setHighlightedText(highlightJson(text, theme));
+    }, [text, json, theme]);
+
+    return (
+      <div className={className} data-testid={dataTestid}>
+        {json && highlightedText ? (
+          <div
+            id={id}
+            dangerouslySetInnerHTML={{ __html: highlightedText }}
+          ></div>
+        ) : (
+          <div>{text}</div>
+        )}
+      </div>
+    );
+  },
+);

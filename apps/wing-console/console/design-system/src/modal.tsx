@@ -11,12 +11,12 @@ export interface ModalProps {
   children?: ReactNode;
 }
 
-export function Modal({
+export const Modal = ({
   visible,
   setVisible,
   className,
   children,
-}: ModalProps) {
+}: ModalProps) => {
   const { theme } = useTheme();
 
   return (
@@ -72,4 +72,4 @@ export function Modal({
       </Dialog>
     </Transition.Root>
   );
-}
+};

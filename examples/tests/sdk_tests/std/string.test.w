@@ -214,3 +214,20 @@ test "replace()" {
   assert("hello world".replace(" ", "-") == "hello-world");
   assert("".replace("", "hello world") == "hello world");
 }
+
+//-----------------------------------------------------------------------------
+// replaceAll()
+
+assert("hello world world".replaceAll("world", "wing") == "hello wing wing");
+assert("pʅɹoʍ oʅʅǝɥ pʅɹoʍ".replaceAll("pʅɹoʍ", "ɓuᴉʍ") == "ɓuᴉʍ oʅʅǝɥ ɓuᴉʍ");
+assert("hello world".replaceAll("wing", "☁") == "hello world");
+assert("hello world world".replaceAll(" ", "-") == "hello-world-world");
+assert("".replaceAll("", "hello world") == "hello world");
+
+test "replaceAll()" {
+  assert("hello world world".replaceAll("world", "wing") == "hello wing wing");
+  assert("pʅɹoʍ oʅʅǝɥ pʅɹoʍ".replaceAll("pʅɹoʍ", "ɓuᴉʍ") == "ɓuᴉʍ oʅʅǝɥ ɓuᴉʍ");
+  assert("hello world".replaceAll("wing", "☁") == "hello world");
+  assert("hello world world".replaceAll(" ", "-") == "hello-world-world");
+  assert("".replaceAll("", "hello world") == "hello world");
+}

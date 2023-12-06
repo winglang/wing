@@ -9,7 +9,6 @@ let path = "/path";
 api.options(path, inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   assert(req.method == cloud.HttpMethod.OPTIONS);
   assert(req.path == path);
-  // req.body is not a string in sim- https://github.com/winglang/wing/issues/3024
   assert(req.body?.length == 0);
 
   return cloud.ApiResponse {
@@ -20,7 +19,6 @@ api.options(path, inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 api.head(path, inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   assert(req.method == cloud.HttpMethod.HEAD);
   assert(req.path == path);
-  // req.body is not a string in sim- https://github.com/winglang/wing/issues/3024
   assert(req.body?.length == 0);
 
   return cloud.ApiResponse {

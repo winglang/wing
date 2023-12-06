@@ -1,13 +1,23 @@
 import { existsSync } from "fs";
+import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
+import {
+  deserializeValue,
+  makeSimulatorClient,
+  serializeValue,
+} from "./client";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
 import { readJsonSync } from "../shared/misc";
 import { CONNECTIONS_FILE_PATH, Trace, TraceType } from "../std";
-import { isToken } from "../target-sim/tokens";
+import {
+  SIMULATOR_TOKEN_REGEX,
+  SIMULATOR_TOKEN_REGEX_FULL,
+} from "../target-sim/tokens";
 
 const START_ATTEMPT_COUNT = 10;
+const LOCALHOST_ADDRESS = "127.0.0.1";
 
 /**
  * Props for `Simulator`.
@@ -76,6 +86,11 @@ export interface ISimulatorContext {
   readonly resourcePath: string;
 
   /**
+   * The url that the simulator server is listening on.
+   */
+  readonly serverUrl: string;
+
+  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResourceInstance;
@@ -123,6 +138,19 @@ export interface ITraceSubscriber {
 }
 
 /**
+ * The simulator can transition between these states:
+ * ┌─────────┐    ┌─────────┐
+ * │ stopped ├───►│starting │
+ * └─────────┘    └────┬────┘
+ *      ▲              │
+ *      │              ▼
+ * ┌────┴────┐    ┌─────────┐
+ * │stopping │◄───┤ running │
+ * └─────────┘    └─────────┘
+ */
+type RunningState = "starting" | "running" | "stopping" | "stopped";
+
+/**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
@@ -131,12 +159,14 @@ export class Simulator {
   private readonly simdir: string;
 
   // fields that change between simulation runs / reloads
-  private _running: boolean;
+  private _running: RunningState;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
   private _tree: Tree;
   private _connections: ConnectionData[];
+  private _serverUrl: string | undefined;
+  private _server: Server | undefined;
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
@@ -145,7 +175,7 @@ export class Simulator {
     this._tree = new Tree(treeData);
     this._connections = connectionData;
 
-    this._running = false;
+    this._running = "stopped";
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
@@ -201,16 +231,19 @@ export class Simulator {
    * Start the simulator.
    */
   public async start(): Promise<void> {
-    if (this._running) {
+    if (this._running !== "stopped") {
       throw new Error(
         "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
       );
     }
+    this._running = "starting";
 
     // create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
       ...this._config.resources,
     ];
+
+    await this.startServer();
 
     while (true) {
       const next = initQueue.shift();
@@ -237,18 +270,25 @@ export class Simulator {
       }
     }
 
-    this._running = true;
+    this._running = "running";
   }
 
   /**
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    if (!this._running) {
+    if (this._running === "starting") {
+      throw new Error("Cannot stop a simulation that is still starting.");
+    }
+    if (this._running === "stopping") {
+      throw new Error("There is already a stop operation in progress.");
+    }
+    if (this._running === "stopped") {
       throw new Error(
         "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
       );
     }
+    this._running = "stopping";
 
     for (const resourceConfig of this._config.resources.slice().reverse()) {
       const handle = resourceConfig.attrs?.handle;
@@ -274,8 +314,11 @@ export class Simulator {
       this._addTrace(event);
     }
 
+    this._server!.close();
+    this._server!.closeAllConnections();
+
     this._handles.reset();
-    this._running = false;
+    this._running = "stopped";
   }
 
   /**
@@ -308,28 +351,28 @@ export class Simulator {
   }
 
   /**
-   * Get a simulated resource instance.
+   * Get a resource client.
    * @returns the resource
    */
   public getResource(path: string): any {
-    const handle = this.tryGetResource(path);
-    if (!handle) {
+    const client = this.tryGetResource(path);
+    if (!client) {
       throw new Error(`Resource "${path}" not found.`);
     }
-    return handle;
+    return client;
   }
 
   /**
-   * Get a simulated resource instance.
-   * @returns The resource of undefined if not found
+   * Get a resource client.
+   * @returns The resource or undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
-    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
+    const handle: string = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
 
-    return this._handles.find(handle);
+    return makeSimulatorClient(this.url, handle);
   }
 
   /**
@@ -355,6 +398,18 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
     return config;
+  }
+
+  /**
+   * Obtain a resource's visual interaction components.
+   * @returns An array of UIComponent objects
+   */
+  public getResourceUI(path: string): any {
+    let treeData = this.tree().rawDataForNode(path);
+    if (!treeData) {
+      throw new Error(`Resource "${path}" not found.`);
+    }
+    return treeData.display?.ui ?? [];
   }
 
   private typeInfo(fqn: string): TypeSchema {
@@ -383,13 +438,132 @@ export class Simulator {
     return structuredClone(this._connections);
   }
 
+  /**
+   * Start a server that allows any resource to be accessed via HTTP.
+   */
+  private async startServer(): Promise<void> {
+    const requestListener = async (
+      req: IncomingMessage,
+      res: ServerResponse
+    ) => {
+      if (!req.url?.startsWith("/v1/call")) {
+        res.writeHead(404);
+        res.end();
+        return;
+      }
+
+      let body = "";
+      req.on("data", (chunk) => {
+        body += chunk;
+      });
+      req.on("end", () => {
+        const request: SimulatorServerRequest = deserializeValue(body);
+        const { handle, method, args } = request;
+        const resource = this._handles.tryFind(handle);
+
+        // If we weren't able to find a resource with the given handle, it could actually
+        // be OK if the resource is still starting up or has already been cleaned up.
+        // In that case, we return a 500 error with a message that explains what happened.
+        if (!resource) {
+          if (this._running === "starting") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: {
+                  message: `Resource ${handle} not found. It may not have been initialized yet.`,
+                },
+              }),
+              "utf-8"
+            );
+            return;
+          } else if (this._running === "stopping") {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: {
+                  message: `Resource ${handle} not found. It may have been cleaned up already.`,
+                },
+              }),
+              "utf-8"
+            );
+            return;
+          } else {
+            throw new Error(`Internal error - resource ${handle} not found.`);
+          }
+        }
+
+        const methodExists = (resource as any)[method] !== undefined;
+        if (!methodExists) {
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(
+            serializeValue({
+              error: {
+                message: `Method ${method} not found on resource ${handle}.`,
+              },
+            }),
+            "utf-8"
+          );
+          return;
+        }
+
+        (resource as any)
+          [method](...args)
+          .then((result: any) => {
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(serializeValue({ result }), "utf-8");
+          })
+          .catch((err: any) => {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(
+              serializeValue({
+                error: {
+                  message: err.message ?? err,
+                  stack: err.stack,
+                  name: err.name,
+                },
+              }),
+              "utf-8"
+            );
+          });
+      });
+    };
+
+    // only import "http" when this method is called to reduce the time it takes to load Wing SDK
+    const http = await import("http");
+
+    // start the server, and wait for it to be listening
+    const server = http.createServer(requestListener);
+    await new Promise<void>((resolve) => {
+      server!.listen(0, LOCALHOST_ADDRESS, () => {
+        const addr = server.address();
+        if (addr && typeof addr === "object" && (addr as any).port) {
+          this._serverUrl = `http://${addr.address}:${addr.port}`;
+        }
+        this._server = server;
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * The URL that the simulator server is listening on.
+   */
+  public get url(): string {
+    if (!this._serverUrl) {
+      throw new Error("Simulator server is not running.");
+    }
+    return this._serverUrl;
+  }
+
   private async tryStartResource(
     resourceConfig: BaseResourceSchema
   ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(resourceConfig.props);
-    if (resolvedProps === undefined) {
+    const { resolved, value: resolvedProps } = this.tryResolveTokens(
+      resourceConfig.props
+    );
+    if (!resolved) {
       this._addTrace({
         type: TraceType.RESOURCE,
         data: { message: `${resourceConfig.path} is waiting on a dependency` },
@@ -402,6 +576,10 @@ export class Simulator {
       // it to the init queue.
       return false;
     }
+
+    // update the resource's config with the resolved props
+    const config = this.getResourceConfig(resourceConfig.path);
+    (config.props as any) = resolvedProps;
 
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
@@ -436,6 +614,7 @@ export class Simulator {
     return {
       simdir: this.simdir,
       resourcePath: resourceConfig.path,
+      serverUrl: this.url,
       findInstance: (handle: string) => {
         return this._handles.find(handle);
       },
@@ -491,6 +670,40 @@ export class Simulator {
     this._traces.push(event);
   }
 
+  private tryResolveToken(s: string): { resolved: boolean; value: any } {
+    const ref = s.slice(2, -1);
+    const [_, path, rest] = ref.split("#");
+    const config = this.getResourceConfig(path);
+    if (rest.startsWith("attrs.")) {
+      const attrName = rest.slice(6);
+      const attr = config?.attrs[attrName];
+
+      // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+      // that this resource haven't been started yet. so return `undefined`, which will cause
+      // this resource to go back to the init queue.
+      if (!attr) {
+        return { resolved: false, value: undefined };
+      }
+      return { resolved: true, value: attr };
+    } else if (rest.startsWith("props.")) {
+      if (!config.props) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no props defined.`
+        );
+      }
+      const propPath = rest.slice(6);
+      const value = config.props[propPath];
+      if (value === undefined) {
+        throw new Error(
+          `Tried to resolve token "${s}" but resource ${path} has no prop "${propPath}".`
+        );
+      }
+      return { resolved: true, value };
+    } else {
+      throw new Error(`Invalid token reference: "${ref}"`);
+    }
+  }
+
   /**
    * Return an object with all tokens in it resolved to their appropriate values.
    *
@@ -505,64 +718,79 @@ export class Simulator {
    * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
    * the resolved value.
    */
-  private tryResolveTokens(obj: any): any {
+  private tryResolveTokens(obj: any): { resolved: boolean; value: any } {
     if (typeof obj === "string") {
-      if (isToken(obj)) {
-        const ref = obj.slice(2, -1);
-        const [path, rest] = ref.split("#");
-        const config = this.getResourceConfig(path);
-        if (rest.startsWith("attrs.")) {
-          const attrName = rest.slice(6);
-          const attr = config?.attrs[attrName];
-
-          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
-          // that this resource haven't been started yet. so return `undefined`, which will cause
-          // this resource to go back to the init queue.
-          if (!attr) {
-            return undefined;
-          }
-          return attr;
-        } else if (rest.startsWith("props.")) {
-          if (!config.props) {
-            throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no props defined.`
-            );
-          }
-          return config.props;
-        } else {
-          throw new Error(`Invalid token reference: "${ref}"`);
+      // there are two cases - a token can be the entire string, or it can be part of the string.
+      // first, check if the entire string is a token
+      if (SIMULATOR_TOKEN_REGEX_FULL.test(obj)) {
+        const { resolved, value } = this.tryResolveToken(obj);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
+        return { resolved: true, value };
       }
 
-      return obj;
+      // otherwise, check if the string contains tokens inside it. if so, we need to resolve them
+      // and then check if the result is a string
+      const globalRegex = new RegExp(SIMULATOR_TOKEN_REGEX.source, "g");
+      const matches = obj.matchAll(globalRegex);
+      const replacements = [];
+      for (const match of matches) {
+        const { resolved, value } = this.tryResolveToken(match[0]);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
+        }
+        if (typeof value !== "string") {
+          throw new Error(
+            `Expected token "${
+              match[0]
+            }" to resolve to a string, but it resolved to ${typeof value}.`
+          );
+        }
+        replacements.push({ match, value });
+      }
+
+      // replace all the tokens in reverse order, and return the result
+      // if a token returns another token (god forbid), do not resolve it again
+      let result = obj;
+      for (const { match, value } of replacements.reverse()) {
+        if (match.index === undefined) {
+          throw new Error(`unexpected error: match.index is undefined`);
+        }
+        result =
+          result.slice(0, match.index) +
+          value +
+          result.slice(match.index + match[0].length);
+      }
+      return { resolved: true, value: result };
     }
 
     if (Array.isArray(obj)) {
       const result = [];
       for (const x of obj) {
-        const value = this.tryResolveTokens(x);
-        if (value === undefined) {
-          return undefined;
+        const { resolved, value } = this.tryResolveTokens(x);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
         result.push(value);
       }
 
-      return result;
+      return { resolved: true, value: result };
     }
 
     if (typeof obj === "object") {
       const ret: any = {};
-      for (const [key, value] of Object.entries(obj)) {
-        const resolved = this.tryResolveTokens(value);
-        if (resolved === undefined) {
-          return undefined;
+      for (const [key, v] of Object.entries(obj)) {
+        const { resolved, value } = this.tryResolveTokens(v);
+        if (!resolved) {
+          return { resolved: false, value: undefined };
         }
-        ret[key] = resolved;
+        ret[key] = value;
       }
-      return ret;
+      return { resolved: true, value: ret };
     }
 
-    return obj;
+    return { resolved: true, value: obj };
   }
 }
 
@@ -596,11 +824,15 @@ class HandleManager {
   }
 
   public find(handle: string): ISimulatorResourceInstance {
-    const instance = this.handles.get(handle);
+    const instance = this.tryFind(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);
     }
     return instance;
+  }
+
+  public tryFind(handle: string): ISimulatorResourceInstance | undefined {
+    return this.handles.get(handle);
   }
 
   public deallocate(handle: string): ISimulatorResourceInstance {
@@ -680,4 +912,28 @@ export interface ConnectionData {
   readonly target: string;
   /** A name for the connection. */
   readonly name: string;
+}
+
+/**
+ * Internal schema for requests to the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerRequest {
+  /** The resource handle (an ID unique among resources in the simulation). */
+  readonly handle: string;
+  /** The method to call on the resource. */
+  readonly method: string;
+  /** The arguments to the method. */
+  readonly args: any[];
+}
+
+/**
+ * Internal schema for responses from the simulator server's /v1/call endpoint.
+ * Subject to breaking changes.
+ */
+export interface SimulatorServerResponse {
+  /** The result of the method call. */
+  readonly result?: any;
+  /** The error that occurred during the method call. */
+  readonly error?: any;
 }

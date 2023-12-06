@@ -77,24 +77,29 @@ const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
 const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
+const WINGSDK_EXPECT_MODULE: &'static str = "expect";
 const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_SIM_MODULE: &'static str = "sim";
+const WINGSDK_UI_MODULE: &'static str = "ui";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 9] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
 	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
+	WINGSDK_EXPECT_MODULE,
 	WINGSDK_REGEX_MODULE,
 	WINGSDK_FS_MODULE,
 	WINGSDK_SIM_MODULE,
+	WINGSDK_UI_MODULE,
 ];
 
+const WINGSDK_GENERIC: &'static str = "std.T1";
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.Map";
 const WINGSDK_MUT_MAP: &'static str = "std.MutMap";
@@ -110,10 +115,13 @@ const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
+
+pub const TRUSTED_LIBRARY_NPM_NAMESPACE: &'static str = "@winglibs";
 
 pub struct CompilerOutput {}
 
@@ -169,6 +177,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -184,6 +193,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			message: format!("Source path cannot be found: {}", source_path),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return WASM_RETURN_ERROR;
 	}
@@ -369,6 +379,7 @@ pub fn compile(
 			message: format!("Project directory must be absolute: {}", project_dir),
 			span: None,
 			annotations: vec![],
+			hints: vec![],
 		});
 		return Err(());
 	}

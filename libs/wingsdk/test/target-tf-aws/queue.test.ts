@@ -15,7 +15,7 @@ import {
 test("default queue behavior", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  Queue._newQueue(app, "Queue");
+  new Queue(app, "Queue");
   const output = app.synth();
 
   // THEN
@@ -27,7 +27,7 @@ test("default queue behavior", () => {
 test("queue with custom timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  Queue._newQueue(app, "Queue", {
+  new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -41,7 +41,7 @@ test("queue with custom timeout", () => {
 test("queue with custom retention", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  Queue._newQueue(app, "Queue", {
+  new Queue(app, "Queue", {
     retentionPeriod: std.Duration.fromMinutes(30),
   });
   const output = app.synth();
@@ -55,17 +55,13 @@ test("queue with custom retention", () => {
 test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const queue = Queue._newQueue(app, "Queue", {
+  const queue = new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
-  const processor = Testing.makeHandler(
-    app,
-    "Handler",
-    `\
+  const processor = Testing.makeHandler(`\
 async handle(event) {
   console.log("Received " + event.name);
-}`
-  );
+}`);
   const processorFn = queue.setConsumer(processor);
   const output = app.synth();
 
@@ -90,7 +86,7 @@ async handle(event) {
 test("queue name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const queue = Queue._newQueue(app, "The-Incredible_Queue-01");
+  const queue = new Queue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
   // THEN
@@ -106,7 +102,7 @@ test("queue name valid", () => {
 test("replace invalid character from queue name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const queue = Queue._newQueue(app, "The*Incredible$Queue");
+  const queue = new Queue(app, "The*Incredible$Queue");
   const output = app.synth();
 
   // THEN

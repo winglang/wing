@@ -14,16 +14,17 @@ test("basic function", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "azurerm_application_insights",
     "azurerm_linux_function_app", // function app
+    "azurerm_log_analytics_workspace",
     "azurerm_resource_group", // resource group
     "azurerm_role_assignment", // role assignment for function app
     "azurerm_service_plan", // service plan for function app
@@ -42,10 +43,10 @@ test("basic function with environment variables", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -77,7 +78,7 @@ test("permissions resources are added to function after constructor has been ini
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   const func = new tfazure.Function(app, "Function", inflight, {});
 
   // WHEN
@@ -106,10 +107,10 @@ test("replace invalid character from function name", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  const func = Function._newFunction(app, "someFunction01", inflight);
+  const func = new Function(app, "someFunction01", inflight);
   const output = app.synth();
 
   // THEN

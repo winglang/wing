@@ -21,7 +21,15 @@ export interface Compiler {
   ): void;
 }
 
-export const createCompiler = (wingfile: string): Compiler => {
+export interface CreateCompilerProps {
+  wingfile: string;
+  platform?: string[];
+}
+
+export const createCompiler = ({
+  wingfile,
+  platform = [wing.BuiltinPlatform.SIM],
+}: CreateCompilerProps): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
@@ -35,7 +43,7 @@ export const createCompiler = (wingfile: string): Compiler => {
       isCompiling = true;
       await events.emit("compiling");
       const simfile = await wing.compile(wingfile, {
-        target: wing.Target.SIM,
+        platform,
       });
       await events.emit("compiled", { simfile });
     } catch (error) {
@@ -46,9 +54,12 @@ export const createCompiler = (wingfile: string): Compiler => {
 
       await events.emit(
         "error",
-        new Error(`Failed to compile.\n\n${await formatWingError(error)}`, {
-          cause: error,
-        }),
+        new Error(
+          `Failed to compile.\n\n${await formatWingError(error, wingfile)}`,
+          {
+            cause: error,
+          },
+        ),
       );
     } finally {
       isCompiling = false;
@@ -63,15 +74,13 @@ export const createCompiler = (wingfile: string): Compiler => {
   const dirname = path.dirname(wingfile);
   //TODO: infer React App resource folders from source files https://github.com/winglang/wing/issues/3956
   const ignoreList = [
-    "**/target/**",
+    `${dirname}/target/**`,
     "**/node_modules/**",
-    "**/**/wing.js",
-    "**/src/**",
-    "**/build/**",
-    "**/public/**",
+    "**/.git/**",
   ];
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
+    ignoreInitial: true,
   });
   watcher.on("change", recompile);
   watcher.on("add", recompile);
@@ -81,6 +90,8 @@ export const createCompiler = (wingfile: string): Compiler => {
     }
     void recompile();
   });
+
+  void recompile();
 
   return {
     async start() {

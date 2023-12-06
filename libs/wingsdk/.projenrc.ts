@@ -11,16 +11,25 @@ const CDKTF_PROVIDERS = [
   "google@~>5.3.0",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];
+const PUBLIC_MODULES = [
+  "std",
+  "http",
+  "util",
+  "aws",
+  "math",
+  "regex",
+  "sim",
+  "fs",
+  "expect",
+  "ui",
+];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
-const TARGET_DEPS = {
-  awscdk: ["aws-cdk-lib@^2.64.0"],
-};
+const TARGET_DEPS: { [key: string]: string[] } = {};
 
 // we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
 // from the "package.json" just before we bundle the package and the Wing CLI will require the user
@@ -53,23 +62,20 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.405.0",
-    "@aws-sdk/client-dynamodb@3.405.0",
-    "@aws-sdk/client-elasticache@3.405.0",
-    "@aws-sdk/util-dynamodb@3.405.0",
-    "@aws-sdk/client-lambda@3.405.0",
-    "@aws-sdk/client-s3@3.405.0",
-    "@aws-sdk/client-secrets-manager@3.405.0",
-    "@aws-sdk/client-sqs@3.405.0",
-    "@aws-sdk/client-sns@3.405.0",
-    "@aws-sdk/types@3.398.0",
-    "@aws-sdk/util-stream-node@3.350.0",
-    "@aws-sdk/util-utf8-node@3.259.0",
-    "@aws-sdk/s3-request-presigner@3.405.0",
+    "@aws-sdk/client-cloudwatch-logs@3.449.0",
+    "@aws-sdk/client-dynamodb@3.449.0",
+    "@aws-sdk/client-elasticache@3.449.0",
+    "@aws-sdk/util-dynamodb@3.449.0",
+    "@aws-sdk/client-lambda@3.449.0",
+    "@aws-sdk/client-secrets-manager@3.449.0",
+    "@aws-sdk/client-sqs@3.449.0",
+    "@aws-sdk/client-sns@3.449.0",
+    "@aws-sdk/client-s3@3.449.0",
+    "@aws-sdk/s3-request-presigner@3.449.0",
+    "@aws-sdk/types@3.449.0",
+    "@smithy/util-stream@2.0.17",
+    "@smithy/util-utf8@2.0.0",
     "@types/aws-lambda",
-    // the following 2 deps are required by @aws-sdk/util-utf8-node
-    "@aws-sdk/util-buffer-from@3.208.0",
-    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
@@ -82,6 +88,7 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "express",
     "uuid",
+    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
@@ -90,6 +97,8 @@ const project = new cdk.JsiiProject({
     "jsonschema",
     // fs module dependency
     "yaml",
+    // enhanced diagnostics
+    "stacktracey",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -109,6 +118,7 @@ const project = new cdk.JsiiProject({
     "@types/uuid",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    "chalk",
     ...JSII_DEPS,
   ],
   jest: false,
@@ -135,6 +145,7 @@ project.eslint?.addOverride({
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen");
+project.deps.removeDependency("jsii-rosetta");
 
 enum Zone {
   PREFLIGHT = "preflight",

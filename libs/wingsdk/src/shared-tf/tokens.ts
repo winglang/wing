@@ -1,13 +1,13 @@
 import { Fn, Token } from "cdktf";
 import { Function } from "../cloud";
-import { Tokens } from "../core/tokens";
+import { tokenEnvName, ITokenResolver } from "../core/tokens";
 import { IInflightHost } from "../std";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
-export class CdkTfTokens extends Tokens {
+export class CdkTfTokens implements ITokenResolver {
   private _jsonEncodeCache = new Map<string, string>();
 
   /**
@@ -23,7 +23,7 @@ export class CdkTfTokens extends Tokens {
    */
   public lift(value: any): string {
     return `JSON.parse(process.env[${JSON.stringify(
-      this.envName(JSON.stringify(value))
+      tokenEnvName(JSON.stringify(value))
     )}])`;
   }
 
@@ -35,7 +35,7 @@ export class CdkTfTokens extends Tokens {
       throw new Error(`Tokens can only be bound by a Function for now`);
     }
 
-    const envName = this.envName(JSON.stringify(value));
+    const envName = tokenEnvName(JSON.stringify(value));
 
     // Fn.jsonencode produces a fresh CDKTF token each time, so we cache the results
     let envValue = this._jsonEncodeCache.get(envName);

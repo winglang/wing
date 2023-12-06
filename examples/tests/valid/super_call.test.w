@@ -1,7 +1,9 @@
+bring expect;
+
 class A {
   message: str;
 
-  init() {
+  new() {
     this.message = "A message from your ancestor";
   }
 }
@@ -14,7 +16,7 @@ class B extends A {
 
 class C extends B {
   pub description(): str {
-    return "C extends ${super.description()}";
+    return "C extends {super.description()}";
   }
 }
 
@@ -24,13 +26,13 @@ class D extends C {
 
 class E extends D {
   pub description(): str {
-    return "E extends ${super.description()}";
+    return "E extends {super.description()}";
   }
 }
 
 let e = new E();
 // Make sure super calls work and skip anything in the inheritance chain that doesn't have the method
-assert(e.description() == "E extends C extends B");
+expect.equal(e.description(), "E extends C extends B");
 
 inflight class InflightA {
   pub description(): str {
@@ -41,13 +43,13 @@ inflight class InflightA {
 // Test super calls on inflight classes
 inflight class InflightB extends InflightA {
   pub description(): str {
-    return "InflightB extends ${super.description()}";
+    return "InflightB extends {super.description()}";
   }
 }
 
 test "super call inflight" {
   let b = new InflightB();
-  assert(b.description() == "InflightB extends InflightA");
+  expect.equal(b.description(), "InflightB extends InflightA");
 }
 
 // Test correct binding when calling a super method
@@ -68,5 +70,5 @@ class ExtendedClass extends BaseClass {
 
 let extended = new ExtendedClass();
 test "super call sets binding permissions" {
-  assert(extended.do() == "value");
+  expect.equal(extended.do(), "value");
 }
