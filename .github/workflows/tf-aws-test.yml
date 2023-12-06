@@ -173,16 +173,16 @@ jobs:
           retry_on: error
           timeout_minutes: 60
           command: |
-            # if  ${{ env.MANUAL == 'true' }}
-            # then
-            #    pnpm install
-            #    pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
-            # elif ${{ env.LOCAL_BUILD == 'false'}}
-            # then 
-            #    wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
-            # else
-            #   ./localwing/node_modules/.bin/wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
-            # fi
+            if  ${{ env.MANUAL == 'true' }}
+            then
+               pnpm install
+               pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+            elif ${{ env.LOCAL_BUILD == 'false'}}
+            then 
+               wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+            else
+              ./localwing/node_modules/.bin/wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+            fi
 
       - name: Output Terraform log
         if: failure()
