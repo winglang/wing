@@ -30,7 +30,6 @@ export class TestRunnerClient implements ITestRunnerClient {
       throw new Error(`No test found with path "${path}"`);
     }
 
-
     const client = new FunctionClient(
       functionArn,
       process.env.GOOGLE_PROJECT_ID as string,
