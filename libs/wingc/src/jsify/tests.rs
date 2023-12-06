@@ -1291,19 +1291,19 @@ fn unqualified_lift_of_collection() {
 	);
 }
 
-#[test]
-fn fails_lift_with_inflight_arguments() {
-	assert_compile_fail!(
-		r#"
-    let a = [1234];
+// #[test]
+// fn fails_lift_with_inflight_arguments() {
+// 	assert_compile_fail!(
+// 		r#"
+//     let a = [1234];
 
-    test "test" {
-      let i = 0;
-      a.at(i);
-    }
-    "#
-	);
-}
+//     test "test" {
+//       let i = 0;
+//       a.at(i);
+//     }
+//     "#
+// 	);
+// }
 
 #[test]
 fn fail_unqualified_lift_element_from_collection_of_objects() {

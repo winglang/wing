@@ -5106,7 +5106,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let (instance_type, instance_phase) = self.type_check_exp(object, env);
+				let (instance_type, _) = self.type_check_exp(object, env);
 
 				// If resolving the object's type failed, we can't resolve the property either
 				if instance_type.is_unresolved() {
@@ -5115,9 +5115,9 @@ impl<'a> TypeChecker<'a> {
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
-				// if the object is `this`, then use the property's phase instead of the object phase
+				// If the property a phase independent then adapt the phase of the current context
 				let property_phase = if property_variable.phase == Phase::Independent {
-					instance_phase
+					self.ctx.current_phase()
 				} else {
 					property_variable.phase
 				};

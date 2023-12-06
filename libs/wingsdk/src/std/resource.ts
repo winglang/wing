@@ -4,7 +4,7 @@ import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
 import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
-import { Node } from "../std";
+import { Datetime, JsonSchema, Node } from "../std";
 
 /**
  * A resource that can run inflight code.
@@ -152,7 +152,11 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        if (obj instanceof Duration) {
+        if (obj instanceof Duration || obj instanceof Datetime) {
+          return;
+        }
+
+        if (obj instanceof JsonSchema) {
           return;
         }
 
@@ -280,8 +284,7 @@ export abstract class Resource extends Construct implements IResource {
    */ // @ts-ignore
   private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 

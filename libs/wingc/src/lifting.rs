@@ -289,8 +289,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
 					span: Some(node.span.clone()),
 					annotations: vec![],
-			hints: vec![],
-		});
+					hints: vec![],
+				});
 
 				return;
 			}
