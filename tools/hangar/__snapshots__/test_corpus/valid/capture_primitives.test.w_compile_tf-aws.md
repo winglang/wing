@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
+module.exports = function({ $myBool, $myDur, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -21,9 +21,9 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       else {
         {console.log("bool=false")};
       }
-      const min = $myDur_minutes;
-      const sec = $myDur_seconds;
-      const hr = $myDur_hours;
+      const min = $myDur.minutes;
+      const sec = $myDur.seconds;
+      const hr = $myDur.hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
       {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(split.length,3)))};
     }
@@ -193,9 +193,7 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure1-1.js")({
             $myBool: ${$stdlib.core.liftObject(myBool)},
-            $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
-            $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},
-            $myDur_seconds: ${$stdlib.core.liftObject(myDur.seconds)},
+            $myDur: ${$stdlib.core.liftObject(myDur)},
             $myNum: ${$stdlib.core.liftObject(myNum)},
             $mySecondBool: ${$stdlib.core.liftObject(mySecondBool)},
             $myStr: ${$stdlib.core.liftObject(myStr)},
@@ -219,9 +217,7 @@ class $Root extends $stdlib.std.Resource {
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerOnLiftObject(myBool, host, []);
-          $Closure1._registerOnLiftObject(myDur.hours, host, []);
-          $Closure1._registerOnLiftObject(myDur.minutes, host, []);
-          $Closure1._registerOnLiftObject(myDur.seconds, host, []);
+          $Closure1._registerOnLiftObject(myDur, host, ["hours", "minutes", "seconds"]);
           $Closure1._registerOnLiftObject(myNum, host, []);
           $Closure1._registerOnLiftObject(mySecondBool, host, []);
           $Closure1._registerOnLiftObject(myStr, host, []);
