@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import { IResource } from "../std/resource";
+import type { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -153,6 +153,23 @@ export abstract class App extends Construct implements IApp {
    */
   public readonly _newInstanceOverrides: any[];
 
+  /**
+   * The test runner for this app. Only created if `isTestEnvironment` is true.
+   * @internal
+   */
+  public _testRunner: TestRunner | undefined;
+
+  /**
+   * List of environments where tests have been synthesized.
+   * @internal
+   */
+  public _synthedEnvs: string[] = [];
+  /**
+   * List of tests that have been synthesized.
+   * @internal
+   */
+  public _synthedTests: string[] = [];
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -278,34 +295,6 @@ export abstract class App extends Construct implements IApp {
       return undefined;
     }
     return new type(scope, id, ...args);
-  }
-
-  /**
-   * Synthesize the root construct if one was given. If this is a test environment, then
-   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
-   * one root construct.
-   *
-   * @param props The App props
-   * @param testRunner The test runner
-   */
-  protected synthRoots(props: AppProps, testRunner: TestRunner) {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-
-      // mark the root type so that we can find it later through
-      // Node.of(root).root
-      Node._markRoot(Root);
-
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
   }
 }
 

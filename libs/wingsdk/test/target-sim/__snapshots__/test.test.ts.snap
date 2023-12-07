@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c818e9be.js": "\\"use strict\\";
+  ".wing/handler_c86fc180.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -28,10 +28,10 @@ async handle(event) {
     "resources": [
       {
         "attrs": {},
-        "path": "root/test:my_test/Handler",
+        "path": "root/env0/test:my_test/Handler",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c818e9be.js",
+          "sourceCodeFile": ".wing/handler_c86fc180.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -42,7 +42,7 @@ async handle(event) {
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
-            "root/test:my_test": "\${wsim#root/test:my_test/Handler#attrs.handle}",
+            "root/env0/test:my_test": "\${wsim#root/env0/test:my_test/Handler#attrs.handle}",
           },
         },
         "type": "@winglang/sdk.std.TestRunner",
@@ -144,31 +144,41 @@ async handle(event) {
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
         },
-        "test:my_test": {
+        "env0": {
           "children": {
-            "Handler": {
+            "test:my_test": {
+              "children": {
+                "Handler": {
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.2.70",
+                  },
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "title": "Function",
+                  },
+                  "id": "Handler",
+                  "path": "root/env0/test:my_test/Handler",
+                },
+              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
+                "description": "A cloud unit test.",
+                "title": "Test",
               },
-              "id": "Handler",
-              "path": "root/test:my_test/Handler",
+              "id": "test:my_test",
+              "path": "root/env0/test:my_test",
             },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.2.70",
           },
-          "display": {
-            "description": "A cloud unit test.",
-            "title": "Test",
-          },
-          "id": "test:my_test",
-          "path": "root/test:my_test",
+          "id": "env0",
+          "path": "root/env0",
         },
       },
       "constructInfo": {

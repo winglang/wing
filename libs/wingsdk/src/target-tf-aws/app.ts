@@ -38,6 +38,7 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
+import { synthRoots } from "../core/synth-roots";
 import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Domain } from "../shared-aws/domain";
@@ -49,11 +50,6 @@ import { TEST_RUNNER_FQN } from "../std";
  * for AWS resources.
  */
 export class App extends CdktfApp {
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   public readonly _target = "tf-aws";
 
   private awsRegionProvider?: DataAwsRegion;
@@ -68,10 +64,9 @@ export class App extends CdktfApp {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
     this.subnets = {};
 
-    this.synthRoots(props, this.testRunner);
+    synthRoots(this, props);
   }
 
   protected typeForFqn(fqn: string): any {

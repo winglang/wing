@@ -8,7 +8,7 @@ import { SimApp } from "../sim-app";
 
 describe("run single test", () => {
   test("test not found", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
@@ -20,7 +20,7 @@ describe("run single test", () => {
   });
 
   test("happy path", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", ["console.log('hi');"]);
     app.synth();
     const sim = await app.startSimulator();
@@ -33,7 +33,7 @@ describe("run single test", () => {
   });
 
   test("test failure", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", [
       "console.log('I am about to fail');",
       "throw new Error('test failed');",
@@ -49,7 +49,7 @@ describe("run single test", () => {
   });
 
   test("not a function", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     new Bucket(app, "test");
 
     const sim = await app.startSimulator();
@@ -65,7 +65,7 @@ describe("run single test", () => {
 
 describe("run all tests", () => {
   test("no tests", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
@@ -76,7 +76,7 @@ describe("run all tests", () => {
   });
 
   test("single test", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", ["console.log('hi');"]);
 
     const sim = await app.startSimulator();
@@ -89,11 +89,16 @@ describe("run all tests", () => {
   });
 
   test("multiple tests", async () => {
-    const app = new SimApp();
-    makeTest(app, "test", ["console.log('hi');"]);
-    makeTest(app, "test:bla", ["console.log('hi');"]);
-    makeTest(app, "test:blue", ["console.log('hi');"]);
-    new Bucket(app, "mytestbucket");
+    class Root extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+        makeTest(this, "test", ["console.log('hi');"]);
+        makeTest(this, "test:bla", ["console.log('hi');"]);
+        makeTest(this, "test:blue", ["console.log('hi');"]);
+        new Bucket(this, "mytestbucket");
+      }
+    }
+    const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
@@ -103,9 +108,9 @@ describe("run all tests", () => {
     await sim.stop();
     expect(results.length).toEqual(3);
     expect(results.map((r) => r.path).sort()).toStrictEqual([
-      "root/test",
-      "root/test:bla",
-      "root/test:blue",
+      "root/env0/test",
+      "root/env1/test:bla",
+      "root/env2/test:blue",
     ]);
   });
 });

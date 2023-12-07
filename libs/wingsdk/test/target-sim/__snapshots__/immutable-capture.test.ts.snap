@@ -30,14 +30,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -142,19 +134,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -233,14 +212,6 @@ my_buckets: [(function() {
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/B1",
         "props": {
           "initialObjects": {},
@@ -393,19 +364,6 @@ my_buckets: [(function() {
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -449,14 +407,6 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -561,19 +511,6 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -617,14 +554,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -729,19 +658,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -784,14 +700,6 @@ my_capture: false
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -896,19 +804,6 @@ my_capture: false
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -953,14 +848,6 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -1065,19 +952,6 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -1124,14 +998,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -1236,19 +1102,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -1297,14 +1150,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -1409,19 +1254,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -1467,14 +1299,6 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -1579,19 +1403,6 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -1667,14 +1478,6 @@ my_map: new Map([[\\"foo\\",(function() {
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/B1",
         "props": {
           "initialObjects": {},
@@ -1827,19 +1630,6 @@ my_map: new Map([[\\"foo\\",(function() {
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1879,14 +1669,6 @@ my_capture: 123
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/Function",
@@ -1993,19 +1775,6 @@ my_capture: 123
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2051,14 +1820,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -2163,19 +1924,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2220,14 +1968,6 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -2332,19 +2072,6 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2388,14 +2115,6 @@ my_capture: \\"bam bam bam\\"
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -2500,19 +2219,6 @@ my_capture: \\"bam bam bam\\"
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2558,14 +2264,6 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -2670,19 +2368,6 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2728,14 +2413,6 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {},
@@ -2840,19 +2517,6 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {
@@ -2976,14 +2640,6 @@ my_struct: {\\"bucky\\": (function() {
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/B1",
@@ -3206,19 +2862,6 @@ my_struct: {\\"bucky\\": (function() {
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {

@@ -10,14 +10,6 @@ exports[`create a queue 2`] = `
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/my_queue",
         "props": {
           "retentionPeriod": 3600,
@@ -109,19 +101,6 @@ exports[`create a queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -149,18 +128,16 @@ exports[`create a queue 2`] = `
 
 exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -198,14 +175,6 @@ async handle(message) {
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -322,19 +291,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -388,18 +344,16 @@ async handle(message) {
 
 exports[`messages are requeued if the function fails after timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
   "1 messages pushed back to queue after visibility timeout.",
 ]
 `;
@@ -438,14 +392,6 @@ async handle(message) {
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -562,19 +508,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -628,11 +561,9 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=).",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -644,14 +575,6 @@ exports[`push rejects empty message 2`] = `
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue",
@@ -745,19 +668,6 @@ exports[`push rejects empty message 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -785,7 +695,6 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=A).",
   "Push (messages=B).",
@@ -793,7 +702,6 @@ exports[`queue batch size of 2, purge the queue 1`] = `
   "Purge ().",
   "ApproxSize ().",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -805,14 +713,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue",
@@ -906,19 +806,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1020,14 +907,6 @@ async handle(message) {
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -1165,19 +1044,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -1290,14 +1156,6 @@ async handle(message) {
   },
   "simulator.json": {
     "resources": [
-      {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
       {
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
@@ -1414,19 +1272,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {

@@ -38,6 +38,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
+import { synthRoots } from "../core/synth-roots";
 import { registerTokenResolver } from "../core/tokens";
 import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
@@ -78,11 +79,6 @@ export class App extends core.App {
   public readonly outdir: string;
   public readonly _target = "sim";
 
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   private synthed = false;
 
   constructor(props: core.AppProps) {
@@ -91,9 +87,7 @@ export class App extends core.App {
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-
-    this.synthRoots(props, this.testRunner);
+    synthRoots(this, props);
   }
 
   /** @internal */

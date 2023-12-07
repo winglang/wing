@@ -6,6 +6,7 @@ import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
+import { synthRoots } from "../core/synth-roots";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
@@ -53,7 +54,6 @@ export class App extends CdktfApp {
   public readonly zone: string;
 
   public readonly _target = "tf-gcp";
-  protected readonly testRunner: TestRunner;
 
   constructor(props: AppProps) {
     super(props);
@@ -80,23 +80,7 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-    this.synthRoots(props, this.testRunner);
-  }
-
-  protected synthRoots(props: AppProps, testRunner: TestRunner): void {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
+    synthRoots(this, props);
   }
 
   protected typeForFqn(fqn: string): any {

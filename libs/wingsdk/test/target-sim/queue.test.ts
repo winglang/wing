@@ -43,7 +43,7 @@ test("create a queue", async () => {
   expect(s.getResourceConfig("/my_queue")).toMatchInlineSnapshot(`
     {
       "attrs": {
-        "handle": "sim-1",
+        "handle": "sim-0",
       },
       "path": "root/my_queue",
       "props": {
@@ -231,7 +231,7 @@ test("messages are not requeued if the function fails before timeout", async () 
     [
       "@winglang/sdk.cloud.Queue created.",
       "Push (messages=BAD MESSAGE).",
-      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
       "Subscriber error - returning 1 messages to queue: ERROR",
       "@winglang/sdk.cloud.Queue deleted.",
     ]
@@ -370,6 +370,6 @@ test("push rejects empty message", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(s.listTraces()[1].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });

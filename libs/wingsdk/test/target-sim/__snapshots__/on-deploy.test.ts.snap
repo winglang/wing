@@ -25,14 +25,6 @@ return class Handler {
     "resources": [
       {
         "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
-        "attrs": {},
         "path": "root/my_on_deploy/Function",
         "props": {
           "environmentVariables": {},
@@ -134,19 +126,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_on_deploy": {
           "children": {
             "Function": {
@@ -189,7 +168,6 @@ return class Handler {
 
 exports[`create an OnDeploy 2`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "super duper success",
   "Invoke (payload=\\"\\").",
@@ -197,6 +175,5 @@ exports[`create an OnDeploy 2`] = `
   "@winglang/sdk.cloud.OnDeploy created.",
   "@winglang/sdk.cloud.OnDeploy deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
