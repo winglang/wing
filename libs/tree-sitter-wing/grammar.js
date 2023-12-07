@@ -467,8 +467,8 @@ module.exports = grammar({
       seq(
         optional(field("inflight", $.inflight_specifier)),
         "new",
-        field("parameter_list", $.parameter_list),
-        field("block", $.block)
+        field("parameter_list", $.initializer_parameter_list),
+        choice(field("block", $.block), $._semicolon)
       ),
 
     extern_modifier: ($) => seq("extern", $.string),
@@ -515,7 +515,18 @@ module.exports = grammar({
         optional($._type_annotation),
       ),
 
+    initializer_parameter_property_definition: ($) =>
+        seq(
+            "let",
+            optional(field("reassignable", $.reassignable)),
+            optional(field("variadic", $.variadic)),
+            field("name", $.identifier),
+            optional($._type_annotation),
+        ),
+
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
+
+    initializer_parameter_list: ($) => seq("(", commaSep(choice($.parameter_definition, $.initializer_parameter_property_definition)), ")"),
 
     immutable_container_type: ($) =>
       seq(

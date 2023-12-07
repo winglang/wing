@@ -21,7 +21,7 @@ inflight class A {
     name: (identifier)
     implementation: (class_implementation
       (initializer
-        parameter_list: (parameter_list)
+        parameter_list: (initializer_parameter_list)
         block: (block))
       (method_definition
         modifiers: (method_modifiers
@@ -100,11 +100,11 @@ class A {
     name: (identifier)
     implementation: (class_implementation
       (initializer
-        parameter_list: (parameter_list)
+        parameter_list: (initializer_parameter_list)
         block: (block))
       (initializer
         inflight: (inflight_specifier)
-        parameter_list: (parameter_list)
+        parameter_list: (initializer_parameter_list)
         block: (block))
       (method_definition
         name: (identifier)
@@ -232,3 +232,61 @@ interface A extends B, C {
       (class_field
         name: (identifier)
         type: (builtin_type)))))
+
+================================================================================
+class definition constructor property initializer without body
+================================================================================
+
+class Bird {
+    new(let type: str, let var name: str, age: num);
+}
+
+--------------------------------------------------------------------------------
+
+(source
+  (class_definition
+    name: (identifier)
+    implementation: (class_implementation
+      (initializer
+        parameter_list: (initializer_parameter_list
+          (initializer_parameter_property_definition
+            name: (identifier)
+            type: (builtin_type))
+          (initializer_parameter_property_definition
+            reassignable: (reassignable)
+            name: (identifier)
+            type: (builtin_type))
+          (parameter_definition
+            name: (identifier)
+            type: (builtin_type)))))))
+
+================================================================================
+class definition constructor property initializer with body
+================================================================================
+
+class Bird {
+    new(let type: str, let var ...sounds: str) {
+        age;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source
+  (class_definition
+    name: (identifier)
+    implementation: (class_implementation
+      (initializer
+        parameter_list: (initializer_parameter_list
+          (initializer_parameter_property_definition
+            name: (identifier)
+            type: (builtin_type))
+          (initializer_parameter_property_definition
+            reassignable: (reassignable)
+            variadic: (variadic)
+            name: (identifier)
+            type: (builtin_type)))
+        block: (block
+          (expression_statement
+            (reference
+              (reference_identifier))))))))
