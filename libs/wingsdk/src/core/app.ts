@@ -145,7 +145,7 @@ export abstract class App extends Construct implements IApp {
   /**
    * Whether or not this app is being synthesized into a test environment.
    */
-  public abstract readonly isTestEnvironment: boolean;
+  public readonly isTestEnvironment: boolean;
 
   /**
    * NewInstance hooks for defining resource implementations.
@@ -166,6 +166,7 @@ export abstract class App extends Construct implements IApp {
 
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
   /**

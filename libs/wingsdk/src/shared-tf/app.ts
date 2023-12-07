@@ -33,7 +33,6 @@ export abstract class CdktfApp extends App {
    */
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
-  public readonly isTestEnvironment: boolean;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
@@ -61,7 +60,6 @@ export abstract class CdktfApp extends App {
     });
 
     this.outdir = outdir;
-    this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTfTokens());
     this.synthHooks = props.synthHooks;
 
