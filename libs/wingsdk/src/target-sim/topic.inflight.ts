@@ -30,6 +30,8 @@ export class Topic
 
   public async cleanup(): Promise<void> {}
 
+  public async save(_dir: string): Promise<void> {}
+
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(

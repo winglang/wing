@@ -62,6 +62,8 @@ export class Redis
     execSync(`docker rm -f ${this.containerName}`);
   }
 
+  public async save(_dir: string): Promise<void> {}
+
   public async rawClient(): Promise<any> {
     if (this.connection) {
       return this.connection;

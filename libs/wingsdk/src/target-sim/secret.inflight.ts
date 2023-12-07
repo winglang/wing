@@ -33,6 +33,8 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
+  public async save(_dir: string): Promise<void> {}
+
   public async value(): Promise<string> {
     this.context.addTrace({
       data: {

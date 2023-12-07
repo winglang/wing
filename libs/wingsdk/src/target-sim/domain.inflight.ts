@@ -9,4 +9,6 @@ export class Domain implements IDomainClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(_dir: string): Promise<void> {}
 }

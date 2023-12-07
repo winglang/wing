@@ -38,6 +38,8 @@ export class Queue
     clearInterval(this.intervalId);
   }
 
+  public async save(_dir: string): Promise<void> {}
+
   public async addEventSubscription(
     subscriber: FunctionHandle,
     subscriptionProps: EventSubscription

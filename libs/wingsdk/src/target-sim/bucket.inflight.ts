@@ -13,12 +13,14 @@ import {
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
+  BUCKET_FQN,
 } from "../cloud";
+import { deserialize, serialize } from "../simulator/serialization";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
-import { Datetime, Json } from "../std";
+import { Datetime, Json, TraceType } from "../std";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly objectKeys: Set<string>;
@@ -42,7 +44,39 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this._fileDir;
   }
 
-  public async init(): Promise<BucketAttributes> {
+  public async init(dir?: string): Promise<BucketAttributes> {
+    if (dir) {
+      this.context.addTrace({
+        type: TraceType.RESOURCE,
+        data: { message: "Loading bucket state." },
+        sourcePath: this.context.resourcePath,
+        sourceType: BUCKET_FQN,
+        timestamp: new Date().toISOString(),
+      });
+
+      const fileDir = join(dir, "files");
+      const fileMetadataFile = join(dir, "fileMetadata.json");
+
+      if (!fs.existsSync(fileDir)) {
+        throw new Error(`No files directory found at ${fileDir}`);
+      }
+
+      if (!fs.existsSync(fileMetadataFile)) {
+        throw new Error(`No file metadata file found at ${fileMetadataFile}`);
+      }
+
+      const fileMetadata: Record<string, ObjectMetadata> = deserialize(
+        fs.readFileSync(fileMetadataFile, "utf-8")
+      );
+
+      for (const [key, value] of Object.entries(fileMetadata)) {
+        this.objectKeys.add(key);
+        this._metadata[key] = value;
+      }
+
+      await fs.promises.cp(fileDir, this._fileDir, { recursive: true });
+    }
+
     for (const [key, value] of Object.entries(this.initialObjects)) {
       await this.context.withTrace({
         message: `Adding object from preflight (key=${key}).`,
@@ -51,11 +85,24 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         },
       });
     }
+
     return {};
   }
 
   public async cleanup(): Promise<void> {
     await fs.promises.rm(this._fileDir, { recursive: true, force: true });
+  }
+
+  public async save(dir: string): Promise<void> {
+    await fs.promises.mkdir(dir, { recursive: true });
+    await fs.promises.mkdir(join(dir, "files"), { recursive: true });
+    await fs.promises.cp(this._fileDir, join(dir, "files"), {
+      recursive: true,
+    });
+    await fs.promises.writeFile(
+      join(dir, "fileMetadata.json"),
+      serialize(this._metadata) // metadata contains Datetime values, so we need to serialize it
+    );
   }
 
   private async notifyListeners(

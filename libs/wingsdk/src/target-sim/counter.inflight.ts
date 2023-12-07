@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { join } from "path";
 import { CounterAttributes, CounterSchema } from "./schema-resources";
 import { ICounterClient } from "../cloud";
 import {
@@ -24,6 +26,13 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(dir: string): Promise<void> {
+    await fs.promises.writeFile(
+      join(dir, "values.json"),
+      JSON.stringify(Array.from(this.values.entries()))
+    );
+  }
 
   public async inc(
     amount: number = 1,

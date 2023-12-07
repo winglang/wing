@@ -22,13 +22,6 @@ export interface AppProps {
   readonly name?: string;
 
   /**
-   * The path to a state file which will track all synthesized files. If a
-   * statefile is not specified, we won't be able to remove extrenous files.
-   * @default - no state file
-   */
-  readonly stateFile?: string;
-
-  /**
    * The root construct class that should be instantiated with a scope and id.
    * If provided, then it will be instantiated on the user's behalf.
    * When the app is synthesized with `isTestEnvironment` set to `true`, then

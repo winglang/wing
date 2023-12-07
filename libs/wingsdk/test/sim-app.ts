@@ -54,10 +54,10 @@ export class SimApp extends App {
    *
    * @returns A started `Simulator` instance. No need to call `start()` again.
    */
-  public async startSimulator(): Promise<Simulator> {
+  public async startSimulator(statePath?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simfile });
+    const s = new Simulator({ simfile, statePath });
     await s.start();
     return s;
   }

@@ -45,6 +45,8 @@ export class Schedule
     clearTimeout(this.intervalTimeout);
   }
 
+  public async save(_dir: string): Promise<void> {}
+
   public async addEventSubscription(
     subscriber: string,
     subscriptionProps: EventSubscription
