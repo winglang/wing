@@ -347,6 +347,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   private hashKey(key: string): string {
-    return crypto.createHash("sha512").update(key).digest("hex");
+    return crypto.createHash("sha512").update(key).digest("hex").slice(-16);
   }
 }

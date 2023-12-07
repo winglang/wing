@@ -134,8 +134,8 @@ export function directorySnapshot(initialRoot: string) {
       const abspath = join(root, relpath);
       const key = prefix + relpath;
       if (statSync(abspath).isDirectory()) {
-        // ignore .wing, .state files
-        if (!basename(abspath).startsWith(".")) {
+        // ignore .state files
+        if (basename(abspath) !== ".state") {
           visit(root, relpath);
         }
       } else {
