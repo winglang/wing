@@ -158,8 +158,8 @@ describe("output-file option", () => {
     expect(testName).toBe("test.test.w");
     expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-    expect(writeFileSpy).toBeCalledTimes(2);
-    const [filePath, output] = writeFileSpy.mock.calls[1];
+    expect(writeFileSpy).toBeCalledTimes(4);
+    const [filePath, output] = writeFileSpy.mock.calls[3];
     expect(filePath).toBe("out.json");
     expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
   });

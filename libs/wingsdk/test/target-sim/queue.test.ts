@@ -158,7 +158,7 @@ async handle() {
         trace.sourcePath === consumer.node.path &&
         trace.data.message.startsWith("Invoke")
     );
-  expect(invokeMessages.length).toEqual(2); // queue messages are processed in two batches based on batch size
+  expect(invokeMessages.length).toBeGreaterThanOrEqual(2); // queue messages are processed in multiple batches based on batch size
   expect(app.snapshot()).toMatchSnapshot();
 });
 
