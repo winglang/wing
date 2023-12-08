@@ -101,15 +101,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_iam_policy_document": {
@@ -158,11 +150,6 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
           }
         }
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {

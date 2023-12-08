@@ -80,15 +80,7 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_region": {
@@ -100,11 +92,6 @@ module.exports = function({ $apiDefaultCors_url, $expect_Util, $http_HttpMethod,
           }
         }
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {
