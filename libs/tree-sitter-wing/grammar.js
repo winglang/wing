@@ -517,6 +517,7 @@ module.exports = grammar({
 
     initializer_parameter_property_definition: ($) =>
         seq(
+            optional(field("access", $.access_modifier)),
             "let",
             optional(field("reassignable", $.reassignable)),
             optional(field("variadic", $.variadic)),

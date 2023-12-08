@@ -265,7 +265,7 @@ class definition constructor property initializer with body
 ================================================================================
 
 class Bird {
-    new(let type: str, let var ...sounds: str) {
+    new(let type: str, pub let var ...sounds: str) {
         age;
     }
 }
@@ -282,6 +282,7 @@ class Bird {
             name: (identifier)
             type: (builtin_type))
           (initializer_parameter_property_definition
+            access: (access_modifier)
             reassignable: (reassignable)
             variadic: (variadic)
             name: (identifier)
