@@ -1,6 +1,6 @@
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
-import { IInflightHost, ILiftable } from "./resource";
+import { ILiftable } from "./resource";
 
 /**
  * Represents a length of time.
@@ -149,20 +149,8 @@ export class Duration implements ILiftable {
     return this.days / 365;
   }
 
-  onLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  _registerOnLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
   /** @internal */
   _toInflight(): string {
     return `(new (require("${normalPath(__filename)}").Duration)(${this.seconds}))`
   }
-  /** @internal */
-  _supportedOps(): string[] {
-    throw new Error("Method not implemented.");
-  }
-
 }

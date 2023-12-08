@@ -1,6 +1,6 @@
 import { InflightClient } from "../core/inflight";
 import { normalPath } from "../shared/misc";
-import { IInflightHost, ILiftable } from "./resource";
+import { ILiftable } from "./resource";
 
 /**
  * Interface that is used for setting Datetime date
@@ -116,20 +116,9 @@ export class Datetime implements ILiftable {
     this._timezoneOffset = timezoneOffset;
   }
 
-  onLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-  /** @internal */
-  _registerOnLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
   /** @internal */
   _toInflight(): string {
     return `(require("${normalPath(__filename)}").Datetime.fromIso("${this.toIso()}"))`
-  }
-  /** @internal */
-  _supportedOps(): string[] {
-    throw new Error("Method not implemented.");
   }
 
   /**
