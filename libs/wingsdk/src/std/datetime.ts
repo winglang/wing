@@ -117,7 +117,7 @@ export class Datetime implements ILiftable {
   }
 
   /** @internal */
-  _toInflight(): string {
+  public _toInflight(): string {
     return `(require("${normalPath(__filename)}").Datetime.fromIso("${this.toIso()}"))`
   }
 

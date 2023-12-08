@@ -150,7 +150,7 @@ export class Duration implements ILiftable {
   }
 
   /** @internal */
-  _toInflight(): string {
+  public _toInflight(): string {
     return `(new (require("${normalPath(__filename)}").Duration)(${this.seconds}))`
   }
 }
