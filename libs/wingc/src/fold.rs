@@ -246,6 +246,7 @@ where
 		phase: node.phase,
 		is_static: node.is_static,
 		access: node.access,
+		variadic: false, // Not supported from class fields
 	}
 }
 

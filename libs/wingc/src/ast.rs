@@ -530,6 +530,7 @@ pub struct ClassField {
 	pub phase: Phase,
 	pub is_static: bool,
 	pub access: AccessModifier,
+	pub variadic: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

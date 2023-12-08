@@ -14,7 +14,7 @@ new C9(token: "1");
 //^^^^^^^ Expected 0 named argument(s)"
 
 class C10 {
-  new(foo: str)
+  new(foo: str);
 }
 new C10(); 
 //^^^^^^^ Expected 1 required positional arguments but got 0 when instantiating "C5"
@@ -158,7 +158,7 @@ inflight class Jet extends Plane{
 //  ^^^^^^^^ Expected 1 positional argument(s) but got 0
   }
   constructor() {
-//^^^^^^^^^^^ To declare a initializer, use "init"
+//^^^^^^^^^^^ To declare a initializer, use "new"
   }
 }
 

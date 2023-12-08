@@ -1229,6 +1229,11 @@ impl<'s> Parser<'s> {
 					}
 					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
 					let parameters = self.build_parameter_list(&parameters_node, class_phase)?;
+					let initializer_fields = self.build_parameter_fields(&parameters_node, class_phase)?;
+					for field in initializer_fields {
+						fields.push(field);
+					}
+
 					if !parameters.is_empty() && is_inflight && class_phase == Phase::Preflight {
 						self
 							.with_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
@@ -1435,6 +1440,7 @@ impl<'s> Parser<'s> {
 			is_static,
 			phase,
 			access: self.get_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+			variadic: false,
 		})
 	}
 
@@ -1619,6 +1625,12 @@ impl<'s> Parser<'s> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for definition_node in parameter_list_node.named_children(&mut cursor) {
+			// Skip properties defined in the parameter list (only for ctor)
+			let kind = definition_node.kind();
+			if kind != "parameter_definition" {
+				continue;
+			}
+
 			if definition_node.is_extra() {
 				continue;
 			}
@@ -1633,6 +1645,45 @@ impl<'s> Parser<'s> {
 
 		Ok(res)
 	}
+
+	fn build_parameter_fields(&self, parameter_list_node: &Node, phase: Phase) -> DiagnosticResult<Vec<ClassField>> {
+		let mut res = vec![];
+		let mut cursor = parameter_list_node.walk();
+		for definition_node in parameter_list_node.named_children(&mut cursor) {
+			// Only add parameter property definitions
+			let kind = definition_node.kind();
+			if kind != "initializer_parameter_property_definition" {
+				continue;
+			}
+
+			if definition_node.is_extra() {
+				continue;
+			}
+
+			let variadic = definition_node.child_by_field_name("variadic").is_some();
+			if variadic {
+				report_diagnostic(Diagnostic {
+					message: "Variadic constructor parameter properties not supported yet.".to_string(),
+					span: Some(self.node_span(&definition_node)),
+					annotations: vec![],
+					hints: vec!["Use a variadic parameter with a classic field instead.".to_string()],
+				});
+			}
+
+			res.push(ClassField {
+				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
+				member_type: self.build_type_annotation(definition_node.child_by_field_name("type"), phase)?,
+				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
+				access: self.build_access_modifier(&definition_node.child_by_field_name("reassignable")),
+				phase,
+				is_static: false,
+				variadic,
+			});
+		}
+
+		Ok(res)
+	}
+
 	fn build_udt(&self, type_node: &Node) -> DiagnosticResult<UserDefinedType> {
 		match type_node.kind() {
 			"custom_type" => {

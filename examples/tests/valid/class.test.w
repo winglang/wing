@@ -141,3 +141,10 @@ class Boom {
   new() { }
 }
 class Bam extends Boom {}
+
+// class with constructor property initialization
+class C6 {
+  new(pub x: num, pub y: num);
+}
+
+let c6 = new C6(1, 2);
