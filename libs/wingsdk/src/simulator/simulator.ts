@@ -30,8 +30,9 @@ export interface SimulatorProps {
   /**
    * Path to a state directory where the simulator can store state between
    * simulation runs.
+   * @default - a directory named ".state" inside the simulator output directory
    */
-  readonly statePath?: string;
+  readonly stateDir?: string;
 
   /**
    * The factory that produces resource simulations.
@@ -176,7 +177,7 @@ export class Simulator {
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
-    this.statedir = props.statePath ?? join(this.simdir, ".state");
+    this.statedir = props.stateDir ?? join(this.simdir, ".state");
     const { config, treeData, connectionData } = this._loadApp(props.simfile);
     this._config = config;
     this._tree = new Tree(treeData);
