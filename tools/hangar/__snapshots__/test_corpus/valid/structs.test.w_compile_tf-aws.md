@@ -25,11 +25,11 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({  }) {
   class Foo {
-    constructor({ $this_data_field0 }) {
-      this.$this_data_field0 = $this_data_field0;
+    constructor({ $this_data }) {
+      this.$this_data = $this_data;
     }
     async getStuff() {
-      return this.$this_data_field0;
+      return this.$this_data.field0;
     }
   }
   return Foo;
@@ -96,7 +96,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_data_field0: ${$stdlib.core.liftObject(this.data.field0)},
+              $this_data: ${$stdlib.core.liftObject(this.data)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -108,10 +108,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerOnLiftObject(this.data.field0, host, []);
+          Foo._registerOnLiftObject(this.data, host, ["field0"]);
         }
         super._registerOnLift(host, ops);
       }

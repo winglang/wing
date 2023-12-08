@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $Object_keys_myMap__length, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__1_, $__bang__in____arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arrOfMap__0___, $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__, $__world__in__myMap__, $_mySet_has__my___, $arr_length, $mySet_size }) {
+module.exports = function({ $arr, $arrOfMap, $j, $myMap, $mySet }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,15 +11,15 @@ module.exports = function({ $Object_keys_myMap__length, $__arr__index_______if__
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__1_,"world")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr_length,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})($_mySet_has__my___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySet_size,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_myMap__length,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in____arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arrOfMap__0___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__,"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arr, 0),"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arr, 1),"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr.length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})((await $mySet.has("my")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySet.size,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})(("world" in ($myMap)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys($myMap).length,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})(("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($arrOfMap, 0))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })($j, "b"),"world")))};
     }
   }
   return $Closure1;
@@ -80,15 +80,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Object_keys_myMap__length: ${$stdlib.core.liftObject(Object.keys(myMap).length)},
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0))},
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 1))},
-            $__bang__in____arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arrOfMap__0___: ${$stdlib.core.liftObject(("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))))},
-            $__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__: ${$stdlib.core.liftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"))},
-            $__world__in__myMap__: ${$stdlib.core.liftObject(("world" in (myMap)))},
-            $_mySet_has__my___: ${$stdlib.core.liftObject((mySet.has("my")))},
-            $arr_length: ${$stdlib.core.liftObject(arr.length)},
-            $mySet_size: ${$stdlib.core.liftObject(mySet.size)},
+            $arr: ${$stdlib.core.liftObject(arr)},
+            $arrOfMap: ${$stdlib.core.liftObject(arrOfMap)},
+            $j: ${$stdlib.core.liftObject(j)},
+            $myMap: ${$stdlib.core.liftObject(myMap)},
+            $mySet: ${$stdlib.core.liftObject(mySet)},
           })
         `;
       }
@@ -108,15 +104,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))), host, []);
-          $Closure1._registerOnLiftObject(("world" in (myMap)), host, []);
-          $Closure1._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), host, []);
-          $Closure1._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 1), host, []);
-          $Closure1._registerOnLiftObject(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), host, []);
-          $Closure1._registerOnLiftObject((mySet.has("my")), host, []);
-          $Closure1._registerOnLiftObject(Object.keys(myMap).length, host, []);
-          $Closure1._registerOnLiftObject(arr.length, host, []);
-          $Closure1._registerOnLiftObject(mySet.size, host, []);
+          $Closure1._registerOnLiftObject(arr, host, ["at", "length"]);
+          $Closure1._registerOnLiftObject(arrOfMap, host, ["at"]);
+          $Closure1._registerOnLiftObject(j, host, ["get"]);
+          $Closure1._registerOnLiftObject(myMap, host, ["has", "size"]);
+          $Closure1._registerOnLiftObject(mySet, host, ["has", "size"]);
         }
         super._registerOnLift(host, ops);
       }

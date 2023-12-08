@@ -77,7 +77,7 @@ module.exports = function({  }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
-module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
+module.exports = function({ $Another, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalArrayOfStr, $globalBool, $globalBucket, $globalMapOfNum, $globalNum, $globalSetOfStr, $globalStr }) {
   class MyResource {
     constructor({ $this_localTopic }) {
       this.$this_localTopic = $this_localTopic;
@@ -88,9 +88,9 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
       {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalStr,"hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalBool,true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalNum,42)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__,(-5))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($globalArrayOfStr, 0),"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })($globalMapOfNum, "a"),(-5))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await $globalSetOfStr.has("a")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalAnother_myField,"hello!")))};
       (await $globalAnother_first_myResource.put("key", "value"));
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
@@ -484,15 +484,15 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.MyResource-1.js")({
             $Another: ${$stdlib.core.liftObject(Another)},
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0))},
-            $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
-            $_globalSetOfStr_has__a___: ${$stdlib.core.liftObject((globalSetOfStr.has("a")))},
             $globalAnother: ${$stdlib.core.liftObject(globalAnother)},
             $globalAnother_first_myResource: ${$stdlib.core.liftObject(globalAnother.first.myResource)},
             $globalAnother_myField: ${$stdlib.core.liftObject(globalAnother.myField)},
+            $globalArrayOfStr: ${$stdlib.core.liftObject(globalArrayOfStr)},
             $globalBool: ${$stdlib.core.liftObject(globalBool)},
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
+            $globalMapOfNum: ${$stdlib.core.liftObject(globalMapOfNum)},
             $globalNum: ${$stdlib.core.liftObject(globalNum)},
+            $globalSetOfStr: ${$stdlib.core.liftObject(globalSetOfStr)},
             $globalStr: ${$stdlib.core.liftObject(globalStr)},
           })
         `;
@@ -517,16 +517,16 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerOnLiftObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), host, []);
-          MyResource._registerOnLiftObject((globalSetOfStr.has("a")), host, []);
           MyResource._registerOnLiftObject(Another, host, ["myStaticMethod"]);
           MyResource._registerOnLiftObject(globalAnother, host, ["myMethod"]);
           MyResource._registerOnLiftObject(globalAnother.first.myResource, host, ["put"]);
           MyResource._registerOnLiftObject(globalAnother.myField, host, []);
+          MyResource._registerOnLiftObject(globalArrayOfStr, host, ["at"]);
           MyResource._registerOnLiftObject(globalBool, host, []);
           MyResource._registerOnLiftObject(globalBucket, host, ["put"]);
+          MyResource._registerOnLiftObject(globalMapOfNum, host, ["get"]);
           MyResource._registerOnLiftObject(globalNum, host, []);
+          MyResource._registerOnLiftObject(globalSetOfStr, host, ["has"]);
           MyResource._registerOnLiftObject(globalStr, host, []);
           MyResource._registerOnLiftObject(this.localTopic, host, ["publish"]);
         }
