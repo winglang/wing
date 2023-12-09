@@ -1700,6 +1700,16 @@ error: Unexpected return value from void function. Return type annotations are r
    |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
+error: Structs must be declared at the top-level of a program: Struct 'SS' is not defined at the top-level
+   --> ../../../examples/tests/invalid/inference.test.w:88:3
+   |  
+88 | /   struct SS {
+89 | |     a: Array<num>;
+90 | |     b: Array<str>;
+91 | |   }
+   | \\\\---^ Structs must be declared at the top-level of a program: Struct 'SS' is not defined at the top-level
+
+
 error: Inferred type Array<str> conflicts with already inferred type Array<num>
    --> ../../../examples/tests/invalid/inference.test.w:92:33
    |  
