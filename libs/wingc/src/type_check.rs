@@ -3128,6 +3128,19 @@ impl<'a> TypeChecker<'a> {
 		for (inner_scope, ctx) in inner_scopes {
 			let scope = unsafe { &*inner_scope };
 			self.ctx = ctx;
+			for statement in &scope.statements {
+				// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+				if let StmtKind::Struct { name, .. } = &statement.kind {
+					report_diagnostic(Diagnostic {
+						message: format!(
+							"Structs must be declared at the top-level of a program: Struct '{name}' is not defined at the top-level"
+						),
+						span: Some(statement.span.clone()),
+						annotations: vec![],
+						hints: vec![],
+					});
+				}
+			}
 			self.type_check_scope(scope);
 		}
 
