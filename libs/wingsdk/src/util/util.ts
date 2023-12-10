@@ -78,6 +78,9 @@ export interface SpawnOptions extends CommandOptions {
   readonly stderr?: Stdio;
 }
 
+/**
+ * Output of a finished process.
+ */
 export interface Output {
   /**
    * The standard output of a finished process.
