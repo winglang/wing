@@ -101,6 +101,13 @@ export interface Output {
  */
 export class ChildProcess {
   /**
+   * @internal
+   */
+  public static _toInflightType(): string {
+    return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
    * The child's OS-assigned process ID.
    */
   public readonly id: number;
