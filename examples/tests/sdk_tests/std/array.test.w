@@ -73,6 +73,8 @@ let item = a.pop();
 assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
+let pushMultipleItems: MutArray<str> = MutArray<str> ["element1"];
+pushMultipleItems.push("element2", "element3");
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
