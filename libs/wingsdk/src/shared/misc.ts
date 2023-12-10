@@ -27,14 +27,8 @@ export function normalPath(path: string) {
  * Just a helpful wrapper around `execFile` that returns a promise.
  */
 export async function runCommand(cmd: string, args: string[]): Promise<any> {
-  try {
     const { stdout } = await execFilePromise(cmd, args);
     return stdout;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-  }
 }
 
 export interface runDockerImageProps {
