@@ -730,12 +730,8 @@ function createMapEdgesFromConnectionData(
           throw new Error(`Could not find node for resource ${target}`);
         }
 
-        // Hide connections from the API to its endpoints, since it's redundant.
-        if (
-          sourceNode.constructInfo?.fqn === "@winglang/sdk.cloud.Api" &&
-          targetNode.parent === sourceNode.path &&
-          targetNode.constructInfo?.fqn === "@winglang/sdk.cloud.Function"
-        ) {
+        // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
+        if (targetNode.parent === sourceNode.path) {
           return false;
         }
 
@@ -746,6 +742,20 @@ function createMapEdgesFromConnectionData(
         if (
           !showTests &&
           (matchTest(sourceNode.path) || matchTest(targetNode.path))
+        ) {
+          return false;
+        }
+
+        // Remove redundant connections to a parent resource if there's already a connection to a child resource.
+        if (
+          connections.some((connection) => {
+            if (
+              connection.source === source &&
+              connection.target.startsWith(`${target}/`)
+            ) {
+              return true;
+            }
+          })
         ) {
           return false;
         }
