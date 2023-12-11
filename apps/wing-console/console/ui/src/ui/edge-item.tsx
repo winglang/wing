@@ -42,11 +42,11 @@ export const EdgeItem = memo(
         .join(" ");
     }, [edge.sections]);
 
-    const [source] = edge.sources;
-    const [target] = edge.targets;
-    const goesOutside =
-      source?.split("/").slice(0, -1).join("/") !==
-      target?.split("/").slice(0, -1).join("/");
+    // const [source] = edge.sources;
+    // const [target] = edge.targets;
+    // const goesOutside =
+    //   source?.split("/").slice(0, -1).join("/") !==
+    //   target?.split("/").slice(0, -1).join("/");
     return (
       <g
         className={classNames(
@@ -73,7 +73,8 @@ export const EdgeItem = memo(
           markerStart={`url(#${markerStart})`}
           markerEnd={`url(#${markerEnd})`}
           d={d}
-          strokeDasharray={goesOutside ? "3" : undefined}
+          // HACK: Dashed strokes have a big performance impact, so we remove them for now.
+          // strokeDasharray={goesOutside ? "3" : undefined}
         />
         <motion.path
           onMouseEnter={onMouseEnter}
