@@ -43,10 +43,6 @@ env:
   GOOGLE_PROJECT_ID: "sdk-spec-tests"
   GOOGLE_REGION: "us-central1"
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -96,6 +92,9 @@ jobs:
       targets: ${{ steps.settargets.outputs.targets }}
 
   test-tf-aws:
+    permissions:
+      contents: read
+      id-token: write
     needs: setup
     runs-on: ubuntu-latest
     strategy:
