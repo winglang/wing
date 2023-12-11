@@ -43,6 +43,9 @@ env:
   GOOGLE_PROJECT_ID: "sdk-spec-tests"
   GOOGLE_REGION: "us-central1"
 
+permissions:
+  id-token: write
+
 jobs:
   setup:
     runs-on: ubuntu-latest
