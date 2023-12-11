@@ -108,11 +108,13 @@ export class ChildProcess {
   }
 
   /**
+   * The underlying native child process object representing the spawned process.
+   */
+  private childProcess: ReturnType<typeof nodeSpawn>;
+  /**
    * The child's OS-assigned process ID.
    */
   public readonly id: number;
-
-  private childProcess: ReturnType<typeof nodeSpawn>;
 
   constructor(program: string, args: string[], opts?: SpawnOptions) {
     this.childProcess = nodeSpawn(program, args, {
