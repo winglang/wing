@@ -1,12 +1,9 @@
-import { exec as nodeExec, spawn as nodeSpawn } from "child_process";
+import { exec as execSync, spawn as nodeSpawn } from "child_process";
 import { createHash } from "crypto";
-import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
-
-const execPromise = promisify(nodeExec);
 
 /**
  * Describes what to do with a standard I/O stream for a child process.
@@ -219,7 +216,8 @@ export class Util {
     command: string,
     opts?: ShellOptions
   ): Promise<string> {
-    const output = await Util.exec("/bin/sh", ["-c", command], opts);
+    const args = command.split(" ");
+    const output = await Util.exec("/bin/sh", ["-c", ...args], opts);
     if (output.status !== 0) {
       throw new Error(
         `Command exited with status ${output.status}: ${command}`
@@ -244,14 +242,19 @@ export class Util {
   ): Promise<Output> {
     const command = `${program} ${args.join(" ")}`;
 
-    const { stdout, stderr } = await execPromise(command, opts);
-
-    const status = 0;
-
-    const stdoutString = stdout.toString();
-    const stderrString = stderr.toString();
-
-    return { stdout: stdoutString, stderr: stderrString, status };
+    try {
+      return {
+        stdout: execSync(command, opts).toString(),
+        stderr: "",
+        status: 0,
+      };
+    } catch (error: any) {
+      return {
+        stdout: error.stdout?.toString() ?? "",
+        stderr: error.stderr?.toString() ?? "",
+        status: error.status ?? -1,
+      };
+    }
   }
 
   /**
