@@ -730,15 +730,6 @@ function createMapEdgesFromConnectionData(
           throw new Error(`Could not find node for resource ${target}`);
         }
 
-        // Hide connections from the API to its endpoints, since it's redundant.
-        if (
-          sourceNode.constructInfo?.fqn === "@winglang/sdk.cloud.Api" &&
-          targetNode.parent === sourceNode.path &&
-          targetNode.constructInfo?.fqn === "@winglang/sdk.cloud.Function"
-        ) {
-          return false;
-        }
-
         if (sourceNode.display?.hidden || targetNode.display?.hidden) {
           return false;
         }
