@@ -25,7 +25,7 @@ on:
           - all
           - tf-aws
           - tf-azure
-          - awscdk
+          - tf-gcp
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
@@ -40,8 +40,8 @@ env:
   PNPM_VERSION: "8.6.3"
   AZURE_LOCATION: "East US"
   CDK_STACK_NAME: "sdk-spec-tests"
-  GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
-  GOOGLE_REGION: "us-central1" # for the future
+  GOOGLE_PROJECT_ID: "sdk-spec-tests"
+  GOOGLE_REGION: "us-central1"
 
 jobs:
   setup:
@@ -78,11 +78,11 @@ jobs:
         id: settargets
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
-            target='["tf-aws", "tf-azure"]'
+            target='["tf-aws", "tf-azure", "tf-gcp"]'
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
             target='["tf-aws"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
-            target='["tf-azure"]'
+            target='["tf-azure", "tf-gcp"]'
           else
            target='["${{env.TARGET}}"]'
           fi
@@ -150,14 +150,11 @@ jobs:
         run: |
           cd examples/tests/sdk_tests
           npm install
-      - name: Installing aws-cdk globally
-        if: ${{ matrix.target == 'awscdk'}}
-        run: npm i -g aws-cdk
       - name: Installing wing locally
         if: ${{ env.MANUAL == 'true' }}
         run: pnpm install
       - name: Configure AWS credentials
-        if: ${{ matrix.target == 'tf-aws' || matrix.target == 'awscdk'}}
+        if: ${{ matrix.target == 'tf-aws'}}
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
@@ -168,6 +165,18 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Configure gcp credentials
+        if: ${{ matrix.target == 'tf-gcp' }}
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
+          service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
+
+      - name: Installing local dependencies
+        if: ${{ env.MANUAL == 'true' }}
+        run: pnpm install
+          pnpm turbo compile -F=winglang
       - name: Execute wing test in matrix directory
         uses: nick-fields/retry@v2
         env:
@@ -179,9 +188,7 @@ jobs:
           timeout_minutes: 60
           command: |
             if  ${{ env.MANUAL == 'true' }}
-            then
-              pnpm install
-              pnpm turbo compile -F=winglang
+            then   
               WING_CLI=$(realpath apps/wing/bin/wing)
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
