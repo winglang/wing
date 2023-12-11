@@ -169,10 +169,12 @@ jobs:
 
       - name: Configure gcp credentials
         if: ${{ matrix.target == 'tf-gcp' }}
-        uses: google-github-actions/auth@v0.4.0
+        uses: google-github-actions/auth
         with:
           workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
+          export_environment_variables: true
+          create_credentials_file: true
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
