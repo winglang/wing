@@ -7,7 +7,7 @@ let api = new cloud.Api();
 let body = Json {"cat": "Tion"};
 let _id = "12345";
 
-api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.patch("/path/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   assert(req.method == cloud.HttpMethod.PATCH);
 
   assert(req.vars?.get("id") == _id);
@@ -23,7 +23,7 @@ api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 
 test "http.patch and http.fetch can preform a call to an api" {
-    let url = "${api.url}/path/${_id}";
+    let url = "{api.url}/path/{_id}";
     let response: http.Response = http.patch(url,  headers: { "content-type" => "application/json" }, body: Json.stringify(body));
     let fetchResponse: http.Response = http.patch(url, method: http.HttpMethod.PATCH, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
 

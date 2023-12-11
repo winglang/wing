@@ -30,12 +30,13 @@ export class Array {
 
   /**
    * Get the value at the given index
+   * @macro ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($self$, $args$)
    * @param index index of the value to get
    * @returns the value at the given index
    */
   public at(index: number): T1 {
     index;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -151,12 +152,13 @@ export class MutArray {
 
   /**
    * Get the value at the given index
+   * @macro ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($self$, $args$)
    * @param index index of the value to get
    * @returns the value at the given index
    */
   public at(index: number): T1 {
     index;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**

@@ -331,8 +331,9 @@ j.get("hello").get("world");
 	test_hover_list!(
 		map_element,
 		r#"
-{ "hi" => "" }
- //^
+let k = "hi";
+{ k => "" }
+//^
 "#
 	);
 
@@ -368,11 +369,11 @@ struct Data {
 }
 
 class T {
-	init() {
+	new() {
 		Data { field: "" };
 	}
 
-	inflight init() {
+	inflight new() {
 		Data { field: "" };
 		//^
 	}
@@ -386,7 +387,7 @@ class T {
 class T {
   stuff: num;
 
-  init() {
+  new() {
     this.stuff = 1;
          //^
   }

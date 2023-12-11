@@ -35,12 +35,15 @@ test("invoke with unsuccessful response", async () => {
   const PAYLOAD = "PAYLOAD";
   const ERROR = `Error while invoking the function ${FUNCTION_NAME}:\nexpected test error`;
 
-  const post = vi.spyOn(http, "post").mockImplementation(() => {
-    throw new Error("expected test error");
+  vi.spyOn(http, "post").mockResolvedValue({
+    body: "expected test error",
+    status: 500,
+    ok: false,
+    headers: {},
+    url: "",
   });
-
   // THEN
   const client = new FunctionClient(FUNCTION_NAME);
 
-  await expect(client.invoke(PAYLOAD)).rejects.toThrow(ERROR);
+  await expect(() => client.invoke(PAYLOAD)).rejects.toThrowError(ERROR);
 });

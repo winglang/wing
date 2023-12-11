@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import { join, resolve, basename } from "path";
 import { stat, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
-import { Target } from "./constants";
+import { BuiltinPlatform } from "./constants";
 import { compile } from "./compile";
 
 const exampleDir = resolve("../../examples/tests/valid");
@@ -18,7 +18,7 @@ describe(
     test("should produce stable artifacts for tf-aws", async () => {
       const targetDir = `${await generateTmpDir()}/target`;
       const artifactDir = await compile(exampleFilePath, {
-        target: Target.TF_AWS,
+        platform: [BuiltinPlatform.TF_AWS],
         targetDir,
       });
 
@@ -31,7 +31,7 @@ describe(
     test("should produce temp artifacts for tf-aws testing", async () => {
       const targetDir = `${await generateTmpDir()}/target`;
       const artifactDir = await compile(exampleFilePath, {
-        target: Target.TF_AWS,
+        platform: [BuiltinPlatform.TF_AWS],
         targetDir,
         testing: true,
       });
@@ -45,7 +45,7 @@ describe(
     test("should produce stable artifacts for sim", async () => {
       const targetDir = `${await generateTmpDir()}/target`;
       const artifactDir = await compile(exampleFilePath, {
-        target: Target.SIM,
+        platform: [BuiltinPlatform.SIM],
         targetDir,
       });
 
@@ -58,7 +58,7 @@ describe(
     test("should produce stable artifacts for sim testing", async () => {
       const targetDir = `${await generateTmpDir()}/target`;
       const artifactDir = await compile(exampleFilePath, {
-        target: Target.SIM,
+        platform: [BuiltinPlatform.SIM],
         targetDir,
         testing: true,
       });

@@ -2,7 +2,6 @@ import {
   ThemeProvider,
   NotificationsProvider,
   type Mode,
-  Theme,
   buildTheme,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
@@ -46,7 +45,7 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
 
   return (
     <ThemeProvider
-      mode={theme || themeMode?.data?.mode}
+      mode={theme ?? themeMode?.data?.mode ?? "auto"}
       theme={buildTheme(color)}
     >
       <NotificationsProvider>

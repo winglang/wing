@@ -1,7 +1,6 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join, basename } from "path";
-import { Template } from "aws-cdk-lib/assertions";
 import { App } from "../src/core";
 import { WingSimulatorSchema } from "../src/simulator";
 
@@ -85,19 +84,6 @@ export function getTfDataSource(
   }
   const key = Object.keys(dataSources)[index ?? 0];
   return dataSources[key];
-}
-
-export function awscdkSanitize(template: Template): any {
-  let json = template.toJSON();
-
-  return JSON.parse(
-    JSON.stringify(json, (key, value) => {
-      if (key === "S3Key" && value.endsWith(".zip")) {
-        return "<S3Key>";
-      }
-      return value;
-    })
-  );
 }
 
 export function tfSanitize(templateStr: string): any {

@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -11,9 +12,14 @@ import { Json, Node, Resource } from "../std";
 export const WEBSITE_FQN = fqnForType("cloud.Website");
 
 /**
- * Options for `Website`.
+ * Options for `Website`
  */
-export interface WebsiteProps extends WebsiteOptions {
+export interface WebsiteProps extends WebsiteOptions, WebsiteDomainOptions {}
+
+/**
+ * Basic options for `Website`
+ */
+export interface WebsiteOptions {
   /**
    * Local path to the website's static files, relative to the Wing source file or absolute.
    * @example "./dist"
@@ -24,7 +30,7 @@ export interface WebsiteProps extends WebsiteOptions {
 /**
  * Options for `Website`, and `ReactApp`
  */
-export interface WebsiteOptions {
+export interface WebsiteDomainOptions {
   /**
    * The website's custom domain object.
    * @default - undefined
@@ -36,26 +42,20 @@ export interface WebsiteOptions {
  * A cloud static website.
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
+ * @abstract
  */
-export abstract class Website extends Resource implements IWebsite {
-  /**
-   * Create a new website.
-   * @internal
-   */
-  public static _newWebsite(
-    scope: Construct,
-    id: string,
-    props: WebsiteProps
-  ): Website {
-    return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
-  }
+export class Website extends Resource implements IWebsite {
   /** @internal */
-  private readonly _path: string;
+  private readonly _path!: string;
 
   /** @internal */
   protected _domain?: cloud.Domain;
 
   constructor(scope: Construct, id: string, props: WebsiteProps) {
+    if (new.target === Website) {
+      return Resource._newFromFactory(WEBSITE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Website";
@@ -68,11 +68,6 @@ export abstract class Website extends Resource implements IWebsite {
     this._domain = props.domain;
   }
 
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
-  }
-
   /**
    * Absolute local path to the website's static files.
    */
@@ -82,8 +77,11 @@ export abstract class Website extends Resource implements IWebsite {
 
   /**
    * The website's url.
+   * @abstract
    */
-  public abstract get url(): string;
+  public get url(): string {
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a JSON file with custom values during the website's deployment.
@@ -108,12 +106,14 @@ export abstract class Website extends Resource implements IWebsite {
    * @param path the file path it will be uploaded as
    * @param data the data to write to the file
    * @param options configure the file's options
+   * @abstract
    */
-  public abstract addFile(
-    path: string,
-    data: string,
-    options?: AddFileOptions
-  ): string;
+  public addFile(path: string, data: string, options?: AddFileOptions): string {
+    path;
+    data;
+    options;
+    throw new AbstractMemberError();
+  }
 }
 
 /**

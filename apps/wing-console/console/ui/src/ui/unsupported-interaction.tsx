@@ -6,6 +6,7 @@ export interface UnsupportedInteractionProps {
   resourceType: string;
   onOpenIssueClick: (url: string) => void;
 }
+
 const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
 export const UnsupportedInteraction = ({

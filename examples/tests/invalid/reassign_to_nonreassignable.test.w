@@ -4,7 +4,7 @@ x = x + 1;
 
 class InnerR {
   pub inflight inner: num;
-  inflight init() {
+  inflight new() {
     this.inner = 1;
   }
 }
@@ -15,12 +15,12 @@ class R {
   innerR: InnerR;
   inflight inflightF: num;
   
-  init() {
+  new() {
     this.f = 1;
     this.innerR = new InnerR();
   }
 
-  inflight init() {
+  inflight new() {
     this.inflightF = 1;
   }
   

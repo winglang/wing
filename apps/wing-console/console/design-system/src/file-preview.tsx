@@ -58,6 +58,10 @@ export const FilePreview = ({
     return getPreviewType(filename);
   }, [filename]);
 
+  const fileType = useMemo(() => {
+    return getFileType(filename);
+  }, [filename]);
+
   return (
     <>
       {["image", "video", "audio", "pdf"].includes(type) && (
@@ -73,7 +77,7 @@ export const FilePreview = ({
         >
           {type === "image" && (
             <img
-              src={`data:image/${getFileType(filename)}+xml;base64,${content}`}
+              src={`data:image/${fileType}+xml;base64,${content}`}
               alt="Preview"
               className={classNames("h-full mx-auto p-4", className)}
             />
@@ -81,7 +85,7 @@ export const FilePreview = ({
           {type === "video" && (
             // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
-              src={`data:video/${getFileType(filename)};base64,${content}`}
+              src={`data:video/${fileType};base64,${content}`}
               controls
               className={classNames(
                 "w-full mx-auto rounded",
@@ -95,7 +99,7 @@ export const FilePreview = ({
             <div className="p-2 flex">
               {/*eslint-disable-next-line jsx-a11y/media-has-caption*/}
               <audio
-                src={`data:audio/${getFileType(filename)};base64,${content}`}
+                src={`data:audio/${fileType};base64,${content}`}
                 controls
                 className="mx-auto focus:outline-none py-2 text-xs scale-75"
               />

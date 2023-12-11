@@ -13,7 +13,7 @@ test("create a schedule", async () => {
   // GIVEN
   const app = new SimApp();
   const cron = "*/1 * * * ?";
-  cloud.Schedule._newSchedule(app, "my_schedule", { cron });
+  new cloud.Schedule(app, "my_schedule", { cron });
   const s = await app.startSimulator();
 
   // THEN
@@ -36,8 +36,8 @@ test("create a schedule", async () => {
 test("schedule with one task with cron", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  const schedule = new cloud.Schedule(app, "my_schedule", {
     cron: "* * * * ?",
   });
   schedule.onTick(handler);
@@ -54,8 +54,8 @@ test("schedule with one task with cron", async () => {
 test("schedule with one task using rate of 10m", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromMinutes(10),
   });
   const expectedCron = "*/10 * * * ?"; // every 10 minutes cron expression
@@ -80,8 +80,8 @@ test("schedule with one task using rate of 10m", async () => {
 test("schedule with one task using rate of 3h", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromHours(3),
   });
   const expectedCron = "* */3 * * ?"; // every 3 hours cron expression

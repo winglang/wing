@@ -15,6 +15,9 @@ export class FunctionClient implements IFunctionClient {
         `https://${this.functionName}.azurewebsites.net/api/${this.functionName}`,
         { body: payload }
       );
+      if (!res.ok) {
+        throw new Error(res.body || "Invocation Error");
+      }
       return res.body ?? "";
     } catch (error) {
       throw new Error(
@@ -31,7 +34,7 @@ export class FunctionClient implements IFunctionClient {
    * @returns the function returned payload and logs
    */
   public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
-    console.error("invokeWithLogs is not implemented yet on tf-azure");
+    console.error("Test invocation on tf-azure doesn't include logs yet");
     //TODO: add traces to tf-azure tests- https://github.com/winglang/wing/issues/4574
     return [await this.invoke(payload), []];
   }

@@ -84,6 +84,7 @@ where
 		StmtKind::Bring { source, identifier } => StmtKind::Bring {
 			source: match source {
 				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::TrustedModule(name, module_dir) => BringSource::TrustedModule(f.fold_symbol(name), module_dir),
 				BringSource::WingLibrary(name, module_dir) => BringSource::WingLibrary(f.fold_symbol(name), module_dir),
 				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
 				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
@@ -214,6 +215,7 @@ where
 {
 	Class {
 		name: f.fold_symbol(node.name),
+		span: node.span,
 		fields: node.fields.into_iter().map(|field| f.fold_class_field(field)).collect(),
 		methods: node
 			.methods
@@ -327,7 +329,7 @@ where
 			type_: type_.map(|t| f.fold_type_annotation(t)),
 			fields: fields
 				.into_iter()
-				.map(|(key, value)| (key, f.fold_expr(value)))
+				.map(|(key, value)| (f.fold_expr(key), f.fold_expr(value)))
 				.collect(),
 		},
 		ExprKind::SetLiteral { type_, items } => ExprKind::SetLiteral {

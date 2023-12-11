@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-
+//# sourceMappingURL=inflight.Baz-1.js.map
 ```
 
 ## preflight.js
@@ -25,7 +25,7 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return "baz";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Baz-1.js")({
         })
@@ -43,11 +43,11 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Baz };
 };
-
+//# sourceMappingURL=preflight.js.map
 ```
 

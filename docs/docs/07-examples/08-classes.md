@@ -14,7 +14,7 @@ class Foo  {
   var field2: num; // <-- reassignable
   inflight field3: Array<str>;
 
-  init() {
+  new() {
     this.field1 = "hello";
     this.field2 = 123;
   }
@@ -23,22 +23,22 @@ class Foo  {
     this.field2 = value;
   }
 
-  inflight init() {
+  inflight new() {
     this.field3 = ["value created on inflight init"];
     log("at inflight init");
   }
 
   pub inflight doStuff() {
     // all code is async and runs on the cloud
-    log("field3[0]='${this.field3.at(0)}'");
+    log("field3[0]='{this.field3.at(0)}'");
     util.sleep(1s);
     log("done");
   }
 }
 
 let f = new Foo();
-log("field1=${f.field1}");
-log("field2=${f.field2}");
+log("field1={f.field1}");
+log("field2={f.field2}");
 
 new cloud.Function(inflight () => {
   f.doStuff();
@@ -81,7 +81,7 @@ interface IKVStore extends std.IResource { // https://github.com/winglang/wing/i
 
 class BucketBasedKeyValueStore impl IKVStore {
   bucket: cloud.Bucket;
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
   pub inflight get(key: str): Json {
@@ -105,7 +105,7 @@ interface IKVStore extends std.IResource {
 
 class BucketBasedKeyValueStore impl IKVStore {
   bucket: cloud.Bucket;
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
   pub inflight get(key: str): Json {
@@ -118,7 +118,7 @@ class BucketBasedKeyValueStore impl IKVStore {
 
 class TableBasedKeyValueStore impl IKVStore {
   table: cloud.Table;
-  init() {
+  new() {
     this.table = new cloud.Table(
       name: "table",
       primaryKey: "key",
@@ -143,7 +143,7 @@ let testKv = inflight (kv: IKVStore):void => {
     value: "v" 
   });
   let result = kv.get("k");
-  log("${result.get("value")}");
+  log("{result.get("value")}");
   assert("v" == str.fromJson(result.get("value")));
 };
 

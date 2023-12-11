@@ -62,6 +62,7 @@ impl<'a> LiftVisitor<'a> {
 					span: Some(symbol.span.clone()),
 					message: format!("Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"),
 					annotations: vec![],
+					hints: vec![],
 				});
 			}
 		}
@@ -117,20 +118,25 @@ impl<'a> LiftVisitor<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
+				source_path: None,
 			},
 		);
 		self.ctx.pop_phase();
-		res
+		res.to_string()
 	}
 
 	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
-		let udt_js = self.jsify.jsify_user_defined_type(
-			&node,
-			&mut JSifyContext {
-				lifts: None,
-				visit_ctx: &mut self.ctx,
-			},
-		);
+		let udt_js = self
+			.jsify
+			.jsify_user_defined_type(
+				&node,
+				&mut JSifyContext {
+					lifts: None,
+					visit_ctx: &mut self.ctx,
+					source_path: None,
+				},
+			)
+			.to_string();
 
 		let current_env = self.ctx.current_env().expect("an env");
 		if let Some(SymbolKind::Namespace(root_namespace)) = current_env.lookup(&node.root, None) {
@@ -217,7 +223,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						),
 						span: Some(node.span.clone()),
 						annotations: vec![],
-					});
+			hints: vec![],
+		});
 
 					return;
 				}
@@ -282,7 +289,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
 					span: Some(node.span.clone()),
 					annotations: vec![],
-				});
+			hints: vec![],
+		});
 
 				return;
 			}
@@ -316,6 +324,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.ctx.push_function_definition(
 					node.name.as_ref(),
 					&node.signature,
+					node.is_static,
 					self.jsify.types.get_scope_env(&scope),
 				);
 

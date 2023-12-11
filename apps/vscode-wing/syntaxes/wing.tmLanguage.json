@@ -50,7 +50,7 @@
       "patterns": [
         {
           "name": "meta.template.expression.wing",
-          "begin": "\\$\\{",
+          "begin": "\\{",
           "beginCaptures": {
             "0": {
               "name": "punctuation.definition.template-expression.begin.wing"
@@ -149,7 +149,7 @@
       "patterns": [
         {
           "name": "constant.numeric.wing",
-          "match": "(-?[0-9]+(\\.[0-9]+)?(s|ms|h|m)?\\b)"
+          "match": "(-?[0-9][0-9_]*(\\.[0-9][0-9_]*)?(s|ms|h|m)?\\b)"
         }
       ]
     },

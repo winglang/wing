@@ -43,19 +43,6 @@ exports[`provides raw tree data 1`] = `
         "id": "test",
         "path": "root/test",
       },
-      "test.handler": {
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.2.70",
-        },
-        "display": {
-          "description": "An inflight resource",
-          "hidden": true,
-          "title": "Inflight",
-        },
-        "id": "test.handler",
-        "path": "root/test.handler",
-      },
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
@@ -87,7 +74,6 @@ exports[`run all tests > single test 1`] = `
       {
         "data": {
           "message": "Invoke (payload=\\"\\").",
-          "result": undefined,
           "status": "success",
         },
         "sourcePath": "root/test/Handler",
@@ -118,7 +104,6 @@ exports[`run single test > happy path 1`] = `
     {
       "data": {
         "message": "Invoke (payload=\\"\\").",
-        "result": undefined,
         "status": "success",
       },
       "sourcePath": "root/test/Handler",
@@ -135,7 +120,7 @@ exports[`run single test > test failure 1`] = `
   "error": "Error: test failed
 <sanitized>
 <sanitized>
-    at evalmachine.<anonymous>:<sanitized>
+<sanitized>
     at Script.runInContext (node:vm:<sanitized>)
     at Object.runInContext (node:vm:<sanitized>)
 <sanitized>
@@ -157,7 +142,7 @@ exports[`run single test > test failure 1`] = `
     },
     {
       "data": {
-        "error": [Error: test failed],
+        "error": {},
         "message": "Invoke (payload=\\"\\").",
         "status": "failure",
       },
