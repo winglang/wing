@@ -153,9 +153,6 @@ jobs:
         run: |
           cd examples/tests/sdk_tests
           npm install
-      - name: Installing wing locally
-        if: ${{ env.MANUAL == 'true' }}
-        run: pnpm install
       - name: Configure AWS credentials
         if: ${{ matrix.target == 'tf-aws'}}
         uses: aws-actions/configure-aws-credentials@v2
@@ -178,7 +175,8 @@ jobs:
 
       - name: Installing local dependencies
         if: ${{ env.MANUAL == 'true' }}
-        run: pnpm install
+        run: |
+          pnpm install
           pnpm turbo compile -F=winglang
       - name: Execute wing test in matrix directory
         uses: nick-fields/retry@v2
