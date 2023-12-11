@@ -173,6 +173,10 @@ jobs:
           workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
 
+      - name: Set-up gcloud
+        if: ${{ matrix.target == 'tf-gcp' }}
+        uses: "google-github-actions/setup-gcloud@v1"
+
       - name: Installing local dependencies
         if: ${{ env.MANUAL == 'true' }}
         run: |
