@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
-    (mutArray.push("three"));
+    ((obj, args) => { obj.push(...args); })(mutArray, ["three"]);
     const immutArray = [...(mutArray)];
     const s = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1);
     {((cond) => {if (!cond) throw new Error("assertion failed: s == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"two")))};
