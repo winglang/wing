@@ -282,9 +282,9 @@ class $Root extends $stdlib.std.Resource {
     const num_array = emptyArray;
     const emptyArray2 = [];
     const clonedArray2 = [...(emptyArray2)];
-    (clonedArray2.push(1));
-    (clonedArray2.push(2));
-    (clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1))));
+    ((obj, args) => { obj.push(...args); })(clonedArray2, [1]);
+    ((obj, args) => { obj.push(...args); })(clonedArray2, [2]);
+    ((obj, args) => { obj.push(...args); })(clonedArray2, [(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1))]);
     {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2),3)))};
     const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
     const clonedSet = new Set(emptySet);
