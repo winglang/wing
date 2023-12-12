@@ -61,11 +61,6 @@ export class App extends core.App {
   private synthedOutput: string | undefined;
   private synthHooks?: core.SynthHooks;
 
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   constructor(props: CdkAppProps) {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
