@@ -613,6 +613,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
+                      "hidden": true,
                       "title": "Test",
                     },
                     "id": "test:dependency cycles",
@@ -625,6 +626,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
+                      "hidden": true,
                       "title": "Test",
                     },
                     "id": "test:test",
