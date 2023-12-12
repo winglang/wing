@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir } from "fs/promises";
+import { mkdir, rmdir } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { makeSimulatorClient } from "./client";
@@ -340,8 +340,12 @@ export class Simulator {
    * Stop the simulation, reload the simulation tree from the latest version of
    * the app file, and restart the simulation.
    */
-  public async reload(): Promise<void> {
+  public async reload(resetState: boolean): Promise<void> {
     await this.stop();
+
+    if (resetState) {
+      await rmdir(this.statedir, { recursive: true });
+    }
 
     const { config, treeData, connectionData } = this._loadApp(this.simdir);
     this._config = config;

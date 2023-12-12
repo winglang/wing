@@ -49,6 +49,9 @@ export class Test extends Resource {
       inflight,
       props
     );
+    if (!this._fn) {
+      Node.of(this).hidden = true;
+    }
   }
 
   /** @internal */
