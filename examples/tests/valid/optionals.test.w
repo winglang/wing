@@ -204,3 +204,13 @@ if let s1 = str1 {
 } elif let s2 = str2 {
   assert(true);
 }
+
+let functionReturningNothing = (): void? => {
+  return;
+}
+
+if let nothing = functionReturningNothing {
+  assert(false);
+} else {
+  assert(true);
+}
