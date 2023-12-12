@@ -32,7 +32,6 @@ const {
 
 import { core, std, ex } from "@winglang/sdk";
 import { Util } from "@winglang/sdk/lib/util";
-import { synthRoots } from "@winglang/sdk/lib/core/synth-roots";
 import { registerTokenResolver } from "@winglang/sdk/lib/core/tokens";
 
 /**
@@ -114,9 +113,8 @@ export class App extends core.App {
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
-    synthRoots(this, props);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /**
