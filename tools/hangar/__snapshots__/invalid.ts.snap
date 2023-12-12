@@ -1984,6 +1984,27 @@ exports[`interface.test.w 1`] = `
    |   ^^^^^^^^^ Properties are not supported in interfaces
 
 
+error: Access modifiers are not allowed in interfaces
+   --> ../../../examples/tests/invalid/interface.test.w:36:3
+   |
+36 |   pub inflight foo(body: Json): Json;  
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+
+
+error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/interface.test.w:36:16
+   |
+36 |   pub inflight foo(body: Json): Json;  
+   |                ^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'json_container_type'
+   --> ../../../examples/tests/invalid/interface.test.w:36:26
+   |
+36 |   pub inflight foo(body: Json): Json;  
+   |                          ^^^^ Unexpected 'json_container_type'
+
+
 error: Unknown symbol \\"IB\\"
   --> ../../../examples/tests/invalid/interface.test.w:2:22
   |
