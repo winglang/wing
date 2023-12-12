@@ -8,88 +8,91 @@ description: "How to create, share, manage inputs"
 - **Submission Date**: {2023-12-08}
 - **Stage**: Draft
 
-Using Wing inputs in your application
-
 ## Background
 
-Frequently applications have the need to read inputs, whether those inputs are sensitive data like passwords, connection strings, ssh keys or non-sensitive configuration such as retry counts, endpoint urls, etc..
+An input is a value used by either an application or platform that is not defined within the application's source code.
+
+Inputs can be Platform agnostic, such as an a retry count that is dictated by business requirements. Other inputs may be Platform specific, like a DNS configurations.
+
+### Context
+
+There are a few things that are considered out-of-scope for this RFC. 
+- Inputs are all treated as string data
+- Inputs cannot be created, or updated inflight
 
 ## Use cases
 
-- Sensitive Data Management
-	- Handling passwords, API keys, and secret tokens.
-	- Managing SSH keys for secure server access.
-	- Database connection strings.
+The following table contains some use cases and is by no means exhaustive. 
 
-- Configuration Management
-	- Setting up environment-specific endpoint URLs (e.g., for different stages like development, staging, production).
-	- Configuring retry logic parameters such as retry counts and backoff strategies.
-	- Defining feature flags or toggle switches to enable/disable certain features dynamically.
+| **Use case** | **Secure** | Consumed |
+|-----------|---------| ----------- |
+| Connection strings | Yes | Inflight |
+| SSH Keys | Yes | Inflight |
+| Bucket count | No | Both | 
+| Retry counts | No | Inflight |
+| API Keys | Yes | Inflight |
+| DNS information (certificates, hosted zones) | No | Preflight |
+| Autoscaling parameters | No | Preflight |
+| Feature Flags | No | Both |
 
-- Application Scaling
-	- Adjusting resource allocation parameters like CPU, memory limits, and autoscaling thresholds based on the environment.
 
-- Service Integrations
-	- Configuring webhook URLs and listener settings for external service events.
+## Configuring and Managing Inputs
 
-- Security Policies
-	- Setting up access control lists or role-based access control parameters.
+(Note): this section is just some initial thoughts I dont want to lose track of as I play with this idea of inputs.
 
-- Network Configuration
-	- Specifying IP ranges, domain names, and port numbers for network settings.
-	- Configuring API gateway endpoints and routing rules.
+The following Wing application contains several inputs, in this section of the RFC we will see how inputs can be managed
 
-- Monitoring and Logging
-	- Setting up log levels, log retention policies, and monitoring thresholds.
-	- Configuring alerting rules and notification settings.
-
-- Deployment and Continuous Integration
-	- Specifying deployment targets and versioning details.
-	- Configuring build and test parameters for CI/CD pipelines.
-- Data Processing and Analytics
-	- Defining data retention policies and archival settings.
-	- Specifying parameters for data processing jobs
-
--  Miscellaneous Settings
-	- Setting time zone, date formats, and other general application settings.
-	- Customizing email templates, notification contents, and messaging formats.
-
-## Managing Inputs
-
-The lifecycle management of inputs in Wing is a crucial aspect of ensuring seamless integration and usability. This section outlines different potential approaches for managing inputs, considering their creation, definition, and usage
-
-### Compilation Time Input Generation
-- CLI-Based input Generation: This feature in the Wing CLI allows the ability to generate and store inputs during the compilation process. (perhaps either interactively or through cli-flag)
+(draft sketch)
 ```js
-wing compile -t tf-aws --input "/some/input=wow"
-```
-- In-Code Input Declaration: Inputs resources can be defined inline in code. 
-```js
-bring cloud;
+let enableNotifications = input("/features/notifications");
+let emailList = input("/email-list"); // comma seperated string
 
-let input = new cloud.Input(name: "/some/input", value: "wow");
+let inbox = new cloud.Bucket() as "inbox";
+
+// conditionally provision infrastructure based on enableNotification
+if (enableNotifications.asBool()) {
+	inbox.onCreate(inflight () => {
+		// use emailList input inflight
+		for email in emailList.asStr().split(",") {
+			// ...
+		}
+	});
+}
 ```
 
-### Runtime Input Management
-- Runtime assignment of Inputs: This allows inputs like database connection strings or API keys that can be created at runtime
-```js
-bring cloud;
+In order for the above code to run there are 2 required inputs `enableNotifications` and `emailList` either one of these inputs can be used inflight or preflight. 
 
-let dbConnectionString = new cloud.Input(name: "/db/connection/string");
-
-new cloud.Function(inflight() => {
-	let conncectionString = someCallToGetConnectionString();
-	// Assign the connection string input during runtime
-	dbConnectionString.setValue(connectionString)
-});
+To manage these inputs we will create a `inputs.json` file within our project's folder.
+```json
+{
+	"features": {
+		"notifications": "true"
+	},
+	"email-list": "one@email.com,two@email.com"
+}
 ```
 
-### Pre-compilation Input Configuration
-- CLI Input configuration: This would introduce some pre-compile cli command that will prompt the user for input values for their Wing application
-```js
-wing -t tf-aws configure-inputs app.main.w
+### Creating the inputs Interactively
 
-...
-please provide a value for: "/some/input": 
+Additionally inputs can be created through an interactive process by running `wing compile -i app.main.w` 
+
+This interactive experience will prompt users to provide values for all of their inputs
+```sh
+wing compile -i app.main.w
+
+Please enter an input value for /features/notifications: "true"
+Please enter an input value for /email-list: "one@email.com,two@email.com"
 ```
-- Manual creation (through script or other means)
+
+As well re-running this command will give the opportunity to change input values
+```sh
+wing compile -i app.main.w
+
+Please enter an input value for /features/notifications (true):
+Please enter an input value for /email-list (one@email.com,two@email.com): ""
+```
+By default, not entering in a new value will keep the existing version.
+
+### Platform specific inputs
+
+In some cases input values need to vary based on the target Platform. Take for example the email list input. This input should use some dev email when running in the `sim` target. 
