@@ -1,9 +1,9 @@
-import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { TestRunner } from "./test-runner";
 import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
+import { LogAnalyticsWorkspace } from "../.gen/providers/azurerm/log-analytics-workspace";
 import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
@@ -37,6 +37,18 @@ const RESOURCEGROUP_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Configuration options for generating a name for Azure Log Analytics Workspace.
+ *
+ * - The workspace name must be between 4 and 63 characters.
+ * - The workspace name can contain only letters, numbers, and hyphens (`"-"`).
+ * - The hyphen (`"-"`) should not be the first or the last character in the name.
+ */
+const LOG_ANALYTICS_WORKSPACE_NAME_OPTS: NameOptions = {
+  maxLen: 63,
+  disallowedRegex: /([^a-zA-Z0-9\-]+)/g,
+};
+
+/**
  * StorageAccount names are limited to 24 characters.
  * You can only use alphanumeric characters.
  */
@@ -67,6 +79,7 @@ export class App extends CdktfApp {
   private _storageAccount?: StorageAccount;
   private _servicePlan?: ServicePlan;
   private _applicationInsights?: ApplicationInsights;
+  private _logAnalyticsWorkspace?: LogAnalyticsWorkspace;
   protected readonly testRunner: TestRunner;
 
   constructor(props: AzureAppProps) {
@@ -111,6 +124,24 @@ export class App extends CdktfApp {
     }
   }
 
+  public get logAnalyticsWorkspace() {
+    if (!this._logAnalyticsWorkspace) {
+      this._logAnalyticsWorkspace = new LogAnalyticsWorkspace(
+        this,
+        "LogAnalyticsWorkspace",
+        {
+          location: this.location,
+          resourceGroupName: this.resourceGroup.name,
+          name: ResourceNames.generateName(
+            this,
+            LOG_ANALYTICS_WORKSPACE_NAME_OPTS
+          ),
+        }
+      );
+    }
+    return this._logAnalyticsWorkspace;
+  }
+
   public get applicationInsights() {
     if (!this._applicationInsights) {
       this._applicationInsights = new ApplicationInsights(
@@ -121,6 +152,7 @@ export class App extends CdktfApp {
           resourceGroupName: this.resourceGroup.name,
           location: this.resourceGroup.location,
           applicationType: "web",
+          workspaceId: this.logAnalyticsWorkspace.id,
         }
       );
     }
@@ -174,21 +206,16 @@ export class App extends CdktfApp {
     return this._servicePlan;
   }
 
-  protected tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
+  protected typeForFqn(fqn: string): any {
     switch (fqn) {
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id, args[0]);
+        return TestRunner;
 
       case FUNCTION_FQN:
-        return new Function(scope, id, args[0], args[1]);
+        return Function;
 
       case BUCKET_FQN:
-        return new Bucket(scope, id, args[0]);
+        return Bucket;
     }
 
     return undefined;

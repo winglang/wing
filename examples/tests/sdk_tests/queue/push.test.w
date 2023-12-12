@@ -17,14 +17,14 @@ new std.Test(inflight () => {
     q.push("");
     assert(false);
   } catch e {
-    assert(e == "Empty messages are not allowed");
+    assert(e.contains("Empty messages are not allowed"));
   }
 
   try {
     q.push("Foo", "");
     assert(false);
   } catch e {
-    assert(e == "Empty messages are not allowed");
+    assert(e.contains("Empty messages are not allowed"));
   }
 
   q.push("Foo");
@@ -42,9 +42,9 @@ new std.Test(inflight () => {
 
   q.purge(); // the message deletion process takes up to 60 seconds. (https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/purgequeuecommand.html)
   util.sleep(1m);
-  q.push("123", "\r", "${obj}");
+  q.push("123", "\r", "{obj}");
 
   assert(util.waitUntil((): bool => {
     return q.approxSize() == 3;
   }));
-}, { timeout: 3m }) as "push";
+}, timeout: 3m) as "push";

@@ -11,7 +11,7 @@ async handle(event) {
 test("create a test", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new Test(app, "test:my_test", handler);
 
   // THEN
@@ -29,7 +29,7 @@ test("create a test", async () => {
       sourceCodeLanguage: "javascript",
       timeout: 60000,
     },
-    type: "wingsdk.cloud.Function",
+    type: "@winglang/sdk.cloud.Function",
   });
   await s.stop();
 

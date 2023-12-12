@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { ReactAppSchema, REACT_APP_TYPE } from "./schema-resources";
+import { ReactAppSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -23,7 +23,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
     if (this._useBuildCommand) {
       // In the future we can create an host (proxy like) for the development one if needed
-      this._host = cloud.Website._newWebsite(this, `${this.node.id}-host`, {
+      this._host = new cloud.Website(this, `${this.node.id}-host`, {
         ...this._hostProps,
         path: this._buildPath,
       });
@@ -43,7 +43,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ReactAppSchema = {
-      type: REACT_APP_TYPE,
+      type: ex.REACT_APP_FQN,
       path: this.node.path,
       props: {
         path: this._projectPath,

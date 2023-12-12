@@ -31,6 +31,7 @@ module.exports = function({  }) {
   }
   return A;
 }
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -45,6 +46,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## preflight.js
@@ -52,18 +54,18 @@ module.exports = function({ $A }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -80,18 +82,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["foo", "$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
+      constructor($scope, $id, ) {
+        super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -106,19 +108,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["bar", "$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "bar", "$inflight_init"];
       }
-      static _registerTypeOnLift(host, ops) {
+      static _registerOnLift(host, ops) {
         if (ops.includes("bar")) {
           B._registerOnLiftObject(A, host, ["foo"]);
         }
-        super._registerTypeOnLift(host, ops);
+        super._registerOnLift(host, ops);
       }
     }
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

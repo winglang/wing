@@ -8,7 +8,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight delete: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a DELETE request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the DELETE request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the DELETE request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
   sortText: ff|delete
-  insertText: delete($0)
+  insertText: delete($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -20,7 +20,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight fetch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a HTTP request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the HTTP request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call\n\n### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
   sortText: ff|fetch
-  insertText: fetch($0)
+  insertText: fetch($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -32,7 +32,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight formatUrl: inflight (url: Url, options: FormatUrlOptions?): str\n```\n---\nSerializes an URL Struct to a String.\n### Parameters\n- `url` — `Url` — The URL Struct to be formatted.\n- `...options` — `FormatUrlOptions?`\n  \n  - `auth?` — `bool?` — Whether the formatted URL should include the username and password.\n  - `fragment?` — `bool?` — Whether the formatted URL should include the fragment identifier.\n  - `search?` — `bool?` — Whether the formatted URL should include the search query.\n  - `unicode?` — `bool?` — Whether the formatted URL should represent Unicode characters for the host component.\n\n### Returns\nA formatted URL String.\n\n*@throws* *Will throw an error if the input URL has invalid fields.*"
   sortText: ff|formatUrl
-  insertText: formatUrl($0)
+  insertText: formatUrl($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -44,7 +44,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight get: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the GET request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the GET request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
   sortText: ff|get
-  insertText: get($0)
+  insertText: get($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -56,7 +56,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight parseUrl: inflight (urlString: str): Url\n```\n---\nParses the input URL String using WHATWG URL API and returns an URL Struct.\n### Parameters\n- `urlString` — `str` — The URL String to be parsed.\n\n### Returns\nAn URL Struct.\n\n*@throws* *Will throw an error if the input String is not a valid URL.*"
   sortText: ff|parseUrl
-  insertText: parseUrl($0)
+  insertText: parseUrl($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -68,7 +68,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight patch: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PATCH request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the PATCH request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the PATCH request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
   sortText: ff|patch
-  insertText: patch($0)
+  insertText: patch($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -80,7 +80,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight post: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a POST request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the POST request.\n- `...options` — `RequestOptions?` — Optional parameters for customizing the POST request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
   sortText: ff|post
-  insertText: post($0)
+  insertText: post($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -92,7 +92,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstatic inflight put: inflight (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PUT request to a specified URL and provides a formatted response.\n### Parameters\n- `url` — `str` — The target URL for the PUT request.\n- `...options` — `RequestOptions?` — ptional parameters for customizing the PUT request.\n  \n  - `body?` — `str?` — Any body that you want to add to your request.\n  - `cache?` — `RequestCache?` — The cache mode you want to use for the request.\n  - `headers?` — `Map<str>?` — Any headers you want to add to your request.\n  - `method?` — `HttpMethod?` — The request method, e.g., GET, POST. The default is GET.\n  - `redirect?` — `RequestRedirect?` — The redirect mode to use: follow, error.\n  - `referrer?` — `str?` — A string specifying \"no-referrer\", client, or a URL.\n\n### Returns\nthe formatted response of the call"
   sortText: ff|put
-  insertText: put($0)
+  insertText: put($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -119,7 +119,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `headers` — `Map<str>` — The map of header information associated with the response.\n- `ok` — `bool` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — `num` — The status code of the response.\n- `url` — `str` — The URL of the response.\n- `body?` — `str?` — A string representation of the body contents."
+    value: "```wing\nstruct Response\n```\n---\nThe response to a HTTP request.\n### Fields\n- `body` — `str` — A string representation of the body contents.\n- `headers` — `Map<str>` — The map of header information associated with the response.\n- `ok` — `bool` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — `num` — The status code of the response.\n- `url` — `str` — The URL of the response."
   sortText: hh|Response
 - label: Url
   kind: 22

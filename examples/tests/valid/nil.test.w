@@ -3,7 +3,7 @@ bring cloud;
 class Foo {
   inflight var optionalVar: str?;
   
-  inflight init() {
+  inflight new() {
     this.optionalVar = nil;
   }
 

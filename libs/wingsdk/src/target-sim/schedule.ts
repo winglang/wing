@@ -1,9 +1,10 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { SCHEDULE_TYPE, ScheduleSchema } from "./schema-resources";
+import { ScheduleSchema } from "./schema-resources";
 import {
   bindSimulatorResource,
   makeSimulatorJsClient,
@@ -31,27 +32,24 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public onTick(
     inflight: cloud.IScheduleOnTickHandler,
-    props: cloud.ScheduleOnTickProps = {}
+    props: cloud.ScheduleOnTickOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
-      `${this.node.id}-OnTick-${hash}`,
+      App.of(this).makeId(this, "OnTick"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onTick()";
 
-    new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "OnTickMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},
@@ -68,7 +66,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: ScheduleSchema = {
-      type: SCHEDULE_TYPE,
+      type: cloud.SCHEDULE_FQN,
       path: this.node.path,
       props: {
         cronExpression: this.cronExpression,

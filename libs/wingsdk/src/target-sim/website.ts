@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { WebsiteSchema, WEBSITE_TYPE, FileRoutes } from "./schema-resources";
+import { WebsiteSchema, FileRoutes } from "./schema-resources";
 import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -39,7 +39,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
   /** Returns sim schema */
   public toSimulator(): BaseResourceSchema {
     const schema: WebsiteSchema = {
-      type: WEBSITE_TYPE,
+      type: cloud.WEBSITE_FQN,
       path: this.node.path,
       props: { staticFilesPath: this.path, fileRoutes: this.fileRoutes },
       attrs: {} as any,

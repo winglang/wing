@@ -10,6 +10,7 @@ const GCP_APP_OPTS = {
   projectId: "my-project",
   region: "us-central1",
   entrypointDir: __dirname,
+  zone: "us-central1",
 };
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
@@ -17,15 +18,16 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 test("basic function", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "google_cloudfunctions_function",
+    "google_service_account",
     "google_storage_bucket",
     "google_storage_bucket_object",
     "random_id",
@@ -37,10 +39,10 @@ test("basic function", () => {
 test("basic function with environment variables", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -68,10 +70,10 @@ test("basic function with environment variables", () => {
 test("basic function with timeout explicitly set", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     timeout: Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -93,11 +95,11 @@ test("basic function with timeout explicitly set", () => {
 test("basic function with timeout beyond the allowed range", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   expect(() => {
-    Function._newFunction(app, "Function", inflight, {
+    new Function(app, "Function", inflight, {
       timeout: Duration.fromSeconds(0),
     });
   }).toThrowErrorMatchingSnapshot();
@@ -106,10 +108,10 @@ test("basic function with timeout beyond the allowed range", () => {
 test("basic function with memory size specified", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
-  Function._newFunction(app, "Function", inflight, {
+  new Function(app, "Function", inflight, {
     memory: 256,
   });
   const output = app.synth();
@@ -131,11 +133,11 @@ test("basic function with memory size specified", () => {
 test("basic function with memory beyond the allowed range", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   expect(() => {
-    Function._newFunction(app, "Function", inflight, {
+    new Function(app, "Function", inflight, {
       memory: 64,
     });
   }).toThrowErrorMatchingSnapshot();

@@ -730,6 +730,11 @@ function createMapEdgesFromConnectionData(
           throw new Error(`Could not find node for resource ${target}`);
         }
 
+        // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
+        if (targetNode.parent === sourceNode.path) {
+          return false;
+        }
+
         if (sourceNode.display?.hidden || targetNode.display?.hidden) {
           return false;
         }
@@ -737,6 +742,20 @@ function createMapEdgesFromConnectionData(
         if (
           !showTests &&
           (matchTest(sourceNode.path) || matchTest(targetNode.path))
+        ) {
+          return false;
+        }
+
+        // Remove redundant connections to a parent resource if there's already a connection to a child resource.
+        if (
+          connections.some((connection) => {
+            if (
+              connection.source === source &&
+              connection.target.startsWith(`${target}/`)
+            ) {
+              return true;
+            }
+          })
         ) {
           return false;
         }

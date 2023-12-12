@@ -8,6 +8,7 @@ import {
   useRef,
   MutableRefObject,
   useState,
+  memo,
 } from "react";
 
 const PersistentStateContext = createContext<
@@ -27,14 +28,14 @@ export const usePersistentStateContext = () => {
   return context.state;
 };
 
-export const PersistentStateProvider = (props: PropsWithChildren) => {
+export const PersistentStateProvider = memo((props: PropsWithChildren) => {
   const state = useRef(new Map<string, any[]>());
   return (
     <PersistentStateContext.Provider value={{ state }}>
       {props.children}
     </PersistentStateContext.Provider>
   );
-};
+});
 
 export const createPersistentState = (stateId: string) => {
   let index = 0;

@@ -4,13 +4,13 @@ struct CountingSemaphoreProps {
   availableResources: num;
 }
 
-resource CountingSemaphore {
+class CountingSemaphore {
   pub limit: num;
   _counter: cloud.Counter;
 
   // need some ttl solution here,
   // probably in-house once replaced with a key-value store
-  init(props: CountingSemaphoreProps) {
+  new(props: CountingSemaphoreProps) {
     // pseudocode: input validation
     this.limit = props.availableResources;
     this._counter = new cloud.Counter();
@@ -69,7 +69,7 @@ queue.add_consumer(inflight (message: str) => {
   }
 
   // real work
-  log("all resources are acquired, processing message: ${message}");
+  log("all resources are acquired, processing message: {message}");
 
   resource_1.release();
   resource_2.release();

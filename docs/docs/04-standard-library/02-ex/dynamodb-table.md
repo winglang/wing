@@ -48,7 +48,7 @@ new ex.DynamodbTable(props: DynamodbTableProps);
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactGetItems">transactGetItems</a></code> | Perform a synchronous read operation that groups up to 100 item retrievals. |
 | <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Get an item from the table. |
+| <code><a href="#@winglang/sdk.ex.IDynamodbTableClient.updateItem">updateItem</a></code> | Edit an existing item's attributes, or add a new item to the table if it does not already exist. |
 
 ---
 
@@ -220,7 +220,7 @@ options for the transact write items operation.
 inflight updateItem(options: DynamodbTableUpdateItemOptions): DynamodbTableUpdateItemResult
 ```
 
-Get an item from the table.
+Edit an existing item's attributes, or add a new item to the table if it does not already exist.
 
 > [https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html](https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html)
 
@@ -310,7 +310,7 @@ the table name.
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.scan">scan</a></code> | Return one or more items and item attributes by accessing every item in a table or a secondary index. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactGetItems">transactGetItems</a></code> | Perform a synchronous read operation that groups up to 100 item retrievals. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.transactWriteItems">transactWriteItems</a></code> | Perform a synchronous write operation that groups up to 100 action requests. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Get an item from the table. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableClientBase.updateItem">updateItem</a></code> | Edit an existing item's attributes, or add a new item to the table if it does not already exist. |
 
 ---
 
@@ -446,7 +446,7 @@ Perform a synchronous write operation that groups up to 100 action requests.
 updateItem(options: DynamodbTableUpdateItemOptions): DynamodbTableUpdateItemResult
 ```
 
-Get an item from the table.
+Edit an existing item's attributes, or add a new item to the table if it does not already exist.
 
 ###### `options`<sup>Required</sup> <a name="options" id="@winglang/sdk.ex.DynamodbTableClientBase.updateItem.parameter.options"></a>
 
@@ -2303,45 +2303,45 @@ let DynamodbTransactGetItem = ex.DynamodbTransactGetItem{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItem.property.get">get</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetProps">DynamodbTransactGetItemGetProps</a></code> | A request to perform a get operation. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItem.property.get">get</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetOptions">DynamodbTransactGetItemGetOptions</a></code> | A request to perform a get operation. |
 
 ---
 
 ##### `get`<sup>Optional</sup> <a name="get" id="@winglang/sdk.ex.DynamodbTransactGetItem.property.get"></a>
 
 ```wing
-get: DynamodbTransactGetItemGetProps;
+get: DynamodbTransactGetItemGetOptions;
 ```
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetProps">DynamodbTransactGetItemGetProps</a>
+- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetOptions">DynamodbTransactGetItemGetOptions</a>
 
 A request to perform a get operation.
 
 ---
 
-### DynamodbTransactGetItemGetProps <a name="DynamodbTransactGetItemGetProps" id="@winglang/sdk.ex.DynamodbTransactGetItemGetProps"></a>
+### DynamodbTransactGetItemGetOptions <a name="DynamodbTransactGetItemGetOptions" id="@winglang/sdk.ex.DynamodbTransactGetItemGetOptions"></a>
 
 Options for `DynamodbTable.transactGetItems`'s get operation.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTransactGetItemGetProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.Initializer"></a>
 
 ```wing
 bring ex;
 
-let DynamodbTransactGetItemGetProps = ex.DynamodbTransactGetItemGetProps{ ... };
+let DynamodbTransactGetItemGetOptions = ex.DynamodbTransactGetItemGetOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be retrieved. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.projectionExpression">projectionExpression</a></code> | <code>str</code> | A string that identifies one or more attributes to retrieve from the table. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.key">key</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The primary key of the item to be retrieved. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.expressionAttributeNames">expressionAttributeNames</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | One or more substitution tokens for attribute names in an expression. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.projectionExpression">projectionExpression</a></code> | <code>str</code> | A string that identifies one or more attributes to retrieve from the table. |
 
 ---
 
-##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.key"></a>
+##### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.key"></a>
 
 ```wing
 key: Json;
@@ -2353,7 +2353,7 @@ The primary key of the item to be retrieved.
 
 ---
 
-##### `expressionAttributeNames`<sup>Optional</sup> <a name="expressionAttributeNames" id="@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.expressionAttributeNames"></a>
+##### `expressionAttributeNames`<sup>Optional</sup> <a name="expressionAttributeNames" id="@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.expressionAttributeNames"></a>
 
 ```wing
 expressionAttributeNames: Json;
@@ -2366,7 +2366,7 @@ One or more substitution tokens for attribute names in an expression.
 
 ---
 
-##### `projectionExpression`<sup>Optional</sup> <a name="projectionExpression" id="@winglang/sdk.ex.DynamodbTransactGetItemGetProps.property.projectionExpression"></a>
+##### `projectionExpression`<sup>Optional</sup> <a name="projectionExpression" id="@winglang/sdk.ex.DynamodbTransactGetItemGetOptions.property.projectionExpression"></a>
 
 ```wing
 projectionExpression: str;
@@ -2443,7 +2443,7 @@ let DynamodbTransactWriteItem = ex.DynamodbTransactWriteItem{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.conditionCheck">conditionCheck</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemConditionCheckOptions">DynamodbTransactWriteItemConditionCheckOptions</a></code> | A request to perform a condition check operation. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.delete">delete</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemDeleteOptions">DynamodbTransactWriteItemDeleteOptions</a></code> | A request to perform a delete operation. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.put">put</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a></code> | A request to perform a put operation. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.put">put</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions">DynamodbTransactWriteItemPutOptions</a></code> | A request to perform a put operation. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItem.property.update">update</a></code> | <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemUpdateOptions">DynamodbTransactWriteItemUpdateOptions</a></code> | A request to perform a update operation. |
 
 ---
@@ -2475,10 +2475,10 @@ A request to perform a delete operation.
 ##### `put`<sup>Optional</sup> <a name="put" id="@winglang/sdk.ex.DynamodbTransactWriteItem.property.put"></a>
 
 ```wing
-put: DynamodbTransactWriteItemPutProps;
+put: DynamodbTransactWriteItemPutOptions;
 ```
 
-- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps">DynamodbTransactWriteItemPutProps</a>
+- *Type:* <a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions">DynamodbTransactWriteItemPutOptions</a>
 
 A request to perform a put operation.
 
@@ -2666,28 +2666,28 @@ Determines the level of detail about either provisioned or on-demand throughput 
 
 ---
 
-### DynamodbTransactWriteItemPutProps <a name="DynamodbTransactWriteItemPutProps" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutProps"></a>
+### DynamodbTransactWriteItemPutOptions <a name="DynamodbTransactWriteItemPutOptions" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions"></a>
 
 Options for transact write item's update operation.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions.Initializer"></a>
 
 ```wing
 bring ex;
 
-let DynamodbTransactWriteItemPutProps = ex.DynamodbTransactWriteItemPutProps{ ... };
+let DynamodbTransactWriteItemPutOptions = ex.DynamodbTransactWriteItemPutOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The values of the item to be put. |
-| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for the operation to succeed. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions.property.item">item</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The values of the item to be put. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions.property.conditionExpression">conditionExpression</a></code> | <code>str</code> | A condition that must be satisfied in order for the operation to succeed. |
 
 ---
 
-##### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.item"></a>
+##### `item`<sup>Required</sup> <a name="item" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions.property.item"></a>
 
 ```wing
 item: Json;
@@ -2699,7 +2699,7 @@ The values of the item to be put.
 
 ---
 
-##### `conditionExpression`<sup>Optional</sup> <a name="conditionExpression" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutProps.property.conditionExpression"></a>
+##### `conditionExpression`<sup>Optional</sup> <a name="conditionExpression" id="@winglang/sdk.ex.DynamodbTransactWriteItemPutOptions.property.conditionExpression"></a>
 
 ```wing
 conditionExpression: str;

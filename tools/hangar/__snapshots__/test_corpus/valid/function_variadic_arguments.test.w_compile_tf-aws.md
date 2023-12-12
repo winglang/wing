@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=inflight.A-1.js.map
 ```
 
 ## inflight.B-1.js
@@ -24,7 +24,7 @@ module.exports = function({ $A }) {
   }
   return B;
 }
-
+//# sourceMappingURL=inflight.B-1.js.map
 ```
 
 ## main.tf.json
@@ -97,20 +97,20 @@ module.exports = function({ $A }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class A extends $stdlib.std.Resource {
-      constructor(scope, id, msg) {
-        super(scope, id);
+      constructor($scope, $id, msg) {
+        super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.A-1.js")({
           })
@@ -127,19 +127,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class B extends A {
-      constructor(scope, id, msg) {
-        super(scope, id);
+      constructor($scope, $id, msg) {
+        super($scope, $id);
         this.message = msg;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.B-1.js")({
-            $A: ${context._lift(A)},
+            $A: ${$stdlib.core.liftObject(A)},
           })
         `;
       }
@@ -154,18 +154,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
-    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket1");
-    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket2");
-    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket3");
-    (bucket3.node.addDependency(bucket1,bucket2));
+    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");
+    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket2");
+    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
+    (bucket3.node.addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,2)))};
     });
-    (funcBucket(bucket1,bucket2));
+    (funcBucket(bucket1, bucket2));
     const func1 = ((x, y, ...args) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: y == \"something\" || y == nil")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,"something")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,undefined))))};
@@ -173,11 +173,11 @@ class $Root extends $stdlib.std.Resource {
       for (const i of args) {
         {((cond) => {if (!cond) throw new Error("assertion failed: i > 0 && i < 5")})(((i > 0) && (i < 5)))};
       }
-      (args.push(10));
-      {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((args.at(4)),10)))};
+      ((obj, args) => { obj.push(...args); })(args, [10]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10)))};
     });
-    (func1(1,"something",1,2,3,4));
-    (func1(1,undefined,1,2,3,4));
+    (func1(1, "something", 1, 2, 3, 4));
+    (func1(1, undefined, 1, 2, 3, 4));
     const addNums = ((...nums) => {
       let total = 0;
       for (const n of nums) {
@@ -185,27 +185,36 @@ class $Root extends $stdlib.std.Resource {
       }
       return total;
     });
-    {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1,2,3)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1, 2, 3)),6)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: addNums() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums()),0)))};
     const arityFunc = ((n, b, ...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(-1) == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at((-1))),"d")))};
+      let error = false;
+      try {
+        ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, (-1));
+      }
+      catch ($error_ex) {
+        const ex = $error_ex.message;
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     });
-    (arityFunc(1,true,"a","b","c","d"));
+    (arityFunc(1, true, "a", "b", "c", "d"));
     const subTypeFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)).message,"this is A")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)).message,"this is B")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message,"this is A")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message,"this is B")))};
     });
-    (subTypeFunc(new A(this,"A","this is A"),new B(this,"B","this is B")));
+    (subTypeFunc(new A(this, "A", "this is A"), new B(this, "B", "this is B")));
     const jsonCastingFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)),"str")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)),"json str")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0),"str")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1),"json str")))};
     });
     const jsonStr = "json str";
-    (jsonCastingFunc("str",jsonStr));
+    (jsonCastingFunc("str", jsonStr));
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "function_variadic_arguments.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "function_variadic_arguments.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

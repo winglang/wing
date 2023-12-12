@@ -7,15 +7,11 @@ import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
 test("inflight function uses a logger", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
 
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    `async handle() {
+  const inflight = Testing.makeHandler(`async handle() {
       console.log("hello world!");
-    }`
-  );
+    }`);
 
-  Function._newFunction(app, "Function", inflight);
+  new Function(app, "Function", inflight);
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 

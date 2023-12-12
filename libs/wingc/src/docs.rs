@@ -183,15 +183,17 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 	}
 
 	docs.custom.iter().for_each(|(k, v)| {
-		// skip "@inflight" because it is already included in the type system
-		if k == "inflight" {
-			return;
-		}
-		if k == "macro" {
-			return;
-		}
-		// marking types that are skipped/changed in the documentation, irrelevant to the language server
-		if k == "skipDocs" || k == "wingType" {
+		if matches!(
+			k.as_str(),
+			// Already included in wing's type system
+			"inflight"
+			// Implementation detail not needed for the user
+			| "macro"
+			// Psuedo-abstract marker, mostly useful internally
+			| "abstract"
+			// Marker type use, not for users
+			| "skipDocs" | "wingType"
+		) {
 			return;
 		}
 
@@ -217,7 +219,11 @@ fn render_signature_help(f: &FunctionSignature) -> String {
 		let param_type_unwrapped = param.typeref.maybe_unwrap_option();
 		let is_last = param_idx == f.parameters.len() - 1;
 
-		let param_name: &String = &param.name;
+		let param_name = if param.name.is_empty() {
+			format!("arg{}", param_idx)
+		} else {
+			param.name.clone()
+		};
 		let detail_text = if let Some(summary) = &param.docs.summary {
 			format!("— `{param_type}` — {summary}")
 		} else {

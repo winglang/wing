@@ -3,7 +3,7 @@ bring cloud;
 let initCount = new cloud.Counter();
 
 class Foo {
-  inflight init() {
+  inflight new() {
     initCount.inc();
   }
 
@@ -12,7 +12,7 @@ class Foo {
 
 class Bar {
   pub foo: Foo;
-  init() {
+  new() {
     this.foo = new Foo();
   }
 

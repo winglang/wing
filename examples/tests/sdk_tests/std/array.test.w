@@ -30,6 +30,34 @@ assert(buckets.at(0).node.id == "myBucket");
 test "at()" {
   assert(["hello"].at(0) == "hello");
   assert(MutArray<str>["hello", "world"].at(1) == "world");
+
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+  let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    ["hello"].at(-1);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    ["hello"].at(20);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    MutArray<str>["hello"].at(20);
+  });
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    MutArray<str>["hello"].at(-1);
+  });
 }
 
 //-----------------------------------------------------------------------------
@@ -45,6 +73,12 @@ let item = a.pop();
 assert(item == "world");
 assert(a.length == 1);
 assert(a.at(0) == "hello");
+let pushMultipleItems: MutArray<str> = MutArray<str> ["element1"];
+pushMultipleItems.push("element2", "element3");
+assert(pushMultipleItems.length == 3);
+assert(pushMultipleItems.at(0) == "element1");
+assert(pushMultipleItems.at(1) == "element2");
+assert(pushMultipleItems.at(2) == "element3");
 
 test "pushAndPop()" {
   let a = MutArray<str>["hello"];
@@ -57,6 +91,12 @@ test "pushAndPop()" {
   assert(item == "world");
   assert(a.length == 1);
   assert(a.at(0) == "hello");
+  let pushMultipleItems: MutArray<str> = MutArray<str> ["element1"];
+  pushMultipleItems.push("element2", "element3");
+  assert(pushMultipleItems.length == 3);
+  assert(pushMultipleItems.at(0) == "element1");
+  assert(pushMultipleItems.at(1) == "element2");
+  assert(pushMultipleItems.at(2) == "element3");
 }
 
 //-----------------------------------------------------------------------------

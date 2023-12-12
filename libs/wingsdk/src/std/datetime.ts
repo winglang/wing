@@ -1,4 +1,4 @@
-import { InflightClient } from "../core";
+import { InflightClient } from "../core/inflight";
 
 /**
  * Interface that is used for setting Datetime date
@@ -78,6 +78,16 @@ export class Datetime {
    */
   public static fromIso(iso: string): Datetime {
     return new Datetime(new Date(iso));
+  }
+
+  /**
+   * Create a Datetime from a JavaScript Date object.
+   *
+   * @param date The JavaScript Date object.
+   * @returns a new `Datetime` instance.
+   */
+  public static fromDate(date: Date): Datetime {
+    return this.fromIso(date.toISOString());
   }
 
   /**

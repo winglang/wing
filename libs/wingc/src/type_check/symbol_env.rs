@@ -378,7 +378,8 @@ impl SymbolEnv {
 				let partial_result = match env.lookup_ext(next_symb, statement_idx) {
 					LookupResult::Found(kind, info) => match info.access {
 						AccessModifier::Public => LookupResult::Found(kind, info),
-						_ => LookupResult::NotPublic(kind, info),
+						AccessModifier::Private => LookupResult::NotPublic(kind, info),
+						AccessModifier::Protected => panic!("symbols in namespaces cannot be protected"),
 					},
 					result => result,
 				};

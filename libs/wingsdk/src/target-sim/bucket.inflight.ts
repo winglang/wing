@@ -251,6 +251,24 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async copy(srcKey: string, dstKey: string): Promise<void> {
+    return this.context.withTrace({
+      message: `Copy (srcKey=${srcKey} to dstKey=${dstKey}).`,
+      activity: async () => {
+        if (!this.objectKeys.has(srcKey)) {
+          throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+        }
+
+        const dstValue = await this.get(srcKey);
+        const dstMetadata = await this.metadata(srcKey);
+
+        await this.put(dstKey, dstValue, {
+          contentType: dstMetadata.contentType ?? "application/octet-stream",
+        });
+      },
+    });
+  }
+
   private async addFile(
     key: string,
     value: string,
@@ -273,7 +291,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
     this._metadata[key] = {
       size: filestat.size,
-      lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
+      lastModified: Datetime.fromDate(filestat.mtime),
       contentType: determinedContentType,
     };
 

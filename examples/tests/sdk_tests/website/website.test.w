@@ -6,8 +6,8 @@ let w = new cloud.Website(path: "./website");
 let config = Json { json: 1 };
 let htmlContent = "<html>Hello World!</html>";
  
-let indexFile = fs.readFile("${w.path}/index.html");
-let otherFile = fs.readFile("${w.path}/inner-folder/other.html");
+let indexFile = fs.readFile("{w.path}/index.html");
+let otherFile = fs.readFile("{w.path}/inner-folder/other.html");
 
 w.addJson("config.json", config);
 w.addFile("another-file.html", htmlContent, contentType: "text/html");

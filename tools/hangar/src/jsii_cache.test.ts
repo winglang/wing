@@ -9,7 +9,8 @@ test("JSII manifest cache", async () => {
   // in addtion to regular manifest files
   const app = "bring_awscdk.test.w";
   const appFile = path.join(validTestDir, app);
-  const args = ["compile", "--target", "sim"];
+  const platforms = ["sim"];
+  const args = ["compile"];
   const manifestCacheExt = ".jsii.speedy";
 
   const awscdkLibDir = path.join(validTestDir, "node_modules", "aws-cdk-lib");
@@ -27,6 +28,7 @@ test("JSII manifest cache", async () => {
     await runWingCommand({
       cwd: validTestDir,
       wingFile: appFile,
+      platforms,
       args,
       expectFailure: false,
     });
