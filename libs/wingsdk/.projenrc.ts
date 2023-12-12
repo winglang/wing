@@ -186,6 +186,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 
 // Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
+  "@typescript-eslint/no-misused-promises": "error",
   "import/no-restricted-paths": [
     "error",
     {

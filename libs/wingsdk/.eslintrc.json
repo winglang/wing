@@ -131,6 +131,7 @@
         ]
       }
     ],
+    "@typescript-eslint/no-misused-promises": "error",
     "import/no-restricted-paths": [
       "error",
       {

@@ -140,48 +140,52 @@ export class Api
 
     this.app[method](
       transformRoutePath(route.path),
-      async (
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction
-      ) => {
-        this.addTrace(
-          `Processing "${route.method} ${route.path}" params=${JSON.stringify(
-            req.params
-          )}).`
-        );
-
-        const apiRequest = transformRequest(req);
-
-        try {
-          const response = await fnClient.invoke(
-            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-            apiRequest as unknown as string
+      asyncMiddleware(
+        async (
+          req: express.Request,
+          res: express.Response,
+          next: express.NextFunction
+        ) => {
+          this.addTrace(
+            `Processing "${route.method} ${route.path}" params=${JSON.stringify(
+              req.params
+            )}).`
           );
 
-          // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-          if (!isApiResponse(response)) {
-            throw new Error(
-              `Expected an ApiResponse struct, found ${JSON.stringify(
-                response
-              )}`
-            );
-          }
+          const apiRequest = transformRequest(req);
 
-          res.status(response.status);
-          for (const [key, value] of Object.entries(response.headers ?? {})) {
-            res.set(key, value);
+          try {
+            const response = await fnClient.invoke(
+              // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+              apiRequest as unknown as string
+            );
+
+            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+            if (!isApiResponse(response)) {
+              throw new Error(
+                `Expected an ApiResponse struct, found ${JSON.stringify(
+                  response
+                )}`
+              );
+            }
+
+            res.status(response.status);
+            for (const [key, value] of Object.entries(response.headers ?? {})) {
+              res.set(key, value);
+            }
+            if (response.body !== undefined) {
+              res.send(response.body);
+            } else {
+              res.end();
+            }
+            this.addTrace(
+              `${route.method} ${route.path} - ${response.status}.`
+            );
+          } catch (err) {
+            return next(err);
           }
-          if (response.body !== undefined) {
-            res.send(response.body);
-          } else {
-            res.end();
-          }
-          this.addTrace(`${route.method} ${route.path} - ${response.status}.`);
-        } catch (err) {
-          return next(err);
         }
-      }
+      )
     );
   }
 
@@ -218,4 +222,22 @@ function transformRequest(req: express.Request): ApiRequest {
 function transformRoutePath(route: string): string {
   // route validation is done in the preflight file
   return route.replace(/{/g, ":").replace(/}/g, "");
+}
+
+// express v4 doesn't natively handle async request handlers, so we need to
+// wrap them in a middleware function
+function asyncMiddleware(
+  fn: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => Promise<any>
+) {
+  return (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
 }

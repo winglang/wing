@@ -461,10 +461,7 @@ export class Simulator {
    * Start a server that allows any resource to be accessed via HTTP.
    */
   private async startServer(): Promise<void> {
-    const requestListener = async (
-      req: IncomingMessage,
-      res: ServerResponse
-    ) => {
+    const requestListener = (req: IncomingMessage, res: ServerResponse) => {
       if (!req.url?.startsWith("/v1/call")) {
         res.writeHead(404);
         res.end();

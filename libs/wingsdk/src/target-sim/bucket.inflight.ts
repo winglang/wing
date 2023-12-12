@@ -65,9 +65,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         throw new Error(`No file metadata file found at ${fileMetadataFile}`);
       }
 
-      const fileMetadata: Record<string, ObjectMetadata> = deserialize(
-        fs.readFileSync(fileMetadataFile, "utf-8")
+      const fileMetadataContents = await fs.promises.readFile(
+        fileMetadataFile,
+        "utf-8"
       );
+      const fileMetadata: Record<string, ObjectMetadata> =
+        deserialize(fileMetadataContents);
 
       for (const [key, value] of Object.entries(fileMetadata)) {
         this.objectKeys.add(key);
