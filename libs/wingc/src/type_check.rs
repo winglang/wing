@@ -3477,7 +3477,7 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(
 				name,
 				format!(
-					"Structs must be declared at the top-level of a program: Struct '{name}' is not defined at the top-level"
+					"struct {name} must be declared at the top-level of a file"
 				),
 			);
 		}
