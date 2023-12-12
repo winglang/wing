@@ -1,4 +1,5 @@
 import type { inferRouterInputs } from "@trpc/server";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
 import type { Express } from "express";
 
@@ -63,6 +64,7 @@ export interface CreateConsoleServerOptions {
   onExpressCreated?: (app: Express) => void;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  platform?: string[];
 }
 
 export const createConsoleServer = async ({
@@ -77,6 +79,7 @@ export const createConsoleServer = async ({
   onExpressCreated,
   requireAcceptTerms,
   layoutConfig,
+  platform,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -104,7 +107,7 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler(wingfile);
+  const compiler = createCompiler({ wingfile, platform });
   let isStarting = false;
   let isStopping = false;
 
@@ -170,7 +173,7 @@ export const createConsoleServer = async ({
     invalidateQuery("app.state");
     invalidateQuery("app.error");
   });
-  simulator.on("trace", (trace) => {
+  simulator.on("trace", async (trace) => {
     // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
     const message = `${
       trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
@@ -187,14 +190,22 @@ export const createConsoleServer = async ({
       });
     }
     if (trace.data.status === "failure") {
-      consoleLogger.error(trace.data.error.message, "user", {
+      let output = await prettyPrintError(trace.data.error);
+
+      // Remove ANSI color codes
+      const regex =
+        /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+      output = output.replaceAll(regex, "");
+
+      consoleLogger.error(output, "user", {
         sourceType: trace.sourceType,
         sourcePath: trace.sourcePath,
       });
     }
 
     if (
-      trace.sourceType === "wingsdk.cloud.Queue" &&
+      trace.sourceType === "@winglang/sdk.cloud.Queue" &&
       // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
       trace.data.message?.includes("Sending messages")
     ) {

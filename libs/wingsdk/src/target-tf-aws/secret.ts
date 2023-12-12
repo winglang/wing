@@ -42,11 +42,12 @@ export class Secret extends cloud.Secret {
     }
   }
 
-  /**
-   * Secret's arn
-   */
-  public get arn(): string {
-    return this.secret.arn;
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.SecretInflightMethods.VALUE,
+      cloud.SecretInflightMethods.VALUE_JSON,
+    ];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

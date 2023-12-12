@@ -16,7 +16,7 @@ lazy_static = "1.4"
 globset = "0.4"
 itertools = "0.11"
 phf = { version = "0.11", features = ["macros"] }
-indexmap = "2.0"
+indexmap = { version = "2.0", features = ["serde"] }
 aho-corasick = "1.1"
 lsp-types = "0.94"
 indoc = "2.0"
@@ -25,6 +25,8 @@ duplicate = "1.0"
 strum = { version = "0.25", features = ["derive"] }
 petgraph = "0.6"
 camino = "1.1"
+parcel_sourcemap = "2.1.1"
+regex = "1"
 
 [lib]
 crate-type = ["rlib", "cdylib"]

@@ -20,7 +20,7 @@ if util.env("WING_TARGET") == "sim" {
 
     pub s: cloud.Service;
 
-    init(body: str) {
+    new(body: str) {
       this.b = new cloud.Bucket();
       this.body = body;
 
@@ -28,8 +28,8 @@ if util.env("WING_TARGET") == "sim" {
         log("starting service");
         let server = MyService.createServer(this.body);
         let port = server.address().port;
-        log("listening on port ${port}");
-        this.b.put("port", "${port}");
+        log("listening on port {port}");
+        this.b.put("port", "{port}");
   
         return () => {
           log("closing server...");
@@ -48,13 +48,13 @@ if util.env("WING_TARGET") == "sim" {
   let foo = new MyService("bang bang!");
 
   test "http server is started with the service" {
-    let response = http.get("http://localhost:${foo.port()}");
-    log(response.body ?? "");
-    assert(response.body ?? "" == "bang bang!");
+    let response = http.get("http://localhost:{foo.port()}");
+    log(response.body);
+    assert(response.body == "bang bang!");
   }
 
   test "service.stop() closes the http server" {
-    let before = http.get("http://localhost:${foo.port()}");
+    let before = http.get("http://localhost:{foo.port()}");
     assert(before.ok);
     
     foo.s.stop();
@@ -62,7 +62,7 @@ if util.env("WING_TARGET") == "sim" {
     // now the http server is expected to be closed
     let var error = false;
     try {
-      http.get("http://localhost:${foo.port()}");
+      http.get("http://localhost:{foo.port()}");
     } catch {
       error = true;
     }

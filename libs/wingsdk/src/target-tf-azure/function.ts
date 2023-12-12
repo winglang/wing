@@ -12,13 +12,14 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageBlob } from "../.gen/providers/azurerm/storage-blob";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, IResource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Function names are limited to 32 characters.
@@ -44,7 +45,7 @@ export interface ScopedRoleAssignment {
 /**
  * Azure implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
@@ -52,7 +53,7 @@ export class Function extends cloud.Function {
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
   private readonly applicationInsights: ApplicationInsights;
-  private permissions?: Map<string, Set<ScopedRoleAssignment>>;
+  private permissions: Map<string, ScopedRoleAssignment> = new Map();
 
   constructor(
     scope: Construct,
@@ -89,7 +90,7 @@ export class Function extends cloud.Function {
 
     // throw an error if props.memory is defined for an Azure function
     if (props.memory) {
-      throw new Error("memory is an invalid parameter on Azure");
+      throw new NotImplementedError("memory is an invalid parameter on Azure");
     }
 
     // As per documentation "a function must have exactly one trigger" so for now
@@ -118,7 +119,12 @@ export class Function extends cloud.Function {
     );
     // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
     // const timeout = props.timeout ?? Duration.fromMinutes(1);
-
+    if (props.timeout) {
+      throw new NotImplementedError(
+        "Function.timeout is not implemented yet on tf-azure target.",
+        "https://github.com/winglang/wing/issues/4494"
+      );
+    }
     // Write host.json file to set function timeout (must be set in root of function app)
     // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
     // this means that timeout is set for all functions in the function app
@@ -176,27 +182,32 @@ export class Function extends cloud.Function {
       }) as any,
     });
 
-    // Add permissions to read function code
-    new RoleAssignment(this, `ReadLambdaCodeAssignment`, {
+    // Apply permissions from bound resources
+    for (const key of this.permissions.keys() || []) {
+      const scopedRoleAssignment = this.permissions?.get(
+        key
+      ) as ScopedRoleAssignment;
+      new RoleAssignment(this, `RoleAssignment${key}`, {
+        scope: scopedRoleAssignment.scope,
+        roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+        principalId: this.function.identity.principalId,
+      });
+    }
+
+    const roleAssignment = {
       principalId: this.function.identity.principalId,
       roleDefinitionName: StorageAccountPermissions.READ,
       scope: this.storageAccount.id,
-    });
+    };
+    // Add permissions to read function code
+    new RoleAssignment(this, `ReadLambdaCodeAssignment`, roleAssignment);
 
-    // Apply permissions from bound resources
-    for (const key of this.permissions?.keys() || []) {
-      for (const scopedRoleAssignment of this.permissions?.get(key) ?? []) {
-        new RoleAssignment(
-          this,
-          `RoleAssignment${key}${scopedRoleAssignment.roleDefinitionName}`,
-          {
-            scope: scopedRoleAssignment.scope,
-            roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
-            principalId: this.function.identity.principalId,
-          }
-        );
-      }
-    }
+    this.permissions.set(
+      `${this.storageAccount.node.addr.substring(-8)}_${
+        StorageAccountPermissions.READ
+      }`,
+      roleAssignment
+    );
   }
 
   /**
@@ -213,41 +224,31 @@ export class Function extends cloud.Function {
    * @param scopedRoleAssignment - The mapping of azure scope to role definition name.
    */
   public addPermission(
-    scopedResource: IResource,
+    scopedResource: Construct,
     scopedRoleAssignment: ScopedRoleAssignment
   ) {
-    if (!this.permissions) {
-      this.permissions = new Map();
-    }
     const uniqueId = scopedResource.node.addr.substring(-8);
+    const permissionsKey = `${uniqueId}_${scopedRoleAssignment.roleDefinitionName}`;
     // If the function has already been initialized attach the role assignment directly
     if (this.function) {
-      if (
-        this.permissions.has(uniqueId) &&
-        this.permissions.get(uniqueId)?.has(scopedRoleAssignment)
-      ) {
+      if (this.permissions.has(permissionsKey)) {
         return; // already exists
       }
 
-      new RoleAssignment(
-        this,
-        `RoleAssignment${uniqueId}${scopedRoleAssignment.roleDefinitionName}`,
-        {
-          scope: scopedRoleAssignment.scope,
-          roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
-          principalId: this.function.identity.principalId,
-        }
-      );
+      new RoleAssignment(this, `RoleAssignment${permissionsKey}`, {
+        scope: scopedRoleAssignment.scope,
+        roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+        principalId: this.function.identity.principalId,
+      });
     }
-    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
-    roleDefinitions.add(scopedRoleAssignment);
-    this.permissions.set(uniqueId, roleDefinitions);
+    this.permissions.set(permissionsKey, scopedRoleAssignment);
   }
 
   protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
+    lines.push('"use strict";');
     lines.push("module.exports = async function(context, req) {");
     lines.push(
       `  const body = await (${inflightClient}).handle(context.req.body ?? "");`
@@ -256,6 +257,11 @@ export class Function extends cloud.Function {
     lines.push(`};`);
 
     return lines;
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {

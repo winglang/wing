@@ -4,8 +4,9 @@ import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Node, Resource, Datetime, Duration } from "../std";
+import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -27,50 +28,21 @@ export interface BucketProps {
  * A cloud object store.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
+ * @abstract
  */
-export abstract class Bucket extends Resource {
-  /**
-   * Create a new bucket.
-   * @internal
-   */
-  public static _newBucket(
-    scope: Construct,
-    id: string,
-    props: BucketProps = {}
-  ): Bucket {
-    return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
-  }
-
+export class Bucket extends Resource {
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
+    if (new.target === Bucket) {
+      return Resource._newFromFactory(BUCKET_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Bucket";
     Node.of(this).description = "A cloud object store";
-
-    props;
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [
-      BucketInflightMethods.DELETE,
-      BucketInflightMethods.GET,
-      BucketInflightMethods.GET_JSON,
-      BucketInflightMethods.LIST,
-      BucketInflightMethods.PUT,
-      BucketInflightMethods.PUT_JSON,
-      BucketInflightMethods.PUBLIC_URL,
-      BucketInflightMethods.EXISTS,
-      BucketInflightMethods.TRY_GET,
-      BucketInflightMethods.TRY_GET_JSON,
-      BucketInflightMethods.TRY_DELETE,
-      BucketInflightMethods.SIGNED_URL,
-      BucketInflightMethods.METADATA,
-      BucketInflightMethods.COPY,
-    ];
   }
 
   /**
@@ -78,8 +50,13 @@ export abstract class Bucket extends Resource {
    *
    * TODO: In the future this will support uploading any `Blob` type or
    * referencing a file from the local filesystem.
+   * @abstract
    */
-  public abstract addObject(key: string, body: string): void;
+  public addObject(key: string, body: string): void {
+    key;
+    body;
+    throw new AbstractMemberError();
+  }
 
   /**
    * Add a file to the bucket from system folder
@@ -110,10 +87,7 @@ export abstract class Bucket extends Resource {
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const topic = Topic._newTopic(
-      this,
-      `${this.node.id}-${actionType.toLowerCase()}`
-    );
+    const topic = new Topic(this, actionType.toLowerCase());
 
     this.node.addDependency(topic);
 
@@ -156,11 +130,8 @@ export abstract class Bucket extends Resource {
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IResource {
-    const hash = inflight.node.addr.slice(-8);
+  ): IInflight {
     return convertBetweenHandlers(
-      this,
-      `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
       inflight,
       // since uses __dirname should be specified under the target directory
       this.eventHandlerLocation(),
@@ -178,7 +149,7 @@ export abstract class Bucket extends Resource {
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnCreateProps
+    opts?: BucketOnCreateOptions
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
@@ -201,9 +172,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void {
     if (opts) {
-      console.warn("bucket.onCreate does not support props yet");
+      console.warn("bucket.onCreate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
@@ -211,9 +182,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void {
     if (opts) {
-      console.warn("bucket.onDelete does not support props yet");
+      console.warn("bucket.onDelete does not support options yet");
     }
     this.createBucketEvent([BucketEventType.DELETE], fn, opts);
   }
@@ -221,9 +192,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void {
     if (opts) {
-      console.warn("bucket.onUpdate does not support props yet");
+      console.warn("bucket.onUpdate does not support options yet");
     }
     this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
   }
@@ -231,9 +202,9 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void {
     if (opts) {
-      console.warn("bucket.onEvent does not support props yet");
+      console.warn("bucket.onEvent does not support options yet");
     }
     this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
@@ -309,7 +280,7 @@ export interface IBucketClient {
    * @param options Additional options
    * @inflight
    */
-  put(key: string, body: string, options?: BucketPutOptions): void;
+  put(key: string, body: string, options?: BucketPutOptions): Promise<void>;
 
   /**
    * Put a Json object in the bucket.
@@ -417,22 +388,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateProps {}
+export interface BucketOnCreateOptions {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteProps {}
+export interface BucketOnDeleteOptions {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {}
+export interface BucketOnUpdateOptions {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventProps {}
+export interface BucketOnEventOptions {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
@@ -440,7 +411,7 @@ export interface BucketOnEventProps {}
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler extends IInflight {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

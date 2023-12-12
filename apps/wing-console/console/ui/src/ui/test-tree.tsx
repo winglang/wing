@@ -15,23 +15,33 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { useMemo } from "react";
 
 import { TestItem } from "../shared/test-item.js";
+
+import { NoTests } from "./no-tests.js";
+
 export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
   onSelectedItemsChange?: (ids: string[]) => void;
-  selectedItems?: string[];
+  selectedItemId?: string;
 }
+
 export const TestTree = ({
   testList,
   handleRunTest,
   handleRunAllTests,
   onSelectedItemsChange,
-  selectedItems,
+  selectedItemId,
 }: TestTreeProps) => {
   const { theme } = useTheme();
+
+  const selectedItems = useMemo(
+    () => (selectedItemId ? [selectedItemId] : undefined),
+    [selectedItemId],
+  );
 
   return (
     <div
@@ -39,13 +49,15 @@ export const TestTree = ({
       data-testid="test-tree-menu"
     >
       <Toolbar title="Tests">
-        <ToolbarButton
-          onClick={() => handleRunAllTests()}
-          title="Run All Tests"
-          disabled={testList.length === 0}
-        >
-          <PlayAllIcon className="w-4 h-4" />
-        </ToolbarButton>
+        {testList.length > 0 && (
+          <ToolbarButton
+            onClick={handleRunAllTests}
+            title="Run All Tests"
+            disabled={testList.length === 0}
+          >
+            <PlayAllIcon className="w-4 h-4" />
+          </ToolbarButton>
+        )}
       </Toolbar>
 
       <div className="relative grow">
@@ -59,16 +71,7 @@ export const TestTree = ({
             )}
           >
             <div className="flex flex-col">
-              {testList.length === 0 && (
-                <div
-                  className={classNames(
-                    theme.text2,
-                    "text-2xs px-3 py-2 font-mono",
-                  )}
-                >
-                  No Tests
-                </div>
-              )}
+              {testList.length === 0 && <NoTests />}
               <TreeView
                 selectedItems={selectedItems}
                 onSelectedItemsChange={onSelectedItemsChange}

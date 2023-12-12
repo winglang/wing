@@ -1,6 +1,6 @@
 class Foo {
   inflight1: inflight (): num;
-  init() {
+  new() {
     // here is an inflight function created during preflight
     this.inflight1 = inflight (): num => {
       return 1;
@@ -8,7 +8,7 @@ class Foo {
   }
 
   inflight inflight2: inflight (): num;
-  inflight init() {
+  inflight new() {
     // here is an inflight function created during inflight
     this.inflight2 = (): num => {
       return 2;

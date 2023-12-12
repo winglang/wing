@@ -97,6 +97,7 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
@@ -364,8 +365,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for (name, val) in fields.iter() {
-				v.visit_symbol(name);
+			for (key, val) in fields.iter() {
+				v.visit_expr(key);
 				v.visit_expr(val);
 			}
 		}

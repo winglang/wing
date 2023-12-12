@@ -82,6 +82,7 @@ fn compile_code(code: &str) -> String {
 			let files = files
 				.filter(|f| f.is_ok())
 				.map(|f| f.unwrap().path())
+				.filter(|f| f.extension().unwrap_or_default() != "map")
 				.sorted_by_key(|f| f.as_os_str().to_string_lossy().to_string())
 				.collect::<Vec<_>>();
 

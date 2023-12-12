@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflightHost, IResource, Node, Resource } from "../std";
+import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -29,7 +29,7 @@ export interface FunctionProps {
 
   /**
    * The amount of memory to allocate to the function, in MB.
-   * @default 128
+   * @default 1024
    */
   readonly memory?: number;
 
@@ -45,27 +45,15 @@ export interface FunctionProps {
  * A function.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
+ * @abstract
  */
-export abstract class Function extends Resource implements IInflightHost {
-  /**
-   * Creates a new cloud.Function instance through the app.
-   * @internal
-   */
-  public static _newFunction(
-    scope: Construct,
-    id: string,
-    handler: IFunctionHandler,
-    props: FunctionProps = {}
-  ): Function {
-    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
-  }
-
+export class Function extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
 
   /**
    * The path to the entrypoint source code of the function.
    */
-  protected readonly entrypoint: string;
+  protected readonly entrypoint!: string;
 
   constructor(
     scope: Construct,
@@ -73,6 +61,10 @@ export abstract class Function extends Resource implements IInflightHost {
     handler: IFunctionHandler,
     props: FunctionProps = {}
   ) {
+    if (new.target === Function) {
+      return Resource._newFromFactory(FUNCTION_FQN, scope, id, handler, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "Function";
@@ -106,11 +98,6 @@ export abstract class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
-  }
-
-  /** @internal */
-  public _getInflightOps(): string[] {
-    return [FunctionInflightMethods.INVOKE];
   }
 
   /**
@@ -167,7 +154,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource {}
+export interface IFunctionHandler extends IInflight {}
 
 /**
  * Inflight client for `IFunctionHandler`.

@@ -1,7 +1,8 @@
 import { promises as fsPromise } from "fs";
-import { relative } from "path";
+import { relative, resolve } from "path";
 
 import * as wingCompiler from "@winglang/compiler";
+import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error";
 import chalk from "chalk";
 import { CHARS_ASCII, emitDiagnostic, File, Label } from "codespan-wasm";
 import debug from "debug";
@@ -19,14 +20,10 @@ const log = debug("wing:compile");
  */
 export interface CompileOptions {
   /**
-   * Target plaform
-   * @default wingCompiler.Target.SIM
+   * Target platform
+   * @default wingCompiler.BuiltinPlatform.SIM
    */
-  readonly target?: wingCompiler.Target;
-  /**
-   * List of compiler plugins
-   */
-  readonly plugins?: string[];
+  readonly platform: string[];
   /**
    * App root id
    *
@@ -66,7 +63,7 @@ export interface CompileOptions {
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
-    const wingFiles = await glob("{main,*.main}.w");
+    const wingFiles = (await glob("{main,*.main}.w")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
         "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
@@ -88,7 +85,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       ...options,
       log,
       color: coloring,
-      target: options?.target || wingCompiler.Target.SIM,
+      platform: options?.platform ?? ["sim"],
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
@@ -98,7 +95,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       const result = [];
 
       for (const diagnostic of diagnostics) {
-        const { message, span, annotations } = diagnostic;
+        const { message, span, annotations, hints } = diagnostic;
         const files: File[] = [];
         const labels: Label[] = [];
 
@@ -148,6 +145,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
             message,
             severity: "error",
             labels,
+            notes: hints.map((hint) => `hint: ${hint}`),
           },
           {
             chars: CHARS_ASCII,
@@ -158,69 +156,24 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       }
       throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
-      const causedBy = annotatePreflightError(error.causedBy);
-
-      const output = new Array<string>();
-
-      output.push(chalk.red(`ERROR: ${causedBy.message}`));
-
-      if (causedBy.stack && causedBy.stack.includes("evalmachine.<anonymous>:")) {
-        const lineNumber =
-          Number.parseInt(causedBy.stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
-        const relativeArtifactPath = relative(process.cwd(), error.artifactPath);
-        log("relative artifact path: %s", relativeArtifactPath);
-
-        output.push("");
-        output.push(chalk.underline(chalk.dim(`${relativeArtifactPath}:${lineNumber}`)));
-
-        const lines = error.artifact.split("\n");
-        let startLine = Math.max(lineNumber - 2, 0);
-        let finishLine = Math.min(lineNumber + 2, lines.length - 1);
-
-        // print line and its surrounding lines
-        for (let i = startLine; i <= finishLine; i++) {
-          if (i === lineNumber) {
-            output.push(chalk.bold.red(">> ") + chalk.red(lines[i]));
-          } else {
-            output.push("   " + chalk.dim(lines[i]));
-          }
-        }
-
-        output.push("");
-      }
+      let output = await prettyPrintError(error.causedBy, {
+        chalk,
+        sourceEntrypoint: resolve(entrypoint ?? "."),
+      });
 
       if (process.env.DEBUG) {
-        output.push(
-          "--------------------------------- STACK TRACE ---------------------------------"
-        );
-        output.push(causedBy.stack ?? "");
+        output +=
+          "\n--------------------------------- ORIGINAL STACK TRACE ---------------------------------\n" +
+          (error.stack ?? "(no stacktrace available)");
       }
 
-      throw new Error(output.join("\n"));
+      error.causedBy.message = output;
+
+      throw error.causedBy;
     } else {
       throw error;
     }
   }
-}
-
-function annotatePreflightError(error: Error): Error {
-  if (error.message.startsWith("There is already a Construct with name")) {
-    const newMessage = [];
-    newMessage.push(error.message);
-    newMessage.push(
-      "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
-    );
-    newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push(
-      "For more information, see https://www.winglang.io/docs/concepts/application-tree"
-    );
-
-    const newError = new Error(newMessage.join("\n\n"), { cause: error });
-    newError.stack = error.stack;
-    return newError;
-  }
-
-  return error;
 }
 
 function byteOffsetFromLineAndColumn(source: string, line: number, column: number) {

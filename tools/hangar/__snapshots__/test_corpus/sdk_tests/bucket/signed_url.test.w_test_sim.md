@@ -2,12 +2,20 @@
 
 ## stdout.log
 ```log
-pass ─ signed_url.test.wsim » root/env0/test:signedUrl                     
-pass ─ signed_url.test.wsim » root/env1/test:signedUrl for non existent key
+runtime error: Resource root/env0/testBucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl/Handler).
+It might not be implemented yet.
+  --> signed_url.test.w:7:18
+  | 
+  | let testBucket = new cloud.Bucket(public: true) as "testBucket";
+  | 
+7 | test "signedUrl" {
+  |                  ^
+at _registerOnLift (<ABSOLUTE>:LINE:COL)
+at (<ABSOLUTE>:LINE:COL)
  
  
-Tests 2 passed (2)
-Test Files 1 passed (1)
+Tests 1 unsupported (1)
+Test Files 1 unsupported (1)
 Duration <DURATION>
 ```
 

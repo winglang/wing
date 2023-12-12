@@ -1,8 +1,11 @@
+import { basename } from "path";
+import { determineTargetFromPlatforms } from "@winglang/compiler";
 import { Command } from "commander";
 import { Collector } from "./collector";
 import { PACKAGE_VERSION } from "../../cli";
 
 export interface CLIData {
+  platform: string;
   target: string;
   version: string;
   options: string;
@@ -20,8 +23,11 @@ export class CLICollector extends Collector {
   }
 
   async collect(): Promise<CLIData> {
+    const platform: string[] = this.cmd.opts().platform ?? [];
+
     return {
-      target: this.cmd.opts().target,
+      platform: platform.map((p: string) => basename(p)).join(","), // only report the platform name, not the full path
+      target: determineTargetFromPlatforms(platform),
       options: `${JSON.stringify(this.cmd.opts())}`,
       version: PACKAGE_VERSION,
       wing_sdk_version: this.tryGetModuleVersion("@winglang/sdk/package.json"),

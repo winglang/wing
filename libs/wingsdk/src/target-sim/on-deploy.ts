@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
+import { OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -16,7 +16,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    this.fn = cloud.Function._newFunction(this, "Function", handler, props);
+    this.fn = new cloud.Function(this, "Function", handler, props);
     Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
@@ -32,7 +32,7 @@ export class OnDeploy extends cloud.OnDeploy {
 
   public toSimulator(): BaseResourceSchema {
     const schema: OnDeploySchema = {
-      type: ON_DEPLOY_TYPE,
+      type: cloud.ON_DEPLOY_FQN,
       path: this.node.path,
       props: {
         functionHandle: simulatorHandleToken(this.fn),

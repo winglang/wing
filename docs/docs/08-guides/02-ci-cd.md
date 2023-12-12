@@ -4,7 +4,7 @@ id: ci-cd
 keywords: [CICD, Continuous Integration, Continuous Deployment, Deployment, GitHub Actions]
 ---
 
-Wing supports compilation to various targets including `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`. After compilation, Wing does not impose a specific deployment method for your infrastructure. Its Terraform target compatibility ensures that nearly all existing services can be utilized for deployment, offering considerable flexibility to choose the approach best aligned with your organizational needs or preferences.
+Wing supports compilation to various targets including `tf-aws`, `tf-azure`, and `tf-gcp`. After compilation, Wing does not impose a specific deployment method for your infrastructure. Its Terraform target compatibility ensures that nearly all existing services can be utilized for deployment, offering considerable flexibility to choose the approach best aligned with your organizational needs or preferences.
 
 This guide will detail the complete deployment lifecycle of a Wing application using GitHub Actions and the `tf-aws` target.
 

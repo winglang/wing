@@ -242,9 +242,42 @@ File's content type.
 
 ---
 
-### WebsiteOptions <a name="WebsiteOptions" id="@winglang/sdk.cloud.WebsiteOptions"></a>
+### WebsiteDomainOptions <a name="WebsiteDomainOptions" id="@winglang/sdk.cloud.WebsiteDomainOptions"></a>
 
 Options for `Website`, and `ReactApp`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteDomainOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let WebsiteDomainOptions = cloud.WebsiteDomainOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebsiteDomainOptions.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.cloud.Domain">Domain</a></code> | The website's custom domain object. |
+
+---
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteDomainOptions.property.domain"></a>
+
+```wing
+domain: Domain;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.Domain">Domain</a>
+- *Default:* undefined
+
+The website's custom domain object.
+
+---
+
+### WebsiteOptions <a name="WebsiteOptions" id="@winglang/sdk.cloud.WebsiteOptions"></a>
+
+Basic options for `Website`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteOptions.Initializer"></a>
 
@@ -258,22 +291,28 @@ let WebsiteOptions = cloud.WebsiteOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.cloud.Domain">Domain</a></code> | The website's custom domain object. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
 
 ---
 
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteOptions.property.domain"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.WebsiteOptions.property.path"></a>
 
 ```wing
-domain: Domain;
+path: str;
 ```
 
-- *Type:* <a href="#@winglang/sdk.cloud.Domain">Domain</a>
-- *Default:* undefined
+- *Type:* str
 
-The website's custom domain object.
+Local path to the website's static files, relative to the Wing source file or absolute.
 
 ---
+
+*Example*
+
+```wing
+"./dist"
+```
+
 
 ### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
 
@@ -291,21 +330,8 @@ let WebsiteProps = cloud.WebsiteProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.cloud.Domain">Domain</a></code> | The website's custom domain object. |
 | <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
-
----
-
-##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteProps.property.domain"></a>
-
-```wing
-domain: Domain;
-```
-
-- *Type:* <a href="#@winglang/sdk.cloud.Domain">Domain</a>
-- *Default:* undefined
-
-The website's custom domain object.
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.cloud.Domain">Domain</a></code> | The website's custom domain object. |
 
 ---
 
@@ -327,6 +353,19 @@ Local path to the website's static files, relative to the Wing source file or ab
 "./dist"
 ```
 
+
+##### `domain`<sup>Optional</sup> <a name="domain" id="@winglang/sdk.cloud.WebsiteProps.property.domain"></a>
+
+```wing
+domain: Domain;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.Domain">Domain</a>
+- *Default:* undefined
+
+The website's custom domain object.
+
+---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 

@@ -8,7 +8,7 @@ source: libs/wingc/src/jsify/tests.rs
     bring cloud;
     class Foo {
       arr: Array<cloud.Bucket>;
-      init() {
+      new() {
         this.arr = [new cloud.Bucket()];
       }
 
@@ -25,15 +25,16 @@ source: libs/wingc/src/jsify/tests.rs
 "use strict";
 module.exports = function({  }) {
   class Foo {
-    constructor({ $_this_arr_at_0__ }) {
-      this.$_this_arr_at_0__ = $_this_arr_at_0__;
+    constructor({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ }) {
+      this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_;
     }
     async foo() {
-      (await this.$_this_arr_at_0__.put("hello","world"));
+      (await this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_.put("hello", "world"));
     }
   }
   return Foo;
 }
+//# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## preflight.js
@@ -41,20 +42,20 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
-  constructor(scope, id) {
-    super(scope, id);
+  constructor($scope, $id) {
+    super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.arr = [this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket")];
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.arr = [this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket")];
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
           })
@@ -65,29 +66,31 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $_this_arr_at_0__: ${this._lift((this.arr.at(0)))},
+              $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _getInflightOps() {
-        return ["foo", "$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject((this.arr.at(0)), host, []);
+          Foo._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), host, []);
         }
         if (ops.includes("foo")) {
-          Foo._registerOnLiftObject((this.arr.at(0)), host, ["put"]);
+          Foo._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arr, 0), host, ["put"]);
         }
         super._registerOnLift(host, ops);
       }
     }
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

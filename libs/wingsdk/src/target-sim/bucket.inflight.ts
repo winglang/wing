@@ -251,17 +251,22 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  /**
-   * Copy object within the container
-   *
-   * @param srcKey The key of the source object you wish to copy.
-   * @param dstKey The key of the destination object after copying.
-   * @throws if `srcKey` object doesn't exist.
-   */
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    return this.context.withTrace({
+      message: `Copy (srcKey=${srcKey} to dstKey=${dstKey}).`,
+      activity: async () => {
+        if (!this.objectKeys.has(srcKey)) {
+          throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+        }
+
+        const dstValue = await this.get(srcKey);
+        const dstMetadata = await this.metadata(srcKey);
+
+        await this.put(dstKey, dstValue, {
+          contentType: dstMetadata.contentType ?? "application/octet-stream",
+        });
+      },
+    });
   }
 
   private async addFile(
@@ -286,7 +291,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
     this._metadata[key] = {
       size: filestat.size,
-      lastModified: Datetime.fromIso(filestat.mtime.toISOString()),
+      lastModified: Datetime.fromDate(filestat.mtime),
       contentType: determinedContentType,
     };
 

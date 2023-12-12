@@ -1,5 +1,6 @@
 import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
+import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
@@ -11,16 +12,19 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "aws", "math", "regex", "sim"];
+// those will be skipped out of the docs
+const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const publicModules = Object.keys(cloud).filter(
+  (item) => !SKIPPED_MODULES.includes(item)
+);
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
+const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/03-std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
-const TARGET_DEPS = {
-  awscdk: ["aws-cdk-lib@^2.64.0"],
-};
+const TARGET_DEPS: { [key: string]: string[] } = {};
 
 // we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
 // from the "package.json" just before we bundle the package and the Wing CLI will require the user
@@ -53,23 +57,20 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.405.0",
-    "@aws-sdk/client-dynamodb@3.405.0",
-    "@aws-sdk/client-elasticache@3.405.0",
-    "@aws-sdk/util-dynamodb@3.405.0",
-    "@aws-sdk/client-lambda@3.405.0",
-    "@aws-sdk/client-s3@3.405.0",
-    "@aws-sdk/client-secrets-manager@3.405.0",
-    "@aws-sdk/client-sqs@3.405.0",
-    "@aws-sdk/client-sns@3.405.0",
-    "@aws-sdk/types@3.398.0",
-    "@aws-sdk/util-stream-node@3.350.0",
-    "@aws-sdk/util-utf8-node@3.259.0",
-    "@aws-sdk/s3-request-presigner@3.405.0",
+    "@aws-sdk/client-cloudwatch-logs@3.449.0",
+    "@aws-sdk/client-dynamodb@3.449.0",
+    "@aws-sdk/client-elasticache@3.449.0",
+    "@aws-sdk/util-dynamodb@3.449.0",
+    "@aws-sdk/client-lambda@3.449.0",
+    "@aws-sdk/client-secrets-manager@3.449.0",
+    "@aws-sdk/client-sqs@3.449.0",
+    "@aws-sdk/client-sns@3.449.0",
+    "@aws-sdk/client-s3@3.449.0",
+    "@aws-sdk/s3-request-presigner@3.449.0",
+    "@aws-sdk/types@3.449.0",
+    "@smithy/util-stream@2.0.17",
+    "@smithy/util-utf8@2.0.0",
     "@types/aws-lambda",
-    // the following 2 deps are required by @aws-sdk/util-utf8-node
-    "@aws-sdk/util-buffer-from@3.208.0",
-    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
@@ -78,9 +79,11 @@ const project = new cdk.JsiiProject({
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
+    "google-auth-library",
     // simulator dependencies
     "express",
     "uuid",
+    "undici",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
@@ -89,6 +92,8 @@ const project = new cdk.JsiiProject({
     "jsonschema",
     // fs module dependency
     "yaml",
+    // enhanced diagnostics
+    "stacktracey",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -108,6 +113,7 @@ const project = new cdk.JsiiProject({
     "@types/uuid",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    "chalk",
     ...JSII_DEPS,
   ],
   jest: false,
@@ -134,6 +140,7 @@ project.eslint?.addOverride({
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen");
+project.deps.removeDependency("jsii-rosetta");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -241,9 +248,8 @@ project.tasks
 
 // --------------- docs -----------------
 
-const docsPrefix = (idx: number, name: string) => {
-  const prefix = idx.toString().padStart(2, "0");
-  return `../../docs/docs/04-standard-library/${prefix}-${name}`;
+const docsPrefix = (name: string) => {
+  return `../../docs/docs/04-standard-library/${name}`;
 };
 const docsFrontMatter = (name: string) => `---
 title: API reference
@@ -265,8 +271,8 @@ docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
-for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 3, mod);
+for (const mod of publicModules) {
+  const prefix = docsPrefix(mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
@@ -277,11 +283,15 @@ for (const mod of PUBLIC_MODULES) {
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const UNDOCUMENTED_EX_FILES = ["index"];
 
+const toCamelCase = (str: string) =>
+  str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
+
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
   docsPath: string,
-  excludedFiles: string[] = []
+  excludedFiles: string[] = [],
+  allowUndocumented = false
 ) {
   const cloudFiles = readdirSync(pathToFolder);
 
@@ -295,7 +305,7 @@ function generateResourceApiDocs(
     (file) => !cloudFiles.includes(`${file}.md`)
   );
 
-  if (undocumentedResources.length) {
+  if (undocumentedResources.length && !allowUndocumented) {
     throw new Error(
       `Detected undocumented resources: ${undocumentedResources.join(
         ", "
@@ -305,6 +315,14 @@ function generateResourceApiDocs(
 
   // generate api reference for each cloud/submodule and append it to the doc file
   for (const mod of cloudResources) {
+    if (undocumentedResources.includes(mod)) {
+      // adding a title
+      docgen.exec(
+        `echo "---\ntitle: ${toCamelCase(mod)}\nid: ${toCamelCase(
+          mod
+        )}\n---\n\n" > ${docsPath}${mod}.md`
+      );
+    }
     docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
     docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
   }
@@ -321,6 +339,14 @@ generateResourceApiDocs(
   "./src/ex",
   EX_DOCS_PREFIX,
   UNDOCUMENTED_EX_FILES
+);
+
+generateResourceApiDocs(
+  "std",
+  "./src/std",
+  STD_DOCS_PREFIX,
+  ["README", "index", "test-runner", "resource", "test", "range", "generics"],
+  true
 );
 
 docgen.exec("rm API.md");

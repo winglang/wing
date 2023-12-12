@@ -23,7 +23,7 @@ describe("Testing ReactApp", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
-    ex.ReactApp._newReactApp(app, "Website", {
+    new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
     });
 
@@ -63,7 +63,7 @@ describe("Testing ReactApp", () => {
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
-      ex.ReactApp._newReactApp(app, "Website", {
+      new ex.ReactApp(app, "Website", {
         projectPath: "/absolute/non-existent",
       });
       app.synth();
@@ -75,7 +75,7 @@ describe("Testing ReactApp", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
-    const website = ex.ReactApp._newReactApp(app, "Website", {
+    const website = new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
     });
 
@@ -117,7 +117,7 @@ describe("Testing ReactApp", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
-    const website = ex.ReactApp._newReactApp(app, "Website", {
+    const website = new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       useBuildCommand: false,
     });
@@ -135,7 +135,7 @@ describe("Testing ReactApp", () => {
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
-    ex.ReactApp._newReactApp(app, "Website", {
+    new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
       buildCommand: CUSTOM_COMMAND,
     });

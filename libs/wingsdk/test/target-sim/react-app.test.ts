@@ -55,7 +55,7 @@ describe("Testing ReactApp", () => {
   test("website builds and serves static files", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactApp._newReactApp(app, "website", {
+    new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       useBuildCommand: true,
     });
@@ -92,7 +92,7 @@ window.wingEnv = {};`);
   test("adding an env var to the website ", async () => {
     // GIVEN
     const app = new SimApp();
-    const website = ex.ReactApp._newReactApp(app, "website", {
+    const website = new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       useBuildCommand: true,
     });
@@ -133,7 +133,7 @@ window.wingEnv = {
   test("running React App on dev mode", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactApp._newReactApp(app, "website", {
+    new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
     });
 
@@ -149,7 +149,7 @@ window.wingEnv = {
   test("running React App on dev mode on custom port", async () => {
     // GIVEN
     const app = new SimApp();
-    ex.ReactApp._newReactApp(app, "website", {
+    new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       useBuildCommand: false,
       localPort: 4032,
@@ -168,7 +168,7 @@ window.wingEnv = {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new SimApp();
-    ex.ReactApp._newReactApp(app, "website", {
+    new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       startCommand: CUSTOM_COMMAND,
       useBuildCommand: false,
@@ -187,7 +187,7 @@ window.wingEnv = {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
     const app = new SimApp();
-    ex.ReactApp._newReactApp(app, "website", {
+    new ex.ReactApp(app, "website", {
       projectPath: resolve(__dirname, "../test-files/react-website"),
       buildCommand: CUSTOM_COMMAND,
       useBuildCommand: true,

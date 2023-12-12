@@ -1,9 +1,10 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -22,27 +23,24 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   public onMessage(
     inflight: cloud.ITopicOnMessageHandler,
-    props: cloud.TopicOnMessageProps = {}
+    props: cloud.TopicOnMessageOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
-      `${this.node.id}-OnMessage-${hash}`,
+      App.of(this).makeId(this, "OnMessage"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "onMessage()";
 
-    new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "TopicEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {},
@@ -67,9 +65,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
-      type: TOPIC_TYPE,
+      type: cloud.TOPIC_FQN,
       path: this.node.path,
       props: {},
       attrs: {} as any,

@@ -125,10 +125,6 @@
       "type": "runtime"
     },
     {
-      "name": "jsii-rosetta",
-      "type": "runtime"
-    },
-    {
       "name": "semver",
       "type": "runtime"
     },
