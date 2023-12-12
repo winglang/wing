@@ -47,14 +47,14 @@ struct Showtime extends Razzle, Dazzle {}
 let x = new cloud.BucketProps(1);
           //^ Cannot instantiate type "BucketProps" because it is not a class
 
-let x = (): str => {
+let inlinePreflightStruct = (): str => {
   struct PreflightStruct {
       // ^ Structs must be declared at the top-level of a program: Struct PreflightStruct is not defined at the top-level
     name: str;
   }
 };
           
-let y = inflight (): str => {
+let inlineInflightStruct = inflight (): str => {
   struct InflightStruct {
       // ^ Structs must be declared at the top-level of a program: Struct InflightStruct is not defined at the top-level
     name: str;
