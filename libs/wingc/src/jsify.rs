@@ -11,9 +11,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
-		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
+		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
+		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -827,39 +827,50 @@ impl<'a> JSifier<'a> {
 	fn jsify_elif_statements(
 		&self,
 		code: &mut CodeMaker,
-		elif_statements: &Vec<ElifLetBlock>,
+		elif_statements: &Vec<Elifs>,
 		index: usize,
 		else_statements: &Option<Scope>,
 		ctx: &mut JSifyContext,
 	) {
-		let elif_let_value = "$elif_let_value";
+		match elif_statements.get(index).unwrap() {
+			Elifs::ElifLetBlock(elif_let_to_jsify) => {
+				// Emit a JavaScript "else {" for each Wing "elif_let_block",
+				// and emit the closing "}" bracket in jsify_statement()'s StmtKind::IfLet match case
+				code.open("else {");
+				let elif_let_value = "$elif_let_value";
 
-		let value = format!("{}{}", elif_let_value, index);
-		let elif_block = elif_statements.get(index).unwrap();
+				let value = format!("{}{}", elif_let_value, index);
 
-		code.line(new_code!(
-			&elif_block.value.span,
-			"const ",
-			value,
-			" = ",
-			self.jsify_expression(&elif_block.value, ctx),
-			";"
-		));
-		let value = format!("{}{}", elif_let_value, index);
-		code.open(format!("if ({value} != undefined) {{"));
-		if elif_block.reassignable {
-			code.line(format!("let {} = {};", elif_block.var_name, value));
-		} else {
-			code.line(format!("const {} = {};", elif_block.var_name, value));
+				code.line(new_code!(
+					&elif_let_to_jsify.value.span,
+					"const ",
+					value,
+					" = ",
+					self.jsify_expression(&elif_let_to_jsify.value, ctx),
+					";"
+				));
+				let value = format!("{}{}", elif_let_value, index);
+				code.open(format!("if ({value} != undefined) {{"));
+				if elif_let_to_jsify.reassignable {
+					code.line(format!("let {} = {};", elif_let_to_jsify.var_name, value));
+				} else {
+					code.line(format!("const {} = {};", elif_let_to_jsify.var_name, value));
+				}
+
+				code.add_code(self.jsify_scope_body(&elif_let_to_jsify.statements, ctx));
+				code.close("}");
+			}
+			Elifs::ElifBlock(elif_to_jsify) => {
+				let condition = self.jsify_expression(&elif_to_jsify.condition, ctx);
+				// TODO: this puts the "else if" in a separate line from the closing block but
+				// technically that shouldn't be a problem, its just ugly
+				code.open(new_code!(&elif_to_jsify.condition.span, "else if (", condition, ") {"));
+				code.add_code(self.jsify_scope_body(&elif_to_jsify.statements, ctx));
+				code.close("}");
+			}
 		}
-
-		code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
-		code.close("}");
-
 		if index < elif_statements.len() - 1 {
-			code.open("else {");
 			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
-			code.close("}");
 		} else if let Some(else_scope) = else_statements {
 			code.open("else {");
 			code.add_code(self.jsify_scope_body(else_scope, ctx));
@@ -1066,9 +1077,15 @@ impl<'a> JSifier<'a> {
 				code.close("}");
 
 				if elif_statements.len() > 0 {
-					code.open("else {");
 					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
-					code.close("}");
+					for elif_statement in elif_statements {
+						if let Elifs::ElifLetBlock(_) = elif_statement {
+							// "elif_let_block" statements emit "else {" in jsify_elif_statements(),
+							//  but no closing bracket "}". The closing brackets are emitted here instead to
+							// deal with properly nesting "elif_let_block", "elif_block", and "else" statements
+							code.close("}");
+						}
+					}
 				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
 					code.add_code(self.jsify_scope_body(else_scope, ctx));

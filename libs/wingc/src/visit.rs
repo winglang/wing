@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, Class, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
+		Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -146,9 +146,17 @@ where
 			v.visit_expr(value);
 			v.visit_scope(statements);
 			for elif in elif_statements {
-				v.visit_symbol(&elif.var_name);
-				v.visit_expr(&elif.value);
-				v.visit_scope(&elif.statements);
+				match elif {
+					Elifs::ElifBlock(elif_block) => {
+						v.visit_expr(&elif_block.condition);
+						v.visit_scope(&elif_block.statements);
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						v.visit_symbol(&elif_let_block.var_name);
+						v.visit_expr(&elif_let_block.value);
+						v.visit_scope(&elif_let_block.statements);
+					}
+				}
 			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);

@@ -10,9 +10,9 @@ use crate::ast::{
 	TypeAnnotationKind,
 };
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
-	TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
+	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Spanned, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
@@ -4113,13 +4113,20 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		for elif_scope in &iflet.elif_statements {
-			self.type_check_if_let_statement(
-				&elif_scope.value,
-				&elif_scope.statements,
-				&elif_scope.reassignable,
-				&elif_scope.var_name,
-				env,
-			);
+			match elif_scope {
+				Elifs::ElifBlock(elif_block) => {
+					self.type_check_if_statement(&elif_block.condition, &elif_block.statements, env);
+				}
+				Elifs::ElifLetBlock(elif_let_block) => {
+					self.type_check_if_let_statement(
+						&elif_let_block.value,
+						&elif_let_block.statements,
+						&elif_let_block.reassignable,
+						&elif_let_block.var_name,
+						env,
+					);
+				}
+			}
 		}
 
 		if let Some(else_scope) = &iflet.else_statements {

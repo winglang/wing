@@ -276,7 +276,12 @@ module.exports = grammar({
         "=",
         field("value", $.expression),
         field("block", $.block),
-        repeat(field("elif_let_block", $.elif_let_block)),
+        repeat(
+          choice(
+            field("elif_let_block", $.elif_let_block),
+            field("elif_block", $.elif_block)
+          )
+        ),
         optional(seq("else", field("else_block", $.block)))
       ),
 
