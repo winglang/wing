@@ -25,7 +25,12 @@ export interface TestRunnerProps {}
  * @abstract
  */
 export class TestRunner extends Resource {
-  public static createTree(app: App, Root: any) {
+  /**
+   * Instantiate one or more copies of a tree inside of an app based
+   * on how many isolated environments are needed for testing.
+   * @internal
+   */
+  public static _createTree(app: App, Root: any) {
     if (app.isTestEnvironment) {
       app._testRunner = new TestRunner(app, "cloud.TestRunner");
     }

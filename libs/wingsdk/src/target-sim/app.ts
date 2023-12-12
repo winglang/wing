@@ -86,7 +86,7 @@ export class App extends core.App {
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
-    TestRunner.createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /** @internal */

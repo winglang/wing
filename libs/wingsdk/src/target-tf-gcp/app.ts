@@ -79,7 +79,7 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    TestRunner.createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {

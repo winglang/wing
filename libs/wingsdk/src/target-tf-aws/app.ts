@@ -65,7 +65,7 @@ export class App extends CdktfApp {
 
     this.subnets = {};
 
-    TestRunner.createTree(this, props.rootConstruct);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {
