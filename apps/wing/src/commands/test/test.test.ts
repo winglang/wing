@@ -122,19 +122,16 @@ describe("wing test (no options)", () => {
 
 describe("output-file option", () => {
   let writeResultsSpy: SpyInstance;
-  let writeFileSpy: SpyInstance;
 
   beforeEach(() => {
     chalk.level = 0;
     writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fsPromises, "writeFile");
   });
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     writeResultsSpy.mockRestore();
-    writeFileSpy.mockRestore();
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
@@ -158,10 +155,10 @@ describe("output-file option", () => {
     expect(testName).toBe("test.test.w");
     expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-    expect(writeFileSpy).toBeCalledTimes(4);
-    const [filePath, output] = writeFileSpy.mock.calls[3];
-    expect(filePath).toBe("out.json");
-    expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
+    const outputFileExists = fs.existsSync(outputFile);
+    expect(outputFileExists).toBe(true);
+    const outputContents = fs.readFileSync(outputFile, "utf-8");
+    expect(JSON.parse(outputContents)).toMatchObject(OUTPUT_FILE);
   });
 
   test("wing test without output file calls writeResultsToFile", async () => {
