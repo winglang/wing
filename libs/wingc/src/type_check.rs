@@ -3474,7 +3474,12 @@ impl<'a> TypeChecker<'a> {
 	) {
 		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
 		if let Some(_) = env.parent {
-			self.spanned_error(name, format!("Structs must be declared at the top-level of a program: Struct '{name}' is not defined at the top-level"));
+			self.spanned_error(
+				name,
+				format!(
+					"Structs must be declared at the top-level of a program: Struct '{name}' is not defined at the top-level"
+				),
+			);
 		}
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
