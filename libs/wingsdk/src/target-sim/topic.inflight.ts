@@ -30,7 +30,7 @@ export class Topic
 
   public async cleanup(): Promise<void> {}
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {

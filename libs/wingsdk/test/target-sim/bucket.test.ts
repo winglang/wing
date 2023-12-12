@@ -21,6 +21,7 @@ test("create a bucket", async () => {
       handle: expect.any(String),
     },
     path: "root/my_bucket",
+    addr: expect.any(String),
     props: {
       public: false,
       initialObjects: {},

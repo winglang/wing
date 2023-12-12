@@ -9,6 +9,7 @@ exports[`create a counter 1`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -145,6 +146,7 @@ exports[`dec 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -281,6 +283,7 @@ exports[`inc 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -417,6 +420,7 @@ exports[`key dec 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -553,6 +557,7 @@ exports[`key inc 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -687,6 +692,7 @@ exports[`key set to new value 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {
@@ -821,6 +827,7 @@ exports[`set to new value 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c82c1419dede49fb73e65c4df6565dc606f828ef99",
         "attrs": {},
         "path": "root/my_counter",
         "props": {

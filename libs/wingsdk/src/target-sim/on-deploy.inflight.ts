@@ -32,5 +32,5 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 }

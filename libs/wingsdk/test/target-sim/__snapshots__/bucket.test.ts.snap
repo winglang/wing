@@ -65,6 +65,7 @@ exports[`can add file in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -205,6 +206,7 @@ exports[`can add object in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -334,6 +336,7 @@ exports[`create a bucket 1`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -469,6 +472,7 @@ exports[`get invalid object throws an error 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {

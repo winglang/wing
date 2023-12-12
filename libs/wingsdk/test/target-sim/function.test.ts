@@ -42,6 +42,7 @@ test("create a function", async () => {
       handle: expect.any(String),
     },
     path: "root/my_function",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",

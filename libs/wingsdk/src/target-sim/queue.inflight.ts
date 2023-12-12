@@ -38,7 +38,7 @@ export class Queue
     await this.processLoop.stop();
   }
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 
   public async addEventSubscription(
     subscriber: FunctionHandle,

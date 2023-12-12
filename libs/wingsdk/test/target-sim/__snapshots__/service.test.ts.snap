@@ -31,6 +31,7 @@ exports.handle = async function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c815f66e1cb1ce843a78fc0ecb05e6fc56e3b51516",
         "attrs": {},
         "path": "root/my_service",
         "props": {

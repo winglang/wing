@@ -102,7 +102,7 @@ export class Api
     this.server?.closeAllConnections();
   }
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 
   public async addEventSubscription(
     subscriber: string,

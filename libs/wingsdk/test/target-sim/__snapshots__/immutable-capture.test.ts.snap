@@ -29,6 +29,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -211,6 +212,7 @@ my_buckets: [(function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -221,6 +223,7 @@ my_buckets: [(function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -231,6 +234,7 @@ my_buckets: [(function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -406,6 +410,7 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -553,6 +558,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -699,6 +705,7 @@ my_capture: false
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -847,6 +854,7 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -997,6 +1005,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1149,6 +1158,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1298,6 +1308,7 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1477,6 +1488,7 @@ my_map: new Map([[\\"foo\\",(function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -1487,6 +1499,7 @@ my_map: new Map([[\\"foo\\",(function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -1497,6 +1510,7 @@ my_map: new Map([[\\"foo\\",(function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1670,6 +1684,7 @@ my_capture: 123
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1819,6 +1834,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1967,6 +1983,7 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2114,6 +2131,7 @@ my_capture: \\"bam bam bam\\"
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2263,6 +2281,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2412,6 +2431,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2641,6 +2661,7 @@ my_struct: {\\"bucky\\": (function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -2651,6 +2672,7 @@ my_struct: {\\"bucky\\": (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -2661,6 +2683,7 @@ my_struct: {\\"bucky\\": (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c832c4af421d07265328cd90ad7ace99950120daf4",
         "attrs": {},
         "path": "root/B3",
         "props": {
@@ -2671,6 +2694,7 @@ my_struct: {\\"bucky\\": (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8512a0fbb3e6bd048ba3e57550a8ef265ea7944ef",
         "attrs": {},
         "path": "root/B4",
         "props": {
@@ -2681,6 +2705,7 @@ my_struct: {\\"bucky\\": (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e8026b7368f86ad7082a73d4943ebe171d7ab674",
         "attrs": {},
         "path": "root/B5",
         "props": {
@@ -2691,6 +2716,7 @@ my_struct: {\\"bucky\\": (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {

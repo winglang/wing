@@ -75,7 +75,7 @@ export class DynamodbTable
     await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
   }
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 
   public async _rawClient(): Promise<DynamoDBClient> {
     if (this.client) {

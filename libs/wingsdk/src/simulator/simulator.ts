@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import { existsSync } from "fs";
 import { mkdir } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
@@ -82,9 +81,14 @@ export interface IWithTraceProps {
  */
 export interface ISimulatorContext {
   /**
-   * This directory where the compilation output is
+   * Thes directory where the compilation output is
    */
   readonly simdir: string;
+
+  /**
+   * The directory for the resource's state.
+   */
+  readonly statedir: string;
 
   /**
    * The path of the resource that is being simulated.
@@ -308,7 +312,7 @@ export class Simulator {
 
       try {
         const resource = this._handles.find(handle);
-        await resource.save(this.getResourceStateDir(resourceConfig.path));
+        await resource.save();
         this._handles.deallocate(handle);
         await resource.cleanup();
       } catch (err) {
@@ -421,14 +425,6 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
     return treeData.display?.ui ?? [];
-  }
-
-  private getResourceStateDir(resourcePath: string) {
-    const hash = createHash("sha256")
-      .update(resourcePath)
-      .digest("hex")
-      .slice(-16);
-    return join(this.statedir, hash);
   }
 
   private typeInfo(fqn: string): TypeSchema {
@@ -600,23 +596,17 @@ export class Simulator {
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
 
+    // set up a state directory for the resource
+    await mkdir(join(this.statedir, resourceConfig.addr), { recursive: true });
+
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
     const resourceObject = new ResourceType(resolvedProps, context);
-
-    const resourceStateDir = this.getResourceStateDir(resourceConfig.path);
-    let attrs: any;
-    if (existsSync(resourceStateDir)) {
-      attrs = await resourceObject.init(resourceStateDir);
-    } else {
-      // if the resource state directory doesn't exist, initialize the resource without state
-      attrs = await resourceObject.init();
-      await mkdir(resourceStateDir, { recursive: true });
-    }
+    const attrs = await resourceObject.init();
 
     // save the current state
-    await resourceObject.save(resourceStateDir);
+    await resourceObject.save();
 
     // allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(resourceObject);
@@ -639,6 +629,7 @@ export class Simulator {
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
     return {
       simdir: this.simdir,
+      statedir: join(this.statedir, resourceConfig.addr),
       resourcePath: resourceConfig.path,
       serverUrl: this.url,
       findInstance: (handle: string) => {
@@ -883,9 +874,8 @@ export interface ISimulatorResourceInstance {
   /**
    * Perform any async initialization required by the resource. Return a map of
    * the resource's runtime attributes.
-   * @param dir The directory to load the resource's state from, if any.
    */
-  init(dir: string): Promise<Record<string, any>>;
+  init(): Promise<Record<string, any>>;
 
   /**
    * Stop the resource and clean up any physical resources it may have created
@@ -894,10 +884,9 @@ export interface ISimulatorResourceInstance {
   cleanup(): Promise<void>;
 
   /**
-   * Save the resource's state to the given directory.
-   * @param dir The directory the resource should create and save its state into, if it has any.
+   * Save the resource's state.
    */
-  save(dir: string): Promise<void>;
+  save(): Promise<void>;
 }
 
 /** Schema for simulator.json */
@@ -922,6 +911,8 @@ export interface TypeSchema {
 export interface BaseResourceSchema {
   /** The resource path from the app's construct tree. */
   readonly path: string;
+  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
+  readonly addr: string;
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */

@@ -22,14 +22,14 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   }
 
   public async init(): Promise<CounterAttributes> {
-    return {};
+    return {}; // TODO load state
   }
 
   public async cleanup(): Promise<void> {}
 
-  public async save(dir: string): Promise<void> {
+  public async save(): Promise<void> {
     await fs.promises.writeFile(
-      join(dir, "values.json"),
+      join(this.context.statedir, "values.json"),
       JSON.stringify(Array.from(this.values.entries()))
     );
   }

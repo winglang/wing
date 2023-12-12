@@ -9,6 +9,7 @@ exports[`create a Redis resource 1`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c84bd402f6d507613026d171fe74fc8ce07ced29ae",
         "attrs": {},
         "path": "root/my_redis",
         "props": {},

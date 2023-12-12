@@ -14,7 +14,7 @@ export class State implements IStateClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
-  public async save(_dir: string): Promise<void> {}
+  public async save(): Promise<void> {}
 
   public async set(key: string, value: any): Promise<void> {
     this.context.setResourceAttributes(this.context.resourcePath, {

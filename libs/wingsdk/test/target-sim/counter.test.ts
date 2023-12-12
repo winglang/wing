@@ -20,6 +20,7 @@ test("create a counter", async () => {
       handle: expect.any(String),
     },
     path: "root/my_counter",
+    addr: expect.any(String),
     props: {
       initial: 123,
     },

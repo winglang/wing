@@ -30,6 +30,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -40,6 +41,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "attrs": {},
         "path": "root/my_function",
         "props": {

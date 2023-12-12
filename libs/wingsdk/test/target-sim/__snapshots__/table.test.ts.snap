@@ -18,6 +18,7 @@ exports[`can add row in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -155,6 +156,7 @@ exports[`create a table 1`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -296,6 +298,7 @@ exports[`get row 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -435,6 +438,7 @@ exports[`insert row 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -576,6 +580,7 @@ exports[`list table 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -716,6 +721,7 @@ exports[`tryGet row 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -859,6 +865,7 @@ exports[`update row 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {

@@ -9,6 +9,7 @@ exports[`create a table 1`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c80d8c0710fc41df32eaa9895ae0bbd6cfd22762c2",
         "attrs": {},
         "path": "root/create_table",
         "props": {
@@ -145,6 +146,7 @@ exports[`get item 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8b976f0619d4aad0e4bb55cbda7b8975704b8b11a",
         "attrs": {},
         "path": "root/get_table",
         "props": {
@@ -281,6 +283,7 @@ exports[`put item 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8fa1029e0255990ff9eb3bf212931386890380f82",
         "attrs": {},
         "path": "root/put_table",
         "props": {
@@ -417,6 +420,7 @@ exports[`update item 2`] = `
   "simulator.json": {
     "resources": [
       {
+        "addr": "c8f403ebb1894f2ea172e92af9090b7c8a25806934",
         "attrs": {},
         "path": "root/update_table",
         "props": {

@@ -18,6 +18,7 @@ test("create a table", async () => {
       handle: expect.any(String),
     },
     path: "root/create_table",
+    addr: expect.any(String),
     props: {
       name: "new_table",
       attributeDefinitions: {
@@ -53,6 +54,7 @@ test("put item", async () => {
       handle: expect.any(String),
     },
     path: "root/put_table",
+    addr: expect.any(String),
     props: {
       name: "my_insert_table",
       attributeDefinitions: {
@@ -89,6 +91,7 @@ test("get item", async () => {
       handle: expect.any(String),
     },
     path: "root/get_table",
+    addr: expect.any(String),
     props: {
       name: "my_get_table",
       attributeDefinitions: {
@@ -132,6 +135,7 @@ test("update item", async () => {
       handle: expect.any(String),
     },
     path: "root/update_table",
+    addr: expect.any(String),
     props: {
       name: "my_update_table",
       attributeDefinitions: {

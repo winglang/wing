@@ -75,6 +75,7 @@ bucket: (function() {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
         "attrs": {},
         "path": "root/HelloWorld/Counter",
         "props": {
@@ -83,6 +84,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Counter",
       },
       {
+        "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
         "attrs": {},
         "path": "root/HelloWorld/Bucket",
         "props": {
@@ -93,6 +95,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
         "attrs": {},
         "path": "root/HelloWorld/Queue/SetConsumer0",
         "props": {
@@ -107,6 +110,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
         "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
@@ -116,6 +120,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
         "attrs": {},
         "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {

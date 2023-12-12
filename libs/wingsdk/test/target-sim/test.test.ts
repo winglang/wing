@@ -29,6 +29,7 @@ test("create a test", async () => {
       handle: expect.any(String),
     },
     path: "root/env0/test:my_test/Handler",
+    addr: expect.any(String),
     props: {
       environmentVariables: {},
       sourceCodeFile: expect.any(String),
