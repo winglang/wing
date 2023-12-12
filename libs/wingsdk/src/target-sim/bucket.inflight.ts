@@ -79,7 +79,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     // during the bucket's lifecycle
     await fs.promises.writeFile(
       join(this.context.statedir, METADATA_FILENAME),
-      serialize([...this._metadata.entries()]) // metadata contains Datetime values, so we need to serialize it
+      serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
     );
   }
 
