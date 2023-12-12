@@ -43,19 +43,12 @@ export class Test extends Resource {
     Node.of(this).title = "Test";
     Node.of(this).description = "A cloud unit test.";
 
-    // only create a function if we're inside a test environment, and
-    // a test hasn't already been synthesized in this isolated environment
-    const testEnv = this.node.path.split("/").at(1)!;
-    const testPath = this.node.path.split("/").slice(2).join("/");
-    if (
-      App.of(this).isTestEnvironment &&
-      !App.of(this)._synthedEnvs.includes(testEnv) &&
-      !App.of(this)._synthedTests.includes(testPath)
-    ) {
-      this._fn = new Function(this, "Handler", inflight, props);
-      App.of(this)._synthedEnvs.push(testEnv);
-      App.of(this)._synthedTests.push(testPath);
-    }
+    this._fn = App.of(this)?._testRunner?._addTestFunction(
+      this,
+      "Handler",
+      inflight,
+      props
+    );
   }
 
   /** @internal */

@@ -159,17 +159,6 @@ export abstract class App extends Construct implements IApp {
    */
   public _testRunner: TestRunner | undefined;
 
-  /**
-   * List of environments where tests have been synthesized.
-   * @internal
-   */
-  public _synthedEnvs: string[] = [];
-  /**
-   * List of tests that have been synthesized.
-   * @internal
-   */
-  public _synthedTests: string[] = [];
-
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {

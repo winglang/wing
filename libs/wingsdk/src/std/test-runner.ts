@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
+import { Function, FunctionProps, IFunctionHandler } from "../cloud";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Node } from "../std";
@@ -46,6 +47,20 @@ export class TestRunner extends Resource {
     }
   }
 
+  /**
+   * List of isolated environment names where we've already created a cloud.Function
+   * for a unit test. We keep track of these so that we don't synthesize
+   * multiple test functions into the same isolated environment.
+   */
+  private _synthedEnvs: string[] = [];
+
+  /**
+   * List of test paths that we have already created a cloud.Function for.
+   * We keep track of these so that we don't create identical test functions in multiple
+   * isolated environments.
+   */
+  private _synthedTests: string[] = [];
+
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
       return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
@@ -59,6 +74,27 @@ export class TestRunner extends Resource {
       "A suite of APIs for running tests and collecting results.";
 
     props;
+  }
+
+  /** @internal */
+  public _addTestFunction(
+    scope: Construct,
+    id: string,
+    inflight: IFunctionHandler,
+    props: FunctionProps
+  ): Function | undefined {
+    const testEnv = scope.node.path.split("/").at(1)!;
+    const testPath = scope.node.path.split("/").slice(2).join("/") + "/" + id;
+    if (
+      !this._synthedEnvs.includes(testEnv) &&
+      !this._synthedTests.includes(testPath)
+    ) {
+      this._synthedEnvs.push(testEnv);
+      this._synthedTests.push(testPath);
+      return new Function(scope, id, inflight, props);
+    }
+
+    return undefined;
   }
 
   /** @internal */
