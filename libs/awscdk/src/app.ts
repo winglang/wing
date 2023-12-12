@@ -7,6 +7,7 @@ import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -21,6 +22,7 @@ import { cloud } from "@winglang/sdk";
 const {
   BUCKET_FQN,
   COUNTER_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -186,6 +188,9 @@ export class App extends core.App {
 
       case ex.DYNAMODB_TABLE_FQN:
         return DynamodbTable;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
     return undefined;
   }

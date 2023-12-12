@@ -9,8 +9,13 @@ import { IInflightHost } from "../std";
  * AWS implementation of `cloud.Endpoint`.
  */
 export class Endpoint extends cloud.Endpoint {
-  constructor(scope: Construct, id: string, url: string) {
-    super(scope, id, url);
+  constructor(
+    scope: Construct,
+    id: string,
+    url: string,
+    props: cloud.EndpointProps = {}
+  ) {
+    super(scope, id, url, props);
 
     new TerraformOutput(this, "Url", {
       value: this.url,

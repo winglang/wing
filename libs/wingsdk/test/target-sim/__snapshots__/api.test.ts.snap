@@ -44,6 +44,16 @@ return class Handler {
       },
       {
         "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
@@ -108,14 +118,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -236,7 +238,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -283,6 +285,7 @@ return class Handler {
 exports[`api handler can read the request params 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -291,11 +294,11 @@ exports[`api handler can read the request params 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -336,6 +339,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -388,14 +401,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -517,7 +522,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -564,6 +569,7 @@ return class Handler {
 exports[`api handler can read the request path 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -572,11 +578,11 @@ exports[`api handler can read the request path 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -617,6 +623,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -669,14 +685,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -798,7 +806,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -845,6 +853,7 @@ return class Handler {
 exports[`api handler can set response headers 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -853,11 +862,11 @@ exports[`api handler can set response headers 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -898,6 +907,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -950,14 +969,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1079,7 +1090,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1126,6 +1137,7 @@ return class Handler {
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1134,11 +1146,11 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -1179,6 +1191,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -1231,14 +1253,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1360,7 +1374,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1407,6 +1421,7 @@ return class Handler {
 exports[`api response returns default Content-Type header 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1415,11 +1430,11 @@ exports[`api response returns default Content-Type header 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -1460,6 +1475,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -1512,14 +1537,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1641,7 +1658,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1688,6 +1705,7 @@ return class Handler {
 exports[`api supports every method type 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1714,11 +1732,11 @@ exports[`api supports every method type 1`] = `
   "Processing \\"PATCH /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -1789,6 +1807,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -1926,14 +1954,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -2054,7 +2074,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2101,6 +2121,7 @@ return class Handler {
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2109,11 +2130,11 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "Processing \\"GET /:name/:age\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}).",
   "GET /:name/:age - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -2154,6 +2175,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -2224,14 +2255,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -2352,7 +2375,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2399,6 +2422,7 @@ return class Handler {
 exports[`api with 'name' parameter 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2407,11 +2431,11 @@ exports[`api with 'name' parameter 1`] = `
   "Processing \\"GET /:name\\" params={\\"name\\":\\"akhil\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}).",
   "GET /:name - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -2452,6 +2476,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -2514,14 +2548,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -2642,7 +2668,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2725,6 +2751,16 @@ return class Handler {
       },
       {
         "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
@@ -2790,14 +2826,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2919,7 +2947,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2966,6 +2994,7 @@ return class Handler {
 exports[`api with multiple methods on same route 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2979,13 +3008,13 @@ exports[`api with multiple methods on same route 1`] = `
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -3046,6 +3075,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -3136,14 +3175,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -3276,7 +3307,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3336,6 +3367,7 @@ return class Handler {
 exports[`api with multiple routes 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3349,13 +3381,13 @@ exports[`api with multiple routes 1`] = `
   "Processing \\"GET /hello/wingnuts\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/wingnuts - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -3416,6 +3448,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -3509,14 +3551,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -3648,7 +3682,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3708,6 +3742,7 @@ return class Handler {
 exports[`api with one GET route 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3716,11 +3751,11 @@ exports[`api with one GET route 1`] = `
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -3761,6 +3796,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -3813,14 +3858,6 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.sim.EventMapping",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -3942,7 +3979,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3989,6 +4026,7 @@ return class Handler {
 exports[`api with one GET route with request params 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3997,11 +4035,11 @@ exports[`api with one GET route with request params 1`] = `
   "Processing \\"GET /users/:name\\" params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/:name - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -4042,6 +4080,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -4104,14 +4152,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -4232,7 +4272,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4279,6 +4319,7 @@ return class Handler {
 exports[`api with one POST route, with body 1`] = `
 [
   "@winglang/sdk.std.TestRunner created.",
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -4287,11 +4328,11 @@ exports[`api with one POST route, with body 1`] = `
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
   "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
@@ -4332,6 +4373,16 @@ return class Handler {
           "tests": {},
         },
         "type": "@winglang/sdk.std.TestRunner",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
       },
       {
         "attrs": {},
@@ -4385,14 +4436,6 @@ return class Handler {
         },
         "type": "@winglang/sdk.sim.EventMapping",
       },
-      {
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -4513,7 +4556,7 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4588,6 +4631,8 @@ exports[`create an api 1`] = `
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -4701,7 +4746,7 @@ exports[`create an api 1`] = `
                 "version": "10.2.70",
               },
               "display": {
-                "description": "A cloud endpoint",
+                "description": "Endpoint for Api root/my_api",
                 "title": "Endpoint",
               },
               "id": "Endpoint",

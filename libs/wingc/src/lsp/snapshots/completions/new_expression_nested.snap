@@ -49,7 +49,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Endpoint\n```\n---\nA cloud Endpoint.\n\n### Initializer\n- `url` — `str`\n### Fields\n- `node` — `Node` — The tree node.\n- `url` — `str` — The endpoint url.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Endpoint\n```\n---\nA cloud Endpoint.\n\n### Initializer\n- `url` — `str`\n- `...props` — `EndpointProps?`\n  \n  - `browserSupport?` — `bool?` — Whether the endpoint is supported through browsers.\n  - `label?` — `str?` — The endpoint's label.\n### Fields\n- `node` — `Node` — The tree node.\n- `url` — `str` — The endpoint url.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Endpoint
   insertText: Endpoint($1)
   insertTextFormat: 2

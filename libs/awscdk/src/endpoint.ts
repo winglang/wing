@@ -6,8 +6,8 @@ import { core, cloud, std } from "@winglang/sdk";
  * AWS implementation of `cloud.Endpoint`.
  */
 export class Endpoint extends cloud.Endpoint {
-  constructor(scope: Construct, id: string, url: string) {
-    super(scope, id, url);
+  constructor(scope: Construct, id: string, url: string, props: cloud.EndpointProps = {}) {
+    super(scope, id, url, props);
 
     new CfnOutput(this, "Url", {
       value: this.url,

@@ -9,7 +9,10 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   ) {}
   public async init(): Promise<EndpointAttributes> {
     return {
+      inputUrl: this._props.inputUrl,
       url: this._props.url,
+      label: this._props.label,
+      browserSupport: this._props.browserSupport,
     };
   }
 

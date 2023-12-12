@@ -77,9 +77,17 @@ export class Website extends Resource implements IWebsite {
 
   /**
    * The website's url.
-   * @abstract
    */
   public get url(): string {
+    return this._endpoint.url;
+  }
+
+  /**
+   * The Endpoint of the Website.
+   * @abstract
+   * @internal
+   */
+  protected get _endpoint(): cloud.Endpoint {
     throw new AbstractMemberError();
   }
 
@@ -113,13 +121,6 @@ export class Website extends Resource implements IWebsite {
     data;
     options;
     throw new AbstractMemberError();
-  }
-
-  /** @internal */
-  public _preSynthesize() {
-    super._preSynthesize();
-
-    new cloud.Endpoint(this, "Endpoint", this.url);
   }
 }
 

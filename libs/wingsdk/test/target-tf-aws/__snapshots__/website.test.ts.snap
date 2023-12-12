@@ -219,7 +219,7 @@ exports[`default website behavior 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "A cloud endpoint",
+                      "description": "Endpoint for Website root/Default/Website",
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
@@ -564,7 +564,7 @@ exports[`website with addFile 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "A cloud endpoint",
+                      "description": "Endpoint for Website root/Default/Website",
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
@@ -917,7 +917,7 @@ exports[`website with addJson 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "A cloud endpoint",
+                      "description": "Endpoint for Website root/Default/Website",
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",

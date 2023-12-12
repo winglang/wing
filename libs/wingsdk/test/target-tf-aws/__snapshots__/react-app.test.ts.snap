@@ -211,7 +211,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "A cloud endpoint",
+                          "description": "Endpoint for Website root/Default/Website/Website-host",
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",
@@ -545,7 +545,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "A cloud endpoint",
+                          "description": "Endpoint for Website root/Default/Website/Website-host",
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",
