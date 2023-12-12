@@ -3322,28 +3322,18 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
-error: Symbol \\"x\\" already defined in this scope
-   --> ../../../examples/tests/invalid/structs.test.w:50:5
-   |
-47 | let x = new cloud.BucketProps(1);
-   |     - previous definition
-   .
-50 | let x = (): str => {
-   |     ^ Symbol \\"x\\" already defined in this scope
-
-
-error: Structs must be declared at the top-level of a program: Struct 'PreflightStruct' is not defined at the top-level
+error: struct PreflightStruct must be declared at the top-level of a file
    --> ../../../examples/tests/invalid/structs.test.w:51:10
    |
 51 |   struct PreflightStruct {
-   |          ^^^^^^^^^^^^^^^ Structs must be declared at the top-level of a program: Struct 'PreflightStruct' is not defined at the top-level
+   |          ^^^^^^^^^^^^^^^ struct PreflightStruct must be declared at the top-level of a file
 
 
-error: Structs must be declared at the top-level of a program: Struct 'InflightStruct' is not defined at the top-level
+error: struct InflightStruct must be declared at the top-level of a file
    --> ../../../examples/tests/invalid/structs.test.w:58:10
    |
 58 |   struct InflightStruct {
-   |          ^^^^^^^^^^^^^^ Structs must be declared at the top-level of a program: Struct 'InflightStruct' is not defined at the top-level
+   |          ^^^^^^^^^^^^^^ struct InflightStruct must be declared at the top-level of a file
 
 
  
