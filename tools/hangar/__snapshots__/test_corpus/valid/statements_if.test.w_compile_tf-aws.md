@@ -121,6 +121,56 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    if (true) {
+      const a = undefined;
+      const b = "b";
+      const c = "c";
+      {
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const d = $if_let_value;
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        }
+        else if (((b) != null)) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        }
+        else {
+          const $elif_let_value1 = c;
+          if ($elif_let_value1 != undefined) {
+            const e = $elif_let_value1;
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+    }
+    if (true) {
+      const a = undefined;
+      const b = undefined;
+      const c = "c";
+      {
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const d = $if_let_value;
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        }
+        else {
+          const $elif_let_value0 = c;
+          if ($elif_let_value0 != undefined) {
+            const e = $elif_let_value0;
+            {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+          }
+          else if (((b) != null)) {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+    }
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

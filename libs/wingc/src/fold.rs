@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Expr, ExprKind,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind,
 		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
 		InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
@@ -130,11 +130,21 @@ where
 			var_name: f.fold_symbol(var_name),
 			elif_statements: elif_statements
 				.into_iter()
-				.map(|elif_let_block| ElifLetBlock {
-					reassignable: elif_let_block.reassignable,
-					statements: f.fold_scope(elif_let_block.statements),
-					value: f.fold_expr(elif_let_block.value),
-					var_name: f.fold_symbol(elif_let_block.var_name),
+				.map(|elif_block| match elif_block {
+					Elifs::ElifBlock(elif_block) => {
+						return Elifs::ElifBlock(ElifBlock {
+							condition: f.fold_expr(elif_block.condition),
+							statements: f.fold_scope(elif_block.statements),
+						})
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						return Elifs::ElifLetBlock(ElifLetBlock {
+							reassignable: elif_let_block.reassignable,
+							statements: f.fold_scope(elif_let_block.statements),
+							value: f.fold_expr(elif_let_block.value),
+							var_name: f.fold_symbol(elif_let_block.var_name),
+						});
+					}
 				})
 				.collect(),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
