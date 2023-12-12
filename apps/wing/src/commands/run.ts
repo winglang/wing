@@ -33,7 +33,6 @@ export interface RunOptions {
  */
 export async function run(entrypoint?: string, options?: RunOptions) {
   const requestedPort = parseNumericString(options?.port) ?? 3000;
-  const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
     const wingFiles = (await glob("{main,*.main}.w")).sort();
@@ -68,11 +67,9 @@ export async function run(entrypoint?: string, options?: RunOptions) {
       },
     },
     requireAcceptTerms: !!process.stdin.isTTY,
+    open: options?.open ?? true,
   });
   const url = `http://localhost:${port}/`;
-  if (openBrowser) {
-    await open(url);
-  }
   console.log(`The Wing Console is running at ${url}`);
 
   const onExit = async (exitCode: number) => {

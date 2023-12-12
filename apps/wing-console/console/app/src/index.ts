@@ -38,6 +38,7 @@ export interface CreateConsoleAppOptions {
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
+  open?: boolean;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -127,5 +128,12 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       set(key, value) {},
     },
   });
+
+  if (options.open) {
+    // @ts-ignore
+    const { openBrowser } = await import("../scripts/open.mjs");
+    openBrowser(`http://localhost:${server.port}/`);
+  }
+
   return server;
 };
