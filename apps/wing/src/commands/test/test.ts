@@ -125,6 +125,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
       return testSimulator(synthDir, options);
     case BuiltinPlatform.TF_AZURE:
     case BuiltinPlatform.TF_AWS:
+    case BuiltinPlatform.TF_GCP:
       return testTf(synthDir, options);
     case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
@@ -438,6 +439,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 const targetFolder: Record<string, string> = {
   [BuiltinPlatform.TF_AWS]: "shared-aws",
   [BuiltinPlatform.TF_AZURE]: "shared-azure",
+  [BuiltinPlatform.TF_GCP]: "shared-gcp",
 };
 
 async function cleanupTf(synthDir: string) {

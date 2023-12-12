@@ -12,7 +12,9 @@ test "fromJson" {
 // fromStr
 
 assert(num.fromStr("42") == 42);
+assert(num.fromStr("42.42") == 42.42);
 
 test "fromStr" {
   assert(num.fromStr("888") == 888);
+  assert(num.fromStr("42.42") == 42.42);
 }

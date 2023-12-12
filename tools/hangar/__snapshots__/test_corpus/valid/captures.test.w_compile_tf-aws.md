@@ -129,7 +129,7 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello\":{\"get\":{\"operationId\":\"get-hello\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello\":{\"get\":{\"operationId\":\"get-hello\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_hello_0_2F9F5F19.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -160,14 +160,14 @@ module.exports = function({ $headers }) {
         "name": "/aws/lambda/AnotherFunction-c88d2a81",
         "retention_in_days": 30
       },
-      "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E": {
+      "cloudApi_get_hello_0_CloudwatchLogGroup_332ABC56": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/CloudwatchLogGroup",
-            "uniqueId": "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_get_hello_0_CloudwatchLogGroup_332ABC56"
           }
         },
-        "name": "/aws/lambda/OnRequest0-c8dd1349",
+        "name": "/aws/lambda/get_hello_-0-c8ed7599",
         "retention_in_days": 30
       },
       "cloudFunction_CloudwatchLogGroup_7399B890": {
@@ -201,11 +201,11 @@ module.exports = function({ $headers }) {
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "cloudApi_OnRequest0_IamRole_0E0166CB": {
+      "cloudApi_get_hello_0_IamRole_AF63D6EC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRole",
-            "uniqueId": "cloudApi_OnRequest0_IamRole_0E0166CB"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/IamRole",
+            "uniqueId": "cloudApi_get_hello_0_IamRole_AF63D6EC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -240,15 +240,15 @@ module.exports = function({ $headers }) {
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.name}"
       },
-      "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2": {
+      "cloudApi_get_hello_0_IamRolePolicy_0D701926": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicy",
-            "uniqueId": "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/IamRolePolicy",
+            "uniqueId": "cloudApi_get_hello_0_IamRolePolicy_0D701926"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
+        "role": "${aws_iam_role.cloudApi_get_hello_0_IamRole_AF63D6EC.name}"
       },
       "cloudFunction_IamRolePolicy_618BF987": {
         "//": {
@@ -282,15 +282,15 @@ module.exports = function({ $headers }) {
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.name}"
       },
-      "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F": {
+      "cloudApi_get_hello_0_IamRolePolicyAttachment_65673571": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicyAttachment",
-            "uniqueId": "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/IamRolePolicyAttachment",
+            "uniqueId": "cloudApi_get_hello_0_IamRolePolicyAttachment_65673571"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
+        "role": "${aws_iam_role.cloudApi_get_hello_0_IamRole_AF63D6EC.name}"
       },
       "cloudFunction_IamRolePolicyAttachment_288B9653": {
         "//": {
@@ -361,11 +361,11 @@ module.exports = function({ $headers }) {
           "subnet_ids": []
         }
       },
-      "cloudApi_OnRequest0_E65A93DD": {
+      "cloudApi_get_hello_0_2F9F5F19": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/Default",
-            "uniqueId": "cloudApi_OnRequest0_E65A93DD"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/Default",
+            "uniqueId": "cloudApi_get_hello_0_2F9F5F19"
           }
         },
         "architectures": [
@@ -374,18 +374,18 @@ module.exports = function({ $headers }) {
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "OnRequest0-c8dd1349",
+            "WING_FUNCTION_NAME": "get_hello_-0-c8ed7599",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "OnRequest0-c8dd1349",
+        "function_name": "get_hello_-0-c8ed7599",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.arn}",
+        "role": "${aws_iam_role.cloudApi_get_hello_0_IamRole_AF63D6EC.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudApi_OnRequest0_S3Object_FDBBBF9D.key}",
+        "s3_key": "${aws_s3_object.cloudApi_get_hello_0_S3Object_B8DCD8E8.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -470,7 +470,7 @@ module.exports = function({ $headers }) {
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_get_hello_0_2F9F5F19.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/hello",
         "statement_id": "AllowExecutionFromAPIGateway-GET-df16733f"
@@ -559,11 +559,11 @@ module.exports = function({ $headers }) {
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "cloudApi_OnRequest0_S3Object_FDBBBF9D": {
+      "cloudApi_get_hello_0_S3Object_B8DCD8E8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/S3Object",
-            "uniqueId": "cloudApi_OnRequest0_S3Object_FDBBBF9D"
+            "path": "root/Default/Default/cloud.Api/get_hello_}0/S3Object",
+            "uniqueId": "cloudApi_get_hello_0_S3Object_B8DCD8E8"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

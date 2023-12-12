@@ -81,9 +81,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(searchString: str, replaceString: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nreplace: (searchString: str, replaceString: str): str\n```\n---\nReplaces occurrences of a substring within a string.\n### Parameters\n- `searchString` — `str` — The substring to search for.\n- `replaceString` — `str` — The replacement substring.\n\n### Returns\nThe modified string after replacement."
+    value: "```wing\nreplace: (searchString: str, replaceString: str): str\n```\n---\nReplaces the first occurence of a substring within a string.\n### Parameters\n- `searchString` — `str` — The substring to search for.\n- `replaceString` — `str` — The replacement substring.\n\n### Returns\nThe modified string after replacement."
   sortText: ff|replace
   insertText: replace($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: replaceAll
+  kind: 2
+  detail: "(searchString: str, replaceString: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nreplaceAll: (searchString: str, replaceString: str): str\n```\n---\nReplaces all occurrences of a substring within a string.\n### Parameters\n- `searchString` — `str` — The substring to search for.\n- `replaceString` — `str` — The replacement substring.\n\n### Returns\nThe modified string after replacement."
+  sortText: ff|replaceAll
+  insertText: replaceAll($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

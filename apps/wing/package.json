@@ -42,6 +42,8 @@
     "commander": "^10.0.1",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "dotenv-expand": "^10.0.0",
     "glob": "^10.3.10",
     "nanoid": "^3.3.6",
     "npm-packlist": "^8.0.0",
