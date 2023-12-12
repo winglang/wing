@@ -1700,16 +1700,6 @@ error: Unexpected return value from void function. Return type annotations are r
    |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
-error: Structs must be declared at the top-level of a program: Struct 'SS' is not defined at the top-level
-   --> ../../../examples/tests/invalid/inference.test.w:88:3
-   |  
-88 | /   struct SS {
-89 | |     a: Array<num>;
-90 | |     b: Array<str>;
-91 | |   }
-   | \\\\---^ Structs must be declared at the top-level of a program: Struct 'SS' is not defined at the top-level
-
-
 error: Inferred type Array<str> conflicts with already inferred type Array<num>
    --> ../../../examples/tests/invalid/inference.test.w:92:33
    |  
@@ -3330,6 +3320,30 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
    |
 47 | let x = new cloud.BucketProps(1);
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
+
+
+error: Symbol \\"x\\" already defined in this scope
+   --> ../../../examples/tests/invalid/structs.test.w:50:5
+   |
+47 | let x = new cloud.BucketProps(1);
+   |     - previous definition
+   .
+50 | let x = (): str => {
+   |     ^ Symbol \\"x\\" already defined in this scope
+
+
+error: Structs must be declared at the top-level of a program: Struct 'PreflightStruct' is not defined at the top-level
+   --> ../../../examples/tests/invalid/structs.test.w:51:10
+   |
+51 |   struct PreflightStruct {
+   |          ^^^^^^^^^^^^^^^ Structs must be declared at the top-level of a program: Struct 'PreflightStruct' is not defined at the top-level
+
+
+error: Structs must be declared at the top-level of a program: Struct 'InflightStruct' is not defined at the top-level
+   --> ../../../examples/tests/invalid/structs.test.w:58:10
+   |
+58 |   struct InflightStruct {
+   |          ^^^^^^^^^^^^^^ Structs must be declared at the top-level of a program: Struct 'InflightStruct' is not defined at the top-level
 
 
  
