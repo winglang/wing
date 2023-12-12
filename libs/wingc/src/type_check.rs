@@ -756,9 +756,9 @@ impl Subtype for Type {
 			(Self::Nil, Self::Optional(_)) => {
 				// Nil is a subtype of Optional<T> for any T
 				true
-			},
+			}
 			(Self::Void, Self::Optional(_)) => {
-				// Void (not specifying a type) is a subtype of Optional<T> 
+				// Void (not specifying a type) is a subtype of Optional<T>
 				// (something that can have no value, and therefore no type)
 				true
 			}
