@@ -95,7 +95,6 @@ describe("run all tests", () => {
         makeTest(this, "test", ["console.log('hi');"]);
         makeTest(this, "test:bla", ["console.log('hi');"]);
         makeTest(this, "test:blue", ["console.log('hi');"]);
-        new Bucket(this, "mytestbucket");
       }
     }
     const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
@@ -111,6 +110,39 @@ describe("run all tests", () => {
       "root/env0/test",
       "root/env1/test:bla",
       "root/env2/test:blue",
+    ]);
+  });
+
+  test("tests with same name in different scopes", async () => {
+    class ConstructWithTest extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+        makeTest(this, "test", ["console.log('hi');"]);
+      }
+    }
+
+    class Root extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+
+        makeTest(this, "test", ["console.log('hi');"]);
+        new ConstructWithTest(this, "scope1");
+        new ConstructWithTest(this, "scope2");
+      }
+    }
+    const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
+
+    const sim = await app.startSimulator();
+    const testRunner = sim.getResource(
+      "/cloud.TestRunner"
+    ) as ITestRunnerClient;
+    const results = await runAllTests(testRunner);
+    await sim.stop();
+    expect(results.length).toEqual(3);
+    expect(results.map((r) => r.path).sort()).toStrictEqual([
+      "root/env0/test",
+      "root/env1/scope1/test",
+      "root/env2/scope2/test",
     ]);
   });
 });
