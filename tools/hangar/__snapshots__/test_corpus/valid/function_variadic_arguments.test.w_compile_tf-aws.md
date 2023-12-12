@@ -173,7 +173,7 @@ class $Root extends $stdlib.std.Resource {
       for (const i of args) {
         {((cond) => {if (!cond) throw new Error("assertion failed: i > 0 && i < 5")})(((i > 0) && (i < 5)))};
       }
-      (args.push(10));
+      ((obj, args) => { obj.push(...args); })(args, [10]);
       {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10)))};
     });
     (func1(1, "something", 1, 2, 3, 4));

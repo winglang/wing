@@ -29,7 +29,7 @@ environment:
 - [Node.js] v18 and [PNPM] v8
   - We recommend [volta] to manage node tools
 - [Rust]
-  - We recommend using [rustup] to manage your Rust installation
+  - We recommend using [rustup] to manage your Rust installation if Rust is not already installed. Be careful of conflicting Rust installations (homebrew rust and rustup)
 - [AWS CLI]
   - Only needed for integration tests - make sure to do the setup part to create credentials
 - [Terraform CLI]
