@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
+import { App } from "../core";
 import { Node } from "../std";
 
 /**
@@ -23,6 +24,28 @@ export interface TestRunnerProps {}
  * @abstract
  */
 export class TestRunner extends Resource {
+  public static createTree(app: App, Root: any) {
+    if (app.isTestEnvironment) {
+      app._testRunner = new TestRunner(app, "cloud.TestRunner");
+    }
+
+    if (Root) {
+      // mark the root type so that we can find it later through
+      // Node.of(root).root
+      Node._markRoot(Root);
+
+      if (app.isTestEnvironment) {
+        new Root(app, "env0");
+        const tests = app._testRunner!.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(app, "env" + i);
+        }
+      } else {
+        new Root(app, "Default");
+      }
+    }
+  }
+
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
       return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);

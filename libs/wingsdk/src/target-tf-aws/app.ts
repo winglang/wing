@@ -38,7 +38,6 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { AppProps } from "../core";
-import { synthRoots } from "../core/synth-roots";
 import { TABLE_FQN, REDIS_FQN, REACT_APP_FQN, DYNAMODB_TABLE_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Domain } from "../shared-aws/domain";
@@ -66,7 +65,7 @@ export class App extends CdktfApp {
 
     this.subnets = {};
 
-    synthRoots(this, props);
+    TestRunner.createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {

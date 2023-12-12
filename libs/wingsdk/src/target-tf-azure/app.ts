@@ -10,7 +10,6 @@ import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps } from "../core";
-import { synthRoots } from "../core/synth-roots";
 import {
   CaseConventions,
   NameOptions,
@@ -85,7 +84,7 @@ export class App extends CdktfApp {
   constructor(props: AzureAppProps) {
     super(props);
     this.location = props.location ?? process.env.AZURE_LOCATION;
-    synthRoots(this, props);
+    TestRunner.createTree(this, props.rootConstruct);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {

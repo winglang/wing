@@ -6,7 +6,6 @@ import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
-import { synthRoots } from "../core/synth-roots";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
 import { TEST_RUNNER_FQN } from "../std";
@@ -80,7 +79,7 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    synthRoots(this, props);
+    TestRunner.createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {

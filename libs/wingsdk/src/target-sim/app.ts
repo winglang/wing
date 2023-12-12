@@ -38,7 +38,6 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { synthRoots } from "../core/synth-roots";
 import { registerTokenResolver } from "../core/tokens";
 import { TABLE_FQN, REDIS_FQN, DYNAMODB_TABLE_FQN, REACT_APP_FQN } from "../ex";
 import { TypeSchema, WingSimulatorSchema } from "../simulator/simulator";
@@ -87,7 +86,7 @@ export class App extends core.App {
     this.outdir = props.outdir ?? ".";
     registerTokenResolver(new SimTokens());
 
-    synthRoots(this, props);
+    TestRunner.createTree(this, props.rootConstruct);
   }
 
   /** @internal */
