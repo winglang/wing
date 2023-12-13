@@ -1,4 +1,4 @@
-import { exec as execSync, spawn as nodeSpawn } from "child_process";
+import { execSync, spawn as nodeSpawn } from "child_process";
 import { createHash } from "crypto";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
