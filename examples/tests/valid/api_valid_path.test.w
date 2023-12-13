@@ -65,3 +65,4 @@ testValidPath("/test/segment1/:param1/segment2?query1=value1?query2=value2");
 testValidPath("/test/segment1/segment2?query=value1&query2=value2");
 testValidPath("/test/path.withDots");
 testValidPath("/test/path/.withDots/:param/:param-dash/x");
+testValidPath("/:param/test");

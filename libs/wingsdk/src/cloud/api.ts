@@ -383,11 +383,7 @@ export class Api extends Resource {
    * @internal
    */
   protected _validatePath(path: string) {
-    if (
-      !/^(\/[a-zA-Z0-9_\-\.]+(\/\:[a-zA-Z0-9_\-]+|\/[a-zA-Z0-9_\-\.]+)*(?:\?[^#]*)?)?$|^(\/\:[a-zA-Z0-9_\-]+)*\/?$/g.test(
-        path
-      )
-    ) {
+    if (!/^((\/:[\w-]+|\/[\w\.-]+)*(\?[^#]*)?)?\/?$/g.test(path)) {
       throw new Error(
         `Invalid path ${path}. Url parts can only contain alpha-numeric chars, "-", "_" and ".". Params can only contain alpha-numeric chars and "_".`
       );
