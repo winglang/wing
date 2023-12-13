@@ -205,7 +205,7 @@ if let s1 = str1 {
   assert(true);
 }
 
-let functionReturningNothing = (): void? => {
+let functionReturningNothing = (): str? => {
   return;
 }
 
