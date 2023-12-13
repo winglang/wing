@@ -28,7 +28,7 @@ export class BucketClient implements IBucketClient {
       return {
         contentType: metadata.contentType,
         lastModified: Datetime.fromIso(metadata.updated),
-        size: metadata.size,
+        size: Number(metadata.size),
       };
     } catch (error) {
       throw new Error(`Failed to get metadata for object. (key=${key})`);
