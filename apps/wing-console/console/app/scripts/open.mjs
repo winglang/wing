@@ -9,7 +9,8 @@
  */
 
 import { exec } from "node:child_process";
-import { join } from "node:path";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import spawn from "cross-spawn";
 import open from "open";
@@ -18,12 +19,12 @@ import colors from "picocolors";
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
-export function openBrowser(url, opt, logger) {
+export function openBrowser(url, opt) {
   // The browser executable to open.
   // See https://github.com/sindresorhus/open#app for documentation.
   const browser = typeof opt === "string" ? opt : process.env.BROWSER || "";
   if (browser.toLowerCase().endsWith(".js")) {
-    executeNodeScript(browser, url, logger);
+    executeNodeScript(browser, url);
   } else if (browser.toLowerCase() !== "none") {
     const browserArguments = process.env.BROWSER_ARGS
       ? process.env.BROWSER_ARGS.split(" ")
@@ -87,7 +88,7 @@ async function startBrowserProcess(browser, browserArguments, url) {
             url,
           )}" "${openedBrowser}"`,
           {
-            cwd: join(VITE_PACKAGE_DIR, "bin"),
+            cwd: resolve(fileURLToPath(new URL("../bin", import.meta.url))),
           },
         );
         return true;
