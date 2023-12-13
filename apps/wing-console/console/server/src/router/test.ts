@@ -18,7 +18,7 @@ const listTests = (simulator: Simulator): Promise<string[]> => {
 };
 
 const reloadSimulator = async (simulator: Simulator, logger: ConsoleLogger) => {
-  logger.log("Reloading simulator...", "console", {
+  logger.verbose("Reloading simulator...", "console", {
     messageType: "info",
   });
   await simulator.reload(true);
