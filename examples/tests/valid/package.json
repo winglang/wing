@@ -14,7 +14,7 @@
     "jsii-code-samples": "1.7.0",
     "projen": "^0.71.163",
     "uuid": "^9.0.0",
-    "wing-fixture": "workspace:^",
+    "@winglibs/testfixture": "workspace:^",
     "jsii-fixture": "workspace:^"
   },
   "volta": {

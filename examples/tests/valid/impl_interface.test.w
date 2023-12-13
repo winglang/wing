@@ -36,6 +36,16 @@ class r impl I3 {
   }
 }
 
+// create an instance of I3 and make sure we can call the methods
+let i3 = (): I3 => {
+  return new r();
+}();
+assert(i3.method1(1) == 1);
+test "can call inherited inflight interface method" {
+  assert(i3.method2("hello") == "hello");
+}
+assert(i3.method3([1, 2, 3]) == [1, 2, 3]);
+
 // a variable of some interface type can be assigned a class instance that implements it.
 interface IAnimal {
   inflight eat(): void;

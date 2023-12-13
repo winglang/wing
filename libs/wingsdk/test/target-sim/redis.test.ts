@@ -6,7 +6,7 @@ import { SimApp } from "../sim-app";
 test("create a Redis resource", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
 
   // THEN
   await app._withSimulator(async (s) => {
@@ -16,31 +16,16 @@ test("create a Redis resource", async () => {
       },
       path: "root/my_redis",
       props: {},
-      type: "wingsdk.redis.Redis",
+      type: ex.REDIS_FQN,
     });
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("access a Redis resource", async () => {
-  // GIVEN
-  const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
-
-  // THEN
-  await app._withSimulator(async (s) => {
-    const client = s.getResource("/my_redis") as ex.IRedisClient;
-    expect((await client.url()).startsWith("redis://")).toBeTruthy();
-    const redisClient = (await client.rawClient()) as IoRedis;
-    await redisClient.set("foo", "bar");
-    expect(await redisClient.get("foo")).toEqual("bar");
-  });
-});
-
 test("can set and get a value", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
   const key = "wing";
   const expectedValue = "does redis";
 
@@ -56,7 +41,7 @@ test("can set and get a value", async () => {
 test("can hset and hget values", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
   const key = "wing";
   const field = "secret_message";
   const expectedValue = "does redis";
@@ -73,7 +58,7 @@ test("can hset and hget values", async () => {
 test("can sadd and smembers values", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
   const key = "wing";
   const expectedValues = ["a", "b", "c"];
 
@@ -91,7 +76,7 @@ test("can sadd and smembers values", async () => {
 test("can del a value", async () => {
   // GIVEN
   const app = new SimApp();
-  const r = ex.Redis._newRedis(app, "my_redis");
+  const r = new ex.Redis(app, "my_redis");
   const key = "wing";
   const expectedValue = "does redis";
 
@@ -109,7 +94,7 @@ test("can del a value", async () => {
 test("return empty array when smembers on a non-existent key", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
   const key = "wing";
 
   // THEN
@@ -123,7 +108,7 @@ test("return empty array when smembers on a non-existent key", async () => {
 test("get a value that does not exist", async () => {
   // GIVEN
   const app = new SimApp();
-  ex.Redis._newRedis(app, "my_redis");
+  new ex.Redis(app, "my_redis");
   const key = "wing";
 
   // THEN

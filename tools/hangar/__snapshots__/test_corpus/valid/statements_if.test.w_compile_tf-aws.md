@@ -35,7 +35,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -74,7 +74,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -83,11 +83,12 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
           })
@@ -104,8 +105,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     if (true) {
@@ -132,11 +133,62 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
+    if (true) {
+      const a = undefined;
+      const b = "b";
+      const c = "c";
+      {
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const d = $if_let_value;
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        }
+        else if (((b) != null)) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        }
+        else {
+          const $elif_let_value1 = c;
+          if ($elif_let_value1 != undefined) {
+            const e = $elif_let_value1;
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+    }
+    if (true) {
+      const a = undefined;
+      const b = undefined;
+      const c = "c";
+      {
+        const $if_let_value = a;
+        if ($if_let_value != undefined) {
+          const d = $if_let_value;
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        }
+        else {
+          const $elif_let_value0 = c;
+          if ($elif_let_value0 != undefined) {
+            const e = $elif_let_value0;
+            {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+          }
+          else if (((b) != null)) {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+    }
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "statements_if.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "statements_if.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

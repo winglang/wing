@@ -9,6 +9,8 @@ import {
 import { Connections } from "../core";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
+export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");
+const ROOT_SYMBOL = Symbol.for("@winglang/sdk.std.Node/root");
 
 export const CONNECTIONS_FILE_PATH = "connections.json";
 export const SDK_SOURCE_MODULE = "@winglang/sdk";
@@ -17,6 +19,15 @@ export const SDK_SOURCE_MODULE = "@winglang/sdk";
  * The internal node of a construct.
  */
 export class Node {
+  /**
+   * Marks a type as the root of the tree.
+   * @param rootConstructor
+   * @internal
+   */
+  public static _markRoot(rootConstructor: any) {
+    rootConstructor[ROOT_SYMBOL] = true;
+  }
+
   /**
    * Return the internal construct node.
    */
@@ -53,8 +64,10 @@ export class Node {
 
   private readonly _constructsNode: ConstructsNode;
   private readonly _connections: Connections;
+  private _app: IApp | undefined;
+  private _root: IConstruct | undefined;
 
-  private constructor(construct: IConstruct) {
+  private constructor(private readonly construct: IConstruct) {
     this._constructsNode = construct.node;
     this._connections = Connections.of(construct); // tree-unique instance
   }
@@ -253,11 +266,33 @@ export class Node {
   }
 
   /**
-   * Returns the root of the construct tree.
+   * Returns the root of the construct tree (the `cloud.App` object).
+   *
+   * Similar to `app`.
+   *
    * @returns The root of the construct tree.
    */
-  public get root() {
-    return this._constructsNode.root;
+  public get root(): IConstruct {
+    if (!this._root) {
+      this._root = this.findRoot(this.construct);
+    }
+
+    return this._root;
+  }
+
+  /**
+   * Returns the root of the construct tree (the `cloud.App` object).
+   *
+   * Similar to `root`.
+   *
+   * @returns The root of the construct tree.
+   */
+  public get app(): IApp {
+    if (!this._app) {
+      this._app = this.findApp(this.construct);
+    }
+
+    return this._app;
   }
 
   /**
@@ -326,6 +361,33 @@ export class Node {
   public lock() {
     this._constructsNode.lock();
   }
+
+  /**
+   * Returns the root app.
+   */
+  private findApp(scope: IConstruct): IApp {
+    if (isApp(scope)) {
+      return scope as IApp;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root app");
+    }
+
+    return this.findApp(scope.node.scope);
+  }
+
+  private findRoot(scope: IConstruct): IConstruct {
+    if (isRoot(scope)) {
+      return scope;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root construct");
+    }
+
+    return this.findRoot(scope.node.scope);
+  }
 }
 
 /**
@@ -346,4 +408,49 @@ export interface AddConnectionProps {
    * A name for the connection.
    */
   readonly name: string;
+}
+
+/**
+ * Represents a Wing application.
+ */
+export interface IApp extends IConstruct {
+  /**
+   * Type marker.
+   * @internal
+   **/
+  readonly [APP_SYMBOL]: true;
+
+  /**
+   * The `.wing` directory into which you can emit artifacts during preflight.
+   */
+  readonly workdir: string;
+
+  /**
+   * `true` if this is a testing environment
+   */
+  readonly isTestEnvironment: boolean;
+
+  /**
+   * The directory of the entrypoint of the current program.
+   */
+  readonly entrypointDir: string;
+
+  /**
+   * Generate a unique ID for the given scope and prefix. The newly generated ID is
+   * guaranteed to be unique within the given scope.
+   * It will have the form '{prefix}{n}', where '{prefix}' is the given prefix and '{n}' is an
+   * ascending sequence of integers starting from '0'.
+   *
+   * @param scope to guarantee uniqueness in
+   * @param prefix prepended to the unique identifier
+   */
+  makeId(scope: IConstruct, prefix?: string): string;
+}
+
+function isApp(x: any): x is IApp {
+  return x && x[APP_SYMBOL];
+}
+
+function isRoot(x: any): boolean {
+  return x && x.constructor && x.constructor[ROOT_SYMBOL];
 }

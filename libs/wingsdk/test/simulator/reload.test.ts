@@ -10,7 +10,7 @@ test("reloading the simulator updates the state of the tree", async () => {
 
   // Create a .wsim file
   const app = new App({ outdir: workdir, entrypointDir: __dirname });
-  const bucket1 = Bucket._newBucket(app, "my_bucket", { public: false });
+  const bucket1 = new Bucket(app, "my_bucket", { public: false });
   Node.of(bucket1).hidden = false;
   const simfile = app.synth();
 
@@ -24,7 +24,7 @@ test("reloading the simulator updates the state of the tree", async () => {
 
   // Update the .wsim file in-place
   const app2 = new App({ outdir: workdir, entrypointDir: __dirname });
-  const bucket2 = Bucket._newBucket(app2, "my_bucket", { public: true });
+  const bucket2 = new Bucket(app2, "my_bucket", { public: true });
   Node.of(bucket2).hidden = true;
   app2.synth();
 

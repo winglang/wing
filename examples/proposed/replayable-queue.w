@@ -8,7 +8,7 @@ class ReplayableQueue {
   bucket: cloud.Bucket; 
   counter: cloud.Counter;
   
-  init() {
+  new() {
     this.queue = new cloud.Queue();
     this.bucket = new cloud.Bucket();
     this.counter = new cloud.Counter();
@@ -20,7 +20,7 @@ class ReplayableQueue {
   
   inflight push(m: str) {
     this.queue.push(m);
-    this.bucket.put("messages/${this.counter.inc()}", m);
+    this.bucket.put("messages/{this.counter.inc()}", m);
   }
   
   inflight replay(){
@@ -33,9 +33,9 @@ class ReplayableQueue {
 
 // how to use the queue
 class RemoteControl { 
-  init(q: ReplayableQueue){
+  new(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      log("setConsumer got triggered with ${m}");
+      log("setConsumer got triggered with {m}");
     };
       
     q.setConsumer(f);

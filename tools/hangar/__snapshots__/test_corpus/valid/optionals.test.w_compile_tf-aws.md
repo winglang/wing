@@ -19,7 +19,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.Node-1.js
@@ -32,7 +32,7 @@ module.exports = function({  }) {
   }
   return Node;
 }
-
+//# sourceMappingURL=inflight.Node-1.js.map
 ```
 
 ## inflight.Sub-1.js
@@ -46,7 +46,7 @@ module.exports = function({ $Super }) {
   }
   return Sub;
 }
-
+//# sourceMappingURL=inflight.Sub-1.js.map
 ```
 
 ## inflight.Sub1-1.js
@@ -60,7 +60,7 @@ module.exports = function({ $Super }) {
   }
   return Sub1;
 }
-
+//# sourceMappingURL=inflight.Sub1-1.js.map
 ```
 
 ## inflight.Super-1.js
@@ -73,7 +73,7 @@ module.exports = function({  }) {
   }
   return Super;
 }
-
+//# sourceMappingURL=inflight.Super-1.js.map
 ```
 
 ## main.tf.json
@@ -126,7 +126,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Super";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Super-1.js")({
           })
@@ -156,8 +156,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Sub extends Super {
@@ -165,10 +165,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -183,8 +183,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Sub1 extends Super {
@@ -192,10 +192,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub1-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -210,8 +210,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -221,7 +221,7 @@ class $Root extends $stdlib.std.Resource {
         this.left = left;
         this.right = right;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Node-1.js")({
           })
@@ -238,21 +238,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
-            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
+            $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
           })
         `;
       }
@@ -267,8 +268,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -288,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this, "Super");
     const s = (optionalSup ?? new Sub(this, "Sub"));
     {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
-    let name = ({"first": "John","last": "Doe"});
+    let name = ({"first": "John", "last": "Doe"});
     {
       const $if_let_value = name;
       if ($if_let_value != undefined) {
@@ -312,7 +313,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0)),"last": (parts.at(1))});
+      return ({"first": ((parts.at(0)) ?? ""), "last": ((parts.at(1)) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
@@ -381,12 +382,8 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
-        {
-          const $if_let_value = parsedName.last;
-          if ($if_let_value != undefined) {
-            const lastName = $if_let_value;
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
-          }
+        if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.last,""))) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
     }
@@ -447,12 +444,29 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payloadWithoutOptions = ({"a": "a"});
-    const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "orange bucket")});
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:t", new $Closure1(this, "$Closure1"));
+    const payloadWithBucket = ({"a": "a", "c": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "orange bucket")});
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:t", new $Closure1(this, "$Closure1"));
+    const str1 = undefined;
+    const str2 = undefined;
+    {
+      const $if_let_value = str1;
+      if ($if_let_value != undefined) {
+        const s1 = $if_let_value;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        const $elif_let_value0 = str2;
+        if ($elif_let_value0 != undefined) {
+          const s2 = $elif_let_value0;
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        }
+      }
+    }
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "optionals.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

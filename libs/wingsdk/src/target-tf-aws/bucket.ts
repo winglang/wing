@@ -20,6 +20,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
+import { IAwsBucket } from "../shared-aws/bucket";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -50,7 +51,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
@@ -72,6 +73,26 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.BucketInflightMethods.DELETE,
+      cloud.BucketInflightMethods.GET,
+      cloud.BucketInflightMethods.GET_JSON,
+      cloud.BucketInflightMethods.LIST,
+      cloud.BucketInflightMethods.PUT,
+      cloud.BucketInflightMethods.PUT_JSON,
+      cloud.BucketInflightMethods.PUBLIC_URL,
+      cloud.BucketInflightMethods.EXISTS,
+      cloud.BucketInflightMethods.TRY_GET,
+      cloud.BucketInflightMethods.TRY_GET_JSON,
+      cloud.BucketInflightMethods.TRY_DELETE,
+      cloud.BucketInflightMethods.SIGNED_URL,
+      cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
+    ];
+  }
+
   protected eventHandlerLocation(): string {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
@@ -89,7 +110,7 @@ export class Bucket extends cloud.Bucket {
     this.notificationTopics.push({
       id: `on-${actionType.toLowerCase()}-notification`,
       events: EVENTS[actionType],
-      topicArn: handler.arn,
+      topicArn: handler.topicArn,
     });
 
     this.notificationDependencies.push(handler.permissions);
@@ -137,6 +158,14 @@ export class Bucket extends cloud.Bucket {
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+
+  public get bucketArn(): string {
+    return this.bucket.arn;
+  }
+
+  public get bucketName(): string {
+    return this.bucket.bucketDomainName;
+  }
 }
 
 export function createEncryptedBucket(
@@ -164,7 +193,7 @@ export function createEncryptedBucket(
 
   const bucket = new S3Bucket(scope, name, {
     bucketPrefix,
-    forceDestroy: isTestEnvironment ? true : false,
+    forceDestroy: !!isTestEnvironment,
   });
 
   if (isPublic) {

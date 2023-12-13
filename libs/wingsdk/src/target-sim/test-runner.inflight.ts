@@ -3,7 +3,7 @@ import { IFunctionClient } from "../cloud";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../simulator";
 import { ITestRunnerClient, TestResult } from "../std";
 
-export class TestRunnerClient
+export class TestRunner
   implements ITestRunnerClient, ISimulatorResourceInstance
 {
   // A map from test paths to their corresponding function handles.
@@ -44,8 +44,8 @@ export class TestRunnerClient
     try {
       await fnClient.invoke("");
       pass = true;
-    } catch (e) {
-      error = (e as any).stack;
+    } catch (e: any) {
+      error = e.stack;
     }
     // only return traces that were added after the test was run
     const newTraces = this.context.listTraces().slice(previousTraces);

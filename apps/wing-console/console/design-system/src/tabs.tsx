@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, memo, useEffect, useState } from "react";
 
 import { ScrollableArea } from "./scrollable-area.js";
 import { useTheme } from "./theme-provider.js";
@@ -22,7 +22,7 @@ export interface TabsProps {
   small?: boolean;
 }
 
-export const Tabs = (props: TabsProps) => {
+export const Tabs = memo((props: TabsProps) => {
   const {
     onTabChange,
     transparent,
@@ -142,4 +142,4 @@ export const Tabs = (props: TabsProps) => {
       })}
     </div>
   );
-};
+});

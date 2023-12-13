@@ -9,7 +9,7 @@ let fn = inflight () => {
 class MyClosure {
   pub bucket: cloud.Bucket;
   
-  init() {
+  new() {
     this.bucket = new cloud.Bucket();
   }
 

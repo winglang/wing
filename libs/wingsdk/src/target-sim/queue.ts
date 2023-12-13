@@ -1,9 +1,10 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -31,12 +32,20 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     }
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      cloud.QueueInflightMethods.PUSH,
+      cloud.QueueInflightMethods.PURGE,
+      cloud.QueueInflightMethods.APPROX_SIZE,
+      cloud.QueueInflightMethods.POP,
+    ];
+  }
+
   public setConsumer(
     inflight: cloud.IQueueSetConsumerHandler,
-    props: cloud.QueueSetConsumerProps = {}
+    props: cloud.QueueSetConsumerOptions = {}
   ): cloud.Function {
-    const hash = inflight.node.addr.slice(-8);
-
     /**
      * The inflight function the user provided (via the `inflight` parameter) needs
      * to be wrapped in some extra logic to handle batching.
@@ -60,23 +69,21 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this,
-      `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
       "QueueSetConsumerHandlerClient"
     );
 
-    const fn = Function._newFunction(
+    const fn = new Function(
       this,
-      `${this.node.id}-SetConsumer-${hash}`,
+      App.of(this).makeId(this, "SetConsumer"),
       functionHandler,
       props
     );
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = "setConsumer()";
 
-    new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
+    new EventMapping(this, App.of(this).makeId(this, "QueueEventMapping"), {
       subscriber: fn,
       publisher: this,
       subscriptionProps: {
@@ -95,7 +102,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: QueueSchema = {
-      type: QUEUE_TYPE,
+      type: cloud.QUEUE_FQN,
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,

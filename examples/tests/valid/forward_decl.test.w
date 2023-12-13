@@ -1,6 +1,6 @@
 let x = "hi";
 if true {
-  log("${x}"); // we can access x because it was defined in an outer scope before this statement
+  log("{x}"); // we can access x because it was defined in an outer scope before this statement
   let y = new R(); // we can reference R because it was defined in an outer (regardless of order)
 }
 
@@ -13,11 +13,11 @@ class R {
   */
   method2() {
     this.method1(); // we can call method1 because it was defined in an outer (regardless of order)
-    log("${this.f}"); // we can access f because it was defined in an outer scope (regardless of order)
+    log("{this.f}"); // we can access f because it was defined in an outer scope (regardless of order)
     this.method2(); // we can call ourselves because we are defined in an outer scope
   }
   f: str;
-  init(/* empty */) {
+  new(/* empty */) {
     this.f = "Hello World!!!";
   }
   method1() {}

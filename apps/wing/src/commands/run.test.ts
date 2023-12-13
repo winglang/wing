@@ -32,7 +32,7 @@ test("wing it runs the only entrypoint file named main.w", async () => {
       wingfile: resolve("main.w"),
       requestedPort: 3000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
@@ -53,7 +53,7 @@ test("wing it runs the only entrypoint file ending with .main.w", async () => {
       wingfile: resolve("foo.main.w"),
       requestedPort: 3000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
@@ -103,7 +103,7 @@ test("wing it throws error for a directory with more than one entrypoint file", 
     writeFileSync("foo.main.w", "bring cloud;");
 
     await expect(run).rejects.toThrow(
-      "Multiple entrypoints found in the current directory (main.w, foo.main.w). Please specify which one to use."
+      "Multiple entrypoints found in the current directory (foo.main.w, main.w). Please specify which one to use."
     );
   } finally {
     process.chdir(prevdir);
@@ -126,7 +126,7 @@ test("wing it with a nested file runs", async () => {
       wingfile: resolve(filePath),
       requestedPort: 3000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
@@ -161,7 +161,7 @@ test("wing it with a custom port runs", async () => {
       wingfile: resolve("foo.main.w"),
       requestedPort: 5000,
       hostUtils: expect.anything(),
-      requireAcceptTerms: false,
+      requireAcceptTerms: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:5000/");
   } finally {

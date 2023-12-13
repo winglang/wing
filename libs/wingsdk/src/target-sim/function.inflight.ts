@@ -1,10 +1,6 @@
 import * as path from "path";
-import {
-  FUNCTION_TYPE,
-  FunctionAttributes,
-  FunctionSchema,
-} from "./schema-resources";
-import { IFunctionClient } from "../cloud";
+import { FunctionAttributes, FunctionSchema } from "./schema-resources";
+import { FUNCTION_FQN, IFunctionClient } from "../cloud";
 import { Sandbox } from "../shared/sandbox";
 import {
   ISimulatorContext,
@@ -41,15 +37,17 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const sb = new Sandbox(this.filename, {
-          context: { $simulator: this.context },
-          env: this.env,
+          env: {
+            ...this.env,
+            WING_SIMULATOR_URL: this.context.serverUrl,
+          },
           timeout: this.timeout,
-          log: (_level, message) => {
+          log: (internal, _level, message) => {
             this.context.addTrace({
               data: { message },
-              type: TraceType.LOG,
+              type: internal ? TraceType.RESOURCE : TraceType.LOG,
               sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_TYPE,
+              sourceType: FUNCTION_FQN,
               timestamp: new Date().toISOString(),
             });
           },

@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind,
-		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, Class, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
+		Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -97,6 +97,7 @@ where
 		StmtKind::Bring { source, identifier } => {
 			match &source {
 				BringSource::BuiltinModule(name) => v.visit_symbol(name),
+				BringSource::TrustedModule(name, _module_dir) => v.visit_symbol(name),
 				BringSource::WingLibrary(name, _module_dir) => v.visit_symbol(name),
 				BringSource::JsiiModule(name) => v.visit_symbol(name),
 				BringSource::WingFile(name) => v.visit_symbol(name),
@@ -145,9 +146,17 @@ where
 			v.visit_expr(value);
 			v.visit_scope(statements);
 			for elif in elif_statements {
-				v.visit_symbol(&elif.var_name);
-				v.visit_expr(&elif.value);
-				v.visit_scope(&elif.statements);
+				match elif {
+					Elifs::ElifBlock(elif_block) => {
+						v.visit_expr(&elif_block.condition);
+						v.visit_scope(&elif_block.statements);
+					}
+					Elifs::ElifLetBlock(elif_let_block) => {
+						v.visit_symbol(&elif_let_block.var_name);
+						v.visit_expr(&elif_let_block.value);
+						v.visit_scope(&elif_let_block.statements);
+					}
+				}
 			}
 			if let Some(statements) = else_statements {
 				v.visit_scope(statements);
@@ -364,8 +373,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for (name, val) in fields.iter() {
-				v.visit_symbol(name);
+			for (key, val) in fields.iter() {
+				v.visit_expr(key);
 				v.visit_expr(val);
 			}
 		}

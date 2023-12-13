@@ -200,7 +200,7 @@ preflight anonymous closure
 
 (source
   (expression_statement
-    (preflight_closure
+    (closure
       (parameter_list
         (parameter_definition
           (identifier)
@@ -221,13 +221,14 @@ inflight (): num => { return 1; };
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
-      (parameter_list)
-      (builtin_type)
-      (block
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
+      parameter_list: (parameter_list)
+      type: (builtin_type)
+      block: (block
         (return_statement
-          (number))))))
+          expression: (number))))))
 
 ================================================================================
 inflight anonymous closure inferred return
@@ -239,12 +240,13 @@ inflight () => { return 1; };
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
-      (parameter_list)
-      (block
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
+      parameter_list: (parameter_list)
+      block: (block
         (return_statement
-          (number))))))
+          expression: (number))))))
 
 ================================================================================
 inflight anonymous closure inferred args
@@ -256,17 +258,18 @@ inflight (arg1) => { log(arg1); };
 
 (source
   (expression_statement
-    (inflight_closure
-      (inflight_specifier)
-      (parameter_list
+    (closure
+      modifiers: (closure_modifiers
+        (inflight_specifier))
+      parameter_list: (parameter_list
         (parameter_definition
-          (identifier)))
-      (block
+          name: (identifier)))
+      block: (block
         (expression_statement
           (call
-            (reference
+            caller: (reference
               (reference_identifier))
-            (argument_list
+            args: (argument_list
               (positional_argument
                 (reference
                   (reference_identifier))))))))))
@@ -275,7 +278,7 @@ inflight (arg1) => { log(arg1); };
 Template string
 ================================================================================
 
-"cool ${test}";
+"cool {test}";
 
 --------------------------------------------------------------------------------
 
@@ -318,7 +321,6 @@ maybeVal ?? 2 == 2;
       (number))))
 
 ================================================================================
->>>>>>> 7e08a6d3f92f31497406dace539d6ccbabc6426e
 Set Literal
 ================================================================================
 
@@ -357,7 +359,11 @@ Empty Json Map Literal
 Map Literal
 ================================================================================
 
-{ "a" => 1, "b" => 2, "c" => 3,};
+{ 
+  "a" => 1, 
+  "b" => 2, 
+  str_func() => 3,
+};
 
 --------------------------------------------------------------------------------
 
@@ -371,7 +377,10 @@ Map Literal
         (string)
         (number))
       member: (map_literal_member
-        (string)
+        (call
+          caller: (reference
+            (reference_identifier))
+          args: (argument_list))
         (number)))))
 
 ================================================================================

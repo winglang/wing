@@ -13,6 +13,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: parseJson
+  kind: 2
+  detail: "(json: str): T1"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic parseJson: (json: str): T1\n```\n---\nParse a Json string into a Struct.\n### Parameters\n- `json` — `str`"
+  sortText: ff|parseJson
+  insertText: parseJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: schema
   kind: 2
   detail: "(): JsonSchema"
@@ -29,6 +41,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic tryFromJson: (json: Json): T1?\n```\n---\nConverts a Json to a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `Json`"
   sortText: ff|tryFromJson
   insertText: tryFromJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryParseJson
+  kind: 2
+  detail: "(json: str?): T1?"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic tryParseJson: (json: str?): T1?\n```\n---\nParse a Json string into a Struct, returning nil if the Json is not valid.\n### Parameters\n- `json` — `str?`"
+  sortText: ff|tryParseJson
+  insertText: tryParseJson($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

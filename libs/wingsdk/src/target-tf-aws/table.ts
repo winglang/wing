@@ -6,6 +6,7 @@ import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
 import * as core from "../core";
 import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { IAwsTable } from "../shared-aws/table";
 import { Json, IInflightHost } from "../std";
 
 /**
@@ -22,7 +23,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
-export class Table extends ex.Table {
+export class Table extends ex.Table implements IAwsTable {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
@@ -79,7 +80,10 @@ export class Table extends ex.Table {
       });
     }
 
-    if (ops.includes(ex.TableInflightMethods.GET)) {
+    if (
+      ops.includes(ex.TableInflightMethods.GET) ||
+      ops.includes(ex.TableInflightMethods.TRYGET)
+    ) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
         resources: [this.table.arn],
@@ -114,6 +118,19 @@ export class Table extends ex.Table {
     );
   }
 
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [
+      ex.TableInflightMethods.INSERT,
+      ex.TableInflightMethods.UPSERT,
+      ex.TableInflightMethods.UPDATE,
+      ex.TableInflightMethods.DELETE,
+      ex.TableInflightMethods.GET,
+      ex.TableInflightMethods.TRYGET,
+      ex.TableInflightMethods.LIST,
+    ];
+  }
+
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
@@ -124,5 +141,13 @@ export class Table extends ex.Table {
 
   private columnsEnvName(): string {
     return `${this.envName()}_COLUMNS`;
+  }
+
+  public get dynamoTableArn(): string {
+    return this.table.arn;
+  }
+
+  public get dynamoTableName(): string {
+    return this.table.name;
   }
 }

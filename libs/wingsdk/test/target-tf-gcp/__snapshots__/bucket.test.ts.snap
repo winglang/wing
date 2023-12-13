@@ -2,6 +2,11 @@
 
 exports[`bucket is public 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
@@ -36,6 +41,29 @@ exports[`bucket is public 2`] = `
         "children": {
           "Default": {
             "children": {
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -128,6 +156,11 @@ exports[`bucket is public 2`] = `
 
 exports[`bucket with two preflight files 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
@@ -167,6 +200,29 @@ exports[`bucket with two preflight files 2`] = `
         "children": {
           "Default": {
             "children": {
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -267,6 +323,11 @@ exports[`bucket with two preflight files 2`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
@@ -306,6 +367,29 @@ exports[`bucket with two preflight objects 2`] = `
         "children": {
           "Default": {
             "children": {
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -406,6 +490,11 @@ exports[`bucket with two preflight objects 2`] = `
 
 exports[`create a bucket 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_storage_bucket": {
       "my_bucket": {
@@ -433,6 +522,29 @@ exports[`create a bucket 2`] = `
         "children": {
           "Default": {
             "children": {
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -517,6 +629,11 @@ exports[`create a bucket 2`] = `
 
 exports[`two buckets 1`] = `
 {
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
+      "value": "[]",
+    },
+  },
   "resource": {
     "google_storage_bucket": {
       "my_bucket1": {
@@ -554,6 +671,29 @@ exports[`two buckets 2`] = `
         "children": {
           "Default": {
             "children": {
+              "cloud.TestRunner": {
+                "children": {
+                  "TestFunctionIdentifiers": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionIdentifiers",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
               "google": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",

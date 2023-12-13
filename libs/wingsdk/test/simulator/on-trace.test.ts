@@ -7,7 +7,7 @@ import { mkdtemp } from "../util";
 test("onTrace", async () => {
   // GIVEN
   const app = new App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  cloud.Bucket._newBucket(app, "my_bucket", { public: false });
+  new cloud.Bucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
 
   let numTraces = 0;
@@ -15,7 +15,7 @@ test("onTrace", async () => {
   // WHEN
   const s = new testing.Simulator({ simfile });
   s.onTrace({
-    callback: (_trace: cloud.Trace) => {
+    callback: (_trace) => {
       numTraces++;
     },
   });
