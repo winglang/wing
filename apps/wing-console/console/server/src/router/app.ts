@@ -735,6 +735,11 @@ function createMapEdgesFromConnectionData(
           return false;
         }
 
+        // Hide connections that go from a node to a parent.
+        if (sourceNode.path.startsWith(`${targetNode.path}/`)) {
+          return false;
+        }
+
         if (sourceNode.display?.hidden || targetNode.display?.hidden) {
           return false;
         }
