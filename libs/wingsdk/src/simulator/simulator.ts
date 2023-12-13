@@ -81,7 +81,7 @@ export interface IWithTraceProps {
  */
 export interface ISimulatorContext {
   /**
-   * Thes directory where the compilation output is
+   * The directory where the compilation output is
    */
   readonly simdir: string;
 
