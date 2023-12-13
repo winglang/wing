@@ -11,6 +11,12 @@ He got an invite for a pre-release. The invite explains that initially, there is
 
 The example looks like this:
 
+First, install some libraries:
+
+```sh
+$ npm i winglang wingsdk @winglibs/cloud @winglibs/checks
+```
+
 ```ts
 // main.ts
 import { inflight, App } from "wingsdk";
