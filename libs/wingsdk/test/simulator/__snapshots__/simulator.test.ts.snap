@@ -11,6 +11,7 @@ exports[`provides raw tree data 1`] = `
         },
         "display": {
           "description": "A cloud unit test.",
+          "hidden": true,
           "title": "Test",
         },
         "id": "test",
