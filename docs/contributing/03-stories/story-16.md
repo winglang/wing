@@ -2,24 +2,34 @@
 
 > **Status**: Draft
 
-Anders loves TypeScript, but he also loves the amazing experience Wing offers for building cloud applications.
+[Anders](https://en.wikipedia.org/wiki/Anders_Hejlsberg) loves TypeScript, but he also loves the amazing experience Wing offers for building cloud applications.
 
-It's Anders' lucky day because Wing Cloud had just announced that very soon TypeScript developers are able to start leveraging Wing libraries from the comfort of
+It's Anders' lucky day because Wing Cloud had just announced that very soon TypeScript developers will be able to leverage any Wing library from the comforts of
 their favorite programming language.
 
-He got an invite for a pre-release. The invite explains that initially, there is only support for `cloud.Bucket` and `cloud.Function` and for consuming [winglibs](https://github.com/winglang/winglibs).
+Anders just got an invite for a pre-release of Wing for TypeScript (code name "wing4ts"). The invite explains that in this pre-release, there is only support for `cloud.Bucket` and `cloud.Function` from the Wing Cloud Library and for consuming [winglibs](https://github.com/winglang/winglibs).
 
-The example looks like this:
-
-First, install some libraries:
+First, install the Wing CLI:
 
 ```sh
-$ npm i winglang wingsdk @winglibs/cloud @winglibs/checks
+npm i winglang
+```
+
+Now, install the Wing for TypeScript library (temporary name):
+
+```sh
+npm i wing4ts
+```
+
+Now, install some winglibs:
+
+```sh
+$ npm i @winglibs/cloud @winglibs/checks
 ```
 
 ```ts
 // main.ts
-import { inflight, App } from "wingsdk";
+import { inflight, App } from "wing4ts";
 import * as cloud from "@winglibs/cloud";
 import { Check } from "@winglibs/checks";
 
@@ -96,5 +106,8 @@ pub class Bucket {
   pub inflight delete(key: str, opts?: BucketDeleteOptions): void { return this.inner.delete(key, opts); }
 
   // ... you got the point
+
+  pub grantPut(target: std.InflightHost): void { /* ??? */ }
+  // ...
 }
 ```
