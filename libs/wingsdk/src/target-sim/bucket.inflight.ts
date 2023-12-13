@@ -46,7 +46,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       await fs.promises.mkdir(this._fileDir, { recursive: true });
     }
 
-    if (fs.existsSync(join(this.context.statedir, METADATA_FILENAME))) {
+    const metadataFileExists = await exists(
+      join(this.context.statedir, METADATA_FILENAME)
+    );
+    if (metadataFileExists) {
       const metadataContents = await fs.promises.readFile(
         join(this.context.statedir, METADATA_FILENAME),
         "utf-8"

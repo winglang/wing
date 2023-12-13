@@ -44,7 +44,7 @@ export const createCompiler = ({
       await events.emit("compiling");
       const simfile = await wing.compile(wingfile, {
         platform,
-        testing: true,
+        testing: false,
       });
       await events.emit("compiled", { simfile });
     } catch (error) {

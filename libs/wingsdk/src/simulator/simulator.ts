@@ -312,7 +312,7 @@ export class Simulator {
 
       try {
         const resource = this._handles.find(handle);
-        await resource.save();
+        await resource.save(join(this.statedir, resourceConfig.addr));
         this._handles.deallocate(handle);
         await resource.cleanup();
       } catch (err) {
@@ -888,9 +888,9 @@ export interface ISimulatorResourceInstance {
   cleanup(): Promise<void>;
 
   /**
-   * Save the resource's state.
+   * Save the resource's state into the state directory.
    */
-  save(): Promise<void>;
+  save(statedir: string): Promise<void>;
 }
 
 /** Schema for simulator.json */
