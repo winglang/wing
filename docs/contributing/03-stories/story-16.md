@@ -35,11 +35,11 @@ const fn = new cloud.Function(app, "Function", inflight({ bucket, data }, async 
 
 bucket.grantPut(fn);
 
-const check = new Check(app, "Check", inflight({ message, fn, bucket, data }, async (ctx, event) => {
-  await fn.invoke();
-  const actual = await bucket.get("hello.txt");
+const check = new Check(app, "Check", inflight({ fn, bucket, data }, async (ctx, event) => {
+  await ctx.fn.invoke();
+  const actual = await ctx.bucket.get("hello.txt");
 
-  console.log(`actual = ${actual}, expected = ${data}`);
+  console.log(`actual = ${actual}, expected = ${ctx.data}`);
 
   if (actual !== ctx.data) {
     throw new Error("check failed");
