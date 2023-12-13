@@ -4,7 +4,7 @@
 
 Anders loves TypeScript, but he also loves the amazing experience Wing offers for building cloud applications.
 
-It's Andres' lucky day because Wing Cloud had just announced that very soon TypeScript developers are able to start leveraging Wing libraries from the comfort of
+It's Anders' lucky day because Wing Cloud had just announced that very soon TypeScript developers are able to start leveraging Wing libraries from the comfort of
 their favorite programming language.
 
 He got an invite for a pre-release. The invite explains that initially, there is only support for `cloud.Bucket` and `cloud.Function` and for consuming [winglibs](https://github.com/winglang/winglibs).
