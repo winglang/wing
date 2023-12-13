@@ -312,7 +312,7 @@ export class Simulator {
 
       try {
         const resource = this._handles.find(handle);
-        await resource.save(join(this.statedir, resourceConfig.addr));
+        await resource.save(this.getResourceStateDir(resourceConfig.path));
         this._handles.deallocate(handle);
         await resource.cleanup();
       } catch (err) {
@@ -417,6 +417,16 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
     return config;
+  }
+
+  /**
+   * Obtain a resource's state directory path.
+   * @param path The resource path
+   * @returns The resource state directory path
+   */
+  public getResourceStateDir(path: string): string {
+    const config = this.getResourceConfig(path);
+    return join(this.statedir, config.addr);
   }
 
   /**
@@ -601,7 +611,9 @@ export class Simulator {
     const typeInfo = this.typeInfo(resourceConfig.type);
 
     // set up a state directory for the resource
-    await mkdir(join(this.statedir, resourceConfig.addr), { recursive: true });
+    await mkdir(this.getResourceStateDir(resourceConfig.path), {
+      recursive: true,
+    });
 
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
