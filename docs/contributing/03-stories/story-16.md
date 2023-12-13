@@ -65,3 +65,36 @@ $ wing compile -t tf-aws main.ts
 ```
 
 And enjoy life!
+
+## Notes
+
+The `@winglibs/cloud` library is a Wing library that looks like this:
+
+```js
+bring cloud;
+
+pub struct BucketProps {
+  public: bool?;
+}
+
+pub class Bucket {
+  inner: cloud.Bucket;
+
+  new(props: BucketProps?) {
+    this.inner = new cloud.Bucket(props);
+  }
+
+  pub addFile(key: str, path: str, encoding?: str): void { return this.inner.addFile(key, path, encoding); }
+  pub addObject(key: str, body: str): void               { return this.inner.addObject(key, body); }
+
+  pub onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void { return this.onCreate(fn, opts); }
+  pub onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void { return this.onDelete(fn, opts); }
+  pub onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void { return this.onUpdate(fn, opts); }
+  pub onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void   { return this.onEvent(fn, opts); }
+
+  pub inflight copy(srcKey: str, dstKey: str): void               { return this.inner.copy(srcKey, dstKey); }
+  pub inflight delete(key: str, opts?: BucketDeleteOptions): void { return this.inner.delete(key, opts); }
+
+  // ... you got the point
+}
+```
