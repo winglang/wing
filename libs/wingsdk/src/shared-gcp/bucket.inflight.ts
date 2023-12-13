@@ -33,7 +33,7 @@ export class BucketClient implements IBucketClient {
         size: Number(metadata.size),
       };
     } catch (error) {
-      throw new Error(`Failed to get metadata for object. (key=${key})`);
+      throw new Error(`Object does not exist (key=${key})`);
     }
   }
 
