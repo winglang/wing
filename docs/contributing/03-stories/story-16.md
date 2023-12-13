@@ -33,6 +33,8 @@ const fn = new cloud.Function(app, "Function", inflight({ bucket, data }, async 
   await ctx.bucket.put("hello.txt", ctx.data);
 });
 
+bucket.grantPut(fn);
+
 const check = new Check(app, "Check", inflight({ message, fn, bucket, data }, async (ctx, event) => {
   await fn.invoke();
   const actual = await bucket.get("hello.txt");
@@ -43,6 +45,9 @@ const check = new Check(app, "Check", inflight({ message, fn, bucket, data }, as
     throw new Error("check failed");
   }
 }));
+
+fn.grantInvoke(check);
+bucket.grantGet(check);
 
 app.synth();
 ```
