@@ -2,6 +2,10 @@ bring util;
 bring expect;
 bring fs;
 
+class Util {
+  extern "./util.js" pub static inflight platform(): str;
+}
+
 let assertThrows = inflight (expected: str, block: (): void) => {
   let var error = false;
   try {
@@ -14,15 +18,19 @@ let assertThrows = inflight (expected: str, block: (): void) => {
 };
 
 test "shell() with valid command" {
-  let command = "echo -n Hello, Wing!";
+  let command = "echo Hello, Wing!";
 
   let output = util.shell(command);
   
-  expect.equal(output, "Hello, Wing!");
+  if Util.platform() != "windows" {
+    expect.equal(output, "Hello, Wing!\n");
+  } else {
+    expect.equal(output, "Hello, Wing!\r\n");
+  }
 }
 
 test "shell() with invalid command" {
-  let NOT_FOUND_ERROR = "Error executing command \"no-such-command\". Exited with error: /bin/sh: 1: no-such-command: not found";
+  let NOT_FOUND_ERROR = "Error executing command \"no-such-command\". Exited with error:";
 
   let command = "no-such-command";
 
@@ -42,12 +50,16 @@ test "shell() with explicit non-zero exit status" {
 }
 
 test "shell() with env option" {
-  let command = "echo -n $ENV_VAR";
+  let command = "echo Hello, $ENV_VAR!";
   let opts = {env: { "ENV_VAR": "Wing" }};
 
   let output = util.shell(command, opts);
 
-  expect.equal(output, "Wing");
+  if Util.platform() != "windows" {
+    expect.equal(output, "Hello, Wing!\n");
+  } else {
+    expect.equal(output, "Hello, Wing!\r\n");
+  }
 }
 
 test "shell() with cwd option" {
