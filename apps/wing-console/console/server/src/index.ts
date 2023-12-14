@@ -240,7 +240,7 @@ export const createConsoleServer = async ({
       return testSimulator.instance(statedir);
     },
     simulatorInstance() {
-      return simulator.instance(undefined);
+      return simulator.instance();
     },
     errorMessage() {
       return lastErrorMessage;
