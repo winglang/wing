@@ -1,9 +1,12 @@
-import { execSync, spawn as nodeSpawn } from "child_process";
+import { exec as nodeExec, spawn as nodeSpawn } from "child_process";
 import { createHash } from "crypto";
+import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
+
+const execPromise = promisify(nodeExec);
 
 /**
  * Describes what to do with a standard I/O stream for a child process.
@@ -243,16 +246,17 @@ export class Util {
     const command = `${program} ${args.join(" ")}`;
 
     try {
+      const { stdout, stderr } = await execPromise(command, opts);
       return {
-        stdout: execSync(command, opts).toString(),
-        stderr: "",
+        stdout: stdout.toString(),
+        stderr: stderr.toString(),
         status: 0,
       };
     } catch (error: any) {
       return {
-        stdout: error.stdout?.toString() ?? "",
-        stderr: error.stderr?.toString() ?? "",
-        status: error.status ?? -1,
+        stdout: error.stdout ?? "",
+        stderr: error.stderr ?? "",
+        status: error.code ?? -1,
       };
     }
   }
