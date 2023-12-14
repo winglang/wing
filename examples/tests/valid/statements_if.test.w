@@ -38,3 +38,35 @@ test "test" {
     }
   }
 }
+
+if true {
+  let a: str? = nil;
+  let b: str? = "b";
+  let c: str? = "c";
+  if let d = a {
+    assert(false);
+  } elif b? {
+    assert(true);
+  } elif let e = c {
+    assert(false);
+  } else {
+    assert(false);
+  }
+}
+
+if true {
+  let a: str? = nil;
+  let b: str? = nil;
+  let c: str? = "c";
+  if let d = a {
+    assert(false);
+  } elif let e = c {
+    assert(true);
+  } elif b? {
+    assert(false);
+  } else {
+    assert(false);
+  }
+}
+
+
