@@ -214,7 +214,7 @@ export class Util {
    * @param command The command string to execute in the shell.
    * @param opts `ShellOptions`, such as the working directory and environment variables.
    * @returns The standard output of the shell command.
-   * @throws An error if the shell command execution fails.
+   * @throws An error if the shell command execution fails or returns a non-zero exit code.
    */
   public static async shell(
     command: string,
