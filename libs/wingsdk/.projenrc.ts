@@ -18,9 +18,9 @@ const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
 
-const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
-const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/03-std/";
+const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/cloud/";
+const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/ex/";
+const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -289,14 +289,17 @@ const toCamelCase = (str: string) =>
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
-  docsPath: string,
-  excludedFiles: string[] = [],
-  allowUndocumented = false
+  options: {
+    docsPath: string;
+    excludedFiles?: string[];
+    allowUndocumented?: boolean;
+  }
 ) {
+  const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
   const cloudFiles = readdirSync(pathToFolder);
 
   const cloudResources: Set<string> = new Set(
-    cloudFiles.map((filename) => filename.split(".")[0])
+    cloudFiles.map((filename: string) => filename.split(".")[0])
   );
 
   excludedFiles.forEach((file) => cloudResources.delete(file));
@@ -328,26 +331,33 @@ function generateResourceApiDocs(
   }
 }
 
-generateResourceApiDocs(
-  "cloud",
-  "./src/cloud",
-  CLOUD_DOCS_PREFIX,
-  UNDOCUMENTED_CLOUD_FILES
-);
-generateResourceApiDocs(
-  "ex",
-  "./src/ex",
-  EX_DOCS_PREFIX,
-  UNDOCUMENTED_EX_FILES
-);
+generateResourceApiDocs("cloud", "./src/cloud", {
+  docsPath: CLOUD_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_CLOUD_FILES,
+});
+generateResourceApiDocs("ex", "./src/ex", {
+  docsPath: EX_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_EX_FILES,
+});
 
-generateResourceApiDocs(
-  "std",
-  "./src/std",
-  STD_DOCS_PREFIX,
-  ["README", "index", "test-runner", "resource", "test", "range", "generics"],
-  true
-);
+// generateResourceApiDocs("dynamodb-table", "./src/ex/dynamodb-table.ts", {
+//   docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table"),
+//   excludedFiles: [],
+// });
+
+generateResourceApiDocs("std", "./src/std", {
+  docsPath: STD_DOCS_PREFIX,
+  excludedFiles: [
+    "README",
+    "index",
+    "test-runner",
+    "resource",
+    "test",
+    "range",
+    "generics",
+  ],
+  allowUndocumented: true,
+});
 
 docgen.exec("rm API.md");
 
