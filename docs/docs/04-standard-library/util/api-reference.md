@@ -92,14 +92,14 @@ Calling this method multiple times will return the same output.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.ChildProcess.property.id">id</a></code> | <code>num</code> | The child's OS-assigned process ID. |
+| <code><a href="#@winglang/sdk.util.ChildProcess.property.pid">pid</a></code> | <code>num</code> | The child's OS-assigned process ID. |
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@winglang/sdk.util.ChildProcess.property.id"></a>
+##### `pid`<sup>Required</sup> <a name="pid" id="@winglang/sdk.util.ChildProcess.property.pid"></a>
 
 ```wing
-id: num;
+pid: num;
 ```
 
 - *Type:* num
@@ -124,7 +124,7 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.exec">exec</a></code> | Execute a program with the given arguments, wait for it to finish, and return its outputs. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
-| <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns a `Output` struct. |
+| <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns its standard output. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.spawn">spawn</a></code> | Execute a program with the given arguments, and return a `ChildProcess` object that can be used to interact with the process while it is running. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
@@ -285,7 +285,7 @@ bring util;
 util.shell(command: str, opts?: ShellOptions);
 ```
 
-Executes a command in the shell and returns a `Output` struct.
+Executes a command in the shell and returns its standard output.
 
 ###### `command`<sup>Required</sup> <a name="command" id="@winglang/sdk.util.Util.shell.parameter.command"></a>
 
@@ -660,6 +660,7 @@ let ShellOptions = util.ShellOptions{ ... };
 | <code><a href="#@winglang/sdk.util.ShellOptions.property.cwd">cwd</a></code> | <code>str</code> | Path to a directory to run the command in. |
 | <code><a href="#@winglang/sdk.util.ShellOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables. |
 | <code><a href="#@winglang/sdk.util.ShellOptions.property.inheritEnv">inheritEnv</a></code> | <code>bool</code> | Whether to inherit environment variables from the host's environment. |
+| <code><a href="#@winglang/sdk.util.ShellOptions.property.throw">throw</a></code> | <code>bool</code> | Whether to throw an error on command execution failure. |
 
 ---
 
@@ -699,6 +700,19 @@ inheritEnv: bool;
 - *Default:* false
 
 Whether to inherit environment variables from the host's environment.
+
+---
+
+##### `throw`<sup>Optional</sup> <a name="throw" id="@winglang/sdk.util.ShellOptions.property.throw"></a>
+
+```wing
+throw: bool;
+```
+
+- *Type:* bool
+- *Default:* true
+
+Whether to throw an error on command execution failure.
 
 ---
 
