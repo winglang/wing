@@ -7,29 +7,47 @@ test "shell() with valid command" {
 
   let output = util.shell(command);
   
-  expect.equal(output.stdout, "Hello, Wing!");
-  expect.equal(output.stderr, "");
-  expect.equal(output.status, 0);
+  expect.equal(output, "Hello, Wing!");
 }
 
 test "shell() with invalid command" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual.contains(expected));
+      error = true;
+    }
+    assert(error);
+  };
+  let NOT_FOUND_ERROR = "no-such-command: not found";
+
   let command = "no-such-command";
 
-  let output = util.shell(command);
-
-  expect.equal(output.stdout, "");
-  expect.equal(output.stderr, "/bin/sh: 1: no-such-command: not found\n");
-  expect.equal(output.status, 127);
+  assertThrows(NOT_FOUND_ERROR, () => {
+    util.shell(command);
+  });
 }
 
 test "shell() with explicit non-zero exit status" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual.contains(expected));
+      error = true;
+    }
+    assert(error);
+  };
+  let ERROR = "";
+
   let command = "exit 1";
 
-  let output = util.shell(command);
-
-  expect.equal(output.stdout, "");
-  expect.equal(output.stderr, "");
-  expect.equal(output.status, 1);
+  assertThrows(ERROR, () => {
+    util.shell(command);
+  });
 }
 
 test "shell() with env option" {
@@ -38,9 +56,7 @@ test "shell() with env option" {
 
   let output = util.shell(command, opts);
 
-  expect.equal(output.stdout, "Wing");
-  expect.equal(output.stderr, "");
-  expect.equal(output.status, 0);
+  expect.equal(output, "Wing");
 }
 
 test "shell() with cwd option" {
@@ -53,7 +69,5 @@ test "shell() with cwd option" {
 
   let output = util.shell(command, opts);
 
-  expect.equal(output.stdout, "tempfile.txt\n");
-  expect.equal(output.stderr, "");
-  expect.equal(output.status, 0);
+  expect.equal(output, "tempfile.txt\n");
 }

@@ -210,28 +210,21 @@ export interface NanoidOptions {
  */
 export class Util {
   /**
-   * Executes a command in the shell and returns a `Output` struct.
+   * Executes a command in the shell and returns its standard output.
    * @param command The command string to execute in the shell.
    * @param opts `ShellOptions`, such as the working directory and environment variables.
-   * @returns A struct containing `stdout`, `stderr` and exit `status` of the shell command.
+   * @returns The standard output of the shell command.
+   * @throws An error if the shell command execution fails.
    */
   public static async shell(
     command: string,
     opts?: ShellOptions
-  ): Promise<Output> {
+  ): Promise<String> {
     try {
-      const { stdout, stderr } = await execPromise(command, opts);
-      return {
-        stdout: stdout.toString(),
-        stderr: stderr.toString(),
-        status: 0,
-      };
+      const { stdout } = await execPromise(command, opts);
+      return stdout.toString();
     } catch (error: any) {
-      return {
-        stdout: error.stdout,
-        stderr: error.stderr,
-        status: error.code,
-      };
+      throw new Error(error.stderr);
     }
   }
 
