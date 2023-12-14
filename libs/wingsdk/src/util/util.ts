@@ -115,7 +115,7 @@ export class ChildProcess {
   /**
    * The child's OS-assigned process ID.
    */
-  public readonly id: number;
+  public readonly pid: number;
 
   constructor(program: string, args: string[], opts?: SpawnOptions) {
     this.childProcess = spawn(program, args, {
