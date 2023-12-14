@@ -3,7 +3,7 @@ bring expect;
 bring fs;
 
 test "shell() with valid command" {
-  let command = "echo -n 'Hello, Wing!'";
+  let command = "echo -n Hello, Wing!";
 
   let output = util.shell(command);
   
