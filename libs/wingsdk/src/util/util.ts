@@ -224,7 +224,14 @@ export class Util {
       const { stdout } = await execPromise(command, opts);
       return stdout.toString();
     } catch (error: any) {
-      throw new Error(error.stderr);
+      if (error && error.stderr) {
+        throw new Error(
+          `Error executing command "${command}". Exited with error: ${error.stderr}`
+        );
+      }
+      throw new Error(
+        `Error executing command "${command}". Exited with error code: ${error.code}`
+      );
     }
   }
 

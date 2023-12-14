@@ -21,7 +21,7 @@ test "shell() with invalid command" {
     }
     assert(error);
   };
-  let NOT_FOUND_ERROR = "no-such-command: not found";
+  let NOT_FOUND_ERROR = "Error executing command \"no-such-command\". Exited with error: /bin/sh: 1: no-such-command: not found";
 
   let command = "no-such-command";
 
@@ -41,7 +41,7 @@ test "shell() with explicit non-zero exit status" {
     }
     assert(error);
   };
-  let ERROR = "";
+  let ERROR = "Error executing command \"exit 1\". Exited with error code: 1";
 
   let command = "exit 1";
 
