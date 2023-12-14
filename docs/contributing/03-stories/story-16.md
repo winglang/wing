@@ -97,10 +97,10 @@ pub class Bucket {
   pub addFile(key: str, path: str, encoding?: str): void { return this.inner.addFile(key, path, encoding); }
   pub addObject(key: str, body: str): void               { return this.inner.addObject(key, body); }
 
-  pub onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void { return this.onCreate(fn, opts); }
-  pub onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void { return this.onDelete(fn, opts); }
-  pub onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void { return this.onUpdate(fn, opts); }
-  pub onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void   { return this.onEvent(fn, opts); }
+  pub onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateOptions): void { return this.inner.onCreate(fn, opts); }
+  pub onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteOptions): void { return this.inner.onDelete(fn, opts); }
+  pub onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateOptions): void { return this.inner.onUpdate(fn, opts); }
+  pub onEvent(fn: IBucketEventHandler, opts?: BucketOnEventOptions): void   { return this.inner.onEvent(fn, opts); }
 
   pub inflight copy(srcKey: str, dstKey: str): void               { return this.inner.copy(srcKey, dstKey); }
   pub inflight delete(key: str, opts?: BucketDeleteOptions): void { return this.inner.delete(key, opts); }
