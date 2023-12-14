@@ -51,7 +51,13 @@ export interface CommandOptions {
 /**
  * Additional options for `util.shell()`
  */
-export interface ShellOptions extends CommandOptions {}
+export interface ShellOptions extends CommandOptions {
+  /**
+   * Whether to throw an error on command execution failure.
+   * @default true
+   */
+  readonly throw?: boolean;
+}
 
 /**
  * Additional options for `util.exec()`
