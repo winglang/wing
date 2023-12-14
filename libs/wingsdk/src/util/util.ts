@@ -121,37 +121,70 @@ export class ChildProcess {
   /**
    * The child's OS-assigned process ID.
    */
-  public readonly pid: number;
-
-  private stdout = "";
-  private stderr = "";
-  private isComplete = false;
+  public readonly pid: number | undefined;
+  /**
+   * The accumulated standard output from the child process.
+   */
+  private stdout: string = "";
+  /**
+   * The accumulated standard error from the child process.
+   */
+  private stderr: string = "";
+  /**
+   * The exit status of the child process. Null if the process has not yet finished.
+   */
   private exitStatus: number | null = null;
 
   constructor(program: string, args: string[], opts?: SpawnOptions) {
-    const spawnOptions: any = {
+    // Prepare stdio options based on `SpawnOptions`
+    const stdio = [
+      opts?.stdin === Stdio.PIPED
+        ? "pipe"
+        : opts?.stdin === Stdio.NULL
+        ? "ignore"
+        : "inherit",
+      opts?.stdout === Stdio.PIPED
+        ? "pipe"
+        : opts?.stdout === Stdio.NULL
+        ? "ignore"
+        : "inherit",
+      opts?.stderr === Stdio.PIPED
+        ? "pipe"
+        : opts?.stderr === Stdio.NULL
+        ? "ignore"
+        : "inherit",
+    ];
+
+    // Spawn the child process with the provided options
+    this.childProcess = spawn(program, args, {
       cwd: opts?.cwd,
-      env: opts?.env,
-    };
-
-    this.childProcess = spawn(program, args, spawnOptions);
-    this.pid = this.childProcess.pid ?? -1;
-
-    this.childProcess.stdout?.on("data", (data) => {
-      this.stdout += data;
+      env: opts?.inheritEnv ? { ...process.env, ...opts.env } : opts?.env,
+      stdio: stdio as [
+        "pipe" | "ignore" | "inherit",
+        "pipe" | "ignore" | "inherit",
+        "pipe" | "ignore" | "inherit"
+      ],
     });
 
-    this.childProcess.stderr?.on("data", (data) => {
-      this.stderr += data;
-    });
+    this.pid = this.childProcess.pid;
 
-    // Listen for the `close` event to track completion and exit status
-    this.childProcess.on("close", (status) => {
-      this.isComplete = true;
-      this.exitStatus = status !== null ? status : -1;
-    });
+    // If stdio for stdout is set to `pipe`, listen for data events on stdout.
+    if (this.childProcess.stdout) {
+      this.childProcess.stdout.on("data", (data: Buffer) => {
+        this.stdout += data.toString();
+      });
+    }
 
-    // this.childProcess.on("error", (error) => {});
+    // If stdio for stderr is set to `pipe`, listen for data events on stderr.
+    if (this.childProcess.stderr) {
+      this.childProcess.stderr.on("data", (data: Buffer) => {
+        this.stderr += data.toString();
+      });
+    }
+
+    this.childProcess.on("exit", (code) => {
+      this.exitStatus = code;
+    });
   }
 
   /**
@@ -167,21 +200,25 @@ export class ChildProcess {
    * Calling this method multiple times will return the same output.
    */
   public async wait(): Promise<Output> {
-    if (this.isComplete) {
+    if (this.exitStatus !== null) {
       return {
         stdout: this.stdout,
         stderr: this.stderr,
-        status: this.exitStatus ?? -1,
+        status: this.exitStatus,
       };
     }
 
-    return new Promise((resolve) => {
-      this.childProcess.on("close", () => {
-        resolve({
-          stdout: this.stdout,
-          stderr: this.stderr,
-          status: this.exitStatus ?? -1,
-        });
+    return new Promise((resolve, reject) => {
+      this.childProcess.on("exit", (code, signal) => {
+        if (code !== null) {
+          resolve({ stdout: this.stdout, stderr: this.stderr, status: code });
+        } else {
+          reject(new Error(`Process terminated by signal ${signal}`));
+        }
+      });
+
+      this.childProcess.on("error", (error) => {
+        reject(error);
       });
     });
   }
