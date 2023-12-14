@@ -1,6 +1,6 @@
 # User Story 16 - Wing for TypeScript
 
-> **Status**: Last Call
+> **Status**: Approved
 
 [Anders](https://en.wikipedia.org/wiki/Anders_Hejlsberg) loves TypeScript, but he also loves the amazing experience Wing offers for building cloud applications.
 
