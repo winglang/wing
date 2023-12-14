@@ -1,4 +1,4 @@
-import { exec, spawn } from "child_process";
+import { exec, execFile, spawn } from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
@@ -7,6 +7,7 @@ import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
 const execPromise = promisify(exec);
+const execFilePromise = promisify(execFile);
 
 /**
  * Describes what to do with a standard I/O stream for a child process.
@@ -79,19 +80,19 @@ export interface SpawnOptions extends CommandOptions {
 }
 
 /**
- * Output of `util.shell()`
+ * Output of a finished process.
  */
-export interface ShellOutput {
+export interface Output {
   /**
-   * The standard output of running the shell command.
+   * The standard output of a finished process.
    */
   readonly stdout: string;
   /**
-   * The standard error of running the shell command.
+   * The standard error of a finished process.
    */
   readonly stderr: string;
   /**
-   * The command's exit status.
+   * A process's exit status.
    */
   readonly status: number;
 }
@@ -136,7 +137,7 @@ export class ChildProcess {
    * Wait for the process to finish and return its output.
    * Calling this method multiple times will return the same output.
    */
-  public async wait(): Promise<ShellOutput> {
+  public async wait(): Promise<Output> {
     return new Promise((resolve, reject) => {
       let stdout = "";
       let stderr = "";
@@ -209,15 +210,15 @@ export interface NanoidOptions {
  */
 export class Util {
   /**
-   * Executes a command in the shell and returns a `ShellOutput` struct.
+   * Executes a command in the shell and returns a `Output` struct.
    * @param command The command string to execute in the shell.
-   * @param opts Configuration options for the execution, such as the working directory and environment variables.
-   * @returns A struct containing `stdout`, `stderr` and exit `status` of the command.
+   * @param opts `ShellOptions`, such as the working directory and environment variables.
+   * @returns A struct containing `stdout`, `stderr` and exit `status` of the shell command.
    */
   public static async shell(
     command: string,
     opts?: ShellOptions
-  ): Promise<ShellOutput> {
+  ): Promise<Output> {
     try {
       const { stdout, stderr } = await execPromise(command, opts);
       return {
@@ -237,21 +238,18 @@ export class Util {
   /**
    * Execute a program with the given arguments, wait for it to finish, and
    * return its outputs.
-   * @param program - The program to execute.
-   * @param args - An array of arguments to pass to the program.
-   * @param opts - Execution options including working directory, environment variables, etc.
-   * @returns A promise that resolves to the output of the executed program.
-   * @throws An error if the execution fails.
+   * @param program The program to execute.
+   * @param args An array of arguments to pass to the program.
+   * @param opts `ExecOptions`, such as the working directory and environment variables.
+   * @returns A struct containing `stdout`, `stderr` and exit `status` of the executed program.
    */
   public static async exec(
     program: string,
     args: Array<string>,
     opts?: ExecOptions
-  ): Promise<ShellOutput> {
-    const command = `${program} ${args.join(" ")}`;
-
+  ): Promise<Output> {
     try {
-      const { stdout, stderr } = await execPromise(command, opts);
+      const { stdout, stderr } = await execFilePromise(program, args, opts);
       return {
         stdout: stdout.toString(),
         stderr: stderr.toString(),
@@ -259,9 +257,9 @@ export class Util {
       };
     } catch (error: any) {
       return {
-        stdout: error.stdout ?? "",
-        stderr: error.stderr ?? "",
-        status: error.code ?? -1,
+        stdout: error.stdout,
+        stderr: error.stderr,
+        status: error.code,
       };
     }
   }
