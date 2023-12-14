@@ -30,4 +30,6 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {}
 }

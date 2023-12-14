@@ -38,6 +38,8 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
 
   public async cleanup(): Promise<void> {}
 
+  public async save(): Promise<void> {}
+
   public async insert(key: string, row: Json): Promise<void> {
     validateRow(row, this.columns);
     const anyRow = row as any;

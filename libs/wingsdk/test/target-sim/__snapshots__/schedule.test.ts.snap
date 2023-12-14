@@ -9,14 +9,7 @@ exports[`create a schedule 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
@@ -108,19 +101,6 @@ exports[`create a schedule 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -179,14 +159,7 @@ console.log(\\"Hello from schedule!\\");
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
@@ -198,6 +171,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
@@ -206,6 +180,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Schedule",
       },
       {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
@@ -299,19 +274,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {
@@ -396,14 +358,7 @@ console.log(\\"Hello from schedule!\\");
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
@@ -415,6 +370,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
@@ -423,6 +379,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Schedule",
       },
       {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
@@ -516,19 +473,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {
@@ -613,14 +557,7 @@ console.log(\\"Hello from schedule!\\");
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c83eddbe8512d15b84969a611d4b5ca9ce55e1f808",
         "attrs": {},
         "path": "root/my_schedule/OnTick0",
         "props": {
@@ -632,6 +569,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8eac5abdbcb1c98c5525dcb3d0e38c0ccdfef4aed",
         "attrs": {},
         "path": "root/my_schedule",
         "props": {
@@ -640,6 +578,7 @@ console.log(\\"Hello from schedule!\\");
         "type": "@winglang/sdk.cloud.Schedule",
       },
       {
+        "addr": "c863abe75f0d01961369ad52fd7212846989919eaf",
         "attrs": {},
         "path": "root/my_schedule/OnTickMapping0",
         "props": {
@@ -733,19 +672,6 @@ console.log(\\"Hello from schedule!\\");
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_schedule": {
           "children": {
             "OnTick0": {

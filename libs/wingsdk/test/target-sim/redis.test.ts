@@ -15,6 +15,7 @@ test("create a Redis resource", async () => {
         handle: expect.any(String),
       },
       path: "root/my_redis",
+      addr: expect.any(String),
       props: {},
       type: ex.REDIS_FQN,
     });

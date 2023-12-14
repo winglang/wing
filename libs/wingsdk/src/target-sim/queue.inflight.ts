@@ -18,7 +18,7 @@ export class Queue
 {
   private readonly messages = new Array<QueueMessage>();
   private readonly subscribers = new Array<QueueSubscriber>();
-  private readonly intervalId: NodeJS.Timeout;
+  private readonly processLoop: LoopController;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
   private readonly retentionPeriod: number;
@@ -26,7 +26,7 @@ export class Queue
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
-    this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
+    this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
     this.context = context;
   }
 
@@ -35,8 +35,10 @@ export class Queue
   }
 
   public async cleanup(): Promise<void> {
-    clearInterval(this.intervalId);
+    await this.processLoop.stop();
   }
+
+  public async save(): Promise<void> {}
 
   public async addEventSubscription(
     subscriber: FunctionHandle,
@@ -96,20 +98,21 @@ export class Queue
     });
   }
 
-  private processMessages() {
+  private async processMessages() {
     let processedMessages = false;
     do {
       processedMessages = false;
       // Remove messages that have expired
       const currentTime = new Date();
-      this.messages.forEach(async (message, index) => {
+      for (let index = this.messages.length - 1; index >= 0; index--) {
+        const message = this.messages[index];
         if (message.retentionTimeout < currentTime) {
           await this.context.withTrace({
             activity: async () => this.messages.splice(index, 1),
             message: `Removing expired message (message=${message.payload}).`,
           });
         }
-      });
+      }
       // Randomize the order of subscribers to avoid user code making
       // assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
@@ -146,6 +149,7 @@ export class Queue
           sourceType: QUEUE_FQN,
           timestamp: new Date().toISOString(),
         });
+        // TODO: replace with await fnClient.invokeAsync()
         void fnClient
           .invoke(JSON.stringify({ messages: messagesPayload }))
           .catch((err) => {
@@ -234,4 +238,56 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
   public [Symbol.iterator]() {
     return this;
   }
+}
+
+interface LoopController {
+  stop(): Promise<void>;
+}
+
+/**
+ * Runs an asynchronous function every `interval` milliseconds.
+ * If the function takes longer than `interval` to run, it will be run again immediately.
+ * Otherwise, it will wait until `interval` milliseconds have passed before running again.
+ * @param interval The interval in milliseconds
+ * @param fn The function to run
+ * @returns A controller that can be used to stop the loop
+ */
+function runEvery(interval: number, fn: () => Promise<void>): LoopController {
+  let keepRunning = true;
+  let resolveStopPromise: (value?: unknown) => void;
+  let stopCalled = false; // in case it is called multiple times
+  let stopPromise = new Promise((resolve) => {
+    resolveStopPromise = resolve;
+  });
+
+  async function loop() {
+    while (keepRunning) {
+      const startTime = Date.now();
+      try {
+        await fn();
+      } catch (err) {
+        console.error(err);
+        keepRunning = false;
+      }
+      const endTime = Date.now();
+      const elapsedTime = endTime - startTime;
+      await new Promise((resolve) =>
+        setTimeout(resolve, Math.max(interval - elapsedTime, 0))
+      );
+    }
+    resolveStopPromise(); // resolve the promise when the loop exits
+  }
+
+  const controller = {
+    async stop() {
+      if (!stopCalled) {
+        stopCalled = true;
+        keepRunning = false;
+        await stopPromise; // wait for the loop to finish
+      }
+    },
+  };
+
+  void loop(); // start the loop
+  return controller;
 }

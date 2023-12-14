@@ -45,6 +45,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
     const schema: ReactAppSchema = {
       type: ex.REACT_APP_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         path: this._projectPath,
         startCommand: this._startCommand,
