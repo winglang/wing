@@ -128,7 +128,7 @@ export class ChildProcess {
       cwd: opts?.cwd,
       env: opts?.env,
     });
-    this.id = this.childProcess.pid ?? -1;
+    this.pid = this.childProcess.pid ?? -1;
   }
 
   /**
