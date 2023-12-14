@@ -82,7 +82,7 @@ export interface InternalTestResult extends TestResult {
 export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
       const list = await listTests(simulator);
 
       const testsState = ctx.testsStateManager();
@@ -105,9 +105,9 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        await reloadSimulator(await ctx.simulator(), ctx.logger);
+        await reloadSimulator(await ctx.testSimulator(), ctx.logger);
         const response = await runTest(
-          await ctx.simulator(),
+          await ctx.testSimulator(),
           input.resourcePath,
           ctx.logger,
         );
@@ -123,7 +123,7 @@ export const createTestRouter = () => {
         return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
       await reloadSimulator(simulator, ctx.logger);
       const testsState = ctx.testsStateManager();
 
