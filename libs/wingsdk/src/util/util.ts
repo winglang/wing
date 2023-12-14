@@ -123,12 +123,35 @@ export class ChildProcess {
    */
   public readonly pid: number;
 
+  private stdout = "";
+  private stderr = "";
+  private isComplete = false;
+  private exitStatus: number | null = null;
+
   constructor(program: string, args: string[], opts?: SpawnOptions) {
-    this.childProcess = spawn(program, args, {
+    const spawnOptions: any = {
       cwd: opts?.cwd,
       env: opts?.env,
-    });
+    };
+
+    this.childProcess = spawn(program, args, spawnOptions);
     this.pid = this.childProcess.pid ?? -1;
+
+    this.childProcess.stdout?.on("data", (data) => {
+      this.stdout += data;
+    });
+
+    this.childProcess.stderr?.on("data", (data) => {
+      this.stderr += data;
+    });
+
+    // Listen for the `close` event to track completion and exit status
+    this.childProcess.on("close", (status) => {
+      this.isComplete = true;
+      this.exitStatus = status !== null ? status : -1;
+    });
+
+    // this.childProcess.on("error", (error) => {});
   }
 
   /**
@@ -144,19 +167,21 @@ export class ChildProcess {
    * Calling this method multiple times will return the same output.
    */
   public async wait(): Promise<Output> {
-    return new Promise((resolve, reject) => {
-      let stdout = "";
-      let stderr = "";
+    if (this.isComplete) {
+      return {
+        stdout: this.stdout,
+        stderr: this.stderr,
+        status: this.exitStatus ?? -1,
+      };
+    }
 
-      this.childProcess.stdout?.on("data", (data) => (stdout += data));
-      this.childProcess.stderr?.on("data", (data) => (stderr += data));
-
-      this.childProcess.on("close", (status) => {
-        resolve({ stdout, stderr, status: status !== null ? status : -1 });
-      });
-
-      this.childProcess.on("error", (error) => {
-        reject(error);
+    return new Promise((resolve) => {
+      this.childProcess.on("close", () => {
+        resolve({
+          stdout: this.stdout,
+          stderr: this.stderr,
+          status: this.exitStatus ?? -1,
+        });
       });
     });
   }
