@@ -81,5 +81,5 @@ test "shell() with throw option" {
 
   let output = util.shell(command, opts);
 
-  expect.equal(output, 1);
+  expect.equal(output, "Error executing command \"exit 1\". Exited with error code: 1");
 }

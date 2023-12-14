@@ -226,21 +226,24 @@ export class Util {
     command: string,
     opts?: ShellOptions
   ): Promise<String> {
+    const createErrorMessage = (error: any): string => {
+      if (error.stderr) {
+        return `Error executing command "${command}". Exited with error: ${error.stderr}`;
+      }
+      return `Error executing command "${command}". Exited with error code: ${error.code}`;
+    };
+
     try {
       const { stdout } = await execPromise(command, opts);
       return stdout.toString();
     } catch (error: any) {
+      const errorMessage = createErrorMessage(error);
+
       if (opts?.throw !== false) {
-        if (error.stderr) {
-          throw new Error(
-            `Error executing command "${command}". Exited with error: ${error.stderr}`
-          );
-        }
-        throw new Error(
-          `Error executing command "${command}". Exited with error code: ${error.code}`
-        );
+        throw new Error(errorMessage);
       }
-      return error.stderr || error.code;
+
+      return errorMessage;
     }
   }
 
