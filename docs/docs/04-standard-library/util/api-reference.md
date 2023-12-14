@@ -96,7 +96,7 @@ Calling this method multiple times will return the same output.
 
 ---
 
-##### `pid`<sup>Required</sup> <a name="pid" id="@winglang/sdk.util.ChildProcess.property.pid"></a>
+##### `pid`<sup>Optional</sup> <a name="pid" id="@winglang/sdk.util.ChildProcess.property.pid"></a>
 
 ```wing
 pid: num;

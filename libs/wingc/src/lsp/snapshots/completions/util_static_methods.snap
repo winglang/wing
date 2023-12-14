@@ -121,7 +121,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass ChildProcess\n```\n---\nHandle to a running child process.\n\n### Initializer\n- `program` — `str`\n- `args` — `Array<str>`\n- `...opts` — `SpawnOptions?`\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n  - `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n  - `stdout?` — `Stdio?` — Configuration for the process's standard output stream.\n### Fields\n- `pid` — `num` — The child's OS-assigned process ID.\n### Methods\n- `kill` — `(signal: num?): void` — Kill the process.\n- `wait` — `(): Output` — Wait for the process to finish and return its output."
+    value: "```wing\nclass ChildProcess\n```\n---\nHandle to a running child process.\n\n### Initializer\n- `program` — `str`\n- `args` — `Array<str>`\n- `...opts` — `SpawnOptions?`\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `stderr?` — `Stdio?` — Configuration for the process's standard error stream.\n  - `stdin?` — `Stdio?` — Configuration for the process's standard input stream.\n  - `stdout?` — `Stdio?` — Configuration for the process's standard output stream.\n### Fields\n- `pid?` — `num?` — The child's OS-assigned process ID.\n### Methods\n- `kill` — `(signal: num?): void` — Kill the process.\n- `wait` — `(): Output` — Wait for the process to finish and return its output."
   sortText: gg|ChildProcess
 - label: Util
   kind: 7
