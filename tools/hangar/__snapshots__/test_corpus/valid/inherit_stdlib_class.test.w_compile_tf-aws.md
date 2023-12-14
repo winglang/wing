@@ -62,15 +62,7 @@ module.exports = function({ $cloud_Api }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_region": {
@@ -82,11 +74,6 @@ module.exports = function({ $cloud_Api }) {
           }
         }
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {

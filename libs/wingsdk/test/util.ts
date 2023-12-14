@@ -134,7 +134,10 @@ export function directorySnapshot(initialRoot: string) {
       const abspath = join(root, relpath);
       const key = prefix + relpath;
       if (statSync(abspath).isDirectory()) {
-        visit(root, relpath);
+        // ignore .state files
+        if (basename(abspath) !== ".state") {
+          visit(root, relpath);
+        }
       } else {
         switch (extname(f)) {
           case ".json":

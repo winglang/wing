@@ -4,40 +4,14 @@ exports[`provides raw tree data 1`] = `
 {
   "tree": {
     "children": {
-      "cloud.TestRunner": {
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.2.70",
-        },
-        "display": {
-          "description": "A suite of APIs for running tests and collecting results.",
-          "hidden": true,
-          "title": "TestRunner",
-        },
-        "id": "cloud.TestRunner",
-        "path": "root/cloud.TestRunner",
-      },
       "test": {
-        "children": {
-          "Handler": {
-            "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.2.70",
-            },
-            "display": {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "Handler",
-            "path": "root/test/Handler",
-          },
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.2.70",
         },
         "display": {
           "description": "A cloud unit test.",
+          "hidden": true,
           "title": "Test",
         },
         "id": "test",

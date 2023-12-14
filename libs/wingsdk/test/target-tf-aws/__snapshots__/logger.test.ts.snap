@@ -19,11 +19,6 @@ return class Handler {
 
 exports[`inflight function uses a logger 2`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
