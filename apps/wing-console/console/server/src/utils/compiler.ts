@@ -25,14 +25,12 @@ export interface CreateCompilerProps {
   wingfile: string;
   platform?: string[];
   testing?: boolean;
-  targetDir?: string;
 }
 
 export const createCompiler = ({
   wingfile,
   platform = [wing.BuiltinPlatform.SIM],
   testing = false,
-  targetDir,
 }: CreateCompilerProps): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
@@ -49,7 +47,6 @@ export const createCompiler = ({
       const simfile = await wing.compile(wingfile, {
         platform,
         testing,
-        targetDir,
       });
       await events.emit("compiled", { simfile });
     } catch (error) {

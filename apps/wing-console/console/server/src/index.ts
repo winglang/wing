@@ -126,14 +126,10 @@ export const createConsoleServer = async ({
     }
   });
 
-  const testCompilerOutputDir = mkdtempSync(
-    join(tmpdir(), "wing-console-test-"),
-  );
   const testCompiler = createCompiler({
     wingfile,
     platform,
     testing: true,
-    targetDir: testCompilerOutputDir,
   });
   const testSimulator = createSimulator();
   testCompiler.on("compiled", ({ simfile }) => {
