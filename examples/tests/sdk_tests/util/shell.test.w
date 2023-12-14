@@ -2,6 +2,17 @@ bring util;
 bring expect;
 bring fs;
 
+let assertThrows = inflight (expected: str, block: (): void) => {
+  let var error = false;
+  try {
+    block();
+  } catch actual {
+    assert(actual.contains(expected));
+    error = true;
+  }
+  assert(error);
+};
+
 test "shell() with valid command" {
   let command = "echo -n Hello, Wing!";
 
@@ -11,16 +22,6 @@ test "shell() with valid command" {
 }
 
 test "shell() with invalid command" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual.contains(expected));
-      error = true;
-    }
-    assert(error);
-  };
   let NOT_FOUND_ERROR = "Error executing command \"no-such-command\". Exited with error: /bin/sh: 1: no-such-command: not found";
 
   let command = "no-such-command";
@@ -31,16 +32,6 @@ test "shell() with invalid command" {
 }
 
 test "shell() with explicit non-zero exit status" {
-  let assertThrows = (expected: str, block: (): void) => {
-    let var error = false;
-    try {
-      block();
-    } catch actual {
-      assert(actual.contains(expected));
-      error = true;
-    }
-    assert(error);
-  };
   let ERROR = "Error executing command \"exit 1\". Exited with error code: 1";
 
   let command = "exit 1";
