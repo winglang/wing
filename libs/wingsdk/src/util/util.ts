@@ -1,4 +1,4 @@
-import { exec as nodeExec, spawn as nodeSpawn } from "child_process";
+import { exec, spawn } from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
@@ -6,7 +6,7 @@ import { v4 } from "uuid";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
-const execPromise = promisify(nodeExec);
+const execPromise = promisify(exec);
 
 /**
  * Describes what to do with a standard I/O stream for a child process.
@@ -110,14 +110,14 @@ export class ChildProcess {
   /**
    * The underlying native child process object representing the spawned process.
    */
-  private childProcess: ReturnType<typeof nodeSpawn>;
+  private childProcess: ReturnType<typeof spawn>;
   /**
    * The child's OS-assigned process ID.
    */
   public readonly id: number;
 
   constructor(program: string, args: string[], opts?: SpawnOptions) {
-    this.childProcess = nodeSpawn(program, args, {
+    this.childProcess = spawn(program, args, {
       cwd: opts?.cwd,
       env: opts?.env,
     });
