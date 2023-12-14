@@ -80,7 +80,7 @@ the signal to send to the process (defaults to SIGTERM).
 ##### `wait` <a name="wait" id="@winglang/sdk.util.ChildProcess.wait"></a>
 
 ```wing
-wait(): ShellOutput
+wait(): Output
 ```
 
 Wait for the process to finish and return its output.
@@ -124,7 +124,7 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.exec">exec</a></code> | Execute a program with the given arguments, wait for it to finish, and return its outputs. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
-| <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns a `ShellOutput` struct. |
+| <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns a `Output` struct. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.spawn">spawn</a></code> | Execute a program with the given arguments, and return a `ChildProcess` object that can be used to interact with the process while it is running. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
@@ -235,7 +235,7 @@ An array of arguments to pass to the program.
 
 - *Type:* <a href="#@winglang/sdk.util.ExecOptions">ExecOptions</a>
 
-Execution options including working directory, environment variables, etc.
+`ExecOptions`, such as the working directory and environment variables.
 
 ---
 
@@ -285,7 +285,7 @@ bring util;
 util.shell(command: str, opts?: ShellOptions);
 ```
 
-Executes a command in the shell and returns a `ShellOutput` struct.
+Executes a command in the shell and returns a `Output` struct.
 
 ###### `command`<sup>Required</sup> <a name="command" id="@winglang/sdk.util.Util.shell.parameter.command"></a>
 
@@ -299,7 +299,7 @@ The command string to execute in the shell.
 
 - *Type:* <a href="#@winglang/sdk.util.ShellOptions">ShellOptions</a>
 
-Configuration options for the execution, such as the working directory and environment variables.
+`ShellOptions`, such as the working directory and environment variables.
 
 ---
 
@@ -583,6 +583,64 @@ Size of ID.
 
 ---
 
+### Output <a name="Output" id="@winglang/sdk.util.Output"></a>
+
+Output of a finished process.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.Output.Initializer"></a>
+
+```wing
+bring util;
+
+let Output = util.Output{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.Output.property.status">status</a></code> | <code>num</code> | A process's exit status. |
+| <code><a href="#@winglang/sdk.util.Output.property.stderr">stderr</a></code> | <code>str</code> | The standard error of a finished process. |
+| <code><a href="#@winglang/sdk.util.Output.property.stdout">stdout</a></code> | <code>str</code> | The standard output of a finished process. |
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.util.Output.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+
+A process's exit status.
+
+---
+
+##### `stderr`<sup>Required</sup> <a name="stderr" id="@winglang/sdk.util.Output.property.stderr"></a>
+
+```wing
+stderr: str;
+```
+
+- *Type:* str
+
+The standard error of a finished process.
+
+---
+
+##### `stdout`<sup>Required</sup> <a name="stdout" id="@winglang/sdk.util.Output.property.stdout"></a>
+
+```wing
+stdout: str;
+```
+
+- *Type:* str
+
+The standard output of a finished process.
+
+---
+
 ### ShellOptions <a name="ShellOptions" id="@winglang/sdk.util.ShellOptions"></a>
 
 Additional options for `util.shell()`.
@@ -641,64 +699,6 @@ inheritEnv: bool;
 - *Default:* false
 
 Whether to inherit environment variables from the host's environment.
-
----
-
-### ShellOutput <a name="ShellOutput" id="@winglang/sdk.util.ShellOutput"></a>
-
-Output of `util.shell()`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.util.ShellOutput.Initializer"></a>
-
-```wing
-bring util;
-
-let ShellOutput = util.ShellOutput{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.ShellOutput.property.status">status</a></code> | <code>num</code> | The command's exit status. |
-| <code><a href="#@winglang/sdk.util.ShellOutput.property.stderr">stderr</a></code> | <code>str</code> | The standard error of running the shell command. |
-| <code><a href="#@winglang/sdk.util.ShellOutput.property.stdout">stdout</a></code> | <code>str</code> | The standard output of running the shell command. |
-
----
-
-##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.util.ShellOutput.property.status"></a>
-
-```wing
-status: num;
-```
-
-- *Type:* num
-
-The command's exit status.
-
----
-
-##### `stderr`<sup>Required</sup> <a name="stderr" id="@winglang/sdk.util.ShellOutput.property.stderr"></a>
-
-```wing
-stderr: str;
-```
-
-- *Type:* str
-
-The standard error of running the shell command.
-
----
-
-##### `stdout`<sup>Required</sup> <a name="stdout" id="@winglang/sdk.util.ShellOutput.property.stdout"></a>
-
-```wing
-stdout: str;
-```
-
-- *Type:* str
-
-The standard output of running the shell command.
 
 ---
 
