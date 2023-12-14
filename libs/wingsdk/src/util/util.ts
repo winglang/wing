@@ -230,14 +230,17 @@ export class Util {
       const { stdout } = await execPromise(command, opts);
       return stdout.toString();
     } catch (error: any) {
-      if (error && error.stderr) {
+      if (opts?.throw !== false) {
+        if (error.stderr) {
+          throw new Error(
+            `Error executing command "${command}". Exited with error: ${error.stderr}`
+          );
+        }
         throw new Error(
-          `Error executing command "${command}". Exited with error: ${error.stderr}`
+          `Error executing command "${command}". Exited with error code: ${error.code}`
         );
       }
-      throw new Error(
-        `Error executing command "${command}". Exited with error code: ${error.code}`
-      );
+      return error.stderr || error.code;
     }
   }
 

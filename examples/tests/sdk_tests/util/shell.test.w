@@ -71,3 +71,12 @@ test "shell() with cwd option" {
 
   expect.equal(output, "tempfile.txt\n");
 }
+
+test "shell() with throw option" {
+  let command = "exit 1";
+  let opts = {throw: false};
+
+  let output = util.shell(command, opts);
+
+  expect.equal(output, 1);
+}
