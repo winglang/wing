@@ -288,6 +288,14 @@ export class Util {
     command: string,
     opts?: ShellOptions
   ): Promise<String> {
+    const shellOpts = {
+      cwd: opts?.cwd,
+      env:
+        opts?.inheritEnv === false
+          ? { ...opts?.env }
+          : { ...process.env, ...opts?.env },
+    };
+
     const createErrorMessage = (error: any): string => {
       if (error.stderr) {
         return `Error executing command "${command}". Exited with error: ${error.stderr}`;
@@ -296,7 +304,7 @@ export class Util {
     };
 
     try {
-      const { stdout } = await execPromise(command, opts);
+      const { stdout } = await execPromise(command, shellOpts);
       return stdout.toString();
     } catch (error: any) {
       const errorMessage = createErrorMessage(error);

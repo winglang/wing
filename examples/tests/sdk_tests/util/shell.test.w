@@ -49,16 +49,21 @@ test "shell() with explicit non-zero exit status" {
   });
 }
 
-test "shell() with env option" {
-  let command = "echo Hello, $ENV_VAR!";
-  let opts = {env: { "ENV_VAR": "Wing" }};
+test "shell() with env and inheritEnv options" {
+  let command = "echo $WING_TARGET $ENV_VAR";
+  let opts = {
+    env: { "ENV_VAR": "Wing" },
+    inheritEnv: false,
+  };
 
-  let output = util.shell(command, opts);
+  let output1 = util.shell(command);
+  let output2 = util.shell(command, opts);
 
+  assert(output1.length > 0);
   if Util.platform() != "windows" {
-    expect.equal(output, "Hello, Wing!\n");
+    expect.equal(output2, "Wing\n");
   } else {
-    expect.equal(output, "Hello, Wing!\r\n");
+    expect.equal(output2, "Wing\r\n");
   }
 }
 
