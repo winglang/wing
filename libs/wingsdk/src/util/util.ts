@@ -79,19 +79,19 @@ export interface SpawnOptions extends CommandOptions {
 }
 
 /**
- * Output of a finished process.
+ * Output of `util.shell()`
  */
-export interface Output {
+export interface ShellOutput {
   /**
-   * The standard output of a finished process.
+   * The standard output of running the shell command.
    */
   readonly stdout: string;
   /**
-   * The standard error of a finished process.
+   * The standard error of running the shell command.
    */
   readonly stderr: string;
   /**
-   * A process's exit status.
+   * The command's exit status.
    */
   readonly status: number;
 }
@@ -136,7 +136,7 @@ export class ChildProcess {
    * Wait for the process to finish and return its output.
    * Calling this method multiple times will return the same output.
    */
-  public async wait(): Promise<Output> {
+  public async wait(): Promise<ShellOutput> {
     return new Promise((resolve, reject) => {
       let stdout = "";
       let stderr = "";
@@ -209,24 +209,29 @@ export interface NanoidOptions {
  */
 export class Util {
   /**
-   * Execute a command in the shell and return its standard output.
-   * @param command - The shell command to execute.
-   * @param opts - The shell options including working directory, environment variables, etc.
-   * @returns The standard output of the shell command.
-   * @throws An error if the command returns a non-zero exit code.
+   * Executes a command in the shell and returns a `ShellOutput` struct.
+   * @param command The command string to execute in the shell.
+   * @param opts Configuration options for the execution, such as the working directory and environment variables.
+   * @returns A struct containing `stdout`, `stderr` and exit `status` of the command.
    */
   public static async shell(
     command: string,
     opts?: ShellOptions
-  ): Promise<string> {
-    const args = command.split(" ");
-    const output = await Util.exec("/bin/sh", ["-c", ...args], opts);
-    if (output.status !== 0) {
-      throw new Error(
-        `Command exited with status ${output.status}: ${command}`
-      );
+  ): Promise<ShellOutput> {
+    try {
+      const { stdout, stderr } = await execPromise(command, opts);
+      return {
+        stdout: stdout.toString(),
+        stderr: stderr.toString(),
+        status: 0,
+      };
+    } catch (error: any) {
+      return {
+        stdout: error.stdout,
+        stderr: error.stderr,
+        status: error.code,
+      };
     }
-    return output.stdout;
   }
 
   /**
@@ -242,7 +247,7 @@ export class Util {
     program: string,
     args: Array<string>,
     opts?: ExecOptions
-  ): Promise<Output> {
+  ): Promise<ShellOutput> {
     const command = `${program} ${args.join(" ")}`;
 
     try {
