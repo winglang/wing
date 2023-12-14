@@ -17,16 +17,18 @@ const listTests = (simulator: Simulator): Promise<string[]> => {
   return testRunner.listTests();
 };
 
+const reloadSimulator = async (simulator: Simulator, logger: ConsoleLogger) => {
+  logger.verbose("Reloading simulator...", "console", {
+    messageType: "info",
+  });
+  await simulator.reload(true);
+};
+
 const runTest = async (
   simulator: Simulator,
   resourcePath: string,
   logger: ConsoleLogger,
 ): Promise<InternalTestResult> => {
-  logger.log("Reloading simulator...", "console", {
-    messageType: "info",
-  });
-  await simulator.reload();
-
   const client = simulator.getResource(
     "root/cloud.TestRunner",
   ) as ITestRunnerClient;
@@ -80,7 +82,7 @@ export interface InternalTestResult extends TestResult {
 export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
       const list = await listTests(simulator);
 
       const testsState = ctx.testsStateManager();
@@ -103,8 +105,9 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
+        await reloadSimulator(await ctx.testSimulator(), ctx.logger);
         const response = await runTest(
-          await ctx.simulator(),
+          await ctx.testSimulator(),
           input.resourcePath,
           ctx.logger,
         );
@@ -120,7 +123,8 @@ export const createTestRouter = () => {
         return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
-      const simulator = await ctx.simulator();
+      const simulator = await ctx.testSimulator();
+      await reloadSimulator(simulator, ctx.logger);
       const testsState = ctx.testsStateManager();
 
       const testList = await listTests(simulator);

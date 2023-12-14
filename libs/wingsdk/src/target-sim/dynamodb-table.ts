@@ -27,6 +27,7 @@ export class DynamodbTable
     const schema: DynamodbTableSchema = {
       type: ex.DYNAMODB_TABLE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         name: this.name,
         attributeDefinitions: this.props.attributeDefinitions,

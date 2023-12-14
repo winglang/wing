@@ -23,6 +23,7 @@ import type { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
   simulatorInstance(): Promise<simulator.Simulator>;
+  testSimulatorInstance(): Promise<simulator.Simulator>;
   consoleLogger: ConsoleLogger;
   errorMessage(): string | undefined;
   emitter: Emittery<{
@@ -47,6 +48,7 @@ export interface CreateExpressServerOptions {
 
 export const createExpressServer = async ({
   simulatorInstance,
+  testSimulatorInstance,
   consoleLogger,
   errorMessage,
   emitter,
@@ -73,6 +75,9 @@ export const createExpressServer = async ({
     return {
       async simulator() {
         return await simulatorInstance();
+      },
+      async testSimulator() {
+        return await testSimulatorInstance();
       },
       async appDetails() {
         return {

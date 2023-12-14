@@ -68,6 +68,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     const schema: ScheduleSchema = {
       type: cloud.SCHEDULE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         cronExpression: this.cronExpression,
       },

@@ -2,11 +2,6 @@
 
 exports[`default website behaviour 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -360,11 +355,6 @@ exports[`default website behaviour 1`] = `
 
 exports[`website with addFile 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -765,11 +755,6 @@ exports[`website with addFile 1`] = `
 
 exports[`website with addJson 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

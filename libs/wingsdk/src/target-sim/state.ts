@@ -57,6 +57,7 @@ export class State extends Resource implements ISimulatorResource {
     return {
       type: STATE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {},
       attrs: {},
     };
