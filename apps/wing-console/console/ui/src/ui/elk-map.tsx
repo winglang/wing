@@ -168,7 +168,7 @@ const EdgesContainer = memo(
       >
         <defs>
           <marker
-            className="stroke-none fill-slate-500 dark:fill-slate-800"
+            className="stroke-none fill-slate-300 dark:fill-slate-700"
             markerWidth="6"
             markerHeight="4"
             orient="auto"
@@ -192,7 +192,7 @@ const EdgesContainer = memo(
           </marker>
 
           <marker
-            className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
+            className="stroke-slate-300 dark:stroke-slate-700 fill-slate-300 dark:fill-slate-700"
             markerHeight="6"
             markerWidth="6"
             orient="auto"
@@ -474,6 +474,9 @@ export const ElkMap = <T extends unknown = undefined>({
         }
         seen.add(key);
         return true;
+      })
+      .filter((edge) => {
+        return edge.source !== edge.target;
       });
   }, [edges, expandedNodeIds]);
 

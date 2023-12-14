@@ -48,7 +48,7 @@ export const EdgeItem = memo(
           "stroke-1 fill-none cursor-pointer hover:stroke-[1.5px]",
           highlighted && "stroke-sky-500",
           selected && "stroke-[1.5px] stroke-sky-500",
-          !highlighted && !selected && "stroke-slate-400 dark:stroke-slate-800",
+          !highlighted && !selected && "stroke-slate-300 dark:stroke-slate-600",
           fade && "opacity-40",
           "transition-all",
         )}
