@@ -36,26 +36,6 @@ export const MapControls = ({}: MapControlsProps) => {
           <ToolbarButton title="Zoom to fit" onClick={zoomToFit}>
             <ArrowsPointingOutIcon className="w-4 h-4" />
           </ToolbarButton>
-
-          {testsExists && (
-            <div className="ml-2">
-              <ToolbarButton
-                title={showTests ? "Hide tests" : "Show tests"}
-                onClick={() => setShowTests(!showTests)}
-              >
-                <div className="flex items-center gap-1">
-                  {showTests ? (
-                    <EyeSlashIcon className="w-4 h-4" />
-                  ) : (
-                    <EyeIcon className="w-4 h-4" />
-                  )}
-                  <span className="text-xs px-0.5">
-                    {showTests ? "Hide tests" : "Show tests"}
-                  </span>
-                </div>
-              </ToolbarButton>
-            </div>
-          )}
         </Toolbar>
       </div>
     </div>
