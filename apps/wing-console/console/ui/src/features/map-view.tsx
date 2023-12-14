@@ -5,7 +5,7 @@ import {
 } from "@wingconsole/design-system";
 import { MapNode } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { useMap } from "../services/use-map.js";
 import { ContainerNode } from "../ui/elk-map-nodes.js";
@@ -69,6 +69,30 @@ export const MapView = memo(
     const { theme } = useTheme();
     const [hoverMapControls, setHoverMapControls] = useState(false);
 
+    const [expandedNodeIds, setExpandedNodeIds] = useState<string[]>(() => [
+      "root",
+    ]);
+
+    const onSelectedNodeIdChange2 = useCallback(
+      (id: string | undefined) => {
+        setExpandedNodeIds(([...nodeIds]) => {
+          if (!id) {
+            return nodeIds;
+          }
+
+          const index = nodeIds.indexOf(id);
+          if (index === -1) {
+            return [...nodeIds, id];
+          }
+
+          nodeIds.splice(index, 1);
+          return nodeIds;
+        });
+        onSelectedNodeIdChange?.(id);
+      },
+      [onSelectedNodeIdChange],
+    );
+
     return (
       <ZoomPaneProvider>
         <div className={classNames("h-full flex flex-col", theme.bg4)}>
@@ -112,9 +136,12 @@ export const MapView = memo(
             <div className="absolute inset-0">
               <ElkMap
                 nodes={mapData?.nodes ?? []}
-                edges={mapData?.edges ?? []}
+                // openNodeIds={openNodeIds}
+                expandedNodeIds={expandedNodeIds}
+                edges={mapData?.edges}
                 selectedNodeId={selectedNodeId}
-                onSelectedNodeIdChange={onSelectedNodeIdChange}
+                // onSelectedNodeIdChange={onSelectedNodeIdChange}
+                onSelectedNodeIdChange={onSelectedNodeIdChange2}
                 selectedEdgeId={selectedEdgeId}
                 onSelectedEdgeIdChange={onSelectedEdgeIdChange}
                 // @ts-ignore-next-line

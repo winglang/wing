@@ -116,6 +116,7 @@ const InvisibleNodeSizeCalculator = memo(
 export interface ElkMapProps<T> {
   nodes: Node<T>[];
   edges?: Edge[];
+  expandedNodeIds: string[];
   node: FC<NodeItemProps<T>>;
   selectedNodeId?: string;
   onSelectedNodeIdChange?: (id: string) => void;
@@ -398,9 +399,37 @@ const NodesContainer = memo(
   },
 );
 
+const parentNode = (nodeId: string) => {
+  const paths = nodeId.split("/");
+  return paths.slice(0, -1).join("/");
+};
+
+const isNodeExpanded = (nodeId: string, expandedNodeIds: string[]) => {
+  if (nodeId === "root" || nodeId === "root/Default") {
+    return true;
+  }
+
+  const paths = nodeId
+    .replace(/^root$/, "")
+    .replace(/^(root\/Default\/)/, "")
+    .split("/");
+  for (let index = 1; index <= paths.length; index++) {
+    const path = paths.slice(0, index).join("/");
+    if (!expandedNodeIds.includes(`root/Default/${path}`)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const isNodeVisible = (nodeId: string, expandedNodeIds: string[]) => {
+  return isNodeExpanded(parentNode(nodeId), expandedNodeIds);
+};
+
 export const ElkMap = <T extends unknown = undefined>({
   nodes,
   edges,
+  expandedNodeIds,
   node,
   selectedNodeId,
   onSelectedNodeIdChange,
@@ -415,6 +444,7 @@ export const ElkMap = <T extends unknown = undefined>({
 
   const [offsets, setOffsets] =
     useState<Map<string, { x: number; y: number }>>();
+
   const [graph, setGraph] = useState<ElkNode>();
   useEffect(() => {
     if (!minimumSizes || Object.keys(minimumSizes).length === 0) return;
@@ -431,7 +461,9 @@ export const ElkMap = <T extends unknown = undefined>({
           "elk.nodeSize.constraints": "MINIMUM_SIZE",
           "elk.nodeSize.minimum": `[${size?.width}, ${size?.height}]`,
         },
-        children: node.children?.map((node) => toElkNode(node)),
+        children: isNodeExpanded(node.id, expandedNodeIds)
+          ? node.children?.map((node) => toElkNode(node))
+          : [],
       };
     };
 
@@ -444,11 +476,21 @@ export const ElkMap = <T extends unknown = undefined>({
           "elk.padding": "[top=10,left=10,bottom=10,right=10]",
         },
         children: nodes.map((node) => toElkNode(node)),
-        edges: edges?.map((edge) => ({
-          id: edge.id,
-          sources: [edge.source],
-          targets: [edge.target],
-        })),
+        edges: edges
+          ?.filter((edge) => {
+            if (!isNodeVisible(edge.source, expandedNodeIds)) {
+              return false;
+            }
+            if (!isNodeVisible(edge.target, expandedNodeIds)) {
+              return false;
+            }
+            return true;
+          })
+          .map((edge) => ({
+            id: edge.id,
+            sources: [edge.source],
+            targets: [edge.target],
+          })),
       })
       .then((graph) => {
         if (abort) {
@@ -472,7 +514,7 @@ export const ElkMap = <T extends unknown = undefined>({
     return () => {
       abort = true;
     };
-  }, [nodes, edges, minimumSizes]);
+  }, [nodes, edges, minimumSizes, expandedNodeIds]);
 
   const [highlighted, setHighlighted] = useState<string>();
 
@@ -520,8 +562,10 @@ export const ElkMap = <T extends unknown = undefined>({
             data,
           });
         }
-        for (const child of node.children ?? []) {
-          traverse(child, depth + 1);
+        if (expandedNodeIds.includes(node.id)) {
+          for (const child of node.children ?? []) {
+            traverse(child, depth + 1);
+          }
         }
       };
 
@@ -532,7 +576,7 @@ export const ElkMap = <T extends unknown = undefined>({
       // Remove root node.
       return nodeList.slice(1);
     });
-  }, [graph, nodeRecord, offsets, edges, setNodeList]);
+  }, [graph, nodeRecord, offsets, edges, setNodeList, expandedNodeIds]);
 
   const { zoomToFit } = useZoomPaneContext();
 
