@@ -330,8 +330,16 @@ export class Util {
     args: Array<string>,
     opts?: ExecOptions
   ): Promise<Output> {
+    const execOpts = {
+      cwd: opts?.cwd,
+      env:
+        opts?.inheritEnv === false
+          ? { ...opts?.env }
+          : { ...process.env, ...opts?.env },
+    };
+
     try {
-      const { stdout, stderr } = await execFilePromise(program, args, opts);
+      const { stdout, stderr } = await execFilePromise(program, args, execOpts);
       return {
         stdout: stdout.toString(),
         stderr: stderr.toString(),
