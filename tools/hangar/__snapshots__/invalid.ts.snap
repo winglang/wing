@@ -3322,18 +3322,18 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
-error: struct PreflightStruct must be declared at the top-level of a file
+error: struct \\"PreflightStruct\\" must be declared at the top-level of a file
    --> ../../../examples/tests/invalid/structs.test.w:51:10
    |
 51 |   struct PreflightStruct {
-   |          ^^^^^^^^^^^^^^^ struct PreflightStruct must be declared at the top-level of a file
+   |          ^^^^^^^^^^^^^^^ struct \\"PreflightStruct\\" must be declared at the top-level of a file
 
 
-error: struct InflightStruct must be declared at the top-level of a file
+error: struct \\"InflightStruct\\" must be declared at the top-level of a file
    --> ../../../examples/tests/invalid/structs.test.w:58:10
    |
 58 |   struct InflightStruct {
-   |          ^^^^^^^^^^^^^^ struct InflightStruct must be declared at the top-level of a file
+   |          ^^^^^^^^^^^^^^ struct \\"InflightStruct\\" must be declared at the top-level of a file
 
 
  
