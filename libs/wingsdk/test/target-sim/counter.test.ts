@@ -4,11 +4,12 @@ import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 test("create a counter", async () => {
   // GIVEN
   const app = new SimApp();
-  const c = cloud.Counter._newCounter(app, "my_counter", {
+  const c = new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -20,6 +21,7 @@ test("create a counter", async () => {
       handle: expect.any(String),
     },
     path: "root/my_counter",
+    addr: expect.any(String),
     props: {
       initial: 123,
     },
@@ -33,7 +35,7 @@ test("create a counter", async () => {
 test("inc", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -61,7 +63,7 @@ test("inc", async () => {
 test("key inc", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -87,7 +89,7 @@ test("key inc", async () => {
 test("dec", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -115,7 +117,7 @@ test("dec", async () => {
 test("key dec", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -141,7 +143,7 @@ test("key dec", async () => {
 test("peek without initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -154,7 +156,7 @@ test("peek without initial value", async () => {
 test("peek with initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -169,7 +171,7 @@ test("peek with initial value", async () => {
 test("key peek without value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -182,7 +184,7 @@ test("key peek without value", async () => {
 test("key peek with value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -196,7 +198,7 @@ test("key peek with value", async () => {
 test("set to new value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter", {
+  new cloud.Counter(app, "my_counter", {
     initial: 123,
   });
 
@@ -217,7 +219,7 @@ test("set to new value", async () => {
 test("key set to new value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -236,7 +238,7 @@ test("key set to new value", async () => {
 test("counter has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   const treeJson = treeJsonOf(app.synth());
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
@@ -256,7 +258,7 @@ test("counter has no display hidden property", async () => {
 test("counter has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Counter._newCounter(app, "my_counter");
+  new cloud.Counter(app, "my_counter");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -273,4 +275,33 @@ test("counter has display title and description properties", async () => {
       },
     },
   });
+});
+
+test("counter is stateful across simulations", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const counter = new cloud.Counter(app, "my_counter", { initial: 5 });
+
+  // WHEN
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+
+  const client = s.getResource("/my_counter") as cloud.ICounterClient;
+  const value1 = await client.peek();
+  const value2 = await client.inc(1, "key");
+  await s.stop();
+
+  // restart the simulator
+
+  await s.start();
+  const client2 = s.getResource("/my_counter") as cloud.ICounterClient;
+  const value3 = await client2.peek();
+  const value4 = await client2.peek("key");
+
+  // THEN
+  await s.stop();
+  expect(value1).toEqual(5);
+  expect(value2).toEqual(5);
+  expect(value3).toEqual(5);
+  expect(value4).toEqual(6); // value from previous simulation
 });

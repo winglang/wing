@@ -49,8 +49,7 @@
     "lodash.throttle": "^4.1.1",
     "lodash.uniqby": "^4.7.0",
     "nanoid": "^4.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-markdown": "^9.0.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {
@@ -69,7 +68,6 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/lodash.uniqby": "^4.7.7",
     "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",
@@ -80,7 +78,7 @@
     "autoprefixer": "^10.4.15",
     "bump-pack": "workspace:^",
     "eslint": "^8.48.0",
-    "react-markdown": "^8.0.7",
+    "react": "^18.2.0",
     "storybook": "^7.4.0",
     "tailwindcss": "^3.3.3",
     "tsup": "^7.2.0",
@@ -91,5 +89,8 @@
   },
   "volta": {
     "extends": "../../../../package.json"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }

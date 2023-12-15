@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { App } from "./app";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
@@ -15,7 +16,10 @@ import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
-  private eventMappings: { [key: string]: EventMapping } = {};
+  private readonly handlers: Record<
+    string,
+    { func: Function; mapping: EventMapping }
+  > = {};
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -31,42 +35,48 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    const hash = inflight.node.addr.slice(-8);
-    const fnPath = `OnRequestHandler-${hash}`;
-    const eventId = `ApiEventMapping-${hash}`;
+    let handler = this.handlers[inflight._hash];
 
-    let existingFn = this.node.tryFindChild(fnPath) as Function;
-
-    if (existingFn) {
-      const event = this.eventMappings[eventId];
-      const routes = (event.eventProps.subscriptionProps as any)
+    if (handler) {
+      const routes = (handler.mapping.eventProps.subscriptionProps as any)
         .routes as ApiRoute[];
       routes.push({
         path,
         method,
       });
 
-      this.eventMappings[eventId] = event;
-      return existingFn;
+      return handler.func;
     }
 
-    const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+    const fn = new Function(
+      this,
+      App.of(this).makeId(this, "OnRequestHandler"),
+      inflight,
+      props
+    ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${path}`;
 
-    const eventMapping = new EventMapping(this, eventId, {
-      publisher: this,
-      subscriber: fn,
-      subscriptionProps: {
-        routes: [
-          {
-            path,
-            method,
-          },
-        ],
-      },
-    });
-    this.eventMappings[eventId] = eventMapping;
+    const eventMapping = new EventMapping(
+      this,
+      App.of(this).makeId(this, "ApiEventMapping"),
+      {
+        publisher: this,
+        subscriber: fn,
+        subscriptionProps: {
+          routes: [
+            {
+              path,
+              method,
+            },
+          ],
+        },
+      }
+    );
+    this.handlers[inflight._hash] = {
+      func: fn,
+      mapping: eventMapping,
+    };
 
     return fn;
   }
@@ -98,7 +108,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public get(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiGetProps | undefined
+    props?: cloud.ApiGetOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.GET, inflight, props);
   }
@@ -112,7 +122,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public post(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPostProps | undefined
+    props?: cloud.ApiPostOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.POST, inflight, props);
   }
@@ -126,7 +136,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public put(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPutProps | undefined
+    props?: cloud.ApiPutOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PUT, inflight, props);
   }
@@ -140,7 +150,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public delete(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiDeleteProps | undefined
+    props?: cloud.ApiDeleteOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.DELETE, inflight, props);
   }
@@ -154,7 +164,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public patch(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiPatchProps | undefined
+    props?: cloud.ApiPatchOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.PATCH, inflight, props);
   }
@@ -168,7 +178,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public options(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiOptionsProps | undefined
+    props?: cloud.ApiOptionsOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.OPTIONS, inflight, props);
   }
@@ -182,7 +192,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public head(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiHeadProps | undefined
+    props?: cloud.ApiHeadOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.HEAD, inflight, props);
   }
@@ -196,7 +206,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   public connect(
     path: string,
     inflight: cloud.IApiEndpointHandler,
-    props?: cloud.ApiConnectProps | undefined
+    props?: cloud.ApiConnectOptions | undefined
   ): void {
     this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }
@@ -205,8 +215,9 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const schema: ApiSchema = {
       type: cloud.API_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
-        openApiSpec: this._getApiSpec(),
+        openApiSpec: this._getOpenApiSpec(),
         corsHeaders: this._generateCorsHeaders(this.corsOptions),
       },
       attrs: {} as any,

@@ -44,6 +44,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
     const schema: SecretSchema = {
       type: cloud.SECRET_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         name: this.name,
       },

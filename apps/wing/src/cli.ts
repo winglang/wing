@@ -1,13 +1,12 @@
 import { Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
-import { collectCommandAnalytics } from "./analytics/collect";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
-export const PACKAGE_VERSION = currentPackage.version;
-let analyticsExportFile: Promise<string | undefined>;
 
+export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
   process.env.WING_DISABLE_ANALYTICS = "1";
 }
@@ -17,7 +16,14 @@ if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
+const DEFAULT_PLATFORM = ["sim"];
+let analyticsExportFile: Promise<string | undefined>;
+
 function runSubCommand(subCommand: string, path: string = subCommand) {
+  loadEnvVariables({
+    mode: subCommand,
+  });
+
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
@@ -33,6 +39,17 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
   };
 }
 
+let platformOptionCount = 0;
+// Removes default if a platform option is provided by user
+function collectPlatformVariadic(value: string, previous: string[]) {
+  return platformOptionCount++ == 0 ? [value] : collectVariadic(value, previous);
+}
+
+// Required to support --option x --option y --option z rather than --option x y z
+function collectVariadic(value: string, previous: string[]) {
+  return previous.concat([value]);
+}
+
 async function collectAnalyticsHook(cmd: Command) {
   if (process.env.WING_DISABLE_ANALYTICS) {
     return;
@@ -40,7 +57,13 @@ async function collectAnalyticsHook(cmd: Command) {
   // Fail silently if collection fails
   try {
     optionallyDisplayDisclaimer();
-    analyticsExportFile = collectCommandAnalytics(cmd);
+    const analyticsModule = await import("./analytics/collect");
+    analyticsExportFile = analyticsModule.collectCommandAnalytics(cmd).catch((err) => {
+      if (process.env.DEBUG) {
+        console.error(err);
+      }
+      return undefined;
+    });
   } catch (err) {
     if (process.env.DEBUG) {
       console.error(err);
@@ -68,7 +91,6 @@ async function main() {
   checkNodeVersion();
 
   const program = new Command();
-
   program.configureHelp({
     sortOptions: true,
     showGlobalOptions: true,
@@ -97,9 +119,8 @@ async function main() {
     });
 
   async function progressHook(cmd: Command) {
-    const target = cmd.opts().target;
     const progress = program.opts().progress;
-    if (progress !== false && target !== "sim") {
+    if (progress !== false && cmd.opts().platform[0] !== "sim") {
       process.env.PROGRESS = "1";
     }
   }
@@ -139,12 +160,12 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("[entrypoint]", "program .w entrypoint")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
     .option("--values <file>", "Yaml file with Platform-specific values")
@@ -158,12 +179,12 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("[entrypoint...]", "all files to test (globs are supported)")
-    .addOption(
-      new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .default("sim")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim, tf-aws, tf-azure, tf-gcp, awscdk)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
     )
-    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-r, --rootId <rootId>", "App root id")
     .option(
       "-f, --test-filter <regex>",
@@ -173,6 +194,11 @@ async function main() {
     .option(
       "-o, --output-file <outputFile>",
       "File name to write test results to (file extension is required, supports only .json at the moment)"
+    )
+    .addOption(
+      new Option("-R, --retry [retries]", "Number of times to retry failed tests")
+        .preset(3)
+        .argParser(parseInt)
     )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)

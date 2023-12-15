@@ -30,7 +30,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## main.tf.json
@@ -42,20 +42,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -123,12 +110,14 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
@@ -173,7 +162,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -182,20 +171,21 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $myBool: ${context._lift(myBool)},
-            $myDur_hours: ${context._lift(myDur.hours)},
-            $myDur_minutes: ${context._lift(myDur.minutes)},
-            $myDur_seconds: ${context._lift(myDur.seconds)},
-            $myNum: ${context._lift(myNum)},
-            $mySecondBool: ${context._lift(mySecondBool)},
-            $myStr: ${context._lift(myStr)},
+            $myBool: ${$stdlib.core.liftObject(myBool)},
+            $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
+            $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},
+            $myDur_seconds: ${$stdlib.core.liftObject(myDur.seconds)},
+            $myNum: ${$stdlib.core.liftObject(myNum)},
+            $mySecondBool: ${$stdlib.core.liftObject(mySecondBool)},
+            $myStr: ${$stdlib.core.liftObject(myStr)},
           })
         `;
       }
@@ -211,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -232,11 +222,12 @@ class $Root extends $stdlib.std.Resource {
     const mySecondBool = false;
     const myDur = (std.Duration.fromSeconds(600));
     const handler = new $Closure1(this, "$Closure1");
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", handler);
+    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler);
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_primitives.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_primitives.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

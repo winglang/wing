@@ -7,7 +7,7 @@ pub class MyService {
   startTimeKey: str;
   pub startTime: str;
   
-  init() {
+  new() {
     // use `sim.State` to store in-memory data
     this.state = new sim.State();
 

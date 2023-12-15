@@ -16,7 +16,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    this.fn = cloud.Function._newFunction(this, "Function", handler, props);
+    this.fn = new cloud.Function(this, "Function", handler, props);
     Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
@@ -34,6 +34,7 @@ export class OnDeploy extends cloud.OnDeploy {
     const schema: OnDeploySchema = {
       type: cloud.ON_DEPLOY_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         functionHandle: simulatorHandleToken(this.fn),
       },

@@ -29,14 +29,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -143,32 +136,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -204,19 +171,27 @@ if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(
 }
 };
 })())({
-my_buckets: [(function(env) {
-  let handle = process.env[env];
+my_buckets: [(function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\"),(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")]
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]
 })).handle(event);
 };",
   "connections.json": {
@@ -237,14 +212,7 @@ my_buckets: [(function(env) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -255,6 +223,7 @@ my_buckets: [(function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -265,12 +234,13 @@ my_buckets: [(function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -398,32 +368,6 @@ my_buckets: [(function(env) {
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -466,14 +410,7 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -579,32 +516,6 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -647,14 +558,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -760,32 +664,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -827,14 +705,7 @@ my_capture: false
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -940,32 +811,6 @@ my_capture: false
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1009,14 +854,7 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1122,32 +960,6 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1193,14 +1005,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1306,32 +1111,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1379,14 +1158,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1492,32 +1264,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -1562,14 +1308,7 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -1676,32 +1415,6 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1734,19 +1447,27 @@ if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`asser
 }
 };
 })())({
-my_map: new Map([[\\"foo\\",(function(env) {
-  let handle = process.env[env];
+my_map: new Map([[\\"foo\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\")],[\\"bar\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],[\\"bar\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")]])
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]])
 })).handle(event);
 };",
   "connections.json": {
@@ -1767,14 +1488,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -1785,6 +1499,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -1795,12 +1510,13 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -1928,32 +1644,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1994,14 +1684,7 @@ my_capture: 123
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2107,32 +1790,6 @@ my_capture: 123
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2177,14 +1834,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2290,32 +1940,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2359,14 +1983,7 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2472,32 +2089,6 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2540,14 +2131,7 @@ my_capture: \\"bam bam bam\\"
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2653,32 +2237,6 @@ my_capture: \\"bam bam bam\\"
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2723,14 +2281,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -2836,32 +2387,6 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {
@@ -2906,14 +2431,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
@@ -3020,32 +2538,6 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
           "id": "Function",
           "path": "root/Function",
         },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -3083,37 +2575,57 @@ if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion fai
 }
 };
 })())({
-my_struct: {\\"bucky\\": (function(env) {
-  let handle = process.env[env];
+my_struct: {\\"bucky\\": (function() {
+  let handle = process.env.BUCKET_HANDLE_4fecd6d0;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_4fecd6d0\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_4fecd6d0\\"),\\"mapy\\": new Map([[\\"foo\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),\\"mapy\\": new Map([[\\"foo\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_300e8055;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_300e8055\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_300e8055\\")],[\\"bar\\",(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],[\\"bar\\",(function() {
+  let handle = process.env.BUCKET_HANDLE_0120daf4;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_0120daf4\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_0120daf4\\")]]),\\"arry\\": {\\"boom\\": [(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()]]),\\"arry\\": {\\"boom\\": [(function() {
+  let handle = process.env.BUCKET_HANDLE_ea7944ef;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_ea7944ef\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_ea7944ef\\"),(function(env) {
-  let handle = process.env[env];
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})(),(function() {
+  let handle = process.env.BUCKET_HANDLE_1d7ab674;
   if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
+    throw new Error(\\"Missing environment variable: BUCKET_HANDLE_1d7ab674\\");
   }
-  return $simulator.findInstance(handle);
-})(\\"BUCKET_HANDLE_1d7ab674\\")],},}
+  const simulatorUrl = process.env.WING_SIMULATOR_URL;
+  if (!simulatorUrl) {
+    throw new Error(\\"Missing environment variable: WING_SIMULATOR_URL\\");
+  }
+  return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
+})()],},}
 })).handle(event);
 };",
   "connections.json": {
@@ -3149,14 +2661,7 @@ my_struct: {\\"bucky\\": (function(env) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c87be5f7041ad818f5140e6f2bd6ce47bf4fecd6d0",
         "attrs": {},
         "path": "root/B1",
         "props": {
@@ -3167,6 +2672,7 @@ my_struct: {\\"bucky\\": (function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c899b98e73c999c57056ae021185038acf300e8055",
         "attrs": {},
         "path": "root/B2",
         "props": {
@@ -3177,6 +2683,7 @@ my_struct: {\\"bucky\\": (function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c832c4af421d07265328cd90ad7ace99950120daf4",
         "attrs": {},
         "path": "root/B3",
         "props": {
@@ -3187,6 +2694,7 @@ my_struct: {\\"bucky\\": (function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8512a0fbb3e6bd048ba3e57550a8ef265ea7944ef",
         "attrs": {},
         "path": "root/B4",
         "props": {
@@ -3197,6 +2705,7 @@ my_struct: {\\"bucky\\": (function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e8026b7368f86ad7082a73d4943ebe171d7ab674",
         "attrs": {},
         "path": "root/B5",
         "props": {
@@ -3207,15 +2716,16 @@ my_struct: {\\"bucky\\": (function(env) {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e6b4af896782ab4057ebb2193266e56b0b6dfeb0",
         "attrs": {},
         "path": "root/Function",
         "props": {
           "environmentVariables": {
-            "BUCKET_HANDLE_0120daf4": "\${root/B3#attrs.handle}",
-            "BUCKET_HANDLE_1d7ab674": "\${root/B5#attrs.handle}",
-            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
-            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
-            "BUCKET_HANDLE_ea7944ef": "\${root/B4#attrs.handle}",
+            "BUCKET_HANDLE_0120daf4": "\${wsim#root/B3#attrs.handle}",
+            "BUCKET_HANDLE_1d7ab674": "\${wsim#root/B5#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${wsim#root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${wsim#root/B1#attrs.handle}",
+            "BUCKET_HANDLE_ea7944ef": "\${wsim#root/B4#attrs.handle}",
           },
           "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
@@ -3378,32 +2888,6 @@ my_struct: {\\"bucky\\": (function(env) {
           },
           "id": "Function",
           "path": "root/Function",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
-        "foo": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
         },
       },
       "constructInfo": {

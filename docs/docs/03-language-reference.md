@@ -74,28 +74,37 @@ import TOCInline from '@theme/TOCInline';
 > let q: num? = nil;          // q is an optional num
 > ```
 
+Numeric literals can be formatted and padded with extra zeroes or underscores to make them easier to read in source code.
+These don't affect the value of the number or how they are printed:
+
+> ```TS
+> let price = 0012.34;
+> let twentyThousand = 20_000;
+> let aBitMore = 20_000.000_1;
+> ```
+
 [`▲ top`][top]
 
 ---
 
 #### 1.1.2 Container Types
 
-| Name          | Extra information                     |
-| ------------- | ------------------------------------- |
-| `Set<T>`      | set type (set of unique items)        |
-| `Map<T>`      | map type (key-value with string keys) |
-| `Array<T>`    | variable size array of a certain type |
-| `MutSet<T>`   | mutable set type                      |
-| `MutMap<T>`   | mutable map type                      |
-| `MutArray<T>` | mutable array type                    |
+| Name          | Extra information                               |
+| ------------- | ----------------------------------------------- |
+| `Array<T>`    | variable size array of a certain type           |
+| `Map<T>`      | map type (key-value with string keys, keys may be any expression evaluating to a string)|
+| `Set<T>`      | set type (unordered collection of unique items) |
+| `MutArray<T>` | mutable array type                              |
+| `MutMap<T>`   | mutable map type                                |
+| `MutSet<T>`   | mutable set type                                |
 
 > ```TS
-> let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
-> let zm = MutSet<num>{};          // mutable set
-> let y = {"a" => 1, "b" => 2};    // immutable map, Map<num> is inferred
-> let ym = MutMap<num>{};          // mutable map
-> let x = [1, 2, 3];               // immutable array, Array<num> is inferred
-> let xm = MutArray<num>[];        // mutable array
+> let y = [1, 2, 3];               // immutable array, Array<num> is inferred
+> let ym = MutArray<num>[1, 2, 3]; // mutable array
+> let x = {"a" => 1, "b" => 2};    // immutable map, Map<num> is inferred
+> let xm = MutMap<num>{};          // mutable map
+> let z = Set<num>[1, 2, 3];       // immutable set
+> let zm = MutSet<num>[1, 2, 3];   // mutable set
 > let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
@@ -170,7 +179,7 @@ let response = http.get("/employees");
 let employees = Array<Employee>.fromJson(response.get("items")); //NOTE: Array.fromJson is currently not implemented
 
 for e in employees {
-  log("hello, ${e.name}, your employee id is ${e.id}");
+  log("hello, {e.name}, your employee id is {e.id}");
 }
 ```
 In the above example, the `http.get` function returns a `Json` object from the server that has a
@@ -217,7 +226,7 @@ let boom: Json = jsonObj.get("boom");
 Trying to access a non-existent field will fail at runtime. For example:
 
 ```TS
-log("${jsonObj.get("boom").get("dude").get("world")}");
+log("{jsonObj.get("boom").get("dude").get("world")}");
 // ERROR: Cannot read properties of undefined (reading 'world')
 ```
 
@@ -432,9 +441,9 @@ let o = Json.tryParse("xxx") ?? Json [1,2,3];
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
 ```TS
-log("my object is: ${jsonObj}");
+log("my object is: {jsonObj}");
 // is equivalent to
-log("my object is: ${Json.stringify(jsonObj)}");
+log("my object is: {Json.stringify(jsonObj)}");
 ```
 
 This will output:
@@ -527,12 +536,12 @@ A few examples:
 
 ```TS
 let now = Datetime.utcNow();
-log("It is now ${now.month}/${now.dayOfMonth}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+log("It is now {now.month}/{now.dayOfMonth}/{now.year} at {now.hours}:{now.min}:{now.sec})");
 assert(now.timezone == 0); // UTC
 
 let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
-log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
-log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
+log("Timezone is GMT{d.timezone() / 60}"); // output: Timezone is GMT-2
+log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
 
@@ -545,7 +554,7 @@ log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | `unsafeCast` | cast a value into a different type                    |
 
 > ```TS
-> log("Hello ${name}");
+> log("Hello {name}");
 > assert(x > 0);
 > ```
 
@@ -677,7 +686,7 @@ Inner classes or closures can access private members of their containing class.
 class Foo {
   private_field: num; // This is private by default
   
-  init() {this.private_field = 1;}
+  new() {this.private_field = 1;}
   
   method() {
     log(this.private_field); // We can access `private_field` since we're in Foo
@@ -854,7 +863,7 @@ class Foo {
   myOpt: num?;
   var myVar: str?;
 
-  init(opt: num?) {
+  new(opt: num?) {
     this.myOpt = opt;
     this.myVar = nil; // everything must be initialized, so you can use `nil` to indicate that there is no value
   }
@@ -929,7 +938,7 @@ let tryParseName = (fullName: str): Name? => {
 
 // since result is optional, it needs to be unwrapped in order to be used
 if let name = tryParseName("Neo Matrix") {
-  log("Hello, ${name.first}!");
+  log("Hello, {name.first}!");
 }
 ```
 
@@ -971,7 +980,7 @@ optional is defined and *unwrap* it into a non-optional variable defined inside 
 
 ```TS
 if let address = myPerson.address {
-  log("${address.length}");
+  log("{address.length}");
   log(address); // type of address is `str`
 }
 ```
@@ -998,7 +1007,7 @@ which must be unwrapped in order to be used.
 let ipAddress: str? = options.networking?.ipAddress;
 
 if let ip = ipAddress {
-  log("the ip address is defined and it is: ${ip}");
+  log("the ip address is defined and it is: {ip}");
 }
 ```
 
@@ -1152,7 +1161,7 @@ The following features are not yet implemented, but we are planning to add them 
 
 ### 2.1 bring
 
-**bring** statement can be used to import and reuse code from
+**bring** statement can be used to import and reuse code from Wing and
 other JSII supported languages. The statement is detailed in its own section in
 this document: [Module System](#4-module-system).
 
@@ -1170,7 +1179,7 @@ this document: [Module System](#4-module-system).
 >   if i > 5 {
 >     break;
 >   }
->   log("${i}");
+>   log("{i}");
 > }
 > ```
 
@@ -1188,7 +1197,7 @@ includes for and while loops currently.
 >   if i > 5 {
 >     continue;
 >   }
->   log("${i}");
+>   log("{i}");
 > }
 > ```
 
@@ -1244,15 +1253,15 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > ```TS
 > // Wing program:
 > let arr = [1, 2, 3];
-> let set = {1, 2, 3};
+> let items = Set<num>[1, 2, 3];
 > for item in arr {
->   log("${item}");
+>   log("{item}");
 > }
-> for item in set {
->   log("${item}");
+> for item in items {
+>   log("{item}");
 > }
 > for item in 0..100 {
->   log("${item}"); // prints 0 to 99
+>   log("{item}"); // prints 0 to 99
 > }
 > ```
 
@@ -1358,7 +1367,7 @@ inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   _field1: num;
   _field2: str;
   
-  init() {
+  new() {
     // constructor implementation
     // order is up to user
     this._field1 = 1;
@@ -1371,7 +1380,7 @@ inflight class Name extends Base impl IMyInterface1, IMyInterface2 {
   publicMethod(arg:type, arg:type, ...) { /* impl */ }
 }
 ```
-If no `init()` is defined, the class will have a default constructor that does nothing.
+If no `new()` is defined, the class will have a default constructor that does nothing.
 
 Implicit default field initialization does not exist in Wing. All member fields must be
 initialized in the constructor. Absent initialization is a compile error. All
@@ -1380,18 +1389,18 @@ field types, including the optional types must be initialized.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 1; }
+  new() { this.x = 1; }
 }
 class Bar {
   y: num;
   z: Foo;
-  init() {
+  new() {
     this.y = 1;
     this.z = new Foo();
     this.log(); // OK to call here
   }
   pub log() {
-    log("${this.y}");
+    log("{this.y}");
   }
 }
 let a = new Bar();
@@ -1410,11 +1419,11 @@ their "strict" mode.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 0; }
+  new() { this.x = 0; }
   pub method() { }
 }
 class Boo extends Foo {
-  init() {
+  new() {
     // this.x = 10; // compile error
     super();
     this.x = 10; // OK
@@ -1428,11 +1437,11 @@ Classes can implement interfaces iff the interfaces do not contain `inflight`.
 ```TS
 class Foo {
   x: num;
-  init() { this.x = 0; }
+  new() { this.x = 0; }
   pub method() { }
 }
 class Boo extends Foo {
-  init() { super(); this.x = 10; }
+  new() { super(); this.x = 10; }
 }
 
 ```
@@ -1483,7 +1492,7 @@ class Foo {
   inflight field8: bool;
 
   // preflight constructor
-  init(field1: num, field2: str, field3: bool, field4: num, field5: str) { 
+  new(field1: num, field2: str, field3: bool, field4: num, field5: str) { 
     /* initialize preflight fields */
     this.field1 = field1;
     this.field2 = field2;
@@ -1493,7 +1502,7 @@ class Foo {
   } 
 
   // inflight constructor
-  inflight init() { 
+  inflight new() { 
     /* initialize inflight fields */
     this.field6 = 123;
     this.field7 = "hello";
@@ -1584,12 +1593,12 @@ Interface fields are not supported.
 >   field1: num;
 >   field2: str;
 >
->   init(x: num) {
+>   new(x: num) {
 >     this.field1 = x;
 >     this.field2 = "sample";
 >   }
 >   method1(x: num): str {
->     return "sample: ${x}";
+>     return "sample: {x}";
 >   }
 >   inflight method3(): void { }
 >   method2(): str {
@@ -1641,14 +1650,14 @@ However, it is possible to create anonymous closures and assign to variables
 
 > ```TS
 > // preflight closure:
-> let f1 = (a: num, b: num) => { log("${a + b}"); };
+> let f1 = (a: num, b: num) => { log("{a + b}"); };
 > // inflight closure:
-> let f2 = inflight (a: num, b: num) => { log("${a + b}"); };
+> let f2 = inflight (a: num, b: num) => { log("{a + b}"); };
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): void => { log("${a + b}"); };
+> let f4 = (a: num, b: num): void => { log("{a + b}"); };
 > // inflight closure:
-> let f5 = inflight (a: num, b: num): void => { log("${a + b}"); };
+> let f5 = inflight (a: num, b: num): void => { log("{a + b}"); };
 > ```
 
 [`▲ top`][top]
@@ -1675,7 +1684,7 @@ struct MyStruct {
   field2: num;
 }
 let f = (x: num, y: num, z: MyStruct) => {
-  log("${x + y + z.field1 + z.field2}");
+  log("{x + y + z.field1 + z.field2}");
 };
 // last arguments are expanded into their struct
 f(1, 2, field1: 3, field2: 4);
@@ -1689,7 +1698,7 @@ Inside the function, these arguments can be accessed using the designated variab
 just as you would with a regular array instance.
 ```TS
 let f = (x: num, ...args: Array<num>) => {
-  log("${x + args.length}");
+  log("{x + args.length}");
 };
 // last arguments are expanded into their array
 f(4, 8, 15, 16, 23, 42); // logs 9
@@ -1776,12 +1785,20 @@ code. Comments before the first bring expression are valid.
 
 ### 4.1 Imports
 
-To import a JSII package under a named import, you may use the following
+To import a built-in module or trusted Wing library, you can use the following syntax:
+
+```TS
+bring util; // import types from the built-in "util" module
+bring cloud; // import types from the built-in "cloud" module
+bring containers; // import types from the `@winglibs/containers` trusted library
+```
+
+To use a trusted library, you must install the relevant npm package with `npm i @winglibs/containers`.
+
+To import a Wing or JSII library under a named import, you may use the following
 syntax:
 
 ```TS
-bring util; // from util bring * as util;
-bring cloud; // from cloud bring * as cloud;
 bring "cdktf" as cdktf; // from "cdktf" bring * as cdktf;
 ```
 
@@ -1805,7 +1822,7 @@ new myModule.submodule.MyClass();
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* Specify types as public using `pub` - see https://github.com/winglang/wing/issues/4294 to track.
+* Install trusted libraries using `wing install containers` - see https://github.com/winglang/wing/issues/1037 to track.
 * Specify types as public within the current project or library, and private outside, using `internal` - see https://github.com/winglang/wing/issues/4156 to track.
 
 [`▲ top`][top]
@@ -1858,7 +1875,7 @@ class TaskList {
   }
 
   // Load js helper file
-  extern "./helpers.js" static inflight makeId(): str;
+  pub extern "./helpers.js" static inflight makeId(): str;
 } 
 
 // helpers.js
@@ -1955,11 +1972,11 @@ assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
 assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
 
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
-assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"a" => "1", "b" => "2"});
+assert(Map<str>{"a" => "1", "b" => "2"} == Map<str>{"b" => "2", "a" => "1"});
 
-assert(Set<num>{1, 2, 3} == Set<num>{1, 2, 3});
-assert(Set<num>{1, 2, 3} == Set<num>{3, 2, 1});
+assert(Set<num>[1, 2, 3] == Set<num>[1, 2, 3]);
+assert(Set<num>[1, 2, 3] == Set<num>[3, 2, 1]);
 ```
 
 > *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).
@@ -2012,7 +2029,7 @@ Two class instances or interface-satisfying objects are equal if they are the sa
 ```js
 class Shop {
   hats: num;
-  init(hats: num) {
+  new(hats: num) {
     this.hats = hats;
   }
 }
@@ -2087,14 +2104,14 @@ All string declaration variants are multi-line.
 #### 6.2.1 Normal strings "..."
 
 The string inside the double quotes is processed, and all notations of form
-`${<expression>}` are substituted from their respective scopes. The behavior is
+`{<expression>}` are substituted from their respective scopes. The behavior is
 similar to `` `text ${sub.prop}` `` notation in JavaScript.  
 Processing unicode escape sequences happens in these strings.  
-`"` can be escaped with backslash `\` inside string substitutions.
+`"` and `{` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
 > let name = "World";
-> let s = "Hello, ${name}!";
+> let s = "Hello, {name}!";
 > let l = s.length;
 > ```
 

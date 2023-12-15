@@ -1,9 +1,9 @@
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-import open from "open";
-
 import { createConsoleApp } from "../dist/index.js";
+
+import { openBrowser } from "./open.mjs";
 
 const options = parseArgs({
   options: {
@@ -20,8 +20,8 @@ const { port } = await createConsoleApp({
   requestedPort: 1214,
   hostUtils: {
     async openExternal(url) {
-      await open(url);
+      openBrowser(url);
     },
   },
 });
-await open(`http://localhost:${port}`);
+openBrowser(`http://localhost:${port}`);

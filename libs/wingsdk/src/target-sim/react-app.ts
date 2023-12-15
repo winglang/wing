@@ -23,7 +23,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
 
     if (this._useBuildCommand) {
       // In the future we can create an host (proxy like) for the development one if needed
-      this._host = cloud.Website._newWebsite(this, `${this.node.id}-host`, {
+      this._host = new cloud.Website(this, `${this.node.id}-host`, {
         ...this._hostProps,
         path: this._buildPath,
       });
@@ -45,6 +45,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
     const schema: ReactAppSchema = {
       type: ex.REACT_APP_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         path: this._projectPath,
         startCommand: this._startCommand,

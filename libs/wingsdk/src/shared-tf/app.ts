@@ -1,5 +1,12 @@
-import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
-import { join } from "path";
+import {
+  mkdirSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  existsSync,
+  writeFileSync,
+} from "fs";
+import { join, resolve } from "path";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -8,10 +15,10 @@ import {
   App,
   AppProps,
   Connections,
+  SynthHooks,
   preSynthesizeAllConstructs,
 } from "../core";
-import { PluginManager } from "../core/plugin-manager";
-import { Tokens } from "../core/tokens";
+import { registerTokenResolver } from "../core/tokens";
 import { synthesizeTree } from "../core/tree";
 
 const TERRAFORM_STACK_NAME = "root";
@@ -26,15 +33,14 @@ export abstract class CdktfApp extends App {
    */
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
-  public readonly isTestEnvironment: boolean;
-  public readonly _tokens: Tokens;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
-  private readonly pluginManager: PluginManager;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
+
+  protected synthHooks?: SynthHooks;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -54,8 +60,8 @@ export abstract class CdktfApp extends App {
     });
 
     this.outdir = outdir;
-    this.isTestEnvironment = props.isTestEnvironment ?? false;
-    this._tokens = new CdkTfTokens();
+    registerTokenResolver(new CdkTfTokens());
+    this.synthHooks = props.synthHooks;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -75,8 +81,6 @@ export abstract class CdktfApp extends App {
     ) => this.newAbstract(fqn, scope, id, ...args);
 
     (cdktfApp as any).typeForFqn = (fqn: string) => this.typeForFqn(fqn);
-
-    this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
@@ -99,8 +103,11 @@ export abstract class CdktfApp extends App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    if (this.synthHooks?.preSynthesize) {
+      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    }
+
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
-    this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
@@ -125,8 +132,18 @@ export abstract class CdktfApp extends App {
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
 
-    this.pluginManager.postSynth(tfConfig, `${this.outdir}/main.tf.json`);
-    this.pluginManager.validate(tfConfig);
+    if (this.synthHooks?.postSynthesize) {
+      this.synthHooks.postSynthesize.forEach((hook) => {
+        writeFileSync(
+          resolve(`${this.outdir}/main.tf.json`),
+          JSON.stringify(hook(tfConfig), null, 2)
+        );
+      });
+    }
+
+    if (this.synthHooks?.validate) {
+      this.synthHooks.validate.forEach((hook) => hook(tfConfig));
+    }
 
     this.synthed = true;
     this.synthedOutput = stringify(cleaned, null, 2) ?? "";

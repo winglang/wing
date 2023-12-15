@@ -35,7 +35,12 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$._reference_identifier, $._type_identifier],
-    [$.parameter_definition, $._reference_identifier]
+    [$.parameter_definition, $._reference_identifier],
+
+    // These modifier conflicts should be solved through GLR parsing
+    [$.field_modifiers, $.method_modifiers],
+    [$.class_modifiers, $.closure_modifiers],
+    [$.inflight_method_signature, $.field_modifiers]
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -184,10 +189,12 @@ module.exports = grammar({
     _type_annotation: ($) => seq(":", field("type", $._type)),
 
     // Classes
+
+    class_modifiers: ($) => repeat1(choice($.access_modifier, $.inflight_specifier)),
+
     class_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("phase_modifier", $.inflight_specifier)),
+        optional(field("modifiers", $.class_modifiers)),
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
@@ -201,18 +208,16 @@ module.exports = grammar({
           choice(
             $.initializer,
             $.method_definition,
-            $.inflight_method_definition,
             $.class_field
           )
         )
       ),
 
+    field_modifiers: ($) => repeat1(choice($.access_modifier, $.static, $.inflight_specifier, $.reassignable)),
+
     class_field: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
-        optional(field("phase_modifier", $.inflight_specifier)),
-        optional(field("reassignable", $.reassignable)),
+        optional(field("modifiers", $.field_modifiers)),
         field("name", $.identifier),
         $._type_annotation,
         optional(seq("=", field("initializer", $.expression))),
@@ -271,7 +276,12 @@ module.exports = grammar({
         "=",
         field("value", $.expression),
         field("block", $.block),
-        repeat(field("elif_let_block", $.elif_let_block)),
+        repeat(
+          choice(
+            field("elif_let_block", $.elif_let_block),
+            field("elif_block", $.elif_block)
+          )
+        ),
         optional(seq("else", field("else_block", $.block)))
       ),
 
@@ -320,8 +330,7 @@ module.exports = grammar({
         $._literal,
         $.reference,
         $.call,
-        $.preflight_closure,
-        $.inflight_closure,
+        $.closure,
         $.await_expression,
         $.defer_expression,
         $._collection_literal,
@@ -337,8 +346,8 @@ module.exports = grammar({
       choice($.string, $.number, $.bool, $.duration, $.nil_value),
 
     number: ($) => choice($._integer, $._decimal),
-    _integer: ($) => choice("0", /[1-9]\d*/),
-    _decimal: ($) => choice(/0\.\d+/, /[1-9]\d*\.\d+/),
+    _integer: ($) => /\d[\d_]*/,
+    _decimal: ($) => /\d[\d_]*\.\d[\d_]*/,
 
     bool: ($) => choice("true", "false"),
 
@@ -363,14 +372,14 @@ module.exports = grammar({
         ),
         '"'
       ),
-    template_substitution: ($) => seq("${", $.expression, "}"),
-    _string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
+    template_substitution: ($) => seq("{", $.expression, "}"),
+    _string_fragment: ($) => token.immediate(prec(1, /[^{"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(
           "\\",
           choice(
-            "$",
+            "{",
             /[^xu0-7]/,
             /[0-7]{1,3}/,
             /x[0-9a-fA-F]{2}/,
@@ -462,7 +471,7 @@ module.exports = grammar({
     initializer: ($) =>
       seq(
         optional(field("inflight", $.inflight_specifier)),
-        "init",
+        "new",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),
@@ -479,11 +488,11 @@ module.exports = grammar({
         $._semicolon
       ),
 
+    method_modifiers: ($) => repeat1(choice($.extern_modifier, $.access_modifier, $.static, $.inflight_specifier)),
+
     method_definition: ($) =>
       seq(
-        optional(field("extern_modifier", $.extern_modifier)),
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
+        optional(field("modifiers", $.method_modifiers)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
@@ -497,18 +506,6 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         $._semicolon
-      ),
-
-    inflight_method_definition: ($) =>
-      seq(
-        optional(field("extern_modifier", $.extern_modifier)),
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
-        field("phase_modifier", $.inflight_specifier),
-        field("name", $.identifier),
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        choice(field("block", $.block), $._semicolon)
       ),
 
     access_modifier: ($) => choice("pub", "protected", "internal"),
@@ -605,17 +602,11 @@ module.exports = grammar({
       );
     },
 
-    preflight_closure: ($) =>
-      seq(
-        field("parameter_list", $.parameter_list),
-        optional($._return_type),
-        "=>",
-        field("block", $.block)
-      ),
+    closure_modifiers: ($) => repeat1(choice($.inflight_specifier)),
 
-    inflight_closure: ($) =>
+    closure: ($) =>
       seq(
-        $.inflight_specifier,
+        optional(field("modifiers", $.closure_modifiers)),
         field("parameter_list", $.parameter_list),
         optional($._return_type),
         "=>",
@@ -651,8 +642,7 @@ module.exports = grammar({
         braced(commaSep(field("fields", $.struct_literal_member)))
       ),
 
-    map_literal_member: ($) =>
-      seq(choice($.string), "=>", $.expression),
+    map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),

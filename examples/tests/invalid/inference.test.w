@@ -24,7 +24,7 @@ let clonedArray = emptyArray.copyMut();
 
 let stringInterpolationCannotBeInferred = (nice) => {
 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^ Unable to infer type
-  return "Hello, ${nice}";
+  return "Hello, {nice}";
 };
 
 let stringArray2 = [].copyMut();
@@ -84,11 +84,11 @@ class NeedAnnotations {
 let badFunc: inflight (str): void = inflight (arg1: num) => {};
 //                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "inflight (str): void", but got "inflight (arg1: num): unknown" instead
 
+struct SS {
+  a: Array<num>;
+  b: Array<str>;
+}
 (a) => {
-  struct SS {
-    a: Array<num>;
-    b: Array<str>;
-  }
   let jsonDoubleInference: SS = {
     a: a,
     b: a,

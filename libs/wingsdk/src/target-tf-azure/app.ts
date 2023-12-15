@@ -3,6 +3,7 @@ import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { TestRunner } from "./test-runner";
 import { ApplicationInsights } from "../.gen/providers/azurerm/application-insights";
+import { LogAnalyticsWorkspace } from "../.gen/providers/azurerm/log-analytics-workspace";
 import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
@@ -36,6 +37,18 @@ const RESOURCEGROUP_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Configuration options for generating a name for Azure Log Analytics Workspace.
+ *
+ * - The workspace name must be between 4 and 63 characters.
+ * - The workspace name can contain only letters, numbers, and hyphens (`"-"`).
+ * - The hyphen (`"-"`) should not be the first or the last character in the name.
+ */
+const LOG_ANALYTICS_WORKSPACE_NAME_OPTS: NameOptions = {
+  maxLen: 63,
+  disallowedRegex: /([^a-zA-Z0-9\-]+)/g,
+};
+
+/**
  * StorageAccount names are limited to 24 characters.
  * You can only use alphanumeric characters.
  */
@@ -66,13 +79,12 @@ export class App extends CdktfApp {
   private _storageAccount?: StorageAccount;
   private _servicePlan?: ServicePlan;
   private _applicationInsights?: ApplicationInsights;
-  protected readonly testRunner: TestRunner;
+  private _logAnalyticsWorkspace?: LogAnalyticsWorkspace;
 
   constructor(props: AzureAppProps) {
     super(props);
     this.location = props.location ?? process.env.AZURE_LOCATION;
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
@@ -95,19 +107,22 @@ export class App extends CdktfApp {
     });
   }
 
-  protected synthRoots(props: AppProps, testRunner: TestRunner): void {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
+  public get logAnalyticsWorkspace() {
+    if (!this._logAnalyticsWorkspace) {
+      this._logAnalyticsWorkspace = new LogAnalyticsWorkspace(
+        this,
+        "LogAnalyticsWorkspace",
+        {
+          location: this.location,
+          resourceGroupName: this.resourceGroup.name,
+          name: ResourceNames.generateName(
+            this,
+            LOG_ANALYTICS_WORKSPACE_NAME_OPTS
+          ),
         }
-      } else {
-        new Root(this, "Default");
-      }
+      );
     }
+    return this._logAnalyticsWorkspace;
   }
 
   public get applicationInsights() {
@@ -120,6 +135,7 @@ export class App extends CdktfApp {
           resourceGroupName: this.resourceGroup.name,
           location: this.resourceGroup.location,
           applicationType: "web",
+          workspaceId: this.logAnalyticsWorkspace.id,
         }
       );
     }

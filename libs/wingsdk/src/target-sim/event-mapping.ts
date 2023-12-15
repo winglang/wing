@@ -68,6 +68,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
     const schema: EventMappingSchema = {
       type: EVENT_MAPPING_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         subscriber: simulatorHandleToken(this.eventProps.subscriber),
         publisher: simulatorHandleToken(this.eventProps.publisher),

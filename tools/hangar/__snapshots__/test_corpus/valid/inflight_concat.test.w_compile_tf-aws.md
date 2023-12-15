@@ -14,7 +14,7 @@ module.exports = function({  }) {
   }
   return R;
 }
-
+//# sourceMappingURL=inflight.R-1.js.map
 ```
 
 ## main.tf.json
@@ -26,20 +26,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -53,7 +40,7 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $plugins = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLUGIN_PATHS);
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -66,7 +53,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.s1 = "hello";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.R-1.js")({
           })
@@ -77,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this)};
             const client = new RClient({
-              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
+              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -85,7 +72,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -100,8 +87,9 @@ class $Root extends $stdlib.std.Resource {
     const r = new R(this, "R");
   }
 }
-const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_concat.test", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_concat.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.js.map
 ```
 

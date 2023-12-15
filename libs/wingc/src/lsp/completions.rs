@@ -509,8 +509,8 @@ fn get_current_scope_completions(
 			} else if !in_type {
 				// we are inside a class definition, so for now let's show nothing at all
 				return vec![CompletionItem {
-					label: "init".to_string(),
-					insert_text: Some("init($1) {\n\t$0\n}".to_string()),
+					label: "new".to_string(),
+					insert_text: Some("new($1) {\n\t$0\n}".to_string()),
 					insert_text_format: Some(InsertTextFormat::SNIPPET),
 					kind: Some(CompletionItemKind::SNIPPET),
 					..Default::default()
@@ -563,8 +563,8 @@ fn get_current_scope_completions(
 				if !in_type {
 					// we are inside a class definition, so for now let's show nothing at all
 					return vec![CompletionItem {
-						label: "init".to_string(),
-						insert_text: Some("init($1) {\n\t$0\n}".to_string()),
+						label: "new".to_string(),
+						insert_text: Some("new($1) {\n\t$0\n}".to_string()),
 						insert_text_format: Some(InsertTextFormat::SNIPPET),
 						kind: Some(CompletionItemKind::SNIPPET),
 						..Default::default()
@@ -1771,7 +1771,7 @@ S.
 		r#"
 class S {
   a: num;
-  init() { this.a = 2; }
+  new() { this.a = 2; }
 }
 let x = new S();
 x.
@@ -1785,7 +1785,7 @@ x.
 		r#"
 class S {
   a: num;
-  init() { 
+  new() { 
     this.
        //^
   }

@@ -14,7 +14,7 @@ export interface SimulatorEvents {
 }
 
 export interface Simulator {
-  instance(): Promise<simulator.Simulator>;
+  instance(statedir?: string): Promise<simulator.Simulator>;
   start(simfile: string): Promise<void>;
   stop(): Promise<void>;
   on<T extends keyof SimulatorEvents>(

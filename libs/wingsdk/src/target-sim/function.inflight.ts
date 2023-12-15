@@ -32,15 +32,19 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
+  public async save(): Promise<void> {}
+
   private createSandbox(): Sandbox {
     return new Sandbox(this.filename, {
-      context: { $simulator: this.context },
-      env: this.env,
+      env: {
+        ...this.env,
+        WING_SIMULATOR_URL: this.context.serverUrl,
+      },
       timeout: this.timeout,
-      log: (_level, message) => {
+      log: (internal, _level, message) => {
         this.context.addTrace({
           data: { message },
-          type: TraceType.LOG,
+          type: internal ? TraceType.RESOURCE : TraceType.LOG,
           sourcePath: this.context.resourcePath,
           sourceType: FUNCTION_FQN,
           timestamp: new Date().toISOString(),
@@ -64,8 +68,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const sb = this.createSandbox();
-        setImmediate(async () => {
-          await sb.call("handler", JSON.stringify(payload));
+        process.nextTick(() => {
+          void sb.call("handler", JSON.stringify(payload));
         });
       },
     });

@@ -9,15 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_lambda_invocation": {
@@ -51,11 +43,6 @@
         "function_name": "${aws_lambda_function.init2_Function_C6177D5D.function_name}",
         "input": "{}"
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {
@@ -183,12 +170,14 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c899c2a8",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Function-c899c2a8",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init1_Function_IamRole_3B884CB0.arn}",
         "runtime": "nodejs18.x",
@@ -213,12 +202,14 @@
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c86c3d88",
             "WING_TARGET": "tf-aws"
           }
         },
         "function_name": "Function-c86c3d88",
         "handler": "index.handler",
+        "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init2_Function_IamRole_A05B341B.arn}",
         "runtime": "nodejs18.x",

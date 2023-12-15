@@ -5,12 +5,12 @@ class Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
   pub inflight inflightField: num;
 
-  init() {
+  new() {
     this.c = new cloud.Counter();
   }
 
   // Inflight init
-  inflight init() {
+  inflight new() {
     this.inflightField = 123;
     // Access a cloud resource from inflight init
     this.c.inc(110);
@@ -47,7 +47,7 @@ class Bar {
   // Use an enum inside a user defined resource to verify enum capturing works
   e: MyEnum;
   
-  init(name: str, b: cloud.Bucket, e: MyEnum) {
+  new(name: str, b: cloud.Bucket, e: MyEnum) {
     this.name = name;
     this.b = b;
     this.foo = new Foo();
@@ -65,7 +65,7 @@ class Bar {
     // Call static method in a user defined resource that's no myself
     let s = Foo.fooStatic();
     // Call SDK built in resource's client
-    this.b.put("foo", "counter is: ${this.foo.fooGet()}");
+    this.b.put("foo", "counter is: {this.foo.fooGet()}");
     return this.b.get("foo");
   }
 
@@ -105,7 +105,7 @@ class BigPublisher {
   q: cloud.Queue;
   t: cloud.Topic;
 
-  init() {
+  new() {
     this.b = new cloud.Bucket();
     this.b2 = new cloud.Bucket() as "b2";
     this.q = new cloud.Queue();
@@ -150,7 +150,7 @@ class Dummy {
   }
 }
 class ScopeAndIdTestClass {
-  init() {
+  new() {
     // Create a Dummy in my scope
     let d1 = new Dummy();
     assert(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"));
@@ -162,8 +162,8 @@ class ScopeAndIdTestClass {
     assert(d3.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy/StaticDummy/Dummy"));
     // Generate multiple Dummys with different id's
     for i in 0..3 {
-      let x = new Dummy() as "tc${i}";
-      let expected_path = "/ScopeAndIdTestClass/tc${i}";
+      let x = new Dummy() as "tc{i}";
+      let expected_path = "/ScopeAndIdTestClass/tc{i}";
       assert(x.node.path.endsWith(expected_path));
     }
   }

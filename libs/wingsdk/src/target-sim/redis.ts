@@ -20,6 +20,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
     const schema: RedisSchema = {
       type: ex.REDIS_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {},
       attrs: {} as any,
     };
@@ -34,7 +35,6 @@ export class Redis extends ex.Redis implements ISimulatorResource {
   /** @internal */
   public _supportedOps(): string[] {
     return [
-      ex.RedisInflightMethods.RAW_CLIENT,
       ex.RedisInflightMethods.URL,
       ex.RedisInflightMethods.SET,
       ex.RedisInflightMethods.GET,

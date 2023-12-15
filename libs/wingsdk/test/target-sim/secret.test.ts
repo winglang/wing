@@ -10,7 +10,7 @@ const SECRETS_FILE = path.join(os.homedir(), ".wing", "secrets.json");
 test("create a secret", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Secret._newSecret(app, "my_secret");
+  new cloud.Secret(app, "my_secret");
 
   await fs.ensureFile(SECRETS_FILE);
 
@@ -22,6 +22,7 @@ test("create a secret", async () => {
       handle: expect.any(String),
     },
     path: "root/my_secret",
+    addr: expect.any(String),
     props: {
       name: "my_secret-c84793b7",
     },
@@ -35,7 +36,7 @@ test("create a secret", async () => {
 test("can get the secret value", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Secret._newSecret(app, "my_secret", {
+  new cloud.Secret(app, "my_secret", {
     name: "wing-sim-test-my-secret",
   });
 

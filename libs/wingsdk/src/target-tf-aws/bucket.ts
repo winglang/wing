@@ -20,6 +20,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
+import { IAwsBucket } from "../shared-aws/bucket";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { IInflightHost } from "../std";
 
@@ -50,7 +51,7 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private readonly notificationTopics: S3BucketNotificationTopic[] = [];
@@ -88,6 +89,7 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
     ];
   }
 
@@ -108,7 +110,7 @@ export class Bucket extends cloud.Bucket {
     this.notificationTopics.push({
       id: `on-${actionType.toLowerCase()}-notification`,
       events: EVENTS[actionType],
-      topicArn: handler.arn,
+      topicArn: handler.topicArn,
     });
 
     this.notificationDependencies.push(handler.permissions);
@@ -155,6 +157,14 @@ export class Bucket extends cloud.Bucket {
 
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  public get bucketArn(): string {
+    return this.bucket.arn;
+  }
+
+  public get bucketName(): string {
+    return this.bucket.bucketDomainName;
   }
 }
 

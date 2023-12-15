@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { IResource, Resource } from "./resource";
-import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
+import { Resource } from "./resource";
+import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Node } from "../std";
+import { Node, IInflight } from "../std";
 
 /**
  * Global identifier for `Test`.
@@ -26,19 +26,6 @@ export interface TestProps extends FunctionProps {}
  */
 export class Test extends Resource {
   /**
-   * Creates a new std.Test instance through the app.
-   * @internal
-   */
-  public static _newTest(
-    scope: Construct,
-    id: string,
-    inflight: ITestHandler,
-    props: TestProps = {}
-  ): Test {
-    return App.of(scope).newAbstract(TEST_FQN, scope, id, inflight, props);
-  }
-
-  /**
    * The function that will be called when the test is run. This will only be created
    * if the app is compiled with `wing test` for a non-simulator target.
    * @internal
@@ -56,14 +43,14 @@ export class Test extends Resource {
     Node.of(this).title = "Test";
     Node.of(this).description = "A cloud unit test.";
 
-    if (App.of(this).isTestEnvironment || App.of(this)._target === "sim") {
-      this._fn = App.of(scope).newAbstract(
-        FUNCTION_FQN,
-        this,
-        "Handler",
-        inflight,
-        props
-      );
+    this._fn = App.of(this)?._testRunner?._addTestFunction(
+      this,
+      "Handler",
+      inflight,
+      props
+    );
+    if (!this._fn) {
+      Node.of(this).hidden = true;
     }
   }
 
@@ -85,7 +72,7 @@ export class Test extends Resource {
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
  * @skipDocs
  */
-export interface ITestHandler extends IResource {}
+export interface ITestHandler extends IInflight {}
 
 /**
  * Inflight client for `ITestHandler`.

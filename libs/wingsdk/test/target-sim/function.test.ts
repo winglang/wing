@@ -28,8 +28,8 @@ async handle() {
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler, {
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler, {
     env: {
       ENV_VAR1: "true",
     },
@@ -42,6 +42,7 @@ test("create a function", async () => {
       handle: expect.any(String),
     },
     path: "root/my_function",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
@@ -60,8 +61,8 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
 
   const s = await app.startSimulator();
 
@@ -82,8 +83,8 @@ test("invoke function succeeds", async () => {
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler, {
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler, {
     env: {
       PIG_LATIN: "true",
     },
@@ -112,8 +113,8 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -128,7 +129,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -137,8 +138,8 @@ test("invoke function fails", async () => {
 test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
 
   const treeJson = treeJsonOf(app.synth());
   const func = app.node.tryFindChild("my_function") as cloud.Function;
@@ -158,8 +159,8 @@ test("function has no display hidden property", async () => {
 test("function has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  cloud.Function._newFunction(app, "my_function", handler);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -181,8 +182,8 @@ test("function has display title and description properties", async () => {
 test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_PANIC);
-  cloud.Function._newFunction(app, "my_function", handler);
+  const handler = Testing.makeHandler(INFLIGHT_PANIC);
+  new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
@@ -193,7 +194,7 @@ test("invoke function with process.exit(1)", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "process.exit() was called with exit code 1",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -210,12 +211,12 @@ test("runtime environment tests", async () => {
 
   // check that fetch is a function (we can't really make network calls here)
   const fetchFn = app.newCloudFunction(`
-    return fetch;
+    return typeof fetch;
   `);
 
   const cryptoFn = app.newCloudFunction(`
     const c = require("crypto");
-    return c.createHash;
+    return typeof c.createHash;
   `);
 
   // check that we can import ESM modules
@@ -226,9 +227,9 @@ test("runtime environment tests", async () => {
 
   // THEN
   const s = await app.startSimulator();
-  expect(await cryptoFn(s)).toBeTypeOf("function");
+  expect(await cryptoFn(s)).toEqual("function");
   expect(await urlSearchParamsFn(s)).toBe("api");
-  expect(await fetchFn(s)).toBeTypeOf("function");
+  expect(await fetchFn(s)).toEqual("function");
   expect(await esmModulesFn(s)).toHaveLength(21);
 
   await s.stop();

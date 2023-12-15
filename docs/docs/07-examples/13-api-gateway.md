@@ -42,13 +42,13 @@ bring cloud;
 
 let api = new cloud.Api();
 
-api.get("/items/{id}/{value}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.get("/items/:id/:value", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let itemId = req.vars.get("id");
   let itemValue = req.vars.get("value");
-  log("Received itemId:${itemId}, itemValue:${itemValue}");
+  log("Received itemId:{itemId}, itemValue:{itemValue}");
   return cloud.ApiResponse {
     status: 200,
-    body: "Received itemId:${itemId}, itemValue:${itemValue}"
+    body: "Received itemId:{itemId}, itemValue:{itemValue}"
   };
 });
 
@@ -60,12 +60,12 @@ bring cloud;
 
 let api = new cloud.Api();
 
-api.put("/items/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+api.put("/items/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   let itemId = req.vars.get("id");
   if let itemBody = Json.tryParse(req.body ?? "") {    
     return cloud.ApiResponse {
         status: 200,
-        body: "Received id ${itemId} with body ${itemBody}"
+        body: "Received id {itemId} with body {itemBody}"
     };
   }
   return cloud.ApiResponse {

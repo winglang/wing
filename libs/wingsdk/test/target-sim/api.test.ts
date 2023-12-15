@@ -28,7 +28,7 @@ const INFLIGHT_CODE_NO_BODY = `async handle(req) { return { status: 200 }; }`;
 test("create an api", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Api._newApi(app, "my_api");
+  new cloud.Api(app, "my_api");
 
   // THEN
   const s = await app.startSimulator();
@@ -38,6 +38,7 @@ test("create an api", async () => {
       url: expect.any(String),
     },
     path: "root/my_api",
+    addr: expect.any(String),
     props: {
       openApiSpec: {
         openapi: expect.any(String),
@@ -57,8 +58,8 @@ test("api with one GET route", async () => {
   const RESPONSE = "boom";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE(RESPONSE));
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -78,15 +79,11 @@ test("api with one GET route", async () => {
 
 test("api with one GET route with request params", async () => {
   // GIVEN
-  const ROUTE = "/users/{name}";
+  const ROUTE = "/users/:name";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_PARAMS
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_PARAMS);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -106,15 +103,11 @@ test("api with one GET route with request params", async () => {
 
 test("api with 'name' parameter", async () => {
   // GIVEN
-  const ROUTE = "/{name}";
+  const ROUTE = "/:name";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_PARAMS
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_PARAMS);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -134,15 +127,11 @@ test("api with 'name' parameter", async () => {
 
 test("api with 'name' & 'age' parameter", async () => {
   // GIVEN
-  const ROUTE = "/{name}/{age}";
+  const ROUTE = "/:name/:age";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_PARAMS
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_PARAMS);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -163,8 +152,8 @@ test("api with 'name' & 'age' parameter", async () => {
 test("api doesn't allow duplicated routes", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get("/hello", inflight);
 
   // THEN
@@ -176,8 +165,8 @@ test("api doesn't allow duplicated routes", () => {
 test("api allows duplicates routes with different methods", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get("/hello", inflight);
 
   // WHEN
@@ -190,17 +179,13 @@ test("api allows duplicates routes with different methods", () => {
 test("api doesn't allow ambiguous routes", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const path = "/api/hello/{name}";
-  const inflightGet = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_BODY
-  );
+  const api = new cloud.Api(app, "my_api");
+  const path = "/api/hello/:name";
+  const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/api/{name}/hello";
+  const ambiguousPath = "/api/:name/hello";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
@@ -211,17 +196,13 @@ test("api doesn't allow ambiguous routes", () => {
 test("api doesn't allow ambiguous routes containing only variables", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const path = "/{age}";
-  const inflightGet = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_BODY
-  );
+  const api = new cloud.Api(app, "my_api");
+  const path = "/:age";
+  const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/{name}";
+  const ambiguousPath = "/:name";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
@@ -232,17 +213,13 @@ test("api doesn't allow ambiguous routes containing only variables", () => {
 test("api doesn't allow ambiguous routes containing different number of varaibles", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const path = "/{param}/{something}";
-  const inflightGet = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_BODY
-  );
+  const api = new cloud.Api(app, "my_api");
+  const path = "/:param/:something";
+  const inflightGet = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(path, inflightGet);
 
   // WHEN
-  const ambiguousPath = "/path/{something}";
+  const ambiguousPath = "/path/:something";
 
   // THEN
   expect(() => api.get(ambiguousPath, inflightGet)).toThrowError(
@@ -253,8 +230,8 @@ test("api doesn't allow ambiguous routes containing different number of varaible
 test("api with multiple GET routes and one lambda", () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
 
   api.get("/hello/foo", inflight);
   api.get("/hello/bat", inflight);
@@ -279,12 +256,8 @@ test("api supports every method type", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_METHOD
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_METHOD);
   METHODS.forEach((method) => {
     api[method.toLowerCase()](ROUTE, inflight);
   });
@@ -320,17 +293,9 @@ test("api with multiple methods on same route", async () => {
   const GET_RESPONSE = "boom";
   const POST_RESPONSE = "bang";
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflightGet = Testing.makeHandler(
-    app,
-    "Handler1",
-    INFLIGHT_CODE(GET_RESPONSE)
-  );
-  const inflightPost = Testing.makeHandler(
-    app,
-    "Handler2",
-    INFLIGHT_CODE(POST_RESPONSE)
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflightGet = Testing.makeHandler(INFLIGHT_CODE(GET_RESPONSE));
+  const inflightPost = Testing.makeHandler(INFLIGHT_CODE(POST_RESPONSE));
   api.get(ROUTE, inflightGet);
   api.post(ROUTE, inflightPost);
 
@@ -360,17 +325,9 @@ test("api with multiple routes", async () => {
   const RESPONSE1 = "boom";
   const RESPONSE2 = "bang";
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight1 = Testing.makeHandler(
-    app,
-    "Handler1",
-    INFLIGHT_CODE(RESPONSE1)
-  );
-  const inflight2 = Testing.makeHandler(
-    app,
-    "Handler2",
-    INFLIGHT_CODE(RESPONSE2)
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight1 = Testing.makeHandler(INFLIGHT_CODE(RESPONSE1));
+  const inflight2 = Testing.makeHandler(INFLIGHT_CODE(RESPONSE2));
   api.get(ROUTE1, inflight1);
   api.get(ROUTE2, inflight2);
 
@@ -399,8 +356,8 @@ test("api with one POST route, with body", async () => {
   const REQUEST_BODY = { message: "hello world" };
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.post(ROUTE, inflight);
 
   // WHEN
@@ -429,8 +386,8 @@ test("api handler can read the request path", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_PATH);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_PATH);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -453,12 +410,8 @@ test("api handler can read the request params", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_ECHO_QUERY
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_QUERY);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -485,12 +438,8 @@ test("api handler can set response headers", async () => {
   const REQUEST_HEADER_VALUE = "bar";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(
-    app,
-    "Handler",
-    INFLIGHT_CODE_WITH_RESPONSE_HEADER
-  );
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_WITH_RESPONSE_HEADER);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -517,21 +466,23 @@ test("api handler can set response headers", async () => {
 test("api url can be used as environment variable", async () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
+  const api = new cloud.Api(app, "my_api");
   const handler = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(req) { return process.env["API_URL"]; }`
   );
-  cloud.Function._newFunction(app, "my_function", handler, {
+  new cloud.Function(app, "my_function", handler, {
     env: {
       API_URL: api.url,
     },
   });
 
   // WHEN
-  const s = await app.startSimulator();
+  const simfile = app.synth();
+  const s = new Simulator({ simfile });
   const fnEnvironmentValue =
+    s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
+  await s.start();
+  const fnEnvironmentValueAfterStart =
     s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
 
   const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -539,7 +490,8 @@ test("api url can be used as environment variable", async () => {
 
   // THEN
   await s.stop();
-  expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
+  expect(fnEnvironmentValue).toEqual("${wsim#root/my_api#attrs.url}");
+  expect(fnEnvironmentValueAfterStart).toEqual(expect.stringMatching(/^http/));
   expect(response.startsWith("http://")).toEqual(true);
 });
 
@@ -548,10 +500,8 @@ test("api response returns Content-Type header from inflight", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
+  const api = new cloud.Api(app, "my_api");
   const inflight = Testing.makeHandler(
-    app,
-    "Handler",
     INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER
   );
   api.get(ROUTE, inflight);
@@ -580,8 +530,8 @@ test("api response returns default Content-Type header", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api");
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  const api = new cloud.Api(app, "my_api");
+  const inflight = Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY);
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -616,11 +566,8 @@ function zip<T, U>(a: T[], b: U[]): Array<[T, U]> {
 test("request & response body are strings", async () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "Api");
-  api.post(
-    "/test",
-    Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY)
-  );
+  const api = new cloud.Api(app, "Api");
+  api.post("/test", Testing.makeHandler(INFLIGHT_CODE_ECHO_BODY));
 
   // WHEN
   const s = await app.startSimulator();
@@ -641,8 +588,8 @@ test("request & response body are strings", async () => {
 test("no response body", async () => {
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "Api");
-  api.post("/test", Testing.makeHandler(app, "Handler", INFLIGHT_CODE_NO_BODY));
+  const api = new cloud.Api(app, "Api");
+  api.post("/test", Testing.makeHandler(INFLIGHT_CODE_NO_BODY));
 
   // WHEN
   const s = await app.startSimulator();
@@ -664,11 +611,8 @@ test("404 handler", async () => {
   const RESPONSE = "boom";
   // GIVEN
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "Api");
-  api.post(
-    "/test",
-    Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE))
-  );
+  const api = new cloud.Api(app, "Api");
+  api.post("/test", Testing.makeHandler(INFLIGHT_CODE(RESPONSE)));
 
   // WHEN
   const s = await app.startSimulator();
@@ -694,8 +638,8 @@ test("api with CORS defaults", async () => {
   const RESPONSE = "boom";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api", { cors: true });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));
+  const api = new cloud.Api(app, "my_api", { cors: true });
+  const inflight = Testing.makeHandler(INFLIGHT_CODE(RESPONSE));
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -720,7 +664,7 @@ test("api with custom CORS settings", async () => {
   const RESPONSE = "boom";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api", {
+  const api = new cloud.Api(app, "my_api", {
     cors: true,
     corsOptions: {
       allowOrigin: ["https://example.com"],
@@ -728,7 +672,7 @@ test("api with custom CORS settings", async () => {
       exposeHeaders: ["x-wingnuts"],
     },
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE(RESPONSE));
+  const inflight = Testing.makeHandler(INFLIGHT_CODE(RESPONSE));
   api.get(ROUTE, inflight);
 
   // WHEN
@@ -757,7 +701,7 @@ test("api with CORS settings responds to OPTIONS request", async () => {
   const ROUTE = "/hello";
 
   const app = new SimApp();
-  const api = cloud.Api._newApi(app, "my_api", {
+  const api = new cloud.Api(app, "my_api", {
     cors: true,
   });
 

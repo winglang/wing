@@ -16,7 +16,6 @@ import {
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -51,26 +50,19 @@ export interface DynamodbTableProps {
  * A cloud Dynamodb table.
  *
  * @inflight `@winglang/sdk.ex.IDynamodbTableClient`
+ * @abstract
  */
-export abstract class DynamodbTable extends Resource {
-  /**
-   * Create a new DynamodbTable.
-   * @internal
-   */
-  public static _newDynamodbTable(
-    scope: Construct,
-    id: string,
-    props: DynamodbTableProps
-  ): DynamodbTable {
-    return App.of(scope).newAbstract(DYNAMODB_TABLE_FQN, scope, id, props);
-  }
-
+export class DynamodbTable extends Resource {
   /**
    * Table name
    */
-  public readonly name: string;
+  public readonly name!: string;
 
   constructor(scope: Construct, id: string, props: DynamodbTableProps) {
+    if (new.target === DynamodbTable) {
+      return Resource._newFromFactory(DYNAMODB_TABLE_FQN, scope, id, props);
+    }
+
     super(scope, id);
 
     Node.of(this).title = "DynamodbTable";
@@ -81,9 +73,6 @@ export abstract class DynamodbTable extends Resource {
     }
     this.name = props.name;
   }
-
-  /** @internal */
-  public abstract _supportedOps(): string[];
 }
 
 /**
@@ -581,7 +570,7 @@ export interface DynamodbTableQueryResult {
 /**
  * Options for transact write item's update operation.
  */
-export interface DynamodbTransactWriteItemPutProps {
+export interface DynamodbTransactWriteItemPutOptions {
   /**
    * The values of the item to be put.
    */
@@ -841,7 +830,7 @@ export interface DynamodbTransactWriteItem {
   /**
    * A request to perform a put operation.
    */
-  readonly put?: DynamodbTransactWriteItemPutProps;
+  readonly put?: DynamodbTransactWriteItemPutOptions;
 
   /**
    * A request to perform a update operation.
@@ -892,7 +881,7 @@ export interface DynamodbTableTransactWriteItemsResult {
 /**
  * Options for `DynamodbTable.transactGetItems`'s get operation.
  */
-export interface DynamodbTransactGetItemGetProps {
+export interface DynamodbTransactGetItemGetOptions {
   /**
    * The primary key of the item to be retrieved.
    */
@@ -918,7 +907,7 @@ export interface DynamodbTransactGetItem {
   /**
    * A request to perform a get operation.
    */
-  readonly get?: DynamodbTransactGetItemGetProps;
+  readonly get?: DynamodbTransactGetItemGetOptions;
 }
 
 /**
@@ -977,7 +966,7 @@ export interface IDynamodbTableClient {
   ): Promise<DynamodbTablePutItemResult>;
 
   /**
-   * Get an item from the table.
+   * Edit an existing item's attributes, or add a new item to the table if it does not already exist.
    * @param options dynamodb UpdateItem options.
    * @inflight
    * @see https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html

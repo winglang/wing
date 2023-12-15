@@ -34,7 +34,7 @@ pub const PARENT_THIS_NAME: &str = "__parent_this";
 /// ```wing
 /// let b = new cloud.Bucket();
 /// class $Closure1 {
-///   init() {}
+///   new() {}
 ///   inflight handle(message: str) {
 ///     b.put("file.txt", message);
 ///   }
@@ -253,7 +253,7 @@ impl Fold for ClosureTransformer {
 				// class_def :=
 				// ```
 				// class <new_class_name> {
-				//   init(<class_init_params>) {<class_init_body>}
+				//   new(<class_init_params>) {<class_init_body>}
 				//   inflight handle() {
 				//     <transformed_def>
 				//   }
@@ -262,6 +262,7 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
+						span: new_func_def.span.clone(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
 							name: Some(CLASS_INIT_NAME.into()),

@@ -15,7 +15,7 @@ if util.env("WING_TARGET") == "sim" {
 
   let s = new cloud.Service(inflight () => {
     let result = http.get(api.url);
-    b.put("service.txt", result.body ?? "");
+    b.put("service.txt", result.body);
   });
 
   test "will bind and use tokens" {

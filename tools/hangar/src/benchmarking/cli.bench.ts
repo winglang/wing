@@ -27,7 +27,8 @@ describe("compile", async () => {
           await runWingCommand({
             cwd: benchmarksTestDir,
             wingFile: wingFile,
-            args: ["compile", "--target", target],
+            platforms: [target],
+            args: ["compile"],
             expectFailure: false,
           });
         },
