@@ -333,9 +333,9 @@ export class Util {
     const execOpts = {
       cwd: opts?.cwd,
       env:
-        opts?.inheritEnv === false
-          ? { ...opts?.env }
-          : { ...process.env, ...opts?.env },
+        opts?.inheritEnv === true
+          ? { ...process.env, ...opts?.env }
+          : { ...opts?.env },
     };
 
     try {

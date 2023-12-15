@@ -35,12 +35,11 @@ test "exec() with explicit non-zero exit status" {
   expect.equal(output.status, 1);
 }
 
-test "shell() with env and inheritEnv options" {
+test "exec() with env option" {
   let program = "bash";
   let args = ["-c", "echo $WING_TARGET $ENV_VAR"];
   let opts = {
     env: { ENV_VAR: "Wing" },
-    inheritEnv: false,
   };
 
   let output = util.exec(program, args, opts);
@@ -48,6 +47,26 @@ test "shell() with env and inheritEnv options" {
   expect.equal(output.stdout, "Wing\n");
   expect.equal(output.stderr, "");
   expect.equal(output.status, 0);
+}
+
+test "exec() with inheritEnv option" {
+  let program = "bash";
+  let args = ["-c", "echo $WING_TARGET"];
+  let opts = {
+    inheritEnv: true,
+  };
+
+  let output1 = util.exec(program, args);
+  let output2 = util.exec(program, args, opts);
+
+  // LF (\n)
+  expect.equal(output1.stdout.length, 1);
+  expect.equal(output1.stderr, "");
+  expect.equal(output1.status, 0);
+
+  assert(output2.stdout.length > 1);
+  expect.equal(output2.stderr, "");
+  expect.equal(output2.status, 0);
 }
 
 test "exec() with cwd option" {

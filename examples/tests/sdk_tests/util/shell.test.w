@@ -73,7 +73,6 @@ test "shell() with inheritEnv option" {
   let output1 = util.shell(command);
   let output2 = util.shell(command, opts);
 
-
   if Util.platform() != "win32" {
     // LF (\n)
     expect.equal(output1.length, 1);
