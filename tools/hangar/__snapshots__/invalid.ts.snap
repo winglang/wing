@@ -47,29 +47,49 @@ error: Cannot override private method \\"method\\" of \\"Bar\\"
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
     |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
 109 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
     |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
 111 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
     |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
 115 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 117 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
@@ -117,99 +137,85 @@ error: Cannot override private method \\"private_method\\" of \\"Foo\\"
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 74 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 84 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 89 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 97 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 102 |     Bar.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
-
-
-error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
     |
-123 |     log(foo.protected_field);
-    |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_field\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
-    |
-125 |     log(foo.private_field);
-    |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
-
-
-error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
-    |
-129 |     foo.protected_method();
-    |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
-    |
-131 |     foo.private_method();
-    |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
-
-
-error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
-    |
-137 |     Foo.protected_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
-
-
-error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
-    |
-139 |     Foo.private_static_method();
-    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
+    = hint: the definition of"
 `;
 
 exports[`access_private_apis.test.w 1`] = `
@@ -2052,6 +2058,8 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   |
+   = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
  

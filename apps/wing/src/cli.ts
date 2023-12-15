@@ -30,11 +30,11 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
       const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
-        process.exit(1);
+        process.exitCode = 1;
       }
     } catch (err) {
       console.error((err as any)?.message ?? err);
-      process.exit(1);
+      process.exitCode = 1;
     }
   };
 }
@@ -234,5 +234,5 @@ function checkNodeVersion() {
 
 main().catch((err) => {
   console.error(err);
-  process.exit(1);
+  process.exitCode = 1;
 });

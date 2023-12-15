@@ -5365,18 +5365,32 @@ impl<'a> TypeChecker<'a> {
 			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access private member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access private member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Protected => {
 					if !protected_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access protected member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access protected member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here

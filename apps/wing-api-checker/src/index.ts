@@ -109,12 +109,12 @@ async function main() {
   } else {
     const warnings = await generateWarnings(packageDir);
     if (warnings > 0) {
-      process.exit(1);
+      process.exitCode = 1;
     }
   }
 }
 
 main().catch((e) => {
   console.error(e);
-  process.exit(1);
+  process.exitCode = 1;
 });
