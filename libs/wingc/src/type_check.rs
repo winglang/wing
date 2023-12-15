@@ -3476,7 +3476,7 @@ impl<'a> TypeChecker<'a> {
 		if let Some(_) = env.parent {
 			self.spanned_error(
 				name,
-				format!("struct {name} must be declared at the top-level of a file"),
+				format!("struct \"{name}\" must be declared at the top-level of a file"),
 			);
 		}
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
