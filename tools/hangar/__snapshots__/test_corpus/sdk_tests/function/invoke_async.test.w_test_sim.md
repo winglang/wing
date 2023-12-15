@@ -5,6 +5,7 @@
 log preflight
 pass ┌ invoke_async.test.wsim » root/env0/test:invoke
      │ log inside test
+     │ log inside f1
      └ log inside f2
  
  
