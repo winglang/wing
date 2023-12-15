@@ -50,7 +50,12 @@ test "shell() with explicit non-zero exit status" {
 }
 
 test "shell() with env option" {
-  let command = "echo $WING_TARGET $ENV_VAR";
+  let var command = "";
+  if Util.platform() != "win32" {
+    command = "echo $WING_TARGET $ENV_VAR";
+  } else {
+    command = "echo %WING_TARGET% %ENV_VAR%";
+  }
   let opts = {
     env: { ENV_VAR: "Wing" },
   };
@@ -60,7 +65,7 @@ test "shell() with env option" {
   if Util.platform() != "win32" {
     expect.equal(output, "Wing\n");
   } else {
-    expect.equal(output, "Wing\r\n");
+    expect.equal(output, "%WING_TARGET% Wing\r\n");
   }
 }
 
