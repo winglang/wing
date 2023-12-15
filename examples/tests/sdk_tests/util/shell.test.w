@@ -70,7 +70,12 @@ test "shell() with env option" {
 }
 
 test "shell() with inheritEnv option" {
-  let command = "echo $WING_TARGET";
+  let var command = "";
+  if Util.platform() != "win32" {
+    command = "echo $WING_TARGET";
+  } else {
+    command = "echo %WING_TARGET%";
+  }
   let opts = {
     inheritEnv: true,
   };
@@ -83,9 +88,9 @@ test "shell() with inheritEnv option" {
     expect.equal(output1.length, 1);
     assert(output2.length > 1);
   } else {
-    // CRLF (\r\n)
-    expect.equal(output1.length, 2);
-    assert(output2.length > 2);
+    // %WING_TARGET%CRLF (%WING_TARGET%\r\n)
+    expect.equal(output1.length, 15);
+    assert(output2.length < 15);
   }
 }
 
