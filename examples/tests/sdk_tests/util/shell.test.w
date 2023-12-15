@@ -22,7 +22,7 @@ test "shell() with valid command" {
 
   let output = util.shell(command);
   
-  if Util.platform() != "windows" {
+  if Util.platform() != "win32" {
     expect.equal(output, "Hello, Wing!\n");
   } else {
     expect.equal(output, "Hello, Wing!\r\n");
@@ -60,7 +60,7 @@ test "shell() with env and inheritEnv options" {
   let output2 = util.shell(command, opts);
 
   assert(output1.length > 0);
-  if Util.platform() != "windows" {
+  if Util.platform() != "win32" {
     expect.equal(output2, "Wing\n");
   } else {
     expect.equal(output2, "Wing\r\n");
