@@ -49,11 +49,10 @@ test "shell() with explicit non-zero exit status" {
   });
 }
 
-test "shell() with env and inheritEnv options" {
+test "shell() with env option" {
   let command = "echo $WING_TARGET $ENV_VAR";
   let opts = {
     env: { ENV_VAR: "Wing" },
-    inheritEnv: false,
   };
 
   let output = util.shell(command, opts);
@@ -62,6 +61,27 @@ test "shell() with env and inheritEnv options" {
     expect.equal(output, "Wing\n");
   } else {
     expect.equal(output, "Wing\r\n");
+  }
+}
+
+test "shell() with inheritEnv option" {
+  let command = "echo $WING_TARGET";
+  let opts = {
+    inheritEnv: true,
+  };
+
+  let output1 = util.shell(command);
+  let output2 = util.shell(command, opts);
+
+
+  if Util.platform() != "win32" {
+    // LF (\n)
+    expect.equal(output1.length, 1);
+    assert(output2.length > 1);
+  } else {
+    // CRLF (\r\n)
+    expect.equal(output1.length, 2);
+    assert(output2.length > 2);
   }
 }
 

@@ -291,9 +291,9 @@ export class Util {
     const shellOpts = {
       cwd: opts?.cwd,
       env:
-        opts?.inheritEnv === false
-          ? { ...opts?.env }
-          : { ...process.env, ...opts?.env },
+        opts?.inheritEnv === true
+          ? { ...process.env, ...opts?.env }
+          : { ...opts?.env },
     };
 
     const createErrorMessage = (error: any): string => {
