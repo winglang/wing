@@ -305,7 +305,8 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
   const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
-    if (!isTerraformInstalled(synthDir)) {
+    const installed = await isTerraformInstalled(synthDir);
+    if (!installed) {
       throw new Error(
         "Terraform is not installed. Please install Terraform to run tests in the cloud."
       );

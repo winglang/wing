@@ -215,7 +215,86 @@ error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
 102 |     Bar.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
     |
-    = hint: the definition of"
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
+
+
+error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
+    |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
+123 |     log(foo.protected_field);
+    |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_field\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
+    |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
+125 |     log(foo.private_field);
+    |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
+    |
+ 47 |   protected protected_method() {}
+    |             ---------------- defined here
+    .
+129 |     foo.protected_method();
+    |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
+    |
+ 49 |   private_method() {}
+    |   -------------- defined here
+    .
+131 |     foo.private_method();
+    |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
+
+
+error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
+    |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
+137 |     Foo.protected_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
+
+
+error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
+    |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
+139 |     Foo.private_static_method();
+    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`access_private_apis.test.w 1`] = `

@@ -17,7 +17,7 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
-let analyticsExportFile: Promise<string | undefined>;
+let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
   loadEnvVariables({
