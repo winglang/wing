@@ -4,7 +4,11 @@ id: using-javascript
 keywords: [Wing example]
 ---
 
-These examples require a separate file named `url_utils.js` with this code:
+Calling a Javascript function from Wing requires two steps. 
+
+First, export the function from Javascript.
+
+This examples exports `isValidUrl` from a file named`url_utils.js`:
 
 ```js
 exports.isValidUrl = function(url) {
@@ -17,29 +21,28 @@ exports.isValidUrl = function(url) {
 };
 ```
 
-### Preflight static function
+### Preflight function
+
+To call this in preflight code, define the function as an `extern` in a class.
+
+**Note:** Extern functions must be `static.` 
+
+If you want to use the function outside of the calss, be sure to decalre it as `pub`.
+
 ```ts 
 class JsExample {  
   // preflight static 
-  extern "./url_utils.js" static isValidUrl(url: str): bool;
+  pub extern "./url_utils.js" static isValidUrl(url: str): bool;
 }
 
 assert(JsExample.isValidUrl("http://www.google.com"));
 assert(!JsExample.isValidUrl("X?Y"));
 ```
-### Preflight method
-```ts 
-class JsExample {  
-  // preflight method
-  extern "./url_utils.js" isValidUrl(url: str): bool;
-}
 
-let j = new JsExample();
-assert(j.isValidUrl("http://www.google.com"));
-assert(!j.isValidUrl("X?Y"));
-```
+### Inflight
 
-### Inflight static
+To call the function inflight, add the `inflight` modifier. 
+
 ```ts
 class JsExample {  
   // inflight static method
@@ -49,18 +52,5 @@ class JsExample {
 test "main" {
   assert(JsExample.isValidUrl("http://www.google.com"));
   assert(!JsExample.isValidUrl("X?Y"));
-}
-```
-### Inflight method
-```ts
-class JsExample {  
-  // inflight method
-  extern "./url_utils.js" inflight isValidUrl(url: str): bool;
-}
-
-let j = new JsExample();
-test "main" {
-  assert(j.isValidUrl("http://www.google.com"));
-  assert(!j.isValidUrl("X?Y"));
 }
 ```

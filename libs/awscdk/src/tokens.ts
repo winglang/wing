@@ -1,13 +1,13 @@
 import { Fn, Token } from "aws-cdk-lib";
 import { Function } from "@winglang/sdk/lib/cloud";
-import { Tokens } from "@winglang/sdk/lib/core/tokens";
+import { tokenEnvName, ITokenResolver } from "@winglang/sdk/lib/core/tokens";
 import { IInflightHost } from "@winglang/sdk/lib/std";
 
 /**
  * Represents values that can only be resolved after the app is synthesized.
  * Tokens values are captured as environment variable, and resolved through the compilation target token mechanism.
  */
-export class CdkTokens extends Tokens {
+export class CdkTokens implements ITokenResolver {
   /**
    * Returns true is the given value is a CDK token.
    */
@@ -23,7 +23,7 @@ export class CdkTokens extends Tokens {
       throw new Error(`Unable to lift null token`);
     }
 
-    const envName = JSON.stringify(this.envName(value.toString()));
+    const envName = JSON.stringify(tokenEnvName(value.toString()));
     switch (typeof value) {
       case "string":
         return `process.env[${envName}]`;
@@ -64,7 +64,7 @@ export class CdkTokens extends Tokens {
       throw new Error(`Unable to bind token ${value}`);
     }
 
-    const envName = this.envName(value.toString());
+    const envName = tokenEnvName(value.toString());
     // the same token might be bound multiple times by different variables/inflight contexts
     if (host.env[envName] === undefined) {
       host.addEnvironment(envName, envValue);

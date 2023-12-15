@@ -2,6 +2,7 @@ use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 use phf::{phf_map, phf_set};
+use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::{fs, str, vec};
@@ -10,9 +11,10 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
-	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
+	Scope, Spanned, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -260,6 +262,42 @@ fn parse_wing_file(
 	dependent_wing_paths
 }
 
+fn dir_contains_wing_file(dir_path: &Utf8Path) -> bool {
+	for entry in fs::read_dir(dir_path).unwrap() {
+		let entry = entry.unwrap().path();
+		let path = Utf8Path::from_path(&entry).unwrap();
+
+		if path.is_dir() {
+			if dir_contains_wing_file(&path) {
+				return true;
+			}
+		} else if path.extension() == Some("w") {
+			return true;
+		}
+	}
+	false
+}
+
+fn contains_non_symbolic(str: &str) -> bool {
+	// uses the same regex pattern from grammar.js for valid identifiers
+	let re = Regex::new(r"^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$").unwrap();
+	!re.is_match(str)
+}
+
+fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
+	if contains_non_symbolic(dir_path.file_name().unwrap()) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot bring Wing directories that contain invalid characters: \"{}\"",
+				dir_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		});
+	}
+}
+
 fn parse_wing_directory(
 	source_path: &Utf8Path,
 	files: &mut Files,
@@ -269,20 +307,36 @@ fn parse_wing_directory(
 ) -> Vec<Utf8PathBuf> {
 	// Collect a list of all files and subdirectories in the directory
 	let mut files_and_dirs = Vec::new();
+
+	if source_path.is_dir() && !dir_contains_wing_file(&source_path) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot explicitly bring directory with no Wing files \"{}\"",
+				source_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		})
+	}
+
 	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
 		let entry = entry.unwrap();
 		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
 
 		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
 		// or if it's a file and its extension is .w, add it
-		//
-		// TODO: skip directories that don't contain any .w files anywhere in their subtree
 		if (path.is_dir()
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
+			&& dir_contains_wing_file(&path)
 			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
+			// before we add the path, we need to check that directory names are valid
+			if path.is_dir() {
+				check_valid_wing_dir_name(&path);
+			}
 			files_and_dirs.push(path);
 		}
 	}
@@ -681,17 +735,31 @@ impl<'s> Parser<'s> {
 
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
-		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
-			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
-			let elif = ElifLetBlock {
-				reassignable: node.child_by_field_name("reassignable").is_some(),
-				statements: statements,
-				value: value,
-				var_name: name,
-			};
-			elif_vec.push(elif);
+		for node in statement_node.children(&mut cursor) {
+			match node.kind() {
+				"elif_let_block" => {
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+					let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
+					let elif = Elifs::ElifLetBlock(ElifLetBlock {
+						reassignable: node.child_by_field_name("reassignable").is_some(),
+						statements: statements,
+						value: value,
+						var_name: name,
+					});
+					elif_vec.push(elif);
+				}
+				"elif_block" => {
+					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let elif = Elifs::ElifBlock(ElifBlock {
+						condition: conditions.unwrap(),
+						statements: statements,
+					});
+					elif_vec.push(elif);
+				}
+				_ => {}
+			}
 		}
 
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -1523,12 +1591,7 @@ impl<'s> Parser<'s> {
 			None => phase,
 		};
 
-		let is_static = if name.is_none() {
-			// Anonymous closures are always static
-			true
-		} else {
-			self.get_modifier("static", &modifiers)?.is_some()
-		};
+		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
 		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
@@ -2124,7 +2187,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"json_map_literal" => {
-				let fields = self.build_map_fields(expression_node, phase)?;
+				let fields = self.build_json_map_fields(expression_node, phase)?;
 				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
 			}
 			"map_literal" => {
@@ -2243,7 +2306,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
+	fn build_json_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -2267,6 +2330,23 @@ impl<'s> Parser<'s> {
 			} else {
 				fields.insert(key, self.build_expression(&value_node, phase)?);
 			}
+		}
+		Ok(fields)
+	}
+
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Vec<(Expr, Expr)>, ()> {
+		let mut fields = vec![];
+		let mut cursor = expression_node.walk();
+		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+			if field_node.is_extra() {
+				continue;
+			}
+			let key_node = field_node.named_child(0).unwrap();
+			let value_node = field_node.named_child(1).unwrap();
+			fields.push((
+				self.build_expression(&key_node, phase)?,
+				self.build_expression(&value_node, phase)?,
+			));
 		}
 		Ok(fields)
 	}
@@ -2646,5 +2726,16 @@ mod tests {
 		let file_path = Utf8Path::new("../foo.w");
 		let relative_to = Utf8Path::new("subdir/bar.w");
 		assert_eq!(normalize_path(file_path, Some(relative_to)), Utf8Path::new("foo.w"));
+	}
+
+	#[test]
+	fn test_contains_non_symbolic() {
+		assert_eq!(true, contains_non_symbolic("wow%zer"));
+		assert_eq!(true, contains_non_symbolic("w.owzer"));
+		assert_eq!(true, contains_non_symbolic("#wowzer"));
+		assert_eq!(true, contains_non_symbolic("wow-zer"));
+		assert_eq!(true, contains_non_symbolic("$wowzer"));
+		assert_eq!(false, contains_non_symbolic("_wowzer"));
+		assert_eq!(false, contains_non_symbolic("wowzer"));
 	}
 }

@@ -28,7 +28,7 @@ async handle() {
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       ENV_VAR1: "true",
@@ -42,6 +42,7 @@ test("create a function", async () => {
       handle: expect.any(String),
     },
     path: "root/my_function",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
@@ -60,7 +61,7 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
 
   const s = await app.startSimulator();
@@ -82,7 +83,7 @@ test("invoke function succeeds", async () => {
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       PIG_LATIN: "true",
@@ -112,7 +113,7 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 
@@ -128,7 +129,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -137,7 +138,7 @@ test("invoke function fails", async () => {
 test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
 
   const treeJson = treeJsonOf(app.synth());
@@ -158,7 +159,7 @@ test("function has no display hidden property", async () => {
 test("function has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
 
   // WHEN
@@ -181,7 +182,7 @@ test("function has display title and description properties", async () => {
 test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_PANIC);
+  const handler = Testing.makeHandler(INFLIGHT_PANIC);
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -193,7 +194,7 @@ test("invoke function with process.exit(1)", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "process.exit() was called with exit code 1",
   });
   expect(app.snapshot()).toMatchSnapshot();

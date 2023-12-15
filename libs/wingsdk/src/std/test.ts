@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { IResource, Resource } from "./resource";
+import { Resource } from "./resource";
 import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Node } from "../std";
+import { Node, IInflight } from "../std";
 
 /**
  * Global identifier for `Test`.
@@ -43,8 +43,14 @@ export class Test extends Resource {
     Node.of(this).title = "Test";
     Node.of(this).description = "A cloud unit test.";
 
-    if (App.of(this).isTestEnvironment || App.of(this)._target === "sim") {
-      this._fn = new Function(this, "Handler", inflight, props);
+    this._fn = App.of(this)?._testRunner?._addTestFunction(
+      this,
+      "Handler",
+      inflight,
+      props
+    );
+    if (!this._fn) {
+      Node.of(this).hidden = true;
     }
   }
 
@@ -66,7 +72,7 @@ export class Test extends Resource {
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
  * @skipDocs
  */
-export interface ITestHandler extends IResource {}
+export interface ITestHandler extends IInflight {}
 
 /**
  * Inflight client for `ITestHandler`.

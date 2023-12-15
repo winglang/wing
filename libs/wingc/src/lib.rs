@@ -99,6 +99,7 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
 	WINGSDK_UI_MODULE,
 ];
 
+const WINGSDK_GENERIC: &'static str = "std.T1";
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.Map";
 const WINGSDK_MUT_MAP: &'static str = "std.MutMap";
@@ -114,6 +115,7 @@ const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";

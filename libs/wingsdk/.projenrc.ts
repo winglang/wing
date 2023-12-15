@@ -1,5 +1,6 @@
 import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
+import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
@@ -11,21 +12,15 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = [
-  "std",
-  "http",
-  "util",
-  "aws",
-  "math",
-  "regex",
-  "sim",
-  "fs",
-  "expect",
-  "ui",
-];
+// those will be skipped out of the docs
+const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const publicModules = Object.keys(cloud).filter(
+  (item) => !SKIPPED_MODULES.includes(item)
+);
 
-const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
+const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/cloud/";
+const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/ex/";
+const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -84,6 +79,7 @@ const project = new cdk.JsiiProject({
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
+    "google-auth-library",
     // simulator dependencies
     "express",
     "uuid",
@@ -190,6 +186,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 
 // Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
+  "@typescript-eslint/no-misused-promises": "error",
   "import/no-restricted-paths": [
     "error",
     {
@@ -252,9 +249,8 @@ project.tasks
 
 // --------------- docs -----------------
 
-const docsPrefix = (idx: number, name: string) => {
-  const prefix = idx.toString().padStart(2, "0");
-  return `../../docs/docs/04-standard-library/${prefix}-${name}`;
+const docsPrefix = (name: string) => {
+  return `../../docs/docs/04-standard-library/${name}`;
 };
 const docsFrontMatter = (name: string) => `---
 title: API reference
@@ -276,8 +272,8 @@ docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
-for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 3, mod);
+for (const mod of publicModules) {
+  const prefix = docsPrefix(mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
@@ -288,16 +284,23 @@ for (const mod of PUBLIC_MODULES) {
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 const UNDOCUMENTED_EX_FILES = ["index"];
 
+const toCamelCase = (str: string) =>
+  str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
+
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
-  docsPath: string,
-  excludedFiles: string[] = []
+  options: {
+    docsPath: string;
+    excludedFiles?: string[];
+    allowUndocumented?: boolean;
+  }
 ) {
+  const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
   const cloudFiles = readdirSync(pathToFolder);
 
   const cloudResources: Set<string> = new Set(
-    cloudFiles.map((filename) => filename.split(".")[0])
+    cloudFiles.map((filename: string) => filename.split(".")[0])
   );
 
   excludedFiles.forEach((file) => cloudResources.delete(file));
@@ -306,7 +309,7 @@ function generateResourceApiDocs(
     (file) => !cloudFiles.includes(`${file}.md`)
   );
 
-  if (undocumentedResources.length) {
+  if (undocumentedResources.length && !allowUndocumented) {
     throw new Error(
       `Detected undocumented resources: ${undocumentedResources.join(
         ", "
@@ -316,23 +319,46 @@ function generateResourceApiDocs(
 
   // generate api reference for each cloud/submodule and append it to the doc file
   for (const mod of cloudResources) {
+    if (undocumentedResources.includes(mod)) {
+      // adding a title
+      docgen.exec(
+        `echo "---\ntitle: ${toCamelCase(mod)}\nid: ${toCamelCase(
+          mod
+        )}\n---\n\n" > ${docsPath}${mod}.md`
+      );
+    }
     docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${module}/${mod}`);
     docgen.exec(`cat API.md >> ${docsPath}${mod}.md`);
   }
 }
 
-generateResourceApiDocs(
-  "cloud",
-  "./src/cloud",
-  CLOUD_DOCS_PREFIX,
-  UNDOCUMENTED_CLOUD_FILES
-);
-generateResourceApiDocs(
-  "ex",
-  "./src/ex",
-  EX_DOCS_PREFIX,
-  UNDOCUMENTED_EX_FILES
-);
+generateResourceApiDocs("cloud", "./src/cloud", {
+  docsPath: CLOUD_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_CLOUD_FILES,
+});
+generateResourceApiDocs("ex", "./src/ex", {
+  docsPath: EX_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_EX_FILES,
+});
+
+// generateResourceApiDocs("dynamodb-table", "./src/ex/dynamodb-table.ts", {
+//   docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table"),
+//   excludedFiles: [],
+// });
+
+generateResourceApiDocs("std", "./src/std", {
+  docsPath: STD_DOCS_PREFIX,
+  excludedFiles: [
+    "README",
+    "index",
+    "test-runner",
+    "resource",
+    "test",
+    "range",
+    "generics",
+  ],
+  allowUndocumented: true,
+});
 
 docgen.exec("rm API.md");
 

@@ -2,13 +2,11 @@
 
 exports[`can obtain ui components 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Function created.",
   "Invoke (payload=\\"\\").",
   "Invoke (payload=\\"\\").",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;

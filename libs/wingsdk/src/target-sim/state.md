@@ -60,7 +60,7 @@ naturally:
 let s = new MyService();
 
 new cloud.Function(inflight () => {
-  log("service start time is ${s}");
+  log("service start time is {s}");
 });
 ```
 

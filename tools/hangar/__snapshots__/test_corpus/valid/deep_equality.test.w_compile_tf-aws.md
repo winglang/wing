@@ -251,20 +251,7 @@ module.exports = function({ $arrayA, $arrayB }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -286,17 +273,18 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $numA: ${context._lift(numA)},
-            $numB: ${context._lift(numB)},
-            $strA: ${context._lift(strA)},
-            $strB: ${context._lift(strB)},
+            $numA: ${$stdlib.core.liftObject(numA)},
+            $numB: ${$stdlib.core.liftObject(numB)},
+            $strA: ${$stdlib.core.liftObject(strA)},
+            $strB: ${$stdlib.core.liftObject(strB)},
           })
         `;
       }
@@ -312,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -325,17 +313,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $numA: ${context._lift(numA)},
-            $numC: ${context._lift(numC)},
-            $strA: ${context._lift(strA)},
-            $strC: ${context._lift(strC)},
+            $numA: ${$stdlib.core.liftObject(numA)},
+            $numC: ${$stdlib.core.liftObject(numC)},
+            $strA: ${$stdlib.core.liftObject(strA)},
+            $strC: ${$stdlib.core.liftObject(strC)},
           })
         `;
       }
@@ -351,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -364,15 +353,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
+            $jsonA: ${$stdlib.core.liftObject(jsonA)},
+            $jsonB: ${$stdlib.core.liftObject(jsonB)},
           })
         `;
       }
@@ -388,7 +378,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -399,16 +389,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
-            $jsonC: ${context._lift(jsonC)},
+            $jsonA: ${$stdlib.core.liftObject(jsonA)},
+            $jsonB: ${$stdlib.core.liftObject(jsonB)},
+            $jsonC: ${$stdlib.core.liftObject(jsonC)},
           })
         `;
       }
@@ -424,7 +415,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -436,15 +427,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $setA: ${context._lift(setA)},
-            $setB: ${context._lift(setB)},
+            $setA: ${$stdlib.core.liftObject(setA)},
+            $setB: ${$stdlib.core.liftObject(setB)},
           })
         `;
       }
@@ -460,7 +452,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -471,16 +463,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure6-1.js")({
-            $setA: ${context._lift(setA)},
-            $setB: ${context._lift(setB)},
-            $setC: ${context._lift(setC)},
+            $setA: ${$stdlib.core.liftObject(setA)},
+            $setB: ${$stdlib.core.liftObject(setB)},
+            $setC: ${$stdlib.core.liftObject(setC)},
           })
         `;
       }
@@ -496,7 +489,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -508,15 +501,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure7-1.js")({
-            $mapA: ${context._lift(mapA)},
-            $mapB: ${context._lift(mapB)},
+            $mapA: ${$stdlib.core.liftObject(mapA)},
+            $mapB: ${$stdlib.core.liftObject(mapB)},
           })
         `;
       }
@@ -532,7 +526,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -543,16 +537,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure8-1.js")({
-            $mapA: ${context._lift(mapA)},
-            $mapB: ${context._lift(mapB)},
-            $mapC: ${context._lift(mapC)},
+            $mapA: ${$stdlib.core.liftObject(mapA)},
+            $mapB: ${$stdlib.core.liftObject(mapB)},
+            $mapC: ${$stdlib.core.liftObject(mapC)},
           })
         `;
       }
@@ -568,7 +563,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -580,15 +575,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure9-1.js")({
-            $arrayA: ${context._lift(arrayA)},
-            $arrayB: ${context._lift(arrayB)},
+            $arrayA: ${$stdlib.core.liftObject(arrayA)},
+            $arrayB: ${$stdlib.core.liftObject(arrayB)},
           })
         `;
       }
@@ -604,7 +600,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -615,16 +611,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure10-1.js")({
-            $arrayA: ${context._lift(arrayA)},
-            $arrayB: ${context._lift(arrayB)},
-            $arrayC: ${context._lift(arrayC)},
+            $arrayA: ${$stdlib.core.liftObject(arrayA)},
+            $arrayB: ${$stdlib.core.liftObject(arrayB)},
+            $arrayC: ${$stdlib.core.liftObject(arrayC)},
           })
         `;
       }
@@ -640,7 +637,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -652,15 +649,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure11 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure11-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
+            $cat1: ${$stdlib.core.liftObject(cat1)},
+            $cat2: ${$stdlib.core.liftObject(cat2)},
           })
         `;
       }
@@ -676,7 +674,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -687,16 +685,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure12 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure12-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
-            $cat3: ${context._lift(cat3)},
+            $cat1: ${$stdlib.core.liftObject(cat1)},
+            $cat2: ${$stdlib.core.liftObject(cat2)},
+            $cat3: ${$stdlib.core.liftObject(cat3)},
           })
         `;
       }
@@ -712,7 +711,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -741,9 +740,9 @@ class $Root extends $stdlib.std.Resource {
     const setC = new Set([4, 5, 6]);
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with the same value", new $Closure5(this, "$Closure5"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Set types with different values", new $Closure6(this, "$Closure6"));
-    const mapA = ({"a": 1, "b": 2});
-    const mapB = ({"a": 1, "b": 2});
-    const mapC = ({"c": 10, "b": 2});
+    const mapA = ({["a"]: 1, ["b"]: 2});
+    const mapB = ({["a"]: 1, ["b"]: 2});
+    const mapC = ({["c"]: 10, ["b"]: 2});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with the same value", new $Closure7(this, "$Closure7"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Map with different values", new $Closure8(this, "$Closure8"));
     const arrayA = [1, 2, 3];

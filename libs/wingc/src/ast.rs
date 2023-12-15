@@ -449,8 +449,14 @@ pub struct IfLet {
 	pub var_name: Symbol,
 	pub value: Expr,
 	pub statements: Scope,
-	pub elif_statements: Vec<ElifLetBlock>,
+	pub elif_statements: Vec<Elifs>,
 	pub else_statements: Option<Scope>,
+}
+
+#[derive(Debug)]
+pub enum Elifs {
+	ElifBlock(ElifBlock),
+	ElifLetBlock(ElifLetBlock),
 }
 
 #[derive(Debug)]
@@ -594,8 +600,7 @@ pub enum ExprKind {
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
-		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: IndexMap<Symbol, Expr>,
+		fields: Vec<(Expr, Expr)>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,

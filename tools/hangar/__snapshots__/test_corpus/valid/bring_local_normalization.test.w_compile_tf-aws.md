@@ -48,20 +48,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -83,7 +70,7 @@ module.exports = function({ $stdlib }) {
     static bar() {
       return "bar";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Bar-1.js")({
         })
@@ -101,7 +88,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
@@ -121,7 +108,7 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return "baz";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Baz-2.js")({
         })
@@ -139,7 +126,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Baz };
@@ -167,7 +154,7 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return (baz.Baz.baz());
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
         require("./inflight.Foo-3.js")({
         })
@@ -185,7 +172,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };

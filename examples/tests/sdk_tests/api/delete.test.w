@@ -18,7 +18,7 @@ api.delete("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 
 test "http.delete and http.fetch can preform a call to an api" {
-    let url = "${api.url}/path?all=true&page=6";
+    let url = "{api.url}/path?all=true&page=6";
     let response: http.Response = http.delete(url);
     let fetchResponse: http.Response = http.fetch(url, method: http.HttpMethod.DELETE);
 

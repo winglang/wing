@@ -276,7 +276,12 @@ module.exports = grammar({
         "=",
         field("value", $.expression),
         field("block", $.block),
-        repeat(field("elif_let_block", $.elif_let_block)),
+        repeat(
+          choice(
+            field("elif_let_block", $.elif_let_block),
+            field("elif_block", $.elif_block)
+          )
+        ),
         optional(seq("else", field("else_block", $.block)))
       ),
 
@@ -367,14 +372,14 @@ module.exports = grammar({
         ),
         '"'
       ),
-    template_substitution: ($) => seq("${", $.expression, "}"),
-    _string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
+    template_substitution: ($) => seq("{", $.expression, "}"),
+    _string_fragment: ($) => token.immediate(prec(1, /[^{"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(
           "\\",
           choice(
-            "$",
+            "{",
             /[^xu0-7]/,
             /[0-7]{1,3}/,
             /x[0-9a-fA-F]{2}/,
@@ -637,8 +642,7 @@ module.exports = grammar({
         braced(commaSep(field("fields", $.struct_literal_member)))
       ),
 
-    map_literal_member: ($) =>
-      seq(choice($.string), "=>", $.expression),
+    map_literal_member: ($) => seq($.expression, "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),

@@ -3,7 +3,7 @@ import { VisualComponent } from "./base";
 import { Function } from "../cloud";
 import { fqnForType } from "../constants";
 import { App, UIComponent } from "../core";
-import { IResource } from "../std";
+import { IInflight } from "../std";
 
 /**
  * Global identifier for `Button`.
@@ -67,7 +67,7 @@ export class Button extends VisualComponent {
  *
  * @inflight `@winglang/sdk.ui.IButtonHandlerClient`
  */
-export interface IButtonHandler extends IResource {}
+export interface IButtonHandler extends IInflight {}
 
 /**
  * Inflight client for `IButtonHandler`.

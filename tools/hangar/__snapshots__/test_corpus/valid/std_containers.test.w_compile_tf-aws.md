@@ -50,20 +50,7 @@ module.exports = function({ $Animal }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -88,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Animal-1.js")({
           })
@@ -106,17 +93,17 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Cat extends Animal {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Cat-1.js")({
-            $Animal: ${context._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }
@@ -132,17 +119,17 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Dog extends Animal {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Dog-1.js")({
-            $Animal: ${context._lift(Animal)},
+            $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
       }
@@ -158,23 +145,23 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
-    (mutArray.push("three"));
+    ((obj, args) => { obj.push(...args); })(mutArray, ["three"]);
     const immutArray = [...(mutArray)];
-    const s = (sArray.at(1));
+    const s = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1);
     {((cond) => {if (!cond) throw new Error("assertion failed: s == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"two")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.at(1) == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((sArray.at(1)),"two")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.at(1) == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1),"two")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sArray.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sArray.length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutArray.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutArray.length,3)))};
     const sArray2 = ["if", "you", "build", "it"];
     const sArray3 = ["he", "will", "come", "for", "you"];
     const mergedArray = (sArray2.concat(sArray3));
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.length == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.length,9)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(5) == \"will\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedArray.at(5)),"will")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(5) == \"will\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedArray, 5),"will")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.contains(\"build\")")})(mergedArray.includes("build"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !mergedArray.contains(\"bring\")")})((!mergedArray.includes("bring")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.indexOf(\"you\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.indexOf("you"),1)))};
@@ -184,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
     const mutArray2 = ["how", "does", "that", "look"];
     const mergedMutArray = (mutArray.concat(mutArray2));
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.length == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedMutArray.length,7)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.at(5) == \"that\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedMutArray.at(5)),"that")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.at(5) == \"that\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedMutArray, 5),"that")))};
     const sSet = new Set(["one", "two"]);
     const mutSet = new Set(sSet);
     (mutSet.add("three"));
@@ -192,8 +179,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.has(\"one\")")})((sSet.has("one")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sSet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sSet.size,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutSet.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutSet.size,3)))};
-    const sMap = ({"one": 1, "two": 2});
-    const nestedMap = ({"a": ({"b": ({"c": "hello"})})});
+    const sMap = ({["one"]: 1, ["two"]: 2});
+    const nestedMap = ({["a"]: ({["b"]: ({"c": "hello"})})});
     const mutMap = {...(sMap)};
     ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five", 5]);
     const immutMap = ({...(mutMap)});
@@ -204,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
     const heterogeneousArray = [new Cat(this, "C1"), new Dog(this, "D1")];
     const heterogeneousDoubleArray = [[new Cat(this, "C2")], [new Cat(this, "C3"), new Dog(this, "D2")], [new Animal(this, "A1")]];
     const heterogeneousSet = new Set([new Cat(this, "C4"), new Dog(this, "D3")]);
-    const heterogeneousMap = ({"cat": new Cat(this, "C5"), "dog": new Dog(this, "D4")});
+    const heterogeneousMap = ({["cat"]: new Cat(this, "C5"), ["dog"]: new Dog(this, "D4")});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

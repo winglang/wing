@@ -43,20 +43,7 @@ module.exports = function({ $myConst }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -82,10 +69,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Foo-1.js")({
-            $myConst: ${context._lift(myConst)},
+            $myConst: ${$stdlib.core.liftObject(myConst)},
           })
         `;
       }
@@ -101,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["getValue", "$inflight_init"];
+        return [...super._supportedOps(), "getValue", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("getValue")) {
@@ -111,15 +98,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Foo: ${context._lift(Foo)},
-            $myConst: ${context._lift(myConst)},
+            $Foo: ${$stdlib.core.liftObject(Foo)},
+            $myConst: ${$stdlib.core.liftObject(myConst)},
           })
         `;
       }
@@ -135,7 +123,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

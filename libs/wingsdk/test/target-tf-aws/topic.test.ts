@@ -30,8 +30,6 @@ test("topic with subscriber function", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
 
@@ -61,13 +59,9 @@ test("topic with multiple subscribers", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subOne = Testing.makeHandler(
-    app,
-    "Handler1",
     `async handle(event) { console.log("Got Event: ", event); }`
   );
   const subTwo = Testing.makeHandler(
-    app,
-    "Handler2",
     `async handle(event) { console.log("Ohh yea!! ", event); }`
   );
 
@@ -129,8 +123,6 @@ test("topic with subscriber function timeout", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
 

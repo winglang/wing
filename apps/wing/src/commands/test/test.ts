@@ -125,6 +125,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
       return testSimulator(synthDir, options);
     case BuiltinPlatform.TF_AZURE:
     case BuiltinPlatform.TF_AWS:
+    case BuiltinPlatform.TF_GCP:
       return testTf(synthDir, options);
     case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
@@ -315,10 +316,11 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
     await withSpinner("terraform apply", () => terraformApply(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+      const target = determineTargetFromPlatforms(platform);
+      const testRunnerPath = `@winglang/sdk/lib/${targetFolder[target]}/test-runner.inflight`;
+
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_IDENTIFIERS);
-      const { TestRunnerClient } = await import(
-        `@winglang/sdk/lib/${targetFolder[platform[0]]}/test-runner.inflight`
-      );
+      const { TestRunnerClient } = await import(testRunnerPath);
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
@@ -437,6 +439,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 const targetFolder: Record<string, string> = {
   [BuiltinPlatform.TF_AWS]: "shared-aws",
   [BuiltinPlatform.TF_AZURE]: "shared-azure",
+  [BuiltinPlatform.TF_GCP]: "shared-gcp",
 };
 
 async function cleanupTf(synthDir: string) {

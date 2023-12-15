@@ -34,9 +34,12 @@
   "scripts": {
     "compile": "tsc",
     "package": "bump-pack -b",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests --update"
   },
   "files": [
     "lib"
-  ]
+  ],
+  "volta": {
+    "extends": "../../package.json"
+  }
 }

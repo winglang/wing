@@ -1,13 +1,14 @@
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Table } from "./table";
+import { TestRunner } from "./test-runner";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
 import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
-import { NotImplementedError } from "../core/errors";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * GCP App props.
@@ -78,20 +79,13 @@ export class App extends CdktfApp {
     });
     new RandomProvider(this, "random");
 
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        throw new NotImplementedError(
-          "wing test not supported for tf-gcp target yet"
-        );
-      } else {
-        new Root(this, "Default");
-      }
-    }
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {
     switch (fqn) {
+      case TEST_RUNNER_FQN:
+        return TestRunner;
       case BUCKET_FQN:
         return Bucket;
       case FUNCTION_FQN:

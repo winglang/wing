@@ -17,7 +17,7 @@ let assertThrows = inflight (expected: str, block: (): void) => {
 };
 
 test "parseJson()" {
-  let jsonString = "{\"name\": \"Billy\", \"age\": 25}";
+  let jsonString = "\{\"name\": \"Billy\", \"age\": 25}";
   
   let person = Person.parseJson(jsonString);
   expect.equal(person.name, "Billy");
@@ -26,7 +26,7 @@ test "parseJson()" {
 
 test "tryParseJson()" {
   // parse happy path
-  let jsonString = "{\"name\": \"Billy\", \"age\": 25}";
+  let jsonString = "\{\"name\": \"Billy\", \"age\": 25}";
   let person = Person.tryParseJson(jsonString);
 
   if let person = person {
@@ -46,7 +46,7 @@ test "tryParseJson()" {
 }
 
 test "invalid parseJson()" {
-  let jsonString = "{\"name\": \"Billy\", \"age\": false}";
+  let jsonString = "\{\"name\": \"Billy\", \"age\": false}";
   
   assertThrows("unable to parse Person:\n- instance.age is not of a type(s) number", () => {
     Person.parseJson(jsonString);
@@ -54,7 +54,7 @@ test "invalid parseJson()" {
 }
 
 test "invalid tryParseJson()" {
-  let jsonString = "{\"name\": \"Billy\", \"age\": false}";
+  let jsonString = "\{\"name\": \"Billy\", \"age\": false}";
 
   if let person = Person.tryParseJson(jsonString) {
     assert(false); // should not happen

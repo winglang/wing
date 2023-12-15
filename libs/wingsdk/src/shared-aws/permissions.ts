@@ -230,7 +230,9 @@ export function calculateBucketPermissions(
   ) {
     actions.push("s3:CopyObject");
   }
-
+  if (actions.length === 0) {
+    return [];
+  }
   return [{ actions, resources: [arn, `${arn}/*`] }];
 }
 

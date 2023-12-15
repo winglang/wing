@@ -14,7 +14,7 @@ test("basic function", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   new Function(app, "Function", inflight);
@@ -43,7 +43,7 @@ test("basic function with environment variables", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   new Function(app, "Function", inflight, {
@@ -78,7 +78,7 @@ test("permissions resources are added to function after constructor has been ini
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
   const func = new tfazure.Function(app, "Function", inflight, {});
 
   // WHEN
@@ -107,7 +107,7 @@ test("replace invalid character from function name", () => {
     location: "East US",
     entrypointDir: __dirname,
   });
-  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
 
   // WHEN
   const func = new Function(app, "someFunction01", inflight);

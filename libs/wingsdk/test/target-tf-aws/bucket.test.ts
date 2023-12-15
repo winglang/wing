@@ -154,7 +154,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler(app, "inflight", "null");
+  const inflightTest = Testing.makeHandler("null");
   bucket.onCreate(inflightTest);
   const output = app.synth();
 
@@ -193,7 +193,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler(app, "inflight", "null");
+  const inflightTest = Testing.makeHandler("null");
   bucket.onDelete(inflightTest);
   const output = app.synth();
 
@@ -232,7 +232,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler(app, "inflight", "null");
+  const inflightTest = Testing.makeHandler("null");
   bucket.onUpdate(inflightTest);
   const output = app.synth();
 
@@ -271,7 +271,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
-  const inflightTest = Testing.makeHandler(app, "inflight", "null");
+  const inflightTest = Testing.makeHandler("null");
   bucket.onEvent(inflightTest);
   const output = app.synth();
 

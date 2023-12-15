@@ -36,7 +36,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   const openBrowser = options?.open ?? true;
 
   if (!entrypoint) {
-    const wingFiles = await glob("{main,*.main}.w");
+    const wingFiles = (await glob("{main,*.main}.w")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
         "Cannot find entrypoint files (main.w or *.main.w) in the current directory."

@@ -22,6 +22,7 @@ test("create a schedule", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: cron,
     },
@@ -36,7 +37,7 @@ test("create a schedule", async () => {
 test("schedule with one task with cron", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     cron: "* * * * ?",
   });
@@ -54,7 +55,7 @@ test("schedule with one task with cron", async () => {
 test("schedule with one task using rate of 10m", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromMinutes(10),
   });
@@ -70,6 +71,7 @@ test("schedule with one task using rate of 10m", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: expectedCron,
     },
@@ -80,7 +82,7 @@ test("schedule with one task using rate of 10m", async () => {
 test("schedule with one task using rate of 3h", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(INFLIGHT_CODE);
   const schedule = new cloud.Schedule(app, "my_schedule", {
     rate: Duration.fromHours(3),
   });
@@ -96,6 +98,7 @@ test("schedule with one task using rate of 3h", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: expectedCron,
     },

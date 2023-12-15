@@ -22,20 +22,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -62,7 +49,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction", awscdk.aws_lambda.DockerImageFunction, this, "DockerImageFunction", ({"code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"))}));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.CdkDockerImageFunction-1.js")({
           })
@@ -80,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     this.node.root.new("aws-cdk-lib.App", awscdk.App, );

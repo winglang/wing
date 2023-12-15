@@ -136,11 +136,17 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     ? join(platformDir, `${customPlatformPath}/lib/index.js`)
     : `${customPlatformPath}/index.js`;
 
+  // enable relative imports from the platform file
+  const customPlatformBaseDir = customPlatformPath.endsWith(".js")
+    ? dirname(customPlatformPath)
+    : customPlatformPath;
+
   const cwdNodeModules = join(cwd(), "node_modules");
   const customPlatformLib = join(cwdNodeModules, customPlatformPath, "lib");
 
   const resolvablePaths = [
     ...module.paths,
+    customPlatformBaseDir,
     platformDir,
     cwdNodeModules,
     customPlatformLib,
@@ -159,11 +165,14 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
 
   platformRequire.resolve = requireResolve;
 
-  const platformExports = {};
+  const platformModule = {
+    exports: {},
+  };
   const context = vm.createContext({
     require: platformRequire,
     console,
-    exports: platformExports,
+    exports: platformModule.exports,
+    module: platformModule,
     process,
     __dirname: customPlatformPath,
   });
@@ -172,7 +181,7 @@ export function _loadCustomPlatform(customPlatformPath: string): any {
     const platformCode = readFileSync(fullCustomPlatformPath, "utf-8");
     const script = new vm.Script(platformCode);
     script.runInContext(context);
-    return new (platformExports as any).Platform();
+    return new (platformModule.exports as any).Platform();
   } catch (error) {
     console.error(
       "An error occurred while loading the custom platform:",

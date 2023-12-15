@@ -85,20 +85,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -139,7 +126,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Super";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Super-1.js")({
           })
@@ -157,7 +144,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Sub extends Super {
@@ -165,10 +152,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -184,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Sub1 extends Super {
@@ -192,10 +179,10 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.name = "Sub";
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Sub1-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
       }
@@ -211,7 +198,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -221,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
         this.left = left;
         this.right = right;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.Node-1.js")({
           })
@@ -239,20 +226,21 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
-            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
+            $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
           })
         `;
       }
@@ -268,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -312,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return ({"first": (parts.at(0)), "last": (parts.at(1))});
+      return ({"first": ((parts.at(0)) ?? ""), "last": ((parts.at(1)) ?? "")});
     });
     const json_obj = ({"ghost": "spooky"});
     let something_else = false;
@@ -381,12 +369,8 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
         {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.first,"BadName")))};
-        {
-          const $if_let_value = parsedName.last;
-          if ($if_let_value != undefined) {
-            const lastName = $if_let_value;
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
-          }
+        if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(parsedName.last,""))) {
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
     }

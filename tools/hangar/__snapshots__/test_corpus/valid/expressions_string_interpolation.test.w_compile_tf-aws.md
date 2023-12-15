@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -46,10 +33,14 @@ class $Root extends $stdlib.std.Resource {
     const regularString = "str\n\"";
     const emptyString = "";
     const number = 1;
-    const coolString = String.raw({ raw: ["cool \"\${", "}\" test"] }, regularString);
-    const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\${empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
+    const coolString = String.raw({ raw: ["cool \"\{", "}\" test"] }, regularString);
+    const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\{empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
     const beginingWithCoolStrings = String.raw({ raw: ["", " ", " <- cool"] }, regularString, number);
     const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"{1+1}\" == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, (1 + 1)),"2")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" == \"\\{1+1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","{1+1}")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"2\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","2")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"\\{2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","{2}")))};
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

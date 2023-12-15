@@ -14,6 +14,7 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { calculateBucketPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
+import { IAwsBucket } from "@winglang/sdk/lib/shared-aws/bucket";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -26,7 +27,7 @@ const EVENTS = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.Bucket {
+export class Bucket extends cloud.Bucket implements IAwsBucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
   private bucketDeployment?: BucketDeployment;
@@ -59,10 +60,7 @@ export class Bucket extends cloud.Bucket {
     inflight: cloud.IBucketEventHandler,
     opts?: cloud.BucketOnCreateOptions
   ): Function {
-    const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-Handler-${hash}`,
       inflight,
       this.eventHandlerLocation(),
       `BucketEventHandlerClient`
@@ -70,7 +68,7 @@ export class Bucket extends cloud.Bucket {
 
     const fn = new Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-${event}-${hash}`,
+      App.of(this).makeId(this, `${this.node.id}-${event}`),
       functionHandler,
       opts
     );
@@ -231,6 +229,14 @@ export class Bucket extends cloud.Bucket {
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
+
+  public get bucketArn(): string {
+    return this.bucket.bucketArn;
+  }
+
+  public get bucketName(): string {
+    return this.bucket.bucketName;
+  }
 }
 
 export function createEncryptedBucket(
@@ -244,11 +250,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-          blockPublicAcls: false,
-          blockPublicPolicy: false,
-          ignorePublicAcls: false,
-          restrictPublicBuckets: false,
-        }
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

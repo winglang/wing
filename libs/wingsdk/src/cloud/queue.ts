@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
-import { Duration, IResource, Node, Resource } from "../std";
+import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -108,7 +108,7 @@ export interface IQueueClient {
  *
  * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`
  */
-export interface IQueueSetConsumerHandler extends IResource {}
+export interface IQueueSetConsumerHandler extends IInflight {}
 
 /**
  * Inflight client for `IQueueSetConsumerHandler`.
