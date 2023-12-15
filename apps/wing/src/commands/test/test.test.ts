@@ -335,7 +335,7 @@ const BUCKET_TEST_RESULT = [
       {
         data: { message: 'Invoke (payload="").', status: "success" },
         type: "resource",
-        sourcePath: "root/env0/test:put/Handler",
+        sourcePath: "root/env0/test:put/Default",
         sourceType: "@winglang/sdk.cloud.Function",
       },
     ],
@@ -374,7 +374,7 @@ const OUTPUT_FILE = {
               status: "success",
             },
             type: "resource",
-            sourcePath: "root/env0/test:put/Handler",
+            sourcePath: "root/env0/test:put/Default",
             sourceType: "@winglang/sdk.cloud.Function",
           },
         ],

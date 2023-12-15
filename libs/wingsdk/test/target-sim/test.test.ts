@@ -18,11 +18,11 @@ test("create a test", async () => {
   const s = await app.startSimulator();
 
   // for now, it just creates a cloud.Function
-  expect(s.getResourceConfig("/test:my_test/Handler")).toEqual({
+  expect(s.getResourceConfig("/test:my_test/Default")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "root/test:my_test/Handler",
+    path: "root/test:my_test/Default",
     props: {
       environmentVariables: {},
       sourceCodeFile: expect.any(String),

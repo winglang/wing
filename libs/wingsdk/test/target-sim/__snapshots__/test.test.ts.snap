@@ -2,7 +2,7 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c818e9be.js": "\\"use strict\\";
+  ".wing/test_my_test_c87be96a.js": "\\"use strict\\";
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -28,10 +28,10 @@ async handle(event) {
     "resources": [
       {
         "attrs": {},
-        "path": "root/test:my_test/Handler",
+        "path": "root/test:my_test/Default",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c818e9be.js",
+          "sourceCodeFile": ".wing/test_my_test_c87be96a.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -42,7 +42,7 @@ async handle(event) {
         "path": "root/cloud.TestRunner",
         "props": {
           "tests": {
-            "root/test:my_test": "\${wsim#root/test:my_test/Handler#attrs.handle}",
+            "root/test:my_test": "\${wsim#root/test:my_test/Default#attrs.handle}",
           },
         },
         "type": "@winglang/sdk.std.TestRunner",
@@ -159,7 +159,7 @@ async handle(event) {
         },
         "test:my_test": {
           "children": {
-            "Handler": {
+            "Default": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.2.70",
@@ -168,8 +168,8 @@ async handle(event) {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
               },
-              "id": "Handler",
-              "path": "root/test:my_test/Handler",
+              "id": "Default",
+              "path": "root/test:my_test/Default",
             },
           },
           "constructInfo": {

@@ -67,7 +67,16 @@ export class ResourceNames {
       throw new Error("maxLen must be at least 8");
     }
 
-    let name = resource.node.id;
+    // if the construct has a name of "Default" or "Resource", use the parent's
+    // name instead
+    const parts = resource.node.path.split("/");
+    while (
+      parts.length > 0 &&
+      ["root", "Default", "Resource"].includes(parts[parts.length - 1])
+    ) {
+      parts.pop();
+    }
+    let name = parts.pop() ?? resource.node.id;
 
     name = applyCaseConversion(name, props.case);
 

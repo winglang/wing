@@ -19,7 +19,7 @@ exports[`provides raw tree data 1`] = `
       },
       "test": {
         "children": {
-          "Handler": {
+          "Default": {
             "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.2.70",
@@ -28,8 +28,8 @@ exports[`provides raw tree data 1`] = `
               "description": "A cloud function (FaaS)",
               "title": "Function",
             },
-            "id": "Handler",
-            "path": "root/test/Handler",
+            "id": "Default",
+            "path": "root/test/Default",
           },
         },
         "constructInfo": {
@@ -79,7 +79,7 @@ exports[`run all tests > single test 1`] = `
         "data": {
           "message": "hi",
         },
-        "sourcePath": "root/test/Handler",
+        "sourcePath": "root/test/Default",
         "sourceType": "@winglang/sdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
         "type": "log",
@@ -89,7 +89,7 @@ exports[`run all tests > single test 1`] = `
           "message": "Invoke (payload=\\"\\").",
           "status": "success",
         },
-        "sourcePath": "root/test/Handler",
+        "sourcePath": "root/test/Default",
         "sourceType": "@winglang/sdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
@@ -109,7 +109,7 @@ exports[`run single test > happy path 1`] = `
       "data": {
         "message": "hi",
       },
-      "sourcePath": "root/test/Handler",
+      "sourcePath": "root/test/Default",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
@@ -119,7 +119,7 @@ exports[`run single test > happy path 1`] = `
         "message": "Invoke (payload=\\"\\").",
         "status": "success",
       },
-      "sourcePath": "root/test/Handler",
+      "sourcePath": "root/test/Default",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
@@ -148,7 +148,7 @@ exports[`run single test > test failure 1`] = `
       "data": {
         "message": "I am about to fail",
       },
-      "sourcePath": "root/test/Handler",
+      "sourcePath": "root/test/Default",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
@@ -159,7 +159,7 @@ exports[`run single test > test failure 1`] = `
         "message": "Invoke (payload=\\"\\").",
         "status": "failure",
       },
-      "sourcePath": "root/test/Handler",
+      "sourcePath": "root/test/Default",
       "sourceType": "@winglang/sdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
