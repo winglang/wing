@@ -34,6 +34,7 @@ export class OnDeploy extends cloud.OnDeploy {
     const schema: OnDeploySchema = {
       type: cloud.ON_DEPLOY_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         functionHandle: simulatorHandleToken(this.fn),
       },

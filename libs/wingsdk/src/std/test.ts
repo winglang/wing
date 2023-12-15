@@ -43,8 +43,14 @@ export class Test extends Resource {
     Node.of(this).title = "Test";
     Node.of(this).description = "A cloud unit test.";
 
-    if (App.of(this).isTestEnvironment || App.of(this)._target === "sim") {
-      this._fn = new Function(this, "Handler", inflight, props);
+    this._fn = App.of(this)?._testRunner?._addTestFunction(
+      this,
+      "Handler",
+      inflight,
+      props
+    );
+    if (!this._fn) {
+      Node.of(this).hidden = true;
     }
   }
 

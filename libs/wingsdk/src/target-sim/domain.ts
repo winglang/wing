@@ -22,6 +22,7 @@ export class Domain extends cloud.Domain {
     return {
       type: cloud.DOMAIN_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {},
       attrs: {},
     };

@@ -73,6 +73,37 @@ export class Api
     }
   }
 
+  public async init(): Promise<ApiAttributes> {
+    // `server.address()` returns `null` until the server is listening
+    // on a port. We use a promise to wait for the server to start
+    // listening before returning the URL.
+    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
+      this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
+        const addr = this.server?.address();
+        if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
+          resolve(addr);
+        } else {
+          reject(new Error("No address found"));
+        }
+      });
+    });
+    this.url = `http://${addrInfo.address}:${addrInfo.port}`;
+
+    this.addTrace(`Server listening on ${this.url}`);
+
+    return {
+      url: this.url,
+    };
+  }
+
+  public async cleanup(): Promise<void> {
+    this.addTrace(`Closing server on ${this.url}`);
+    this.server?.close();
+    this.server?.closeAllConnections();
+  }
+
+  public async save(): Promise<void> {}
+
   public async addEventSubscription(
     subscriber: string,
     subscriptionProps: EventSubscription
@@ -109,78 +140,53 @@ export class Api
 
     this.app[method](
       transformRoutePath(route.path),
-      async (
-        req: express.Request,
-        res: express.Response,
-        next: express.NextFunction
-      ) => {
-        this.addTrace(
-          `Processing "${route.method} ${route.path}" params=${JSON.stringify(
-            req.params
-          )}).`
-        );
-
-        const apiRequest = transformRequest(req);
-
-        try {
-          const response = await fnClient.invoke(
-            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-            apiRequest as unknown as string
+      asyncMiddleware(
+        async (
+          req: express.Request,
+          res: express.Response,
+          next: express.NextFunction
+        ) => {
+          this.addTrace(
+            `Processing "${route.method} ${route.path}" params=${JSON.stringify(
+              req.params
+            )}).`
           );
 
-          // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-          if (!isApiResponse(response)) {
-            throw new Error(
-              `Expected an ApiResponse struct, found ${JSON.stringify(
-                response
-              )}`
+          const apiRequest = transformRequest(req);
+
+          try {
+            const response = await fnClient.invoke(
+              // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+              apiRequest as unknown as string
             );
-          }
 
-          res.status(response.status);
-          for (const [key, value] of Object.entries(response.headers ?? {})) {
-            res.set(key, value);
+            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+            if (!isApiResponse(response)) {
+              throw new Error(
+                `Expected an ApiResponse struct, found ${JSON.stringify(
+                  response
+                )}`
+              );
+            }
+
+            res.status(response.status);
+            for (const [key, value] of Object.entries(response.headers ?? {})) {
+              res.set(key, value);
+            }
+            if (response.body !== undefined) {
+              res.send(response.body);
+            } else {
+              res.end();
+            }
+            this.addTrace(
+              `${route.method} ${route.path} - ${response.status}.`
+            );
+          } catch (err) {
+            return next(err);
           }
-          if (response.body !== undefined) {
-            res.send(response.body);
-          } else {
-            res.end();
-          }
-          this.addTrace(`${route.method} ${route.path} - ${response.status}.`);
-        } catch (err) {
-          return next(err);
         }
-      }
+      )
     );
-  }
-
-  public async init(): Promise<ApiAttributes> {
-    // `server.address()` returns `null` until the server is listening
-    // on a port. We use a promise to wait for the server to start
-    // listening before returning the URL.
-    const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
-        const addr = this.server?.address();
-        if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
-          resolve(addr);
-        } else {
-          reject(new Error("No address found"));
-        }
-      });
-    });
-    this.url = `http://${addrInfo.address}:${addrInfo.port}`;
-
-    this.addTrace(`Server listening on ${this.url}`);
-
-    return {
-      url: this.url,
-    };
-  }
-
-  public async cleanup(): Promise<void> {
-    this.addTrace(`Closing server on ${this.url}`);
-    this.server?.close();
-    this.server?.closeAllConnections();
   }
 
   private addTrace(message: string): void {
@@ -216,4 +222,22 @@ function transformRequest(req: express.Request): ApiRequest {
 function transformRoutePath(route: string): string {
   // route validation is done in the preflight file
   return route.replace(/{/g, ":").replace(/}/g, "");
+}
+
+// express v4 doesn't natively handle async request handlers, so we need to
+// wrap them in a middleware function
+function asyncMiddleware(
+  fn: (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => Promise<any>
+) {
+  return (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
 }

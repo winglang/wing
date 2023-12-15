@@ -17,6 +17,7 @@ test("create a topic", async () => {
       handle: expect.any(String),
     },
     path: "root/my_topic",
+    addr: expect.any(String),
     props: {},
     type: cloud.TOPIC_FQN,
   });
@@ -53,11 +54,9 @@ test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    "Handler1",
     `async handle(message) { console.log("Received " + message); }`
   );
   const otherHandler = Testing.makeHandler(
-    "Handler2",
     `async handle(message) { console.log("Also received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");

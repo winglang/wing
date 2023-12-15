@@ -61,11 +61,6 @@ export class App extends core.App {
   private synthedOutput: string | undefined;
   private synthHooks?: core.SynthHooks;
 
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   constructor(props: CdkAppProps) {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
@@ -113,9 +108,8 @@ export class App extends core.App {
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /**

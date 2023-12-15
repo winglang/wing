@@ -38,6 +38,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
     const schema: FunctionSchema = {
       type: cloud.FUNCTION_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         sourceCodeFile: relative(outdir, this.entrypoint),
         sourceCodeLanguage: "javascript",

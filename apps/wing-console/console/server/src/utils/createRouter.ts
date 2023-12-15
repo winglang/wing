@@ -76,6 +76,7 @@ export interface FileLink {
 
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
+  testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;
