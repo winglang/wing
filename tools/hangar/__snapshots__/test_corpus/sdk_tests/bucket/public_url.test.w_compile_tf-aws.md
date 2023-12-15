@@ -22,8 +22,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const BUCKET_NOT_PUBLIC_ERROR = "Cannot provide public url for a non-public bucket";
       (await $publicBucket.put("file1.txt", "Foo"));
       (await $privateBucket.put("file2.txt", "Bar"));
@@ -34,13 +33,12 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       }
       (await assertThrows(BUCKET_NOT_PUBLIC_ERROR, async () => {
         (await $privateBucket.publicUrl("file2.txt"));
-      }
-      ));
+      }));
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -131,17 +129,18 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $privateBucket: ${context._lift(privateBucket)},
-            $publicBucket: ${context._lift(publicBucket)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $privateBucket: ${$stdlib.core.liftObject(privateBucket)},
+            $publicBucket: ${$stdlib.core.liftObject(publicBucket)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -157,7 +156,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -167,14 +166,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "publicBucket", { public: true });
-    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "privateBucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:publicUrl", new $Closure1(this, "$Closure1"));
+    const publicBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "publicBucket", { public: true });
+    const privateBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "privateBucket");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:publicUrl", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "public_url.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

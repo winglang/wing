@@ -17,7 +17,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -391,16 +391,17 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $w1_url: ${context._lift(w1.url)},
-            $w2_url: ${context._lift(w2.url)},
+          require("././inflight.$Closure1-1.cjs")({
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $w1_url: ${$stdlib.core.liftObject(w1.url)},
+            $w2_url: ${$stdlib.core.liftObject(w2.url)},
           })
         `;
       }
@@ -416,7 +417,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -426,14 +427,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w1 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
-    const w2 = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "website-2", { path: "./website" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:deploying two websites", new $Closure1(this, "$Closure1"));
+    const w1 = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "cloud.Website", { path: "./website" });
+    const w2 = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "website-2", { path: "./website" });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:deploying two websites", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "two_websites.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

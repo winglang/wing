@@ -26,8 +26,7 @@ module.exports = function({ $table }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       (await $table.insert(VALID_KEY, ({"gender": COLUMN_VALUE})));
       {((cond) => {if (!cond) throw new Error("assertion failed: table.tryGet(VALID_KEY)?.tryGet(COLUMN_NAME)?.tryAsStr() == COLUMN_VALUE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((await $table.tryGet(VALID_KEY)))?.[COLUMN_NAME]),COLUMN_VALUE)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: table.tryGet(NON_EXISTENT_KEY) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $table.tryGet(NON_EXISTENT_KEY)),undefined)))};
@@ -35,7 +34,7 @@ module.exports = function({ $table }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -92,14 +91,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $table: ${context._lift(table)},
+          require("././inflight.$Closure1-1.cjs")({
+            $table: ${$stdlib.core.liftObject(table)},
           })
         `;
       }
@@ -115,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -124,13 +124,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this, "ex.Table", { name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING}) });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:tryGet", new $Closure1(this, "$Closure1"));
+    const table = this.node.root.new("@winglang/sdk.ex.Table", ex.Table, this, "ex.Table", { name: "users", primaryKey: "name", columns: ({["gender"]: ex.ColumnType.STRING}) });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:tryGet", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "try_get.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

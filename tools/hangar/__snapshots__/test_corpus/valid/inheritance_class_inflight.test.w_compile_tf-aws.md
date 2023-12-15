@@ -1,7 +1,7 @@
 # [inheritance_class_inflight.test.w](../../../../../examples/tests/valid/inheritance_class_inflight.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $expect_Util, $foo }) {
   class $Closure1 {
@@ -18,11 +18,11 @@ module.exports = function({ $expect_Util, $foo }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.Foo-1.js
-```js
+## inflight.Foo-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $FooBase }) {
   class Foo extends $FooBase {
@@ -38,11 +38,11 @@ module.exports = function({ $FooBase }) {
   }
   return Foo;
 }
-//# sourceMappingURL=inflight.Foo-1.js.map
+//# sourceMappingURL=./inflight.Foo-1.cjs.map
 ```
 
-## inflight.FooBase-1.js
-```js
+## inflight.FooBase-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class FooBase {
@@ -57,7 +57,7 @@ module.exports = function({  }) {
   }
   return FooBase;
 }
-//# sourceMappingURL=inflight.FooBase-1.js.map
+//# sourceMappingURL=./inflight.FooBase-1.cjs.map
 ```
 
 ## main.tf.json
@@ -79,8 +79,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -97,7 +97,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.FooBase-1.js")({
+          require("././inflight.FooBase-1.cjs")({
           })
         `;
       }
@@ -122,7 +122,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("././inflight.Foo-1.cjs")({
             $FooBase: ${$stdlib.core.liftObject(FooBase)},
           })
         `;
@@ -150,7 +150,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("././inflight.$Closure1-1.cjs")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $foo: ${$stdlib.core.liftObject(foo)},
           })
@@ -184,6 +184,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inheritance_class_inflight.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

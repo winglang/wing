@@ -16,7 +16,7 @@ module.exports = function({  }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -30,7 +30,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       return $obj;
     }
     async handle(x) {
-      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })(x);
+      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })(x);
       const y = (await $handler(xStr));
       const z = (await $handler(y));
       return ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([z]);
@@ -38,7 +38,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -57,7 +57,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -77,7 +77,7 @@ module.exports = function({ $f }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## inflight.Doubler-1.cjs
@@ -95,7 +95,7 @@ module.exports = function({  }) {
   }
   return Doubler;
 }
-
+//# sourceMappingURL=./inflight.Doubler-1.cjs.map
 ```
 
 ## inflight.Doubler2-1.cjs
@@ -108,7 +108,7 @@ module.exports = function({  }) {
   }
   return Doubler2;
 }
-
+//# sourceMappingURL=./inflight.Doubler2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -120,20 +120,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -201,6 +188,7 @@ module.exports = function({  }) {
         ],
         "environment": {
           "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d4b6f0",
             "WING_TARGET": "tf-aws"
           }
@@ -265,9 +253,9 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.func = func;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.Doubler-1.cjs")({
+          require("././inflight.Doubler-1.cjs")({
           })
         `;
       }
@@ -276,7 +264,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DoublerClient = ${Doubler._toInflightType(this)};
             const client = new DoublerClient({
-              $this_func: ${this._lift(this.func)},
+              $this_func: ${$stdlib.core.liftObject(this.func)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -284,7 +272,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["invoke", "$inflight_init"];
+        return [...super._supportedOps(), "invoke", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -297,13 +285,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
+          require("././inflight.$Closure1-1.cjs")({
           })
         `;
       }
@@ -319,7 +308,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class Doubler2 extends $stdlib.std.Resource {
@@ -329,16 +318,17 @@ class $Root extends $stdlib.std.Resource {
       makeFunc(handler) {
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
-              require("./inflight.$Closure2-1.cjs")({
-                $handler: ${context._lift(handler)},
-                $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-                $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+              require("././inflight.$Closure2-1.cjs")({
+                $handler: ${$stdlib.core.liftObject(handler)},
+                $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+                $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
               })
             `;
           }
@@ -354,7 +344,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
@@ -363,11 +353,11 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this, "cloud.Function", new $Closure2(this, "$Closure2"));
+        return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.Doubler2-1.cjs")({
+          require("././inflight.Doubler2-1.cjs")({
           })
         `;
       }
@@ -383,17 +373,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
+          require("././inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -409,18 +400,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
-            $f: ${context._lift(f)},
+          require("././inflight.$Closure4-1.cjs")({
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }
@@ -436,7 +428,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -448,12 +440,12 @@ class $Root extends $stdlib.std.Resource {
     const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));
     const doubler2 = new Doubler2(this, "Doubler2");
     const f = (doubler2.makeFunc(new $Closure3(this, "$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:f(2) == 8", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "doubler.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

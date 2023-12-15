@@ -16,7 +16,7 @@ module.exports = function({ $__parent_this_1_b }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.Store-1.cjs
@@ -33,7 +33,7 @@ module.exports = function({  }) {
   }
   return Store;
 }
-
+//# sourceMappingURL=./inflight.Store-1.cjs.map
 ```
 
 ## inflight.Util-1.cjs
@@ -46,7 +46,7 @@ module.exports = function({  }) {
   }
   return Util;
 }
-
+//# sourceMappingURL=./inflight.Util-1.cjs.map
 ```
 
 ## preflight.cjs
@@ -61,9 +61,9 @@ module.exports = function({ $stdlib }) {
     constructor($scope, $id, ) {
       super($scope, $id);
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.Util-1.cjs")({
+        require("././inflight.Util-1.cjs")({
         })
       `;
     }
@@ -79,23 +79,24 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+      this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.$Closure1-1.cjs")({
-              $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
+            require("././inflight.$Closure1-1.cjs")({
+              $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
             })
           `;
         }
@@ -111,7 +112,7 @@ module.exports = function({ $stdlib }) {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -120,11 +121,11 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.Store-1.cjs")({
+        require("././inflight.Store-1.cjs")({
         })
       `;
     }
@@ -133,7 +134,7 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const StoreClient = ${Store._toInflightType(this)};
           const client = new StoreClient({
-            $this_b: ${this._lift(this.b)},
+            $this_b: ${$stdlib.core.liftObject(this.b)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
@@ -141,7 +142,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["store", "$inflight_init"];
+      return [...super._supportedOps(), "store", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -155,15 +156,15 @@ module.exports = function({ $stdlib }) {
   }
   const Color =
     (function (tmp) {
-      tmp[tmp["RED"] = 0] = "RED";
-      tmp[tmp["GREEN"] = 1] = "GREEN";
-      tmp[tmp["BLUE"] = 2] = "BLUE";
+      tmp[tmp["RED"] = 0] = ",RED";
+      tmp[tmp["GREEN"] = 1] = ",GREEN";
+      tmp[tmp["BLUE"] = 2] = ",BLUE";
       return tmp;
     })({})
   ;
   return { Util, Store, Color };
 };
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 
 ## preflight.empty-1.cjs
@@ -173,6 +174,6 @@ module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   return {  };
 };
-
+//# sourceMappingURL=preflight.empty-1.cjs.map
 ```
 

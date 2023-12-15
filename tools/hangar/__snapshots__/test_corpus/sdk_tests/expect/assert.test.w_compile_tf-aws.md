@@ -22,7 +22,7 @@ module.exports = function({ $a, $b, $expect_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -47,7 +47,7 @@ module.exports = function({ $c, $d, $expect_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -70,7 +70,7 @@ module.exports = function({ $e, $expect_Util, $f }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -90,7 +90,7 @@ module.exports = function({ $expect_Util, $g }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## inflight.$Closure5-1.cjs
@@ -110,7 +110,7 @@ module.exports = function({ $expect_Util, $h }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.cjs.map
 ```
 
 ## inflight.$Closure6-1.cjs
@@ -124,13 +124,13 @@ module.exports = function({ $expect_Util, $obj }) {
       return $obj;
     }
     async handle() {
-      (await $expect_Util.equal($obj, ({"key1": 1,"key2": 2})));
-      (await $expect_Util.notEqual($obj, ({"key1": 1,"key3": 3})));
+      (await $expect_Util.equal($obj, ({"key1": 1, "key2": 2})));
+      (await $expect_Util.notEqual($obj, ({"key1": 1, "key3": 3})));
     }
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.cjs.map
 ```
 
 ## inflight.$Closure7-1.cjs
@@ -144,13 +144,13 @@ module.exports = function({ $expect_Util, $maps }) {
       return $obj;
     }
     async handle() {
-      (await $expect_Util.equal($maps, ({"hello": 123,"world": 99})));
-      (await $expect_Util.notEqual($maps, ({"hello": 123,"world": 100})));
+      (await $expect_Util.equal($maps, ({["hello"]: 123, ["world"]: 99})));
+      (await $expect_Util.notEqual($maps, ({["hello"]: 123, ["world"]: 100})));
     }
   }
   return $Closure7;
 }
-
+//# sourceMappingURL=./inflight.$Closure7-1.cjs.map
 ```
 
 ## inflight.$Closure8-1.cjs
@@ -170,7 +170,7 @@ module.exports = function({ $expect_Util, $mySet }) {
   }
   return $Closure8;
 }
-
+//# sourceMappingURL=./inflight.$Closure8-1.cjs.map
 ```
 
 ## inflight.$Closure9-1.cjs
@@ -190,7 +190,7 @@ module.exports = function({ $expect_Util, $std_Duration }) {
   }
   return $Closure9;
 }
-
+//# sourceMappingURL=./inflight.$Closure9-1.cjs.map
 ```
 
 ## inflight.MyClass-1.cjs
@@ -203,7 +203,7 @@ module.exports = function({  }) {
   }
   return MyClass;
 }
-
+//# sourceMappingURL=./inflight.MyClass-1.cjs.map
 ```
 
 ## main.tf.json
@@ -239,16 +239,17 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $a: ${context._lift(a)},
-            $b: ${context._lift(b)},
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $a: ${$stdlib.core.liftObject(a)},
+            $b: ${$stdlib.core.liftObject(b)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -264,7 +265,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -275,16 +276,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
-            $c: ${context._lift(c)},
-            $d: ${context._lift(d)},
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+          require("././inflight.$Closure2-1.cjs")({
+            $c: ${$stdlib.core.liftObject(c)},
+            $d: ${$stdlib.core.liftObject(d)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
         `;
       }
@@ -300,7 +302,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -311,16 +313,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
-            $e: ${context._lift(e)},
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $f: ${context._lift(f)},
+          require("././inflight.$Closure3-1.cjs")({
+            $e: ${$stdlib.core.liftObject(e)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }
@@ -336,7 +339,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -347,15 +350,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $g: ${context._lift(g)},
+          require("././inflight.$Closure4-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $g: ${$stdlib.core.liftObject(g)},
           })
         `;
       }
@@ -371,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -381,15 +385,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure5-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $h: ${context._lift(h)},
+          require("././inflight.$Closure5-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $h: ${$stdlib.core.liftObject(h)},
           })
         `;
       }
@@ -405,7 +410,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -415,15 +420,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure6-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $obj: ${context._lift(obj)},
+          require("././inflight.$Closure6-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $obj: ${$stdlib.core.liftObject(obj)},
           })
         `;
       }
@@ -439,7 +445,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -449,15 +455,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure7-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $maps: ${context._lift(maps)},
+          require("././inflight.$Closure7-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $maps: ${$stdlib.core.liftObject(maps)},
           })
         `;
       }
@@ -473,7 +480,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -483,15 +490,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure8-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $mySet: ${context._lift(mySet)},
+          require("././inflight.$Closure8-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $mySet: ${$stdlib.core.liftObject(mySet)},
           })
         `;
       }
@@ -507,7 +515,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -517,15 +525,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure9-1.cjs")({
-            $expect_Util: ${context._lift($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+          require("././inflight.$Closure9-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
           })
         `;
       }
@@ -541,7 +550,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class MyClass extends $stdlib.std.Resource {
@@ -550,9 +559,9 @@ class $Root extends $stdlib.std.Resource {
         this.a = a;
         this.b = b;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.MyClass-1.cjs")({
+          require("././inflight.MyClass-1.cjs")({
           })
         `;
       }
@@ -568,7 +577,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const a = undefined;
@@ -582,7 +591,7 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.notEqual(b, 2));
     (expect.Util.notEqual(b, "hello"));
     (expect.Util.notEqual(b, true));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal num", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal num", new $Closure1(this, "$Closure1"));
     const c = undefined;
     const d = "hello";
     (expect.Util.equal("hello", "hello"));
@@ -592,7 +601,7 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.notEqual(d, "world"));
     (expect.Util.notEqual(d, 1));
     (expect.Util.notEqual(d, true));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal str", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal str", new $Closure2(this, "$Closure2"));
     const e = undefined;
     const f = true;
     (expect.Util.equal(true, true));
@@ -600,30 +609,30 @@ class $Root extends $stdlib.std.Resource {
     (expect.Util.nil(e));
     (expect.Util.notNil(f));
     (expect.Util.notEqual(f, false));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal bool", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal bool", new $Closure3(this, "$Closure3"));
     const g = ["hello"];
     (expect.Util.equal(g, ["hello"]));
     (expect.Util.notEqual(g, ["world"]));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal array of strings", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal array of strings", new $Closure4(this, "$Closure4"));
     const h = [1];
     (expect.Util.equal(h, [1]));
     (expect.Util.notEqual(h, ["world"]));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal array of numbers", new $Closure5(this, "$Closure5"));
-    const obj = ({"key1": 1,"key2": 2});
-    (expect.Util.equal(obj, ({"key1": 1,"key2": 2})));
-    (expect.Util.notEqual(obj, ({"key1": 1,"key3": 3})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal objects", new $Closure6(this, "$Closure6"));
-    const maps = ({"hello": 123,"world": 99});
-    (expect.Util.equal(maps, ({"hello": 123,"world": 99})));
-    (expect.Util.notEqual(maps, ({"hello": 123,"world": 100})));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal maps", new $Closure7(this, "$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal array of numbers", new $Closure5(this, "$Closure5"));
+    const obj = ({"key1": 1, "key2": 2});
+    (expect.Util.equal(obj, ({"key1": 1, "key2": 2})));
+    (expect.Util.notEqual(obj, ({"key1": 1, "key3": 3})));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal objects", new $Closure6(this, "$Closure6"));
+    const maps = ({["hello"]: 123, ["world"]: 99});
+    (expect.Util.equal(maps, ({["hello"]: 123, ["world"]: 99})));
+    (expect.Util.notEqual(maps, ({["hello"]: 123, ["world"]: 100})));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal maps", new $Closure7(this, "$Closure7"));
     const mySet = new Set([1, 2, 3]);
     (expect.Util.equal(mySet, new Set([1, 2, 3])));
     (expect.Util.notEqual(mySet, new Set([1, 2, 3, 4])));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal sets", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal sets", new $Closure8(this, "$Closure8"));
     (expect.Util.equal((std.Duration.fromSeconds(60)), (std.Duration.fromSeconds(60))));
     (expect.Util.notEqual((std.Duration.fromSeconds(61)), (std.Duration.fromSeconds(60))));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:equal durations", new $Closure9(this, "$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:equal durations", new $Closure9(this, "$Closure9"));
     const myClass = new MyClass(this, "MyClass", 1, "hello");
     (expect.Util.equal(myClass, myClass));
     (expect.Util.notEqual(myClass, new MyClass(this, "yet another my class", 1, "hello world")));
@@ -632,6 +641,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "assert.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -18,7 +18,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.Bar-1.cjs
@@ -35,7 +35,7 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=./inflight.Bar-1.cjs.map
 ```
 
 ## inflight.Foo-1.cjs
@@ -53,7 +53,7 @@ module.exports = function({ $initCount }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=./inflight.Foo-1.cjs.map
 ```
 
 ## main.tf.json
@@ -65,20 +65,7 @@ module.exports = function({ $initCount }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -125,10 +112,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.Foo-1.cjs")({
-            $initCount: ${context._lift(initCount)},
+          require("././inflight.Foo-1.cjs")({
+            $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
       }
@@ -144,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["method", "$inflight_init"];
+        return [...super._supportedOps(), "method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -158,9 +145,9 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.foo = new Foo(this, "Foo");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.Bar-1.cjs")({
+          require("././inflight.Bar-1.cjs")({
           })
         `;
       }
@@ -169,7 +156,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
-              $this_foo: ${this._lift(this.foo)},
+              $this_foo: ${$stdlib.core.liftObject(this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -177,7 +164,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["callFoo", "$inflight_init"];
+        return [...super._supportedOps(), "callFoo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -190,16 +177,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $bar: ${context._lift(bar)},
-            $bar_foo: ${context._lift(bar.foo)},
-            $initCount: ${context._lift(initCount)},
+          require("././inflight.$Closure1-1.cjs")({
+            $bar: ${$stdlib.core.liftObject(bar)},
+            $bar_foo: ${$stdlib.core.liftObject(bar.foo)},
+            $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
       }
@@ -215,7 +203,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -226,14 +214,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const initCount = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const initCount = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const bar = new Bar(this, "Bar");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:hello", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:hello", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "double_reference.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 
