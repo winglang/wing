@@ -753,7 +753,7 @@ test("rename valid object in the bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("rename invalid object in the bucket", async () => {
+test("renaming an object to its current name should throw an error", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
