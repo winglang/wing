@@ -22,8 +22,8 @@ test "rename()" {
   let KEY3 = "to-overwrite.txt";
   let VALUE3 = "Hello, World!";
   let UNEXISTING_KEY = "no-such-file.txt";
-  let SAME_KEY_ERROR = "Renaming an object to its current name is not a valid operation (srcKey=${KEY3}, dstKey=${KEY3}).";
-  let OBJECT_DOES_NOT_EXIST_ERROR = "Source object does not exist (srcKey=${UNEXISTING_KEY}).";
+  let SAME_KEY_ERROR = "Renaming an object to its current name is not a valid operation (srcKey={KEY3}, dstKey={KEY3}).";
+  let OBJECT_DOES_NOT_EXIST_ERROR = "Source object does not exist (srcKey={UNEXISTING_KEY}).";
 
   b.put(KEY1, VALUE1);
   b.put(KEY3, VALUE3);
