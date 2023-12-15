@@ -16,7 +16,7 @@ import {
 test("default topic behavior", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  cloud.Topic._newTopic(app, "Topic");
+  new cloud.Topic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -28,10 +28,8 @@ test("default topic behavior", () => {
 test("topic with subscriber function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const topic = cloud.Topic._newTopic(app, "Topic");
+  const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
 
@@ -59,15 +57,11 @@ test("topic with subscriber function", () => {
 test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const topic = cloud.Topic._newTopic(app, "Topic");
+  const topic = new cloud.Topic(app, "Topic");
   const subOne = Testing.makeHandler(
-    app,
-    "Handler1",
     `async handle(event) { console.log("Got Event: ", event); }`
   );
   const subTwo = Testing.makeHandler(
-    app,
-    "Handler2",
     `async handle(event) { console.log("Ohh yea!! ", event); }`
   );
 
@@ -95,7 +89,7 @@ test("topic with multiple subscribers", () => {
 test("topic name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const topic = cloud.Topic._newTopic(app, "The-Spectacular_Topic-01");
+  const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
   // THEN
@@ -111,7 +105,7 @@ test("topic name valid", () => {
 test("replace invalid character from queue name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const topic = cloud.Topic._newTopic(app, "The%Spectacular@Topic");
+  const topic = new cloud.Topic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
   // THEN
@@ -127,10 +121,8 @@ test("replace invalid character from queue name", () => {
 test("topic with subscriber function timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
-  const topic = cloud.Topic._newTopic(app, "Topic");
+  const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
-    app,
-    "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
 

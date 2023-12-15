@@ -33,6 +33,7 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     const schema: CounterSchema = {
       type: cloud.COUNTER_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         initial: this.initial,
       },

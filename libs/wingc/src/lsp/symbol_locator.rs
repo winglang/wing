@@ -37,7 +37,7 @@ pub enum SymbolLocatorResult {
 		struct_type: TypeRef,
 		field: Symbol,
 	},
-	/// This may be a json or map key
+	/// This is a json key
 	LooseField {
 		object: TypeRef,
 		field_type: TypeRef,
@@ -274,9 +274,11 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 				self.ctx.pop_env();
 
 				for elif in elif_statements {
-					self.push_scope_env(&elif.statements);
-					self.visit_symbol(&elif.var_name);
-					self.ctx.pop_env();
+					if let Elifs::ElifLetBlock(elif_let_block) = elif {
+						self.push_scope_env(&elif_let_block.statements);
+						self.visit_symbol(&elif_let_block.var_name);
+						self.ctx.pop_env();
+					}
 				}
 			}
 			_ => {}
@@ -359,9 +361,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 					}
 				}
 			}
-			ExprKind::MapLiteral { fields, .. }
-			| ExprKind::JsonMapLiteral { fields }
-			| ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::JsonMapLiteral { fields } | ExprKind::StructLiteral { fields, .. } => {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains_location(&self.location)) {
 					let field_name = f.0;
 					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));

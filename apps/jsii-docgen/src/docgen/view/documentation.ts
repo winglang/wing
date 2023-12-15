@@ -4,7 +4,6 @@ import { SPEC_FILE_NAME } from "@jsii/spec";
 import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
-import { TargetLanguage } from "jsii-rosetta";
 import { Npm } from "./_npm";
 import { ApiReference } from "./api-reference";
 import { Readme } from "./readme";
@@ -113,6 +112,8 @@ export interface ForPackageDocumentationOptions {
    */
   readonly name?: string;
 }
+
+export type TargetLanguage = "python" | "csharp" | "java" | "go" | "wing";
 
 /**
  * Render documentation pages for a jsii library.
@@ -324,7 +325,10 @@ export class Documentation {
   ): Promise<{ assembly: reflect.Assembly; transpile: Transpile }> {
     const { rosettaTarget, transpile } = LANGUAGE_SPECIFIC[lang.toString()];
     return {
-      assembly: await this.createAssembly(rosettaTarget, options),
+      assembly: await this.createAssembly(
+        rosettaTarget as TargetLanguage,
+        options
+      ),
       transpile,
     };
   }
@@ -423,7 +427,7 @@ export class Documentation {
 export const LANGUAGE_SPECIFIC = {
   [Language.PYTHON.toString()]: {
     transpile: new PythonTranspile(),
-    rosettaTarget: TargetLanguage.PYTHON,
+    rosettaTarget: "python",
   },
   [Language.TYPESCRIPT.toString()]: {
     transpile: new TypeScriptTranspile(),
@@ -431,20 +435,20 @@ export const LANGUAGE_SPECIFIC = {
   },
   [Language.JAVA.toString()]: {
     transpile: new JavaTranspile(),
-    rosettaTarget: TargetLanguage.JAVA,
+    rosettaTarget: "java",
   },
   [Language.CSHARP.toString()]: {
     transpile: new CSharpTranspile(),
-    rosettaTarget: TargetLanguage.CSHARP,
+    rosettaTarget: "csharp",
   },
   [Language.GO.toString()]: {
     transpile: new GoTranspile(),
-    rosettaTarget: TargetLanguage.GO,
+    rosettaTarget: "go",
   },
   [Language.WING.toString()]: {
     transpile: new WingTranspile(),
     // TODO WING HACK
-    rosettaTarget: "wing" as TargetLanguage,
+    rosettaTarget: "wing",
   },
 };
 

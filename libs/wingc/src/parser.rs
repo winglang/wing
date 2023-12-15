@@ -1,6 +1,8 @@
 use camino::{Utf8Component, Utf8Path, Utf8PathBuf};
 use indexmap::{IndexMap, IndexSet};
+use itertools::Itertools;
 use phf::{phf_map, phf_set};
+use regex::Regex;
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::{fs, str, vec};
@@ -9,9 +11,10 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
-	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
+	Scope, Spanned, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -259,6 +262,42 @@ fn parse_wing_file(
 	dependent_wing_paths
 }
 
+fn dir_contains_wing_file(dir_path: &Utf8Path) -> bool {
+	for entry in fs::read_dir(dir_path).unwrap() {
+		let entry = entry.unwrap().path();
+		let path = Utf8Path::from_path(&entry).unwrap();
+
+		if path.is_dir() {
+			if dir_contains_wing_file(&path) {
+				return true;
+			}
+		} else if path.extension() == Some("w") {
+			return true;
+		}
+	}
+	false
+}
+
+fn contains_non_symbolic(str: &str) -> bool {
+	// uses the same regex pattern from grammar.js for valid identifiers
+	let re = Regex::new(r"^([A-Za-z_][A-Za-z_0-9]*|[A-Z][A-Z0-9_]*)$").unwrap();
+	!re.is_match(str)
+}
+
+fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
+	if contains_non_symbolic(dir_path.file_name().unwrap()) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot bring Wing directories that contain invalid characters: \"{}\"",
+				dir_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		});
+	}
+}
+
 fn parse_wing_directory(
 	source_path: &Utf8Path,
 	files: &mut Files,
@@ -268,20 +307,36 @@ fn parse_wing_directory(
 ) -> Vec<Utf8PathBuf> {
 	// Collect a list of all files and subdirectories in the directory
 	let mut files_and_dirs = Vec::new();
+
+	if source_path.is_dir() && !dir_contains_wing_file(&source_path) {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Cannot explicitly bring directory with no Wing files \"{}\"",
+				source_path.file_name().unwrap()
+			),
+			span: None,
+			annotations: vec![],
+			hints: vec![],
+		})
+	}
+
 	for entry in fs::read_dir(&source_path).expect("read_dir call failed") {
 		let entry = entry.unwrap();
 		let path = Utf8PathBuf::from_path_buf(entry.path()).expect("invalid utf8 path");
 
 		// If it's a directory and its name is not node_modules or .git or ending in .tmp, add it
 		// or if it's a file and its extension is .w, add it
-		//
-		// TODO: skip directories that don't contain any .w files anywhere in their subtree
 		if (path.is_dir()
 			&& path.file_name() != Some("node_modules")
 			&& path.file_name() != Some(".git")
 			&& path.extension() != Some("tmp"))
+			&& dir_contains_wing_file(&path)
 			|| path.extension() == Some("w") && !is_entrypoint_file(&path)
 		{
+			// before we add the path, we need to check that directory names are valid
+			if path.is_dir() {
+				check_valid_wing_dir_name(&path);
+			}
 			files_and_dirs.push(path);
 		}
 	}
@@ -320,6 +375,32 @@ pub struct Parser<'a> {
 	referenced_wing_paths: RefCell<Vec<Utf8PathBuf>>,
 }
 
+struct ParseErrorBuilder<'s> {
+	node: &'s Node<'s>,
+	diag: Diagnostic,
+	parser: &'s Parser<'s>,
+}
+
+impl<'a> ParseErrorBuilder<'a> {
+	fn new(message: impl ToString, node: &'a Node, parser: &'a Parser) -> Self {
+		Self {
+			node,
+			diag: Diagnostic::new(message, &parser.node_span(node)),
+			parser,
+		}
+	}
+
+	fn with_annotation(mut self, message: impl ToString, span: impl Spanned) -> Self {
+		self.diag.add_anotation(message, span);
+		self
+	}
+
+	fn report(self) {
+		self.diag.report();
+		self.parser.error_nodes.borrow_mut().insert(self.node.id());
+	}
+}
+
 impl<'s> Parser<'s> {
 	pub fn new(source: &'s [u8], source_name: Utf8PathBuf) -> Self {
 		Self {
@@ -347,10 +428,10 @@ impl<'s> Parser<'s> {
 		if !is_entrypoint_file(&self.source_name) {
 			for stmt in &scope.statements {
 				if !is_valid_module_statement(&stmt) {
-					self.add_error_from_span(
+					Diagnostic::new(
 						"Module files cannot have statements besides classes, interfaces, enums, and structs. Rename the file to end with `.main.w` or `.test.w` to make this an entrypoint file.",
-						stmt.span(),
-					);
+						stmt,
+					).report();
 				}
 			}
 		}
@@ -360,32 +441,20 @@ impl<'s> Parser<'s> {
 		(scope, self.referenced_wing_paths.into_inner())
 	}
 
-	fn add_error_from_span(&self, message: impl ToString, span: WingSpan) {
-		let diag = Diagnostic {
-			message: message.to_string(),
-			span: Some(span),
-			annotations: vec![],
-			hints: vec![],
-		};
-		report_diagnostic(diag);
+	fn add_error(&self, message: impl ToString, node: &Node) {
+		self.build_error(message, node).report();
 	}
 
-	fn add_error(&self, message: impl ToString, node: &Node) {
-		let diag = Diagnostic {
-			message: message.to_string(),
-			span: Some(self.node_span(node)),
-			annotations: vec![],
-			hints: vec![],
-		};
-		report_diagnostic(diag);
-
-		// Track that we have produced a diagnostic for this node
-		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
-		self.error_nodes.borrow_mut().insert(node.id());
+	fn build_error<'a>(&'a self, message: impl ToString, node: &'a Node) -> ParseErrorBuilder {
+		ParseErrorBuilder::new(message, node, self)
 	}
 
 	fn with_error<T>(&self, message: impl ToString, node: &Node) -> Result<T, ()> {
-		self.add_error(message, node);
+		self.with_error_builder::<T>(self.build_error(message, node))
+	}
+
+	fn with_error_builder<T>(&self, error_builder: ParseErrorBuilder) -> Result<T, ()> {
+		error_builder.report();
 
 		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
 		// the error and continue parsing.
@@ -666,17 +735,31 @@ impl<'s> Parser<'s> {
 
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
-		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
-			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
-			let elif = ElifLetBlock {
-				reassignable: node.child_by_field_name("reassignable").is_some(),
-				statements: statements,
-				value: value,
-				var_name: name,
-			};
-			elif_vec.push(elif);
+		for node in statement_node.children(&mut cursor) {
+			match node.kind() {
+				"elif_let_block" => {
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+					let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
+					let elif = Elifs::ElifLetBlock(ElifLetBlock {
+						reassignable: node.child_by_field_name("reassignable").is_some(),
+						statements: statements,
+						value: value,
+						var_name: name,
+					});
+					elif_vec.push(elif);
+				}
+				"elif_block" => {
+					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let elif = Elifs::ElifBlock(ElifBlock {
+						condition: conditions.unwrap(),
+						statements: statements,
+					});
+					elif_vec.push(elif);
+				}
+				_ => {}
+			}
 		}
 
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -775,7 +858,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Structs must be public (\"pub\") or private",
@@ -1052,7 +1135,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Enums must be public (\"pub\") or private",
@@ -1067,8 +1150,33 @@ impl<'s> Parser<'s> {
 		})
 	}
 
+	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> DiagnosticResult<Option<Node>> {
+		let modifiers_node = if let Some(modifiers_node) = maybe_modifiers {
+			modifiers_node
+		} else {
+			return Ok(None);
+		};
+
+		let found_modifiers = modifiers_node
+			.children(&mut modifiers_node.walk())
+			.filter(|node| node.kind() == modifier)
+			.collect_vec();
+
+		if found_modifiers.len() > 1 {
+			let mut err = self.build_error("Multiple or ambiguous modifiers found", modifiers_node);
+			for m in found_modifiers.iter() {
+				err = err.with_annotation("possible redundant modifier", self.node_span(m));
+			}
+
+			self.with_error_builder::<_>(err)
+		} else {
+			Ok(found_modifiers.first().map(|x| *x))
+		}
+	}
+
 	fn build_class_statement(&self, statement_node: &Node, class_phase: Phase) -> DiagnosticResult<StmtKind> {
-		let class_phase = if statement_node.child_by_field_name("phase_modifier").is_some() {
+		let class_modifiers = statement_node.child_by_field_name("modifiers");
+		let class_phase = if self.get_modifier("inflight_specifier", &class_modifiers)?.is_some() {
 			Phase::Inflight
 		} else {
 			class_phase
@@ -1088,19 +1196,12 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 			match class_element.kind() {
-				"method_definition" | "inflight_method_definition" => {
-					let mut phase = class_phase;
-					if class_element.kind() == "inflight_method_definition" {
-						phase = Phase::Inflight;
-					}
-
-					let is_static = class_element.child_by_field_name("static").is_some();
+				"method_definition" => {
 					let Ok(method_name) = self.node_symbol(&class_element.child_by_field_name("name").unwrap()) else {
 						continue;
 					};
 
-					let Ok(func_def) =
-						self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static)
+					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, class_phase)
 					else {
 						continue;
 					};
@@ -1108,42 +1209,18 @@ impl<'s> Parser<'s> {
 					// make sure all the parameters have type annotations
 					for param in &func_def.signature.parameters {
 						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
-							self.add_error_from_span(
-								"Missing required type annotation for method signature",
-								param.name.span.clone(),
-							);
+							Diagnostic::new("Missing required type annotation for method signature", &param.name).report();
 						}
 					}
 
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
-					let is_static = class_element.child_by_field_name("static").is_some();
-					if is_static {
-						report_diagnostic(Diagnostic {
-							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
-								.to_string(),
-							span: Some(self.node_span(&class_element)),
-							annotations: vec![],
-							hints: vec![],
-						});
-					}
-
-					// if there is no "phase_modifier", then inherit from the class phase
-					// currently "phase_modifier" can only be "inflight".
-					let phase = match class_element.child_by_field_name("phase_modifier") {
-						None => class_phase,
-						Some(_) => Phase::Inflight,
+					let Ok(class_field) = self.build_class_field(class_element, class_phase) else {
+						continue;
 					};
 
-					fields.push(ClassField {
-						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-						member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
-						reassignable: class_element.child_by_field_name("reassignable").is_some(),
-						is_static,
-						phase,
-						access: self.build_access_modifier(class_element.child_by_field_name("access_modifier"))?,
-					})
+					fields.push(class_field)
 				}
 				"initializer" => {
 					// the initializer is considered an inflight initializer if either the class is inflight
@@ -1227,10 +1304,11 @@ impl<'s> Parser<'s> {
 
 		for method in &methods {
 			if method.0.name == "constructor" {
-				self.add_error_from_span(
+				Diagnostic::new(
 					"Reserved method name. Initializers are declared with \"init\"",
-					method.0.span.clone(),
+					&method.0,
 				)
+				.report();
 			}
 		}
 
@@ -1326,17 +1404,19 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.get_access_modifier(&class_modifiers)?;
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Classes must be public (\"pub\") or private",
-				&access_modifier_node.expect("access modifier node"),
+				&class_modifiers.expect("access modifier node"),
 			)?;
 		}
 
+		let span = self.node_span(statement_node);
+
 		Ok(StmtKind::Class(Class {
 			name,
+			span,
 			fields,
 			methods,
 			parent,
@@ -1346,6 +1426,31 @@ impl<'s> Parser<'s> {
 			inflight_initializer,
 			access,
 		}))
+	}
+
+	fn build_class_field(&self, class_element: Node<'_>, class_phase: Phase) -> Result<ClassField, ()> {
+		let modifiers = class_element.child_by_field_name("modifiers");
+		let is_static = self.get_modifier("static", &modifiers)?.is_some();
+		if is_static {
+			report_diagnostic(Diagnostic {
+				message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668".to_string(),
+				span: Some(self.node_span(&class_element)),
+				annotations: vec![],
+				hints: vec![],
+			});
+		}
+		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
+			None => class_phase,
+			Some(_) => Phase::Inflight,
+		};
+		Ok(ClassField {
+			name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
+			member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
+			reassignable: self.get_modifier("reassignable", &modifiers)?.is_some(),
+			is_static,
+			phase,
+			access: self.get_access_modifier(&class_element.child_by_field_name("modifiers"))?,
+		})
 	}
 
 	fn build_interface_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
@@ -1416,7 +1521,7 @@ impl<'s> Parser<'s> {
 		}
 
 		let access_modifier_node = statement_node.child_by_field_name("access_modifier");
-		let access = self.build_access_modifier(access_modifier_node)?;
+		let access = self.build_access_modifier(&access_modifier_node);
 		if access == AccessModifier::Protected {
 			self.with_error::<Node>(
 				"Interfaces must be public (\"pub\") or private",
@@ -1449,7 +1554,7 @@ impl<'s> Parser<'s> {
 			self.build_type_annotation(Some(rt), phase)?
 		} else {
 			let func_sig_kind = func_sig_node.kind();
-			if func_sig_kind == "inflight_closure" || func_sig_kind == "preflight_closure" {
+			if func_sig_kind == "closure" {
 				TypeAnnotation {
 					kind: TypeAnnotationKind::Inferred,
 					span: Default::default(),
@@ -1470,7 +1575,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(None, anon_closure_node, phase, true)
+		self.build_function_definition(None, anon_closure_node, phase)
 	}
 
 	fn build_function_definition(
@@ -1478,16 +1583,33 @@ impl<'s> Parser<'s> {
 		name: Option<Symbol>,
 		func_def_node: &Node,
 		phase: Phase,
-		is_static: bool,
 	) -> DiagnosticResult<FunctionDefinition> {
+		let modifiers = func_def_node.child_by_field_name("modifiers");
+
+		let phase = match self.get_modifier("inflight_specifier", &modifiers)? {
+			Some(_) => Phase::Inflight,
+			None => phase,
+		};
+
+		let is_static = self.get_modifier("static", &modifiers)?.is_some();
+
 		let signature = self.build_function_signature(func_def_node, phase)?;
-		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
+		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
 			let file_path = normalize_path(file_path, Some(&Utf8Path::new(&self.source_name)));
 			if !file_path.exists() {
 				self.add_error(format!("File not found: {}", node_text), &external);
 			}
+
+			// Make sure there's no statements block for extern functions
+			if let Some(body) = &func_def_node.child_by_field_name("block") {
+				self
+					.build_error("Extern functions cannot have a body", &external)
+					.with_annotation("Body defined here", self.node_span(body))
+					.report();
+			}
+
 			FunctionBody::External(file_path.to_string())
 		} else {
 			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?, phase))
@@ -1499,7 +1621,7 @@ impl<'s> Parser<'s> {
 			signature,
 			is_static,
 			span: self.node_span(func_def_node),
-			access: self.build_access_modifier(func_def_node.child_by_field_name("access_modifier"))?,
+			access: self.get_access_modifier(&modifiers)?,
 		})
 	}
 
@@ -1572,14 +1694,20 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_access_modifier(&self, am_node: Option<Node>) -> DiagnosticResult<AccessModifier> {
-		match am_node {
-			Some(am_node) => match self.node_text(&am_node) {
-				"pub" => Ok(AccessModifier::Public),
-				"protected" => Ok(AccessModifier::Protected),
-				other => self.report_unimplemented_grammar(other, "access modifier", &am_node),
+	/// Get the access modifier an elements (closure/class/field/method) modifiers node (from a list of multiple modifiers)
+	fn get_access_modifier(&self, modifiers: &Option<Node>) -> DiagnosticResult<AccessModifier> {
+		Ok(self.build_access_modifier(&self.get_modifier("access_modifier", modifiers)?))
+	}
+
+	/// Given an access modifier node build the correct access modifier, defaulting to private
+	fn build_access_modifier(&self, maybe_access_modifer: &Option<Node>) -> AccessModifier {
+		match maybe_access_modifer {
+			Some(access_modifier) => match self.node_text(access_modifier) {
+				"pub" => AccessModifier::Public,
+				"protected" => AccessModifier::Protected,
+				other => panic!("Unexpected access modifier {}", other),
 			},
-			None => Ok(AccessModifier::Private),
+			None => AccessModifier::Private,
 		}
 	}
 
@@ -2033,12 +2161,8 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"preflight_closure" => Ok(Expr::new(
+			"closure" => Ok(Expr::new(
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
-				expression_span,
-			)),
-			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
 			"array_literal" => {
@@ -2063,7 +2187,7 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"json_map_literal" => {
-				let fields = self.build_map_fields(expression_node, phase)?;
+				let fields = self.build_json_map_fields(expression_node, phase)?;
 				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
 			}
 			"map_literal" => {
@@ -2182,7 +2306,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
+	fn build_json_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -2206,6 +2330,23 @@ impl<'s> Parser<'s> {
 			} else {
 				fields.insert(key, self.build_expression(&value_node, phase)?);
 			}
+		}
+		Ok(fields)
+	}
+
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<Vec<(Expr, Expr)>, ()> {
+		let mut fields = vec![];
+		let mut cursor = expression_node.walk();
+		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+			if field_node.is_extra() {
+				continue;
+			}
+			let key_node = field_node.named_child(0).unwrap();
+			let value_node = field_node.named_child(1).unwrap();
+			fields.push((
+				self.build_expression(&key_node, phase)?,
+				self.build_expression(&value_node, phase)?,
+			));
 		}
 		Ok(fields)
 	}
@@ -2585,5 +2726,16 @@ mod tests {
 		let file_path = Utf8Path::new("../foo.w");
 		let relative_to = Utf8Path::new("subdir/bar.w");
 		assert_eq!(normalize_path(file_path, Some(relative_to)), Utf8Path::new("foo.w"));
+	}
+
+	#[test]
+	fn test_contains_non_symbolic() {
+		assert_eq!(true, contains_non_symbolic("wow%zer"));
+		assert_eq!(true, contains_non_symbolic("w.owzer"));
+		assert_eq!(true, contains_non_symbolic("#wowzer"));
+		assert_eq!(true, contains_non_symbolic("wow-zer"));
+		assert_eq!(true, contains_non_symbolic("$wowzer"));
+		assert_eq!(false, contains_non_symbolic("_wowzer"));
+		assert_eq!(false, contains_non_symbolic("wowzer"));
 	}
 }

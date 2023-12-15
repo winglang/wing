@@ -9,7 +9,7 @@ class Foo {
 
   pub static m(): num { return 99; }
 
-  init() {
+  new() {
     this.instanceField = 100;
   }
 
@@ -26,7 +26,7 @@ assert(Foo.m() == 99);
 
 test "test" {
   inflight class InflightClass {
-    init() {}
+    new() {}
     pub inflight inflightMethod(): str {
       return "Inflight method";
     }

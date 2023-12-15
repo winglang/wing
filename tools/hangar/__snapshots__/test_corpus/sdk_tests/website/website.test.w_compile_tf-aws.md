@@ -31,15 +31,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_iam_policy_document": {
@@ -78,11 +70,6 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
           }
         ]
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {

@@ -6,7 +6,7 @@ class MyResource {
 
   extern "./url_utils.js" pub static inflight isValidUrl(url: str): bool;
 
-  init() {
+  new() {
     this.api = new cloud.Api();
     this.url = this.api.url;  
   }

@@ -60,6 +60,15 @@ describe("wing pack", () => {
     await expectNoTarball(outdir);
   });
 
+  it("throws an error if wing files are located in invalid directories", async () => {
+    const projectDir = join(fixturesDir, "invalid5");
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+
+    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow();
+    await expectNoTarball(outdir);
+  });
+
   it("includes extra files specified by package.json", async () => {
     // valid1's package.json contains this:
     // {

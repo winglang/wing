@@ -1,7 +1,6 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join, basename } from "path";
-import { Template } from "aws-cdk-lib/assertions";
 import { App } from "../src/core";
 import { WingSimulatorSchema } from "../src/simulator";
 
@@ -87,19 +86,6 @@ export function getTfDataSource(
   return dataSources[key];
 }
 
-export function awscdkSanitize(template: Template): any {
-  let json = template.toJSON();
-
-  return JSON.parse(
-    JSON.stringify(json, (key, value) => {
-      if (key === "S3Key" && value.endsWith(".zip")) {
-        return "<S3Key>";
-      }
-      return value;
-    })
-  );
-}
-
 export function tfSanitize(templateStr: string): any {
   // remove names of assets whose hashes are sensitive to changes based
   // on the file system layout
@@ -148,7 +134,10 @@ export function directorySnapshot(initialRoot: string) {
       const abspath = join(root, relpath);
       const key = prefix + relpath;
       if (statSync(abspath).isDirectory()) {
-        visit(root, relpath);
+        // ignore .state files
+        if (basename(abspath) !== ".state") {
+          visit(root, relpath);
+        }
       } else {
         switch (extname(f)) {
           case ".json":

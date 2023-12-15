@@ -1,8 +1,9 @@
 bring fs;
 bring regex;
+bring expect;
 
 let tmpdir = fs.mkdtemp();
-let dirpath = "${tmpdir}/wingdir-preflight";
+let dirpath = "{tmpdir}/wingdir-preflight";
 let filename = "temp.txt";
 
 fs.mkdir(dirpath);
@@ -26,7 +27,7 @@ assert(nilFiles == nil);
 
 test "inflight create normal directory" {
     let tmpdir = fs.mkdtemp();
-    let dirpath = "${tmpdir}/wingdir-inflight";
+    let dirpath = "{tmpdir}/wingdir-inflight";
 
     fs.mkdir(dirpath);
     assert(fs.exists(dirpath) == true);
@@ -50,7 +51,7 @@ test "inflight create normal directory" {
 
 test "cannot overwrite directory with a file" {
     let tmpdir = fs.mkdtemp();
-    let dirpath = "${tmpdir}/test-overwrite-dir";
+    let dirpath = "{tmpdir}/test-overwrite-dir";
     let var errorCaught = false;
 
     fs.mkdir(dirpath);
@@ -63,6 +64,23 @@ test "cannot overwrite directory with a file" {
     }
     assert(errorCaught == true);
 
-    fs.remove(dirpath, { recursive: true });
+    // Cleanup
+    fs.remove(dirpath);
     assert(fs.exists(dirpath) == false);
+}
+
+test "isDir()" {
+    let tempDir = fs.mkdtemp();
+    expect.equal(fs.isDir(tempDir), true);
+
+    let tempFile = fs.join(tempDir, "tempfile.txt");
+    fs.writeFile(tempFile, "Hello, Wing!");
+    expect.equal(fs.isDir(tempFile), false);
+
+    let nonExistentPath = fs.join(tempDir, "nonexistent");
+    expect.equal(fs.isDir(nonExistentPath), false);
+
+    // Cleanup
+    fs.remove(tempDir);
+    expect.equal(fs.exists(dirpath), false);
 }

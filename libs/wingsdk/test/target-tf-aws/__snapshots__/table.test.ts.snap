@@ -2,11 +2,6 @@
 
 exports[`default table behavior 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "Table": {
@@ -44,11 +39,6 @@ my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/table.inflight\\")).
 
 exports[`function with a table binding 2`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -96,6 +86,7 @@ exports[`function with a table binding 2`] = `
             "DYNAMODB_TABLE_NAME_e7245baa": "\${aws_dynamodb_table.Table.name}",
             "DYNAMODB_TABLE_NAME_e7245baa_COLUMNS": "{\\"name\\":0}",
             "DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY": "id",
+            "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c852aba6",
           },
         },
@@ -216,19 +207,6 @@ exports[`function with a table binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": {
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "An inflight resource",
-                  "hidden": true,
-                  "title": "Inflight",
-                },
-                "id": "Handler",
-                "path": "root/Default/Handler",
-              },
               "Table": {
                 "children": {
                   "Default": {
@@ -258,29 +236,6 @@ exports[`function with a table binding 3`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

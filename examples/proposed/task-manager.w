@@ -17,17 +17,17 @@ resource TaskManager {
   fn: cloud.Function;
   state: cloud.Bucket;
 
-  init(handler: inflight (str): void) {
+  new(handler: inflight (str): void) {
     this.bucket = new cloud.Bucket();
 
     let wrapper = inflight (id: str, input: str) => {
       try {
         let result = handler.invoke(input);
-        this.bucket.put("${id}/status", "done");
-        this.bucket.put("${id}/result", result);
+        this.bucket.put("{id}/status", "done");
+        this.bucket.put("{id}/result", result);
       } catch e {
-        this.bucket.put("${id}/status", "failed");
-        this.bucket.put("${id}/result", e);
+        this.bucket.put("{id}/status", "failed");
+        this.bucket.put("{id}/result", e);
       }
     };
 
@@ -41,7 +41,7 @@ resource TaskManager {
   inflight start(input: str) {
     let id = Utils.uuid();
     this.fn.invoke_async(id, input);
-    this.bucket.put("${id}/status", "pending");
+    this.bucket.put("{id}/status", "pending");
   }
 
   /**
@@ -52,9 +52,9 @@ resource TaskManager {
    */
   inflight check(id: str): str {
     try {
-      return this.bucket.get("${id}/status");
+      return this.bucket.get("{id}/status");
     } catch e {
-      throw "no such key: ${id}";
+      throw "no such key: {id}";
     }
   }
 
@@ -63,9 +63,9 @@ resource TaskManager {
    */
   inflight get_result(id: str): str {
     try {
-      return this.bucket.get("${id}/result");
+      return this.bucket.get("{id}/result");
     } catch e {
-      throw "no such id: ${id}";
+      throw "no such id: {id}";
     }
   }
 

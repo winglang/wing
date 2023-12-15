@@ -37,7 +37,7 @@ module.exports = function({  }) {
   }
   return Assert;
 }
-
+//# sourceMappingURL=./inflight.Assert-1.js.map
 ```
 
 ## preflight.cjs
@@ -72,6 +72,6 @@ module.exports = function({ $stdlib }) {
   }
   return { Assert };
 };
-
+//# sourceMappingURL=preflight.js.map
 ```
 

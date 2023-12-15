@@ -1,8 +1,8 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
-import { Tokens } from "./tokens";
 import { SDK_PACKAGE_NAME } from "../constants";
-import { IResource } from "../std/resource";
+import { APP_SYMBOL, IApp, Node } from "../std/node";
+import type { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -20,13 +20,6 @@ export interface AppProps {
    * @default "app"
    */
   readonly name?: string;
-
-  /**
-   * The path to a state file which will track all synthesized files. If a
-   * statefile is not specified, we won't be able to remove extrenous files.
-   * @default - no state file
-   */
-  readonly stateFile?: string;
 
   /**
    * The root construct class that should be instantiated with a scope and id.
@@ -91,20 +84,12 @@ export interface SynthHooks {
 /**
  * A Wing application.
  */
-export abstract class App extends Construct {
+export abstract class App extends Construct implements IApp {
   /**
    * Returns the root app.
    */
   public static of(scope: Construct): App {
-    if (scope instanceof App) {
-      return scope;
-    }
-
-    if (!scope.node.scope) {
-      throw new Error("Cannot find root app");
-    }
-
-    return App.of(scope.node.scope);
+    return Node.of(scope).app as App;
   }
 
   /**
@@ -128,6 +113,9 @@ export abstract class App extends Construct {
     }
   }
 
+  /** @internal */
+  public readonly [APP_SYMBOL] = true;
+
   /**
    * The name of the compilation target.
    * @internal
@@ -145,6 +133,11 @@ export abstract class App extends Construct {
   public readonly entrypointDir: string;
 
   /**
+   * Used in `makeId` to keep track of known IDs
+   */
+  private readonly _idCounters: Record<string, number> = {};
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -152,13 +145,7 @@ export abstract class App extends Construct {
   /**
    * Whether or not this app is being synthesized into a test environment.
    */
-  public abstract readonly isTestEnvironment: boolean;
-
-  /**
-   * Tokens handling for this app.
-   * @internal
-   */
-  public abstract readonly _tokens: Tokens;
+  public readonly isTestEnvironment: boolean;
 
   /**
    * NewInstance hooks for defining resource implementations.
@@ -166,14 +153,26 @@ export abstract class App extends Construct {
    */
   public readonly _newInstanceOverrides: any[];
 
+  /**
+   * The test runner for this app. Only created if `isTestEnvironment` is true.
+   * @internal
+   */
+  public _testRunner: TestRunner | undefined;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
       throw new Error("Missing environment variable: WING_SOURCE_DIR");
     }
 
+    // the app is also marked as root in the case where there is no root construct
+    if (!props.rootConstruct) {
+      Node._markRoot(this.constructor);
+    }
+
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
   /**
@@ -226,23 +225,24 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // first check if overrides have been provided
-    for (const override of this._newInstanceOverrides) {
-      const instance = override(fqn, scope, id, ...args);
-      if (instance) {
-        return instance;
-      }
-    }
     // next delegate to "tryNew", which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
-    const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
     if (!instance) {
+      const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
       throw new NotImplementedError(
         `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
       );
     }
 
     return instance;
+  }
+
+  public makeId(scope: IConstruct, prefix: string = "") {
+    const key = `${scope.node.addr}|${prefix}`;
+
+    this._idCounters[key] = this._idCounters[key] ?? 0;
+
+    return `${prefix}${this._idCounters[key]++}`;
   }
 
   /**
@@ -271,34 +271,19 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
+    // first check if overrides have been provided
+    for (const override of this._newInstanceOverrides) {
+      const instance = override(fqn, scope, id, ...args);
+      if (instance) {
+        return instance;
+      }
+    }
+
     const type = this.typeForFqn(fqn);
     if (!type) {
       return undefined;
     }
     return new type(scope, id, ...args);
-  }
-
-  /**
-   * Synthesize the root construct if one was given. If this is a test environment, then
-   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
-   * one root construct.
-   *
-   * @param props The App props
-   * @param testRunner The test runner
-   */
-  protected synthRoots(props: AppProps, testRunner: TestRunner) {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
   }
 }
 

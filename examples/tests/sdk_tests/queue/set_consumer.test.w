@@ -8,7 +8,7 @@ let c = new cloud.Counter();
 // had to wrap the inflight ():bool => { c.peek == 2 } inflight method with a the Predicate resource
 class Predicate {
   c: cloud.Counter;
-  init(c: cloud.Counter){
+  new(c: cloud.Counter){
     this.c = c;
   }
 
