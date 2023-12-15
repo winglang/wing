@@ -19,13 +19,12 @@ module.exports = function({ $MyService, $__parent_this_1_b, $__parent_this_1_bod
       return async () => {
         {console.log("closing server...")};
         (await server.close());
-      }
-      ;
+      };
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -40,13 +39,13 @@ module.exports = function({ $foo, $http_Util }) {
     }
     async handle() {
       const response = (await $http_Util.get(String.raw({ raw: ["http://localhost:", ""] }, (await $foo.port()))));
-      {console.log((response.body ?? ""))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body ?? \"\" == \"bang bang!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.body ?? ""),"bang bang!")))};
+      {console.log(response.body)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"bang bang!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,"bang bang!")))};
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -75,7 +74,7 @@ module.exports = function({ $foo, $foo_s, $http_Util }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.MyService-1.cjs
@@ -87,7 +86,7 @@ module.exports = function({ $std_Number }) {
       this.$this_b = $this_b;
     }
     async port() {
-      return ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })((await this.$this_b.get("port")));
+      return ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })((await this.$this_b.get("port")));
     }
     static async createServer(body) {
       return (require("<ABSOLUTE_PATH>/http-server.js")["createServer"])(body)
@@ -95,7 +94,7 @@ module.exports = function({ $std_Number }) {
   }
   return MyService;
 }
-
+//# sourceMappingURL=./inflight.MyService-1.cjs.map
 ```
 
 ## main.tf.json
@@ -135,20 +134,21 @@ class $Root extends $stdlib.std.Resource {
       class MyService extends $stdlib.std.Resource {
         constructor($scope, $id, body) {
           super($scope, $id);
-          this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
+          this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
           this.body = body;
           const __parent_this_1 = this;
           class $Closure1 extends $stdlib.std.Resource {
+            _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
             constructor($scope, $id, ) {
               super($scope, $id);
               (std.Node.of(this)).hidden = true;
             }
-            static _toInflightType(context) {
+            static _toInflightType() {
               return `
-                require("./inflight.$Closure1-1.cjs")({
-                  $MyService: ${context._lift(MyService)},
-                  $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
-                  $__parent_this_1_body: ${context._lift(__parent_this_1.body)},
+                require("././inflight.$Closure1-1.cjs")({
+                  $MyService: ${$stdlib.core.liftObject(MyService)},
+                  $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
+                  $__parent_this_1_body: ${$stdlib.core.liftObject(__parent_this_1.body)},
                 })
               `;
             }
@@ -164,7 +164,7 @@ class $Root extends $stdlib.std.Resource {
               `;
             }
             _supportedOps() {
-              return ["handle", "$inflight_init"];
+              return [...super._supportedOps(), "handle", "$inflight_init"];
             }
             _registerOnLift(host, ops) {
               if (ops.includes("handle")) {
@@ -175,12 +175,12 @@ class $Root extends $stdlib.std.Resource {
               super._registerOnLift(host, ops);
             }
           }
-          this.s = this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"));
+          this.s = this.node.root.new("@winglang/sdk.cloud.Service", cloud.Service, this, "cloud.Service", new $Closure1(this, "$Closure1"));
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.MyService-1.cjs")({
-              $std_Number: ${context._lift($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
+            require("././inflight.MyService-1.cjs")({
+              $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
             })
           `;
         }
@@ -189,7 +189,7 @@ class $Root extends $stdlib.std.Resource {
             (await (async () => {
               const MyServiceClient = ${MyService._toInflightType(this)};
               const client = new MyServiceClient({
-                $this_b: ${this._lift(this.b)},
+                $this_b: ${$stdlib.core.liftObject(this.b)},
               });
               if (client.$inflight_init) { await client.$inflight_init(); }
               return client;
@@ -197,7 +197,7 @@ class $Root extends $stdlib.std.Resource {
           `;
         }
         _supportedOps() {
-          return ["port", "createServer", "$inflight_init"];
+          return [...super._supportedOps(), "port", "createServer", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("$inflight_init")) {
@@ -211,15 +211,16 @@ class $Root extends $stdlib.std.Resource {
       }
       const foo = new MyService(this, "MyService", "bang bang!");
       class $Closure2 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.$Closure2-1.cjs")({
-              $foo: ${context._lift(foo)},
-              $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            require("././inflight.$Closure2-1.cjs")({
+              $foo: ${$stdlib.core.liftObject(foo)},
+              $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
             })
           `;
         }
@@ -235,7 +236,7 @@ class $Root extends $stdlib.std.Resource {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -244,18 +245,19 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http server is started with the service", new $Closure2(this, "$Closure2"));
+      this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:http server is started with the service", new $Closure2(this, "$Closure2"));
       class $Closure3 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.$Closure3-1.cjs")({
-              $foo: ${context._lift(foo)},
-              $foo_s: ${context._lift(foo.s)},
-              $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            require("././inflight.$Closure3-1.cjs")({
+              $foo: ${$stdlib.core.liftObject(foo)},
+              $foo_s: ${$stdlib.core.liftObject(foo.s)},
+              $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
             })
           `;
         }
@@ -271,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -281,13 +283,13 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:service.stop() closes the http server", new $Closure3(this, "$Closure3"));
+      this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:service.stop() closes the http server", new $Closure3(this, "$Closure3"));
     }
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "http-server.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

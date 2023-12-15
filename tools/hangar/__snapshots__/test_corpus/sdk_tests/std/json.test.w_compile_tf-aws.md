@@ -11,14 +11,14 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"key1": 1,"key2": 2});
+      const obj = ({"key1": 1, "key2": 2});
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(obj, \"key1\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([obj, "key1"]),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(obj, \"key3\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([obj, "key3"]),false)))};
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure10-1.cjs
@@ -32,8 +32,8 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const original = ({"string": "wing","number": 123,"array": [1, 2, 3],"true": true,"false": false,"object": ({"key1": "value1","key2": 2,"key3": false,"key5": [3, 2, 1]})});
-      const mutation = ({"key1": 1,"key2": 2});
+      const original = ({"string": "wing", "number": 123, "array": [1, 2, 3], "true": true, "false": false, "object": ({"key1": "value1", "key2": 2, "key3": false, "key5": [3, 2, 1]})});
+      const mutation = ({"key1": 1, "key2": 2});
       const copy = JSON.parse(JSON.stringify(original));
       const copyMut = (JSON.parse(JSON.stringify(original)));
       {((cond) => {if (!cond) throw new Error("assertion failed: copy == copyMut")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(copy,copyMut)))};
@@ -44,7 +44,7 @@ module.exports = function({ $std_Json }) {
   }
   return $Closure10;
 }
-
+//# sourceMappingURL=./inflight.$Closure10-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -69,26 +69,23 @@ module.exports = function({  }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const JSON_PROPERTY_DOES_NOT_EXIST_ERROR = "Json property \"c\" does not exist";
-      const obj = ({"a": 1,"b": 2});
-      const mutObj = ({"a": 1,"b": 2});
+      const obj = ({"a": 1, "b": 2});
+      const mutObj = ({"a": 1, "b": 2});
       {((cond) => {if (!cond) throw new Error("assertion failed: obj.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "b"),2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "b"),2)))};
       (await assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(obj, "c");
-      }
-      ));
+      }));
       (await assertThrows(JSON_PROPERTY_DOES_NOT_EXIST_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "c");
-      }
-      ));
+      }));
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -113,8 +110,7 @@ module.exports = function({  }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
       const jsonArray = ["foo", "bar", "baz"];
       const mutJsonArray = [1, 2, 3];
@@ -123,13 +119,12 @@ module.exports = function({  }) {
       (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, async () => {
         ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(jsonArray, 3);
         ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(mutJsonArray, 3);
-      }
-      ));
+      }));
     }
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -143,7 +138,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const mutObj = ({"x": 1,"y": 2});
+      const mutObj = ({"x": 1, "y": 2});
       ((obj, args) => { obj[args[0]] = args[1]; })(mutObj, ["x", (-1)]);
       ((obj, args) => { obj[args[0]] = args[1]; })(mutObj, ["z", 3]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutObj.get(\"x\") == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(mutObj, "x"),(-1))))};
@@ -152,7 +147,7 @@ module.exports = function({  }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## inflight.$Closure5-1.cjs
@@ -175,7 +170,7 @@ module.exports = function({  }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.cjs.map
 ```
 
 ## inflight.$Closure6-1.cjs
@@ -189,16 +184,16 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"a": 1,"b": 2});
+      const obj = ({"a": 1, "b": 2});
       const stringified = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj]);
       const stringifiedIndent = ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([obj, { indent: 2 }]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: stringified == \"{\\\"a\\\":1,\\\"b\\\":2}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringified,"{\"a\":1,\"b\":2}")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"{\n  \"a\": 1,\n  \"b\": 2\n}")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: stringified == \"\\{\\\"a\\\":1,\\\"b\\\":2}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringified,"{\"a\":1,\"b\":2}")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: stringifiedIndent == \"\\{\\n  \\\"a\\\": 1,\\n  \\\"b\\\": 2\\n}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifiedIndent,"{\n  \"a\": 1,\n  \"b\": 2\n}")))};
     }
   }
   return $Closure6;
 }
-
+//# sourceMappingURL=./inflight.$Closure6-1.cjs.map
 ```
 
 ## inflight.$Closure7-1.cjs
@@ -212,21 +207,21 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"a": 1,"b": [3, 7, 9],"c": ({"foo": "bar"})});
+      const obj = ({"a": 1, "b": [3, 7, 9], "c": ({"foo": "bar"})});
       const entries = (await $std_Json.entries(obj));
       const keys = (Object.keys(obj));
       const values = (Object.values(obj));
       let i = 0;
       for (const e of entries) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.key == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.key,(await keys.at(i)))))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,(await values.at(i)))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.key == keys.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.key,((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(keys, i))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e.value == values.at(i)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e.value,((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(values, i))))};
         i += 1;
       }
     }
   }
   return $Closure7;
 }
-
+//# sourceMappingURL=./inflight.$Closure7-1.cjs.map
 ```
 
 ## inflight.$Closure8-1.cjs
@@ -240,7 +235,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"key1": 1,"key2": 2});
+      const obj = ({"key1": 1, "key2": 2});
       const String = "{\"key\":1,\"key2\":2}";
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSON.parse("123")),123)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(\"true\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSON.parse("true")),true)))};
@@ -249,7 +244,7 @@ module.exports = function({ $std_Json }) {
   }
   return $Closure8;
 }
-
+//# sourceMappingURL=./inflight.$Closure8-1.cjs.map
 ```
 
 ## inflight.$Closure9-1.cjs
@@ -263,7 +258,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle() {
-      const obj = ({"key1": 1,"key2": 2});
+      const obj = ({"key1": 1, "key2": 2});
       const String = "{\"key\":1,\"key2\":2}";
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"123\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("123"),123)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"true\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("true"),true)))};
@@ -275,7 +270,7 @@ module.exports = function({ $std_Json }) {
   }
   return $Closure9;
 }
-
+//# sourceMappingURL=./inflight.$Closure9-1.cjs.map
 ```
 
 ## main.tf.json
@@ -310,14 +305,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -333,17 +329,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
+          require("././inflight.$Closure2-1.cjs")({
           })
         `;
       }
@@ -359,17 +356,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
+          require("././inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -385,17 +383,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
+          require("././inflight.$Closure4-1.cjs")({
           })
         `;
       }
@@ -411,17 +410,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure5-1.cjs")({
+          require("././inflight.$Closure5-1.cjs")({
           })
         `;
       }
@@ -437,18 +437,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure6-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure6-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -464,18 +465,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure7-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure7-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -491,18 +493,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure8-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure8-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -518,18 +521,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure9-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure9-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -545,18 +549,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure10-1.cjs")({
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          require("././inflight.$Closure10-1.cjs")({
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
       }
@@ -572,24 +577,24 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:has()", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:get()", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:getAt()", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:set()", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:setAt()", new $Closure5(this, "$Closure5"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:stringify()", new $Closure6(this, "$Closure6"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:keys(), values(), entries()", new $Closure7(this, "$Closure7"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:parse()", new $Closure8(this, "$Closure8"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:tryParse()", new $Closure9(this, "$Closure9"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:deepCopy(), deepCopyMut()", new $Closure10(this, "$Closure10"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:has()", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:get()", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:getAt()", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:set()", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:setAt()", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:stringify()", new $Closure6(this, "$Closure6"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:keys(), values(), entries()", new $Closure7(this, "$Closure7"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:parse()", new $Closure8(this, "$Closure8"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:tryParse()", new $Closure9(this, "$Closure9"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:deepCopy(), deepCopyMut()", new $Closure10(this, "$Closure10"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "json.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

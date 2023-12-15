@@ -16,7 +16,7 @@ module.exports = function({ $s }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -35,7 +35,7 @@ module.exports = function({ $s }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -54,7 +54,7 @@ module.exports = function({ $s }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -74,7 +74,7 @@ module.exports = function({  }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## inflight.A-1.cjs
@@ -87,7 +87,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=./inflight.A-1.cjs.map
 ```
 
 ## main.tf.json
@@ -99,20 +99,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -141,14 +128,15 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"inResource")))};
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
           constructor($scope, $id, ) {
             super($scope, $id);
             (std.Node.of(this)).hidden = true;
           }
-          static _toInflightType(context) {
+          static _toInflightType() {
             return `
-              require("./inflight.$Closure2-1.cjs")({
-                $s: ${context._lift(s)},
+              require("././inflight.$Closure2-1.cjs")({
+                $s: ${$stdlib.core.liftObject(s)},
               })
             `;
           }
@@ -164,7 +152,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           _registerOnLift(host, ops) {
             if (ops.includes("handle")) {
@@ -173,11 +161,11 @@ class $Root extends $stdlib.std.Resource {
             super._registerOnLift(host, ops);
           }
         }
-        this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight in resource should capture the right scoped var", new $Closure2(this, "$Closure2"));
+        this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight in resource should capture the right scoped var", new $Closure2(this, "$Closure2"));
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.A-1.cjs")({
+          require("././inflight.A-1.cjs")({
           })
         `;
       }
@@ -193,18 +181,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
-            $s: ${context._lift(s)},
+          require("././inflight.$Closure3-1.cjs")({
+            $s: ${$stdlib.core.liftObject(s)},
           })
         `;
       }
@@ -220,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -230,13 +219,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
+          require("././inflight.$Closure4-1.cjs")({
           })
         `;
       }
@@ -252,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     const s = "top";
@@ -260,14 +250,15 @@ class $Root extends $stdlib.std.Resource {
       const s = "inner";
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"inner")))};
       class $Closure1 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.$Closure1-1.cjs")({
-              $s: ${context._lift(s)},
+            require("././inflight.$Closure1-1.cjs")({
+              $s: ${$stdlib.core.liftObject(s)},
             })
           `;
         }
@@ -283,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -292,17 +283,17 @@ class $Root extends $stdlib.std.Resource {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight nested should not capture the shadowed var", new $Closure1(this, "$Closure1"));
+      this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight nested should not capture the shadowed var", new $Closure1(this, "$Closure1"));
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"top")))};
     new A(this, "A");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:inflight on top should capture top", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:insideInflight should capture the right scope", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight on top should capture top", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:insideInflight should capture the right scope", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "symbol_shadow.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

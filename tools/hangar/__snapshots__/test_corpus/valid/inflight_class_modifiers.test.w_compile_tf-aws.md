@@ -15,7 +15,7 @@ module.exports = function({  }) {
   }
   return C;
 }
-//# sourceMappingURL=inflight.C-1.js.map
+//# sourceMappingURL=./inflight.C-1.cjs.map
 ```
 
 ## main.tf.json
@@ -54,7 +54,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.C-1.cjs")({
+          require("././inflight.C-1.cjs")({
           })
         `;
       }
@@ -84,6 +84,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_class_modifiers.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

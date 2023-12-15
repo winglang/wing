@@ -1,7 +1,7 @@
 # [new_in_static.test.w](../../../../../examples/tests/valid/new_in_static.test.w) | compile | tf-aws
 
-## inflight.$Closure1-1.js
-```js
+## inflight.$Closure1-1.cjs
+```cjs
 "use strict";
 module.exports = function({ $bucket }) {
   class $Closure1 {
@@ -16,11 +16,11 @@ module.exports = function({ $bucket }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
-## inflight.MyClass-1.js
-```js
+## inflight.MyClass-1.cjs
+```cjs
 "use strict";
 module.exports = function({  }) {
   class MyClass {
@@ -29,7 +29,7 @@ module.exports = function({  }) {
   }
   return MyClass;
 }
-//# sourceMappingURL=inflight.MyClass-1.js.map
+//# sourceMappingURL=./inflight.MyClass-1.cjs.map
 ```
 
 ## main.tf.json
@@ -85,8 +85,8 @@ module.exports = function({  }) {
 }
 ```
 
-## preflight.js
-```js
+## preflight.cjs
+```cjs
 "use strict";
 const $stdlib = require('@winglang/sdk');
 const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyClass-1.js")({
+          require("././inflight.MyClass-1.cjs")({
           })
         `;
       }
@@ -137,7 +137,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("././inflight.$Closure1-1.cjs")({
             $bucket: ${$stdlib.core.liftObject(bucket)},
           })
         `;
@@ -179,6 +179,6 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_in_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-//# sourceMappingURL=preflight.js.map
+//# sourceMappingURL=preflight.cjs.map
 ```
 

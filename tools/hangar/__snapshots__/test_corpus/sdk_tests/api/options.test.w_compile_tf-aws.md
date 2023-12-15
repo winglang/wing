@@ -19,7 +19,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -41,7 +41,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -60,7 +60,7 @@ module.exports = function({  }) {
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -83,7 +83,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## main.tf.json
@@ -486,15 +486,16 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $cloud_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
-            $path: ${context._lift(path)},
+          require("././inflight.$Closure1-1.cjs")({
+            $cloud_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
+            $path: ${$stdlib.core.liftObject(path)},
           })
         `;
       }
@@ -510,7 +511,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -520,15 +521,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
-            $cloud_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
-            $path: ${context._lift(path)},
+          require("././inflight.$Closure2-1.cjs")({
+            $cloud_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(cloud.HttpMethod, "@winglang/sdk/cloud", "HttpMethod"))},
+            $path: ${$stdlib.core.liftObject(path)},
           })
         `;
       }
@@ -544,7 +546,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -554,13 +556,14 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
+          require("././inflight.$Closure3-1.cjs")({
           })
         `;
       }
@@ -576,21 +579,22 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
-            $api_url: ${context._lift(api.url)},
-            $http_HttpMethod: ${context._lift($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $path: ${context._lift(path)},
+          require("././inflight.$Closure4-1.cjs")({
+            $api_url: ${$stdlib.core.liftObject(api.url)},
+            $http_HttpMethod: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"))},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $path: ${$stdlib.core.liftObject(path)},
           })
         `;
       }
@@ -606,7 +610,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -616,17 +620,17 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this, "cloud.Api");
+    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     const path = "/path";
     (api.options(path, new $Closure1(this, "$Closure1")));
     (api.head(path, new $Closure2(this, "$Closure2")));
     (api.connect(path, new $Closure3(this, "$Closure3")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "options.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

@@ -10,7 +10,7 @@ module.exports = function({  }) {
   }
   return Bar;
 }
-
+//# sourceMappingURL=./inflight.Bar-1.cjs.map
 ```
 
 ## inflight.Baz-2.cjs
@@ -23,7 +23,7 @@ module.exports = function({  }) {
   }
   return Baz;
 }
-
+//# sourceMappingURL=./inflight.Baz-2.cjs.map
 ```
 
 ## inflight.Foo-3.cjs
@@ -36,7 +36,7 @@ module.exports = function({  }) {
   }
   return Foo;
 }
-
+//# sourceMappingURL=./inflight.Foo-3.cjs.map
 ```
 
 ## main.tf.json
@@ -48,20 +48,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -83,9 +70,9 @@ module.exports = function({ $stdlib }) {
     static bar() {
       return "bar";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.Bar-1.cjs")({
+        require("././inflight.Bar-1.cjs")({
         })
       `;
     }
@@ -101,12 +88,12 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Bar };
 };
-
+//# sourceMappingURL=preflight.bar-1.cjs.map
 ```
 
 ## preflight.baz-2.cjs
@@ -121,9 +108,9 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return "baz";
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.Baz-2.cjs")({
+        require("././inflight.Baz-2.cjs")({
         })
       `;
     }
@@ -139,12 +126,12 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Baz };
 };
-
+//# sourceMappingURL=preflight.baz-2.cjs.map
 ```
 
 ## preflight.cjs
@@ -171,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_normalization.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 
 ## preflight.foo-3.cjs
@@ -194,9 +181,9 @@ module.exports = function({ $stdlib }) {
     static baz() {
       return (baz.Baz.baz());
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.Foo-3.cjs")({
+        require("././inflight.Foo-3.cjs")({
         })
       `;
     }
@@ -212,11 +199,11 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   return { Foo };
 };
-
+//# sourceMappingURL=preflight.foo-3.cjs.map
 ```
 

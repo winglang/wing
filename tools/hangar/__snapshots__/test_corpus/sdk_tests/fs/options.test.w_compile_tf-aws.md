@@ -3,8 +3,64 @@
 ## inflight.$Closure1-1.cjs
 ```cjs
 "use strict";
-module.exports = function({ $fs_Util, $regex_Util }) {
+module.exports = function({ $expect_Util, $fs_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const tmpdir = (await $fs_Util.mkdtemp());
+      const filepath = (await $fs_Util.join(tmpdir, "utf8test.txt"));
+      const data = "こんにちは、ウィング!";
+      (await $fs_Util.writeFile(filepath, data, ({"encoding": "utf8"})));
+      const contentUtf8 = (await $fs_Util.readFile(filepath, ({"encoding": "utf8"})));
+      const contentAscii = (await $fs_Util.readFile(filepath, ({"encoding": "ascii"})));
+      (await $expect_Util.equal(contentUtf8, data));
+      (await $expect_Util.notEqual(contentAscii, data));
+      (await $fs_Util.remove(tmpdir, ({"recursive": true})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
+```
+
+## inflight.$Closure2-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $expect_Util, $fs_Util }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const tmpdir = (await $fs_Util.mkdtemp());
+      const filepath = (await $fs_Util.join(tmpdir, "test.txt"));
+      const data = "Hello, Wing!";
+      const appendData = " More text.";
+      (await $fs_Util.writeFile(filepath, data));
+      (await $fs_Util.writeFile(filepath, appendData, ({"flag": "a"})));
+      const content = (await $fs_Util.readFile(filepath));
+      (await $expect_Util.equal(content, String.raw({ raw: ["", "", ""] }, data, appendData)));
+      (await $fs_Util.remove(tmpdir, ({"recursive": true})));
+      {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
+```
+
+## inflight.$Closure3-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $expect_Util, $fs_Util, $regex_Util }) {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -21,21 +77,21 @@ module.exports = function({ $fs_Util, $regex_Util }) {
         const e = $error_e.message;
         errorCaught = (await $regex_Util.match("^ENOENT: no such file or directory", e));
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: errorCaught == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(errorCaught,true)))};
+      (await $expect_Util.equal(errorCaught, true));
       (await $fs_Util.remove(tmpdir));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
     }
   }
-  return $Closure1;
+  return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
-## inflight.$Closure2-1.cjs
+## inflight.$Closure4-1.cjs
 ```cjs
 "use strict";
-module.exports = function({ $fs_Util, $regex_Util }) {
-  class $Closure2 {
+module.exports = function({ $expect_Util, $fs_Util, $regex_Util }) {
+  class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -55,16 +111,16 @@ module.exports = function({ $fs_Util, $regex_Util }) {
         const e = $error_e.message;
         errorCaught = (await $regex_Util.match("^Path is a directory: rm returned EISDIR", e));
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: errorCaught == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(errorCaught,true)))};
+      (await $expect_Util.equal(errorCaught, true));
       (await $fs_Util.remove(dirpath));
       (await $fs_Util.remove(tmpdir));
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(dirpath) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(dirpath)),false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fs.exists(tmpdir) == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fs_Util.exists(tmpdir)),false)))};
     }
   }
-  return $Closure2;
+  return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## main.tf.json
@@ -96,19 +152,21 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const fs = $stdlib.fs;
 const regex = $stdlib.regex;
+const expect = $stdlib.expect;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
-            $regex_Util: ${context._lift($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $fs_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
           })
         `;
       }
@@ -124,19 +182,20 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
-            $fs_Util: ${context._lift($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
-            $regex_Util: ${context._lift($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
+          require("././inflight.$Closure2-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $fs_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
           })
         `;
       }
@@ -152,16 +211,78 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:removing non-existent file with `force: false` raises error", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:removing directory with `recursive: false` raises error", new $Closure2(this, "$Closure2"));
+    class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("././inflight.$Closure3-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $fs_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
+            $regex_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+    }
+    class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("././inflight.$Closure4-1.cjs")({
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $fs_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fs.Util, "@winglang/sdk/fs", "Util"))},
+            $regex_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(regex.Util, "@winglang/sdk/regex", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure4Client = ${$Closure4._toInflightType(this)};
+            const client = new $Closure4Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+    }
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:write and read file with `encoding` option", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:write file with `flag` option", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:removing non-existent file with `force: false` raises error", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:removing directory with `recursive: false` raises error", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "options.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

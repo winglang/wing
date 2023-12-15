@@ -11,16 +11,16 @@ module.exports = function({ $t1 }) {
       return $obj;
     }
     async handle() {
-      (await $t1.putItem(({"item": ({"k1": "key1","k2": "value1","k3": "other-value1"})})));
-      (await $t1.putItem(({"item": ({"k1": "key2","k2": "value2","k3": "other-value2"})})));
-      (await $t1.transactWriteItems({ transactItems: [({"put": ({"item": ({"k1": "key3","k2": "value3","k3": "other-value3"})})}), ({"delete": ({"key": ({"k1": "key2","k2": "value2"})})}), ({"update": ({"key": ({"k1": "key1","k2": "value1"}),"updateExpression": "set k3 = :k3","expressionAttributeValues": ({":k3": "not-other-value1"})})})] }));
-      let r = (await $t1.getItem(({"key": ({"k1": "key1","k2": "value1"})})));
+      (await $t1.putItem(({"item": ({"k1": "key1", "k2": "value1", "k3": "other-value1"})})));
+      (await $t1.putItem(({"item": ({"k1": "key2", "k2": "value2", "k3": "other-value2"})})));
+      (await $t1.transactWriteItems({ transactItems: [({"put": ({"item": ({"k1": "key3", "k2": "value3", "k3": "other-value3"})})}), ({"delete": ({"key": ({"k1": "key2", "k2": "value2"})})}), ({"update": ({"key": ({"k1": "key1", "k2": "value1"}), "updateExpression": "set k3 = :k3", "expressionAttributeValues": ({":k3": "not-other-value1"})})})] }));
+      let r = (await $t1.getItem(({"key": ({"k1": "key1", "k2": "value1"})})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k1\")?.asStr() == \"key1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k1")),"key1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k2\")?.asStr() == \"value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k2")),"value1")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k3\")?.asStr() == \"not-other-value1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k3")),"not-other-value1")))};
-      r = (await $t1.getItem(({"key": ({"k1": "key2","k2": "value2"})})));
+      r = (await $t1.getItem(({"key": ({"k1": "key2", "k2": "value2"})})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.tryGet(\"k1\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((r.item)?.["k1"],undefined)))};
-      r = (await $t1.getItem(({"key": ({"k1": "key3","k2": "value3"})})));
+      r = (await $t1.getItem(({"key": ({"k1": "key3", "k2": "value3"})})));
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k1\")?.asStr() == \"key3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k1")),"key3")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k2\")?.asStr() == \"value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k2")),"value3")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: r.item?.get(\"k3\")?.asStr() == \"other-value3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(r.item, "k3")),"other-value3")))};
@@ -28,7 +28,7 @@ module.exports = function({ $t1 }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -89,14 +89,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $t1: ${context._lift(t1)},
+          require("././inflight.$Closure1-1.cjs")({
+            $t1: ${$stdlib.core.liftObject(t1)},
           })
         `;
       }
@@ -112,7 +113,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -121,13 +122,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const t1 = this.node.root.newAbstract("@winglang/sdk.ex.DynamodbTable",this, "ex.DynamodbTable", { name: "test1", attributeDefinitions: ({"k1": "S","k2": "S"}), hashKey: "k1", rangeKey: "k2" });
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:transactWriteItems", new $Closure1(this, "$Closure1"));
+    const t1 = this.node.root.new("@winglang/sdk.ex.DynamodbTable", ex.DynamodbTable, this, "ex.DynamodbTable", { name: "test1", attributeDefinitions: ({"k1": "S", "k2": "S"}), hashKey: "k1", rangeKey: "k2" });
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:transactWriteItems", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "transaction.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

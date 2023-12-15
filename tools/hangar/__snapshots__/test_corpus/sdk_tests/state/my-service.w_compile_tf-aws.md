@@ -16,7 +16,7 @@ module.exports = function({ $__parent_this_1_startTimeKey, $__parent_this_1_stat
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.MyService-1.cjs
@@ -34,7 +34,7 @@ module.exports = function({  }) {
   }
   return MyService;
 }
-
+//# sourceMappingURL=./inflight.MyService-1.cjs.map
 ```
 
 ## preflight.cjs
@@ -48,19 +48,20 @@ module.exports = function({ $stdlib }) {
   class MyService extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.state = this.node.root.new("@winglang/sdk.sim.State",sim.State,this, "sim.State");
+      this.state = this.node.root.new("@winglang/sdk.sim.State", sim.State, this, "sim.State");
       this.startTimeKey = "start_time";
       const __parent_this_1 = this;
       class $Closure1 extends $stdlib.std.Resource {
+        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
           super($scope, $id);
           (std.Node.of(this)).hidden = true;
         }
-        static _toInflightType(context) {
+        static _toInflightType() {
           return `
-            require("./inflight.$Closure1-1.cjs")({
-              $__parent_this_1_startTimeKey: ${context._lift(__parent_this_1.startTimeKey)},
-              $__parent_this_1_state: ${context._lift(__parent_this_1.state)},
+            require("././inflight.$Closure1-1.cjs")({
+              $__parent_this_1_startTimeKey: ${$stdlib.core.liftObject(__parent_this_1.startTimeKey)},
+              $__parent_this_1_state: ${$stdlib.core.liftObject(__parent_this_1.state)},
             })
           `;
         }
@@ -76,7 +77,7 @@ module.exports = function({ $stdlib }) {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -86,12 +87,12 @@ module.exports = function({ $stdlib }) {
           super._registerOnLift(host, ops);
         }
       }
-      this.node.root.newAbstract("@winglang/sdk.cloud.Service",this, "cloud.Service", new $Closure1(this, "$Closure1"));
+      this.node.root.new("@winglang/sdk.cloud.Service", cloud.Service, this, "cloud.Service", new $Closure1(this, "$Closure1"));
       this.startTime = (this.state.token(this.startTimeKey));
     }
-    static _toInflightType(context) {
+    static _toInflightType() {
       return `
-        require("./inflight.MyService-1.cjs")({
+        require("././inflight.MyService-1.cjs")({
         })
       `;
     }
@@ -100,8 +101,8 @@ module.exports = function({ $stdlib }) {
         (await (async () => {
           const MyServiceClient = ${MyService._toInflightType(this)};
           const client = new MyServiceClient({
-            $this_startTimeKey: ${this._lift(this.startTimeKey)},
-            $this_state: ${this._lift(this.state)},
+            $this_startTimeKey: ${$stdlib.core.liftObject(this.startTimeKey)},
+            $this_state: ${$stdlib.core.liftObject(this.state)},
           });
           if (client.$inflight_init) { await client.$inflight_init(); }
           return client;
@@ -109,7 +110,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["getStartTime", "$inflight_init"];
+      return [...super._supportedOps(), "getStartTime", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -125,6 +126,6 @@ module.exports = function({ $stdlib }) {
   }
   return { MyService };
 };
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

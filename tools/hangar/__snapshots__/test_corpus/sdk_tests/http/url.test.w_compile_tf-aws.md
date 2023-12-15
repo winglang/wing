@@ -22,23 +22,21 @@ module.exports = function({ $http_Util }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const INVALID_URL_STRING = "hello world";
       const INVALID_URL_ERROR = String.raw({ raw: ["Invalid URL: ", ""] }, INVALID_URL_STRING);
       const URL_STRING = "http://username:password@www.example.com:3000/pathname?search=test#hash";
-      const urlStruct = ({"href": URL_STRING,"protocol": "http:","host": "www.example.com:3000","hostname": "www.example.com","port": "3000","pathname": "/pathname","search": "?search=test","hash": "#hash","origin": "http://www.example.com:3000","username": "username","password": "password"});
+      const urlStruct = ({"href": URL_STRING, "protocol": "http:", "host": "www.example.com:3000", "hostname": "www.example.com", "port": "3000", "pathname": "/pathname", "search": "?search=test", "hash": "#hash", "origin": "http://www.example.com:3000", "username": "username", "password": "password"});
       const parsedUrlStruct = (await $http_Util.parseUrl(URL_STRING));
       {((cond) => {if (!cond) throw new Error("assertion failed: urlStruct == parsedUrlStruct")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(urlStruct,parsedUrlStruct)))};
       (await assertThrows(INVALID_URL_ERROR, async () => {
         const invalidUrlStruct = (await $http_Util.parseUrl(INVALID_URL_STRING));
-      }
-      ));
+      }));
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -63,8 +61,7 @@ module.exports = function({ $http_Util }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const UNABLE_TO_FORMAT_URL_STRUCT_ERROR = "Unable to format URL Struct: Invalid URL";
       const urlStruct = (await $http_Util.parseUrl("https://a:b@測試.com/path?query=1#fragment"));
       {((cond) => {if (!cond) throw new Error("assertion failed: http.formatUrl(urlStruct, { unicode: false }) == \"https://a:b@xn--g6w251d.com/path?query=1#fragment\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.formatUrl(urlStruct, ({"unicode": false}))),"https://a:b@xn--g6w251d.com/path?query=1#fragment")))};
@@ -75,16 +72,15 @@ module.exports = function({ $http_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: http.formatUrl(urlStruct, { search: true }) == \"https://a:b@xn--g6w251d.com/path?query=1#fragment\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.formatUrl(urlStruct, ({"search": true}))),"https://a:b@xn--g6w251d.com/path?query=1#fragment")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.formatUrl(urlStruct, { auth: false }) == \"https://xn--g6w251d.com/path?query=1#fragment\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.formatUrl(urlStruct, ({"auth": false}))),"https://xn--g6w251d.com/path?query=1#fragment")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.formatUrl(urlStruct, { auth: true }) == \"https://a:b@xn--g6w251d.com/path?query=1#fragment\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.formatUrl(urlStruct, ({"auth": true}))),"https://a:b@xn--g6w251d.com/path?query=1#fragment")))};
-      const invalidUrlStruct = ({"href": "hello world","protocol": urlStruct.protocol,"host": urlStruct.host,"hostname": urlStruct.hostname,"port": urlStruct.hostname,"pathname": urlStruct.pathname,"search": urlStruct.search,"hash": urlStruct.hash,"origin": urlStruct.origin,"username": urlStruct.username,"password": urlStruct.password});
+      const invalidUrlStruct = ({"href": "hello world", "protocol": urlStruct.protocol, "host": urlStruct.host, "hostname": urlStruct.hostname, "port": urlStruct.hostname, "pathname": urlStruct.pathname, "search": urlStruct.search, "hash": urlStruct.hash, "origin": urlStruct.origin, "username": urlStruct.username, "password": urlStruct.password});
       (await assertThrows(UNABLE_TO_FORMAT_URL_STRUCT_ERROR, async () => {
         (await $http_Util.formatUrl(invalidUrlStruct));
-      }
-      ));
+      }));
     }
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
@@ -119,14 +115,15 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
@@ -142,18 +139,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+          require("././inflight.$Closure2-1.cjs")({
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
           })
         `;
       }
@@ -169,16 +167,16 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:parseUrl()", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:formatUrl()", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:parseUrl()", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:formatUrl()", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "url.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

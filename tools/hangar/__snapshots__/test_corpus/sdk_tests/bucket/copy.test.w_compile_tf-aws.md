@@ -22,10 +22,9 @@ module.exports = function({ $b, $std_Duration, $util_Util }) {
           error = true;
         }
         {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
-      }
-      ;
+      };
       const UNEXISTING_KEY = "no-such-file.txt";
-      const OBJECT_DOES_NOT_EXIST_ERROR = String.raw({ raw: ["Unable to copy. Source object does not exist (srcKey=", ")."] }, UNEXISTING_KEY);
+      const OBJECT_DOES_NOT_EXIST_ERROR = String.raw({ raw: ["Source object does not exist (srcKey=", ")."] }, UNEXISTING_KEY);
       const KEY1 = "file1.main.w";
       const VALUE1 = "bring cloud;";
       const KEY2 = "file2.txt";
@@ -45,16 +44,15 @@ module.exports = function({ $b, $std_Duration, $util_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: file2SrcMetadata.contentType == file2DstMetadata.contentType")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file2SrcMetadata.contentType,file2DstMetadata.contentType)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: file2SrcMetadata.size == file2DstMetadata.size")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(file2SrcMetadata.size,file2DstMetadata.size)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: file2SrcMetadata.lastModified != file2DstMetadata.lastModified")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(file2SrcMetadata.lastModified,file2DstMetadata.lastModified)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(KEY2) == b.get(\"dir/${KEY2}\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get(KEY2)),(await $b.get(String.raw({ raw: ["dir/", ""] }, KEY2))))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(KEY2) == b.get(\"dir/{KEY2}\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get(KEY2)),(await $b.get(String.raw({ raw: ["dir/", ""] }, KEY2))))))};
       (await assertThrows(OBJECT_DOES_NOT_EXIST_ERROR, async () => {
         (await $b.copy(UNEXISTING_KEY, KEY1));
-      }
-      ));
+      }));
     }
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -104,16 +102,17 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $b: ${context._lift(b)},
-            $std_Duration: ${context._lift($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $b: ${$stdlib.core.liftObject(b)},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -129,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -138,13 +137,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this, "cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:copy()", new $Closure1(this, "$Closure1"));
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:copy()", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "copy.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

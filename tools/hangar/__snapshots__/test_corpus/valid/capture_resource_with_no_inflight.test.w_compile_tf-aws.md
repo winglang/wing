@@ -17,7 +17,7 @@ module.exports = function({ $a, $a_field }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.A-1.cjs
@@ -36,7 +36,7 @@ module.exports = function({  }) {
   }
   return A;
 }
-
+//# sourceMappingURL=./inflight.A-1.cjs.map
 ```
 
 ## main.tf.json
@@ -48,20 +48,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -108,11 +95,11 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         this.field = "hey";
-        this.counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+        this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.A-1.cjs")({
+          require("././inflight.A-1.cjs")({
           })
         `;
       }
@@ -121,7 +108,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this)};
             const client = new AClient({
-              $this_counter: ${this._lift(this.counter)},
+              $this_counter: ${$stdlib.core.liftObject(this.counter)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -129,7 +116,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["incCounter", "bar", "$inflight_init"];
+        return [...super._supportedOps(), "incCounter", "bar", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -142,15 +129,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $a: ${context._lift(a)},
-            $a_field: ${context._lift(a.field)},
+          require("././inflight.$Closure1-1.cjs")({
+            $a: ${$stdlib.core.liftObject(a)},
+            $a_field: ${$stdlib.core.liftObject(a.field)},
           })
         `;
       }
@@ -166,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -177,12 +165,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this, "A");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:test", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_resource_with_no_inflight.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

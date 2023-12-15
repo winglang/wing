@@ -19,7 +19,7 @@ module.exports = function({ $config, $htmlContent, $http_Util, $indexFile, $othe
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## main.tf.json
@@ -264,20 +264,21 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $config: ${context._lift(config)},
-            $htmlContent: ${context._lift(htmlContent)},
-            $http_Util: ${context._lift($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
-            $indexFile: ${context._lift(indexFile)},
-            $otherFile: ${context._lift(otherFile)},
-            $std_Json: ${context._lift($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
-            $w_url: ${context._lift(w.url)},
+          require("././inflight.$Closure1-1.cjs")({
+            $config: ${$stdlib.core.liftObject(config)},
+            $htmlContent: ${$stdlib.core.liftObject(htmlContent)},
+            $http_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"))},
+            $indexFile: ${$stdlib.core.liftObject(indexFile)},
+            $otherFile: ${$stdlib.core.liftObject(otherFile)},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+            $w_url: ${$stdlib.core.liftObject(w.url)},
           })
         `;
       }
@@ -293,7 +294,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -306,7 +307,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this, "cloud.Website", { path: "./website" });
+    const w = this.node.root.new("@winglang/sdk.cloud.Website", cloud.Website, this, "cloud.Website", { path: "./website" });
     const config = ({"json": 1});
     const htmlContent = "<html>Hello World!</html>";
     const indexFile = (fs.Util.readFile(String.raw({ raw: ["", "/index.html"] }, w.path)));
@@ -314,12 +315,12 @@ class $Root extends $stdlib.std.Resource {
     (w.addJson("config.json", config));
     (w.addFile("another-file.html", htmlContent, { contentType: "text/html" }));
     {((cond) => {if (!cond) throw new Error("assertion failed: w.path.endsWith(\"sdk_tests/website/website\") || w.path.endsWith(\"sdk_tests\\\\website\\\\website\")")})((w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_tests\\website\\website")))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:access files on the website", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access files on the website", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "website.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 

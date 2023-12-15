@@ -1,5 +1,65 @@
 # [section.test.w](../../../../../../examples/tests/sdk_tests/ui/section.test.w) | compile | tf-aws
 
+## inflight.$Closure1-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $__parent_this_1 }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $__parent_this_1.addWidget());
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
+```
+
+## inflight.$Closure2-1.cjs
+```cjs
+"use strict";
+module.exports = function({ $__parent_this_2 }) {
+  class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      return (await $__parent_this_2.countWidgets());
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
+```
+
+## inflight.WidgetService-1.cjs
+```cjs
+"use strict";
+module.exports = function({  }) {
+  class WidgetService {
+    constructor({ $this_counter, $this_data }) {
+      this.$this_counter = $this_counter;
+      this.$this_data = $this_data;
+    }
+    async addWidget() {
+      const id = (await this.$this_counter.inc());
+      (await this.$this_data.put(String.raw({ raw: ["widget-", ""] }, id), "my data"));
+    }
+    async countWidgets() {
+      return String.raw({ raw: ["", ""] }, (await this.$this_data.list()).length);
+    }
+  }
+  return WidgetService;
+}
+//# sourceMappingURL=./inflight.WidgetService-1.cjs.map
+```
+
 ## main.tf.json
 ```json
 {
@@ -237,5 +297,144 @@
     }
   }
 }
+```
+
+## preflight.cjs
+```cjs
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const ui = $stdlib.ui;
+class $Root extends $stdlib.std.Resource {
+  constructor($scope, $id) {
+    super($scope, $id);
+    class WidgetService extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+        this.counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        const __parent_this_1 = this;
+        class $Closure1 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          constructor($scope, $id, ) {
+            super($scope, $id);
+            (std.Node.of(this)).hidden = true;
+          }
+          static _toInflightType() {
+            return `
+              require("././inflight.$Closure1-1.cjs")({
+                $__parent_this_1: ${$stdlib.core.liftObject(__parent_this_1)},
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
+                const client = new $Closure1Client({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          _registerOnLift(host, ops) {
+            if (ops.includes("handle")) {
+              $Closure1._registerOnLiftObject(__parent_this_1, host, ["addWidget"]);
+            }
+            super._registerOnLift(host, ops);
+          }
+        }
+        const button = this.node.root.new("@winglang/sdk.ui.Button", ui.Button, this, "ui.Button", "Add widget", new $Closure1(this, "$Closure1"));
+        const __parent_this_2 = this;
+        class $Closure2 extends $stdlib.std.Resource {
+          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          constructor($scope, $id, ) {
+            super($scope, $id);
+            (std.Node.of(this)).hidden = true;
+          }
+          static _toInflightType() {
+            return `
+              require("././inflight.$Closure2-1.cjs")({
+                $__parent_this_2: ${$stdlib.core.liftObject(__parent_this_2)},
+              })
+            `;
+          }
+          _toInflight() {
+            return `
+              (await (async () => {
+                const $Closure2Client = ${$Closure2._toInflightType(this)};
+                const client = new $Closure2Client({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `;
+          }
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          _registerOnLift(host, ops) {
+            if (ops.includes("handle")) {
+              $Closure2._registerOnLiftObject(__parent_this_2, host, ["countWidgets"]);
+            }
+            super._registerOnLift(host, ops);
+          }
+        }
+        const field = this.node.root.new("@winglang/sdk.ui.Field", ui.Field, this, "ui.Field", "Total widgets", new $Closure2(this, "$Closure2"), { refreshRate: (std.Duration.fromSeconds(5)) });
+        const section = this.node.root.new("@winglang/sdk.ui.Section", ui.Section, this, "ui.Section", { label: "Widget helpers" });
+        (section.add(button, field));
+      }
+      static _toInflightType() {
+        return `
+          require("././inflight.WidgetService-1.cjs")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const WidgetServiceClient = ${WidgetService._toInflightType(this)};
+            const client = new WidgetServiceClient({
+              $this_counter: ${$stdlib.core.liftObject(this.counter)},
+              $this_data: ${$stdlib.core.liftObject(this.data)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "addWidget", "countWidgets", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          WidgetService._registerOnLiftObject(this.counter, host, []);
+          WidgetService._registerOnLiftObject(this.data, host, []);
+        }
+        if (ops.includes("addWidget")) {
+          WidgetService._registerOnLiftObject(this.counter, host, ["inc"]);
+          WidgetService._registerOnLiftObject(this.data, host, ["put"]);
+        }
+        if (ops.includes("countWidgets")) {
+          WidgetService._registerOnLiftObject(this.data, host, ["list"]);
+        }
+        super._registerOnLift(host, ops);
+      }
+    }
+    new WidgetService(this, "WidgetService");
+  }
+}
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "section.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+$APP.synth();
+//# sourceMappingURL=preflight.cjs.map
 ```
 

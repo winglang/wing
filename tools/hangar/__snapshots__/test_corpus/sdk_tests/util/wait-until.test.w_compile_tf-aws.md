@@ -14,8 +14,7 @@ module.exports = function({ $JSHelper, $util_Util }) {
       const start = (await $JSHelper.getTime());
       if ((await $util_Util.waitUntil(async () => {
         return true;
-      }
-      ))) {
+      }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await $JSHelper.getTime()) - start) < 1000))};
       }
       else {
@@ -25,7 +24,7 @@ module.exports = function({ $JSHelper, $util_Util }) {
   }
   return $Closure1;
 }
-
+//# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
@@ -42,8 +41,7 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
       const start = (await $JSHelper.getTime());
       if ((await $util_Util.waitUntil(async () => {
         return false;
-      }
-      , { timeout: $oneSecond }))) {
+      }, { timeout: $oneSecond }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
@@ -53,7 +51,7 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   }
   return $Closure2;
 }
-
+//# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## inflight.$Closure3-1.cjs
@@ -71,8 +69,7 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
       const returnTrueAfter3Seconds = async () => {
         (await $invokeCounter.inc());
         return (((await $JSHelper.getTime()) - start) > (3 * 1000));
-      }
-      ;
+      };
       if ((await $util_Util.waitUntil(returnTrueAfter3Seconds, { interval: $oneSecond }))) {
         const invocations = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed:  invocations > 1 && invocations < 10 ")})(((invocations > 1) && (invocations < 10)))};
@@ -84,7 +81,7 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
   }
   return $Closure3;
 }
-
+//# sourceMappingURL=./inflight.$Closure3-1.cjs.map
 ```
 
 ## inflight.$Closure4-1.cjs
@@ -102,8 +99,7 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
       const returnFalse = async () => {
         (await $invokeCounter.inc());
         return false;
-      }
-      ;
+      };
       if ((await $util_Util.waitUntil(returnFalse, { interval: $oneSecond, timeout: $fiveSeconds }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
@@ -115,7 +111,7 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
   }
   return $Closure4;
 }
-
+//# sourceMappingURL=./inflight.$Closure4-1.cjs.map
 ```
 
 ## inflight.$Closure5-1.cjs
@@ -133,8 +129,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
         (await $util_Util.waitUntil(async () => {
           (await $invokeCounter.inc());
           throw new Error("ERROR");
-        }
-        ));
+        }));
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
@@ -144,7 +139,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
   }
   return $Closure5;
 }
-
+//# sourceMappingURL=./inflight.$Closure5-1.cjs.map
 ```
 
 ## inflight.JSHelper-1.cjs
@@ -160,7 +155,7 @@ module.exports = function({  }) {
   }
   return JSHelper;
 }
-
+//# sourceMappingURL=./inflight.JSHelper-1.cjs.map
 ```
 
 ## main.tf.json
@@ -220,9 +215,9 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.JSHelper-1.cjs")({
+          require("././inflight.JSHelper-1.cjs")({
           })
         `;
       }
@@ -238,19 +233,20 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["getTime", "$inflight_init"];
+        return [...super._supportedOps(), "getTime", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.cjs")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure1-1.cjs")({
+            $JSHelper: ${$stdlib.core.liftObject(JSHelper)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -266,7 +262,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -276,16 +272,17 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.cjs")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure2-1.cjs")({
+            $JSHelper: ${$stdlib.core.liftObject(JSHelper)},
+            $oneSecond: ${$stdlib.core.liftObject(oneSecond)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -301,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -312,17 +309,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.cjs")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure3-1.cjs")({
+            $JSHelper: ${$stdlib.core.liftObject(JSHelper)},
+            $invokeCounter: ${$stdlib.core.liftObject(invokeCounter)},
+            $oneSecond: ${$stdlib.core.liftObject(oneSecond)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -338,7 +336,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -350,18 +348,19 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.cjs")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $fiveSeconds: ${context._lift(fiveSeconds)},
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure4-1.cjs")({
+            $JSHelper: ${$stdlib.core.liftObject(JSHelper)},
+            $fiveSeconds: ${$stdlib.core.liftObject(fiveSeconds)},
+            $invokeCounter: ${$stdlib.core.liftObject(invokeCounter)},
+            $oneSecond: ${$stdlib.core.liftObject(oneSecond)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -377,7 +376,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -390,15 +389,16 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
         (std.Node.of(this)).hidden = true;
       }
-      static _toInflightType(context) {
+      static _toInflightType() {
         return `
-          require("./inflight.$Closure5-1.cjs")({
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $util_Util: ${context._lift($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          require("././inflight.$Closure5-1.cjs")({
+            $invokeCounter: ${$stdlib.core.liftObject(invokeCounter)},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -414,7 +414,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -423,20 +423,20 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const invokeCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this, "cloud.Counter");
+    const invokeCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const oneHundredMiliseconds = (std.Duration.fromSeconds(0.1));
     const oneSecond = (std.Duration.fromSeconds(1));
     const fiveSeconds = (std.Duration.fromSeconds(5));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:returns true immediately", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:returns false goes to timeout", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:returns after some time waiting", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:setting props", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this, "test:throwing exception from predicate should throw immediately", new $Closure5(this, "$Closure5"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:returns true immediately", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:returns false goes to timeout", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:returns after some time waiting", new $Closure3(this, "$Closure3"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:setting props", new $Closure4(this, "$Closure4"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:throwing exception from predicate should throw immediately", new $Closure5(this, "$Closure5"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "wait-until.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
-
+//# sourceMappingURL=preflight.cjs.map
 ```
 
