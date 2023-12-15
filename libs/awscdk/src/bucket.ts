@@ -100,6 +100,7 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
       cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
 
