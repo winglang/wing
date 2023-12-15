@@ -8,9 +8,6 @@ Error: No resource found with handle "sim-25".
     at Queue.processMessages (<ABSOLUTE>:LINE:COL)
     at <ABSOLUTE>/queue.inflight.js:12:59
     at loop (<ABSOLUTE>:LINE:COL)
-    at runNextTicks (node:internal/process/task_queues:60:5)
-    at listOnTimeout (node:internal/timers:538:9)
-    at process.processTimers (node:internal/timers:512:7)
 ```
 
 ## stdout.log
