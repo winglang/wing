@@ -51,6 +51,17 @@ export class Queue
     this.subscribers.push(s);
   }
 
+  public async removeEventSubscription(
+    subscriber: FunctionHandle
+  ): Promise<void> {
+    const index = this.subscribers.findIndex(
+      (s) => s.functionHandle === subscriber
+    );
+    if (index >= 0) {
+      this.subscribers.splice(index, 1);
+    }
+  }
+
   // TODO: enforce maximum queue message size?
   public async push(...messages: string[]): Promise<void> {
     return this.context.withTrace({
