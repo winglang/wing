@@ -58,6 +58,13 @@ export class Schedule
     this.tasks.push(task);
   }
 
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.tasks.findIndex((s) => s.functionHandle === subscriber);
+    if (index >= 0) {
+      this.tasks.splice(index, 1);
+    }
+  }
+
   private runTasks() {
     for (const task of this.tasks) {
       const fnClient = this.context.findInstance(

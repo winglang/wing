@@ -27,6 +27,13 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
     subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
   ) => Promise<void>;
+
+  /**
+   * Removes event subscription from the publisher client.
+   * @param subscriber the subscriber function
+   * @param subscriptionProps additional subscription properties
+   */
+  removeEventSubscription: (subscriber: FunctionHandle) => Promise<void>;
 }
 
 export const EVENT_MAPPING_FQN = fqnForType("sim.EventMapping");

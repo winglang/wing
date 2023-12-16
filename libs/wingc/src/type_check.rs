@@ -3472,6 +3472,13 @@ impl<'a> TypeChecker<'a> {
 		access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
+		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+		if let Some(_) = env.parent {
+			self.spanned_error(
+				name,
+				format!("struct \"{name}\" must be declared at the top-level of a file"),
+			);
+		}
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 		//   fail type checking.
