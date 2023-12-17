@@ -6,6 +6,7 @@ import {
   COUNTER_FQN,
   CorsHeaders,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   HttpMethod,
   ON_DEPLOY_FQN,
@@ -324,4 +325,31 @@ export interface StateSchema extends BaseResourceSchema {
 export interface DomainSchema extends BaseResourceSchema {
   readonly type: typeof DOMAIN_FQN;
   readonly props: {};
+}
+
+/** Runtime attributes for cloud.Endpoint */
+export interface EndpointAttributes {
+  /** The input URL of the Endpoint. */
+  readonly inputUrl: string;
+  /** The output URL of the Endpoint. */
+  readonly url: string;
+  /** The Label of the Endpoint. */
+  readonly label: string | undefined;
+  /** Browser support of the Endpoint. */
+  readonly browserSupport: boolean | undefined;
+}
+
+/** Schema for cloud.Endpoint */
+export interface EndpointSchema extends BaseResourceSchema {
+  readonly type: typeof ENDPOINT_FQN;
+  readonly props: {
+    /** The input URL of the Endpoint. */
+    readonly inputUrl: string;
+    /** The output URL of the Endpoint. */
+    readonly url: string;
+    /** The Label of the Endpoint. */
+    readonly label: string | undefined;
+    /** Browser support of the Endpoint. */
+    readonly browserSupport: boolean | undefined;
+  };
 }

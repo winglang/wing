@@ -9,7 +9,21 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "aws-wing-react-app": {
+              "aws-wing-react-app-host": {
+                "Endpoint": {
+                  "Url": "aws-wing-react-app_aws-wing-react-app-host_Endpoint_Url_6E5C5D26"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_iam_policy_document": {
@@ -48,6 +62,11 @@
           }
         ]
       }
+    }
+  },
+  "output": {
+    "aws-wing-react-app_aws-wing-react-app-host_Endpoint_Url_6E5C5D26": {
+      "value": "https://${aws_cloudfront_distribution.aws-wing-react-app_aws-wing-react-app-host_Distribution_4EBFE5E4.domain_name}"
     }
   },
   "provider": {

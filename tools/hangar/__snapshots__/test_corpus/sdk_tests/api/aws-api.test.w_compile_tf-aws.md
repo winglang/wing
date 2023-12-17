@@ -9,7 +9,19 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "api": {
+              "Endpoint": {
+                "Url": "api_Endpoint_Url_E5DB9C2F"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -21,6 +33,11 @@
           }
         }
       }
+    }
+  },
+  "output": {
+    "api_Endpoint_Url_E5DB9C2F": {
+      "value": "https://${aws_api_gateway_rest_api.api_DD79FE08.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.api_stage_ABA3AD8B.stage_name}"
     }
   },
   "provider": {
