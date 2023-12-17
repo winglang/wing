@@ -179,7 +179,7 @@ jobs:
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
-        uses: "google-github-actions/setup-gcloud@v1"
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Installing local dependencies
         if: ${{ env.MANUAL == 'true' }}
