@@ -210,7 +210,6 @@ jobs:
             # fi
             # cd ${{ matrix.test.directory }}
             # $WING_CLI test -t ${{ matrix.target }} *.test.w
-            gcloud auth login --cred-file=${{steps.gcp-auth.outputs.credentials_file_path}}
             gcloud info
             gcloud auth list
             gcloud auth print-identity-token #TODO: restore
