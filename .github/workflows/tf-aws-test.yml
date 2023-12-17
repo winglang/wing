@@ -169,6 +169,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Configure gcp credentials
+        id: gcp-auth
         if: ${{ matrix.target == 'tf-gcp' }}
         uses: google-github-actions/auth@v1
         with:
@@ -176,8 +177,8 @@ jobs:
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
           export_environment_variables: true
           create_credentials_file: true
+          activate_credentials_file: true
           token_format: "id_token"
-          id_token_audience: "workload_identity_provider"
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
@@ -209,6 +210,7 @@ jobs:
             # fi
             # cd ${{ matrix.test.directory }}
             # $WING_CLI test -t ${{ matrix.target }} *.test.w
+            gcloud auth login --cred-file=${{steps.gcp-auth.outputs.credentials_file_path}}
             gcloud info
             gcloud auth list
             gcloud auth print-identity-token #TODO: restore
