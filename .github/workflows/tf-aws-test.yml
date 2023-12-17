@@ -26,6 +26,11 @@ on:
           - tf-aws
           - tf-azure
           - tf-gcp
+
+permissions:
+  contents: read
+  id-token: write
+
 env:
   AWS_REGION: "us-east-1"
   NODE_VERSION: "18.16.0"
@@ -33,7 +38,7 @@ env:
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
   # indicates if the action triggered from a workflow_dispatch
-  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+  MANUAL: ${{ github.event_name != 'workflow_dispatch' }} #TODO: change back- this is for testing
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
@@ -92,9 +97,6 @@ jobs:
       targets: ${{ steps.settargets.outputs.targets }}
 
   test-tf-aws:
-    permissions:
-      contents: read
-      id-token: write
     needs: setup
     runs-on: ubuntu-latest
     strategy:
