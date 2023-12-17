@@ -176,6 +176,8 @@ jobs:
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
           export_environment_variables: true
           create_credentials_file: true
+          token_format: "id_token"
+          id_token_audience: "workload_identity_provider"
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
