@@ -54,6 +54,10 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
         }
 
         for (const annotation of annotations) {
+          // file_id might be "" if the span is synthetic (see #2521)
+          if (!annotation.span?.file_id) {
+            continue;
+          }
           const source = await readFile(annotation.span.file_id, "utf8");
           const start = offsetFromLineAndColumn(
             source,

@@ -178,14 +178,14 @@ export async function lsp() {
     }
   }
 
-  connection.onDidOpenTextDocument(async (params) => {
+  connection.onDidOpenTextDocument((params) => {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_open_text_document",
       params,
       params.textDocument.uri
     );
   });
-  connection.onDidChangeTextDocument(async (params) => {
+  connection.onDidChangeTextDocument((params) => {
     void handle_event_and_update_diagnostics(
       "wingc_on_did_change_text_document",
       params,
