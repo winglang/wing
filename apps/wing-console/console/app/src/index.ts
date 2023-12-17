@@ -38,6 +38,7 @@ export interface CreateConsoleAppOptions {
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
+  stateDir?: string;
 }
 
 const staticDir = `${__dirname}/vite`;
