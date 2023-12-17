@@ -17,4 +17,6 @@ export class Endpoint implements IEndpointClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {}
 }

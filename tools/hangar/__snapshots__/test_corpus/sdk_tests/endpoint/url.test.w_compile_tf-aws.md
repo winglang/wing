@@ -21,9 +21,6 @@
             "cloud.Endpoint": {
               "Url": "cloudEndpoint_Url_824C5F1B"
             }
-          },
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
           }
         }
       }
@@ -42,9 +39,6 @@
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    },
     "cloudApi_Endpoint_Url_CD8AC9A6": {
       "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     },

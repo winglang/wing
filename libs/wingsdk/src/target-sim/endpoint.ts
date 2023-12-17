@@ -29,6 +29,7 @@ export class Endpoint extends cloud.Endpoint {
     return {
       type: cloud.ENDPOINT_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         inputUrl: this._inputUrl,
         url: this.url,

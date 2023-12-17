@@ -35,6 +35,11 @@ exports[`Testing ReactApp > default React App behavior 1`] = `
       },
     },
   },
+  "output": {
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
+    },
+  },
   "resource": {
     "aws_cloudfront_distribution": {
       "Website_Website-host_Distribution_16BBCB7A": {
@@ -334,6 +339,11 @@ exports[`Testing ReactApp > website with addEnvironment 1`] = `
           },
         ],
       },
+    },
+  },
+  "output": {
+    "Website_Website-host_Endpoint_Url_82B41E68": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
     },
   },
   "resource": {

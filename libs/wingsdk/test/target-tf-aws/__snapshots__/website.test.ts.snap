@@ -35,6 +35,11 @@ exports[`default website behavior 1`] = `
       },
     },
   },
+  "output": {
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
+    },
+  },
   "resource": {
     "aws_cloudfront_distribution": {
       "Website_Distribution_5E840E42": {
@@ -338,6 +343,11 @@ exports[`website with addFile 1`] = `
           },
         ],
       },
+    },
+  },
+  "output": {
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -660,6 +670,11 @@ exports[`website with addJson 1`] = `
           },
         ],
       },
+    },
+  },
+  "output": {
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
