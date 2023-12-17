@@ -178,6 +178,7 @@ jobs:
           export_environment_variables: true
           create_credentials_file: true
           token_format: "id_token"
+          id_token_audience: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
