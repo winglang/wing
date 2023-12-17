@@ -35,14 +35,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -64,6 +57,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -98,6 +92,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -206,19 +201,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -284,8 +266,6 @@ return class Handler {
 
 exports[`api handler can read the request params 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -298,8 +278,6 @@ exports[`api handler can read the request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -333,14 +311,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -362,6 +333,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -386,6 +358,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -490,19 +463,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -568,8 +528,6 @@ return class Handler {
 
 exports[`api handler can read the request path 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -582,8 +540,6 @@ exports[`api handler can read the request path 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -617,14 +573,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -646,6 +595,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -670,6 +620,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -774,19 +725,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -852,8 +790,6 @@ return class Handler {
 
 exports[`api handler can set response headers 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -866,8 +802,6 @@ exports[`api handler can set response headers 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -901,14 +835,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -930,6 +857,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -954,6 +882,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -1058,19 +987,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -1136,8 +1052,6 @@ return class Handler {
 
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1150,8 +1064,6 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1185,14 +1097,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -1214,6 +1119,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -1238,6 +1144,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -1342,19 +1249,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -1420,8 +1314,6 @@ return class Handler {
 
 exports[`api response returns default Content-Type header 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1434,8 +1326,6 @@ exports[`api response returns default Content-Type header 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1469,14 +1359,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -1498,6 +1381,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -1522,6 +1406,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -1626,19 +1511,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -1704,8 +1576,6 @@ return class Handler {
 
 exports[`api supports every method type 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -1736,8 +1606,6 @@ exports[`api supports every method type 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1801,14 +1669,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -1830,6 +1691,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -1914,6 +1776,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -2042,19 +1905,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -2120,8 +1970,6 @@ return class Handler {
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2134,8 +1982,6 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -2169,14 +2015,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -2198,6 +2037,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -2239,6 +2079,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -2343,19 +2184,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -2421,8 +2249,6 @@ return class Handler {
 
 exports[`api with 'name' parameter 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -2435,8 +2261,6 @@ exports[`api with 'name' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -2470,14 +2294,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -2499,6 +2316,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -2532,6 +2350,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -2636,19 +2455,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -2742,14 +2548,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -2771,6 +2570,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -2807,6 +2607,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -2915,19 +2716,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -2993,8 +2781,6 @@ return class Handler {
 
 exports[`api with multiple methods on same route 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3014,8 +2800,6 @@ exports[`api with multiple methods on same route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3069,14 +2853,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -3098,6 +2875,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -3132,6 +2910,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -3149,6 +2928,7 @@ return class Handler {
         "type": "@winglang/sdk.sim.EventMapping",
       },
       {
+        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler1",
         "props": {
@@ -3160,6 +2940,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping1",
         "props": {
@@ -3264,19 +3045,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -3366,8 +3134,6 @@ return class Handler {
 
 exports[`api with multiple routes 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3387,8 +3153,6 @@ exports[`api with multiple routes 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3442,14 +3206,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -3471,6 +3228,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -3507,6 +3265,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -3524,6 +3283,7 @@ return class Handler {
         "type": "@winglang/sdk.sim.EventMapping",
       },
       {
+        "addr": "c84819d7712e30f38cf7731fcfbe96cbc39c7e75d3",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler1",
         "props": {
@@ -3535,6 +3295,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c874047faffbf7bc1cdc78bb5f3f942cf01cd31844",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping1",
         "props": {
@@ -3639,19 +3400,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -3741,8 +3489,6 @@ return class Handler {
 
 exports[`api with one GET route 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -3755,8 +3501,6 @@ exports[`api with one GET route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -3790,14 +3534,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -3819,6 +3556,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -3843,6 +3581,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -3947,19 +3686,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -4025,8 +3751,6 @@ return class Handler {
 
 exports[`api with one GET route with request params 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -4039,8 +3763,6 @@ exports[`api with one GET route with request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -4074,14 +3796,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -4103,6 +3818,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -4136,6 +3852,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -4240,19 +3957,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -4318,8 +4022,6 @@ return class Handler {
 
 exports[`api with one POST route, with body 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
-  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
@@ -4332,8 +4034,6 @@ exports[`api with one POST route, with body 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.cloud.Endpoint deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -4367,14 +4067,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
@@ -4396,6 +4089,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -4420,6 +4114,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Api",
       },
       {
+        "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
         "attrs": {},
         "path": "root/my_api/ApiEventMapping0",
         "props": {
@@ -4524,19 +4219,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "ApiEventMapping0": {
@@ -4609,14 +4291,7 @@ exports[`create an api 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
         "props": {
@@ -4725,19 +4400,6 @@ exports[`create an api 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_api": {
           "children": {
             "Endpoint": {

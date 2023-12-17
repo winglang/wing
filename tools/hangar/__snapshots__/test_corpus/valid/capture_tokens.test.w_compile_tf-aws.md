@@ -70,29 +70,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "Default": {
-            "MyResource": {
-              "cloud.Api": {
-                "Endpoint": {
-                  "Url": "MyResource_cloudApi_Endpoint_Url_02924D7C"
-                }
-              }
-            },
-            "cloud.Api": {
-              "Endpoint": {
-                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
-              }
-            }
-          },
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_region": {
@@ -104,17 +82,6 @@ module.exports = function({  }) {
           }
         }
       }
-    }
-  },
-  "output": {
-    "MyResource_cloudApi_Endpoint_Url_02924D7C": {
-      "value": "https://${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.stage_name}"
-    },
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    },
-    "cloudApi_Endpoint_Url_CD8AC9A6": {
-      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {

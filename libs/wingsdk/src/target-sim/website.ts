@@ -48,6 +48,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
     const schema: WebsiteSchema = {
       type: cloud.WEBSITE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: { staticFilesPath: this.path, fileRoutes: this.fileRoutes },
       attrs: {} as any,
     };

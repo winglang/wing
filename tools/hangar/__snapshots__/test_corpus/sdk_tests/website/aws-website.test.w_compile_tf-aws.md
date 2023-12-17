@@ -9,22 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "Default": {
-            "aws-wing-website": {
-              "Endpoint": {
-                "Url": "aws-wing-website_Endpoint_Url_2C61EBBC"
-              }
-            }
-          },
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_iam_policy_document": {
@@ -63,14 +48,6 @@
           }
         ]
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    },
-    "aws-wing-website_Endpoint_Url_2C61EBBC": {
-      "value": "https://${aws_cloudfront_distribution.aws-wing-website_Distribution_87B2F767.domain_name}"
     }
   },
   "provider": {

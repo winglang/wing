@@ -9,29 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "Default": {
-            "cloud.Api": {
-              "Endpoint": {
-                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
-              }
-            },
-            "ex.ReactApp": {
-              "ex.ReactApp-host": {
-                "Endpoint": {
-                  "Url": "exReactApp_exReactApp-host_Endpoint_Url_CC674145"
-                }
-              }
-            }
-          },
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_iam_policy_document": {
@@ -80,17 +58,6 @@
           }
         }
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    },
-    "cloudApi_Endpoint_Url_CD8AC9A6": {
-      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
-    },
-    "exReactApp_exReactApp-host_Endpoint_Url_CC674145": {
-      "value": "https://${aws_cloudfront_distribution.exReactApp_exReactApp-host_Distribution_FE9291B1.domain_name}"
     }
   },
   "provider": {

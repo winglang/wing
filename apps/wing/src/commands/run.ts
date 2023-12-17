@@ -79,7 +79,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     await close(() => process.exit(exitCode));
   };
 
-  process.once("exit", async (c) => onExit(c));
-  process.once("SIGTERM", async () => onExit(0));
-  process.once("SIGINT", async () => onExit(0));
+  process.once("exit", (c) => void onExit(c));
+  process.once("SIGTERM", () => void onExit(0));
+  process.once("SIGINT", () => void onExit(0));
 }

@@ -1,7 +1,9 @@
 import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
+import { Function, FunctionProps, IFunctionHandler } from "../cloud";
 import { fqnForType } from "../constants";
+import { App } from "../core";
 import { Node } from "../std";
 
 /**
@@ -23,6 +25,47 @@ export interface TestRunnerProps {}
  * @abstract
  */
 export class TestRunner extends Resource {
+  /**
+   * Instantiate one or more copies of a tree inside of an app based
+   * on how many isolated environments are needed for testing.
+   * @internal
+   */
+  public static _createTree(app: App, Root: any) {
+    if (app.isTestEnvironment) {
+      app._testRunner = new TestRunner(app, "cloud.TestRunner");
+    }
+
+    if (Root) {
+      // mark the root type so that we can find it later through
+      // Node.of(root).root
+      Node._markRoot(Root);
+
+      if (app.isTestEnvironment) {
+        new Root(app, "env0");
+        const tests = app._testRunner!.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(app, "env" + i);
+        }
+      } else {
+        new Root(app, "Default");
+      }
+    }
+  }
+
+  /**
+   * List of isolated environment names where we've already created a cloud.Function
+   * for a unit test. We keep track of these so that we don't synthesize
+   * multiple test functions into the same isolated environment.
+   */
+  private _synthedEnvs: string[] = [];
+
+  /**
+   * List of test paths that we have already created a cloud.Function for.
+   * We keep track of these so that we don't create identical test functions in multiple
+   * isolated environments.
+   */
+  private _synthedTests: string[] = [];
+
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
       return Resource._newFromFactory(TEST_RUNNER_FQN, scope, id, props);
@@ -36,6 +79,27 @@ export class TestRunner extends Resource {
       "A suite of APIs for running tests and collecting results.";
 
     props;
+  }
+
+  /** @internal */
+  public _addTestFunction(
+    scope: Construct,
+    id: string,
+    inflight: IFunctionHandler,
+    props: FunctionProps
+  ): Function | undefined {
+    const testEnv = scope.node.path.split("/").at(1)!;
+    const testPath = scope.node.path.split("/").slice(2).join("/") + "/" + id;
+    if (
+      !this._synthedEnvs.includes(testEnv) &&
+      !this._synthedTests.includes(testPath)
+    ) {
+      this._synthedEnvs.push(testEnv);
+      this._synthedTests.push(testPath);
+      return new Function(scope, id, inflight, props);
+    }
+
+    return undefined;
   }
 
   /** @internal */

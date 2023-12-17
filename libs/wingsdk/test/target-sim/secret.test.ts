@@ -22,6 +22,7 @@ test("create a secret", async () => {
       handle: expect.any(String),
     },
     path: "root/my_secret",
+    addr: expect.any(String),
     props: {
       name: "my_secret-c84793b7",
     },

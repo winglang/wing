@@ -45,6 +45,8 @@ export class Schedule
     clearTimeout(this.intervalTimeout);
   }
 
+  public async save(): Promise<void> {}
+
   public async addEventSubscription(
     subscriber: string,
     subscriptionProps: EventSubscription
@@ -54,6 +56,13 @@ export class Schedule
       ...subscriptionProps,
     } as ScheduleTask;
     this.tasks.push(task);
+  }
+
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.tasks.findIndex((s) => s.functionHandle === subscriber);
+    if (index >= 0) {
+      this.tasks.splice(index, 1);
+    }
   }
 
   private runTasks() {

@@ -35,14 +35,6 @@ exports[`Testing ReactApp > default React App behavior 1`] = `
       },
     },
   },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-    "Website_Website-host_Endpoint_Url_82B41E68": {
-      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
-    },
-  },
   "resource": {
     "aws_cloudfront_distribution": {
       "Website_Website-host_Distribution_16BBCB7A": {
@@ -273,29 +265,6 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -365,14 +334,6 @@ exports[`Testing ReactApp > website with addEnvironment 1`] = `
           },
         ],
       },
-    },
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-    "Website_Website-host_Endpoint_Url_82B41E68": {
-      "value": "https://\${aws_cloudfront_distribution.Website_Website-host_Distribution_16BBCB7A.domain_name}",
     },
   },
   "resource": {
@@ -606,29 +567,6 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

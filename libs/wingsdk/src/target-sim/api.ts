@@ -224,6 +224,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const schema: ApiSchema = {
       type: cloud.API_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         openApiSpec: this._getOpenApiSpec(),
         corsHeaders: this._generateCorsHeaders(this.corsOptions),

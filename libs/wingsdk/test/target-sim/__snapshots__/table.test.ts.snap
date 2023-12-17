@@ -2,12 +2,10 @@
 
 exports[`can add row in preflight 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "Adding initial row (key=joe-id).",
   "@winglang/sdk.ex.Table created.",
   "get row joe-id from table my_addrow_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -20,14 +18,7 @@ exports[`can add row in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -135,19 +126,6 @@ exports[`can add row in preflight 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -182,14 +160,7 @@ exports[`create a table 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -291,19 +262,6 @@ exports[`create a table 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -331,13 +289,11 @@ exports[`create a table 1`] = `
 
 exports[`get row 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "get row NON_EXISTENT_KEY from table my_get_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -350,14 +306,7 @@ exports[`get row 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -459,19 +408,6 @@ exports[`get row 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -499,11 +435,9 @@ exports[`get row 2`] = `
 
 exports[`insert row 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_insert_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -516,14 +450,7 @@ exports[`insert row 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -625,19 +552,6 @@ exports[`insert row 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -665,13 +579,11 @@ exports[`insert row 2`] = `
 
 exports[`list table 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_list_table.",
   "insert row jane-id into the table my_list_table.",
   "list all rows from table my_list_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -684,14 +596,7 @@ exports[`list table 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -793,19 +698,6 @@ exports[`list table 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -833,12 +725,10 @@ exports[`list table 2`] = `
 
 exports[`tryGet row 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_get_table.",
   "get row joe-id from table my_get_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -851,14 +741,7 @@ exports[`tryGet row 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -960,19 +843,6 @@ exports[`tryGet row 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1000,7 +870,6 @@ exports[`tryGet row 2`] = `
 
 exports[`update row 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.Table created.",
   "insert row joe-id into the table my_update_table.",
   "get row joe-id from table my_update_table.",
@@ -1008,7 +877,6 @@ exports[`update row 1`] = `
   "update row joe-id in table my_update_table.",
   "get row joe-id from table my_update_table.",
   "@winglang/sdk.ex.Table deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -1021,14 +889,7 @@ exports[`update row 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e507baf046ceb6108a9fe64c08a39ccc39ffe11c",
         "attrs": {},
         "path": "root/my_table",
         "props": {
@@ -1130,19 +991,6 @@ exports[`update row 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
