@@ -177,7 +177,6 @@ jobs:
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
           export_environment_variables: true
           create_credentials_file: true
-          activate_credentials_file: true
           token_format: "id_token"
 
       - name: Set-up gcloud
