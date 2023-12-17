@@ -210,8 +210,7 @@ jobs:
             # cd ${{ matrix.test.directory }}
             # $WING_CLI test -t ${{ matrix.target }} *.test.w
             gcloud auth list
-            gcloud auth print-identity-token #TODO: restore
-            gcloud auth print-access-token #TODO: restore
+            gcloud auth print-identity-token --impersonate-service-account=gh-action@sdk-spec-tests.iam.gserviceaccount.com #TODO: restore
 
       - name: Output Terraform log
         if: failure()
