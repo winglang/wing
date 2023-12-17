@@ -194,7 +194,7 @@ jobs:
           TF_LOG: info
           TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
         with:
-          max_attempts: 3
+          max_attempts: 1 #TODO: restore- 3
           retry_on: error
           timeout_minutes: 60
           command: |
