@@ -38,7 +38,7 @@ env:
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
   # indicates if the action triggered from a workflow_dispatch
-  MANUAL: ${{ github.event_name != 'workflow_dispatch' }} #TODO: change back- this is for testing
+  MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
@@ -175,13 +175,16 @@ jobs:
         with:
           workload_identity_provider: "projects/833985639028/locations/global/workloadIdentityPools/gh-action/providers/gh-action-provider"
           service_account: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
-          create_credentials_file: true
-          token_format: "access_token"
-          # id_token_audience: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
+          token_format: "id_token"
+          id_token_audience: "gh-action@sdk-spec-tests.iam.gserviceaccount.com"
 
       - name: Set-up gcloud
         if: ${{ matrix.target == 'tf-gcp' }}
         uses: google-github-actions/setup-gcloud@v1
+
+      - name: export gcloud token
+        if: ${{ matrix.target == 'tf-gcp' }}
+        run: echo "GCP_ID_TOKEN=${{ steps.gcp-auth.outputs.id_token }}" >> $GITHUB_ENV
 
       - name: Installing local dependencies
         if: ${{ env.MANUAL == 'true' }}
@@ -194,25 +197,21 @@ jobs:
           TF_LOG: info
           TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
         with:
-          max_attempts: 1 #TODO: restore- 3
+          max_attempts: 3
           retry_on: error
           timeout_minutes: 60
           command: |
-            # if  ${{ env.MANUAL == 'true' }}
-            # then   
-            #   WING_CLI=$(realpath apps/wing/bin/wing)
-            # elif ${{ env.LOCAL_BUILD == 'false'}}
-            # then 
-            #   WING_CLI=$(which wing)
-            # else
-            #   WING_CLI=$(realpath localwing/node_modules/.bin/wing)
-            # fi
-            # cd ${{ matrix.test.directory }}
-            # $WING_CLI test -t ${{ matrix.target }} *.test.w
-            gcloud auth list
-            gcloud auth print-identity-token --impersonate-service-account=gh-action@sdk-spec-tests.iam.gserviceaccount.com #TODO: restore
-            echo "ok"
-            gcloud auth print-identity-token
+            if  ${{ env.MANUAL == 'true' }}
+            then   
+              WING_CLI=$(realpath apps/wing/bin/wing)
+            elif ${{ env.LOCAL_BUILD == 'false'}}
+            then 
+              WING_CLI=$(which wing)
+            else
+              WING_CLI=$(realpath localwing/node_modules/.bin/wing)
+            fi
+            cd ${{ matrix.test.directory }}
+            $WING_CLI test -t ${{ matrix.target }} *.test.w
       - name: Output Terraform log
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log

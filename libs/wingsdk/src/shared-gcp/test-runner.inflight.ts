@@ -15,9 +15,9 @@ export class TestRunnerClient implements ITestRunnerClient {
     //   ...
     // ]
     this.tests = new Map(JSON.parse(tests) as [string, string][]);
-    this.token = execSync("gcloud auth print-identity-token")
-      .toString()
-      .replace("\n", "");
+    this.token =
+      process.env.GCP_ID_TOKEN ??
+      execSync("gcloud auth print-identity-token").toString().replace("\n", "");
   }
 
   public async listTests(): Promise<string[]> {
