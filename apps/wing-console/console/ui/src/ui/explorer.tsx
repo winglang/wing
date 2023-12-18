@@ -115,7 +115,7 @@ export const Explorer = memo((props: ExplorerProps) => {
             )}
           >
             <div className="flex flex-col">
-              {expandedItems.length === 0 && <NoResources />}
+              {(!items || items.length === 0) && <NoResources />}
               <TreeView
                 expandedItems={expandedItems}
                 onExpandedItemsChange={onExpandedItemsChange}
