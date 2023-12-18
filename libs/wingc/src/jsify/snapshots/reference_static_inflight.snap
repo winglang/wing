@@ -6,7 +6,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     class MyType {
-      pub static inflight myStaticMethod(): str {}
+      pub static inflight myStaticMethod(): str { return "hi"; }
     }
 
     test "test" {
@@ -44,6 +44,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async myStaticMethod() {
+      return "hi";
     }
   }
   return MyType;
