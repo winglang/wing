@@ -311,7 +311,7 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event: str): void
+inflight handle(event: str): str
 ```
 
 Entrypoint function that will be called when the cloud function is invoked.

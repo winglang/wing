@@ -12,14 +12,14 @@ class Predicate {
     this.c = c;
   }
 
-  pub inflight test(): bool{
+  pub inflight test(): bool {
     return this.c.peek() == 2;
   }
 }
 
 
 
-q.setConsumer(inflight (msg: str): str => {
+q.setConsumer(inflight (msg: str) => {
   c.inc();
 });
 
