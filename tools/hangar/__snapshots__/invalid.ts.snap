@@ -3774,6 +3774,27 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'void
   |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
 
 
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:11:5
+   |
+11 | let z = returnsNothing();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:5
+   |
+15 | let w: str? = returnsNothing2();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Expected type to be \\"str?\\", but got \\"void\\" instead
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:15
+   |
+15 | let w: str? = returnsNothing2();
+   |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
+
+
  
  
 Tests 1 failed (1)
