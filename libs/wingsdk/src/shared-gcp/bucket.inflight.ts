@@ -1,11 +1,13 @@
 import { Storage, Bucket } from "@google-cloud/storage";
+import mime from "mime-types";
 import {
   BucketDeleteOptions,
   IBucketClient,
   ObjectMetadata,
   BucketSignedUrlOptions,
+  BucketPutOptions,
 } from "../cloud";
-import { Json } from "../std";
+import { Datetime, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private bucketName: string;
@@ -22,8 +24,17 @@ export class BucketClient implements IBucketClient {
     this.bucket = this.storage.bucket(this.bucketName);
   }
 
-  public async metadata(_key: string): Promise<ObjectMetadata> {
-    throw new Error("Method not implemented.");
+  public async metadata(key: string): Promise<ObjectMetadata> {
+    try {
+      const [metadata] = await this.bucket.file(key).getMetadata();
+      return {
+        contentType: metadata.contentType,
+        lastModified: Datetime.fromIso(metadata.updated),
+        size: Number(metadata.size),
+      };
+    } catch (error) {
+      throw new Error(`Object does not exist (key=${key}).`);
+    }
   }
 
   public async copy(srcKey: string, dstKey: string): Promise<void> {
@@ -53,20 +64,34 @@ export class BucketClient implements IBucketClient {
     }
   }
 
-  public async put(key: string, body: string): Promise<void> {
-    try {
-      await this.bucket.file(key).save(body);
-    } catch (error) {
-      throw new Error(`Failed to put object. (key=${key})`);
-    }
+  /**
+   * Put object into bucket with given body contents
+   *
+   * @param key Key of the object
+   * @param body string contents of the object
+   */
+  public async put(
+    key: string,
+    body: string,
+    opts?: BucketPutOptions
+  ): Promise<void> {
+    const options = {
+      contentType:
+        (opts?.contentType ?? mime.lookup(key)) || "application/octet-stream",
+    };
+    await this.bucket.file(key).save(body, options);
   }
 
+  /**
+   * Put Json object into bucket with given body contents
+   *
+   * @param key Key of the object
+   * @param body Json object
+   */
   public async putJson(key: string, body: Json): Promise<void> {
-    try {
-      await this.put(key, JSON.stringify(body, null, 2));
-    } catch (error) {
-      throw new Error(`Failed to put JSON object. (key=${key})`);
-    }
+    await this.put(key, JSON.stringify(body, null, 2), {
+      contentType: "application/json",
+    });
   }
 
   public async get(key: string): Promise<string> {

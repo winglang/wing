@@ -1,6 +1,7 @@
 import { MockStorage } from "mock-gcs";
 import { vi, test, beforeEach, expect } from "vitest";
 import { BucketClient } from "../../src/shared-gcp/bucket.inflight";
+import { Datetime } from "../../src/std";
 
 vi.mock("@google-cloud/storage", () => {
   return {
@@ -308,6 +309,63 @@ test("tryDelete a non-existent object from the bucket", async () => {
   const res = await client.tryDelete(NON_EXISTENT_KEY);
 
   expect(res).toBe(false);
+});
+
+test("get object's metadata from bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "my-bucket";
+  const KEY = "my-object";
+  const VALUE = "hello world";
+  const mockStorage = new MockStorage();
+  await mockStorage
+    .bucket(BUCKET_NAME)
+    .file(KEY)
+    .save(VALUE, {
+      metadata: {
+        acl: [
+          {
+            entity: "user-example@example.com",
+            role: "OWNER",
+          },
+        ],
+        cacheControl: "public, max-age=3600",
+        contentDisposition: "attachment; filename=my-object.txt",
+        contentEncoding: "gzip",
+        contentLanguage: "en",
+        contentType: "text/plain",
+        crc32c: "abcd1234",
+        customTime: "2023-10-22T18:55:00Z",
+        etag: "Cj0KEQjwvb76BRCtAhIDAQAB",
+        generation: 1,
+        id: "my-bucket/my-object/1666563700000000",
+        kind: "storage#object",
+        md5Hash: "1B2M2Y8AsgTpgAmY7PhCfg==",
+        mediaLink: "https://storage.googleapis.com/my-bucket/my-object",
+        metageneration: 1,
+        name: "my-object",
+        owner: {
+          entity: "user-example@example.com",
+          entityId: "12345678901234567890",
+        },
+        selfLink:
+          "https://www.googleapis.com/storage/v1/b/my-bucket/o/my-object",
+        size: 11,
+        storageClass: "STANDARD",
+        timeCreated: "2023-10-22T18:55:00Z",
+        updated: "2023-10-22T18:55:00Z",
+      },
+    });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  const response = await client.metadata(KEY);
+
+  // THEN
+  expect(response).toEqual({
+    size: 11,
+    lastModified: Datetime.fromIso("2023-10-22T18:55:00Z"),
+    contentType: "text/plain",
+  });
 });
 
 // TODO: implement signedUrl related tests
