@@ -167,10 +167,12 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     return nodeModules;
   }
 
-  let cliNodeModules = nearestNodeModules(__dirname);
+  let compilerModuleDir = nearestNodeModules(__dirname);
+  let sdkModuleDir = nearestNodeModules(join(require.resolve("@winglang/sdk"), "..", "..", ".."));
   let wingNodeModules = nearestNodeModules(wingDir);
+  let workDirNodeModules = nearestNodeModules(workDir);
 
-  const nodePaths = [cliNodeModules, wingNodeModules];
+  const nodePaths = [compilerModuleDir, sdkModuleDir, wingNodeModules, workDirNodeModules];
   if (process.env.NODE_PATH) {
     nodePaths.push(process.env.NODE_PATH);
   }
