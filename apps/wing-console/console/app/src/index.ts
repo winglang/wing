@@ -110,8 +110,6 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
         action,
         ...properties,
       });
-      // resrouce specific event
-      analytics.track(`console_${resourceName}_${action}`, properties);
     },
     log: options.log ?? {
       info() {},

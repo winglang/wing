@@ -67,6 +67,15 @@ export class Topic
     this.subscribers.push(s);
   }
 
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.subscribers.findIndex(
+      (s) => s.functionHandle === subscriber
+    );
+    if (index >= 0) {
+      this.subscribers.splice(index, 1);
+    }
+  }
+
   public async publish(message: string): Promise<void> {
     this.context.addTrace({
       data: {
