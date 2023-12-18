@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@winglang/sdk": "workspace:^",
+    "ts4wing": "workspace:^",
     "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [
@@ -35,7 +36,6 @@
     "@winglang/wingc": "workspace:^",
     "bump-pack": "workspace:^",
     "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
     "vitest": "^0.30.1",
     "wasi-js": "^1.7.3"
   },

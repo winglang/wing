@@ -1,5 +1,5 @@
 import { readdirSync } from "fs";
-import { JsonFile, cdk, javascript } from "projen";
+import { JsonFile, cdk, javascript, DependencyType } from "projen";
 import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
@@ -408,5 +408,7 @@ project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();

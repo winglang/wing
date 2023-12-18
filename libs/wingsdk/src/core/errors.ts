@@ -1,4 +1,5 @@
 export class NotImplementedError extends Error {
+  public name: string = "NotImplementedError";
   constructor(message: string, issue?: string) {
     super(
       `${message}${

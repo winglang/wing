@@ -237,7 +237,7 @@
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @types/jest @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript chalk chokidar glob-promise jsii-reflect yargs"
+          "exec": "pnpm update @types/jest @types/node @types/yargs @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit npm-check-updates prettier projen standard-version ts-jest ts-node typescript @types/node chalk chokidar glob-promise jsii-reflect yargs"
         },
         {
           "exec": "pnpm exec projen"

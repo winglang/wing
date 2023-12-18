@@ -6,7 +6,6 @@ import { IPlatform } from "./platform";
 import { App, AppProps, SynthHooks } from "../core";
 
 interface PlatformManagerOptions {
-  readonly appProps: AppProps;
   /**
    * Either a builtin platform name or a path to a custom platform
    */
@@ -18,13 +17,10 @@ const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 /** @internal */
 export class PlatformManager {
   private readonly platformPaths: string[];
-  private readonly appProps: AppProps;
   private readonly platformInstances: IPlatform[] = [];
 
   constructor(options: PlatformManagerOptions) {
-    this.appProps = options.appProps;
     this.platformPaths = options.platformPaths ?? [];
-    this.appProps;
   }
 
   private loadPlatformPath(platformPath: string) {
@@ -66,9 +62,8 @@ export class PlatformManager {
   }
 
   // This method is called from preflight.js in order to return an App instance
-  // that can be synthesized, so need to ignore the "declared but never read"
-  // @ts-ignore-next-line
-  private createApp(appProps: AppProps): App {
+  // that can be synthesized
+  public createApp(appProps: AppProps): App {
     this.createPlatformInstances();
 
     let appCall = this.platformInstances[0].newApp;
