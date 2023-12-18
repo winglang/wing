@@ -2,11 +2,6 @@
 
 exports[`schedule behavior with cron 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
@@ -226,29 +221,6 @@ exports[`schedule behavior with cron 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -287,11 +259,6 @@ exports[`schedule behavior with cron 2`] = `
 
 exports[`schedule behavior with rate 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
@@ -511,29 +478,6 @@ exports[`schedule behavior with rate 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -572,11 +516,6 @@ exports[`schedule behavior with rate 2`] = `
 
 exports[`schedule with two functions 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_event_rule": {
       "Schedule_15669BF1": {
@@ -795,29 +734,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

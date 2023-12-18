@@ -22,6 +22,7 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     const schema: TestRunnerSchema = {
       type: std.TEST_RUNNER_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         tests,
       },

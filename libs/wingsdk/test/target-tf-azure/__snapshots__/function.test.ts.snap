@@ -2,11 +2,6 @@
 
 exports[`basic function 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -224,29 +219,6 @@ exports[`basic function 2`] = `
                 "id": "azure",
                 "path": "root/Default/azure",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -285,11 +257,6 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -509,29 +476,6 @@ exports[`basic function with environment variables 2`] = `
                 "id": "azure",
                 "path": "root/Default/azure",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -570,11 +514,6 @@ exports[`basic function with environment variables 2`] = `
 
 exports[`replace invalid character from function name 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "azurerm_application_insights": {
       "ApplicationInsights": {
@@ -723,29 +662,6 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionIdentifiers": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionIdentifiers",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionIdentifiers",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "someFunction01": {
                 "children": {

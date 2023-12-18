@@ -109,6 +109,7 @@ test("api.url is resolved in website config", async () => {
       url: expect.any(String),
     },
     path: "root/website",
+    addr: expect.any(String),
     props: {
       fileRoutes: {
         "config.json": {
@@ -144,6 +145,7 @@ test("multiple tokens are resolved in website config", async () => {
       url: expect.any(String),
     },
     path: "root/website",
+    addr: expect.any(String),
     props: {
       fileRoutes: {
         "config.json": {

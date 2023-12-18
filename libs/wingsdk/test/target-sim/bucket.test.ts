@@ -7,6 +7,7 @@ import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -20,6 +21,7 @@ test("create a bucket", async () => {
       handle: expect.any(String),
     },
     path: "root/my_bucket",
+    addr: expect.any(String),
     props: {
       public: false,
       initialObjects: {},
@@ -328,7 +330,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(s.listTraces()[1].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -768,6 +770,44 @@ test("copy non-existent object within the bucket", async () => {
     /Source object does not exist/
   );
   await s.stop();
+});
+
+test("bucket is stateful across simulations", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const bucket = new cloud.Bucket(app, "my_bucket");
+
+  // addObject means that each deployment, object ("a", "1") will be set on the bucket
+  // even if a different object with the same key is added in-flight
+  bucket.addObject("a", "1");
+
+  // WHEN
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client.put("a", "2"); // override contents of file "a" inflight
+  await client.put("b", "2");
+  const metadata1 = await client.metadata("a");
+  const metadata2 = await client.metadata("b");
+  await s.stop();
+
+  // restart the simulator, re-initializing all resources
+  // this will reset "a" to its original value
+
+  await s.start();
+  const client2 = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const dataA = await client2.get("a");
+  const dataB = await client2.get("b");
+  const metadata3 = await client2.metadata("a");
+  const metadata4 = await client2.metadata("b");
+
+  // THEN
+  await s.stop();
+  expect(dataA).toEqual("1");
+  expect(dataB).toEqual("2"); // "b" will be remembered
+  expect(metadata1).not.toEqual(metadata3);
+  expect(metadata2).toEqual(metadata4);
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

@@ -9,14 +9,7 @@ exports[`create a table 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c80d8c0710fc41df32eaa9895ae0bbd6cfd22762c2",
         "attrs": {},
         "path": "root/create_table",
         "props": {
@@ -47,6 +40,10 @@ exports[`create a table 1`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -112,19 +109,6 @@ exports[`create a table 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "create_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -152,10 +136,8 @@ exports[`create a table 1`] = `
 
 exports[`get item 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.DynamodbTable created.",
   "@winglang/sdk.ex.DynamodbTable deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -168,14 +150,7 @@ exports[`get item 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8b976f0619d4aad0e4bb55cbda7b8975704b8b11a",
         "attrs": {},
         "path": "root/get_table",
         "props": {
@@ -206,6 +181,10 @@ exports[`get item 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -271,19 +250,6 @@ exports[`get item 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "get_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -311,10 +277,8 @@ exports[`get item 2`] = `
 
 exports[`put item 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.DynamodbTable created.",
   "@winglang/sdk.ex.DynamodbTable deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -327,14 +291,7 @@ exports[`put item 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8fa1029e0255990ff9eb3bf212931386890380f82",
         "attrs": {},
         "path": "root/put_table",
         "props": {
@@ -365,6 +322,10 @@ exports[`put item 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -430,19 +391,6 @@ exports[`put item 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "put_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -470,10 +418,8 @@ exports[`put item 2`] = `
 
 exports[`update item 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.ex.DynamodbTable created.",
   "@winglang/sdk.ex.DynamodbTable deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -486,14 +432,7 @@ exports[`update item 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8f403ebb1894f2ea172e92af9090b7c8a25806934",
         "attrs": {},
         "path": "root/update_table",
         "props": {
@@ -524,6 +463,10 @@ exports[`update item 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -589,19 +532,6 @@ exports[`update item 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "update_table": {
           "constructInfo": {
             "fqn": "constructs.Construct",

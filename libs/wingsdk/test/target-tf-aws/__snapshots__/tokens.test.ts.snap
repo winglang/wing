@@ -13,9 +13,9 @@ return class Handler {
   }
 };
 })())({
-str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9\\"]),
-num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591388E_298\\"]),
-list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_11\\"])
+str: JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_7_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_8\\"]),
+num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591387E_298\\"]),
+list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_10\\"])
 })"
 `;
 
@@ -27,8 +27,8 @@ exports[`captures tokens 2`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
+    "Api_Endpoint_Url_473FEE9F": {
+      "value": "https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}",
     },
   },
   "resource": {
@@ -91,9 +91,9 @@ exports[`captures tokens 2`] = `
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get__-0-c8a5fd6a",
-            "WING_TOKEN_8_109562212591388E_298": "\${jsonencode(var.Number)}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_8_EXECUTE_API_TFTOKEN_TOKEN_1_AMAZONAWS_COM_TFTOKEN_TOKEN_9": "\${jsonencode(\\"https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}\\")}",
-            "WING_TOKEN_TFTOKEN_TOKEN_11": "\${jsonencode(var.List)}",
+            "WING_TOKEN_8_109562212591387E_298": "\${jsonencode(var.Number)}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_7_EXECUTE_API_TFTOKEN_TOKEN_0_AMAZONAWS_COM_TFTOKEN_TOKEN_8": "\${jsonencode(\\"https://\${aws_api_gateway_rest_api.Api_api_91C07D84.id}.execute-api.\${data.aws_region.Region.name}.amazonaws.com/\${aws_api_gateway_stage.Api_api_stage_E0FA39D6.stage_name}\\")}",
+            "WING_TOKEN_TFTOKEN_TOKEN_10": "\${jsonencode(var.List)}",
           },
         },
         "function_name": "get__-0-c8a5fd6a",

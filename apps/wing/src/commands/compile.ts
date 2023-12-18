@@ -117,6 +117,10 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
         }
 
         for (const annotation of annotations) {
+          // file_id might be "" if the span is synthetic (see #2521)
+          if (!annotation.span?.file_id) {
+            continue;
+          }
           const source = await fsPromise.readFile(annotation.span.file_id, "utf8");
           const start = byteOffsetFromLineAndColumn(
             source,

@@ -121,10 +121,10 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/"
+          "exec": "cp -r src/cloud/*.md ../../docs/docs/04-standard-library/cloud/"
         },
         {
-          "exec": "cp -r src/ex/*.md ../../docs/docs/04-standard-library/02-ex/"
+          "exec": "cp -r src/ex/*.md ../../docs/docs/04-standard-library/ex/"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule expect"
@@ -238,211 +238,211 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/api"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/api.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/api.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/bucket"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/bucket.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/bucket.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/counter"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/counter.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/counter.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/domain"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/domain.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/domain.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/function"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/function.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/function.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/on-deploy"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/on-deploy.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/on-deploy.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/queue"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/queue.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/queue.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/schedule"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/schedule.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/schedule.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/secret"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/secret.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/secret.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/service"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/service.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/service.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/topic"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/topic.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/topic.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/website"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/website.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/website.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/workload"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/workload.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/cloud/workload.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/dynamodb-table"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/02-ex/dynamodb-table.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/ex/dynamodb-table.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/react-app"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/02-ex/react-app.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/ex/react-app.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/redis"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/02-ex/redis.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/ex/redis.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule ex/table"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/02-ex/table.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/ex/table.md"
         },
         {
-          "exec": "echo \"---\ntitle: array\nid: array\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/array.md"
+          "exec": "echo \"---\ntitle: array\nid: array\n---\n\n\" > ../../docs/docs/04-standard-library/std/array.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/array"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/array.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/array.md"
         },
         {
-          "exec": "echo \"---\ntitle: bool\nid: bool\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/bool.md"
+          "exec": "echo \"---\ntitle: bool\nid: bool\n---\n\n\" > ../../docs/docs/04-standard-library/std/bool.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/bool"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/bool.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/bool.md"
         },
         {
-          "exec": "echo \"---\ntitle: datetime\nid: datetime\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/datetime.md"
+          "exec": "echo \"---\ntitle: datetime\nid: datetime\n---\n\n\" > ../../docs/docs/04-standard-library/std/datetime.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/datetime"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/datetime.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/datetime.md"
         },
         {
-          "exec": "echo \"---\ntitle: duration\nid: duration\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/duration.md"
+          "exec": "echo \"---\ntitle: duration\nid: duration\n---\n\n\" > ../../docs/docs/04-standard-library/std/duration.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/duration"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/duration.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/duration.md"
         },
         {
-          "exec": "echo \"---\ntitle: json\nid: json\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/json.md"
+          "exec": "echo \"---\ntitle: json\nid: json\n---\n\n\" > ../../docs/docs/04-standard-library/std/json.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/json"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/json.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/json.md"
         },
         {
-          "exec": "echo \"---\ntitle: jsonSchema\nid: jsonSchema\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/json_schema.md"
+          "exec": "echo \"---\ntitle: jsonSchema\nid: jsonSchema\n---\n\n\" > ../../docs/docs/04-standard-library/std/json_schema.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/json_schema"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/json_schema.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/json_schema.md"
         },
         {
-          "exec": "echo \"---\ntitle: map\nid: map\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/map.md"
+          "exec": "echo \"---\ntitle: map\nid: map\n---\n\n\" > ../../docs/docs/04-standard-library/std/map.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/map"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/map.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/map.md"
         },
         {
-          "exec": "echo \"---\ntitle: node\nid: node\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/node.md"
+          "exec": "echo \"---\ntitle: node\nid: node\n---\n\n\" > ../../docs/docs/04-standard-library/std/node.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/node"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/node.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/node.md"
         },
         {
-          "exec": "echo \"---\ntitle: number\nid: number\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/number.md"
+          "exec": "echo \"---\ntitle: number\nid: number\n---\n\n\" > ../../docs/docs/04-standard-library/std/number.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/number"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/number.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/number.md"
         },
         {
-          "exec": "echo \"---\ntitle: set\nid: set\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/set.md"
+          "exec": "echo \"---\ntitle: set\nid: set\n---\n\n\" > ../../docs/docs/04-standard-library/std/set.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/set"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/set.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/set.md"
         },
         {
-          "exec": "echo \"---\ntitle: string\nid: string\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/string.md"
+          "exec": "echo \"---\ntitle: string\nid: string\n---\n\n\" > ../../docs/docs/04-standard-library/std/string.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/string"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/string.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/string.md"
         },
         {
-          "exec": "echo \"---\ntitle: struct\nid: struct\n---\n\n\" > ../../docs/docs/04-standard-library/03-std/struct.md"
+          "exec": "echo \"---\ntitle: struct\nid: struct\n---\n\n\" > ../../docs/docs/04-standard-library/std/struct.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule std/struct"
         },
         {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/03-std/struct.md"
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/std/struct.md"
         },
         {
           "exec": "rm API.md"

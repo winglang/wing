@@ -1,3 +1,4 @@
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
@@ -10,19 +11,25 @@ async handle(event) {
 
 test("create a test", async () => {
   // GIVEN
-  const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  new Test(app, "test:my_test", handler);
+  class Root extends Construct {
+    constructor(scope: Construct, id: string) {
+      super(scope, id);
+      const handler = Testing.makeHandler(INFLIGHT_CODE);
+      new Test(this, "test:my_test", handler);
+    }
+  }
+  const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
 
   // THEN
   const s = await app.startSimulator();
 
   // for now, it just creates a cloud.Function
-  expect(s.getResourceConfig("/test:my_test/Handler")).toEqual({
+  expect(s.getResourceConfig("/env0/test:my_test/Handler")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "root/test:my_test/Handler",
+    path: "root/env0/test:my_test/Handler",
+    addr: expect.any(String),
     props: {
       environmentVariables: {},
       sourceCodeFile: expect.any(String),

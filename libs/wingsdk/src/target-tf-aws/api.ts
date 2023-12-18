@@ -41,6 +41,7 @@ const NAME_OPTS: NameOptions = {
 export class Api extends cloud.Api implements IAwsApi {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -48,10 +49,13 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
+      label: `Endpoint for Api ${this.node.path}`,
+    });
   }
 
-  public get url(): string {
-    return this.api.url;
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   /**

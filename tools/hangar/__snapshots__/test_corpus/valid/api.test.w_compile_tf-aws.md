@@ -87,8 +87,19 @@ module.exports = function({  }) {
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "A": {
+              "cloud.Api": {
+                "Endpoint": {
+                  "Url": "A_cloudApi_Endpoint_Url_77CB2098"
+                }
+              }
+            },
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
           }
         }
       }
@@ -107,8 +118,11 @@ module.exports = function({  }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "A_cloudApi_Endpoint_Url_77CB2098": {
+      "value": "https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}"
+    },
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {
@@ -322,7 +336,7 @@ module.exports = function({  }) {
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_endpoint1_-0-c83be382",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_31_EXECUTE_API_TFTOKEN_TOKEN_24_AMAZONAWS_COM_TFTOKEN_TOKEN_32": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_30_EXECUTE_API_TFTOKEN_TOKEN_23_AMAZONAWS_COM_TFTOKEN_TOKEN_31": "${jsonencode(\"https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}\")}"
           }
         },
         "function_name": "get_endpoint1_-0-c83be382",
