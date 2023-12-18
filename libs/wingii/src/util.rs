@@ -11,11 +11,11 @@ pub mod package_json {
 	pub fn dependencies_of(package_json: &serde_json::Value) -> HashSet<String> {
 		// merge both dependencies and peerDependencies and return the list of keys
 		let mut deps = HashSet::new();
-		if let Some(deps_obj) = package_json.get("dependencies") {
-			deps.extend(deps_obj.as_object().unwrap().keys().cloned());
+		if let Some(deps_obj) = package_json.get("dependencies").and_then(|x| x.as_object()) {
+			deps.extend(deps_obj.keys().cloned());
 		}
-		if let Some(deps_obj) = package_json.get("peerDependencies") {
-			deps.extend(deps_obj.as_object().unwrap().keys().cloned());
+		if let Some(deps_obj) = package_json.get("peerDependencies").and_then(|x| x.as_object()) {
+			deps.extend(deps_obj.keys().cloned());
 		}
 		deps
 	}
@@ -23,23 +23,11 @@ pub mod package_json {
 	pub fn bundled_dependencies_of(package_json: &serde_json::Value) -> Vec<String> {
 		// merge both bundledDependencies and bundleDependencies and return the list of keys
 		let mut deps = Vec::new();
-		if let Some(deps_obj) = package_json.get("bundledDependencies") {
-			deps.extend(
-				deps_obj
-					.as_array()
-					.unwrap()
-					.iter()
-					.map(|s| s.as_str().unwrap().to_string()),
-			);
+		if let Some(deps_obj) = package_json.get("bundledDependencies").and_then(|x| x.as_array()) {
+			deps.extend(deps_obj.iter().filter_map(|s| s.as_str().map(|s| s.to_string())));
 		}
-		if let Some(deps_obj) = package_json.get("bundleDependencies") {
-			deps.extend(
-				deps_obj
-					.as_array()
-					.unwrap()
-					.iter()
-					.map(|s| s.as_str().unwrap().to_string()),
-			);
+		if let Some(deps_obj) = package_json.get("bundleDependencies").and_then(|x| x.as_array()) {
+			deps.extend(deps_obj.iter().filter_map(|s| s.as_str().map(|s| s.to_string())));
 		}
 		deps
 	}
@@ -84,5 +72,58 @@ pub mod package_json {
 		} else {
 			None
 		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	use serde_json::json;
+	#[test]
+	fn test_dependencies_of() {
+		let package_json = json!({
+			"dependencies": {
+				"serde": "^1.0",
+				"serde_json": "^1.0"
+			},
+			"peerDependencies": {
+				"regex": "^1.0"
+			}
+		});
+
+		let dependencies = package_json::dependencies_of(&package_json);
+
+		assert_eq!(dependencies.len(), 3);
+		assert!(dependencies.contains("serde"));
+		assert!(dependencies.contains("serde_json"));
+		assert!(dependencies.contains("regex"));
+	}
+
+	#[test]
+	fn test_bundled_dependencies_of() {
+		let package_json = json!({
+			"bundledDependencies": ["uuid", "chrono"],
+			"bundleDependencies": ["reqwest"]
+		});
+
+		let bundled_dependencies = package_json::bundled_dependencies_of(&package_json);
+
+		assert_eq!(bundled_dependencies.len(), 3);
+		assert!(bundled_dependencies.contains(&"uuid".to_string()));
+		assert!(bundled_dependencies.contains(&"chrono".to_string()));
+		assert!(bundled_dependencies.contains(&"reqwest".to_string()));
+	}
+
+	#[test]
+	fn test_invalid_bundled_dependencies_of() {
+		let package_json = json!({
+			"bundledDependencies": ["uuid"],
+			"bundleDependencies": "reqwest"
+		});
+
+		let bundled_dependencies = package_json::bundled_dependencies_of(&package_json);
+
+		assert_eq!(bundled_dependencies.len(), 1);
+		assert!(bundled_dependencies.contains(&"uuid".to_string()));
 	}
 }
