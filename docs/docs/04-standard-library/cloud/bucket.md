@@ -342,33 +342,6 @@ The key of the destination object after copying.
 
 ---
 
-##### `copy` <a name="copy" id="@winglang/sdk.cloud.IBucketClient.copy"></a>
-
-```wing
-inflight copy(srcKey: str, dstKey: str): void
-```
-
-Copy an object to a new location in the bucket.
-
-If the destination object
-already exists, it will be overwritten. Returns once the copying is finished.
-
-###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
-
-- *Type:* str
-
-The key of the source object you wish to copy.
-
----
-
-###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.dstKey"></a>
-
-- *Type:* str
-
-The key of the destination object after copying.
-
----
-
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
 
 ```wing
