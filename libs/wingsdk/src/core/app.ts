@@ -1,10 +1,10 @@
-import { Construct, IConstruct } from "constructs";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
+import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import type { IResource } from "../std/resource";
+import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -302,7 +302,50 @@ export abstract class App extends Construct implements IApp {
     if (!type) {
       return undefined;
     }
+
+    if (this.traceUsage) {
+      return new Proxy(new type(scope, id, ...args), {
+        get: (target, prop: string | Symbol) => {
+          if (
+            typeof prop === "string" &&
+            !prop.startsWith("_") &&
+            !PARENT_PROPERTIES.has(prop)
+          ) {
+            this._addToUsageContext(target, prop);
+          }
+          //@ts-ignore
+          return target[prop];
+        },
+        set: (target, prop, newValue) => {
+          if (typeof prop === "string" && !prop.startsWith("_")) {
+            this._addToUsageContext(target, prop);
+          }
+          //@ts-ignore
+          target[prop] = newValue;
+          return true;
+        },
+      });
+    }
+
     return new type(scope, id, ...args);
+  }
+
+  /**
+   * Adds an op to usage context
+   * @param op
+   * @internal
+   */
+  public _addToUsageContext(parent: any, op: string): void {
+    const className = parent.constructor.name;
+    if (!this.traceUsage || ["handle", "$inflight_init"].includes(op)) {
+      return;
+    }
+    const usageContext = this._usageContext.get(className);
+    if (!usageContext) {
+      this._usageContext.set(className, new Set([op]));
+    } else {
+      usageContext.add(op);
+    }
   }
 
   /**
@@ -356,3 +399,10 @@ export function preSynthesizeAllConstructs(app: App): void {
 
   app._writeAppUsage();
 }
+
+const PARENT_PROPERTIES: Set<string> = new Set([
+  "node",
+  "onLiftMap",
+  ...Object.getOwnPropertyNames(Construct),
+  ...Object.getOwnPropertyNames(Construct.prototype),
+]);
