@@ -10,3 +10,7 @@ let y = 5 + log("hello");
 let returnsNothing = () => {};
 let z = returnsNothing();
 //      ^^^^^^^^^^^^^^^^^ Cannot assign expression of type "void" to a variable
+
+let returnsNothing2 = () => {};
+let w: str? = returnsNothing2();
+//            ^^^^^^^^^^^^^^^^^ Cannot assign expression of type "void" to a variable
