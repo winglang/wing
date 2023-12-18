@@ -177,35 +177,10 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     nodePaths.push(process.env.NODE_PATH);
   }
 
-  let preflightEnv: Record<string, string | undefined> = {
-    ...process.env,
-    WING_TARGET: target,
-    WING_PLATFORMS: resolvePlatformPaths(options.platform),
-    WING_SYNTH_DIR: tmpSynthDir,
-    WING_SOURCE_DIR: wingDir,
-    WING_IS_TEST: testing.toString(),
-    WING_VALUES: options.value?.length == 0 ? undefined : options.value,
-    WING_VALUES_FILE: options.values,
-    WING_NODE_MODULES: wingNodeModules,
-    NODE_PATH: nodePaths.join(os.platform() === "win32" ? ";" : ":"),
-  };
-
-  if (options.rootId) {
-    preflightEnv.WING_ROOT_ID = options.rootId;
-  }
-
   await Promise.all([
     fs.mkdir(workDir, { recursive: true }),
     fs.mkdir(tmpSynthDir, { recursive: true }),
   ]);
-
-  let env: Record<string, string> = {
-    RUST_BACKTRACE: "full",
-    WING_SYNTH_DIR: normalPath(tmpSynthDir),
-  };
-  if (options.color !== undefined) {
-    env.CLICOLOR = options.color ? "1" : "0";
-  }
 
   let preflightEntrypoint = join(workDir, WINGC_PREFLIGHT);
 
@@ -226,6 +201,14 @@ npm i ts4wing
       entrypoint,
     });
   } else {
+    let env: Record<string, string> = {
+      RUST_BACKTRACE: "full",
+      WING_SYNTH_DIR: normalPath(tmpSynthDir),
+    };
+    if (options.color !== undefined) {
+      env.CLICOLOR = options.color ? "1" : "0";
+    }
+
     const wingc = await wingCompiler.load({
       env,
       imports: {
@@ -264,6 +247,23 @@ npm i ts4wing
   }
 
   if (isEntrypointFile(entrypoint)) {
+    let preflightEnv: Record<string, string | undefined> = {
+      ...process.env,
+      WING_TARGET: target,
+      WING_PLATFORMS: resolvePlatformPaths(options.platform),
+      WING_SYNTH_DIR: tmpSynthDir,
+      WING_SOURCE_DIR: wingDir,
+      WING_IS_TEST: testing.toString(),
+      WING_VALUES: options.value?.length == 0 ? undefined : options.value,
+      WING_VALUES_FILE: options.values,
+      WING_NODE_MODULES: wingNodeModules,
+      NODE_PATH: nodePaths.join(os.platform() === "win32" ? ";" : ":"),
+    };
+  
+    if (options.rootId) {
+      preflightEnv.WING_ROOT_ID = options.rootId;
+    }
+
     await runPreflightCodeInVm(preflightEntrypoint, wingDir, preflightEnv, log);
   }
 
