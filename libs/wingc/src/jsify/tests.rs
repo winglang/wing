@@ -837,7 +837,7 @@ fn reference_static_inflight() {
 	assert_compile_ok!(
 		r#"
     class MyType {
-      pub static inflight myStaticMethod(): str {}
+      pub static inflight myStaticMethod(): str { return "hi"; }
     }
 
     test "test" {
@@ -1220,7 +1220,7 @@ fn capture_in_keyword_args() {
     let x = 1s;
     
     test "test" {
-      util.waitUntil((): bool => {}, interval: x);
+      util.waitUntil((): bool => { return true; }, interval: x);
     }
     "#
 	);
@@ -1391,8 +1391,9 @@ fn func_returns_func() {
 		r#"
     test "test" {
       (s: str): (): bool => {
-        (): bool => { 
+        return (): bool => {
           s;
+          return true;
         };
       };
     }
@@ -1769,7 +1770,7 @@ fn reassign_captured_variable() {
       let var i = 10;
     
       class Inner {
-        dang(): num {
+        dang(): void {
           i = i + 1;
         }
       }

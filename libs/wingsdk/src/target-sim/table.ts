@@ -25,6 +25,7 @@ export class Table extends ex.Table implements ISimulatorResource {
     const schema: TableSchema = {
       type: ex.TABLE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         name: this.name,
         columns: this.columns,

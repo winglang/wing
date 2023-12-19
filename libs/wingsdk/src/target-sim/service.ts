@@ -25,6 +25,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     const schema: ServiceSchema = {
       type: cloud.SERVICE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         environmentVariables: this.env,
         sourceCodeFile: relative(App.of(this).outdir, this.entrypoint),

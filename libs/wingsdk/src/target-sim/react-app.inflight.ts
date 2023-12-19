@@ -79,6 +79,8 @@ window.wingEnv = ${JSON.stringify(this.environmentVariables, null, 2)};`
     this.childProcess?.kill("SIGINT");
   }
 
+  public async save(): Promise<void> {}
+
   private addTrace(message: string): void {
     this.context.addTrace({
       type: TraceType.RESOURCE,

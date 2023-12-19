@@ -15,7 +15,7 @@ module.exports = function({  }) {
       let i = 10;
       class Inner {
         async dang() {
-          (await y.push(2));
+          ((obj, args) => { obj.push(...args); })(y, [2]);
           i = (i + 1);
           return (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0) + 10);
         }
@@ -39,20 +39,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [

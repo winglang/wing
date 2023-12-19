@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`create a queue 2`] = `
+exports[`create a queue 1`] = `
 {
   "connections.json": {
     "connections": [],
@@ -9,14 +9,7 @@ exports[`create a queue 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -43,6 +36,10 @@ exports[`create a queue 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -109,19 +106,6 @@ exports[`create a queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -149,18 +133,16 @@ exports[`create a queue 2`] = `
 
 exports[`messages are not requeued if the function fails before timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -199,14 +181,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -218,6 +193,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -227,6 +203,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -256,6 +233,10 @@ async handle(message) {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -322,19 +303,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -388,18 +356,16 @@ async handle(message) {
 
 exports[`messages are requeued if the function fails after timeout 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Queue created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Push (messages=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-0).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Queue deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
   "1 messages pushed back to queue after visibility timeout.",
 ]
 `;
@@ -439,14 +405,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -458,6 +417,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -467,6 +427,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -496,6 +457,10 @@ async handle(message) {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -562,19 +527,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -628,11 +580,9 @@ async handle(message) {
 
 exports[`push rejects empty message 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=).",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -645,14 +595,7 @@ exports[`push rejects empty message 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -679,6 +622,10 @@ exports[`push rejects empty message 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -745,19 +692,6 @@ exports[`push rejects empty message 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -785,7 +719,6 @@ exports[`push rejects empty message 2`] = `
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Queue created.",
   "Push (messages=A).",
   "Push (messages=B).",
@@ -793,7 +726,6 @@ exports[`queue batch size of 2, purge the queue 1`] = `
   "Purge ().",
   "ApproxSize ().",
   "@winglang/sdk.cloud.Queue deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -806,14 +738,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -840,6 +765,10 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -906,19 +835,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1021,14 +937,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -1040,6 +949,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -1049,6 +959,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -1061,6 +972,7 @@ async handle(message) {
         "type": "@winglang/sdk.sim.EventMapping",
       },
       {
+        "addr": "c8ab799f6c9c9a3cd279909012c4f322ab902f5e19",
         "attrs": {},
         "path": "root/my_queue_messages/Function",
         "props": {
@@ -1074,6 +986,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8e2354407fd3536187725c2b37c5327f47bb841e9",
         "attrs": {},
         "path": "root/my_queue_messages",
         "props": {
@@ -1099,6 +1012,10 @@ async handle(message) {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1165,19 +1082,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {
@@ -1291,14 +1195,7 @@ async handle(message) {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8e33b9b91c909e579b9d3d703146eb66c2a657ffc",
         "attrs": {},
         "path": "root/my_queue/SetConsumer0",
         "props": {
@@ -1310,6 +1207,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8dee4ef24593d08aa22e8845be36d0ee754fcf4cd",
         "attrs": {},
         "path": "root/my_queue",
         "props": {
@@ -1319,6 +1217,7 @@ async handle(message) {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c8f9f7d56097ba3d2e0e82988718175a5d841f855e",
         "attrs": {},
         "path": "root/my_queue/QueueEventMapping0",
         "props": {
@@ -1348,6 +1247,10 @@ async handle(message) {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1414,19 +1317,6 @@ async handle(message) {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_queue": {
           "children": {
             "QueueEventMapping0": {

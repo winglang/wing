@@ -23,6 +23,8 @@ export class TestRunner
     return;
   }
 
+  public async save(): Promise<void> {}
+
   public async listTests(): Promise<string[]> {
     return Array.from(this.tests.keys());
   }

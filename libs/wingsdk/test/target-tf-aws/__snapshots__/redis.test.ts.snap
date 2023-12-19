@@ -7,11 +7,6 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
       "Region": {},
     },
   },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_eip": {
       "EIP": {},
