@@ -7,8 +7,9 @@ source: libs/wingc/src/jsify/tests.rs
 
     test "test" {
       (s: str): (): bool => {
-        (): bool => { 
+        return (): bool => {
           s;
+          return true;
         };
       };
     }
@@ -28,8 +29,9 @@ module.exports = function({  }) {
     }
     async handle() {
       async (s) => {
-        async () => {
+        return async () => {
           s;
+          return true;
         };
       };
     }

@@ -62,7 +62,19 @@ module.exports = function({ $cloud_Api }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "AnApi": {
+              "Endpoint": {
+                "Url": "AnApi_Endpoint_Url_A71EBCD8"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -74,6 +86,11 @@ module.exports = function({ $cloud_Api }) {
           }
         }
       }
+    }
+  },
+  "output": {
+    "AnApi_Endpoint_Url_A71EBCD8": {
+      "value": "https://${aws_api_gateway_rest_api.AnApi_api_99502955.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.AnApi_api_stage_1FA14C2C.stage_name}"
     }
   },
   "provider": {

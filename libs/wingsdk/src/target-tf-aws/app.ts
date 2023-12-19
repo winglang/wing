@@ -2,6 +2,7 @@ import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -29,6 +30,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -120,6 +122,9 @@ export class App extends CdktfApp {
 
       case DYNAMODB_TABLE_FQN:
         return DynamodbTable;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
 
     return undefined;

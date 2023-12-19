@@ -48,6 +48,7 @@ exports[`run all tests > single test 1`] = `
       {
         "data": {
           "message": "Invoke (payload=\\"\\").",
+          "result": "\\"\\"",
           "status": "success",
         },
         "sourcePath": "root/test/Handler",
@@ -78,6 +79,7 @@ exports[`run single test > happy path 1`] = `
     {
       "data": {
         "message": "Invoke (payload=\\"\\").",
+        "result": "\\"\\"",
         "status": "success",
       },
       "sourcePath": "root/test/Handler",

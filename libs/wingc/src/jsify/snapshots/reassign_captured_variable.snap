@@ -9,7 +9,7 @@ source: libs/wingc/src/jsify/tests.rs
       let var i = 10;
     
       class Inner {
-        dang(): num {
+        dang(): void {
           i = i + 1;
         }
       }

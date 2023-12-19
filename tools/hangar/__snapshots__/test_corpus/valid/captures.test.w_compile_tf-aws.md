@@ -1,58 +1,86 @@
 # [captures.test.w](../../../../../examples/tests/valid/captures.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.cjs
+
 ```cjs
 "use strict";
-module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
+module.exports = function ({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(event) {
-      (await $bucket1.put("file.txt", "data"));
-      (await $bucket2.get("file.txt"));
-      (await $bucket2.get("file2.txt"));
-      (await $bucket3.get("file3.txt"));
-      for (const stuff of (await $bucket1.list())) {
-        {console.log(stuff)};
+      await $bucket1.put("file.txt", "data");
+      await $bucket2.get("file.txt");
+      await $bucket2.get("file2.txt");
+      await $bucket3.get("file3.txt");
+      for (const stuff of await $bucket1.list()) {
+        {
+          console.log(stuff);
+        }
       }
-      {console.log((await $bucket2.publicUrl("file.txt")))};
+      {
+        console.log(await $bucket2.publicUrl("file.txt"));
+      }
       try {
-        (await $bucket1.publicUrl("file.txt"));
-      }
-      catch ($error_error) {
+        await $bucket1.publicUrl("file.txt");
+      } catch ($error_error) {
         const error = $error_error.message;
-        {console.log(error)};
+        {
+          console.log(error);
+        }
       }
     }
   }
   return $Closure1;
-}
+};
 //# sourceMappingURL=./inflight.$Closure1-1.cjs.map
 ```
 
 ## inflight.$Closure2-1.cjs
+
 ```cjs
 "use strict";
-module.exports = function({ $headers }) {
+module.exports = function ({ $handler }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle(event) {
+      await $handler(event);
+    }
+  }
+  return $Closure2;
+};
+//# sourceMappingURL=inflight.$Closure2-1.js.map
+```
+
+## inflight.$Closure3-1.js
+
+```js
+"use strict";
+module.exports = function ({ $headers }) {
+  class $Closure3 {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(req) {
-      return ({"status": 200, "headers": $headers, "body": "Hello, world!"});
+      return { status: 200, headers: $headers, body: "Hello, world!" };
     }
   }
-  return $Closure2;
-}
+  return $Closure3;
+};
 //# sourceMappingURL=./inflight.$Closure2-1.cjs.map
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -61,7 +89,19 @@ module.exports = function({ $headers }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -75,10 +115,13 @@ module.exports = function({ $headers }) {
       }
     }
   },
+  "output": {
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
+    }
+  },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -311,9 +354,7 @@ module.exports = function({ $headers }) {
             "uniqueId": "AnotherFunction"
           }
         },
-        "architectures": [
-          "arm64"
-        ],
+        "architectures": ["arm64"],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
@@ -345,9 +386,7 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudApi_get_hello_0_2F9F5F19"
           }
         },
-        "architectures": [
-          "arm64"
-        ],
+        "architectures": ["arm64"],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
@@ -376,9 +415,7 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudFunction"
           }
         },
-        "architectures": [
-          "arm64"
-        ],
+        "architectures": ["arm64"],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
@@ -410,9 +447,7 @@ module.exports = function({ $headers }) {
             "uniqueId": "cloudQueue-SetConsumer0"
           }
         },
-        "architectures": [
-          "arm64"
-        ],
+        "architectures": ["arm64"],
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
@@ -588,10 +623,13 @@ module.exports = function({ $headers }) {
 ```
 
 ## preflight.cjs
+
 ```cjs
 "use strict";
-const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
+const $stdlib = require("@winglang/sdk");
+const $platforms = ((s) => (!s ? [] : s.split(";")))(
+  process.env.WING_PLATFORMS
+);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -600,10 +638,13 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
-      constructor($scope, $id, ) {
+      _hash = require("crypto")
+        .createHash("md5")
+        .update(this._toInflight())
+        .digest("hex");
+      constructor($scope, $id) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        std.Node.of(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -630,7 +671,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Closure1._registerOnLiftObject(bucket1, host, [
+            "list",
+            "publicUrl",
+            "put",
+          ]);
           $Closure1._registerOnLiftObject(bucket2, host, ["get", "publicUrl"]);
           $Closure1._registerOnLiftObject(bucket3, host, ["get"]);
         }
@@ -638,10 +683,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
-      constructor($scope, $id, ) {
+      _hash = require("crypto")
+        .createHash("md5")
+        .update(this._toInflight())
+        .digest("hex");
+      constructor($scope, $id) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        std.Node.of(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -666,28 +714,117 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(headers, host, []);
+          $Closure2._registerOnLiftObject(handler, host, ["handle"]);
         }
         super._registerOnLift(host, ops);
       }
     }
-    const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PublicBucket", ({"public": true}));
-    const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PrivateBucket", { public: false });
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+    class $Closure3 extends $stdlib.std.Resource {
+      _hash = require("crypto")
+        .createHash("md5")
+        .update(this._toInflight())
+        .digest("hex");
+      constructor($scope, $id) {
+        super($scope, $id);
+        std.Node.of(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure3-1.js")({
+            $headers: ${$stdlib.core.liftObject(headers)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure3._registerOnLiftObject(headers, host, []);
+        }
+        super._registerOnLift(host, ops);
+      }
+    }
+    const bucket1 = this.node.root.new(
+      "@winglang/sdk.cloud.Bucket",
+      cloud.Bucket,
+      this,
+      "cloud.Bucket"
+    );
+    const bucket2 = this.node.root.new(
+      "@winglang/sdk.cloud.Bucket",
+      cloud.Bucket,
+      this,
+      "PublicBucket",
+      { public: true }
+    );
+    const bucket3 = this.node.root.new(
+      "@winglang/sdk.cloud.Bucket",
+      cloud.Bucket,
+      this,
+      "PrivateBucket",
+      { public: false }
+    );
+    const queue = this.node.root.new(
+      "@winglang/sdk.cloud.Queue",
+      cloud.Queue,
+      this,
+      "cloud.Queue"
+    );
     const handler = new $Closure1(this, "$Closure1");
-    (queue.setConsumer(handler, { batchSize: 5 }));
-    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler, { env: ({}) });
-    const emptyEnv = ({});
-    this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
-    const headers = ({["my-fancy-header"]: "my-fancy-value", ["not-even-real\""]: "wow` !"});
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
-    (api.get("/hello", new $Closure2(this, "$Closure2")));
+    queue.setConsumer(new $Closure2(this, "$Closure2"), { batchSize: 5 });
+    this.node.root.new(
+      "@winglang/sdk.cloud.Function",
+      cloud.Function,
+      this,
+      "cloud.Function",
+      handler,
+      { env: {} }
+    );
+    const emptyEnv = {};
+    this.node.root.new(
+      "@winglang/sdk.cloud.Function",
+      cloud.Function,
+      this,
+      "AnotherFunction",
+      handler,
+      { env: emptyEnv }
+    );
+    const headers = {
+      ["my-fancy-header"]: "my-fancy-value",
+      ['not-even-real"']: "wow` !",
+    };
+    const api = this.node.root.new(
+      "@winglang/sdk.cloud.Api",
+      cloud.Api,
+      this,
+      "cloud.Api"
+    );
+    api.get("/hello", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "captures.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $PlatformManager = new $stdlib.platform.PlatformManager({
+  platformPaths: $platforms,
+});
+const $APP = $PlatformManager.createApp({
+  outdir: $outdir,
+  name: "captures.test",
+  rootConstruct: $Root,
+  isTestEnvironment: $wing_is_test,
+  entrypointDir: process.env["WING_SOURCE_DIR"],
+  rootId: process.env["WING_ROOT_ID"],
+});
 $APP.synth();
 //# sourceMappingURL=preflight.cjs.map
 ```
-
