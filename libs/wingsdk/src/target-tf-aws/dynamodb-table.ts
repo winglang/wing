@@ -34,6 +34,7 @@ export class DynamodbTable
       hashKey: props.hashKey,
       rangeKey: props.rangeKey,
       billingMode: "PAY_PER_REQUEST",
+      globalSecondaryIndex: props.globalSecondaryIndex,
     });
   }
 

@@ -7,6 +7,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
+  DynamodbTableGlobalSecondaryIndex,
   DynamodbTableSchema,
 } from "./schema-resources";
 import { DynamodbTableClientBase } from "../ex";
@@ -99,6 +100,16 @@ export class DynamodbTable
       });
     }
 
+    const globalSecondaryIndexKeys = (i: DynamodbTableGlobalSecondaryIndex) => {
+      const keys: KeySchemaElement[] = [
+        { AttributeName: i.hashKey, KeyType: KeyType.HASH },
+      ];
+      if (i.rangeKey) {
+        keys.push({ AttributeName: i.rangeKey, KeyType: KeyType.RANGE });
+      }
+      return keys;
+    };
+
     const createTableCommand = new CreateTableCommand({
       TableName: this.tableName,
       AttributeDefinitions: Object.entries(this.props.attributeDefinitions).map(
@@ -106,6 +117,18 @@ export class DynamodbTable
       ),
       KeySchema: keySchema,
       BillingMode: "PAY_PER_REQUEST",
+      GlobalSecondaryIndexes: this.props.globalSecondaryIndex?.map((i) => ({
+        IndexName: i.name,
+        KeySchema: globalSecondaryIndexKeys(i),
+        Projection: {
+          ProjectionType: i.projectionType,
+          NonKeyAttributes: i.nonKeyAttributes,
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: i.readCapacity,
+          WriteCapacityUnits: i.writeCapacity,
+        },
+      })),
     });
 
     // dynamodb server process might take some time to start

@@ -295,6 +295,45 @@ export interface OnDeployAttributes {}
 /** Runtime attributes for ex.DynamodbTable */
 export interface DynamodbTableAttributes {}
 
+/**
+ * Options for `DynamodbTableGlobalSecondaryIndex`.
+ */
+export interface DynamodbTableGlobalSecondaryIndex {
+  /**
+   * The name of the index.
+   */
+  readonly name: string;
+  /**
+   * The name of the hash key in the index.
+   */
+  readonly hashKey: string;
+  /**
+   * The name of the range key.
+   * @default undefined
+   */
+  readonly rangeKey?: string;
+  /**
+   * Number of read units for this index.
+   * @default undefined
+   */
+  readonly writeCapacity?: number;
+  /**
+   * Number of write units for this index
+   * @default undefined
+   */
+  readonly readCapacity?: number;
+  /**
+   * The set of attributes that are projected into the index.
+   * @default "ALL"
+   */
+  readonly projectionType: "ALL" | "INCLUDE" | "KEYS_ONLY";
+  /**
+   * A list of attributes to project into the index.
+   * @default undefined
+   */
+  readonly nonKeyAttributes?: string[];
+}
+
 /** Schema for ex.DynamodbTable */
 export interface DynamodbTableSchema extends BaseResourceSchema {
   readonly type: typeof DYNAMODB_TABLE_FQN;
@@ -312,6 +351,10 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
      * Range key for this table.
      */
     readonly rangeKey?: string;
+    /**
+     * The GSI for the table.
+     */
+    readonly globalSecondaryIndex?: DynamodbTableGlobalSecondaryIndex[];
   };
 }
 
