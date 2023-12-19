@@ -159,7 +159,11 @@ export abstract class App extends Construct implements IApp {
    */
   public _testRunner: TestRunner | undefined;
 
-  protected synthHooks?: SynthHooks;
+  /**
+   * SynthHooks hooks of dependent platforms
+   * @internal
+   */
+  protected _synthHooks?: SynthHooks;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -174,7 +178,7 @@ export abstract class App extends Construct implements IApp {
 
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
-    this.synthHooks = props.synthHooks;
+    this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
