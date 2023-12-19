@@ -1,4 +1,4 @@
-import { wing } from "../src";
+import { main } from "../src";
 import { cloud } from "@winglang/sdk"
 
 main((app) => {

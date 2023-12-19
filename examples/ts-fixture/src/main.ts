@@ -1,4 +1,4 @@
-import { wing } from "ts4w";
+import { main } from "ts4w";
 import { cloud } from "@winglang/sdk";
 
 main((app) => {
