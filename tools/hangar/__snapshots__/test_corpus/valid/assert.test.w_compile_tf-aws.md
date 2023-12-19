@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $s1, $s2 }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______s1_s1__, $s1, $s2 }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -17,7 +17,7 @@ module.exports = function({ $s1, $s2 }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"`\" == \"`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`","`")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("``","``")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`s1`","`s1`")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s1,$s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______s1_s1__)};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" == \"{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s1))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" != \"{s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s2))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" == \"a{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["a", ""] }, $s1))))};
@@ -72,6 +72,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______s1_s1__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)))},
             $s1: ${$stdlib.core.liftObject(s1)},
             $s2: ${$stdlib.core.liftObject(s2)},
           })
@@ -93,6 +94,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
+          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)), host, []);
           $Closure1._registerOnLiftObject(s1, host, []);
           $Closure1._registerOnLiftObject(s2, host, []);
         }

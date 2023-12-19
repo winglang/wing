@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $a, $aCloned, $m, $s }) {
+module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,10 +11,10 @@ module.exports = function({ $a, $aCloned, $m, $s }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a.length,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s.size,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys($m).length,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($aCloned.length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a_length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s_size,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_m__length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($aCloned_length,1)))};
     }
   }
   return $Closure1;
@@ -80,10 +80,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $a: ${$stdlib.core.liftObject(a)},
-            $aCloned: ${$stdlib.core.liftObject(aCloned)},
-            $m: ${$stdlib.core.liftObject(m)},
-            $s: ${$stdlib.core.liftObject(s)},
+            $Object_keys_m__length: ${$stdlib.core.liftObject(Object.keys(m).length)},
+            $aCloned_length: ${$stdlib.core.liftObject(aCloned.length)},
+            $a_length: ${$stdlib.core.liftObject(a.length)},
+            $s_size: ${$stdlib.core.liftObject(s.size)},
           })
         `;
       }
@@ -103,10 +103,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(a, host, ["length"]);
-          $Closure1._registerOnLiftObject(aCloned, host, ["length"]);
-          $Closure1._registerOnLiftObject(m, host, ["size"]);
-          $Closure1._registerOnLiftObject(s, host, ["size"]);
+          $Closure1._registerOnLiftObject(Object.keys(m).length, host, []);
+          $Closure1._registerOnLiftObject(a.length, host, []);
+          $Closure1._registerOnLiftObject(aCloned.length, host, []);
+          $Closure1._registerOnLiftObject(s.size, host, []);
         }
         super._registerOnLift(host, ops);
       }
