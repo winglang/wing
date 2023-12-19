@@ -61,7 +61,6 @@ export class App extends core.App {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private synthHooks?: core.SynthHooks;
 
   constructor(props: CdkAppProps) {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;

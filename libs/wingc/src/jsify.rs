@@ -192,7 +192,7 @@ impl<'a> JSifier<'a> {
 			));
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'], traceUsage: process.env['WING_TRACE_USAGE'] }});",
+				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
 				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 			output.line("$APP.synth();".to_string());

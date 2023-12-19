@@ -200,10 +200,6 @@ async function main() {
         .preset(3)
         .argParser(parseInt)
     )
-    .option(
-      "--trace-usage",
-      "Trace the usage of resources, methods, and properties in a dedicated file in the output dir"
-    )
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test", "test/test"));

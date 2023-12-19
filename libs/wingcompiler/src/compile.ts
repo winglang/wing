@@ -161,7 +161,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_VALUES_FILE"] = options.values;
   process.env["WING_IS_TEST"] = testing.toString();
   process.env["WING_PLATFORMS"] = resolvePlatformPaths(options.platform);
-  process.env["WING_TRACE_USAGE"] = `${options.traceUsage ?? false}`;
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 

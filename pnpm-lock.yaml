@@ -1133,6 +1133,28 @@ importers:
         specifier: ^0.32.4
         version: 0.32.4
 
+  libs/compatibility-spy:
+    dependencies:
+      "@winglang/sdk":
+        specifier: workspace:^
+        version: link:../wingsdk
+      constructs:
+        specifier: ~10.2.69
+        version: 10.2.70
+    devDependencies:
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../tools/bump-pack
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@4.9.5)
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+      vitest:
+        specifier: ^0.32.4
+        version: 0.32.4
+
   libs/tree-sitter-wing:
     dependencies:
       nan:
@@ -14179,7 +14201,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231124
+      typescript: 5.4.0-dev.20231218
     dev: true
 
   /dset@3.1.2:
@@ -23694,8 +23716,8 @@ packages:
     engines: {node: ">=14.17"}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231124:
-    resolution: {integrity: sha512-XGgnXNUfccFaEWyWZ0i/JuPNbHzutjS/vKgpz5TpEjmwFYwyQMSr06Nicv0HJBw/8WQ7m8EoKbyyXN8wdWmoVg==}
+  /typescript@5.4.0-dev.20231218:
+    resolution: {integrity: sha512-huxh8lRM0KCQBEOrTZEGb/B/3FE7XQzoGuNnaRG3kpJoj4xZ+TuJNCIJYDSXHvd5754pfOLxz51Jhkvc/ZCr3w==}
     engines: {node: ">=14.17"}
     hasBin: true
     dev: true

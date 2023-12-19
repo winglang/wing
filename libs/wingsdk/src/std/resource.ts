@@ -305,7 +305,6 @@ export abstract class Resource extends Construct implements IResource {
         // first add the operation to the set of operations for the host so that we can avoid
         // infinite recursion.
         opsForHost.add(op);
-        App.of(this)._addToUsageContext(this, op);
 
         this._registerOnLift(host, [op]);
 

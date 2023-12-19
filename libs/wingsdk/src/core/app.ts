@@ -1,5 +1,3 @@
-import { writeFileSync } from "fs";
-import { resolve } from "path";
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
@@ -61,11 +59,6 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
-
-  /** Whether resources' methods and props usage is  traced
-   * @default false
-   */
-  readonly traceUsage?: boolean;
 }
 
 /**
@@ -155,11 +148,6 @@ export abstract class App extends Construct implements IApp {
   public readonly isTestEnvironment: boolean;
 
   /**
-   * Whether or not this app's resources' methods and properties should be traced
-   */
-  public readonly traceUsage: boolean;
-
-  /**
    * NewInstance hooks for defining resource implementations.
    * @internal
    */
@@ -171,11 +159,7 @@ export abstract class App extends Construct implements IApp {
    */
   public _testRunner: TestRunner | undefined;
 
-  /**
-   * A summary of methods and property usage for each resource time
-   * @internal
-   */
-  public _usageContext: Map<string, Set<string>> = new Map();
+  protected synthHooks?: SynthHooks;
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
@@ -188,9 +172,9 @@ export abstract class App extends Construct implements IApp {
       Node._markRoot(this.constructor);
     }
 
-    this.traceUsage = props.traceUsage ?? false;
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this.synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
@@ -292,7 +276,7 @@ export abstract class App extends Construct implements IApp {
   ): any {
     // first check if overrides have been provided
     for (const override of this._newInstanceOverrides) {
-      const instance = override(fqn, scope, id, ...args);
+      const instance = override(this, fqn, scope, id, args);
       if (instance) {
         return instance;
       }
@@ -303,49 +287,7 @@ export abstract class App extends Construct implements IApp {
       return undefined;
     }
 
-    if (this.traceUsage) {
-      return new Proxy(new type(scope, id, ...args), {
-        get: (target, prop: string | Symbol) => {
-          if (
-            typeof prop === "string" &&
-            !prop.startsWith("_") &&
-            !PARENT_PROPERTIES.has(prop)
-          ) {
-            this._addToUsageContext(target, prop);
-          }
-          //@ts-ignore
-          return target[prop];
-        },
-        set: (target, prop, newValue) => {
-          if (typeof prop === "string" && !prop.startsWith("_")) {
-            this._addToUsageContext(target, prop);
-          }
-          //@ts-ignore
-          target[prop] = newValue;
-          return true;
-        },
-      });
-    }
-
     return new type(scope, id, ...args);
-  }
-
-  /**
-   * Adds an op to usage context
-   * @param op
-   * @internal
-   */
-  public _addToUsageContext(parent: any, op: string): void {
-    const className = parent.constructor.name;
-    if (!this.traceUsage || ["handle", "$inflight_init"].includes(op)) {
-      return;
-    }
-    const usageContext = this._usageContext.get(className);
-    if (!usageContext) {
-      this._usageContext.set(className, new Set([op]));
-    } else {
-      usageContext.add(op);
-    }
   }
 
   /**
@@ -370,24 +312,6 @@ export abstract class App extends Construct implements IApp {
       }
     }
   }
-
-  /**
-   * Write the usage context into a file in the out dir
-   * @internal
-   */
-  public _writeAppUsage(): void {
-    if (this.traceUsage) {
-      const context: Record<string, string[]> = {};
-      for (const key of this._usageContext.keys()) {
-        context[key] = Array.from(this._usageContext.get(key) ?? []);
-      }
-
-      writeFileSync(
-        resolve(this.outdir, "usage_context.json"),
-        JSON.stringify(context, null, 2)
-      );
-    }
-  }
 }
 
 export function preSynthesizeAllConstructs(app: App): void {
@@ -396,13 +320,4 @@ export function preSynthesizeAllConstructs(app: App): void {
       (c as IResource)._preSynthesize();
     }
   }
-
-  app._writeAppUsage();
 }
-
-const PARENT_PROPERTIES: Set<string> = new Set([
-  "node",
-  "onLiftMap",
-  ...Object.getOwnPropertyNames(Construct),
-  ...Object.getOwnPropertyNames(Construct.prototype),
-]);

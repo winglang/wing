@@ -19,8 +19,15 @@ export interface IPlatform {
    * @param scope construct scope
    * @param id unique string id for resource
    * @param props props to pass to the resource
+   * @param app the base app instance
    */
-  newInstance?(type: string, scope: Construct, id: string, props: any): any;
+  newInstance?(
+    app: Construct,
+    type: string,
+    scope: Construct,
+    id: string,
+    props: any
+  ): any;
 
   /**
    * New App Method

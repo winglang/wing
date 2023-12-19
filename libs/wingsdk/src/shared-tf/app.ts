@@ -15,7 +15,6 @@ import {
   App,
   AppProps,
   Connections,
-  SynthHooks,
   preSynthesizeAllConstructs,
 } from "../core";
 import { registerTokenResolver } from "../core/tokens";
@@ -39,8 +38,6 @@ export abstract class CdktfApp extends App {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-
-  protected synthHooks?: SynthHooks;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
