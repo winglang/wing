@@ -1989,18 +1989,25 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:13:12
+"error: Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+36 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:34:13
+error: Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
-34 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+43 |     q.push(\\"push!\\");
+   |     ^ Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+
+
+error: Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
+   |
+48 |     assert(b.list().length == 0);
+   |            ^ Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -2011,18 +2018,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:13:12
+"error: Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+32 |     q.push(\\"push!\\");
+   |     ^ Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:18:12
+error: Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
-18 |     return globalQueue;
-   |            ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+35 |     q2.push(\\"push!\\");
+   |     ^^ Reference to lifted preflight object of type \\"Queue\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -2033,18 +2040,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:13:13
+"error: Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
-13 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:17:13
+error: Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
-17 |     let y = globalB;
-   |             ^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+19 |     y.put(\\"boom\\", \\"shakalaka\\");
+   |     ^ Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -3002,11 +3009,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/resource_captures.test.w:13:13
+"error: Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/resource_captures.test.w:15:5
    |
-13 |     let b = this.bucket;
-   |             ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     b.put(\\"hello\\", \\"world\\");
+   |     ^ Reference to lifted preflight object of type \\"Bucket\\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -3144,13 +3151,6 @@ error: Inflight classes cannot have a scope
    |
 17 |   new InflightClass() in pc;
    |                          ^^ Inflight classes cannot have a scope
-
-
-error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/scope_and_id.test.w:17:26
-   |
-17 |   new InflightClass() in pc;
-   |                          ^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -3675,18 +3675,18 @@ error: Unknown symbol \\"unknown\\"
    | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
-error: Unknown symbol \\"assert\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
-   |
-20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Unknown symbol \\"assert\\"
-
-
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:24
    |
 20 |     this.bucket.assert(2 + \\"2\\");
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unknown symbol \\"assert\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
+   |
+20 |     this.bucket.assert(2 + \\"2\\");
+   |                 ^^^^^^ Unknown symbol \\"assert\\"
 
 
 error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
