@@ -209,7 +209,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     }
 
     if (os.platform() === "win32") {
-      // In worker threads on Windows, environment variables on case-sensitive.
+      // In worker threads on Windows, environment variables are case-sensitive.
       // Most people probably already assume this is the case everywhere, so
       // it is sufficient for now to just to normalize common automatic env vars.
 
@@ -219,7 +219,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       }
     }
 
-    await runPreflightCodeInVm(preflightEntrypoint, wingDir, preflightEnv, log);
+    await runPreflightCodeInWorkerThread(preflightEntrypoint, wingDir, preflightEnv, log);
   }
 
   if (os.platform() === "win32") {
@@ -325,7 +325,7 @@ npm i ts4w
   }
 }
 
-async function runPreflightCodeInVm(
+async function runPreflightCodeInWorkerThread(
   entrypoint: string,
   wingDir: string,
   env: Record<string, string | undefined>,
