@@ -35,6 +35,17 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
         "path": "root/my_api/OnRequestHandler0",
@@ -122,6 +133,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -199,6 +214,18 @@ return class Handler {
               },
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
+            },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
               "constructInfo": {
@@ -240,10 +267,12 @@ return class Handler {
 
 exports[`api handler can read the request params 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -251,6 +280,7 @@ exports[`api handler can read the request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -283,6 +313,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -356,6 +397,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -434,6 +479,18 @@ return class Handler {
               },
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
+            },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
               "constructInfo": {
@@ -475,10 +532,12 @@ return class Handler {
 
 exports[`api handler can read the request path 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -486,6 +545,7 @@ exports[`api handler can read the request path 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -518,6 +578,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -591,6 +662,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -669,6 +744,18 @@ return class Handler {
               },
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
+            },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
               "constructInfo": {
@@ -710,10 +797,12 @@ return class Handler {
 
 exports[`api handler can set response headers 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -721,6 +810,7 @@ exports[`api handler can set response headers 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -753,6 +843,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -826,6 +927,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -904,6 +1009,18 @@ return class Handler {
               },
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
+            },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
               "constructInfo": {
@@ -945,10 +1062,12 @@ return class Handler {
 
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -956,6 +1075,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -988,6 +1108,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -1061,6 +1192,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1139,6 +1274,18 @@ return class Handler {
               },
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
+            },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
             },
             "OnRequestHandler0": {
               "constructInfo": {
@@ -1180,10 +1327,12 @@ return class Handler {
 
 exports[`api response returns default Content-Type header 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -1191,6 +1340,7 @@ exports[`api response returns default Content-Type header 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -1223,6 +1373,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -1296,6 +1457,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -1375,6 +1540,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1415,10 +1592,12 @@ return class Handler {
 
 exports[`api supports every method type 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -1444,6 +1623,7 @@ exports[`api supports every method type 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -1506,6 +1686,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -1664,6 +1855,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -1742,6 +1937,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -1782,10 +1989,12 @@ return class Handler {
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /:name/:age\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}).",
   "GET /:name/:age - 200.",
@@ -1793,6 +2002,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -1825,6 +2035,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -1916,6 +2137,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -1994,6 +2219,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2034,10 +2271,12 @@ return class Handler {
 
 exports[`api with 'name' parameter 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /:name\\" params={\\"name\\":\\"akhil\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}).",
   "GET /:name - 200.",
@@ -2045,6 +2284,7 @@ exports[`api with 'name' parameter 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -2077,6 +2317,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -2160,6 +2411,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -2238,6 +2493,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2305,6 +2572,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -2395,6 +2673,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -2473,6 +2755,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2513,12 +2807,14 @@ return class Handler {
 
 exports[`api with multiple methods on same route 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -2531,6 +2827,7 @@ exports[`api with multiple methods on same route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -2583,6 +2880,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -2697,6 +3005,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -2786,6 +3098,18 @@ return class Handler {
               "id": "ApiEventMapping1",
               "path": "root/my_api/ApiEventMapping1",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -2839,12 +3163,14 @@ return class Handler {
 
 exports[`api with multiple routes 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello/world\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
@@ -2857,6 +3183,7 @@ exports[`api with multiple routes 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -2909,6 +3236,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -3025,6 +3363,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -3114,6 +3456,18 @@ return class Handler {
               "id": "ApiEventMapping1",
               "path": "root/my_api/ApiEventMapping1",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -3167,10 +3521,12 @@ return class Handler {
 
 exports[`api with one GET route 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -3178,6 +3534,7 @@ exports[`api with one GET route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -3210,6 +3567,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -3283,6 +3651,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -3362,6 +3734,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -3402,10 +3786,12 @@ return class Handler {
 
 exports[`api with one GET route with request params 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /users/:name\\" params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/:name - 200.",
@@ -3413,6 +3799,7 @@ exports[`api with one GET route with request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -3445,6 +3832,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -3528,6 +3926,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -3606,6 +4008,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -3646,10 +4060,12 @@ return class Handler {
 
 exports[`api with one POST route, with body 1`] = `
 [
+  "root/my_api/Endpoint is waiting on a dependency",
   "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
   "@winglang/sdk.sim.EventMapping created.",
+  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
@@ -3657,6 +4073,7 @@ exports[`api with one POST route, with body 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
+  "@winglang/sdk.cloud.Endpoint deleted.",
 ]
 `;
 
@@ -3689,6 +4106,17 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
       {
         "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
         "attrs": {},
@@ -3763,6 +4191,10 @@ return class Handler {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -3841,6 +4273,18 @@ return class Handler {
               "id": "ApiEventMapping0",
               "path": "root/my_api/ApiEventMapping0",
             },
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -3899,6 +4343,17 @@ exports[`create an api 1`] = `
         },
         "type": "@winglang/sdk.cloud.Api",
       },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
     ],
     "sdkVersion": "0.0.0",
     "types": {
@@ -3917,6 +4372,10 @@ exports[`create an api 1`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -3984,6 +4443,20 @@ exports[`create an api 1`] = `
     "tree": {
       "children": {
         "my_api": {
+          "children": {
+            "Endpoint": {
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.2.70",
+              },
+              "display": {
+                "description": "Endpoint for Api root/my_api",
+                "title": "Endpoint",
+              },
+              "id": "Endpoint",
+              "path": "root/my_api/Endpoint",
+            },
+          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.2.70",

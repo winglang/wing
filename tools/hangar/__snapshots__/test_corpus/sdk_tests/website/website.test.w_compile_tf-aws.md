@@ -9,7 +9,19 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "cloud.Website": {
+              "Endpoint": {
+                "Url": "cloudWebsite_Endpoint_Url_31589343"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_iam_policy_document": {
@@ -48,6 +60,11 @@
           }
         ]
       }
+    }
+  },
+  "output": {
+    "cloudWebsite_Endpoint_Url_31589343": {
+      "value": "https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}"
     }
   },
   "provider": {

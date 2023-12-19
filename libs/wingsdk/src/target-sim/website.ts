@@ -12,14 +12,21 @@ import { IInflightHost } from "../std";
  */
 export class Website extends cloud.Website implements ISimulatorResource {
   private fileRoutes: FileRoutes = {};
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
+
+    this.endpoint = new cloud.Endpoint(
+      this,
+      "Endpoint",
+      simulatorAttrToken(this, "url"),
+      { label: `Endpoint for Website ${this.node.path}`, browserSupport: true }
+    );
   }
 
-  /** The url of the website */
-  public get url(): string {
-    return simulatorAttrToken(this, "url");
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   /** Adds a file to the website during deployment */

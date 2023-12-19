@@ -25,12 +25,14 @@ export interface CreateCompilerProps {
   wingfile: string;
   platform?: string[];
   testing?: boolean;
+  stateDir?: string;
 }
 
 export const createCompiler = ({
   wingfile,
   platform = [wing.BuiltinPlatform.SIM],
   testing = false,
+  stateDir,
 }: CreateCompilerProps): Compiler => {
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
@@ -81,6 +83,11 @@ export const createCompiler = ({
     "**/node_modules/**",
     "**/.git/**",
   ];
+
+  if (stateDir) {
+    ignoreList.push(stateDir);
+  }
+
   const watcher = chokidar.watch(dirname, {
     ignored: ignoreList,
     ignoreInitial: true,

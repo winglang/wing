@@ -29,6 +29,7 @@ const INDEX_FILE = "index.html";
 export class Website extends cloud.Website implements aws.IAwsWebsite {
   public readonly bucket: S3Bucket;
   private readonly _url: string;
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: aws.AwsWebsiteProps) {
     super(scope, id, props);
@@ -153,10 +154,15 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     }
 
     this._url = `https://${distribution.domainName}`;
+
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, {
+      label: `Endpoint for Website ${this.node.path}`,
+      browserSupport: true,
+    });
   }
 
-  public get url(): string {
-    return this._url;
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   public addFile(

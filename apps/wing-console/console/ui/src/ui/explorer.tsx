@@ -70,7 +70,6 @@ export const Explorer = memo((props: ExplorerProps) => {
     selectedItemId,
     onSelectedItemsChange,
     onExpandAll,
-    loading,
     onCollapseAll,
     expandedItems,
     onExpandedItemsChange,
@@ -87,19 +86,11 @@ export const Explorer = memo((props: ExplorerProps) => {
       data-testid={props["data-testid"]}
     >
       <Toolbar title="Explorer">
-        <ToolbarButton
-          onClick={onExpandAll}
-          title="Expand All"
-          disabled={loading}
-        >
+        <ToolbarButton onClick={onExpandAll} title="Expand All">
           <SquareStackPlusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
 
-        <ToolbarButton
-          onClick={onCollapseAll}
-          title="Collapse All"
-          disabled={loading}
-        >
+        <ToolbarButton onClick={onCollapseAll} title="Collapse All">
           <SquareStackMinusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
       </Toolbar>
@@ -115,7 +106,7 @@ export const Explorer = memo((props: ExplorerProps) => {
             )}
           >
             <div className="flex flex-col">
-              {expandedItems.length === 0 && <NoResources />}
+              {(!items || items.length === 0) && <NoResources />}
               <TreeView
                 expandedItems={expandedItems}
                 onExpandedItemsChange={onExpandedItemsChange}
