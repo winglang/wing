@@ -197,6 +197,20 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				return;
 			}
 
+			// Inflight expressions that evaluate to a preflight type are currently unsupported because
+			// we can't determine exactly which preflight object is being accessed and therefore can't
+			// qualify the original lift expression.
+			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Reference to lifted preflight object of type \"{expr_type}\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)"
+					),
+					span: Some(node.span.clone()),
+					annotations: vec![],
+					hints: vec![],
+				});
+			}
+
 			//---------------
 			// LIFT
 			if expr_phase == Phase::Preflight {
@@ -213,21 +227,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				} else {
 					None
 				};
-
-				// check that we can qualify the lift (e.g. determine which property is being accessed)
-				if property.is_none() && expr_type.is_preflight_class() {
-					report_diagnostic(Diagnostic {
-						message: format!(
-							"Cannot qualify access to a lifted object of type \"{}\" (see https://github.com/winglang/wing/issues/76 for more details)",
-							expr_type.to_string()
-						),
-						span: Some(node.span.clone()),
-						annotations: vec![],
-			hints: vec![],
-		});
-
-					return;
-				}
 
 				// if this is an inflight field of "this" no need to lift it
 				if is_inflight_field(&node, expr_type, &property) {

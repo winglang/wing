@@ -466,6 +466,9 @@ impl ClassLike for Struct {
 pub struct ArgListTypes {
 	pub pos_args: Vec<TypeRef>,
 	pub named_args: IndexMap<Symbol, SpannedTypeInfo>,
+	// Indicates if any of the arguments were an inflight expression, this is useful for determining if a
+	// phase independent call needs to be resolved as an inflight call or not.
+	pub includes_inflights: bool,
 }
 
 #[derive(Derivative)]
@@ -1728,7 +1731,21 @@ pub struct TypeChecker<'a> {
 
 	is_in_mut_json: bool,
 
+	// Stack of extra information we need to keep track of while visiting nested
+	// expressions during type checking.
+	curr_expr_info: Vec<CurrExpressionInfo>,
+
 	ctx: VisitContext,
+}
+
+enum CurrExpressionInfo {
+	/// The current expression has no special properties
+	NoInfo,
+	/// The current expression is the callee of a function call
+	Callee {
+		// The callee is being called with inflight args
+		inflight_args: bool,
+	},
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1748,6 +1765,7 @@ impl<'a> TypeChecker<'a> {
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
+			curr_expr_info: vec![],
 		}
 	}
 
@@ -1864,13 +1882,52 @@ impl<'a> TypeChecker<'a> {
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &mut SymbolEnv) -> (TypeRef, Phase) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
+
+		// By default set the current state to indicate the current expression isn't a function call
+		self.curr_expr_info.push(CurrExpressionInfo::NoInfo);
+
 		let (mut t, phase) = self.type_check_exp_helper(&exp, env);
 		self.types.assign_type_to_expr(exp, t, phase);
+
+		self.curr_expr_info.pop();
 
 		// In case any type inferences were updated during this check, ensure all related inferences are updated
 		self.update_known_inferences(&mut t, &exp.span);
 
 		(t, phase)
+	}
+
+	fn type_check_callee_exp(&mut self, exp: &Expr, env: &mut SymbolEnv, inflight_args: bool) -> (TypeRef, Phase) {
+		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
+
+		self.curr_expr_info.push(CurrExpressionInfo::Callee { inflight_args });
+
+		let (mut t, phase) = self.type_check_exp_helper(&exp, env);
+		self.types.assign_type_to_expr(exp, t, phase);
+
+		self.curr_expr_info.pop();
+
+		// In case any type inferences were updated during this check, ensure all related inferences are updated
+		self.update_known_inferences(&mut t, &exp.span);
+
+		(t, phase)
+	}
+
+	// Give two phases will return the more restrictive of the two
+	fn combine_phases(phase1: Phase, phase2: Phase) -> Phase {
+		match (phase1, phase2) {
+			// If any of the expressions are inflight then the result is inflight
+			(Phase::Inflight, _) | (_, Phase::Inflight) => Phase::Inflight,
+			// // Othewise, if any of the expressions are preflight then the result is preflight
+			// (Phase::Preflight, _) | (_, Phase::Preflight) => Phase::Preflight,
+			// // Otherwise the result is independent
+			// (Phase::Independent, Phase::Independent) => Phase::Independent,
+
+			// Otherwise, if any of the expressions are independent then the result is independent
+			(Phase::Independent, _) | (_, Phase::Independent) => Phase::Independent,
+			// Othersize the result is preflight
+			(Phase::Preflight, Phase::Preflight) => Phase::Preflight,
+		}
 	}
 
 	/// Helper function for type_check_exp. This is needed because we want to be able to `return`
@@ -1883,32 +1940,37 @@ impl<'a> TypeChecker<'a> {
 				Literal::String(_) => (self.types.string(), Phase::Independent),
 				Literal::Nil => (self.types.nil(), Phase::Independent),
 				Literal::InterpolatedString(s) => {
+					let mut phase = Phase::Independent;
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
-							let (exp_type, _) = self.type_check_exp(interpolated_expr, env);
+							let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
+							phase = Self::combine_phases(phase, p);
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
-					(self.types.string(), Phase::Independent)
+					(self.types.string(), phase)
 				}
 				Literal::Number(_) => (self.types.number(), Phase::Independent),
 				Literal::Boolean(_) => (self.types.bool(), Phase::Independent),
 			},
 			ExprKind::Binary { op, left, right } => {
 				let (ltype, ltype_phase) = self.type_check_exp(left, env);
-				let (rtype, _) = self.type_check_exp(right, env);
+				let (rtype, rtype_phase) = self.type_check_exp(right, env);
+
+				// Resolve the phase
+				let phase = Self::combine_phases(ltype_phase, rtype_phase);
 
 				match op {
 					BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
 						self.validate_type(ltype, self.types.bool(), left);
 						self.validate_type(rtype, self.types.bool(), right);
-						(self.types.bool(), Phase::Independent)
+						(self.types.bool(), phase)
 					}
 					BinaryOperator::AddOrConcat => {
 						if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
 							(self.types.number(), Phase::Independent)
 						} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
-							(self.types.string(), Phase::Independent)
+							(self.types.string(), phase)
 						} else {
 							// If any of the types are unresolved (error) then don't report this assuming the error has already been reported
 							if !ltype.is_unresolved() && !rtype.is_unresolved() {
@@ -1936,11 +1998,11 @@ impl<'a> TypeChecker<'a> {
 					| BinaryOperator::Power => {
 						self.validate_type(ltype, self.types.number(), left);
 						self.validate_type(rtype, self.types.number(), right);
-						(self.types.number(), Phase::Independent)
+						(self.types.number(), phase)
 					}
 					BinaryOperator::Equal | BinaryOperator::NotEqual => {
 						self.validate_type_binary_equality(rtype, ltype, exp);
-						(self.types.bool(), Phase::Independent)
+						(self.types.bool(), phase)
 					}
 					BinaryOperator::Less
 					| BinaryOperator::LessOrEqual
@@ -1948,18 +2010,18 @@ impl<'a> TypeChecker<'a> {
 					| BinaryOperator::GreaterOrEqual => {
 						self.validate_type(ltype, self.types.number(), left);
 						self.validate_type(rtype, self.types.number(), right);
-						(self.types.bool(), Phase::Independent)
+						(self.types.bool(), phase)
 					}
 					BinaryOperator::UnwrapOr => {
 						// Left argument must be an optional type
 						if !ltype.is_option() {
 							self.spanned_error(left, format!("Expected optional type, found \"{}\"", ltype));
-							(ltype, ltype_phase)
+							(ltype, phase)
 						} else {
 							// Right argument must be a subtype of the inner type of the left argument
 							let inner_type = *ltype.maybe_unwrap_option();
 							self.validate_type(rtype, inner_type, right);
-							(inner_type, ltype_phase)
+							(inner_type, phase)
 						}
 					}
 				}
@@ -1991,7 +2053,7 @@ impl<'a> TypeChecker<'a> {
 				(self.types.add_type(Type::Array(stype)), stype_phase)
 			}
 			ExprKind::Reference(_ref) => {
-				let (vi, phase) = self.resolve_reference(_ref, env);
+				let (vi, phase) = self.resolve_reference(_ref, env, self.curr_expr_is_callee_with_inflight_args());
 				(vi.type_, phase)
 			}
 			ExprKind::New(new_expr) => {
@@ -2169,9 +2231,12 @@ impl<'a> TypeChecker<'a> {
 				(class_type, env.phase)
 			}
 			ExprKind::Call { callee, arg_list } => {
+				// Type check the call arguments
+				let arg_list_types = self.type_check_arg_list(arg_list, env);
+
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let (func_type, callee_phase) = match callee {
-					CalleeKind::Expr(expr) => self.type_check_exp(expr, env),
+					CalleeKind::Expr(expr) => self.type_check_callee_exp(expr, env, arg_list_types.includes_inflights),
 					CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types).unwrap_or_else(|e| {
 						self.type_error(e);
 						self.resolved_error()
@@ -2179,8 +2244,6 @@ impl<'a> TypeChecker<'a> {
 				};
 				let is_option = func_type.is_option();
 				let func_type = func_type.maybe_unwrap_option();
-
-				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
 				// If the callee's signature type is unknown, just evaluate the entire call expression as an error
 				if func_type.is_unresolved() {
@@ -2225,7 +2288,7 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
-				// if the function is phase independent, then inherit from the callee
+				// If the function is phase independent, then inherit from the callee
 				let func_phase = if func_sig.phase == Phase::Independent {
 					callee_phase
 				} else {
@@ -3263,11 +3326,18 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_arg_list(&mut self, arg_list: &ArgList, env: &mut SymbolEnv) -> ArgListTypes {
+		// By default assume there are no inflight expressions in the arg list
+		let mut inflight_args = false;
+
 		// Type check the positional arguments, e.g. fn(exp1, exp2, exp3)
 		let pos_arg_types = arg_list
 			.pos_args
 			.iter()
-			.map(|pos_arg| self.type_check_exp(pos_arg, env).0)
+			.map(|pos_arg| {
+				let (t, p) = self.type_check_exp(pos_arg, env);
+				inflight_args |= p == Phase::Inflight;
+				t
+			})
 			.collect();
 
 		// Type check the named arguments, e.g. fn(named_arg1: exp4, named_arg2: exp5)
@@ -3275,7 +3345,8 @@ impl<'a> TypeChecker<'a> {
 			.named_args
 			.iter()
 			.map(|(sym, expr)| {
-				let arg_type = self.type_check_exp(&expr, env).0;
+				let (arg_type, p) = self.type_check_exp(&expr, env);
+				inflight_args |= p == Phase::Inflight;
 				(
 					sym.clone(),
 					SpannedTypeInfo {
@@ -3289,6 +3360,7 @@ impl<'a> TypeChecker<'a> {
 		ArgListTypes {
 			pos_args: pos_arg_types,
 			named_args: named_arg_types,
+			includes_inflights: inflight_args,
 		}
 	}
 
@@ -4053,7 +4125,7 @@ impl<'a> TypeChecker<'a> {
 		// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
 		// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
-		let (var, var_phase) = self.resolve_reference(&variable, env);
+		let (var, var_phase) = self.resolve_reference(&variable, env, false);
 
 		if !var.type_.is_unresolved() && !var.reassignable {
 			report_diagnostic(Diagnostic {
@@ -5046,7 +5118,12 @@ impl<'a> TypeChecker<'a> {
 			.map(|_| base_udt)
 	}
 
-	fn resolve_reference(&mut self, reference: &Reference, env: &mut SymbolEnv) -> (VariableInfo, Phase) {
+	fn resolve_reference(
+		&mut self,
+		reference: &Reference,
+		env: &mut SymbolEnv,
+		calee_with_inflight_args: bool,
+	) -> (VariableInfo, Phase) {
 		match reference {
 			Reference::Identifier(symbol) => {
 				let lookup_res = env.lookup_ext_mut(symbol, Some(self.ctx.current_stmt_idx()));
@@ -5090,7 +5167,7 @@ impl<'a> TypeChecker<'a> {
 					// Store this reference for later when we can modify the final AST and replace the original reference with the new one
 					self.types.type_expressions.insert(object.id, new_ref.clone());
 
-					return self.resolve_reference(&new_ref, env);
+					return self.resolve_reference(&new_ref, env, calee_with_inflight_args);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -5106,7 +5183,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let (instance_type, _) = self.type_check_exp(object, env);
+				let (instance_type, instance_phase) = self.type_check_exp(object, env);
 
 				// If resolving the object's type failed, we can't resolve the property either
 				if instance_type.is_unresolved() {
@@ -5115,9 +5192,16 @@ impl<'a> TypeChecker<'a> {
 
 				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
-				// If the property a phase independent then adapt the phase of the current context
+				// Try to resolve phase independent propertie's actual phase
 				let property_phase = if property_variable.phase == Phase::Independent {
-					self.ctx.current_phase()
+					// When the property is phase independent and either the object phase is inflight or we're
+					// passing inflight args to the method call, then we need treat the property as inflight too
+					if instance_phase == Phase::Inflight || calee_with_inflight_args {
+						Phase::Inflight
+					} else {
+						// Default to instance phase
+						instance_phase
+					}
 				} else {
 					property_variable.phase
 				};
@@ -5204,7 +5288,14 @@ impl<'a> TypeChecker<'a> {
 								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
 							);
 						}
-						(v.clone(), v.phase)
+						// If the property is phase independent then but it's a method call with inflight
+						// args then treat it as an inflight property
+						let phase = if v.phase == Phase::Independent && calee_with_inflight_args {
+							Phase::Inflight
+						} else {
+							v.phase
+						};
+						(v.clone(), phase)
 					}
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
@@ -5471,6 +5562,22 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
+	}
+
+	fn curr_expr_is_callee_with_inflight_args(&self) -> bool {
+		self
+			.curr_expr_info
+			.last()
+			.map(|e| {
+				matches!(
+					e,
+					CurrExpressionInfo::Callee {
+						inflight_args: true,
+						..
+					}
+				)
+			})
+			.unwrap_or(false)
 	}
 }
 
