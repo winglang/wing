@@ -62,8 +62,6 @@ export interface CompileOptions {
 
   // target directory for the output files
   readonly targetDir?: string;
-
-  readonly traceUsage?: boolean;
 }
 
 /**
