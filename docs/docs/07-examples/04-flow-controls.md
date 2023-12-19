@@ -36,6 +36,16 @@ for value in iterable {
 for value in 0..10 {
   log("{value}");
 }
+
+// prints numbers in reverse order from 10 to 0
+for value in 10..-1 {
+    log("{value}");
+}
+
+// include end
+for value in 1..=5 {
+    log("{value}");
+}
 ```
 
 ### If elif else
