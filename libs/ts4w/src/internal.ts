@@ -32,12 +32,11 @@ export async function compile(options: WingTSOptions) {
   }
 
   // get the last .js file emitted, this should be the entrypoint
-  // TODO Is this really the best way to do this?
   const emittedFiles = results.emittedFiles?.filter((f) => f.endsWith(".js"));
   const emittedFile = emittedFiles?.[emittedFiles.length - 1];
 
   if (!emittedFile) {
-    throw new Error(`TS compilation failed: Could not find emitted file ${emittedFile}`);
+    throw new Error(`TS compilation failed: Could not find emitted file in ${outDir}`);
   }
   
   return emittedFile;

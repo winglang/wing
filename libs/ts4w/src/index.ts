@@ -1,6 +1,8 @@
 import { std, platform } from "@winglang/sdk";
 import { Construct } from "constructs";
 
+export * as internal from "./internal";
+
 /**
  * Properties for a Wing app.
  */

@@ -137,16 +137,16 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const { log } = options;
   // create a unique temporary directory for the compilation
   const targetdir = options.targetDir ?? join(dirname(entrypoint), "target");
-  const wingFile = resolve(entrypoint);
-  log?.("wing file: %s", wingFile);
-  const wingDir = resolve(dirname(wingFile));
+  const entrypointFile = resolve(entrypoint);
+  log?.("wing file: %s", entrypointFile);
+  const wingDir = resolve(dirname(entrypointFile));
   log?.("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, target, testing, true);
+  const tmpSynthDir = resolveSynthDir(targetdir, entrypointFile, target, testing, true);
   log?.("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, target, testing);
+  const synthDir = resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
@@ -181,68 +181,14 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     fs.mkdir(tmpSynthDir, { recursive: true }),
   ]);
 
-  let preflightEntrypoint = join(workDir, WINGC_PREFLIGHT);
-
-  // Do TS compilation
-  if (entrypoint.endsWith(".ts")) {
-    const ts4w = await import("ts4w/dist/compiler.js").catch((err) => {
-      throw new Error(`\
-Failed to load "ts4w": ${err.message}
-
-To use Wing with TypeScript files, you must install "ts4w" as a dependency of your project.
-npm i ts4w
-`);
-    });
-
-    preflightEntrypoint = await ts4w.compile({
-      workDir,
-      entrypoint,
-    });
-  } else {
-    let env: Record<string, string> = {
-      RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(tmpSynthDir),
-    };
-    if (options.color !== undefined) {
-      env.CLICOLOR = options.color ? "1" : "0";
-    }
-
-    const wingc = await wingCompiler.load({
-      env,
-      imports: {
-        env: {
-          send_diagnostic,
-        },
-      },
-    });
-
-    const errors: wingCompiler.WingDiagnostic[] = [];
-
-    function send_diagnostic(data_ptr: number, data_len: number) {
-      const data_buf = Buffer.from(
-        (wingc.exports.memory as WebAssembly.Memory).buffer,
-        data_ptr,
-        data_len
-      );
-      const data_str = new TextDecoder().decode(data_buf);
-      errors.push(JSON.parse(data_str));
-    }
-
-    const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(wingDir)}`;
-    log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-    let compileSuccess: boolean;
-    try {
-      compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
-    } catch (error) {
-      // This is a bug in the compiler, indicate a compilation failure.
-      // The bug details should be part of the diagnostics handling below.
-      compileSuccess = false;
-    }
-    if (!compileSuccess) {
-      // This is a bug in the user's code. Print the compiler diagnostics.
-      throw new CompileError(errors);
-    }
-  }
+  let preflightEntrypoint = await compileForPreflight({
+    entrypointFile,
+    workDir,
+    wingDir,
+    tmpSynthDir,
+    color: options.color,
+    log,
+  });
 
   if (isEntrypointFile(entrypoint)) {
     let preflightEnv: Record<string, string | undefined> = {
@@ -302,6 +248,81 @@ function isEntrypointFile(path: string) {
     path.endsWith("\\main.w") ||
     path === "main.w"
   );
+}
+
+async function compileForPreflight(props: {
+  entrypointFile: string;
+  workDir: string;
+  wingDir: string;
+  tmpSynthDir: string;
+  color?: boolean;
+  log?: (...args: any[]) => void;
+}) {
+  if (props.entrypointFile.endsWith(".ts")) {
+    const ts4w = await import("ts4w")
+      .then((m) => m.internal)
+      .catch((err) => {
+        throw new Error(`\
+Failed to load "ts4w": ${err.message}
+
+To use Wing with TypeScript files, you must install "ts4w" as a dependency of your project.
+npm i ts4w
+`);
+      });
+
+    return await ts4w.compile({
+      workDir: props.workDir,
+      entrypoint: props.entrypointFile,
+    });
+  } else {
+    let env: Record<string, string> = {
+      RUST_BACKTRACE: "full",
+      WING_SYNTH_DIR: normalPath(props.tmpSynthDir),
+    };
+    if (props.color !== undefined) {
+      env.CLICOLOR = props.color ? "1" : "0";
+    }
+
+    const wingc = await wingCompiler.load({
+      env,
+      imports: {
+        env: {
+          send_diagnostic,
+        },
+      },
+    });
+
+    const errors: wingCompiler.WingDiagnostic[] = [];
+
+    function send_diagnostic(data_ptr: number, data_len: number) {
+      const data_buf = Buffer.from(
+        (wingc.exports.memory as WebAssembly.Memory).buffer,
+        data_ptr,
+        data_len
+      );
+      const data_str = new TextDecoder().decode(data_buf);
+      errors.push(JSON.parse(data_str));
+    }
+
+    const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
+      props.wingDir
+    )}`;
+    props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+    let compileSuccess: boolean;
+    try {
+      compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
+    } catch (error) {
+      // This is a bug in the compiler, indicate a compilation failure.
+      // The bug details should be part of the diagnostics handling below.
+      compileSuccess = false;
+    }
+    if (!compileSuccess) {
+      // This is a bug in the user's code. Print the compiler diagnostics.
+      throw new CompileError(errors);
+    }
+
+    return join(props.workDir, WINGC_PREFLIGHT);
+  }
 }
 
 async function runPreflightCodeInVm(
