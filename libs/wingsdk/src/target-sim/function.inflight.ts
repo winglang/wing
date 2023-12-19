@@ -55,7 +55,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           },
         });
 
-        return sb.call("handler", JSON.stringify(payload));
+        const result = await sb.call("handler", JSON.stringify(payload));
+        return result ?? "";
       },
     });
   }
