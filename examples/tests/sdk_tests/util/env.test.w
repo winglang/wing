@@ -5,7 +5,7 @@ let NOT_ACTUAL_ENV = "__NOT_ACTUAL_ENV_SHOULD_FAIL__";
 /**
  * env()
  */
-assert(util.env("WING_TARGET") != "");
+assert(util.env("PATH").length > 0);
 assert(util.env("APP_NAME") == "foo");
 assert(util.env("BASE_URL") == "https://www.winglang.io");
 assert(util.env("API_BASE_URL") == "https://www.winglang.io/api");

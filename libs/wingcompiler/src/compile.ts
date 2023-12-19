@@ -111,7 +111,9 @@ function resolveSynthDir(
  * @returns the resolved model
  */
 export function determineTargetFromPlatforms(platforms: string[]): string {
-  if (platforms.length === 0) { return ""; }
+  if (platforms.length === 0) {
+    return "";
+  }
   // determine target based on first platform
   const platform = platforms[0];
 
@@ -162,7 +164,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     }
 
     return nodeModules;
-  }
+  };
 
   let compilerModuleDir = nearestNodeModules(__dirname);
   let sdkModuleDir = nearestNodeModules(join(require.resolve("@winglang/sdk"), "..", "..", ".."));
@@ -182,9 +184,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   let preflightEntrypoint = join(workDir, WINGC_PREFLIGHT);
 
   // Do TS compilation
-  if(entrypoint.endsWith(".ts")) {
-    const ts4w = await import("ts4w/dist/compiler.js")
-    .catch((err) => {
+  if (entrypoint.endsWith(".ts")) {
+    const ts4w = await import("ts4w/dist/compiler.js").catch((err) => {
       throw new Error(`\
 Failed to load "ts4w": ${err.message}
 
@@ -214,9 +215,9 @@ npm i ts4w
         },
       },
     });
-  
+
     const errors: wingCompiler.WingDiagnostic[] = [];
-  
+
     function send_diagnostic(data_ptr: number, data_len: number) {
       const data_buf = Buffer.from(
         (wingc.exports.memory as WebAssembly.Memory).buffer,
@@ -226,7 +227,7 @@ npm i ts4w
       const data_str = new TextDecoder().decode(data_buf);
       errors.push(JSON.parse(data_str));
     }
-  
+
     const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(wingDir)}`;
     log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
@@ -256,9 +257,20 @@ npm i ts4w
       WING_NODE_MODULES: wingNodeModules,
       NODE_PATH: nodePaths.join(os.platform() === "win32" ? ";" : ":"),
     };
-  
+
     if (options.rootId) {
       preflightEnv.WING_ROOT_ID = options.rootId;
+    }
+
+    if (os.platform() === "win32") {
+      // In worker threads on windows, environment variable are case sensitive.
+      // Most people probably already assume this is true, but it can be confusing for automatic variables
+      // So let's fix any that come up
+
+      if (preflightEnv.Path) {
+        preflightEnv.PATH = preflightEnv.Path;
+        delete preflightEnv.Path;
+      }
     }
 
     await runPreflightCodeInVm(preflightEntrypoint, wingDir, preflightEnv, log);
@@ -296,7 +308,7 @@ async function runPreflightCodeInVm(
   entrypoint: string,
   wingDir: string,
   env: Record<string, string | undefined>,
-  log?: (...args: any[]) => void,
+  log?: (...args: any[]) => void
 ): Promise<void> {
   log?.("reading artifact from %s", entrypoint);
   const artifact = await fs.readFile(entrypoint, "utf-8");
