@@ -22,7 +22,7 @@ const ignoreList = [
   "hangar",
   "jsii-fixture",
   "ts-fixture",
-  "ts4wing",
+  "ts4w",
 ];
 
 const nameMapping: Record<string, string> = {

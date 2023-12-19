@@ -1,6 +1,6 @@
 import { wing } from "../src";
 import { cloud } from "@winglang/sdk"
 
-wing((app) => {
+main((app) => {
   new cloud.Bucket(app, "Bucket");
 });

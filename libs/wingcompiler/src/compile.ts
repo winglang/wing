@@ -149,9 +149,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const workDir = resolve(tmpSynthDir, ".wing");
   log?.("work dir: %s", workDir);
 
-  // TODO: couldn't be moved to the context's since used in utils.env(...)
-  // in the future we may look for a unified approach
-
   const nearestNodeModules = (dir: string): string => {
     let nodeModules = join(dir, "node_modules");
     while (!existsSync(nodeModules)) {
@@ -186,17 +183,17 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   // Do TS compilation
   if(entrypoint.endsWith(".ts")) {
-    const ts4wing = await import("ts4wing/dist/compiler.js")
+    const ts4w = await import("ts4w/dist/compiler.js")
     .catch((err) => {
       throw new Error(`\
-Failed to load "ts4wing": ${err.message}
+Failed to load "ts4w": ${err.message}
 
-To use Wing with TypeScript files, you must install "ts4wing" as a dependency of your project.
-npm i ts4wing
+To use Wing with TypeScript files, you must install "ts4w" as a dependency of your project.
+npm i ts4w
 `);
     });
 
-    preflightEntrypoint = await ts4wing.compileTypescriptForWing({
+    preflightEntrypoint = await ts4w.compile({
       workDir,
       entrypoint,
     });

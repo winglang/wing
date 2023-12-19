@@ -1,6 +1,6 @@
-import { wing } from "ts4wing";
+import { wing } from "ts4w";
 import { cloud } from "@winglang/sdk";
 
-wing((app) => {
+main((app) => {
   new cloud.Bucket(app, "Bucket");
 });

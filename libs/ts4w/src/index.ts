@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 /**
  * Properties for a Wing app.
  */
-export interface WingAppProps {
+export interface AppProps {
   /**
    * The name and id of the app.
    * @default "main"
@@ -16,10 +16,10 @@ export interface WingAppProps {
  * Create a Wing app.
  *
  * ```ts
- * import { wing } from "ts4wing";
+ * import { wing } from "ts4w";
  * import { cloud } from "@winglang/sdk";
  *
- * wing(app => {
+ * main(app => {
  *   new cloud.Bucket(app, "Bucket");
  * });
  * ```
@@ -27,7 +27,7 @@ export interface WingAppProps {
  * @param fn Define your application using the provided root construct.
  *           Note that this function may be called multiple times when used with `wing test`.
  */
-export function wing(fn: (root: Construct) => void, props: WingAppProps = {}) {
+export function main(fn: (root: Construct) => void, props: AppProps = {}) {
   // check if we have everything we need
   const requiredEnvVars = [
     "WING_PLATFORMS",

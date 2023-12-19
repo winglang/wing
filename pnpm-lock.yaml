@@ -1109,9 +1109,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
-      ts4wing:
+      ts4w:
         specifier: workspace:^
-        version: link:../../libs/ts4wing
+        version: link:../../libs/ts4w
       winglang:
         specifier: workspace:^
         version: link:../../apps/wing
@@ -1159,7 +1159,7 @@ importers:
         specifier: 0.20.6
         version: 0.20.6
 
-  libs/ts4wing:
+  libs/ts4w:
     dependencies:
       '@winglang/sdk':
         specifier: workspace:^
@@ -1198,9 +1198,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../wingsdk
-      ts4wing:
+      ts4w:
         specifier: workspace:^
-        version: link:../ts4wing
+        version: link:../ts4w
       wasi-js:
         specifier: ^1.7.3
         version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
@@ -1217,6 +1217,9 @@ importers:
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@4.9.5)
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
       vitest:
         specifier: ^0.30.1
         version: 0.30.1
@@ -1546,9 +1549,9 @@ importers:
       octokit:
         specifier: ^3.1.0
         version: 3.1.1
-      ts4wing:
+      ts4w:
         specifier: workspace:^
-        version: link:../../libs/ts4wing
+        version: link:../../libs/ts4w
       tsx:
         specifier: ^3.12.8
         version: 3.13.0
@@ -14530,7 +14533,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231218
+      typescript: 5.4.0-dev.20231219
     dev: true
 
   /dset@3.1.2:
@@ -24068,8 +24071,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231218:
-    resolution: {integrity: sha512-huxh8lRM0KCQBEOrTZEGb/B/3FE7XQzoGuNnaRG3kpJoj4xZ+TuJNCIJYDSXHvd5754pfOLxz51Jhkvc/ZCr3w==}
+  /typescript@5.4.0-dev.20231219:
+    resolution: {integrity: sha512-pWOp0d2qj5T4llRnhb3BVkx2jN2yglMVTc96xs9dRY4I64EG/uFfyO3aoHm/1H0LAPmilJsJGDtXASxGM+GIVg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

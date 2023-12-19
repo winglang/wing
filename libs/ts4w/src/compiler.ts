@@ -5,7 +5,7 @@ export interface WingTSOptions {
   entrypoint: string;
 }
 
-export async function compileTypescriptForWing(options: WingTSOptions) {
+export async function compile(options: WingTSOptions) {
   const ts = (await import("typescript")).default;
   const outDir = join(options.workDir, "ts");
 

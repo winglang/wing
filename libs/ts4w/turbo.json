@@ -14,7 +14,7 @@
     },
     "package": {
       "dependsOn": ["compile"],
-      "outputs": ["../../dist/ts4wing-*.tgz"]
+      "outputs": ["../../dist/ts4w-*.tgz"]
     }
   }
 }

@@ -6,7 +6,7 @@
     "test": "wing test ./src/main.ts"
   },
   "dependencies": {
-    "ts4wing": "workspace:^",
+    "ts4w": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "winglang": "workspace:^"
   },
