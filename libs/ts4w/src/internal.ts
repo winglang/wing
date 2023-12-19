@@ -1,11 +1,11 @@
 import { join } from "path";
 
-export interface WingTSOptions {
+export interface CompileOptions {
   workDir: string;
   entrypoint: string;
 }
 
-export async function compile(options: WingTSOptions) {
+export async function compile(options: CompileOptions) {
   const ts = (await import("typescript")).default;
   const outDir = join(options.workDir, "ts");
 
