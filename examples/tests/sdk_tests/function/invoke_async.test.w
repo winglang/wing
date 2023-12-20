@@ -1,19 +1,28 @@
 bring cloud;
 bring util;
 
-let payload = "hello";
-log("log preflight");
+let counter = new cloud.Counter();
 
-let f1 = new cloud.Function(inflight (input: str): str => {
-  log("log inside f1");
-}) as "f1";
+let fn = new cloud.Function(inflight (input: str) => {
+  log("log inside fn");
+  util.sleep(5s);
+  counter.inc();
+});
 
-let f2 = new cloud.Function(inflight (input: str): str => {
-  log("log inside f2");
-}) as "f2";
+test "invoke() waits for function to finish" {
+  assert(counter.peek() == 0);
+  log("before time: {datetime.utcNow().toIso()}");
+  fn.invoke("");
+  log("after time: {datetime.utcNow().toIso()}");
+  assert(counter.peek() == 1);
+}
 
-test "invoke" {
-  log("log inside test");
-  f1.invokeAsync(payload);
-  f2.invoke(payload);
+test "invokeAsync() returns without waiting for the function finishes" {
+  assert(counter.peek() == 0);
+  log("before time: {datetime.utcNow().toIso()}");
+  fn.invokeAsync("");
+  log("after time: {datetime.utcNow().toIso()}");
+  assert(counter.peek() == 0);
+  util.sleep(10s);
+  assert(counter.peek() == 1);
 }

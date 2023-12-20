@@ -248,7 +248,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
       host.addPolicyStatements({
         actions: ["lambda:InvokeFunction"],
         resources: [`${this.function.arn}`],
