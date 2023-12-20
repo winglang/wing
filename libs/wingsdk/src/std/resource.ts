@@ -55,7 +55,7 @@ export interface ILiftable {
 
 /**
  * A liftable object that needs to be registered on the host as part of
- * the lifting process. 
+ * the lifting process.
  * This is generally used so the host can set up permissions
  * to access the lifted object inflight.
  */
@@ -292,7 +292,8 @@ export abstract class Resource extends Construct implements IResource {
    */ // @ts-ignore
   private _addOnLift(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -373,5 +374,7 @@ function isHostedLiftable(t: any): t is IHostedLiftable {
 }
 
 function isHostedLiftableType(t: any): t is IHostedLiftable {
-  return typeof t._registerOnLift === "function" && isHostedLiftable(t.prototype);
+  return (
+    typeof t._registerOnLift === "function" && isHostedLiftable(t.prototype)
+  );
 }

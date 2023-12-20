@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@trpc/client": "^10.38.1",
-    "@types/node": "^16",
+    "@types/node": "^18.17.13",
     "@types/node-fetch": "^2.6.4",
     "@types/vscode": "^1.70.0",
     "@types/which": "^3.0.0",

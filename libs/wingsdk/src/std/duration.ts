@@ -1,6 +1,6 @@
+import { ILiftable } from "./resource";
 import { InflightClient } from "../core";
 import { normalPath } from "../shared/misc";
-import { ILiftable } from "./resource";
 
 /**
  * Represents a length of time.
@@ -151,6 +151,8 @@ export class Duration implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(new (require("${normalPath(__filename)}").Duration)(${this.seconds}))`
+    return `(new (require("${normalPath(__filename)}").Duration)(${
+      this.seconds
+    }))`;
   }
 }

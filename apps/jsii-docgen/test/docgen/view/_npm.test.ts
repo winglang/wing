@@ -184,6 +184,8 @@ class MockChildProcess extends EventEmitter implements ChildProcess {
   public unref(): never {
     throw new UnsupportedCallError();
   }
+
+  [Symbol.dispose](): void {}
 }
 
 export class UnsupportedCallError extends Error {

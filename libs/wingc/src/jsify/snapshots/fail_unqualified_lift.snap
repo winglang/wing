@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Cannot qualify access to a lifted object of type "Queue" (see https://github.com/winglang/wing/issues/76 for more details) 6:6
+Reference to lifted preflight object of type "Queue" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details) 7:6
