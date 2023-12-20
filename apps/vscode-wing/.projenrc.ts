@@ -1,4 +1,4 @@
-import { IgnoreFile } from "projen";
+import { IgnoreFile, DependencyType } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
@@ -61,7 +61,6 @@ const project = new TypeScriptAppProject({
     "ws",
     "open",
     "node-fetch@^2.6.7",
-    "@types/node",
     "@types/which",
     "@vscode/vsce",
     "@types/node-fetch",
@@ -250,5 +249,7 @@ project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
 project.addTask("dev").exec("node scripts/dev.mjs");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();

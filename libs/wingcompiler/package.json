@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@winglang/sdk": "workspace:^",
+    "ts4w": "workspace:^",
     "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [
