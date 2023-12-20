@@ -156,6 +156,8 @@ impl<'a> JSifier<'a> {
 
 		output.line("\"use strict\";");
 
+		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+
 		if is_entrypoint {
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
@@ -169,7 +171,6 @@ impl<'a> JSifier<'a> {
 		}
 
 		// "std" is implicitly imported
-		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
