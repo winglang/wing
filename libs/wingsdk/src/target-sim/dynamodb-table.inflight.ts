@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import {
   CreateTableCommand,
   DynamoDBClient,
@@ -7,11 +8,10 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
-  DynamodbTableGlobalSecondaryIndex,
   DynamodbTableSchema,
 } from "./schema-resources";
-import { DynamodbTableClientBase } from "../ex";
-import { runCommand, runDockerImage } from "../shared/misc";
+import { DynamodbTableClientBase, GlobalSecondaryIndex } from "../ex";
+import { runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -73,7 +73,7 @@ export class DynamodbTable
     // disconnect from the dynamodb server
     this.client?.destroy();
     // stop the dynamodb container
-    await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
+    execSync(`docker rm -f ${this.containerName}`);
   }
 
   public async save(): Promise<void> {}
@@ -100,7 +100,7 @@ export class DynamodbTable
       });
     }
 
-    const globalSecondaryIndexKeys = (i: DynamodbTableGlobalSecondaryIndex) => {
+    const globalSecondaryIndexKeys = (i: GlobalSecondaryIndex) => {
       const keys: KeySchemaElement[] = [
         { AttributeName: i.hashKey, KeyType: KeyType.HASH },
       ];
