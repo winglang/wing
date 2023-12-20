@@ -901,14 +901,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello {name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   |  
   = hint: expected phase to be inflight, but got preflight instead
 
@@ -2311,6 +2311,24 @@ exports[`json_static.test.w 1`] = `
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
   |          ^^^ Unknown symbol \\"set\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`missing_return.test.w 1`] = `
+"error: A function whose return type is \\"str\\" must return a value.
+  --> ../../../examples/tests/invalid/missing_return.test.w:1:40
+  |  
+1 |   let returnString = inflight (): str => {
+  | /----------------------------------------^
+2 | |   log(\\"i am not going to return anything!\\");
+3 | | };
+  | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
  
@@ -3754,6 +3772,27 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'void
   |
 7 | let y = 5 + log(\\"hello\\");
   |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:11:5
+   |
+11 | let z = returnsNothing();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:5
+   |
+15 | let w: str? = returnsNothing2();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Expected type to be \\"str?\\", but got \\"void\\" instead
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:15
+   |
+15 | let w: str? = returnsNothing2();
+   |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
 
 
  
