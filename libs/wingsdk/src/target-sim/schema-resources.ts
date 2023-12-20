@@ -25,9 +25,7 @@ import {
   REDIS_FQN,
   TABLE_FQN,
 } from "../ex";
-import {
-  GlobalSecondaryIndex as DynamodbTableGlobalSecondaryIndex
-} from "../ex/dynamodb-table";
+import { GlobalSecondaryIndex as DynamodbTableGlobalSecondaryIndex } from "../ex/dynamodb-table";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
