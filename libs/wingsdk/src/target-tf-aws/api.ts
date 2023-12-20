@@ -3,7 +3,7 @@ import { join } from "path";
 
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
+import { corsOptionsMethod } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -326,21 +326,21 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
-            };
+          const injectOptionsMethods = (openApiSpec: OpenApiSpec) => {
+            Object.keys(openApiSpec.paths).forEach(function (key) {
+              if (!("options" in openApiSpec.paths[key]) && props.cors) {
+                openApiSpec.paths[key]["options"] = corsOptionsMethod(props.cors);
+              }
+            });
+
             return openApiSpec;
           };
-          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
+          return JSON.stringify(injectOptionsMethods(props.getApiSpec()));
         },
       }),
       lifecycle: {
