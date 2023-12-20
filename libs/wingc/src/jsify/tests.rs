@@ -1272,14 +1272,54 @@ fn fail_unqualified_lift() {
     let q = new cloud.Queue();
 
     test "test "{
-      q;
+      let x = q;
+      x.push("hello");
     }
     "#
 	);
 }
 
 #[test]
-fn unqualified_lift_of_collection() {
+fn fail_unqualified_lift_as_arg() {
+	assert_compile_fail!(
+		r#"
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    let f = inflight (q: cloud.Queue) => {
+      q.push("hello");
+    };
+
+    test "test "{
+      f(q);
+    }
+    "#
+	);
+}
+
+#[test]
+fn fail_unqualified_lift_return() {
+	assert_compile_fail!(
+		r#"
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    let f = inflight (): cloud.Queue => {
+      return q;
+    };
+
+    test "test "{
+      f(); // this is fine
+      f().push("hello"); // unknown lift origin
+    }
+    "#
+	);
+}
+
+#[test]
+fn reference_lift_of_collection() {
 	assert_compile_ok!(
 		r#"
     let a = [1,2,3];
@@ -1291,20 +1331,6 @@ fn unqualified_lift_of_collection() {
 	);
 }
 
-// #[test]
-// fn fails_lift_with_inflight_arguments() {
-// 	assert_compile_fail!(
-// 		r#"
-//     let a = [1234];
-
-//     test "test" {
-//       let i = 0;
-//       a.at(i);
-//     }
-//     "#
-// 	);
-// }
-
 #[test]
 fn fail_unqualified_lift_element_from_collection_of_objects() {
 	assert_compile_fail!(
@@ -1313,7 +1339,8 @@ fn fail_unqualified_lift_element_from_collection_of_objects() {
     let a = [new cloud.Bucket()];
 
     test "test" {
-      a.at(0);
+      let x = 0;
+      a.at(x).list();
     }
     "#
 	);
@@ -1579,29 +1606,6 @@ fn base_class_with_lifted_fields() {
     class Derived extends Base {
       inflight foo() {
         this.f;
-      }
-    }
-    "#
-	);
-}
-
-#[test]
-fn fails_base_class_with_lifted_field_object_unqualified() {
-	assert_compile_fail!(
-		r#"
-    bring cloud;
-
-    class Base {
-      b: cloud.Bucket;
-      new() {
-        this.b = new cloud.Bucket();
-      }
-    }
-
-    class Derived extends Base {
-      inflight foo() {
-        this.b;
-//           ^ Cannot qualify access to a lifted object of type "Bucket"
       }
     }
     "#
