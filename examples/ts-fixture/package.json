@@ -1,0 +1,16 @@
+{
+  "name": "ts-fixture",
+  "version": "0.0.0",
+  "scripts": {
+    "compile": "wing compile ./src/main.ts",
+    "test": "wing test ./src/main.ts"
+  },
+  "dependencies": {
+    "ts4w": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "winglang": "workspace:^"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

@@ -1,5 +1,6 @@
 import { readdirSync } from "fs";
-import { JsonFile, cdk, javascript } from "projen";
+import { join } from "path";
+import { JsonFile, cdk, javascript, DependencyType } from "projen";
 import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
@@ -267,10 +268,6 @@ sidebar_position: 100
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy readme docs
-docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
-docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
-
 // generate api reference for each submodule
 for (const mod of publicModules) {
   const prefix = docsPrefix(mod);
@@ -282,7 +279,7 @@ for (const mod of publicModules) {
 }
 
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index"];
+const UNDOCUMENTED_EX_FILES = ["index", "dynamodb-table"];
 
 const toCamelCase = (str: string) =>
   str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
@@ -297,6 +294,10 @@ function generateResourceApiDocs(
   }
 ) {
   const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
+
+  // copy readme docs
+  docgen.exec(`cp -r ${pathToFolder}/*.md ${docsPath}`);
+
   const cloudFiles = readdirSync(pathToFolder);
 
   const cloudResources: Set<string> = new Set(
@@ -341,10 +342,10 @@ generateResourceApiDocs("ex", "./src/ex", {
   excludedFiles: UNDOCUMENTED_EX_FILES,
 });
 
-// generateResourceApiDocs("dynamodb-table", "./src/ex/dynamodb-table.ts", {
-//   docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table"),
-//   excludedFiles: [],
-// });
+generateResourceApiDocs("ex/dynamodb-table", "./src/ex/dynamodb-table", {
+  docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table/"),
+  excludedFiles: ["index"],
+});
 
 generateResourceApiDocs("std", "./src/std", {
   docsPath: STD_DOCS_PREFIX,
@@ -408,5 +409,7 @@ project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();
