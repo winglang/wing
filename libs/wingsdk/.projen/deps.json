@@ -315,6 +315,11 @@
       "type": "bundled"
     },
     {
+      "name": "@types/node",
+      "version": "^18.17.13",
+      "type": "devenv"
+    },
+    {
       "name": "constructs",
       "version": "~10.2.69",
       "type": "peer"

@@ -10,7 +10,7 @@ source: libs/wingc/src/jsify/tests.rs
     let x = 1s;
     
     test "test" {
-      util.waitUntil((): bool => {}, interval: x);
+      util.waitUntil((): bool => { return true; }, interval: x);
     }
     
 ```
@@ -28,6 +28,7 @@ module.exports = function({ $util_Util, $x }) {
     }
     async handle() {
       (await $util_Util.waitUntil(async () => {
+        return true;
       }, { interval: $x }));
     }
   }

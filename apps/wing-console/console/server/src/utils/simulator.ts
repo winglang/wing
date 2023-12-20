@@ -23,6 +23,10 @@ export interface Simulator {
   ): void;
 }
 
+export interface CreateSimulatorProps {
+  stateDir?: string;
+}
+
 const stopSilently = async (simulator: simulator.Simulator) => {
   try {
     await simulator.stop();
@@ -38,7 +42,7 @@ const stopSilently = async (simulator: simulator.Simulator) => {
   }
 };
 
-export const createSimulator = (): Simulator => {
+export const createSimulator = (props?: CreateSimulatorProps): Simulator => {
   const events = new Emittery<SimulatorEvents>();
   let instance: simulator.Simulator | undefined;
   const start = async (simfile: string) => {
@@ -48,7 +52,10 @@ export const createSimulator = (): Simulator => {
         await stopSilently(instance);
       }
 
-      instance = new simulator.Simulator({ simfile });
+      instance = new simulator.Simulator({
+        simfile,
+        stateDir: props?.stateDir,
+      });
       instance.onTrace({
         callback(trace) {
           events.emit("trace", trace);

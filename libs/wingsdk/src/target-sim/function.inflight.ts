@@ -58,7 +58,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const sb = this.createSandbox();
-        return sb.call("handler", JSON.stringify(payload));
+        return sb.call("handler", JSON.stringify(payload)) ?? "";
       },
     });
   }

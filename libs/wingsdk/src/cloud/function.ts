@@ -170,7 +170,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event: string): Promise<void>;
+  handle(event: string): Promise<string | undefined>;
 }
 
 /**

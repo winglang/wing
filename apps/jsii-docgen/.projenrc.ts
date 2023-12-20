@@ -1,4 +1,4 @@
-import { typescript, javascript } from "projen";
+import { typescript, javascript, DependencyType } from "projen";
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -19,7 +19,6 @@ const project = new typescript.TypeScriptProject({
     "@types/fs-extra",
     "@types/semver",
     "@types/yargs@^16",
-    "@types/node",
     "constructs",
   ],
   deps: [
@@ -72,5 +71,7 @@ project.addFields({
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();
