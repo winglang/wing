@@ -8,6 +8,7 @@ import { existsSync } from "fs";
 import { BuiltinPlatform } from "./constants";
 import { CompileError, PreflightError } from "./errors";
 import { Worker } from "worker_threads";
+import { readFile } from "fs/promises";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -166,15 +167,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     return nodeModules;
   };
 
-  let compilerModuleDir = nearestNodeModules(__dirname);
-  let sdkModuleDir = nearestNodeModules(join(require.resolve("@winglang/sdk"), "..", "..", ".."));
   let wingNodeModules = nearestNodeModules(wingDir);
-  let workDirNodeModules = nearestNodeModules(workDir);
-
-  const nodePaths = [compilerModuleDir, sdkModuleDir, wingNodeModules, workDirNodeModules];
-  if (process.env.NODE_PATH) {
-    nodePaths.push(process.env.NODE_PATH);
-  }
 
   await Promise.all([
     fs.mkdir(workDir, { recursive: true }),
@@ -201,7 +194,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
       WING_VALUES_FILE: options.values,
       WING_NODE_MODULES: wingNodeModules,
-      NODE_PATH: nodePaths.join(os.platform() === "win32" ? ";" : ":"),
     };
 
     if (options.rootId) {
@@ -219,7 +211,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       }
     }
 
-    await runPreflightCodeInWorkerThread(preflightEntrypoint, wingDir, preflightEnv, log);
+    await runPreflightCodeInWorkerThread(preflightEntrypoint, preflightEnv);
   }
 
   if (os.platform() === "win32") {
@@ -327,27 +319,27 @@ npm i ts4w
 
 async function runPreflightCodeInWorkerThread(
   entrypoint: string,
-  wingDir: string,
-  env: Record<string, string | undefined>,
-  log?: (...args: any[]) => void
+  env: Record<string, string | undefined>
 ): Promise<void> {
-  log?.("reading artifact from %s", entrypoint);
-  const artifact = await fs.readFile(entrypoint, "utf-8");
-  log?.("artifact: %s", artifact);
-
-  // Try looking for dependencies not only in the current directory (wherever
-  // the wing CLI was installed to), but also in the source code directory.
-  // This is necessary because the Wing app may have installed dependencies in
-  // the project directory.
-  const requireResolve = (path: string) =>
-    require.resolve(path, { paths: [__dirname, wingDir, dirname(entrypoint)] });
-  const preflightRequire = (path: string) => require(requireResolve(path));
-  preflightRequire.resolve = requireResolve;
-
   try {
+    // Create a shimmed entrypoint that ensures we always load the compiler's version of the SDK
+    const shim = `\
+var Module = require('module');
+var original_resolveFilename = Module._resolveFilename;
+var WINGSDK_PATH = '${normalPath(require.resolve("@winglang/sdk"))}';
+
+Module._resolveFilename = function () {
+  if(arguments[0] === '@winglang/sdk') return WINGSDK_PATH;
+  return original_resolveFilename.apply(this, arguments);
+};
+
+require('${normalPath(entrypoint)}');
+`;
+
     await new Promise((resolve, reject) => {
-      const worker = new Worker(entrypoint, {
+      const worker = new Worker(shim, {
         env,
+        eval: true,
       });
       worker.on("error", reject);
       worker.on("exit", (code) => {
@@ -359,6 +351,7 @@ async function runPreflightCodeInWorkerThread(
       });
     });
   } catch (error) {
+    const artifact = await readFile(entrypoint, "utf-8");
     throw new PreflightError(error as any, entrypoint, artifact);
   }
 }
