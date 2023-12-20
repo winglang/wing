@@ -8,10 +8,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
-  DynamodbTableGlobalSecondaryIndex,
   DynamodbTableSchema,
 } from "./schema-resources";
-import { DynamodbTableClientBase } from "../ex";
+import { DynamodbTableClientBase, GlobalSecondaryIndex } from "../ex";
 import { runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
@@ -101,7 +100,7 @@ export class DynamodbTable
       });
     }
 
-    const globalSecondaryIndexKeys = (i: DynamodbTableGlobalSecondaryIndex) => {
+    const globalSecondaryIndexKeys = (i: GlobalSecondaryIndex) => {
       const keys: KeySchemaElement[] = [
         { AttributeName: i.hashKey, KeyType: KeyType.HASH },
       ];
