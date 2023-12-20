@@ -12,6 +12,7 @@ import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
@@ -43,6 +44,9 @@ const defaultLayoutConfig: LayoutConfig = {
   },
   bottomPanel: {
     components: [
+      {
+        type: "endpoints",
+      },
       {
         type: "logs",
       },
@@ -172,6 +176,9 @@ export const DefaultLayout = ({
               <LogsWidget onResourceClick={onResourceClick} />
             </div>
           );
+        }
+        case "endpoints": {
+          return <EndpointsTreeView key={component.type} />;
         }
       }
     },

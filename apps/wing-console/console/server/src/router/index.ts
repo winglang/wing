@@ -6,6 +6,7 @@ import { createBucketRouter } from "./bucket.js";
 import { createConfigRouter } from "./config.js";
 import { createCounterRouter } from "./counter.js";
 import { createDynamodbTableRouter } from "./dynamodb-table.js";
+import { createEndpointRouter } from "./endpoint.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 import { createReactAppRouter } from "./react-app.js";
@@ -35,6 +36,7 @@ export const mergeAllRouters = () => {
     createReactAppRouter(),
     createConfigRouter(),
     createDynamodbTableRouter(),
+    createEndpointRouter(),
   );
 
   return { router };
