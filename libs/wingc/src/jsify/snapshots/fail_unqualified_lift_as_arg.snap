@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Reference to lifted preflight object of type "Queue" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details) 6:6

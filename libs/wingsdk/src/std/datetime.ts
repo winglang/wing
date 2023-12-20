@@ -1,6 +1,6 @@
+import { ILiftable } from "./resource";
 import { InflightClient } from "../core/inflight";
 import { normalPath } from "../shared/misc";
-import { ILiftable } from "./resource";
 
 /**
  * Interface that is used for setting Datetime date
@@ -118,7 +118,9 @@ export class Datetime implements ILiftable {
 
   /** @internal */
   public _toInflight(): string {
-    return `(require("${normalPath(__filename)}").Datetime.fromIso("${this.toIso()}"))`
+    return `(require("${normalPath(
+      __filename
+    )}").Datetime.fromIso("${this.toIso()}"))`;
   }
 
   /**
