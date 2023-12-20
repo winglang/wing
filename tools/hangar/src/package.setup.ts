@@ -48,6 +48,7 @@ const getInstallArgs = async () => {
     "file:../../../apps/wing",
     "file:../../../libs/wingsdk",
     "file:../../../libs/awscdk",
+    "file:../../../libs/ts4w",
   ];
 };
 

@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import {
   CreateTableCommand,
   DynamoDBClient,
@@ -11,7 +12,7 @@ import {
   DynamodbTableSchema,
 } from "./schema-resources";
 import { DynamodbTableClientBase } from "../ex";
-import { runCommand, runDockerImage } from "../shared/misc";
+import { runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -73,7 +74,7 @@ export class DynamodbTable
     // disconnect from the dynamodb server
     this.client?.destroy();
     // stop the dynamodb container
-    await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
+    execSync(`docker rm -f ${this.containerName}`);
   }
 
   public async save(): Promise<void> {}
