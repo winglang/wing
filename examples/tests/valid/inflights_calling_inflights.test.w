@@ -2,11 +2,11 @@ bring cloud;
 
 let globalBucket = new cloud.Bucket();
 
-let storeInBucket = inflight (event: str, file: str): str => {
+let storeInBucket = inflight (event: str, file: str) => {
   globalBucket.put(file, event);
 };
 
-let handler1 = inflight (event: str): str => {
+let handler1 = inflight (event: str) => {
   storeInBucket(event, "file1");
 };
 
