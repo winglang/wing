@@ -1,62 +1,44 @@
 import { createHash } from "crypto";
 import { join } from "path";
-
-import { Fn, Lazy } from "cdktf";
+import { Lazy } from "aws-cdk-lib";
+import {
+  ApiDefinition,
+  Deployment,
+  SpecRestApi,
+  Stage,
+} from "aws-cdk-lib/aws-apigateway";
+import { CfnPermission } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
-import { core } from "..";
-import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
-import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
-import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
-import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
-import * as cloud from "../cloud";
-import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../shared/convert";
-import {
-  CaseConventions,
-  NameOptions,
-  ResourceNames,
-} from "../shared/resource-names";
-import { IAwsApi } from "../shared-aws";
-import { STAGE_NAME } from "../shared-aws/api";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
-import { IInflightHost, Node } from "../std";
-
-/**
- * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
- */
-const NAME_OPTS: NameOptions = {
-  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
-};
+import { cloud, core, std } from "@winglang/sdk";
+import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
+import { STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
+import { API_CORS_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.cors";
 
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api implements IAwsApi {
+export class Api extends cloud.Api {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
-  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-    this.api = new WingRestApi(this, "api", {
+    this.api = new WingRestApi(this, `${id}Api`, {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
-    this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
-      label: `Endpoint for Api ${this.node.path}`,
-    });
   }
 
-  protected get _endpoint(): cloud.Endpoint {
-    return this.endpoint;
+  public get url(): string {
+    return this.api.url;
   }
 
   /**
    * Build the http requests
    *
-   * @param method http method
+   * @param method htttp method
    * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
@@ -75,11 +57,11 @@ export class Api extends cloud.Api implements IAwsApi {
     }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight, method, path);
+    const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
-    Node.of(this).addConnection({
+    std.Node.of(this).addConnection({
       source: this,
       target: fn,
       name: `${lowerMethod}()`,
@@ -197,12 +179,8 @@ export class Api extends cloud.Api implements IAwsApi {
    * @param props Endpoint props
    * @returns AWS Lambda Function
    */
-  private addHandler(
-    inflight: cloud.IApiEndpointHandler,
-    method: string,
-    path: string
-  ): Function {
-    let fn = this.addInflightHandler(inflight, method, path);
+  private addHandler(inflight: cloud.IApiEndpointHandler): Function {
+    let fn = this.addInflightHandler(inflight);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -215,12 +193,9 @@ export class Api extends cloud.Api implements IAwsApi {
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
-  private addInflightHandler(
-    inflight: cloud.IApiEndpointHandler,
-    method: string,
-    path: string
-  ): Function {
+  private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
     let handler = this.handlers[inflight._hash];
+
     if (!handler) {
       const newInflight = convertBetweenHandlers(
         inflight,
@@ -234,10 +209,9 @@ export class Api extends cloud.Api implements IAwsApi {
             ?.defaultResponse,
         }
       );
-      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new Function(
         this,
-        App.of(this).makeId(this, prefix),
+        App.of(this).makeId(this, "OnRequest"),
         newInflight
       );
       this.handlers[inflight._hash] = handler;
@@ -247,9 +221,9 @@ export class Api extends cloud.Api implements IAwsApi {
   }
 
   /** @internal */
-  public onLift(host: IInflightHost, ops: string[]): void {
+  public onLift(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
-      throw new Error("apis can only be bound by tfaws.Function for now");
+      throw new Error("apis can only be bound by awscdk.Function for now");
     }
 
     host.addEnvironment(this.urlEnvName(), this.url);
@@ -260,7 +234,7 @@ export class Api extends cloud.Api implements IAwsApi {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "ApiClient",
       [`process.env["${this.urlEnvName()}"]`]
@@ -268,35 +242,7 @@ export class Api extends cloud.Api implements IAwsApi {
   }
 
   private urlEnvName(): string {
-    return ResourceNames.generateName(this, {
-      disallowedRegex: /[^a-zA-Z0-9_]/,
-      sep: "_",
-      case: CaseConventions.UPPERCASE,
-    });
-  }
-
-  public get restApiArn(): string {
-    return this.api.api.executionArn;
-  }
-
-  public get restApiId(): string {
-    return this.api.api.id;
-  }
-
-  public get restApiName(): string {
-    return this.api.api.name;
-  }
-
-  public get stageName(): string {
-    return this.api.stage.stageName;
-  }
-
-  public get invokeUrl(): string {
-    return this.api.stage.invokeUrl;
-  }
-
-  public get deploymentId(): string {
-    return this.api.deployment.id;
+    return `API_${this.node.addr.slice(-8)}`;
   }
 }
 
@@ -304,17 +250,16 @@ export class Api extends cloud.Api implements IAwsApi {
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
-  public readonly url: string;
-  public readonly api: ApiGatewayRestApi;
-  public readonly stage: ApiGatewayStage;
-  public readonly deployment: ApiGatewayDeployment;
+  private readonly api: SpecRestApi;
+  private readonly deployment: Deployment;
+  private readonly stage: Stage;
   private readonly region: string;
 
   constructor(
     scope: Construct,
     id: string,
     props: {
-      getApiSpec: () => OpenApiSpec;
+      getApiSpec: () => cloud.OpenApiSpec;
       cors?: cloud.ApiCorsOptions;
     }
   ) {
@@ -323,48 +268,37 @@ class WingRestApi extends Construct {
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    this.api = new ApiGatewayRestApi(this, `${id}`, {
-      name: ResourceNames.generateName(this, NAME_OPTS),
-      // Lazy generation of the api spec because routes can be added after the API is created
-      body: Lazy.stringValue({
-        produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
+    this.api = new SpecRestApi(this, "api", {
+      apiDefinition: ApiDefinition.fromInline(
+        Lazy.any({
+          produce: () => {
+            const injectGreedy404Handler = (openApiSpec: cloud.OpenApiSpec) => {
+              openApiSpec.paths = {
+                ...openApiSpec.paths,
+                ...defaultResponse,
+              };
+              return openApiSpec;
             };
-            return openApiSpec;
-          };
-          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
-        },
-      }),
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
+            return injectGreedy404Handler(props.getApiSpec());
+          },
+        })
+      ),
+      deploy: false,
     });
 
-    this.deployment = new ApiGatewayDeployment(this, "deployment", {
-      restApiId: this.api.id,
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-      triggers: {
-        // Trigger redeployment when the api spec changes
-        redeployment: Fn.sha256(this.api.body),
-      },
+    this.deployment = new Deployment(this, "deployment", {
+      api: this.api,
+      retainDeployments: true,
     });
 
-    this.stage = new ApiGatewayStage(this, "stage", {
-      restApiId: this.api.id,
+    this.stage = new Stage(this, "stage", {
+      deployment: this.deployment,
       stageName: STAGE_NAME,
-      deploymentId: this.deployment.id,
     });
+  }
 
-    // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
-    // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
-    // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
-    // in Terraform. Hence, we're creating our own url here.
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
+  public get url(): string {
+    return this.stage.urlForPath();
   }
 
   /**
@@ -417,14 +351,11 @@ class WingRestApi extends Construct {
   ) => {
     const pathHash = createHash("sha1").update(path).digest("hex").slice(-8);
     const permissionId = `${method}-${pathHash}`;
-    new LambdaPermission(this, `permission-${permissionId}`, {
-      statementId: `AllowExecutionFromAPIGateway-${permissionId}`,
+    new CfnPermission(this, `permission-${permissionId}`, {
       action: "lambda:InvokeFunction",
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: `${this.api.executionArn}/*/${method}${Api._toOpenApiPath(
-        path
-      )}`,
+      sourceArn: this.api.arnForExecuteApi(method, path),
     });
   };
 }

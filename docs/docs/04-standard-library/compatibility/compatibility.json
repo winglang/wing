@@ -425,35 +425,35 @@
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 625 },
       "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "post": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 625 },
       "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "put": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 625 },
       "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "delete": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 625 },
       "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "patch": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false, "issue": 625 },
       "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "any": {
       "sim": { "implemented": false, "issue": 1848 },
