@@ -5,11 +5,11 @@
 "use strict";
 module.exports = function({  }) {
   class R {
-    constructor({ $this_s1 }) {
-      this.$this_s1 = $this_s1;
+    constructor({ $_this_s1_concat___world___ }) {
+      this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
     }
     async foo() {
-      {console.log((await this.$this_s1.concat(" world")))};
+      {console.log(this.$_this_s1_concat___world___)};
     }
   }
   return R;
@@ -26,20 +26,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -77,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this)};
             const client = new RClient({
-              $this_s1: ${$stdlib.core.liftObject(this.s1)},
+              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -89,10 +76,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          R._registerOnLiftObject(this.s1, host, []);
+          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
         }
         if (ops.includes("foo")) {
-          R._registerOnLiftObject(this.s1, host, ["concat"]);
+          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
         }
         super._registerOnLift(host, ops);
       }

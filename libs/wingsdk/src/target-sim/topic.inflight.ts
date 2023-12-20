@@ -30,6 +30,8 @@ export class Topic
 
   public async cleanup(): Promise<void> {}
 
+  public async save(): Promise<void> {}
+
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(
@@ -77,6 +79,15 @@ export class Topic
       ...subscriptionProps,
     } as TopicSubscriber;
     this.subscribers.push(s);
+  }
+
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.subscribers.findIndex(
+      (s) => s.functionHandle === subscriber
+    );
+    if (index >= 0) {
+      this.subscribers.splice(index, 1);
+    }
   }
 
   public async publish(message: string): Promise<void> {

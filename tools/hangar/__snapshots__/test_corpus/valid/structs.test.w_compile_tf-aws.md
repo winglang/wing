@@ -25,11 +25,11 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({  }) {
   class Foo {
-    constructor({ $this_data }) {
-      this.$this_data = $this_data;
+    constructor({ $this_data_field0 }) {
+      this.$this_data_field0 = $this_data_field0;
     }
     async getStuff() {
-      return this.$this_data.field0;
+      return this.$this_data_field0;
     }
   }
   return Foo;
@@ -46,20 +46,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -96,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_data: ${$stdlib.core.liftObject(this.data)},
+              $this_data_field0: ${$stdlib.core.liftObject(this.data.field0)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -108,10 +95,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this.data, host, []);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerOnLiftObject(this.data, host, ["field0"]);
+          Foo._registerOnLiftObject(this.data.field0, host, []);
         }
         super._registerOnLift(host, ops);
       }

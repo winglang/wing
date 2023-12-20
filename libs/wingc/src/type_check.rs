@@ -1,4 +1,5 @@
 mod class_fields_init;
+mod has_return_stmt;
 mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
@@ -10,14 +11,15 @@ use crate::ast::{
 	TypeAnnotationKind,
 };
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
-	TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
+	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Spanned, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
+use crate::type_check::has_return_stmt::HasReturnStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
@@ -3194,7 +3196,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_check_scope(scope);
 		}
 
-		if let SymbolEnvKind::Function { sig, .. } = env.kind {
+		if let SymbolEnvKind::Function { sig, is_init, .. } = env.kind {
 			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
@@ -3202,6 +3204,20 @@ impl<'a> TypeChecker<'a> {
 					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
 				}
 				self.update_known_inferences(&mut return_type, &scope.span);
+			}
+
+			let mut has_return_stmt_visitor = HasReturnStatementVisitor::default();
+			has_return_stmt_visitor.visit(&scope.statements);
+
+			// If the scope doesn't contain any return statements and the return type isn't void or T?, throw an error
+			if !has_return_stmt_visitor.seen_return && !return_type.is_void() && !return_type.is_option() && !is_init {
+				self.spanned_error(
+					scope,
+					format!(
+						"A function whose return type is \"{}\" must return a value.",
+						return_type
+					),
+				);
 			}
 		}
 
@@ -3544,6 +3560,13 @@ impl<'a> TypeChecker<'a> {
 		access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
+		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+		if let Some(_) = env.parent {
+			self.spanned_error(
+				name,
+				format!("struct \"{name}\" must be declared at the top-level of a file"),
+			);
+		}
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 		//   fail type checking.
@@ -4185,13 +4208,20 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		for elif_scope in &iflet.elif_statements {
-			self.type_check_if_let_statement(
-				&elif_scope.value,
-				&elif_scope.statements,
-				&elif_scope.reassignable,
-				&elif_scope.var_name,
-				env,
-			);
+			match elif_scope {
+				Elifs::ElifBlock(elif_block) => {
+					self.type_check_if_statement(&elif_block.condition, &elif_block.statements, env);
+				}
+				Elifs::ElifLetBlock(elif_let_block) => {
+					self.type_check_if_let_statement(
+						&elif_let_block.value,
+						&elif_let_block.statements,
+						&elif_let_block.reassignable,
+						&elif_let_block.var_name,
+						env,
+					);
+				}
+			}
 		}
 
 		if let Some(else_scope) = &iflet.else_statements {
@@ -5449,18 +5479,32 @@ impl<'a> TypeChecker<'a> {
 			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access private member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access private member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Protected => {
 					if !protected_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access protected member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access protected member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here

@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $numA, $numB, $strA, $strB }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numB__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strB__ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,10 +11,10 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($numA,$numA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($numA,$numB)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($strA,$strA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($strA,$strB)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numB__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strB__)};
     }
   }
   return $Closure1;
@@ -25,7 +25,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 ## inflight.$Closure10-1.js
 ```js
 "use strict";
-module.exports = function({ $arrayA, $arrayB, $arrayC }) {
+module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayC__ }) {
   class $Closure10 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -33,8 +33,8 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayC)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(arrayA != arrayB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayB))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayC__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(arrayA != arrayB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB___)};
     }
   }
   return $Closure10;
@@ -45,7 +45,7 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
 ## inflight.$Closure11-1.js
 ```js
 "use strict";
-module.exports = function({ $cat1, $cat2 }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat1__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2__ }) {
   class $Closure11 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -53,8 +53,8 @@ module.exports = function({ $cat1, $cat2 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat1")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat1__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2__)};
     }
   }
   return $Closure11;
@@ -65,7 +65,7 @@ module.exports = function({ $cat1, $cat2 }) {
 ## inflight.$Closure12-1.js
 ```js
 "use strict";
-module.exports = function({ $cat1, $cat2, $cat3 }) {
+module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat3__ }) {
   class $Closure12 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -73,8 +73,8 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(cat1 != cat2)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat3__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(cat1 != cat2)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2___)};
     }
   }
   return $Closure12;
@@ -85,7 +85,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $numA, $numC, $strA, $strC }) {
+module.exports = function({ $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______numA_numC__, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______strA_strC__ }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -93,8 +93,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($numA,$numC)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($strA,$strC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______numA_numC__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______strA_strC__)};
     }
   }
   return $Closure2;
@@ -105,7 +105,7 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
-module.exports = function({ $jsonA, $jsonB }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB__ }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -113,8 +113,8 @@ module.exports = function({ $jsonA, $jsonB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonB)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB__)};
     }
   }
   return $Closure3;
@@ -125,7 +125,7 @@ module.exports = function({ $jsonA, $jsonB }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
-module.exports = function({ $jsonA, $jsonB, $jsonC }) {
+module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonC__ }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -133,8 +133,8 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonC)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(jsonA != jsonB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonB))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonC__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(jsonA != jsonB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB___)};
     }
   }
   return $Closure4;
@@ -145,7 +145,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
 ## inflight.$Closure5-1.js
 ```js
 "use strict";
-module.exports = function({ $setA, $setB }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setB__ }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -153,8 +153,8 @@ module.exports = function({ $setA, $setB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setB)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setB__)};
     }
   }
   return $Closure5;
@@ -165,7 +165,7 @@ module.exports = function({ $setA, $setB }) {
 ## inflight.$Closure6-1.js
 ```js
 "use strict";
-module.exports = function({ $setA, $setB, $setC }) {
+module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setC__ }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -173,8 +173,8 @@ module.exports = function({ $setA, $setB, $setC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setC)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(setA != setB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setB))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setC__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(setA != setB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setB___)};
     }
   }
   return $Closure6;
@@ -185,7 +185,7 @@ module.exports = function({ $setA, $setB, $setC }) {
 ## inflight.$Closure7-1.js
 ```js
 "use strict";
-module.exports = function({ $mapA, $mapB }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB__ }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -193,8 +193,8 @@ module.exports = function({ $mapA, $mapB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapB)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB__)};
     }
   }
   return $Closure7;
@@ -205,7 +205,7 @@ module.exports = function({ $mapA, $mapB }) {
 ## inflight.$Closure8-1.js
 ```js
 "use strict";
-module.exports = function({ $mapA, $mapB, $mapC }) {
+module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapC__ }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -213,8 +213,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapC)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(mapA != mapB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapB))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapC__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(mapA != mapB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB___)};
     }
   }
   return $Closure8;
@@ -225,7 +225,7 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
 ## inflight.$Closure9-1.js
 ```js
 "use strict";
-module.exports = function({ $arrayA, $arrayB }) {
+module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB__ }) {
   class $Closure9 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -233,8 +233,8 @@ module.exports = function({ $arrayA, $arrayB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayB")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayB)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayA__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB__)};
     }
   }
   return $Closure9;
@@ -251,20 +251,7 @@ module.exports = function({ $arrayA, $arrayB }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -294,10 +281,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $numA: ${$stdlib.core.liftObject(numA)},
-            $numB: ${$stdlib.core.liftObject(numB)},
-            $strA: ${$stdlib.core.liftObject(strA)},
-            $strB: ${$stdlib.core.liftObject(strB)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numB)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strB)))},
           })
         `;
       }
@@ -317,10 +304,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(numA, host, []);
-          $Closure1._registerOnLiftObject(numB, host, []);
-          $Closure1._registerOnLiftObject(strA, host, []);
-          $Closure1._registerOnLiftObject(strB, host, []);
+          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numA)), host, []);
+          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numB)), host, []);
+          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strA)), host, []);
+          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strB)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -334,10 +321,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $numA: ${$stdlib.core.liftObject(numA)},
-            $numC: ${$stdlib.core.liftObject(numC)},
-            $strA: ${$stdlib.core.liftObject(strA)},
-            $strC: ${$stdlib.core.liftObject(strC)},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______numA_numC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numC)))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______strA_strC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strC)))},
           })
         `;
       }
@@ -357,10 +342,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(numA, host, []);
-          $Closure2._registerOnLiftObject(numC, host, []);
-          $Closure2._registerOnLiftObject(strA, host, []);
-          $Closure2._registerOnLiftObject(strC, host, []);
+          $Closure2._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(numA,numC)), host, []);
+          $Closure2._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(strA,strC)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -374,8 +357,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $jsonA: ${$stdlib.core.liftObject(jsonA)},
-            $jsonB: ${$stdlib.core.liftObject(jsonB)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonB)))},
           })
         `;
       }
@@ -395,8 +378,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(jsonA, host, []);
-          $Closure3._registerOnLiftObject(jsonB, host, []);
+          $Closure3._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonA)), host, []);
+          $Closure3._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonB)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -410,9 +393,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $jsonA: ${$stdlib.core.liftObject(jsonA)},
-            $jsonB: ${$stdlib.core.liftObject(jsonB)},
-            $jsonC: ${$stdlib.core.liftObject(jsonC)},
+            $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB___: ${$stdlib.core.liftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonB))))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonC)))},
           })
         `;
       }
@@ -432,9 +414,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerOnLiftObject(jsonA, host, []);
-          $Closure4._registerOnLiftObject(jsonB, host, []);
-          $Closure4._registerOnLiftObject(jsonC, host, []);
+          $Closure4._registerOnLiftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonB))), host, []);
+          $Closure4._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(jsonA,jsonC)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -448,8 +429,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $setA: ${$stdlib.core.liftObject(setA)},
-            $setB: ${$stdlib.core.liftObject(setB)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setB)))},
           })
         `;
       }
@@ -469,8 +450,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerOnLiftObject(setA, host, []);
-          $Closure5._registerOnLiftObject(setB, host, []);
+          $Closure5._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setA)), host, []);
+          $Closure5._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setB)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -484,9 +465,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure6-1.js")({
-            $setA: ${$stdlib.core.liftObject(setA)},
-            $setB: ${$stdlib.core.liftObject(setB)},
-            $setC: ${$stdlib.core.liftObject(setC)},
+            $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setB___: ${$stdlib.core.liftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setB))))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setC)))},
           })
         `;
       }
@@ -506,9 +486,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure6._registerOnLiftObject(setA, host, []);
-          $Closure6._registerOnLiftObject(setB, host, []);
-          $Closure6._registerOnLiftObject(setC, host, []);
+          $Closure6._registerOnLiftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setB))), host, []);
+          $Closure6._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(setA,setC)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -522,8 +501,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure7-1.js")({
-            $mapA: ${$stdlib.core.liftObject(mapA)},
-            $mapB: ${$stdlib.core.liftObject(mapB)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapB)))},
           })
         `;
       }
@@ -543,8 +522,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerOnLiftObject(mapA, host, []);
-          $Closure7._registerOnLiftObject(mapB, host, []);
+          $Closure7._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapA)), host, []);
+          $Closure7._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapB)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -558,9 +537,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure8-1.js")({
-            $mapA: ${$stdlib.core.liftObject(mapA)},
-            $mapB: ${$stdlib.core.liftObject(mapB)},
-            $mapC: ${$stdlib.core.liftObject(mapC)},
+            $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB___: ${$stdlib.core.liftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapB))))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapC)))},
           })
         `;
       }
@@ -580,9 +558,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerOnLiftObject(mapA, host, []);
-          $Closure8._registerOnLiftObject(mapB, host, []);
-          $Closure8._registerOnLiftObject(mapC, host, []);
+          $Closure8._registerOnLiftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapB))), host, []);
+          $Closure8._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(mapA,mapC)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -596,8 +573,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure9-1.js")({
-            $arrayA: ${$stdlib.core.liftObject(arrayA)},
-            $arrayB: ${$stdlib.core.liftObject(arrayB)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayA__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayA)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayB)))},
           })
         `;
       }
@@ -617,8 +594,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure9._registerOnLiftObject(arrayA, host, []);
-          $Closure9._registerOnLiftObject(arrayB, host, []);
+          $Closure9._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayA)), host, []);
+          $Closure9._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayB)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -632,9 +609,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure10-1.js")({
-            $arrayA: ${$stdlib.core.liftObject(arrayA)},
-            $arrayB: ${$stdlib.core.liftObject(arrayB)},
-            $arrayC: ${$stdlib.core.liftObject(arrayC)},
+            $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB___: ${$stdlib.core.liftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayB))))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayC__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayC)))},
           })
         `;
       }
@@ -654,9 +630,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure10._registerOnLiftObject(arrayA, host, []);
-          $Closure10._registerOnLiftObject(arrayB, host, []);
-          $Closure10._registerOnLiftObject(arrayC, host, []);
+          $Closure10._registerOnLiftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayB))), host, []);
+          $Closure10._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(arrayA,arrayC)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -670,8 +645,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure11-1.js")({
-            $cat1: ${$stdlib.core.liftObject(cat1)},
-            $cat2: ${$stdlib.core.liftObject(cat2)},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat1__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat1)))},
+            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2)))},
           })
         `;
       }
@@ -691,8 +666,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure11._registerOnLiftObject(cat1, host, []);
-          $Closure11._registerOnLiftObject(cat2, host, []);
+          $Closure11._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat1)), host, []);
+          $Closure11._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2)), host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -706,9 +681,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure12-1.js")({
-            $cat1: ${$stdlib.core.liftObject(cat1)},
-            $cat2: ${$stdlib.core.liftObject(cat2)},
-            $cat3: ${$stdlib.core.liftObject(cat3)},
+            $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2___: ${$stdlib.core.liftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2))))},
+            $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat3__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat3)))},
           })
         `;
       }
@@ -728,9 +702,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure12._registerOnLiftObject(cat1, host, []);
-          $Closure12._registerOnLiftObject(cat2, host, []);
-          $Closure12._registerOnLiftObject(cat3, host, []);
+          $Closure12._registerOnLiftObject((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2))), host, []);
+          $Closure12._registerOnLiftObject((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat3)), host, []);
         }
         super._registerOnLift(host, ops);
       }

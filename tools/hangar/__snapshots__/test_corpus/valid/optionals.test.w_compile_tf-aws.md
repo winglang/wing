@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $payloadWithBucket, $payloadWithoutOptions }) {
+module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,9 +11,9 @@ module.exports = function({ $payloadWithBucket, $payloadWithoutOptions }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((($payloadWithoutOptions.b) != null),false)))};
-      if ((($payloadWithBucket.c) != null)) {
-        (await $payloadWithBucket.c?.put?.("x.txt", "something"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__payloadWithoutOptions_b_____null_,false)))};
+      if ($__payloadWithBucket_c_____null_) {
+        (await $payloadWithBucket_c?.put?.("x.txt", "something"));
       }
     }
   }
@@ -85,20 +85,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -251,8 +238,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $payloadWithBucket: ${$stdlib.core.liftObject(payloadWithBucket)},
-            $payloadWithoutOptions: ${$stdlib.core.liftObject(payloadWithoutOptions)},
+            $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
           })
         `;
       }
@@ -272,8 +260,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(payloadWithBucket, host, ["c"]);
-          $Closure1._registerOnLiftObject(payloadWithoutOptions, host, ["b"]);
+          $Closure1._registerOnLiftObject(((payloadWithBucket.c) != null), host, []);
+          $Closure1._registerOnLiftObject(((payloadWithoutOptions.b) != null), host, []);
+          $Closure1._registerOnLiftObject(payloadWithBucket.c, host, ["put"]);
         }
         super._registerOnLift(host, ops);
       }

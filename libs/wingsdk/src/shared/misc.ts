@@ -1,5 +1,8 @@
 import { execFile } from "child_process";
 import { readFileSync } from "fs";
+import { promisify } from "util";
+
+const execFilePromise = promisify(execFile);
 
 export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
@@ -24,16 +27,8 @@ export function normalPath(path: string) {
  * Just a helpful wrapper around `execFile` that returns a promise.
  */
 export async function runCommand(cmd: string, args: string[]): Promise<any> {
-  const raw = await new Promise((resolve, reject) => {
-    execFile(cmd, args, (error, stdout, stderr) => {
-      if (error) {
-        console.error(stderr);
-        reject(error);
-      }
-      resolve(stdout);
-    });
-  });
-  return raw;
+  const { stdout } = await execFilePromise(cmd, args);
+  return stdout;
 }
 
 export interface runDockerImageProps {

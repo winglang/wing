@@ -89,7 +89,7 @@ module.exports = function({ $Student, $jStudent1 }) {
 ## inflight.$Closure4-2.js
 ```js
 "use strict";
-module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $std_Json }) {
+module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyStruct, $std_Json }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -99,7 +99,7 @@ module.exports = function({ $MyStruct, $expectedSchema, $jMyStruct, $schema, $st
     async handle() {
       const s = ($MyStruct);
       (await s.validate($jMyStruct));
-      {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$expectedSchema]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: schema.asStr() == Json.stringify(expectedSchema)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_schema_asStr___,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$expectedSchema]))))};
     }
   }
   return $Closure4;
@@ -151,20 +151,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -304,9 +291,9 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("./inflight.$Closure4-2.js")({
             $MyStruct: ${$stdlib.core.liftObject(MyStruct)},
+            $_schema_asStr___: ${$stdlib.core.liftObject((schema.asStr()))},
             $expectedSchema: ${$stdlib.core.liftObject(expectedSchema)},
             $jMyStruct: ${$stdlib.core.liftObject(jMyStruct)},
-            $schema: ${$stdlib.core.liftObject(schema)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
         `;
@@ -327,9 +314,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
+          $Closure4._registerOnLiftObject((schema.asStr()), host, []);
           $Closure4._registerOnLiftObject(expectedSchema, host, []);
           $Closure4._registerOnLiftObject(jMyStruct, host, []);
-          $Closure4._registerOnLiftObject(schema, host, ["asStr"]);
         }
         super._registerOnLift(host, ops);
       }

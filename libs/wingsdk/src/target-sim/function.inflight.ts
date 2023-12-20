@@ -32,6 +32,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
+  public async save(): Promise<void> {}
+
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
@@ -53,7 +55,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           },
         });
 
-        return sb.call("handler", JSON.stringify(payload));
+        const result = await sb.call("handler", JSON.stringify(payload));
+        return result ?? "";
       },
     });
   }

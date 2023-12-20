@@ -449,8 +449,14 @@ pub struct IfLet {
 	pub var_name: Symbol,
 	pub value: Expr,
 	pub statements: Scope,
-	pub elif_statements: Vec<ElifLetBlock>,
+	pub elif_statements: Vec<Elifs>,
 	pub else_statements: Option<Scope>,
+}
+
+#[derive(Debug)]
+pub enum Elifs {
+	ElifBlock(ElifBlock),
+	ElifLetBlock(ElifLetBlock),
 }
 
 #[derive(Debug)]
@@ -847,6 +853,12 @@ impl Spanned for TypeAnnotation {
 }
 
 impl Spanned for UserDefinedType {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl Spanned for Scope {
 	fn span(&self) -> WingSpan {
 		self.span.clone()
 	}

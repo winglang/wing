@@ -3,7 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $data, $queue, $res }) {
+module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,7 +11,7 @@ module.exports = function({ $data, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($data.size,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($data_size,3)))};
       (await $res.put("file.txt", "world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $res.get("file.txt")),"world")))};
       (await $queue.push("spirulina"));
@@ -31,20 +31,7 @@ module.exports = function({ $data, $queue, $res }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -102,7 +89,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $data: ${$stdlib.core.liftObject(data)},
+            $data_size: ${$stdlib.core.liftObject(data.size)},
             $queue: ${$stdlib.core.liftObject(queue)},
             $res: ${$stdlib.core.liftObject(res)},
           })
@@ -124,7 +111,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(data, host, ["size"]);
+          $Closure1._registerOnLiftObject(data.size, host, []);
           $Closure1._registerOnLiftObject(queue, host, ["push"]);
           $Closure1._registerOnLiftObject(res, host, ["get", "put"]);
         }

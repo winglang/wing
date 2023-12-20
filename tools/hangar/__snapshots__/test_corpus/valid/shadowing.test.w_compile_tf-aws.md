@@ -12,13 +12,13 @@ module.exports = function({ $bar }) {
     }
     async handle() {
       const result = [];
-      (await result.push($bar));
+      ((obj, args) => { obj.push(...args); })(result, [$bar]);
       if (true) {
         const bar = "world";
-        (await result.push(bar));
+        ((obj, args) => { obj.push(...args); })(result, [bar]);
       }
       const foo = "bang";
-      (await result.push(foo));
+      ((obj, args) => { obj.push(...args); })(result, [foo]);
       return [...(result)];
     }
   }
@@ -59,20 +59,7 @@ module.exports = function({ $fn }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [

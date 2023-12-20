@@ -21,11 +21,11 @@ describe(`${__dirname}/main.w`, () => {
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
-    await expect(currentValue).toHaveValue("0");
+    await expect(currentValue).toHaveValue("1");
 
     await page.getByTestId("cloud.counter:decrease").click();
 
-    await expect(currentValue).toHaveValue("-1");
+    await expect(currentValue).toHaveValue("0");
   });
 
   test("resets counter", async ({ page }) => {

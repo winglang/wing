@@ -89,8 +89,9 @@ module.exports = function({  }) {
       this.$this_func = $this_func;
     }
     async invoke(message) {
-      (await this.$this_func.handle(message));
-      (await this.$this_func.handle(message));
+      const res1 = ((await this.$this_func.handle(message)) ?? "");
+      const res2 = ((await this.$this_func.handle(res1)) ?? "");
+      return res2;
     }
   }
   return Doubler;
@@ -120,20 +121,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [

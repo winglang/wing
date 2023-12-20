@@ -36,8 +36,8 @@ exports[`default website behavior 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -200,6 +200,28 @@ exports[`default website behavior 2`] = `
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.17.0",
+                        },
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "Endpoint for Website root/Default/Website",
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -251,29 +273,6 @@ exports[`default website behavior 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -347,8 +346,8 @@ exports[`website with addFile 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -520,6 +519,28 @@ exports[`website with addFile 2`] = `
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.17.0",
+                        },
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "Endpoint for Website root/Default/Website",
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -579,29 +600,6 @@ exports[`website with addFile 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -675,8 +673,8 @@ exports[`website with addJson 1`] = `
     },
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
+    "Website_Endpoint_Url_0CC0343F": {
+      "value": "https://\${aws_cloudfront_distribution.Website_Distribution_5E840E42.domain_name}",
     },
   },
   "resource": {
@@ -848,6 +846,28 @@ exports[`website with addJson 2`] = `
                     "id": "DistributionS3BucketPolicy",
                     "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
+                  "Endpoint": {
+                    "children": {
+                      "Url": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformOutput",
+                          "version": "0.17.0",
+                        },
+                        "id": "Url",
+                        "path": "root/Default/Website/Endpoint/Url",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "display": {
+                      "description": "Endpoint for Website root/Default/Website",
+                      "title": "Endpoint",
+                    },
+                    "id": "Endpoint",
+                    "path": "root/Default/Website/Endpoint",
+                  },
                   "File--b.html": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -907,29 +927,6 @@ exports[`website with addJson 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
