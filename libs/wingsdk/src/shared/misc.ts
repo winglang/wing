@@ -35,6 +35,8 @@ export interface runDockerImageProps {
   imageName: string;
   containerName: string;
   containerPort: string;
+  args?: string[];
+  volumes?: Record<string, string>;
 }
 
 /**
@@ -44,6 +46,8 @@ export async function runDockerImage({
   imageName,
   containerName,
   containerPort,
+  volumes,
+  args,
 }: runDockerImageProps): Promise<{ hostPort: string }> {
   // Pull docker image
   try {
@@ -51,16 +55,30 @@ export async function runDockerImage({
   } catch {
     await runCommand("docker", ["pull", imageName]);
   }
-  // Run the container and allow docker to assign a host port dynamically
-  await runCommand("docker", [
+
+  const runArgs = [
     "run",
     "--detach",
     "--name",
     containerName,
     "-p",
     containerPort,
-    imageName,
-  ]);
+  ];
+
+  if (volumes) {
+    for (let [src, dst] of Object.entries(volumes)) {
+      runArgs.push(`-v=${src}:${dst}`);
+    }
+  }
+
+  runArgs.push(imageName);
+
+  if (args) {
+    runArgs.push(...args);
+  }
+
+  // Run the container and allow docker to assign a host port dynamically
+  await runCommand("docker", runArgs);
 
   // Inspect the container to get the host port
   const out = await runCommand("docker", ["inspect", containerName]);

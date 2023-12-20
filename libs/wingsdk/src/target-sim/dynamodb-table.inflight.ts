@@ -1,9 +1,14 @@
 import { execSync } from "child_process";
+import { resolve } from "node:path";
 import {
   CreateTableCommand,
   DynamoDBClient,
   KeyType,
   KeySchemaElement,
+  DescribeTableCommand,
+  AttributeDefinition,
+  DeleteTableCommand,
+  ListTablesCommand,
 } from "@aws-sdk/client-dynamodb";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -17,7 +22,8 @@ import {
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
 
-const MAX_CREATE_TABLE_COMMAND_ATTEMPTS = 50;
+const MAX_LIST_TABLE_COMMAND_ATTEMPTS = 50;
+const DB_DATA_PATH = "/home/dynamodblocal/data/";
 
 export class DynamodbTable
   extends DynamodbTableClientBase
@@ -48,6 +54,14 @@ export class DynamodbTable
         imageName: this.WING_DYNAMODB_IMAGE,
         containerName: this.containerName,
         containerPort: "8000",
+        args: [
+          "-jar",
+          "DynamoDBLocal.jar",
+          "-sharedDb",
+          "-dbPath",
+          DB_DATA_PATH,
+        ],
+        volumes: { [resolve(this.context.statedir)]: DB_DATA_PATH },
       });
 
       // dynamodb url based on host port
@@ -100,28 +114,100 @@ export class DynamodbTable
       });
     }
 
-    const createTableCommand = new CreateTableCommand({
-      TableName: this.tableName,
-      AttributeDefinitions: Object.entries(this.props.attributeDefinitions).map(
-        ([k, v]) => ({ AttributeName: k, AttributeType: v })
-      ),
-      KeySchema: keySchema,
-      BillingMode: "PAY_PER_REQUEST",
-    });
+    const attributeDefinitions = Object.entries(
+      this.props.attributeDefinitions
+    ).map(([k, v]) => ({ AttributeName: k, AttributeType: v }));
 
     // dynamodb server process might take some time to start
     let attemptNumber = 0;
+    let shouldCreateTable = false;
+    let tables: string[] | undefined;
     while (true) {
       try {
-        await this.client!.send(createTableCommand);
+        const res = await this.client!.send(new ListTablesCommand({}));
+        tables = res.TableNames;
         break;
       } catch (err) {
-        if (++attemptNumber >= MAX_CREATE_TABLE_COMMAND_ATTEMPTS) {
+        if (++attemptNumber >= MAX_LIST_TABLE_COMMAND_ATTEMPTS) {
           throw err;
         }
         await this.sleep(50);
       }
     }
+
+    // check if tables exists
+    if (tables?.includes(this.tableName)) {
+      const describeTableOutput = await this.client!.send(
+        new DescribeTableCommand({
+          TableName: this.tableName,
+        })
+      );
+      if (describeTableOutput.Table) {
+        // check if table should be recreated
+        if (
+          !this.compareKeySchemas(
+            describeTableOutput.Table.KeySchema,
+            keySchema
+          ) ||
+          !this.compareAttributeDefinitions(
+            describeTableOutput.Table.AttributeDefinitions,
+            attributeDefinitions
+          )
+        ) {
+          shouldCreateTable = true;
+          await this.client!.send(
+            new DeleteTableCommand({
+              TableName: this.tableName,
+            })
+          );
+        }
+      }
+    } else {
+      shouldCreateTable = true;
+    }
+
+    if (shouldCreateTable) {
+      await this.client!.send(
+        new CreateTableCommand({
+          TableName: this.tableName,
+          AttributeDefinitions: attributeDefinitions,
+          KeySchema: keySchema,
+          BillingMode: "PAY_PER_REQUEST",
+        })
+      );
+    }
+  }
+
+  private compareKeySchemas(
+    actual: KeySchemaElement[] | undefined,
+    expected: KeySchemaElement[]
+  ) {
+    if (actual === undefined) {
+      return false;
+    }
+
+    return expected.every((key, index) => {
+      return (
+        actual[index].KeyType == key.KeyType &&
+        actual[index].AttributeName == key.AttributeName
+      );
+    });
+  }
+
+  private compareAttributeDefinitions(
+    actual: AttributeDefinition[] | undefined,
+    expected: AttributeDefinition[]
+  ) {
+    if (actual === undefined) {
+      return false;
+    }
+
+    return expected.every((attr, index) => {
+      return (
+        actual[index].AttributeName == attr.AttributeName &&
+        actual[index].AttributeType == attr.AttributeType
+      );
+    });
   }
 
   private async sleep(ms: number) {
