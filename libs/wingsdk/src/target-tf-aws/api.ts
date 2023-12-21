@@ -3,7 +3,6 @@ import { join } from "path";
 
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -20,6 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
+import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
 
 /**
