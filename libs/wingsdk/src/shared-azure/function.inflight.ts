@@ -33,9 +33,8 @@ export class FunctionClient implements IFunctionClient {
    * @returns immediately once the event has been handed off to AWS Lambda.
    */
   public async invokeAsync(payload: string): Promise<void> {
-    return Promise.reject(
-      `invokeAsync is not implemented: (payload=${payload})`
-    );
+    payload;
+    throw new Error("invokeAsync is not implemented");
   }
 
   /**
