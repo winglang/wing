@@ -176,3 +176,14 @@ test("asset path is stripped of spaces", () => {
   // THEN
   expect(f.entrypoint).toContain(expectedReplacement);
 });
+
+test("vpc permissions are added even if there is no policy", () => {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  const f = new Function(app, some_name, inflight);
+
+
+  const output = app.synth();
+
+  console.log(tfSanitize(output));
+});
