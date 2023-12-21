@@ -111,6 +111,9 @@ export const createTestRouter = () => {
           input.resourcePath,
           ctx.logger,
         );
+        for (const log of response.traces.filter((t) => t.type === "log")) {
+          ctx.logger.log(log.data.message);
+        }
 
         const testsState = ctx.testsStateManager();
         testsState.setTest({
