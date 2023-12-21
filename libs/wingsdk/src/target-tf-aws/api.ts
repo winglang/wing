@@ -334,7 +334,7 @@ class WingRestApi extends Construct {
           const injectOptionsMethods = (openApiSpec: OpenApiSpec) => {
             Object.keys(openApiSpec.paths).forEach(function (key) {
               if (!("options" in openApiSpec.paths[key]) && props.cors) {
-                openApiSpec.paths[key]["options"] = corsOptionsMethod(props.cors);
+                openApiSpec.paths[key].options = corsOptionsMethod(props.cors);
               }
             });
 
