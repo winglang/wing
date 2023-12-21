@@ -40,11 +40,16 @@ new std.Test(inflight () => {
     return q.approxSize() == 2;
   }));
 
-  q.purge(); // the message deletion process takes up to 60 seconds. (https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/purgequeuecommand.html)
+  q.purge(); 
+  if util.env("WING_TARGET") != "sim" {
+    // In a real cloud, purging is expensive so we should wait a minute regardless of .approxSize()
+    // e.g. See AWS docs for queue purging (https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-sqs/classes/purgequeuecommand.html)
+    util.sleep(1m);
+  }
 
   assert(util.waitUntil(() => {
     return q.approxSize() == 0;
-  }, timeout: 1m, interval: 5s));
+  }));
 
   q.push("123", "\r", "{obj}");
 
