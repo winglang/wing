@@ -1,4 +1,4 @@
-import { exec, execFile, spawn } from "child_process";
+import { exec, execFile } from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
@@ -186,11 +186,15 @@ export class Util {
         status: 0,
       };
     } catch (error: any) {
-      return {
-        stdout: error.stdout,
-        stderr: error.stderr,
-        status: error.code,
-      };
+      if (error.code === "ENOENT") {
+        throw new Error(`Program not found: ${error.message}`);
+      } else {
+        return {
+          stdout: error.stdout.toString(),
+          stderr: error.stderr.toString(),
+          status: error.code,
+        };
+      }
     }
   }
 

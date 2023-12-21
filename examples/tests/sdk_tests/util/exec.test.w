@@ -2,6 +2,18 @@ bring util;
 bring expect;
 bring fs;
 
+let assertThrows = inflight (expected: str, block: (): void) => {
+  let var error = false;
+  try {
+    block();
+  } catch actual {
+    assert(actual.contains(expected));
+    error = true;
+  }
+  assert(error);
+};
+
+
 test "exec() with valid program" {
   let program = "echo";
   let args = ["-n", "Hello, Wing!"];
@@ -14,14 +26,14 @@ test "exec() with valid program" {
 }
 
 test "exec() with invalid program" {
+  let NOT_FOUND_ERROR = "Program not found:";
+
   let program = "no-such-program";
   let args = [""];
 
-  let output = util.exec(program, args);
-
-  expect.equal(output.stdout, "");
-  expect.equal(output.stderr, "");
-  expect.equal(output.status, "ENOENT");
+  assertThrows(NOT_FOUND_ERROR, () => {
+    util.exec(program, args);
+  });
 }
 
 test "exec() with explicit non-zero exit status" {
