@@ -2,11 +2,6 @@
 
 exports[`api configured for cors 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -470,11 +465,6 @@ exports[`api configured for cors 1`] = `
 
 exports[`api url can be used as environment variable 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -835,11 +825,6 @@ exports[`api url can be used as environment variable 1`] = `
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1265,11 +1250,6 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 
 exports[`api with 'name' parameter 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1687,11 +1667,6 @@ exports[`api with 'name' parameter 1`] = `
 
 exports[`api with CONNECT route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2100,11 +2075,6 @@ exports[`api with CONNECT route 1`] = `
 
 exports[`api with DELETE route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2513,11 +2483,6 @@ exports[`api with DELETE route 1`] = `
 
 exports[`api with GET route at root 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2926,11 +2891,6 @@ exports[`api with GET route at root 1`] = `
 
 exports[`api with GET routes with common prefix 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -3415,11 +3375,6 @@ exports[`api with GET routes with common prefix 1`] = `
 
 exports[`api with GET routes with different prefix 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -3904,11 +3859,6 @@ exports[`api with GET routes with different prefix 1`] = `
 
 exports[`api with HEAD route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -4317,11 +4267,6 @@ exports[`api with HEAD route 1`] = `
 
 exports[`api with OPTIONS route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -4730,11 +4675,6 @@ exports[`api with OPTIONS route 1`] = `
 
 exports[`api with PATCH route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -5143,11 +5083,6 @@ exports[`api with PATCH route 1`] = `
 
 exports[`api with POST route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -5556,11 +5491,6 @@ exports[`api with POST route 1`] = `
 
 exports[`api with PUT route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -5969,11 +5899,6 @@ exports[`api with PUT route 1`] = `
 
 exports[`api with multiple GET route and one lambda 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -6458,11 +6383,6 @@ exports[`api with multiple GET route and one lambda 1`] = `
 
 exports[`api with multiple methods and multiple lambda 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -6947,11 +6867,6 @@ exports[`api with multiple methods and multiple lambda 1`] = `
 
 exports[`api with multiple methods and one lambda 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -7436,11 +7351,6 @@ exports[`api with multiple methods and one lambda 1`] = `
 
 exports[`api with multiple methods on same route 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -7923,11 +7833,6 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with path parameter 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
