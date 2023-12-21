@@ -127,6 +127,8 @@ export class Function extends cloud.Function implements IAwsFunction {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
+          this.policyStatements = this.policyStatements ?? [];
+          
           // If there are subnets to attach then the role needs to be able to
           // create network interfaces
           if ((this.subnets?.size ?? 0) !== 0) {
@@ -142,12 +144,14 @@ export class Function extends cloud.Function implements IAwsFunction {
               Resource: "*",
             });
           }
+          
           if ((this.policyStatements ?? []).length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
           }
+          
           // policy must contain at least one statement, so include a no-op statement
           return JSON.stringify({
             Version: "2012-10-17",
