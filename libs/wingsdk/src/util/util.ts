@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { nanoid, customAlphabet } from "nanoid";
+import { ulid } from "ulid";
 import { v4 } from "uuid";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
@@ -51,6 +52,17 @@ export interface NanoidOptions {
    * Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
    */
   readonly alphabet?: string;
+}
+
+/**
+ * Options to generate universally unique lexicographically sortable identifiers.
+ */
+export interface UlidOptions {
+  /**
+   * You can also input a seed time which will consistently give you the same string for the time component. This is useful for migrating to ulid.
+   * @default Date.now()
+   */
+  readonly seed?: number;
 }
 
 /**
@@ -163,6 +175,16 @@ export class Util {
       ? customAlphabet(options.alphabet, size)
       : undefined;
     return nano ? nano(size) : nanoid(size);
+  }
+
+  /**
+   * Generates universally unique lexicographically sortable identifier.
+   # @link https://github.com/ulid/javascript
+   * @param options - Optional options object for generating the ID.
+   */
+  public static ulid(options?: UlidOptions): string {
+    const seed = options?.seed;
+    return ulid(seed);
   }
 
   /**
