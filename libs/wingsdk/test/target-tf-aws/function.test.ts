@@ -180,10 +180,29 @@ test("asset path is stripped of spaces", () => {
 test("vpc permissions are added even if there is no policy", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(INFLIGHT_CODE);
-  const f = new Function(app, some_name, inflight);
+  const f = new tfaws.Function(app, "Function", inflight);
 
+  f.addNetworkConfig({
+    securityGroupIds: ["sg-1234567890"],
+    subnetIds: ["subnet-1234567890"],
+  });
 
   const output = app.synth();
+  const policy =
+    tfSanitize(output).resource.aws_iam_role_policy
+      .Function_IamRolePolicy_E3B26607.policy;
 
-  console.log(tfSanitize(output));
+  expect(JSON.parse(policy).Statement).toStrictEqual([
+    {
+      Action: [
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+      ],
+      Resource: ["*"],
+      Effect: "Allow",
+    },
+  ]);
 });
