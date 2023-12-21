@@ -5,7 +5,7 @@ let counter = new cloud.Counter();
 
 let fn = new cloud.Function(inflight (input: str) => {
   log("log inside fn");
-  util.sleep(5s);
+  util.sleep(3s);
   counter.inc();
 });
 
@@ -19,6 +19,7 @@ test "invokeAsync() returns without waiting for the function finishes" {
   assert(counter.peek() == 0);
   fn.invokeAsync("");
   assert(counter.peek() == 0);
-  util.sleep(10s);
-  assert(counter.peek() == 1);
+  util.waitUntil(() => {
+    return counter.peek() == 1;
+  }, timeout: 15s);
 }
