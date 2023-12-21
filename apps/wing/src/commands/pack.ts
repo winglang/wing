@@ -109,7 +109,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     // TODO Remove once we are generating .d.ts files
     await fs.writeFile(
       path.join(compilerOutputDir, "preflight.d.ts"),
-      `declare module '${pkgJson}';`
+      `declare module '${pkgJson.name}';`
     );
 
     // move compiler output
