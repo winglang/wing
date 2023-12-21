@@ -226,7 +226,10 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+    return [
+      cloud.FunctionInflightMethods.INVOKE,
+      cloud.FunctionInflightMethods.INVOKE_ASYNC,
+    ];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -234,7 +237,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
       host.addPolicyStatements({
         actions: ["lambda:InvokeFunction"],
         resources: [`${this.function.arn}`],
