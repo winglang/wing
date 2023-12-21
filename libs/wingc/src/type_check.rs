@@ -1,4 +1,5 @@
 mod class_fields_init;
+mod has_return_stmt;
 mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
@@ -18,6 +19,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
+use crate::type_check::has_return_stmt::HasReturnStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
@@ -3131,7 +3133,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_check_scope(scope);
 		}
 
-		if let SymbolEnvKind::Function { sig, .. } = env.kind {
+		if let SymbolEnvKind::Function { sig, is_init, .. } = env.kind {
 			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
@@ -3139,6 +3141,20 @@ impl<'a> TypeChecker<'a> {
 					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
 				}
 				self.update_known_inferences(&mut return_type, &scope.span);
+			}
+
+			let mut has_return_stmt_visitor = HasReturnStatementVisitor::default();
+			has_return_stmt_visitor.visit(&scope.statements);
+
+			// If the scope doesn't contain any return statements and the return type isn't void or T?, throw an error
+			if !has_return_stmt_visitor.seen_return && !return_type.is_void() && !return_type.is_option() && !is_init {
+				self.spanned_error(
+					scope,
+					format!(
+						"A function whose return type is \"{}\" must return a value.",
+						return_type
+					),
+				);
 			}
 		}
 
@@ -5372,18 +5388,32 @@ impl<'a> TypeChecker<'a> {
 			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access private member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access private member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Protected => {
 					if !protected_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access protected member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access protected member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here

@@ -84,7 +84,26 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "A": {
+              "cloud.Api": {
+                "Endpoint": {
+                  "Url": "A_cloudApi_Endpoint_Url_77CB2098"
+                }
+              }
+            },
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -96,6 +115,14 @@ module.exports = function({  }) {
           }
         }
       }
+    }
+  },
+  "output": {
+    "A_cloudApi_Endpoint_Url_77CB2098": {
+      "value": "https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}"
+    },
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {

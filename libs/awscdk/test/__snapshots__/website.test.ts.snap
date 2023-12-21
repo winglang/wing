@@ -2,6 +2,24 @@
 
 exports[`default website behaviour 1`] = `
 {
+  "Outputs": {
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -355,6 +373,24 @@ exports[`default website behaviour 1`] = `
 
 exports[`website with addFile 1`] = `
 {
+  "Outputs": {
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -755,6 +791,24 @@ exports[`website with addFile 1`] = `
 
 exports[`website with addJson 1`] = `
 {
+  "Outputs": {
+    "WebsiteEndpointUrl0CC0343F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Fn::GetAtt": [
+                "WebsiteDistribution0C86AB5B",
+                "DomainName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

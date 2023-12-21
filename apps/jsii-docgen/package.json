@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
-    "@types/node": "^16",
+    "@types/node": "^18.17.13",
     "@types/semver": "^7.5.1",
     "@types/yargs": "^16",
     "@typescript-eslint/eslint-plugin": "^5",

@@ -45,6 +45,7 @@
     "!projenrc/**/*.ts"
   ],
   "rules": {
+    "@typescript-eslint/no-misused-promises": "error",
     "prettier/prettier": [
       "error"
     ],
