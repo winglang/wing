@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -87,25 +74,25 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: emptyArray2.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(emptyArray2.length,0)))};
     const arr1 = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr1.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr1.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr1.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr1.at(1)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr1.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr1, 1),2)))};
     const arr2 = ["1", "2", "3"];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr2.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr2.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr2.at(1) == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr2.at(1)),"2")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr2.at(1) == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr2, 1),"2")))};
     const arr3 = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr3.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr3.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr3.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr3.at(1)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr3.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr3, 1),2)))};
     const arr4 = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr4.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr4.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr4.at(1)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 1),2)))};
     const arr5 = [bucket1, bucket2, bucket3];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr5.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr5.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr5.at(1) == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr5.at(1)),bucket2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr5.at(1) == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr5, 1),bucket2)))};
     const arr6 = [bucket1, bucket2, bucket3];
     {((cond) => {if (!cond) throw new Error("assertion failed: arr6.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr6.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr6.at(1) == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr6.at(1)),bucket2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr6.at(1) == bucket2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr6, 1),bucket2)))};
     const arr7 = arr4;
     {((cond) => {if (!cond) throw new Error("assertion failed: arr7.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr7.length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr7.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr7.at(1)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr7.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr7, 1),2)))};
     {
       const $if_let_value = (emptyArray.at(0));
       if ($if_let_value != undefined) {
@@ -151,12 +138,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: m7.has(\"b\")")})(("b" in (m7)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m4.has(\"boom\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("boom" in (m4)),false)))};
     const m8 = ({["a"]: "a1", ["b"]: "b1", ["c"]: "c1"});
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m8).at(0)),"a")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(1) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m8).at(1)),"b")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(2) == \"c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m8).at(2)),"c")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(0) == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m8).at(0)),"a1")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(1) == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m8).at(1)),"b1")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(2) == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m8).at(2)),"c1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m8), 0),"a")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(1) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m8), 1),"b")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.keys().at(2) == \"c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m8), 2),"c")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(0) == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m8), 0),"a1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(1) == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m8), 1),"b1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m8.values().at(2) == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m8), 2),"c1")))};
     for (const val of Object.keys(m8)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: !val.endsWith(\"1\")")})((!val.endsWith("1")))};
     }
@@ -164,12 +151,12 @@ class $Root extends $stdlib.std.Resource {
       {((cond) => {if (!cond) throw new Error("assertion failed: val.endsWith(\"1\")")})(val.endsWith("1"))};
     }
     const m9 = ({["a"]: "a1", ["b"]: "b1", ["c"]: "c1"});
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m9).at(0)),"a")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(1) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m9).at(1)),"b")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(2) == \"c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.keys(m9).at(2)),"c")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(0) == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m9).at(0)),"a1")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(1) == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m9).at(1)),"b1")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(2) == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(m9).at(2)),"c1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m9), 0),"a")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(1) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m9), 1),"b")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.keys().at(2) == \"c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.keys(m9), 2),"c")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(0) == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m9), 0),"a1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(1) == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m9), 1),"b1")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m9.values().at(2) == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(Object.values(m9), 2),"c1")))};
     for (const val of Object.keys(m9)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: !val.endsWith(\"1\")")})((!val.endsWith("1")))};
     }

@@ -1,0 +1,44 @@
+{
+  "name": "ts4w",
+  "version": "0.0.0",
+  "author": {
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "organization": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/ts4w"
+  },
+  "description": "Experimental TypeScript experience for Wing",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "compile": "tsup",
+    "package": "bump-pack -b"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "tag": "latest"
+  },
+  "dependencies": {
+    "@winglang/sdk": "workspace:^",
+    "constructs": "~10.2.69"
+  },
+  "peerDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.17.13",
+    "tsup": "^8.0.1",
+    "bump-pack": "workspace:^"
+  },
+  "files": [
+    "dist"
+  ],
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

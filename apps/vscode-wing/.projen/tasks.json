@@ -183,7 +183,7 @@
           "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "pnpm update @trpc/client @types/node-fetch @types/node @types/vscode @types/which @types/ws @typescript-eslint/eslint-plugin @typescript-eslint/parser @vscode/vsce @wingconsole/app @wingconsole/server eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint node-fetch npm-check-updates open prettier projen ts-node tsup typescript vscode-languageclient which winglang ws"
+          "exec": "pnpm update @trpc/client @types/node-fetch @types/node @types/vscode @types/which @types/ws @typescript-eslint/eslint-plugin @typescript-eslint/parser @vscode/vsce @wingconsole/app @wingconsole/server eslint-config-prettier eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint node-fetch npm-check-updates open prettier projen ts-node tsup typescript vscode-languageclient which winglang ws @types/node"
         },
         {
           "exec": "pnpm exec projen"

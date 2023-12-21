@@ -104,6 +104,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const schema: QueueSchema = {
       type: cloud.QUEUE_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         timeout: this.timeout.seconds,
         retentionPeriod: this.retentionPeriod.seconds,

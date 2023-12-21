@@ -33,10 +33,10 @@ module.exports = function({  }) {
     async handle() {
       const arr = [0];
       const i = 1;
-      (await arr.push(i));
+      ((obj, args) => { obj.push(...args); })(arr, [i]);
       if (true) {
         const i = 2;
-        (await arr.push(i));
+        ((obj, args) => { obj.push(...args); })(arr, [i]);
       }
     }
   }

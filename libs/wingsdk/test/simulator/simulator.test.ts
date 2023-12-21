@@ -8,7 +8,7 @@ import { SimApp } from "../sim-app";
 
 describe("run single test", () => {
   test("test not found", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
@@ -16,10 +16,11 @@ describe("run single test", () => {
     await expect(testRunner.runTest("test_not_found")).rejects.toThrowError(
       'No test found at path "test_not_found"'
     );
+    await sim.stop();
   });
 
   test("happy path", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", ["console.log('hi');"]);
     app.synth();
     const sim = await app.startSimulator();
@@ -27,11 +28,12 @@ describe("run single test", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
+    await sim.stop();
     expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
   test("test failure", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", [
       "console.log('I am about to fail');",
       "throw new Error('test failed');",
@@ -42,11 +44,12 @@ describe("run single test", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const result = await testRunner.runTest("root/test");
+    await sim.stop();
     expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
   test("not a function", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     new Bucket(app, "test");
 
     const sim = await app.startSimulator();
@@ -56,22 +59,24 @@ describe("run single test", () => {
     await expect(testRunner.runTest("root/test")).rejects.toThrowError(
       'No test found at path "root/test"'
     );
+    await sim.stop();
   });
 });
 
 describe("run all tests", () => {
   test("no tests", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const tests = await testRunner.listTests();
+    await sim.stop();
     expect(tests).toEqual([]);
   });
 
   test("single test", async () => {
-    const app = new SimApp();
+    const app = new SimApp({ isTestEnvironment: true });
     makeTest(app, "test", ["console.log('hi');"]);
 
     const sim = await app.startSimulator();
@@ -79,28 +84,88 @@ describe("run all tests", () => {
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
+    await sim.stop();
     expect(results.map(sanitizeResult)).toMatchSnapshot();
   });
 
   test("multiple tests", async () => {
-    const app = new SimApp();
-    makeTest(app, "test", ["console.log('hi');"]);
-    makeTest(app, "test:bla", ["console.log('hi');"]);
-    makeTest(app, "test:blue", ["console.log('hi');"]);
-    new Bucket(app, "mytestbucket");
+    class Root extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+        makeTest(this, "test", ["console.log('hi');"]);
+        makeTest(this, "test:bla", ["console.log('hi');"]);
+        makeTest(this, "test:blue", ["console.log('hi');"]);
+      }
+    }
+    const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
 
     const sim = await app.startSimulator();
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
     const results = await runAllTests(testRunner);
+    await sim.stop();
     expect(results.length).toEqual(3);
     expect(results.map((r) => r.path).sort()).toStrictEqual([
-      "root/test",
-      "root/test:bla",
-      "root/test:blue",
+      "root/env0/test",
+      "root/env1/test:bla",
+      "root/env2/test:blue",
     ]);
   });
+
+  test("tests with same name in different scopes", async () => {
+    class ConstructWithTest extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+        makeTest(this, "test", ["console.log('hi');"]);
+      }
+    }
+
+    class Root extends Construct {
+      constructor(scope: Construct, id: string) {
+        super(scope, id);
+
+        makeTest(this, "test", ["console.log('hi');"]);
+        new ConstructWithTest(this, "scope1");
+        new ConstructWithTest(this, "scope2");
+      }
+    }
+    const app = new SimApp({ isTestEnvironment: true, rootConstruct: Root });
+
+    const sim = await app.startSimulator();
+    const testRunner = sim.getResource(
+      "/cloud.TestRunner"
+    ) as ITestRunnerClient;
+    const results = await runAllTests(testRunner);
+    await sim.stop();
+    expect(results.length).toEqual(3);
+    expect(results.map((r) => r.path).sort()).toStrictEqual([
+      "root/env0/test",
+      "root/env1/scope1/test",
+      "root/env2/scope2/test",
+    ]);
+  });
+});
+
+test("await client is a no-op", async () => {
+  const app = new SimApp();
+  new Bucket(app, "test");
+  const sim = await app.startSimulator();
+  const bucketClient = sim.getResource("/test");
+  expect(await bucketClient).toBe(bucketClient);
+  await sim.stop();
+});
+
+test("calling an invalid method returns an error to the client", async () => {
+  // as opposed to, say, crashing the server
+  const app = new SimApp();
+  new Bucket(app, "test");
+  const sim = await app.startSimulator();
+  const bucketClient = sim.getResource("/test");
+  await expect(bucketClient.invalidMethod()).rejects.toThrowError(
+    /Method invalidMethod not found on resource/
+  );
+  await sim.stop();
 });
 
 test("provides raw tree data", async () => {
@@ -108,6 +173,7 @@ test("provides raw tree data", async () => {
   makeTest(app, "test", ["console.log('hi');"]);
   const sim = await app.startSimulator();
   const treeData = sim.tree().rawData();
+  await sim.stop();
   expect(treeData).toBeDefined();
   expect(treeData).toMatchSnapshot();
 });

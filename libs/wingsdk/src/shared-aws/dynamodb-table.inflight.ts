@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamodbTableClientBase } from "../ex/dynamodb-table";
+import { DynamodbTableClientBase } from "../ex/dynamodb-table/table";
 
 export class DynamodbTableClient extends DynamodbTableClientBase {
   constructor(

@@ -36,20 +36,7 @@ module.exports = function({ $A }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -173,8 +160,8 @@ class $Root extends $stdlib.std.Resource {
       for (const i of args) {
         {((cond) => {if (!cond) throw new Error("assertion failed: i > 0 && i < 5")})(((i > 0) && (i < 5)))};
       }
-      (args.push(10));
-      {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((args.at(4)),10)))};
+      ((obj, args) => { obj.push(...args); })(args, [10]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10)))};
     });
     (func1(1, "something", 1, 2, 3, 4));
     (func1(1, undefined, 1, 2, 3, 4));
@@ -188,17 +175,25 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1, 2, 3)),6)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: addNums() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums()),0)))};
     const arityFunc = ((n, b, ...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(-1) == \"d\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at((-1))),"d")))};
+      let error = false;
+      try {
+        ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, (-1));
+      }
+      catch ($error_ex) {
+        const ex = $error_ex.message;
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     });
     (arityFunc(1, true, "a", "b", "c", "d"));
     const subTypeFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)).message,"this is A")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)).message,"this is B")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message,"this is A")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message,"this is B")))};
     });
     (subTypeFunc(new A(this, "A", "this is A"), new B(this, "B", "this is B")));
     const jsonCastingFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(0)),"str")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((events.at(1)),"json str")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0),"str")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1),"json str")))};
     });
     const jsonStr = "json str";
     (jsonCastingFunc("str", jsonStr));

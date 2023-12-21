@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -85,12 +72,12 @@ class $Root extends $stdlib.std.Resource {
     const arr2 = [1, 2, 3];
     const arr3 = [bucket1, bucket2];
     const arr4 = arr1;
-    (arr1.push("a"));
-    (arr2.push(4));
-    (arr3.push(bucket3));
+    ((obj, args) => { obj.push(...args); })(arr1, ["a"]);
+    ((obj, args) => { obj.push(...args); })(arr2, [4]);
+    ((obj, args) => { obj.push(...args); })(arr3, [bucket3]);
     {((cond) => {if (!cond) throw new Error("assertion failed: arr2.pop() == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr2.pop()),4)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: arr1.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr1.length,4)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr4.at(0)),"a")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 0),"a")))};
     const s1 = new Set([1, 2, 3, 3]);
     const s2 = new Set(["hello", "world", "hello"]);
     const s3 = new Set([bucket1, bucket2, bucket2]);

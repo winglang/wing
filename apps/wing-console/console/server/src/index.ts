@@ -1,3 +1,7 @@
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import type { inferRouterInputs } from "@trpc/server";
 import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
@@ -64,6 +68,8 @@ export interface CreateConsoleServerOptions {
   onExpressCreated?: (app: Express) => void;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  platform?: string[];
+  stateDir?: string;
 }
 
 export const createConsoleServer = async ({
@@ -78,6 +84,8 @@ export const createConsoleServer = async ({
   onExpressCreated,
   requireAcceptTerms,
   layoutConfig,
+  platform,
+  stateDir,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -105,11 +113,16 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler(wingfile);
+  const compiler = createCompiler({
+    wingfile,
+    platform,
+    testing: false,
+    stateDir,
+  });
   let isStarting = false;
   let isStopping = false;
 
-  const simulator = createSimulator();
+  const simulator = createSimulator({ stateDir });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
@@ -118,6 +131,16 @@ export const createConsoleServer = async ({
       simulator.start(simfile);
       isStarting = true;
     }
+  });
+
+  const testCompiler = createCompiler({
+    wingfile,
+    platform,
+    testing: true,
+  });
+  const testSimulator = createSimulator();
+  testCompiler.on("compiled", ({ simfile }) => {
+    testSimulator.start(simfile);
   });
 
   let lastErrorMessage = "";
@@ -189,6 +212,13 @@ export const createConsoleServer = async ({
     }
     if (trace.data.status === "failure") {
       let output = await prettyPrintError(trace.data.error);
+
+      // Remove ANSI color codes
+      const regex =
+        /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+      output = output.replaceAll(regex, "");
+
       consoleLogger.error(output, "user", {
         sourceType: trace.sourceType,
         sourcePath: trace.sourcePath,
@@ -212,6 +242,10 @@ export const createConsoleServer = async ({
 
   const { server, port } = await createExpressServer({
     consoleLogger,
+    testSimulatorInstance() {
+      const statedir = mkdtempSync(join(tmpdir(), "wing-console-test-"));
+      return testSimulator.instance(statedir);
+    },
     simulatorInstance() {
       return simulator.instance();
     },
@@ -257,6 +291,7 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
+        testSimulator.stop(),
       ]);
     } catch (error) {
       log.error(error);

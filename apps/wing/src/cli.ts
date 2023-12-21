@@ -3,10 +3,10 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
-export const PACKAGE_VERSION = currentPackage.version;
-let analyticsExportFile: Promise<string | undefined>;
 
+export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
   process.env.WING_DISABLE_ANALYTICS = "1";
 }
@@ -17,19 +17,24 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 const DEFAULT_PLATFORM = ["sim"];
+let analyticsExportFile: Promise<string | undefined> | undefined;
 
 function runSubCommand(subCommand: string, path: string = subCommand) {
+  loadEnvVariables({
+    mode: subCommand,
+  });
+
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
       const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();
-        process.exit(1);
+        process.exitCode = 1;
       }
     } catch (err) {
       console.error((err as any)?.message ?? err);
-      process.exit(1);
+      process.exitCode = 1;
     }
   };
 }
@@ -86,7 +91,6 @@ async function main() {
   checkNodeVersion();
 
   const program = new Command();
-
   program.configureHelp({
     sortOptions: true,
     showGlobalOptions: true,
@@ -230,5 +234,5 @@ function checkNodeVersion() {
 
 main().catch((err) => {
   console.error(err);
-  process.exit(1);
+  process.exitCode = 1;
 });

@@ -8,6 +8,7 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -23,6 +24,7 @@ const {
   API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -65,11 +67,6 @@ export class App extends core.App {
   private synthed: boolean;
   private synthedOutput: string | undefined;
   private synthHooks?: core.SynthHooks;
-
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
 
   constructor(props: CdkAppProps) {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
@@ -118,9 +115,8 @@ export class App extends core.App {
     this.synthed = false;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     registerTokenResolver(new CdkTokens());
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   /**
@@ -194,6 +190,9 @@ export class App extends core.App {
 
       case ex.DYNAMODB_TABLE_FQN:
         return DynamodbTable;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
     return undefined;
   }

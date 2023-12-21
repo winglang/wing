@@ -50,20 +50,7 @@ module.exports = function({ $Animal }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -163,18 +150,18 @@ class $Root extends $stdlib.std.Resource {
     }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
-    (mutArray.push("three"));
+    ((obj, args) => { obj.push(...args); })(mutArray, ["three"]);
     const immutArray = [...(mutArray)];
-    const s = (sArray.at(1));
+    const s = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1);
     {((cond) => {if (!cond) throw new Error("assertion failed: s == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"two")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.at(1) == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((sArray.at(1)),"two")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.at(1) == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1),"two")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: sArray.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sArray.length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutArray.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutArray.length,3)))};
     const sArray2 = ["if", "you", "build", "it"];
     const sArray3 = ["he", "will", "come", "for", "you"];
     const mergedArray = (sArray2.concat(sArray3));
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.length == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.length,9)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(5) == \"will\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedArray.at(5)),"will")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(5) == \"will\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedArray, 5),"will")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.contains(\"build\")")})(mergedArray.includes("build"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !mergedArray.contains(\"bring\")")})((!mergedArray.includes("bring")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.indexOf(\"you\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.indexOf("you"),1)))};
@@ -184,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
     const mutArray2 = ["how", "does", "that", "look"];
     const mergedMutArray = (mutArray.concat(mutArray2));
     {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.length == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedMutArray.length,7)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.at(5) == \"that\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedMutArray.at(5)),"that")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.at(5) == \"that\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedMutArray, 5),"that")))};
     const sSet = new Set(["one", "two"]);
     const mutSet = new Set(sSet);
     (mutSet.add("three"));

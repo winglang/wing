@@ -1,6 +1,9 @@
 name: SDK Spec Tests
 run-name: SDK Spec Tests (${{ inputs.repo || github.repository }}/${{inputs.ref || github.ref}})
 on:
+  release:
+    types:
+      - published # runs only unstable targets
   workflow_call: {}
   workflow_dispatch:
     inputs:
@@ -17,6 +20,8 @@ on:
         default: all
         description: "target to run at, can be one or all of them"
         options:
+          - all-stable # tf-aws
+          - all-unstable # tf-azure and soon tf-gcp
           - all
           - tf-aws
           - tf-azure
@@ -30,7 +35,7 @@ env:
   MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
-  TARGET: ${{ inputs.target || 'all' }}
+  TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
   PNPM_VERSION: "8.6.3"
   AZURE_LOCATION: "East US"
   GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
@@ -72,6 +77,10 @@ jobs:
         run: |
           if [ "${{env.TARGET}}" = "all" ]; then
             target='["tf-aws", "tf-azure"]'
+          elif [ "${{env.TARGET}}" = "all-stable" ]; then
+            target='["tf-aws"]'
+          elif [ "${{env.TARGET}}" = "all-unstable" ]; then
+            target='["tf-azure"]'
           else
            target='["${{env.TARGET}}"]'
           fi
@@ -164,14 +173,17 @@ jobs:
           command: |
             if  ${{ env.MANUAL == 'true' }}
             then
-               pnpm install
-               pnpm wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+              pnpm install
+              pnpm turbo compile -F=winglang
+              WING_CLI=$(realpath apps/wing/bin/wing)
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
-               wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+              WING_CLI=$(which wing)
             else
-              ./localwing/node_modules/.bin/wing test -t ${{ matrix.target }} ${{ matrix.test.directory }}/*.test.w
+              WING_CLI=$(realpath localwing/node_modules/.bin/wing)
             fi
+            cd ${{ matrix.test.directory }}
+            $WING_CLI test -t ${{ matrix.target }} *.test.w
 
       - name: Output Terraform log
         if: failure()

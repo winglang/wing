@@ -36,6 +36,7 @@ const NAME_OPTS: NameOptions = {
 export class Api extends cloud.Api implements IAwsApi {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -43,10 +44,13 @@ export class Api extends cloud.Api implements IAwsApi {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
+      label: `Endpoint for Api ${this.node.path}`,
+    });
   }
 
-  public get url(): string {
-    return this.api.url;
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   /**
@@ -71,7 +75,7 @@ export class Api extends cloud.Api implements IAwsApi {
     }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight);
+    const fn = this.addHandler(inflight, method, path);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
@@ -193,8 +197,12 @@ export class Api extends cloud.Api implements IAwsApi {
    * @param props Endpoint props
    * @returns AWS Lambda Function
    */
-  private addHandler(inflight: cloud.IApiEndpointHandler): Function {
-    let fn = this.addInflightHandler(inflight);
+  private addHandler(
+    inflight: cloud.IApiEndpointHandler,
+    method: string,
+    path: string
+  ): Function {
+    let fn = this.addInflightHandler(inflight, method, path);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -207,7 +215,11 @@ export class Api extends cloud.Api implements IAwsApi {
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
-  private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
+  private addInflightHandler(
+    inflight: cloud.IApiEndpointHandler,
+    method: string,
+    path: string
+  ): Function {
     let handler = this.handlers[inflight._hash];
     if (!handler) {
       const newInflight = convertBetweenHandlers(
@@ -222,9 +234,10 @@ export class Api extends cloud.Api implements IAwsApi {
             ?.defaultResponse,
         }
       );
+      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new Function(
         this,
-        App.of(this).makeId(this, "OnRequest"),
+        App.of(this).makeId(this, prefix),
         newInflight
       );
       this.handlers[inflight._hash] = handler;

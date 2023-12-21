@@ -4,6 +4,7 @@ export * from "./bucket";
 export * from "./bucket.onevent.inflight";
 export * from "./counter";
 export * from "./counter.inflight";
+export * from "./endpoint";
 export * from "./function";
 export * from "./queue";
 export * from "./queue.setconsumer.inflight";
