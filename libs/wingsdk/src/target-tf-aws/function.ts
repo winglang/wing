@@ -183,7 +183,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs18.x",
+      runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
