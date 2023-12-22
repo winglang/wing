@@ -25,8 +25,8 @@ module.exports = function({ $std_Json, $std_String }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $std_String.fromJson("hello")))};
-      $helpers.assert($helpers.eq((Object.values(({}))).length,0), "Json.values(Json {}).length == 0");
+      console.log((await $std_String.fromJson("hello")));
+      $helpers.assert($helpers.eq(Object.values(({})).length, 0), "Json.values(Json {}).length == 0");
     }
   }
   return $Closure1;

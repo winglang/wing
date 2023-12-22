@@ -68,7 +68,7 @@ module.exports = function({ $x }) {
     }
     async handle() {
       const val = (await $x.foo());
-      $helpers.assert($helpers.eq(val,"hello"), "val == \"hello\"");
+      $helpers.assert($helpers.eq(val, "hello"), "val == \"hello\"");
     }
   }
   return $Closure2;

@@ -54,7 +54,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async foo() {
-      {console.log("hello")};
+      console.log("hello");
     }
   }
   return A;

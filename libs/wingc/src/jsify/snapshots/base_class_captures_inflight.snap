@@ -31,7 +31,7 @@ module.exports = function({ $x }) {
     constructor({  }) {
     }
     async bar() {
-      {console.log($x)};
+      console.log($x);
     }
   }
   return Base;

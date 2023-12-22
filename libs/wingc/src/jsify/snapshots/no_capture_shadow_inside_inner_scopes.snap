@@ -34,10 +34,10 @@ module.exports = function({  }) {
     async handle() {
       const arr = [0];
       const i = 1;
-      ((obj, args) => { obj.push(...args); })(arr, [i]);
+      arr.push(i);
       if (true) {
         const i = 2;
-        ((obj, args) => { obj.push(...args); })(arr, [i]);
+        arr.push(i);
       }
     }
   }

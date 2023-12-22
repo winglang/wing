@@ -64,11 +64,11 @@ module.exports = function({  }) {
       this.$this_b = $this_b;
     }
     async isEmpty() {
-      return $helpers.eq((await this.$this_b.list()).length,0);
+      return $helpers.eq((await this.$this_b.list()).length, 0);
     }
     async checkIfEmpty() {
       if ((await this.isEmpty())) {
-        {console.log("empty!")};
+        console.log("empty!");
       }
     }
   }

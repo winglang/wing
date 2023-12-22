@@ -26,7 +26,7 @@ module.exports = function({ $s_length }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($s_length,5), "s.length == 5");
+      $helpers.assert($helpers.eq($s_length, 5), "s.length == 5");
     }
   }
   return $Closure1;

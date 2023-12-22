@@ -26,7 +26,7 @@ module.exports = function({ $__obj__key_______if____key_in_obj___throw_new_Error
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______s___hello___length,3), "s.get(\"hello\").length == 3");
+      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______s___hello___length, 3), "s.get(\"hello\").length == 3");
     }
   }
   return $Closure1;

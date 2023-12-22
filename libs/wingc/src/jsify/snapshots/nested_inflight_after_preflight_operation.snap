@@ -34,7 +34,7 @@ module.exports = function({ $y }) {
       return $obj;
     }
     async handle() {
-      {console.log($y.b)};
+      console.log($y.b);
     }
   }
   return $Closure1;

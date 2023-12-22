@@ -30,7 +30,7 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arr_length,2), "arr.length == 2");
+      $helpers.assert($helpers.eq($arr_length, 2), "arr.length == 2");
       (await $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_.put("hello", "world"));
     }
   }

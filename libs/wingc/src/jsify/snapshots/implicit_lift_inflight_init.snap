@@ -44,7 +44,7 @@ module.exports = function({  }) {
       (await this.$this_c.inc());
     }
     async dontTouchCounter() {
-      {console.log("hello")};
+      console.log("hello");
     }
     async $inflight_init() {
       this.myField2 = "hello";

@@ -24,7 +24,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("hello")};
+      console.log("hello");
     }
   }
   return $Closure1;

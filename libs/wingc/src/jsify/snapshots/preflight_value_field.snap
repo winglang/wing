@@ -38,9 +38,9 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
       return $obj;
     }
     async handle() {
-      {console.log($t_name)};
+      console.log($t_name);
       $helpers.assert(($t_name_length > 0), "t.name.length > 0");
-      {console.log($t_last)};
+      console.log($t_last);
     }
   }
   return $Closure1;

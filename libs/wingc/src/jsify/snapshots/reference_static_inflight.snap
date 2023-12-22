@@ -28,7 +28,7 @@ module.exports = function({ $MyType }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $MyType.myStaticMethod()))};
+      console.log((await $MyType.myStaticMethod()));
     }
   }
   return $Closure1;

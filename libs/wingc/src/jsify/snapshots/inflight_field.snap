@@ -28,7 +28,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async method() {
-      {console.log(this.x)};
+      console.log(this.x);
     }
     async $inflight_init() {
       this.x = "hello";

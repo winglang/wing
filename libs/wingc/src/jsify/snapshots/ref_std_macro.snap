@@ -26,7 +26,7 @@ module.exports = function({ $arr_length }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arr_length,3), "arr.length == 3");
+      $helpers.assert($helpers.eq($arr_length, 3), "arr.length == 3");
     }
   }
   return $Closure1;

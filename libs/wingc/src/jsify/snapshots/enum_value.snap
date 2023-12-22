@@ -28,8 +28,8 @@ module.exports = function({ $MyEnum, $x }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($MyEnum.B,$MyEnum.C), "MyEnum.B != MyEnum.C");
-      $helpers.assert($helpers.eq($x,$MyEnum.C), "x == MyEnum.C");
+      $helpers.assert(!$helpers.eq($MyEnum.B, $MyEnum.C), "MyEnum.B != MyEnum.C");
+      $helpers.assert($helpers.eq($x, $MyEnum.C), "x == MyEnum.C");
     }
   }
   return $Closure1;

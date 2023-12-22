@@ -28,7 +28,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $Foo.a()))};
+      console.log((await $Foo.a()));
     }
   }
   return $Closure1;

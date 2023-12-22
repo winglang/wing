@@ -46,7 +46,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       foo() {
-        {console.log(x)};
+        console.log(x);
       }
       static _toInflightType() {
         return `

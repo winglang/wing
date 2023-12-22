@@ -36,7 +36,7 @@ module.exports = function({  }) {
     async handle() {
       class A {
         static async foo() {
-          {console.log("hello")};
+          console.log("hello");
         }
       }
       class B {

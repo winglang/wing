@@ -25,7 +25,7 @@ module.exports = function({ $api_url }) {
       return $obj;
     }
     async handle() {
-      {console.log($api_url)};
+      console.log($api_url);
     }
   }
   return $Closure1;

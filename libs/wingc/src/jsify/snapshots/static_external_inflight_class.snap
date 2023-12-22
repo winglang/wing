@@ -55,7 +55,7 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     static async foo() {
-      {console.log("hello")};
+      console.log("hello");
     }
   }
   return A;

@@ -26,8 +26,8 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($a_length,2), "a.length == 2");
-      {console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_)};
+      $helpers.assert($helpers.eq($a_length, 2), "a.length == 2");
+      console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______a__0_);
     }
   }
   return $Closure1;

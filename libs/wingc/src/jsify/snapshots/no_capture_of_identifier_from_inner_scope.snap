@@ -29,7 +29,7 @@ module.exports = function({  }) {
     async handle() {
       const x = "hello";
       if (true) {
-        {console.log(x)};
+        console.log(x);
       }
     }
   }
