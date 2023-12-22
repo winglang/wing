@@ -95,6 +95,7 @@ const project = new cdk.JsiiProject({
     "yaml",
     // enhanced diagnostics
     "stacktracey",
+    "ulid",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
