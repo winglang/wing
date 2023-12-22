@@ -12,7 +12,7 @@ module.exports = function({ $Preflight }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $Preflight.staticMethod(123)),"foo-123"), "Preflight.staticMethod(123) == \"foo-123\"");
+      $helpers.assert($helpers.eq((await $Preflight.staticMethod(123)), "foo-123"), "Preflight.staticMethod(123) == \"foo-123\"");
     }
   }
   return $Closure1;
@@ -32,7 +32,7 @@ module.exports = function({ $OuterInflight }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $OuterInflight.staticMethod("hello")),5), "OuterInflight.staticMethod(\"hello\") == 5");
+      $helpers.assert($helpers.eq((await $OuterInflight.staticMethod("hello")), 5), "OuterInflight.staticMethod(\"hello\") == 5");
     }
   }
   return $Closure2;
@@ -57,7 +57,7 @@ module.exports = function({  }) {
           return "hello";
         }
       }
-      $helpers.assert($helpers.eq((await InnerInflight.staticMethod()),"hello"), "InnerInflight.staticMethod() == \"hello\"");
+      $helpers.assert($helpers.eq((await InnerInflight.staticMethod()), "hello"), "InnerInflight.staticMethod() == \"hello\"");
     }
   }
   return $Closure3;
@@ -81,7 +81,7 @@ module.exports = function({ $util_Util }) {
         const $if_let_value = (await $util_Util.tryEnv("WING_TARGET"));
         if ($if_let_value != undefined) {
           const target = $if_let_value;
-          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
+          console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target));
         }
         else {
           $helpers.assert(false, "false /* target not defined*/");

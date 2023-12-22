@@ -14,7 +14,7 @@ module.exports = function({  }) {
     async handle() {
       const iFn = async (s) => {
         return async () => {
-          return $helpers.eq(s,"wing");
+          return $helpers.eq(s, "wing");
         };
       };
       const wingInflightFn = (await iFn("wing"));
@@ -89,7 +89,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const fn = ((s) => {
       return (() => {
-        return $helpers.eq(s,"wing");
+        return $helpers.eq(s, "wing");
       });
     });
     const wingFn = (fn("wing"));

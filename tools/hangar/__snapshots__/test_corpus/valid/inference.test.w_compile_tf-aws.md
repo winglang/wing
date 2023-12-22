@@ -275,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const preflightClosure = ((nice) => {
-      {console.log(nice)};
+      console.log(nice);
       return true;
     });
     const recursiveClosure = ((nice) => {
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
     clonedArray2.push(1);
     clonedArray2.push(2);
     clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1)));
-    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2),3), "clonedArray2.at(2) == 3");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
     const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
@@ -318,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         const $if_let_value = optionalString;
         if ($if_let_value != undefined) {
           const justString = $if_let_value;
-          {console.log(justString)};
+          console.log(justString);
         }
       }
     });

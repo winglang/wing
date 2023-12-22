@@ -88,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
     }
     let count = 0;
     ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(new CustomScope(this, "CustomScope"));
-    $helpers.assert($helpers.eq(count,1), "count == 1");
+    $helpers.assert($helpers.eq(count, 1), "count == 1");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

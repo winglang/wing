@@ -15,7 +15,7 @@ module.exports = function({ $__parent_this_1_b }) {
       (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {
-          $helpers.assert($helpers.eq(this.field,"value"), "this.field == \"value\"");
+          $helpers.assert($helpers.eq(this.field, "value"), "this.field == \"value\"");
         }
         constructor(){
           this.$inflight_init = async () => {
@@ -72,7 +72,7 @@ module.exports = function({  }) {
       }
       const foo = (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
       const y = (await foo.getX());
-      $helpers.assert($helpers.eq(y,12), "y == 12");
+      $helpers.assert($helpers.eq(y, 12), "y == 12");
     }
   }
   return $Closure3;

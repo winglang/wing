@@ -33,8 +33,8 @@ const stdFs2 = $stdlib.fs;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.assert($helpers.eq((stdFs.Util.dirname("/")),"/"), "stdFs.dirname(\"/\") == \"/\"");
-    $helpers.assert($helpers.eq((stdFs2.Util.dirname("/")),"/"), "stdFs2.dirname(\"/\") == \"/\"");
+    $helpers.assert($helpers.eq((stdFs.Util.dirname("/")), "/"), "stdFs.dirname(\"/\") == \"/\"");
+    $helpers.assert($helpers.eq((stdFs2.Util.dirname("/")), "/"), "stdFs2.dirname(\"/\") == \"/\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

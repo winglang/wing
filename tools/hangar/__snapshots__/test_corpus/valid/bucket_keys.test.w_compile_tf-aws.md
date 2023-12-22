@@ -18,11 +18,11 @@ module.exports = function({ $b }) {
       (await $b.put("foo/bar/", "text"));
       (await $b.put("foo/bar/baz", "text"));
       const objs = (await $b.list());
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 0),"foo"), "objs.at(0) == \"foo\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 1),"foo/"), "objs.at(1) == \"foo/\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 2),"foo/bar"), "objs.at(2) == \"foo/bar\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 3),"foo/bar/"), "objs.at(3) == \"foo/bar/\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 4),"foo/bar/baz"), "objs.at(4) == \"foo/bar/baz\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 0), "foo"), "objs.at(0) == \"foo\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 1), "foo/"), "objs.at(1) == \"foo/\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 2), "foo/bar"), "objs.at(2) == \"foo/bar\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 3), "foo/bar/"), "objs.at(3) == \"foo/bar/\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(objs, 4), "foo/bar/baz"), "objs.at(4) == \"foo/bar/baz\"");
     }
   }
   return $Closure1;

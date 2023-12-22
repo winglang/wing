@@ -12,7 +12,7 @@ module.exports = function({ $a, $a_field }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq("hey",$a_field), "\"hey\" == a.field");
+      $helpers.assert($helpers.eq("hey", $a_field), "\"hey\" == a.field");
       (await $a.bar());
     }
   }

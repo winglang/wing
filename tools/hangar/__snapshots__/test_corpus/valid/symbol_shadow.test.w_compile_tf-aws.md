@@ -12,7 +12,7 @@ module.exports = function({ $s }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($s,"inner"), "s == \"inner\"");
+      $helpers.assert($helpers.eq($s, "inner"), "s == \"inner\"");
     }
   }
   return $Closure1;
@@ -32,7 +32,7 @@ module.exports = function({ $s }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($s,"inResource"), "s == \"inResource\"");
+      $helpers.assert($helpers.eq($s, "inResource"), "s == \"inResource\"");
     }
   }
   return $Closure2;
@@ -52,7 +52,7 @@ module.exports = function({ $s }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($s,"top"), "s == \"top\"");
+      $helpers.assert($helpers.eq($s, "top"), "s == \"top\"");
     }
   }
   return $Closure3;
@@ -73,7 +73,7 @@ module.exports = function({  }) {
     }
     async handle() {
       const s = "insideInflight";
-      $helpers.assert($helpers.eq(s,"insideInflight"), "s == \"insideInflight\"");
+      $helpers.assert($helpers.eq(s, "insideInflight"), "s == \"insideInflight\"");
     }
   }
   return $Closure4;
@@ -131,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const s = "inResource";
-        $helpers.assert($helpers.eq(s,"inResource"), "s == \"inResource\"");
+        $helpers.assert($helpers.eq(s, "inResource"), "s == \"inResource\"");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -254,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
     const s = "top";
     if (true) {
       const s = "inner";
-      $helpers.assert($helpers.eq(s,"inner"), "s == \"inner\"");
+      $helpers.assert($helpers.eq(s, "inner"), "s == \"inner\"");
       class $Closure1 extends $stdlib.std.Resource {
         _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
         constructor($scope, $id, ) {
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
       }
       this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight nested should not capture the shadowed var", new $Closure1(this, "$Closure1"));
     }
-    $helpers.assert($helpers.eq(s,"top"), "s == \"top\"");
+    $helpers.assert($helpers.eq(s, "top"), "s == \"top\"");
     new A(this, "A");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight on top should capture top", new $Closure3(this, "$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:insideInflight should capture the right scope", new $Closure4(this, "$Closure4"));

@@ -13,8 +13,8 @@ module.exports = function({ $b, $x }) {
     }
     async handle() {
       (await $b.put("file", "foo"));
-      $helpers.assert($helpers.eq((await $b.get("file")),"foo"), "b.get(\"file\") == \"foo\"");
-      $helpers.assert($helpers.eq(12,$x), "12 == x");
+      $helpers.assert($helpers.eq((await $b.get("file")), "foo"), "b.get(\"file\") == \"foo\"");
+      $helpers.assert($helpers.eq(12, $x), "12 == x");
     }
   }
   return $Closure1;

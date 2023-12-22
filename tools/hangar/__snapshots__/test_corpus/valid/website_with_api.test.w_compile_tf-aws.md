@@ -33,7 +33,7 @@ module.exports = function({ $std_Json, $usersTable }) {
     }
     async handle(req) {
       const body = JSON.parse((req.body ?? ""));
-      if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),"")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),""))) {
+      if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"), "") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"), "")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"), ""))) {
         return ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"error": "incomplete details"})), "status": 400});
       }
       (await $usersTable.insert(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")), body));

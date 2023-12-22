@@ -15,7 +15,7 @@ module.exports = function({  }) {
       for (const x of $helpers.range(0,10,false)) {
         $helpers.assert((x <= 0), "x <= 0");
         $helpers.assert((x > 10), "x > 10");
-        {console.log(String.raw({ raw: ["", ""] }, x))};
+        console.log(String.raw({ raw: ["", ""] }, x));
       }
     }
   }
@@ -34,7 +34,7 @@ module.exports = function({  }) {
     }
     async hello() {
       for (const p of ["hello"]) {
-        {console.log(p)};
+        console.log(p);
       }
     }
   }
@@ -238,7 +238,7 @@ class $Root extends $stdlib.std.Resource {
     for (const word of words) {
       for (const number of uniqueNumbers) {
         $helpers.assert((number > 0), "number > 0");
-        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
+        console.log(String.raw({ raw: ["", ": ", ""] }, word, number));
       }
     }
     let i = 0;
@@ -248,17 +248,17 @@ class $Root extends $stdlib.std.Resource {
       let postBreakHits = 0;
       for (const number of uniqueNumbers) {
         $helpers.assert((number > 0), "number > 0");
-        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
+        console.log(String.raw({ raw: ["", ": ", ""] }, word, number));
         preBreakHits = (preBreakHits + 1);
-        if ($helpers.eq(number,2)) {
+        if ($helpers.eq(number, 2)) {
           break;
         }
         postBreakHits = (postBreakHits + 1);
       }
-      $helpers.assert($helpers.eq(preBreakHits,2), "preBreakHits == 2");
-      $helpers.assert($helpers.eq(postBreakHits,1), "postBreakHits == 1");
+      $helpers.assert($helpers.eq(preBreakHits, 2), "preBreakHits == 2");
+      $helpers.assert($helpers.eq(postBreakHits, 1), "postBreakHits == 1");
     }
-    $helpers.assert($helpers.eq(i,3), "i == 3");
+    $helpers.assert($helpers.eq(i, 3), "i == 3");
     let j = 0;
     for (const word of words) {
       j = (j + 1);
@@ -266,111 +266,111 @@ class $Root extends $stdlib.std.Resource {
       let postContinueHits = 0;
       for (const number of uniqueNumbers) {
         $helpers.assert((number > 0), "number > 0");
-        {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
+        console.log(String.raw({ raw: ["", ": ", ""] }, word, number));
         preContinueHits = (preContinueHits + 1);
         if ((number > 0)) {
           continue;
         }
         postContinueHits = (postContinueHits + 1);
       }
-      $helpers.assert($helpers.eq(preContinueHits,3), "preContinueHits == 3");
-      $helpers.assert($helpers.eq(postContinueHits,0), "postContinueHits == 0");
+      $helpers.assert($helpers.eq(preContinueHits, 3), "preContinueHits == 3");
+      $helpers.assert($helpers.eq(postContinueHits, 0), "postContinueHits == 0");
     }
-    $helpers.assert($helpers.eq(j,3), "j == 3");
-    {console.log("---\nfor x in 0..0 { ... }")};
+    $helpers.assert($helpers.eq(j, 3), "j == 3");
+    console.log("---\nfor x in 0..0 { ... }");
     for (const x of $helpers.range(0,0,false)) {
       $helpers.assert(false, "false");
     }
-    {console.log("there's no value to iterate")};
-    {console.log("---\nfor x in 0..=0 { ... }")};
+    console.log("there's no value to iterate");
+    console.log("---\nfor x in 0..=0 { ... }");
     for (const x of $helpers.range(0,0,true)) {
-      $helpers.assert($helpers.eq(x,0), "x == 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      $helpers.assert($helpers.eq(x, 0), "x == 0");
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..2 { ... }")};
+    console.log("---\nfor x in 0..2 { ... }");
     for (const x of $helpers.range(0,2,false)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x < 2), "x < 2");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..=2 { ... }")};
+    console.log("---\nfor x in 0..=2 { ... }");
     for (const x of $helpers.range(0,2,true)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x <= 2), "x <= 2");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 2..0 { ... }")};
+    console.log("---\nfor x in 2..0 { ... }");
     for (const x of $helpers.range(2,0,false)) {
       $helpers.assert((x <= 2), "x <= 2");
       $helpers.assert((x > 0), "x > 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 2..=0 { ... }")};
+    console.log("---\nfor x in 2..=0 { ... }");
     for (const x of $helpers.range(2,0,true)) {
       $helpers.assert((x <= 2), "x <= 2");
       $helpers.assert((x >= 0), "x >= 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..-2 { ... }")};
+    console.log("---\nfor x in 0..-2 { ... }");
     for (const x of $helpers.range(0,(-2),false)) {
       $helpers.assert((x <= 0), "x <= 0");
       $helpers.assert((x > (-2)), "x > -2");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..=-2 { ... }")};
+    console.log("---\nfor x in 0..=-2 { ... }");
     for (const x of $helpers.range(0,(-2),true)) {
       $helpers.assert((x <= 0), "x <= 0");
       $helpers.assert((x > (-3)), "x > -3");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in -2..0 { ... }")};
+    console.log("---\nfor x in -2..0 { ... }");
     for (const x of $helpers.range((-2),0,false)) {
       $helpers.assert((x >= (-2)), "x >= -2");
       $helpers.assert((x < 0), "x < 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in -2..=0 { ... }")};
+    console.log("---\nfor x in -2..=0 { ... }");
     for (const x of $helpers.range((-2),0,true)) {
       $helpers.assert((x >= (-2)), "x >= -2");
       $helpers.assert((x <= 0), "x <= 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
     const z = 2;
-    {console.log("---\nfor x in 0..z { ... } <=> x = 2")};
+    console.log("---\nfor x in 0..z { ... } <=> x = 2");
     for (const x of $helpers.range(0,z,false)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x < 2), "x < 2");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..=z { ... } <=> x = 2")};
+    console.log("---\nfor x in 0..=z { ... } <=> x = 2");
     for (const x of $helpers.range(0,z,true)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x <= 2), "x <= 2");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in z..0 { ... } <=> x = 2")};
+    console.log("---\nfor x in z..0 { ... } <=> x = 2");
     for (const x of $helpers.range(z,0,false)) {
       $helpers.assert((x <= 2), "x <= 2");
       $helpers.assert((x > 0), "x > 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..(z*2) { ... } <=> x = 2")};
+    console.log("---\nfor x in 0..(z*2) { ... } <=> x = 2");
     for (const x of $helpers.range(0,(z * 2),false)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x < 4), "x < 4");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in 0..=(z*2) { ... } <=> x = 2")};
+    console.log("---\nfor x in 0..=(z*2) { ... } <=> x = 2");
     for (const x of $helpers.range(0,(z * 2),true)) {
       $helpers.assert((x >= 0), "x >= 0");
       $helpers.assert((x <= 4), "x <= 4");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
-    {console.log("---\nfor x in (z*2)..0 { ... } <=> x = 2")};
+    console.log("---\nfor x in (z*2)..0 { ... } <=> x = 2");
     for (const x of $helpers.range((z * 2),0,false)) {
       $helpers.assert((x <= 4), "x <= 4");
       $helpers.assert((x > 0), "x > 0");
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
     }
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
   }

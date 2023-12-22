@@ -12,7 +12,7 @@ module.exports = function({ $bucket }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $bucket.list()).length,0), "bucket.list().length == 0");
+      $helpers.assert($helpers.eq((await $bucket.list()).length, 0), "bucket.list().length == 0");
     }
   }
   return $Closure1;

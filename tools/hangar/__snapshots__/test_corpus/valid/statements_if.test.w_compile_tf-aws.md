@@ -14,14 +14,14 @@ module.exports = function({  }) {
     async handle() {
       if (true) {
         const x = 2;
-        if ((true && $helpers.eq((x + 2),4))) {
-          if ((true && $helpers.eq((x + 3),4))) {
+        if ((true && $helpers.eq((x + 2), 4))) {
+          if ((true && $helpers.eq((x + 3), 4))) {
             $helpers.assert(false, "false");
           }
-          else if ((true && $helpers.eq((x + 3),6))) {
+          else if ((true && $helpers.eq((x + 3), 6))) {
             $helpers.assert(false, "false");
           }
-          else if ((false || $helpers.eq((x + 3),5))) {
+          else if ((false || $helpers.eq((x + 3), 5))) {
             $helpers.assert(true, "true");
           }
           else {
@@ -101,14 +101,14 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       const x = 2;
       const f = false;
-      if ((true && $helpers.eq((x + 2),4))) {
-        if ((true && $helpers.eq((x + 3),4))) {
+      if ((true && $helpers.eq((x + 2), 4))) {
+        if ((true && $helpers.eq((x + 3), 4))) {
           $helpers.assert(false, "false");
         }
-        else if ((true && $helpers.eq((x + 3),6))) {
+        else if ((true && $helpers.eq((x + 3), 6))) {
           $helpers.assert(false, "false");
         }
-        else if ((false || $helpers.eq((x + 3),5))) {
+        else if ((false || $helpers.eq((x + 3), 5))) {
           $helpers.assert(true, "true");
         }
         else if ((!f)) {

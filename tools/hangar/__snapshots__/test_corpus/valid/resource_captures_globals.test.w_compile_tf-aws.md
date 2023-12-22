@@ -32,7 +32,7 @@ module.exports = function({ $Another }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $Another.myStaticMethod()),0), "Another.myStaticMethod() == 0");
+      $helpers.assert($helpers.eq((await $Another.myStaticMethod()), 0), "Another.myStaticMethod() == 0");
     }
   }
   return $Closure2;
@@ -56,7 +56,7 @@ module.exports = function({ $globalCounter }) {
       return (await $globalCounter.peek());
     }
     async $inflight_init() {
-      $helpers.assert($helpers.eq((await $globalCounter.peek()),0), "globalCounter.peek() == 0");
+      $helpers.assert($helpers.eq((await $globalCounter.peek()), 0), "globalCounter.peek() == 0");
     }
   }
   return Another;
@@ -90,13 +90,13 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
     async myPut() {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key", "value"));
-      $helpers.assert($helpers.eq($globalStr,"hello"), "globalStr == \"hello\"");
-      $helpers.assert($helpers.eq($globalBool,true), "globalBool == true");
-      $helpers.assert($helpers.eq($globalNum,42), "globalNum == 42");
-      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_,"hello"), "globalArrayOfStr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__,(-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
+      $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
+      $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
+      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, (-5)), "globalMapOfNum.get(\"a\") == -5");
       $helpers.assert($_globalSetOfStr_has__a___, "globalSetOfStr.has(\"a\")");
-      $helpers.assert($helpers.eq($globalAnother_myField,"hello!"), "globalAnother.myField == \"hello!\"");
+      $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
       $helpers.assert(((await $globalAnother.myMethod()) > 0), "globalAnother.myMethod() > 0");
       $helpers.assert(((await $Another.myStaticMethod()) > 0), "Another.myStaticMethod() > 0");

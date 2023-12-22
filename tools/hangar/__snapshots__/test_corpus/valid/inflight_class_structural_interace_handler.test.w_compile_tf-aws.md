@@ -17,13 +17,13 @@ module.exports = function({ $NotGoo }) {
           return 456;
         }
         async anotherMethod() {
-          {console.log("also fine")};
+          console.log("also fine");
         }
       }
       const y = (await (async () => {const o = new YesGoo(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await y.handle()),456), "y.handle() == 456");
+      $helpers.assert($helpers.eq((await y.handle()), 456), "y.handle() == 456");
       const x = (await (async () => {const o = new $NotGoo(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await x.handle()),123), "x.handle() == 123");
+      $helpers.assert($helpers.eq((await x.handle()), 123), "x.handle() == 123");
     }
   }
   return $Closure1;

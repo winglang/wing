@@ -54,10 +54,10 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    if ($helpers.eq((util.Util.env("WING_TARGET")),"tf-aws")) {
+    if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
       const s3Bucket = (b.node.findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
-      {console.log(s3Bucket.node.path)};
+      console.log(s3Bucket.node.path);
     }
   }
 }

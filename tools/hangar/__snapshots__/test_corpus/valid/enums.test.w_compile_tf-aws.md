@@ -12,8 +12,8 @@ module.exports = function({ $SomeEnum, $one, $two }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($one,$SomeEnum.ONE), "one == SomeEnum.ONE");
-      $helpers.assert($helpers.eq($two,$SomeEnum.TWO), "two == SomeEnum.TWO");
+      $helpers.assert($helpers.eq($one, $SomeEnum.ONE), "one == SomeEnum.ONE");
+      $helpers.assert($helpers.eq($two, $SomeEnum.TWO), "two == SomeEnum.TWO");
     }
   }
   return $Closure1;

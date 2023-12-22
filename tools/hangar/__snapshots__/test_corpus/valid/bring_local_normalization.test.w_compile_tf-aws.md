@@ -201,11 +201,11 @@ const baz = require("./preflight.baz-2.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.assert($helpers.eq((foo.Foo.foo()),"foo"), "foo.Foo.foo() == \"foo\"");
-    $helpers.assert($helpers.eq((foo.Foo.bar()),"bar"), "foo.Foo.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((foo.Foo.baz()),"baz"), "foo.Foo.baz() == \"baz\"");
-    $helpers.assert($helpers.eq((bar.Bar.bar()),"bar"), "bar.Bar.bar() == \"bar\"");
-    $helpers.assert($helpers.eq((baz.Baz.baz()),"baz"), "baz.Baz.baz() == \"baz\"");
+    $helpers.assert($helpers.eq((foo.Foo.foo()), "foo"), "foo.Foo.foo() == \"foo\"");
+    $helpers.assert($helpers.eq((foo.Foo.bar()), "bar"), "foo.Foo.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((foo.Foo.baz()), "baz"), "foo.Foo.baz() == \"baz\"");
+    $helpers.assert($helpers.eq((bar.Bar.bar()), "bar"), "bar.Bar.bar() == \"bar\"");
+    $helpers.assert($helpers.eq((baz.Baz.baz()), "baz"), "baz.Baz.baz() == \"baz\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

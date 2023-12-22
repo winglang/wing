@@ -12,8 +12,8 @@ module.exports = function({ $fn }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $fn()),42), "fn() == 42");
-      $helpers.assert($helpers.eq((await $fn.another()),"hello"), "fn.another() == \"hello\"");
+      $helpers.assert($helpers.eq((await $fn()), 42), "fn() == 42");
+      $helpers.assert($helpers.eq((await $fn.another()), "hello"), "fn.another() == \"hello\"");
     }
   }
   return $Closure1;

@@ -41,10 +41,10 @@ module.exports = function({ $fn }) {
     }
     async handle() {
       const result = (await $fn());
-      $helpers.assert($helpers.eq(result.length,3), "result.length == 3");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 0),"hola!"), "result.at(0) == \"hola!\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 1),"world"), "result.at(1) == \"world\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 2),"bang"), "result.at(2) == \"bang\"");
+      $helpers.assert($helpers.eq(result.length, 3), "result.length == 3");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 0), "hola!"), "result.at(0) == \"hola!\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 1), "world"), "result.at(1) == \"world\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 2), "bang"), "result.at(2) == \"bang\"");
     }
   }
   return $Closure2;

@@ -12,15 +12,15 @@ module.exports = function({ $Object_keys_myMap__length, $__arr__index_______if__
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_,"hello"), "arr.at(0) == \"hello\"");
-      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__1_,"world"), "arr.at(1) == \"world\"");
-      $helpers.assert($helpers.eq($arr_length,2), "arr.length == 2");
+      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__0_, "hello"), "arr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arr__1_, "world"), "arr.at(1) == \"world\"");
+      $helpers.assert($helpers.eq($arr_length, 2), "arr.length == 2");
       $helpers.assert($_mySet_has__my___, "mySet.has(\"my\")");
-      $helpers.assert($helpers.eq($mySet_size,2), "mySet.size == 2");
+      $helpers.assert($helpers.eq($mySet_size, 2), "mySet.size == 2");
       $helpers.assert($__world__in__myMap__, "myMap.has(\"world\")");
-      $helpers.assert($helpers.eq($Object_keys_myMap__length,2), "myMap.size() == 2");
+      $helpers.assert($helpers.eq($Object_keys_myMap__length, 2), "myMap.size() == 2");
       $helpers.assert($__bang__in____arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______arrOfMap__0___, "arrOfMap.at(0).has(\"bang\")");
-      $helpers.assert($helpers.eq($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__,"world"), "j.get(\"b\") == \"world\"");
+      $helpers.assert($helpers.eq($__obj__args_______if__obj_args______undefined__throw_new_Error__Json_property____args___does_not_exist____return_obj_args_____j___b__, "world"), "j.get(\"b\") == \"world\"");
     }
   }
   return $Closure1;

@@ -32,8 +32,8 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $foo.callFn(true)),1), "foo.callFn(true) == 1");
-      $helpers.assert($helpers.eq((await $foo.callFn(false)),2), "foo.callFn(false) == 2");
+      $helpers.assert($helpers.eq((await $foo.callFn(true)), 1), "foo.callFn(true) == 1");
+      $helpers.assert($helpers.eq((await $foo.callFn(false)), 2), "foo.callFn(false) == 2");
       (await $foo.callFn2());
     }
   }
@@ -52,7 +52,7 @@ module.exports = function({  }) {
       this.$this_inflight1 = $this_inflight1;
     }
     async makeFn(x) {
-      if ($helpers.eq(x,true)) {
+      if ($helpers.eq(x, true)) {
         return this.$this_inflight1;
       }
       else {
@@ -66,15 +66,15 @@ module.exports = function({  }) {
     async callFn2() {
       const one = (await this.$this_inflight1());
       const two = (await this.inflight2());
-      $helpers.assert($helpers.eq(one,1), "one == 1");
-      $helpers.assert($helpers.eq(two,2), "two == 2");
+      $helpers.assert($helpers.eq(one, 1), "one == 1");
+      $helpers.assert($helpers.eq(two, 2), "two == 2");
     }
     async $inflight_init() {
       this.inflight2 = async () => {
         return 2;
       };
       const ret = (await this.inflight2());
-      $helpers.assert($helpers.eq(ret,2), "ret == 2");
+      $helpers.assert($helpers.eq(ret, 2), "ret == 2");
     }
   }
   return Foo;

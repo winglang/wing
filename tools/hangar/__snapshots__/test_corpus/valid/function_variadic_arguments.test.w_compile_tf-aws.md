@@ -153,18 +153,18 @@ class $Root extends $stdlib.std.Resource {
     const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     (bucket3.node.addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
-      $helpers.assert($helpers.eq(buckets.length,2), "buckets.length == 2");
+      $helpers.assert($helpers.eq(buckets.length, 2), "buckets.length == 2");
     });
     (funcBucket(bucket1, bucket2));
     const func1 = ((x, y, ...args) => {
-      $helpers.assert($helpers.eq(x,1), "x == 1");
-      $helpers.assert(($helpers.eq(y,"something") || $helpers.eq(y,undefined)), "y == \"something\" || y == nil");
-      $helpers.assert($helpers.eq(args.length,4), "args.length == 4");
+      $helpers.assert($helpers.eq(x, 1), "x == 1");
+      $helpers.assert(($helpers.eq(y, "something") || $helpers.eq(y, undefined)), "y == \"something\" || y == nil");
+      $helpers.assert($helpers.eq(args.length, 4), "args.length == 4");
       for (const i of args) {
         $helpers.assert(((i > 0) && (i < 5)), "i > 0 && i < 5");
       }
       args.push(10);
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10), "args.at(4) == 10");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4), 10), "args.at(4) == 10");
     });
     (func1(1, "something", 1, 2, 3, 4));
     (func1(1, undefined, 1, 2, 3, 4));
@@ -175,8 +175,8 @@ class $Root extends $stdlib.std.Resource {
       }
       return total;
     });
-    $helpers.assert($helpers.eq((addNums(1, 2, 3)),6), "addNums(1, 2, 3) == 6");
-    $helpers.assert($helpers.eq((addNums()),0), "addNums() == 0");
+    $helpers.assert($helpers.eq((addNums(1, 2, 3)), 6), "addNums(1, 2, 3) == 6");
+    $helpers.assert($helpers.eq((addNums()), 0), "addNums() == 0");
     const arityFunc = ((n, b, ...events) => {
       let error = false;
       try {
@@ -190,13 +190,13 @@ class $Root extends $stdlib.std.Resource {
     });
     (arityFunc(1, true, "a", "b", "c", "d"));
     const subTypeFunc = ((...events) => {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message,"this is A"), "events.at(0).message == \"this is A\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message,"this is B"), "events.at(1).message == \"this is B\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message, "this is A"), "events.at(0).message == \"this is A\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message, "this is B"), "events.at(1).message == \"this is B\"");
     });
     (subTypeFunc(new A(this, "A", "this is A"), new B(this, "B", "this is B")));
     const jsonCastingFunc = ((...events) => {
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0),"str"), "events.at(0) == \"str\"");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1),"json str"), "events.at(1) == \"json str\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0), "str"), "events.at(0) == \"str\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1), "json str"), "events.at(1) == \"json str\"");
     });
     const jsonStr = "json str";
     (jsonCastingFunc("str", jsonStr));

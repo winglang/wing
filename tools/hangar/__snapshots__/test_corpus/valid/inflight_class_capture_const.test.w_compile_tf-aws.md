@@ -13,7 +13,7 @@ module.exports = function({ $Foo, $myConst }) {
     }
     async handle() {
       const x = (await (async () => {const o = new $Foo(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await x.getValue()),$myConst), "x.getValue() == myConst");
+      $helpers.assert($helpers.eq((await x.getValue()), $myConst), "x.getValue() == myConst");
     }
   }
   return $Closure1;

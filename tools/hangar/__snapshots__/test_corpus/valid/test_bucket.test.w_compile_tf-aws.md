@@ -12,9 +12,9 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $b.list()).length,0), "b.list().length == 0");
+      $helpers.assert($helpers.eq((await $b.list()).length, 0), "b.list().length == 0");
       (await $b.put("hello.txt", "world"));
-      $helpers.assert($helpers.eq((await $b.list()).length,1), "b.list().length == 1");
+      $helpers.assert($helpers.eq((await $b.list()).length, 1), "b.list().length == 1");
     }
   }
   return $Closure1;
@@ -35,7 +35,7 @@ module.exports = function({ $b }) {
     }
     async handle() {
       (await $b.put("hello.txt", "world"));
-      $helpers.assert($helpers.eq((await $b.get("hello.txt")),"world"), "b.get(\"hello.txt\") == \"world\"");
+      $helpers.assert($helpers.eq((await $b.get("hello.txt")), "world"), "b.get(\"hello.txt\") == \"world\"");
     }
   }
   return $Closure2;

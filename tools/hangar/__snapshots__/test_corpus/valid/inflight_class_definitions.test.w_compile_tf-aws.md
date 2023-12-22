@@ -18,7 +18,7 @@ module.exports = function({  }) {
         }
       }
       const c = (await (async () => {const o = new C(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await c.foo()),"c1"), "c.foo() == \"c1\"");
+      $helpers.assert($helpers.eq((await c.foo()), "c1"), "c.foo() == \"c1\"");
     }
   }
   return $Closure1;
@@ -58,12 +58,12 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $a.goo()),"a2"), "a.goo() == \"a2\"");
+      $helpers.assert($helpers.eq((await $a.goo()), "a2"), "a.goo() == \"a2\"");
       const b = (await (async () => {const o = new $B(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await b.foo()),"b1"), "b.foo() == \"b1\"");
+      $helpers.assert($helpers.eq((await b.foo()), "b1"), "b.foo() == \"b1\"");
       (await $fn());
-      $helpers.assert($helpers.eq((await $d.callInner()),"f1"), "d.callInner() == \"f1\"");
-      $helpers.assert($helpers.eq((await $innerD()),"f1"), "innerD() == \"f1\"");
+      $helpers.assert($helpers.eq((await $d.callInner()), "f1"), "d.callInner() == \"f1\"");
+      $helpers.assert($helpers.eq((await $innerD()), "f1"), "innerD() == \"f1\"");
     }
   }
   return $Closure3;
@@ -293,7 +293,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const pb = new E(this, "E");
-        $helpers.assert($helpers.eq((pb.foo()),"e1"), "pb.foo() == \"e1\"");
+        $helpers.assert($helpers.eq((pb.foo()), "e1"), "pb.foo() == \"e1\"");
         class F extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -426,7 +426,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this, "A");
-    $helpers.assert($helpers.eq((a.foo()),"a1"), "a.foo() == \"a1\"");
+    $helpers.assert($helpers.eq((a.foo()), "a1"), "a.foo() == \"a1\"");
     const fn = new $Closure1(this, "$Closure1");
     const d = new D(this, "D");
     const innerD = (d.getInner());

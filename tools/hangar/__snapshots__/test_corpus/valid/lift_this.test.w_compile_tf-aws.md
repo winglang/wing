@@ -12,7 +12,7 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $f.foo()),21), "f.foo() == 21");
+      $helpers.assert($helpers.eq((await $f.foo()), 21), "f.foo() == 21");
     }
   }
   return $Closure1;

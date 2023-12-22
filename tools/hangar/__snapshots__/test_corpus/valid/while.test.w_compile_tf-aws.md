@@ -45,7 +45,7 @@ class $Root extends $stdlib.std.Resource {
         break;
       }
     }
-    $helpers.assert($helpers.eq(z,3), "z == 3");
+    $helpers.assert($helpers.eq(z, 3), "z == 3");
     while (true) {
       break;
     }
@@ -53,13 +53,13 @@ class $Root extends $stdlib.std.Resource {
     let i = 0;
     while ((i < 10)) {
       i = (i + 1);
-      if ($helpers.eq((i % 2),0)) {
+      if ($helpers.eq((i % 2), 0)) {
         continue;
       }
       v = (v + 1);
     }
-    $helpers.assert($helpers.eq(i,10), "i == 10");
-    $helpers.assert($helpers.eq(v,5), "v == 5");
+    $helpers.assert($helpers.eq(i, 10), "i == 10");
+    $helpers.assert($helpers.eq(v, 5), "v == 5");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -53,7 +53,7 @@ module.exports = function({ $func1, $globalBucket }) {
     }
     async handle() {
       (await $func1.invoke("hi1"));
-      $helpers.assert($helpers.eq((await $globalBucket.get("file1")),"hi1"), "globalBucket.get(\"file1\") == \"hi1\"");
+      $helpers.assert($helpers.eq((await $globalBucket.get("file1")), "hi1"), "globalBucket.get(\"file1\") == \"hi1\"");
     }
   }
   return $Closure3;
@@ -95,7 +95,7 @@ module.exports = function({ $x }) {
     }
     async handle() {
       const val = (await $x.foo());
-      $helpers.assert($helpers.eq(val,"hello"), "val == \"hello\"");
+      $helpers.assert($helpers.eq(val, "hello"), "val == \"hello\"");
     }
   }
   return $Closure5;

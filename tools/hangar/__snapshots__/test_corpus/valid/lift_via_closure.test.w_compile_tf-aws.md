@@ -53,9 +53,9 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
     }
     async handle() {
       (await $fn2());
-      $helpers.assert($helpers.eq((await $fn2_bucket.get("hello")),"world"), "fn2.bucket.get(\"hello\") == \"world\"");
-      $helpers.assert($helpers.eq((await $fn2.listFiles()).length,1), "fn2.listFiles().length == 1");
-      $helpers.assert($helpers.eq((await $bucket2.get("b2")),"world"), "bucket2.get(\"b2\") == \"world\"");
+      $helpers.assert($helpers.eq((await $fn2_bucket.get("hello")), "world"), "fn2.bucket.get(\"hello\") == \"world\"");
+      $helpers.assert($helpers.eq((await $fn2.listFiles()).length, 1), "fn2.listFiles().length == 1");
+      $helpers.assert($helpers.eq((await $bucket2.get("b2")), "world"), "bucket2.get(\"b2\") == \"world\"");
     }
   }
   return $Closure3;
@@ -76,11 +76,11 @@ module.exports = function({ $bucket2 }) {
       return $obj;
     }
     async handle() {
-      {console.log("handle called")};
+      console.log("handle called");
       (await this.putFile());
     }
     async putFile() {
-      {console.log("putFile called")};
+      console.log("putFile called");
       (await this.$this_bucket.put("hello", "world"));
     }
     async listFiles() {

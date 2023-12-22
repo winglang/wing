@@ -32,7 +32,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     const myfunc = ((x) => {
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
       x = (x + 1);
       if ((x > 3.14)) {
         return;
@@ -41,7 +41,7 @@ class $Root extends $stdlib.std.Resource {
     });
     (myfunc(1));
     (((x) => {
-      $helpers.assert($helpers.eq(x,1), "x == 1");
+      $helpers.assert($helpers.eq(x, 1), "x == 1");
     })(1));
   }
 }

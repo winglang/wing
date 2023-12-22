@@ -12,7 +12,7 @@ module.exports = function({ $fixture_Store }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $fixture_Store.makeKeyInflight("hello")),"data/hello.json"), "fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"");
+      $helpers.assert($helpers.eq((await $fixture_Store.makeKeyInflight("hello")), "data/hello.json"), "fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"");
     }
   }
   return $Closure1;
@@ -162,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
-    $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")),"data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
+    $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }

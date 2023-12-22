@@ -12,10 +12,10 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($numA,$numA), "numA == numA");
-      $helpers.assert($helpers.eq($numA,$numB), "numA == numB");
-      $helpers.assert($helpers.eq($strA,$strA), "strA == strA");
-      $helpers.assert($helpers.eq($strA,$strB), "strA == strB");
+      $helpers.assert($helpers.eq($numA, $numA), "numA == numA");
+      $helpers.assert($helpers.eq($numA, $numB), "numA == numB");
+      $helpers.assert($helpers.eq($strA, $strA), "strA == strA");
+      $helpers.assert($helpers.eq($strA, $strB), "strA == strB");
     }
   }
   return $Closure1;
@@ -35,8 +35,8 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($arrayA,$arrayC), "arrayA != arrayC");
-      $helpers.assert((!!$helpers.eq($arrayA,$arrayB)), "!(arrayA != arrayB)");
+      $helpers.assert(!$helpers.eq($arrayA, $arrayC), "arrayA != arrayC");
+      $helpers.assert((!!$helpers.eq($arrayA, $arrayB)), "!(arrayA != arrayB)");
     }
   }
   return $Closure10;
@@ -56,8 +56,8 @@ module.exports = function({ $cat1, $cat2 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($cat1,$cat1), "cat1 == cat1");
-      $helpers.assert($helpers.eq($cat1,$cat2), "cat1 == cat2");
+      $helpers.assert($helpers.eq($cat1, $cat1), "cat1 == cat1");
+      $helpers.assert($helpers.eq($cat1, $cat2), "cat1 == cat2");
     }
   }
   return $Closure11;
@@ -77,8 +77,8 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($cat1,$cat3), "cat1 != cat3");
-      $helpers.assert((!!$helpers.eq($cat1,$cat2)), "!(cat1 != cat2)");
+      $helpers.assert(!$helpers.eq($cat1, $cat3), "cat1 != cat3");
+      $helpers.assert((!!$helpers.eq($cat1, $cat2)), "!(cat1 != cat2)");
     }
   }
   return $Closure12;
@@ -98,8 +98,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($numA,$numC), "numA != numC");
-      $helpers.assert(!$helpers.eq($strA,$strC), "strA != strC");
+      $helpers.assert(!$helpers.eq($numA, $numC), "numA != numC");
+      $helpers.assert(!$helpers.eq($strA, $strC), "strA != strC");
     }
   }
   return $Closure2;
@@ -119,8 +119,8 @@ module.exports = function({ $jsonA, $jsonB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($jsonA,$jsonA), "jsonA == jsonA");
-      $helpers.assert($helpers.eq($jsonA,$jsonB), "jsonA == jsonB");
+      $helpers.assert($helpers.eq($jsonA, $jsonA), "jsonA == jsonA");
+      $helpers.assert($helpers.eq($jsonA, $jsonB), "jsonA == jsonB");
     }
   }
   return $Closure3;
@@ -140,8 +140,8 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($jsonA,$jsonC), "jsonA != jsonC");
-      $helpers.assert((!!$helpers.eq($jsonA,$jsonB)), "!(jsonA != jsonB)");
+      $helpers.assert(!$helpers.eq($jsonA, $jsonC), "jsonA != jsonC");
+      $helpers.assert((!!$helpers.eq($jsonA, $jsonB)), "!(jsonA != jsonB)");
     }
   }
   return $Closure4;
@@ -161,8 +161,8 @@ module.exports = function({ $setA, $setB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($setA,$setA), "setA == setA");
-      $helpers.assert($helpers.eq($setA,$setB), "setA == setB");
+      $helpers.assert($helpers.eq($setA, $setA), "setA == setA");
+      $helpers.assert($helpers.eq($setA, $setB), "setA == setB");
     }
   }
   return $Closure5;
@@ -182,8 +182,8 @@ module.exports = function({ $setA, $setB, $setC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($setA,$setC), "setA != setC");
-      $helpers.assert((!!$helpers.eq($setA,$setB)), "!(setA != setB)");
+      $helpers.assert(!$helpers.eq($setA, $setC), "setA != setC");
+      $helpers.assert((!!$helpers.eq($setA, $setB)), "!(setA != setB)");
     }
   }
   return $Closure6;
@@ -203,8 +203,8 @@ module.exports = function({ $mapA, $mapB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($mapA,$mapA), "mapA == mapA");
-      $helpers.assert($helpers.eq($mapA,$mapB), "mapA == mapB");
+      $helpers.assert($helpers.eq($mapA, $mapA), "mapA == mapA");
+      $helpers.assert($helpers.eq($mapA, $mapB), "mapA == mapB");
     }
   }
   return $Closure7;
@@ -224,8 +224,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($mapA,$mapC), "mapA != mapC");
-      $helpers.assert((!!$helpers.eq($mapA,$mapB)), "!(mapA != mapB)");
+      $helpers.assert(!$helpers.eq($mapA, $mapC), "mapA != mapC");
+      $helpers.assert((!!$helpers.eq($mapA, $mapB)), "!(mapA != mapB)");
     }
   }
   return $Closure8;
@@ -245,8 +245,8 @@ module.exports = function({ $arrayA, $arrayB }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($arrayA,$arrayA), "arrayA == arrayA");
-      $helpers.assert($helpers.eq($arrayA,$arrayB), "arrayA == arrayB");
+      $helpers.assert($helpers.eq($arrayA, $arrayA), "arrayA == arrayA");
+      $helpers.assert($helpers.eq($arrayA, $arrayB), "arrayA == arrayB");
     }
   }
   return $Closure9;

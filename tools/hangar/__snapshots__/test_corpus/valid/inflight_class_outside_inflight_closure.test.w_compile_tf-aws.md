@@ -13,7 +13,7 @@ module.exports = function({ $BinaryOperation }) {
     }
     async handle() {
       const op = (await (async () => {const o = new $BinaryOperation(10, 20); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await op.add()),30), "op.add() == 30");
+      $helpers.assert($helpers.eq((await op.add()), 30), "op.add() == 30");
     }
   }
   return $Closure1;

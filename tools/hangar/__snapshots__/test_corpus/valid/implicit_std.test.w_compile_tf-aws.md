@@ -33,8 +33,8 @@ class $Root extends $stdlib.std.Resource {
     super($scope, $id);
     const d = (std.Duration.fromMinutes(5));
     const n = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("12");
-    $helpers.assert($helpers.eq(d.seconds,(5 * 60)), "d.seconds == 5 * 60");
-    $helpers.assert($helpers.eq(n,12), "n == 12");
+    $helpers.assert($helpers.eq(d.seconds, (5 * 60)), "d.seconds == 5 * 60");
+    $helpers.assert($helpers.eq(n, 12), "n == 12");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
