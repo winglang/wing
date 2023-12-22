@@ -1321,6 +1321,9 @@ importers:
       stacktracey:
         specifier: ^2.1.8
         version: 2.1.8
+      ulid:
+        specifier: ^2.3.0
+        version: 2.3.0
       undici:
         specifier: ^5.25.4
         version: 5.25.4
@@ -14533,7 +14536,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231219
+      typescript: 5.4.0-dev.20231221
     dev: true
 
   /dset@3.1.2:
@@ -24071,8 +24074,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231219:
-    resolution: {integrity: sha512-pWOp0d2qj5T4llRnhb3BVkx2jN2yglMVTc96xs9dRY4I64EG/uFfyO3aoHm/1H0LAPmilJsJGDtXASxGM+GIVg==}
+  /typescript@5.4.0-dev.20231221:
+    resolution: {integrity: sha512-vsu9WExlMAmSoA/elxcmBTyRDyf9REJCKV2DowCmSpp+oqv+oq0yku8490q1r2YBC7o9DP+u/q58J5sjqaAD+g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -24091,6 +24094,11 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /ulid@2.3.0:
+    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
+    hasBin: true
+    dev: false
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
