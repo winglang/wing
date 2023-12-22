@@ -113,6 +113,7 @@ const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
+// const WINGSDK_NODE: &'static str = "std.Node";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -249,9 +250,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some(
-				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
-			),
+			js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
 			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,

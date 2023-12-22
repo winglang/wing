@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $handler, $std_Json, $std_Number }) {
   class $Closure2 {
     constructor({  }) {
@@ -44,6 +46,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -63,6 +66,7 @@ module.exports = function({  }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $f }) {
   class $Closure4 {
     constructor({  }) {
@@ -72,7 +76,7 @@ module.exports = function({ $f }) {
     }
     async handle() {
       const result = (await $f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"8")))};
+      $helpers.assert($helpers.eq(result,"8"), "result == \"8\"");
     }
   }
   return $Closure4;
@@ -83,6 +87,7 @@ module.exports = function({ $f }) {
 ## inflight.Doubler-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Doubler {
     constructor({ $this_func }) {
@@ -102,6 +107,7 @@ module.exports = function({  }) {
 ## inflight.Doubler2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Doubler2 {
     constructor({  }) {
@@ -245,6 +251,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

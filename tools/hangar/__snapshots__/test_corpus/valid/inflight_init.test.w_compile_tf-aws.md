@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,7 +13,7 @@ module.exports = function({ $Foo }) {
     }
     async handle() {
       const f = (await (async () => {const o = new $Foo(5); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))))};
+      $helpers.assert(($helpers.eq(f.field1,6) && $helpers.eq(f.field2,5)), "f.field1 == 6 && f.field2 == 5");
     }
   }
   return $Closure1;
@@ -23,6 +24,7 @@ module.exports = function({ $Foo }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $FooChild }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,7 +34,7 @@ module.exports = function({ $FooChild }) {
     }
     async handle() {
       const f = (await (async () => {const o = new $FooChild(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: f.field1 == 6 && f.field2 == 5 && f.field3 == 4")})((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field1,6)) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field2,5))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field3,4))))};
+      $helpers.assert((($helpers.eq(f.field1,6) && $helpers.eq(f.field2,5)) && $helpers.eq(f.field3,4)), "f.field1 == 6 && f.field2 == 5 && f.field3 == 4");
     }
   }
   return $Closure2;
@@ -43,6 +45,7 @@ module.exports = function({ $FooChild }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -67,7 +70,7 @@ module.exports = function({  }) {
         }
       }
       const f = (await (async () => {const o = new FooChild(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: f.field == 1337")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.field,1337)))};
+      $helpers.assert($helpers.eq(f.field,1337), "f.field == 1337");
     }
   }
   return $Closure3;
@@ -78,6 +81,7 @@ module.exports = function({  }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $jsii_fixture_JsiiClass }) {
   class $Closure4 {
     constructor({  }) {
@@ -99,7 +103,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
         }
       }
       const f = (await (async () => {const o = new Foo(1, "Foo"); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: f.foo_str == \"Foo 1\" && f.field() == 1 && f.foo_num == 6")})((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.foo_str,"Foo 1")) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await f.field()),1))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f.foo_num,6))))};
+      $helpers.assert((($helpers.eq(f.foo_str,"Foo 1") && $helpers.eq((await f.field()),1)) && $helpers.eq(f.foo_num,6)), "f.foo_str == \"Foo 1\" && f.field() == 1 && f.foo_num == 6");
       class FooChild extends Foo {
         constructor(){
           super(2, "FooChild");
@@ -111,7 +115,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
         }
       }
       const f_child = (await (async () => {const o = new FooChild(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: f_child.foo_str == \"FooChild 2\" && f_child.field() == 2 && f_child.foo_num == 6 && f_child.child_field == 7")})(((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f_child.foo_str,"FooChild 2")) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await f_child.field()),2))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f_child.foo_num,6))) && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f_child.child_field,7))))};
+      $helpers.assert(((($helpers.eq(f_child.foo_str,"FooChild 2") && $helpers.eq((await f_child.field()),2)) && $helpers.eq(f_child.foo_num,6)) && $helpers.eq(f_child.child_field,7)), "f_child.foo_str == \"FooChild 2\" && f_child.field() == 2 && f_child.foo_num == 6 && f_child.child_field == 7");
     }
   }
   return $Closure4;
@@ -122,6 +126,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     async get_six() {
@@ -142,6 +147,7 @@ module.exports = function({  }) {
 ## inflight.FooChild-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
   class FooChild extends $Foo {
     constructor(){
@@ -185,6 +191,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -14,7 +15,7 @@ module.exports = function({ $__parent_this_1_b }) {
       (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {
-          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
+          $helpers.assert($helpers.eq(this.field,"value"), "this.field == \"value\"");
         }
         constructor(){
           this.$inflight_init = async () => {
@@ -34,6 +35,7 @@ module.exports = function({ $__parent_this_1_b }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $f }) {
   class $Closure2 {
     constructor({  }) {
@@ -53,6 +55,7 @@ module.exports = function({ $f }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -69,7 +72,7 @@ module.exports = function({  }) {
       }
       const foo = (await (async () => {const o = new Foo(); await o.$inflight_init?.(); return o; })());
       const y = (await foo.getX());
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
+      $helpers.assert($helpers.eq(y,12), "y == 12");
     }
   }
   return $Closure3;
@@ -80,6 +83,7 @@ module.exports = function({  }) {
 ## inflight.PreflightClass-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class PreflightClass {
     constructor({  }) {
@@ -234,6 +238,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

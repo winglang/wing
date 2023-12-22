@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
     constructor({  }) {
@@ -31,7 +33,7 @@ module.exports = function({ $std_Json, $usersTable }) {
     }
     async handle(req) {
       const body = (JSON.parse((req.body ?? "")));
-      if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),"")))) {
+      if ((($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "name"),"") || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "age"),"")) || $helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id"),""))) {
         return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]), "status": 400});
       }
       (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(body, "id")]), body));
@@ -46,6 +48,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure3 {
     constructor({  }) {
@@ -72,6 +75,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -610,6 +614,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const http = $stdlib.http;

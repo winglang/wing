@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
     constructor({  }) {
@@ -14,7 +15,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       {console.log($myStr)};
       const n = $myNum;
       {console.log(String.raw({ raw: ["", ""] }, n))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySecondBool,false)))};
+      $helpers.assert($helpers.eq($mySecondBool,false), "mySecondBool == false");
       if ($myBool) {
         {console.log("bool=true")};
       }
@@ -25,7 +26,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       const sec = $myDur_seconds;
       const hr = $myDur_hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
-      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(split.length,3)))};
+      $helpers.assert($helpers.eq(split.length,3), "split.length == 3");
     }
   }
   return $Closure1;
@@ -166,6 +167,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -397,6 +398,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -440,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,expected)))};
+      $helpers.assert($helpers.eq(error,expected), "error == expected");
     });
     const testValidPath = ((path) => {
       let error = "";
@@ -451,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"")))};
+      $helpers.assert($helpers.eq(error,""), "error == \"\"");
     });
     (testInvalidPath("/test/:sup{er/:annoying//path"));
     (testInvalidPath("/test/{::another:annoying:path}"));

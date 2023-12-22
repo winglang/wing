@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $r }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,12 +34,12 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     async handle() {
       (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
+      $helpers.assert($helpers.eq(value2,"does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
-        return (((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $r.get("hello")),undefined));
+        return !$helpers.eq((await $r.get("hello")),undefined);
       }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"{r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
+      $helpers.assert($helpers.eq("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
   }
   return $Closure2;
@@ -536,6 +538,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;

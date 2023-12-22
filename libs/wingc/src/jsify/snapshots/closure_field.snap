@@ -36,6 +36,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
     constructor({  }) {
@@ -57,6 +58,7 @@ module.exports = function({ $globalBucket }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $x }) {
   class $Closure2 {
     constructor({  }) {
@@ -66,7 +68,7 @@ module.exports = function({ $x }) {
     }
     async handle() {
       const val = (await $x.foo());
-      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"hello")))};
+      $helpers.assert($helpers.eq(val,"hello"), "val == \"hello\"");
     }
   }
   return $Closure2;
@@ -78,6 +80,7 @@ module.exports = function({ $x }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_closure }) {
@@ -101,6 +104,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

@@ -27,6 +27,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -38,15 +39,15 @@ class $Root extends $stdlib.std.Resource {
     const yf = ((-20.22) * xf);
     const zf = ((xf + yf) - (-0.01));
     const fxzy = (5 ** (2 ** 3));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fxzy == 390625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fxzy,390625)))};
+    $helpers.assert($helpers.eq(fxzy,390625), "fxzy == 390625");
     const xyzf = Math.trunc(501 / (99 + 1));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyzf == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyzf,5)))};
+    $helpers.assert($helpers.eq(xyzf,5), "xyzf == 5");
     const xyznf = Math.trunc((-501) / (99 + 1));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyznf == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznf,(-5))))};
+    $helpers.assert($helpers.eq(xyznf,(-5)), "xyznf == -5");
     const xyznfj = Math.trunc(501.9 / ((-99.1) - 0.91));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyznfj == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznfj,(-5))))};
+    $helpers.assert($helpers.eq(xyznfj,(-5)), "xyznfj == -5");
     const xynfj = Math.trunc((-501.9) / ((-99.1) - 0.91));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xynfj == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xynfj,5)))};
+    $helpers.assert($helpers.eq(xynfj,5), "xynfj == 5");
     const price = 12.34;
     const twentyThousand = 20000;
     const aBitMore = 20000.0001;

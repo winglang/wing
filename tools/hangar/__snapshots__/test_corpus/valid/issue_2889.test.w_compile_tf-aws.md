@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $std_Json }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,7 +36,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const res = (await $http_Util.get(($api_url + "/foo")));
       const body = (JSON.parse(res.body));
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
+      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar"), "a1.get(\"foo\") == \"bar\"");
     }
   }
   return $Closure2;
@@ -264,6 +266,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {

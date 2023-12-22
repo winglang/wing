@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,10 +12,10 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a_length,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s_size,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_m__length,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($aCloned_length,1)))};
+      $helpers.assert($helpers.eq($a_length,1), "a.length == 1");
+      $helpers.assert($helpers.eq($s_size,1), "s.size == 1");
+      $helpers.assert($helpers.eq($Object_keys_m__length,1), "m.size() == 1");
+      $helpers.assert($helpers.eq($aCloned_length,1), "aCloned.length == 1");
     }
   }
   return $Closure1;
@@ -25,6 +26,7 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $handler }) {
   class $Closure2 {
     constructor({  }) {
@@ -68,6 +70,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);

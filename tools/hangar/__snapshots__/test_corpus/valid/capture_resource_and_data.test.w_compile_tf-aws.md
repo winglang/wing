@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,9 +12,9 @@ module.exports = function({ $data_size, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($data_size,3)))};
+      $helpers.assert($helpers.eq($data_size,3), "data.size == 3");
       (await $res.put("file.txt", "world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $res.get("file.txt")),"world")))};
+      $helpers.assert($helpers.eq((await $res.get("file.txt")),"world"), "res.get(\"file.txt\") == \"world\"");
       (await $queue.push("spirulina"));
     }
   }
@@ -76,6 +77,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
