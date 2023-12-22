@@ -1124,8 +1124,8 @@ importers:
         specifier: workspace:^
         version: link:../wingsdk
       aws-cdk-lib:
-        specifier: ^2.64.0
-        version: 2.100.0(constructs@10.2.70)
+        specifier: ^2.116.0
+        version: 2.116.0(constructs@10.2.70)
       constructs:
         specifier: ~10.2.69
         version: 10.2.70
@@ -1609,6 +1609,10 @@ packages:
 
   /@aws-cdk/asset-awscli-v1@2.2.200:
     resolution: {integrity: sha512-Kf5J8DfJK4wZFWT2Myca0lhwke7LwHcHBo+4TvWOGJrFVVKVuuiLCkzPPRBQQVDj0Vtn2NBokZAz8pfMpAqAKg==}
+    dev: false
+
+  /@aws-cdk/asset-awscli-v1@2.2.201:
+    resolution: {integrity: sha512-INZqcwDinNaIdb5CtW3ez5s943nX5stGBQS6VOP2JDlOFP81hM3fds/9NDknipqfUkZM43dx+HgVvkXYXXARCQ==}
     dev: false
 
   /@aws-cdk/asset-kubectl-v20@2.1.2:
@@ -12398,6 +12402,29 @@ packages:
       - table
       - yaml
 
+  /aws-cdk-lib@2.116.0(constructs@10.2.70):
+    resolution: {integrity: sha512-LOYJGtKLvf/wVt3UMwWQxvxgAM681ZV/BbGGB6aEqc7+4TMfbYFbaA02+zwN0E0zxOxi4l0j1/BNO4GOzVSoPw==}
+    engines: {node: '>= 14.15.0'}
+    peerDependencies:
+      constructs: ^10.0.0
+    dependencies:
+      '@aws-cdk/asset-awscli-v1': 2.2.201
+      '@aws-cdk/asset-kubectl-v20': 2.1.2
+      '@aws-cdk/asset-node-proxy-agent-v6': 2.0.1
+      constructs: 10.2.70
+    dev: false
+    bundledDependencies:
+      - '@balena/dockerignore'
+      - case
+      - fs-extra
+      - ignore
+      - jsonschema
+      - minimatch
+      - punycode
+      - semver
+      - table
+      - yaml
+
   /aws-sdk-client-mock-jest@2.2.0(aws-sdk-client-mock@2.2.0):
     resolution: {integrity: sha512-lpPapmCjTe70qhXYFIjUL9cdA75YmtC0surig3QSr2Y5doaG1e4fuXlgkNeH6V873rlwu9TWCG2MFOr4rHuMfg==}
     peerDependencies:
@@ -14536,7 +14563,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231221
+      typescript: 5.4.0-dev.20231222
     dev: true
 
   /dset@3.1.2:
@@ -24074,8 +24101,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231221:
-    resolution: {integrity: sha512-vsu9WExlMAmSoA/elxcmBTyRDyf9REJCKV2DowCmSpp+oqv+oq0yku8490q1r2YBC7o9DP+u/q58J5sjqaAD+g==}
+  /typescript@5.4.0-dev.20231222:
+    resolution: {integrity: sha512-SK3Hak67HL8l08jLRYOFF0cXL0ODM/tvA6w2+HOOYKijxGOmpc0xWz7zvOi6RLihS9BGgBG6Hk1zD/bN4qR4Qg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
