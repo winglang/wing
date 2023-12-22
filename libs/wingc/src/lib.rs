@@ -218,8 +218,6 @@ pub fn type_check(
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
-	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
-	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
 		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
@@ -232,7 +230,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{console.log($args$)}".to_string()),
+			js_override: Some("console.log($args$)".to_string()),
 			docs: Docs::with_summary("Logs a message"),
 		}),
 		scope,
