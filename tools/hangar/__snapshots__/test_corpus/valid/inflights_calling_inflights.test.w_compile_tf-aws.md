@@ -203,7 +203,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func1_IamRole_31EC29DC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.func1_S3Object_33D0CBF3.key}",
         "timeout": 60,
