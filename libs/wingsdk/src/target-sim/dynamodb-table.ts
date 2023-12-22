@@ -35,6 +35,7 @@ export class DynamodbTable
         rangeKey: this.props.rangeKey,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

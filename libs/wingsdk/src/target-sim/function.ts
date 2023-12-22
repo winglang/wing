@@ -46,6 +46,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
         timeout: this.timeout.seconds * 1000,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

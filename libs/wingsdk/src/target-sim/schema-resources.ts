@@ -328,28 +328,17 @@ export interface DomainSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Endpoint */
-export interface EndpointAttributes {
-  /** The input URL of the Endpoint. */
-  readonly inputUrl: string;
-  /** The output URL of the Endpoint. */
-  readonly url: string;
-  /** The Label of the Endpoint. */
-  readonly label: string | undefined;
-  /** Browser support of the Endpoint. */
-  readonly browserSupport: boolean | undefined;
-}
+export interface EndpointAttributes {}
 
 /** Schema for cloud.Endpoint */
 export interface EndpointSchema extends BaseResourceSchema {
   readonly type: typeof ENDPOINT_FQN;
   readonly props: {
-    /** The input URL of the Endpoint. */
-    readonly inputUrl: string;
-    /** The output URL of the Endpoint. */
+    /** The URL of the Endpoint. */
     readonly url: string;
     /** The Label of the Endpoint. */
     readonly label: string | undefined;
     /** Browser support of the Endpoint. */
-    readonly browserSupport: boolean | undefined;
+    readonly browserSupport: boolean;
   };
 }

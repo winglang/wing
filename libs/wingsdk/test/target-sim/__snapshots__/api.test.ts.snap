@@ -35,29 +35,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -91,6 +68,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -267,20 +267,19 @@ return class Handler {
 
 exports[`api handler can read the request params 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -314,29 +313,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -360,6 +336,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -532,20 +531,19 @@ return class Handler {
 
 exports[`api handler can read the request path 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -579,29 +577,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -625,6 +600,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -797,20 +795,19 @@ return class Handler {
 
 exports[`api handler can set response headers 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -844,29 +841,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -890,6 +864,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -1062,20 +1059,19 @@ return class Handler {
 
 exports[`api response returns Content-Type header from inflight 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -1109,29 +1105,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -1155,6 +1128,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -1327,20 +1323,19 @@ return class Handler {
 
 exports[`api response returns default Content-Type header 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -1374,29 +1369,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -1420,6 +1392,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -1592,12 +1587,11 @@ return class Handler {
 
 exports[`api supports every method type 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -1620,10 +1614,10 @@ exports[`api supports every method type 1`] = `
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -1686,29 +1680,6 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
       {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
@@ -1793,6 +1764,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -1989,20 +1983,19 @@ return class Handler {
 
 exports[`api with 'name' & 'age' parameter 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /:name/:age\\" params={\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil/23\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\",\\"age\\":\\"23\\"}}).",
   "GET /:name/:age - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -2035,29 +2028,6 @@ return class Handler {
   },
   "simulator.json": {
     "resources": [
-      {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
       {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
@@ -2099,6 +2069,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -2271,20 +2264,19 @@ return class Handler {
 
 exports[`api with 'name' parameter 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /:name\\" params={\\"name\\":\\"akhil\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/akhil\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"akhil\\"}}).",
   "GET /:name - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -2318,29 +2310,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2373,6 +2342,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -2573,29 +2565,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2631,6 +2600,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -2807,14 +2799,13 @@ return class Handler {
 
 exports[`api with multiple methods on same route 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -2824,10 +2815,10 @@ exports[`api with multiple methods on same route 1`] = `
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -2881,29 +2872,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -2937,6 +2905,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -3163,14 +3154,13 @@ return class Handler {
 
 exports[`api with multiple routes 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
+  "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Endpoint created.",
   "Processing \\"GET /hello/world\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
@@ -3180,10 +3170,10 @@ exports[`api with multiple routes 1`] = `
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -3237,29 +3227,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3295,6 +3262,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -3521,20 +3511,19 @@ return class Handler {
 
 exports[`api with one GET route 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -3568,29 +3557,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3614,6 +3580,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -3786,20 +3775,19 @@ return class Handler {
 
 exports[`api with one GET route with request params 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"GET /users/:name\\" params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/:name - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -3833,29 +3821,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -3888,6 +3853,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -4060,20 +4048,19 @@ return class Handler {
 
 exports[`api with one POST route, with body 1`] = `
 [
-  "root/my_api/Endpoint is waiting on a dependency",
-  "@winglang/sdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "@winglang/sdk.cloud.Api created.",
-  "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Endpoint created.",
+  "@winglang/sdk.cloud.Function created.",
+  "@winglang/sdk.sim.EventMapping created.",
   "Processing \\"POST /hello\\" params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":\\"{\\\\\\"message\\\\\\":\\\\\\"hello world\\\\\\"}\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
   "@winglang/sdk.sim.EventMapping deleted.",
-  "Closing server on http://127.0.0.1:<port>",
-  "@winglang/sdk.cloud.Api deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Endpoint deleted.",
+  "Closing server on http://127.0.0.1:<port>",
+  "@winglang/sdk.cloud.Api deleted.",
 ]
 `;
 
@@ -4107,29 +4094,6 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
-        "attrs": {},
-        "path": "root/my_api/Endpoint",
-        "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
-          "url": "\${wsim#root/my_api#attrs.url}",
-        },
-        "type": "@winglang/sdk.cloud.Endpoint",
-      },
-      {
-        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
-        "attrs": {},
-        "path": "root/my_api/OnRequestHandler0",
-        "props": {
-          "environmentVariables": {},
-          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-      {
         "addr": "c8f2ecf2132465e146aa80cb01f4e5ab1968f4314a",
         "attrs": {},
         "path": "root/my_api",
@@ -4153,6 +4117,29 @@ return class Handler {
           },
         },
         "type": "@winglang/sdk.cloud.Api",
+      },
+      {
+        "addr": "c85bd2f9eb401f27bec4d0ad16222c2876bcfe640a",
+        "attrs": {},
+        "path": "root/my_api/Endpoint",
+        "props": {
+          "browserSupport": true,
+          "label": "Endpoint for Api root/my_api",
+          "url": "\${wsim#root/my_api#attrs.url}",
+        },
+        "type": "@winglang/sdk.cloud.Endpoint",
+      },
+      {
+        "addr": "c82d41b2501ac42e07e4565202a5b87a180a01c6a2",
+        "attrs": {},
+        "path": "root/my_api/OnRequestHandler0",
+        "props": {
+          "environmentVariables": {},
+          "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "@winglang/sdk.cloud.Function",
       },
       {
         "addr": "c8a199e7bc539eb442a47653fe0f2b1f0bf50aa6d1",
@@ -4348,7 +4335,7 @@ exports[`create an api 1`] = `
         "attrs": {},
         "path": "root/my_api/Endpoint",
         "props": {
-          "inputUrl": "\${wsim#root/my_api#attrs.url}",
+          "browserSupport": true,
           "label": "Endpoint for Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },

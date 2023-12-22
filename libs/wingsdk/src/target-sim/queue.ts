@@ -110,6 +110,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         retentionPeriod: this.retentionPeriod.seconds,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

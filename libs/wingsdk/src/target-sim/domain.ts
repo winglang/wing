@@ -25,6 +25,7 @@ export class Domain extends cloud.Domain {
       addr: this.node.addr,
       props: {},
       attrs: {},
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
   }
 }

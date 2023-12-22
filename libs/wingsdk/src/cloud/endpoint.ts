@@ -14,13 +14,13 @@ export interface EndpointProps {
   /**
    * The endpoint's label. For UI purposes.
    * @example "My Dashboard"
-   * @default undefined
+   * @default - no label
    */
   readonly label?: string;
 
   /**
    * Whether the endpoint is supported through browsers. For UI purposes.
-   * @default undefined
+   * @default true
    */
   readonly browserSupport?: boolean;
 }
@@ -37,7 +37,7 @@ export class Endpoint extends Resource {
   protected _label: string | undefined;
 
   /** @internal */
-  protected _browserSupport: boolean | undefined;
+  protected _browserSupport!: boolean;
 
   /**
    * The endpoint url.
@@ -60,7 +60,7 @@ export class Endpoint extends Resource {
 
     this._url = url;
     this._label = props?.label;
-    this._browserSupport = props?.browserSupport;
+    this._browserSupport = props?.browserSupport ?? true;
   }
 
   /**
@@ -80,7 +80,7 @@ export class Endpoint extends Resource {
   /**
    * The endpoint browser support.
    */
-  protected get browserSupport(): boolean | undefined {
+  protected get browserSupport(): boolean {
     return this._browserSupport;
   }
 }

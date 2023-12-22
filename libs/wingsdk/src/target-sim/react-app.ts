@@ -56,6 +56,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
         url: this.url,
       },
       attrs: {},
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

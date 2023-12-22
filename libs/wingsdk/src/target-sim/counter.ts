@@ -38,6 +38,7 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
         initial: this.initial,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

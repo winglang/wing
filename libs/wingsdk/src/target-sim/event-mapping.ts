@@ -82,6 +82,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
         subscriptionProps: this.eventProps.subscriptionProps,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

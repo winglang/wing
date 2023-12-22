@@ -230,6 +230,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
         corsHeaders: this._generateCorsHeaders(this.corsOptions),
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

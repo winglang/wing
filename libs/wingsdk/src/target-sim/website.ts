@@ -51,6 +51,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
       addr: this.node.addr,
       props: { staticFilesPath: this.path, fileRoutes: this.fileRoutes },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

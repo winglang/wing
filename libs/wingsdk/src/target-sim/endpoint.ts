@@ -7,7 +7,6 @@ import * as cloud from "../cloud";
  * Simulator implementation of `cloud.Endpoint`
  */
 export class Endpoint extends cloud.Endpoint {
-  private readonly _inputUrl: string;
   constructor(
     scope: Construct,
     id: string,
@@ -15,7 +14,6 @@ export class Endpoint extends cloud.Endpoint {
     props: cloud.EndpointProps = {}
   ) {
     super(scope, id, url, props);
-    this._inputUrl = url;
   }
 
   /**
@@ -31,12 +29,12 @@ export class Endpoint extends cloud.Endpoint {
       path: this.node.path,
       addr: this.node.addr,
       props: {
-        inputUrl: this._inputUrl,
         url: this.url,
         label: this.label,
         browserSupport: this.browserSupport,
       },
       attrs: {},
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
   }
 }

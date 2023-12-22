@@ -23,6 +23,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
       addr: this.node.addr,
       props: {},
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

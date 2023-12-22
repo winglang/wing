@@ -32,6 +32,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
         autoStart: this.autoStart,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

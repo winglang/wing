@@ -73,6 +73,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
         cronExpression: this.cronExpression,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

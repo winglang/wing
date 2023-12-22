@@ -14,7 +14,7 @@ import {
   SIMULATOR_TOKEN_REGEX_FULL,
 } from "../target-sim/tokens";
 
-const START_ATTEMPT_COUNT = 10;
+// const START_ATTEMPT_COUNT = 10;
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
 /**
@@ -250,36 +250,71 @@ export class Simulator {
     }
     this._running = "starting";
 
-    // create a copy of the resource list to be used as an init queue.
-    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
-      ...this._config.resources,
-    ];
+    // create an init queue of resources that need to be started
+    const initQueue: (BaseResourceSchema & {
+      _inferredDependencies: string[];
+    })[] = [];
+
+    // initialize the queue with all resources, parsing their props for tokens
+    // and adding referenced constructs as dependencies
+    for (const resourceConfig of this._config.resources) {
+      const _inferredDependencies = this.tryFindTokens(resourceConfig.props);
+      initQueue.push({ ...resourceConfig, _inferredDependencies });
+    }
+
+    console.error(JSON.stringify(this._config.resources, null, 2));
+    console.error(JSON.stringify(initQueue, null, 2));
 
     await this.startServer();
 
     try {
-      while (true) {
-        const next = initQueue.shift();
-        if (!next) {
-          break;
-        }
+      while (initQueue.length > 0) {
+        let started = false;
 
-        // we couldn't start this resource yet, so decrement the retry counter and put it back in
-        // the init queue.
-        if (!(await this.tryStartResource(next))) {
-          // we couldn't start this resource yet, so decrement the attempt counter
-          next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
-          next._attempts--;
-
-          // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
-          if (next._attempts === 0) {
-            throw new Error(
-              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+        for (const [idx, resourceConfig] of Object.entries(initQueue)) {
+          const dependencies = [...resourceConfig.dependencies].concat(
+            ...resourceConfig._inferredDependencies
+          );
+          const allDependenciesStarted = dependencies.every((dep) =>
+            this._handles.tryFind(this.getResourceConfig(dep).attrs.handle)
+          );
+          if (allDependenciesStarted) {
+            console.error(`trying to start ${resourceConfig.path}`);
+            await this.tryStartResource(resourceConfig);
+            initQueue.splice(Number(idx), 1);
+            started = true;
+          } else {
+            console.error(
+              `not starting ${resourceConfig.path}, dependencies not started`
             );
           }
+        }
 
-          // put back in the queue for another round
-          initQueue.push(next);
+        // if all of the resources have unmet dependencies (so we weren't able to start one), then there must be a dependency cycle
+        // so we'll throw an error to break out of the while loop
+        if (!started) {
+          // for easier debugging, lets make a list of all resources that are waiting to be started
+          // and what their unmet dependencies are
+          // (extracting the actual dependency cycle is hard and requires graph algorithms)
+          const waiting: Record<string, string[]> = {};
+          for (const resourceConfig of initQueue) {
+            const dependencies = [...resourceConfig.dependencies].concat(
+              ...resourceConfig._inferredDependencies
+            );
+            const unstartedDependencies = dependencies.filter(
+              (dep) =>
+                !this._handles.tryFind(this.getResourceConfig(dep).attrs.handle)
+            );
+            waiting[resourceConfig.path] = unstartedDependencies;
+          }
+
+          throw new Error(
+            `Not all resources could be started. This could be due to a dependency cycle or an invalid attribute reference. Resources waiting to start and their unmet dependencies: ${JSON.stringify(
+              waiting,
+              null,
+              2
+            )}`
+          );
         }
       }
 
@@ -596,24 +631,16 @@ export class Simulator {
 
   private async tryStartResource(
     resourceConfig: BaseResourceSchema
-  ): Promise<boolean> {
+  ): Promise<void> {
     const context = this.createContext(resourceConfig);
 
     const { resolved, value: resolvedProps } = this.tryResolveTokens(
       resourceConfig.props
     );
     if (!resolved) {
-      this._addTrace({
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.path} is waiting on a dependency` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      });
-
-      // this means the resource has a dependency that hasn't been started yet (hopefully). return
-      // it to the init queue.
-      return false;
+      throw new Error(
+        `Could not start resource ${resourceConfig.path}. This could be due to a dependency cycle or an invalid attribute reference.`
+      );
     }
 
     // update the resource's config with the resolved props
@@ -651,8 +678,6 @@ export class Simulator {
       sourceType: resourceConfig.type,
       timestamp: new Date().toISOString(),
     });
-
-    return true;
   }
 
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
@@ -838,6 +863,64 @@ export class Simulator {
 
     return { resolved: true, value: obj };
   }
+
+  /**
+   * Find all tokens in the given resource config object, and return a list of all construct paths they reference.
+   * For example:
+   *
+   * {
+   *   "props": {
+   *     "environmentVariables": {
+   *       "FOO": "${wsim#root/MyState#attrs.myKey",
+   *       "BAR": "${wsim#root/MyState#attrs.myOtherKey",
+   *       "BAR": "${wsim#root/MyApi#attrs.url",
+   *     }
+   *   }
+   * }
+   *
+   * Will return ["root/MyState", "root/MyApi"].
+   */
+  private tryFindTokens(obj: any): string[] {
+    if (typeof obj === "string") {
+      // there are two cases - a token can be the entire string, or it can be part of the string.
+      // first, check if the entire string is a token
+      if (SIMULATOR_TOKEN_REGEX_FULL.test(obj)) {
+        const ref = obj.slice(2, -1);
+        const [_, path] = ref.split("#");
+        return [path];
+      }
+
+      // otherwise, check if the string contains tokens inside it. if so, we need to resolve them
+      // and then check if the result is a string
+      const globalRegex = new RegExp(SIMULATOR_TOKEN_REGEX.source, "g");
+      const matches = obj.matchAll(globalRegex);
+      const paths = [];
+      for (const match of matches) {
+        const ref = match[0].slice(2, -1);
+        const [_, path] = ref.split("#");
+        paths.push(path);
+      }
+      return paths;
+    }
+
+    if (Array.isArray(obj)) {
+      const paths = [];
+      for (const x of obj) {
+        paths.push(...this.tryFindTokens(x));
+      }
+      return paths;
+    }
+
+    if (typeof obj === "object") {
+      const paths = [];
+      for (const v of Object.values(obj)) {
+        paths.push(...this.tryFindTokens(v));
+      }
+      return paths;
+    }
+
+    return [];
+  }
 }
 
 /**
@@ -948,7 +1031,8 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
-  // TODO: model dependencies
+  /** The list of dependencies of this resource (construct paths). */
+  readonly dependencies: string[];
 }
 
 /** Schema for resource attributes */

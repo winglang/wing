@@ -33,6 +33,7 @@ export class Table extends ex.Table implements ISimulatorResource {
         initialRows: this.initialRows,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

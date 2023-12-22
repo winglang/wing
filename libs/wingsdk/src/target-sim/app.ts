@@ -253,8 +253,8 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
-    const resources = new core.DependencyGraph(this.node)
-      .topology()
+    const resources = this.node
+      .findAll()
       .filter(isSimulatorResource)
       .map((res) => res.toSimulator());
 

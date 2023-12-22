@@ -39,6 +39,7 @@ export class OnDeploy extends cloud.OnDeploy {
         functionHandle: simulatorHandleToken(this.fn),
       },
       attrs: {},
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

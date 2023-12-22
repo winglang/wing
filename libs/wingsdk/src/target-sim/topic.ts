@@ -77,6 +77,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       addr: this.node.addr,
       props: {},
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

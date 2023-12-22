@@ -73,6 +73,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
         topics: this.convertTopicsToHandles(),
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }

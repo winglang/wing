@@ -60,6 +60,7 @@ export class State extends Resource implements ISimulatorResource {
       addr: this.node.addr,
       props: {},
       attrs: {},
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
   }
 }

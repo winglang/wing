@@ -49,6 +49,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
         name: this.name,
       },
       attrs: {} as any,
+      dependencies: this.node.dependencies.map((d) => d.node.path),
     };
     return schema;
   }
