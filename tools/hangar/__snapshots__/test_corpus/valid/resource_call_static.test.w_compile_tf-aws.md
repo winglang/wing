@@ -12,7 +12,7 @@ module.exports = function({ $Another }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $Another.myStaticMethod()),0), "Another.myStaticMethod() == 0");
+      $helpers.assert($helpers.eq((await $Another.myStaticMethod()), 0), "Another.myStaticMethod() == 0");
     }
   }
   return $Closure1;

@@ -63,8 +63,8 @@ module.exports = function({  }) {
     async call() {
       $helpers.assert((await Foo.regexInflight("[a-z]+-\\d+", "abc-123")), "Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")");
       const uuid = (await Foo.getUuid());
-      $helpers.assert($helpers.eq(uuid.length,36), "uuid.length == 36");
-      $helpers.assert($helpers.eq((await Foo.getData()),"Cool data!"), "Foo.getData() == \"Cool data!\"");
+      $helpers.assert($helpers.eq(uuid.length, 36), "uuid.length == 36");
+      $helpers.assert($helpers.eq((await Foo.getData()), "Cool data!"), "Foo.getData() == \"Cool data!\"");
     }
   }
   return Foo;
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")),"Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
+    $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
     const f = new Foo(this, "Foo");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:console", new $Closure2(this, "$Closure2"));

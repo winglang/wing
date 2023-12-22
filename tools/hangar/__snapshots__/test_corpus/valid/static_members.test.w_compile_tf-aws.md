@@ -21,8 +21,8 @@ module.exports = function({  }) {
         }
       }
       const inflightClass = (await (async () => {const o = new InflightClass(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await inflightClass.inflightMethod()),"Inflight method"), "inflightClass.inflightMethod() == \"Inflight method\"");
-      $helpers.assert($helpers.eq((await InflightClass.staticInflightMethod()),"Static inflight method"), "InflightClass.staticInflightMethod() == \"Static inflight method\"");
+      $helpers.assert($helpers.eq((await inflightClass.inflightMethod()), "Inflight method"), "inflightClass.inflightMethod() == \"Inflight method\"");
+      $helpers.assert($helpers.eq((await InflightClass.staticInflightMethod()), "Static inflight method"), "InflightClass.staticInflightMethod() == \"Static inflight method\"");
     }
   }
   return $Closure1;
@@ -136,8 +136,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this, "Foo");
-    $helpers.assert($helpers.eq(foo.instanceField,100), "foo.instanceField == 100");
-    $helpers.assert($helpers.eq((Foo.m()),99), "Foo.m() == 99");
+    $helpers.assert($helpers.eq(foo.instanceField, 100), "foo.instanceField == 100");
+    $helpers.assert($helpers.eq((Foo.m()), 99), "Foo.m() == 99");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
   }
 }

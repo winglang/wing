@@ -32,7 +32,7 @@ module.exports = function({ $strToStr }) {
     }
     async handle(s) {
       (await $strToStr.invoke("one"));
-      {console.log((await $strToStr.invoke("two")))};
+      console.log((await $strToStr.invoke("two")));
     }
   }
   return $Closure2;

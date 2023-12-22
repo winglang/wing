@@ -12,9 +12,9 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($greeting,"Hello, wingnuts"), "greeting == \"Hello, wingnuts\"");
+      $helpers.assert($helpers.eq($greeting, "Hello, wingnuts"), "greeting == \"Hello, wingnuts\"");
       const helloInflight = new $stuff_HelloWorld();
-      $helpers.assert($helpers.eq((await helloInflight.sayHello("wingnuts")),$greeting), "helloInflight.sayHello(\"wingnuts\") == greeting");
+      $helpers.assert($helpers.eq((await helloInflight.sayHello("wingnuts")), $greeting), "helloInflight.sayHello(\"wingnuts\") == greeting");
     }
   }
   return $Closure1;

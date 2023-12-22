@@ -442,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      $helpers.assert($helpers.eq(error,expected), "error == expected");
+      $helpers.assert($helpers.eq(error, expected), "error == expected");
     });
     const testValidPath = ((path) => {
       let error = "";
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      $helpers.assert($helpers.eq(error,""), "error == \"\"");
+      $helpers.assert($helpers.eq(error, ""), "error == \"\"");
     });
     (testInvalidPath("/test/:sup{er/:annoying//path"));
     (testInvalidPath("/test/{::another:annoying:path}"));

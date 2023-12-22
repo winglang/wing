@@ -13,7 +13,7 @@ module.exports = function({ $cloud_BucketProps, $j }) {
     }
     async handle() {
       const x = $cloud_BucketProps._fromJson($j);
-      $helpers.assert($helpers.eq(x.public,false), "x.public == false");
+      $helpers.assert($helpers.eq(x.public, false), "x.public == false");
     }
   }
   return $Closure1;
@@ -35,21 +35,21 @@ module.exports = function({ $Student }) {
     async handle() {
       const jStudent3 = ({"firstName": "struct", "lastName": "greatest", "enrolled": true, "schoolId": "s3-inflight", "dob": ({"month": 4, "day": 1, "year": 1999}), "coursesTaken": [({"grade": "B", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "A", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
       const studentInflight1 = $Student._fromJson(jStudent3);
-      $helpers.assert($helpers.eq(studentInflight1.firstName,"struct"), "studentInflight1.firstName == \"struct\"");
-      $helpers.assert($helpers.eq(studentInflight1.lastName,"greatest"), "studentInflight1.lastName == \"greatest\"");
+      $helpers.assert($helpers.eq(studentInflight1.firstName, "struct"), "studentInflight1.firstName == \"struct\"");
+      $helpers.assert($helpers.eq(studentInflight1.lastName, "greatest"), "studentInflight1.lastName == \"greatest\"");
       $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
-      $helpers.assert($helpers.eq(studentInflight1.schoolId,"s3-inflight"), "studentInflight1.schoolId == \"s3-inflight\"");
-      $helpers.assert($helpers.eq(studentInflight1.dob.month,4), "studentInflight1.dob.month == 4");
-      $helpers.assert($helpers.eq(studentInflight1.dob.day,1), "studentInflight1.dob.day == 1");
-      $helpers.assert($helpers.eq(studentInflight1.dob.year,1999), "studentInflight1.dob.year == 1999");
+      $helpers.assert($helpers.eq(studentInflight1.schoolId, "s3-inflight"), "studentInflight1.schoolId == \"s3-inflight\"");
+      $helpers.assert($helpers.eq(studentInflight1.dob.month, 4), "studentInflight1.dob.month == 4");
+      $helpers.assert($helpers.eq(studentInflight1.dob.day, 1), "studentInflight1.dob.day == 1");
+      $helpers.assert($helpers.eq(studentInflight1.dob.year, 1999), "studentInflight1.dob.year == 1999");
       {
         const $if_let_value = studentInflight1.coursesTaken;
         if ($if_let_value != undefined) {
           const coursesTaken = $if_let_value;
           const course1 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(coursesTaken, 0);
           const course2 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(coursesTaken, 1);
-          $helpers.assert($helpers.eq(course1.grade,"B"), "course1.grade == \"B\"");
-          $helpers.assert($helpers.eq(course2.grade,"A"), "course2.grade == \"A\"");
+          $helpers.assert($helpers.eq(course1.grade, "B"), "course1.grade == \"B\"");
+          $helpers.assert($helpers.eq(course2.grade, "A"), "course2.grade == \"A\"");
         }
         else {
           $helpers.assert(false, "false");
@@ -75,13 +75,13 @@ module.exports = function({ $Student, $jStudent1 }) {
     }
     async handle() {
       const studentInflight1 = $Student._fromJson($jStudent1);
-      $helpers.assert($helpers.eq(studentInflight1.firstName,"John"), "studentInflight1.firstName == \"John\"");
-      $helpers.assert($helpers.eq(studentInflight1.lastName,"Smith"), "studentInflight1.lastName == \"Smith\"");
+      $helpers.assert($helpers.eq(studentInflight1.firstName, "John"), "studentInflight1.firstName == \"John\"");
+      $helpers.assert($helpers.eq(studentInflight1.lastName, "Smith"), "studentInflight1.lastName == \"Smith\"");
       $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
-      $helpers.assert($helpers.eq(studentInflight1.schoolId,"s1-xyz"), "studentInflight1.schoolId == \"s1-xyz\"");
-      $helpers.assert($helpers.eq(studentInflight1.dob.month,10), "studentInflight1.dob.month == 10");
-      $helpers.assert($helpers.eq(studentInflight1.dob.day,10), "studentInflight1.dob.day == 10");
-      $helpers.assert($helpers.eq(studentInflight1.dob.year,2005), "studentInflight1.dob.year == 2005");
+      $helpers.assert($helpers.eq(studentInflight1.schoolId, "s1-xyz"), "studentInflight1.schoolId == \"s1-xyz\"");
+      $helpers.assert($helpers.eq(studentInflight1.dob.month, 10), "studentInflight1.dob.month == 10");
+      $helpers.assert($helpers.eq(studentInflight1.dob.day, 10), "studentInflight1.dob.day == 10");
+      $helpers.assert($helpers.eq(studentInflight1.dob.year, 2005), "studentInflight1.dob.year == 2005");
     }
   }
   return $Closure3;
@@ -103,7 +103,7 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
     async handle() {
       const s = $MyStruct;
       (await s.validate($jMyStruct));
-      $helpers.assert($helpers.eq($_schema_asStr___,((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+      $helpers.assert($helpers.eq($_schema_asStr___, ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     }
   }
   return $Closure4;
@@ -361,10 +361,10 @@ class $Root extends $stdlib.std.Resource {
     }
     const j = ({"public": false});
     const x = cloud_BucketProps._fromJson(j);
-    $helpers.assert($helpers.eq(x.public,false), "x.public == false");
+    $helpers.assert($helpers.eq(x.public, false), "x.public == false");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
-    $helpers.assert($helpers.eq(Foo._fromJson(jFoo).f,"bar"), "Foo.fromJson(jFoo).f == \"bar\"");
+    $helpers.assert($helpers.eq(Foo._fromJson(jFoo).f, "bar"), "Foo.fromJson(jFoo).f == \"bar\"");
     const jFoosible = ({});
     const jFoosible2 = ({"f": "bar"});
     {
@@ -378,7 +378,7 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = Foosible._fromJson(jFoosible2).f;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
-        $helpers.assert($helpers.eq(f,"bar"), "f == \"bar\"");
+        $helpers.assert($helpers.eq(f, "bar"), "f == \"bar\"");
       }
       else {
         $helpers.assert(false, "false");
@@ -386,26 +386,26 @@ class $Root extends $stdlib.std.Resource {
     }
     const jBar = ({"f": "bar", "b": 10});
     const b = Bar._fromJson(jBar);
-    $helpers.assert($helpers.eq(b.f,"bar"), "b.f == \"bar\"");
-    $helpers.assert($helpers.eq(b.b,10), "b.b == 10");
+    $helpers.assert($helpers.eq(b.f, "bar"), "b.f == \"bar\"");
+    $helpers.assert($helpers.eq(b.b, 10), "b.b == 10");
     const jStudent1 = ({"firstName": "John", "lastName": "Smith", "enrolled": true, "schoolId": "s1-xyz", "dob": ({"month": 10, "day": 10, "year": 2005}), "enrolledCourses": []});
     const student1 = Student._fromJson(jStudent1);
-    $helpers.assert($helpers.eq(student1.firstName,"John"), "student1.firstName == \"John\"");
-    $helpers.assert($helpers.eq(student1.lastName,"Smith"), "student1.lastName == \"Smith\"");
+    $helpers.assert($helpers.eq(student1.firstName, "John"), "student1.firstName == \"John\"");
+    $helpers.assert($helpers.eq(student1.lastName, "Smith"), "student1.lastName == \"Smith\"");
     $helpers.assert(student1.enrolled, "student1.enrolled");
-    $helpers.assert($helpers.eq(student1.schoolId,"s1-xyz"), "student1.schoolId == \"s1-xyz\"");
-    $helpers.assert($helpers.eq(student1.dob.month,10), "student1.dob.month == 10");
-    $helpers.assert($helpers.eq(student1.dob.day,10), "student1.dob.day == 10");
-    $helpers.assert($helpers.eq(student1.dob.year,2005), "student1.dob.year == 2005");
+    $helpers.assert($helpers.eq(student1.schoolId, "s1-xyz"), "student1.schoolId == \"s1-xyz\"");
+    $helpers.assert($helpers.eq(student1.dob.month, 10), "student1.dob.month == 10");
+    $helpers.assert($helpers.eq(student1.dob.day, 10), "student1.dob.day == 10");
+    $helpers.assert($helpers.eq(student1.dob.year, 2005), "student1.dob.year == 2005");
     const jStudent2 = ({"advisor": ({"firstName": "Tom", "lastName": "Baker", "dob": ({"month": 1, "day": 1, "year": 1983}), "employeeID": "emp123"}), "firstName": "Sally", "lastName": "Reynolds", "enrolled": false, "schoolId": "s2-xyz", "dob": ({"month": 5, "day": 31, "year": 1987}), "enrolledCourses": [({"name": "COMP 101", "credits": 2}), ({"name": "COMP 121", "credits": 4})], "coursesTaken": [({"grade": "F", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "D", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
     const student2 = Student._fromJson(jStudent2);
-    $helpers.assert($helpers.eq(student2.firstName,"Sally"), "student2.firstName == \"Sally\"");
-    $helpers.assert($helpers.eq(student2.lastName,"Reynolds"), "student2.lastName == \"Reynolds\"");
+    $helpers.assert($helpers.eq(student2.firstName, "Sally"), "student2.firstName == \"Sally\"");
+    $helpers.assert($helpers.eq(student2.lastName, "Reynolds"), "student2.lastName == \"Reynolds\"");
     $helpers.assert((!student2.enrolled), "!student2.enrolled");
-    $helpers.assert($helpers.eq(student2.schoolId,"s2-xyz"), "student2.schoolId == \"s2-xyz\"");
-    $helpers.assert($helpers.eq(student2.dob.month,5), "student2.dob.month == 5");
-    $helpers.assert($helpers.eq(student2.dob.day,31), "student2.dob.day == 31");
-    $helpers.assert($helpers.eq(student2.dob.year,1987), "student2.dob.year == 1987");
+    $helpers.assert($helpers.eq(student2.schoolId, "s2-xyz"), "student2.schoolId == \"s2-xyz\"");
+    $helpers.assert($helpers.eq(student2.dob.month, 5), "student2.dob.month == 5");
+    $helpers.assert($helpers.eq(student2.dob.day, 31), "student2.dob.day == 31");
+    $helpers.assert($helpers.eq(student2.dob.year, 1987), "student2.dob.year == 1987");
     {
       const $if_let_value = student2.enrolledCourses;
       if ($if_let_value != undefined) {
@@ -413,10 +413,10 @@ class $Root extends $stdlib.std.Resource {
         const courses = [...(enrolledCourses)];
         const s2Course1 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(courses, 0);
         const s2Course2 = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(courses, 1);
-        $helpers.assert($helpers.eq(s2Course1.name,"COMP 101"), "s2Course1.name == \"COMP 101\"");
-        $helpers.assert($helpers.eq(s2Course1.credits,2), "s2Course1.credits == 2");
-        $helpers.assert($helpers.eq(s2Course2.name,"COMP 121"), "s2Course2.name == \"COMP 121\"");
-        $helpers.assert($helpers.eq(s2Course2.credits,4), "s2Course2.credits == 4");
+        $helpers.assert($helpers.eq(s2Course1.name, "COMP 101"), "s2Course1.name == \"COMP 101\"");
+        $helpers.assert($helpers.eq(s2Course1.credits, 2), "s2Course1.credits == 2");
+        $helpers.assert($helpers.eq(s2Course2.name, "COMP 121"), "s2Course2.name == \"COMP 121\"");
+        $helpers.assert($helpers.eq(s2Course2.credits, 4), "s2Course2.credits == 4");
       }
       else {
         $helpers.assert(false, "false");
@@ -429,7 +429,7 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const additionalData = $if_let_value;
         const notes = ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(additionalData, "notes");
-        $helpers.assert($helpers.eq(notes,"wow such notes"), "notes == \"wow such notes\"");
+        $helpers.assert($helpers.eq(notes, "wow such notes"), "notes == \"wow such notes\"");
       }
       else {
         $helpers.assert(false, "false");
@@ -450,13 +450,13 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = Student._tryFromJson(jStudent2);
       if ($if_let_value != undefined) {
         const student = $if_let_value;
-        $helpers.assert($helpers.eq(student.firstName,"Sally"), "student.firstName == \"Sally\"");
-        $helpers.assert($helpers.eq(student.lastName,"Reynolds"), "student.lastName == \"Reynolds\"");
+        $helpers.assert($helpers.eq(student.firstName, "Sally"), "student.firstName == \"Sally\"");
+        $helpers.assert($helpers.eq(student.lastName, "Reynolds"), "student.lastName == \"Reynolds\"");
         $helpers.assert((!student.enrolled), "!student.enrolled");
-        $helpers.assert($helpers.eq(student.schoolId,"s2-xyz"), "student.schoolId == \"s2-xyz\"");
-        $helpers.assert($helpers.eq(student.dob.month,5), "student.dob.month == 5");
-        $helpers.assert($helpers.eq(student.dob.day,31), "student.dob.day == 31");
-        $helpers.assert($helpers.eq(student.dob.year,1987), "student.dob.year == 1987");
+        $helpers.assert($helpers.eq(student.schoolId, "s2-xyz"), "student.schoolId == \"s2-xyz\"");
+        $helpers.assert($helpers.eq(student.dob.month, 5), "student.dob.month == 5");
+        $helpers.assert($helpers.eq(student.dob.day, 31), "student.dob.day == 31");
+        $helpers.assert($helpers.eq(student.dob.year, 1987), "student.dob.year == 1987");
       }
       else {
         $helpers.assert(false, "false");
@@ -466,15 +466,15 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
     const externalBar = externalStructs_MyOtherStruct._fromJson(jj1);
-    $helpers.assert($helpers.eq(externalBar.data.val,10), "externalBar.data.val == 10");
+    $helpers.assert($helpers.eq(externalBar.data.val, 10), "externalBar.data.val == 10");
     const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"})});
     const myStruct = MyStruct._fromJson(jMyStruct);
-    $helpers.assert($helpers.eq(myStruct.m1.val,10), "myStruct.m1.val == 10");
-    $helpers.assert($helpers.eq(myStruct.m2.val,"10"), "myStruct.m2.val == \"10\"");
+    $helpers.assert($helpers.eq(myStruct.m1.val, 10), "myStruct.m1.val == 10");
+    $helpers.assert($helpers.eq(myStruct.m2.val, "10"), "myStruct.m2.val == \"10\"");
     const schema = MyStruct;
     (schema.validate(jMyStruct));
     const expectedSchema = ({"id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
-    $helpers.assert($helpers.eq((schema.asStr()),((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
+    $helpers.assert($helpers.eq((schema.asStr()), ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));

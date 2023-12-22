@@ -12,9 +12,9 @@ module.exports = function({ $data_size, $queue, $res }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($data_size,3), "data.size == 3");
+      $helpers.assert($helpers.eq($data_size, 3), "data.size == 3");
       (await $res.put("file.txt", "world"));
-      $helpers.assert($helpers.eq((await $res.get("file.txt")),"world"), "res.get(\"file.txt\") == \"world\"");
+      $helpers.assert($helpers.eq((await $res.get("file.txt")), "world"), "res.get(\"file.txt\") == \"world\"");
       (await $queue.push("spirulina"));
     }
   }

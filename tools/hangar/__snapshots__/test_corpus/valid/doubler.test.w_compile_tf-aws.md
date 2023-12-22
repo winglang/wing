@@ -76,7 +76,7 @@ module.exports = function({ $f }) {
     }
     async handle() {
       const result = (await $f.invoke("2"));
-      $helpers.assert($helpers.eq(result,"8"), "result == \"8\"");
+      $helpers.assert($helpers.eq(result, "8"), "result == \"8\"");
     }
   }
   return $Closure4;

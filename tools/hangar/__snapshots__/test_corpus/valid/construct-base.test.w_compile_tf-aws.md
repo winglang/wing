@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
+        console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id));
       }
       static _toInflightType() {
         return `
@@ -95,10 +95,10 @@ class $Root extends $stdlib.std.Resource {
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
-    {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
-    {console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))))};
+    console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));
+    console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))));
     const title = ((getDisplayName(wr)) ?? "no display name");
-    {console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title))};
+    console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

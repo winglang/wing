@@ -76,9 +76,9 @@ class $Root extends $stdlib.std.Resource {
     arr1.push("a");
     arr2.push(4);
     arr3.push(bucket3);
-    $helpers.assert($helpers.eq((arr2.pop()),4), "arr2.pop() == 4");
-    $helpers.assert($helpers.eq(arr1.length,4), "arr1.length == 4");
-    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 0),"a"), "arr4.at(0) == \"a\"");
+    $helpers.assert($helpers.eq((arr2.pop()), 4), "arr2.pop() == 4");
+    $helpers.assert($helpers.eq(arr1.length, 4), "arr1.length == 4");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 0), "a"), "arr4.at(0) == \"a\"");
     const s1 = new Set([1, 2, 3, 3]);
     const s2 = new Set(["hello", "world", "hello"]);
     const s3 = new Set([bucket1, bucket2, bucket2]);
@@ -95,16 +95,16 @@ class $Root extends $stdlib.std.Resource {
     const m5 = ({["goodbye"]: "world"});
     const m6 = ({["a"]: m1, ["b"]: m5});
     $helpers.assert(("hello" in (m1)), "m1.has(\"hello\")");
-    $helpers.assert($helpers.eq(Object.keys(m2).length,1), "m2.size() == 1");
-    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m3, "b1"),bucket1), "m3.get(\"b1\") == bucket1");
-    $helpers.assert($helpers.eq(Object.keys(m4).length,1), "m4.size() == 1");
-    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m6, "a"), "hello"),"world"), "m6.get(\"a\").get(\"hello\") == \"world\"");
+    $helpers.assert($helpers.eq(Object.keys(m2).length, 1), "m2.size() == 1");
+    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m3, "b1"), bucket1), "m3.get(\"b1\") == bucket1");
+    $helpers.assert($helpers.eq(Object.keys(m4).length, 1), "m4.size() == 1");
+    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m6, "a"), "hello"), "world"), "m6.get(\"a\").get(\"hello\") == \"world\"");
     ((obj, args) => { obj[args[0]] = args[1]; })(m1, ["hello", "goodbye"]);
     ((obj, args) => { obj[args[0]] = args[1]; })(m6, ["a", ({["foo"]: "bar"})]);
     ((map) => { for(const k in map){delete map[k]}; })(m2);
-    $helpers.assert($helpers.eq(Object.keys(m2).length,0), "m2.size() == 0");
-    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m1, "hello"),"goodbye"), "m1.get(\"hello\") == \"goodbye\"");
-    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m6, "a"), "foo"),"bar"), "m6.get(\"a\").get(\"foo\") == \"bar\"");
+    $helpers.assert($helpers.eq(Object.keys(m2).length, 0), "m2.size() == 0");
+    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m1, "hello"), "goodbye"), "m1.get(\"hello\") == \"goodbye\"");
+    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })(m6, "a"), "foo"), "bar"), "m6.get(\"a\").get(\"foo\") == \"bar\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

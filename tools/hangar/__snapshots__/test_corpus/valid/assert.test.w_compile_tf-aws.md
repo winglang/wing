@@ -12,21 +12,21 @@ module.exports = function({ $s1, $s2 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq("",""), "\"\" == \"\"");
-      $helpers.assert($helpers.eq("'","'"), "\"\'\" == \"\'\"");
-      $helpers.assert($helpers.eq("\"","\""), "\"\\\"\" == \"\\\"\"");
-      $helpers.assert($helpers.eq("`","`"), "\"`\" == \"`\"");
-      $helpers.assert($helpers.eq("``","``"), "\"``\" == \"``\"");
-      $helpers.assert($helpers.eq("`s1`","`s1`"), "\"`s1`\" == \"`s1`\"");
-      $helpers.assert($helpers.eq($s1,$s1), "s1 == s1");
-      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s1)), "\"{s1}\" == \"{s1}\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
-      $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["a", ""] }, $s1)), "\"a{s1}\" == \"a{s1}\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["b", ""] }, $s1)), "\"a{s1}\" != \"b{s1}\"");
-      $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "a"] }, $s1)), "\"{s1}a\" == \"{s1}a\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "b"] }, $s1)), "\"{s1}a\" != \"{s1}b\"");
-      $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, $s1),String.raw({ raw: ["`'", ""] }, $s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
-      $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2),String.raw({ raw: ["a", "b", "c"] }, $s1, $s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
+      $helpers.assert($helpers.eq("", ""), "\"\" == \"\"");
+      $helpers.assert($helpers.eq("'", "'"), "\"\'\" == \"\'\"");
+      $helpers.assert($helpers.eq("\"", "\""), "\"\\\"\" == \"\\\"\"");
+      $helpers.assert($helpers.eq("`", "`"), "\"`\" == \"`\"");
+      $helpers.assert($helpers.eq("``", "``"), "\"``\" == \"``\"");
+      $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
+      $helpers.assert($helpers.eq($s1, $s1), "s1 == s1");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s1)), "\"{s1}\" == \"{s1}\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["a", ""] }, $s1)), "\"a{s1}\" == \"a{s1}\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["b", ""] }, $s1)), "\"a{s1}\" != \"b{s1}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "a"] }, $s1)), "\"{s1}a\" == \"{s1}a\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "b"] }, $s1)), "\"{s1}a\" != \"{s1}b\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, $s1), String.raw({ raw: ["`'", ""] }, $s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2), String.raw({ raw: ["a", "b", "c"] }, $s1, $s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     }
   }
   return $Closure1;
@@ -103,21 +103,21 @@ class $Root extends $stdlib.std.Resource {
     }
     const s1 = "foo";
     const s2 = "bar";
-    $helpers.assert($helpers.eq("",""), "\"\" == \"\"");
-    $helpers.assert($helpers.eq("'","'"), "\"\'\" == \"\'\"");
-    $helpers.assert($helpers.eq("\"","\""), "\"\\\"\" == \"\\\"\"");
-    $helpers.assert($helpers.eq("`","`"), "\"`\" == \"`\"");
-    $helpers.assert($helpers.eq("``","``"), "\"``\" == \"``\"");
-    $helpers.assert($helpers.eq("`s1`","`s1`"), "\"`s1`\" == \"`s1`\"");
-    $helpers.assert($helpers.eq(s1,s1), "s1 == s1");
-    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s1)), "\"{s1}\" == \"{s1}\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s2)), "\"{s1}\" != \"{s2}\"");
-    $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["a", ""] }, s1)), "\"a{s1}\" == \"a{s1}\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["b", ""] }, s1)), "\"a{s1}\" != \"b{s1}\"");
-    $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "a"] }, s1)), "\"{s1}a\" == \"{s1}a\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "b"] }, s1)), "\"{s1}a\" != \"{s1}b\"");
-    $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, s1),String.raw({ raw: ["`'", ""] }, s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
-    $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, s1, s2),String.raw({ raw: ["a", "b", "c"] }, s1, s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
+    $helpers.assert($helpers.eq("", ""), "\"\" == \"\"");
+    $helpers.assert($helpers.eq("'", "'"), "\"\'\" == \"\'\"");
+    $helpers.assert($helpers.eq("\"", "\""), "\"\\\"\" == \"\\\"\"");
+    $helpers.assert($helpers.eq("`", "`"), "\"`\" == \"`\"");
+    $helpers.assert($helpers.eq("``", "``"), "\"``\" == \"``\"");
+    $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
+    $helpers.assert($helpers.eq(s1, s1), "s1 == s1");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s1)), "\"{s1}\" == \"{s1}\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s2)), "\"{s1}\" != \"{s2}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["a", ""] }, s1)), "\"a{s1}\" == \"a{s1}\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["b", ""] }, s1)), "\"a{s1}\" != \"b{s1}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "a"] }, s1)), "\"{s1}a\" == \"{s1}a\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "b"] }, s1)), "\"{s1}a\" != \"{s1}b\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, s1), String.raw({ raw: ["`'", ""] }, s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, s1, s2), String.raw({ raw: ["a", "b", "c"] }, s1, s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:assert works inflight", new $Closure1(this, "$Closure1"));
   }
 }

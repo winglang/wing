@@ -32,7 +32,7 @@ module.exports = function({ $i3 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $i3.method2("hello")),"hello"), "i3.method2(\"hello\") == \"hello\"");
+      $helpers.assert($helpers.eq((await $i3.method2("hello")), "hello"), "i3.method2(\"hello\") == \"hello\"");
     }
   }
   return $Closure2;
@@ -325,9 +325,9 @@ class $Root extends $stdlib.std.Resource {
     const i3 = ((() => {
       return new r(this, "r");
     })());
-    $helpers.assert($helpers.eq((i3.method1(1)),1), "i3.method1(1) == 1");
+    $helpers.assert($helpers.eq((i3.method1(1)), 1), "i3.method1(1) == 1");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can call inherited inflight interface method", new $Closure2(this, "$Closure2"));
-    $helpers.assert($helpers.eq((i3.method3([1, 2, 3])),[1, 2, 3]), "i3.method3([1, 2, 3]) == [1, 2, 3]");
+    $helpers.assert($helpers.eq((i3.method3([1, 2, 3])), [1, 2, 3]), "i3.method3([1, 2, 3]) == [1, 2, 3]");
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
   }

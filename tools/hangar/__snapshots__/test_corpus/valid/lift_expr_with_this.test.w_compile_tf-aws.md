@@ -13,7 +13,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq(this.$foo_this_value,"hello"), "foo_this.value == \"hello\"");
+      $helpers.assert($helpers.eq(this.$foo_this_value, "hello"), "foo_this.value == \"hello\"");
     }
   }
   return $Closure1;

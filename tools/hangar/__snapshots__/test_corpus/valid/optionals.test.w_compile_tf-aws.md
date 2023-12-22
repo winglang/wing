@@ -12,7 +12,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($__payloadWithoutOptions_b_____null_,false), "payloadWithoutOptions.b? == false");
+      $helpers.assert($helpers.eq($__payloadWithoutOptions_b_____null_, false), "payloadWithoutOptions.b? == false");
       if ($__payloadWithBucket_c_____null_) {
         (await $payloadWithBucket_c?.put?.("x.txt", "something"));
       }
@@ -274,20 +274,20 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const x = 4;
-    $helpers.assert($helpers.eq(((x) != null),true), "x? == true");
-    $helpers.assert($helpers.eq((!((x) != null)),false), "!x? == false");
-    $helpers.assert($helpers.eq((x ?? 5),4), "x ?? 5 == 4");
+    $helpers.assert($helpers.eq(((x) != null), true), "x? == true");
+    $helpers.assert($helpers.eq((!((x) != null)), false), "!x? == false");
+    $helpers.assert($helpers.eq((x ?? 5), 4), "x ?? 5 == 4");
     const y = (x ?? 5);
-    $helpers.assert($helpers.eq(y,4), "y == 4");
+    $helpers.assert($helpers.eq(y, 4), "y == 4");
     const optionalSup = new Super(this, "Super");
     const s = (optionalSup ?? new Sub(this, "Sub"));
-    $helpers.assert($helpers.eq(s.name,"Super"), "s.name == \"Super\"");
+    $helpers.assert($helpers.eq(s.name, "Super"), "s.name == \"Super\"");
     let name = ({"first": "John", "last": "Doe"});
     {
       const $if_let_value = name;
       if ($if_let_value != undefined) {
         const n = $if_let_value;
-        $helpers.assert($helpers.eq(n.first,"John"), "n.first == \"John\"");
+        $helpers.assert($helpers.eq(n.first, "John"), "n.first == \"John\"");
       }
     }
     name = undefined;
@@ -314,13 +314,13 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
       if ($if_let_value != undefined) {
         const y = $if_let_value;
-        $helpers.assert(($helpers.eq(y,true) || $helpers.eq(y,false)), "y == true || y == false");
+        $helpers.assert(($helpers.eq(y, true) || $helpers.eq(y, false)), "y == true || y == false");
       }
       else {
         const $elif_let_value0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
         if ($elif_let_value0 != undefined) {
           const y = $elif_let_value0;
-          $helpers.assert($helpers.eq((y + 0),y), "y + 0 == y");
+          $helpers.assert($helpers.eq((y + 0), y), "y + 0 == y");
         }
         else {
           const $elif_let_value1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
@@ -340,9 +340,9 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = a;
       if ($if_let_value != undefined) {
         let z = $if_let_value;
-        $helpers.assert($helpers.eq(z,1), "z == 1");
+        $helpers.assert($helpers.eq(z, 1), "z == 1");
         z = 2;
-        $helpers.assert($helpers.eq(z,2), "z == 2");
+        $helpers.assert($helpers.eq(z, 2), "z == 2");
       }
     }
     const b = 1;
@@ -350,19 +350,19 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = b;
       if ($if_let_value != undefined) {
         const z = $if_let_value;
-        $helpers.assert($helpers.eq(z,1), "z == 1");
+        $helpers.assert($helpers.eq(z, 1), "z == 1");
       }
     }
     {
       const $if_let_value = (tryParseName("Good Name"));
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
-        $helpers.assert($helpers.eq(parsedName.first,"Good"), "parsedName.first == \"Good\"");
+        $helpers.assert($helpers.eq(parsedName.first, "Good"), "parsedName.first == \"Good\"");
         {
           const $if_let_value = parsedName.last;
           if ($if_let_value != undefined) {
             const lastName = $if_let_value;
-            $helpers.assert($helpers.eq(lastName,"Name"), "lastName == \"Name\"");
+            $helpers.assert($helpers.eq(lastName, "Name"), "lastName == \"Name\"");
           }
           else {
             $helpers.assert(false, "false");
@@ -374,8 +374,8 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = (tryParseName("BadName"));
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
-        $helpers.assert($helpers.eq(parsedName.first,"BadName"), "parsedName.first == \"BadName\"");
-        if (!$helpers.eq(parsedName.last,"")) {
+        $helpers.assert($helpers.eq(parsedName.first, "BadName"), "parsedName.first == \"BadName\"");
+        if (!$helpers.eq(parsedName.last, "")) {
           $helpers.assert(false, "false");
         }
       }
@@ -385,7 +385,7 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = falsy;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
-        $helpers.assert($helpers.eq(f,false), "f == false");
+        $helpers.assert($helpers.eq(f, false), "f == false");
       }
       else {
         $helpers.assert(false, "false");
@@ -396,13 +396,13 @@ class $Root extends $stdlib.std.Resource {
       const $if_let_value = shadow;
       if ($if_let_value != undefined) {
         const shadow = $if_let_value;
-        $helpers.assert($helpers.eq(shadow,"root"), "shadow == \"root\"");
+        $helpers.assert($helpers.eq(shadow, "root"), "shadow == \"root\"");
         const shadow1 = "nested";
         {
           const $if_let_value = shadow1;
           if ($if_let_value != undefined) {
             const shadow1 = $if_let_value;
-            $helpers.assert($helpers.eq(shadow1,"nested"), "shadow1 == \"nested\"");
+            $helpers.assert($helpers.eq(shadow1, "nested"), "shadow1 == \"nested\"");
           }
           else {
             $helpers.assert(false, "false");
@@ -422,18 +422,18 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     });
-    $helpers.assert($helpers.eq((fun("hello")),"hello"), "fun(\"hello\") == \"hello\"");
-    $helpers.assert($helpers.eq((fun(undefined)),"default"), "fun(nil) == \"default\"");
+    $helpers.assert($helpers.eq((fun("hello")), "hello"), "fun(\"hello\") == \"hello\"");
+    $helpers.assert($helpers.eq((fun(undefined)), "default"), "fun(nil) == \"default\"");
     const tree = new Node(this, "eight", 8, new Node(this, "three", 3, new Node(this, "one", 1, undefined, undefined), new Node(this, "six", 6, undefined, undefined)), new Node(this, "ten", 10, undefined, new Node(this, "fourteen", 14, new Node(this, "thirteen", 13, undefined, undefined), undefined)));
     const thirteen = tree.right?.right?.left?.value;
     const notThere = tree.right?.right?.right;
-    $helpers.assert($helpers.eq(thirteen,13), "thirteen == 13");
-    $helpers.assert($helpers.eq(notThere,undefined), "notThere == nil");
+    $helpers.assert($helpers.eq(thirteen, 13), "thirteen == 13");
+    $helpers.assert($helpers.eq(notThere, undefined), "notThere == nil");
     {
       const $if_let_value = tree.left?.left;
       if ($if_let_value != undefined) {
         const o = $if_let_value;
-        $helpers.assert($helpers.eq(o.value,1), "o.value == 1");
+        $helpers.assert($helpers.eq(o.value, 1), "o.value == 1");
       }
     }
     const payloadWithoutOptions = ({"a": "a"});

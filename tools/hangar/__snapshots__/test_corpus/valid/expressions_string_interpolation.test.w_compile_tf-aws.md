@@ -38,10 +38,10 @@ class $Root extends $stdlib.std.Resource {
     const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\{empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
     const beginingWithCoolStrings = String.raw({ raw: ["", " ", " <- cool"] }, regularString, number);
     const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
-    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, (1 + 1)),"2"), "\"{1+1}\" == \"2\"");
-    $helpers.assert($helpers.eq("{1+1}","{1+1}"), "\"\\{1+1}\" == \"\\{1+1}\"");
-    $helpers.assert(!$helpers.eq("{1+1}","2"), "\"\\{1+1}\" != \"2\"");
-    $helpers.assert(!$helpers.eq("{1+1}","{2}"), "\"\\{1+1}\" != \"\\{2}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, (1 + 1)), "2"), "\"{1+1}\" == \"2\"");
+    $helpers.assert($helpers.eq("{1+1}", "{1+1}"), "\"\\{1+1}\" == \"\\{1+1}\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "2"), "\"\\{1+1}\" != \"2\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "{2}"), "\"\\{1+1}\" != \"\\{2}\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

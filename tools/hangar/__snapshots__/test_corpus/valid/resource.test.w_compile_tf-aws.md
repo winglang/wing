@@ -13,10 +13,10 @@ module.exports = function({ $bucket, $res, $res_foo }) {
     }
     async handle() {
       const s = (await $res.myMethod());
-      {console.log(s)};
-      $helpers.assert($helpers.eq(s,"counter is: 201"), "s == \"counter is: 201\"");
-      $helpers.assert($helpers.eq((await $bucket.list()).length,1), "bucket.list().length == 1");
-      $helpers.assert($helpers.eq($res_foo.inflightField,123), "res.foo.inflightField == 123");
+      console.log(s);
+      $helpers.assert($helpers.eq(s, "counter is: 201"), "s == \"counter is: 201\"");
+      $helpers.assert($helpers.eq((await $bucket.list()).length, 1), "bucket.list().length == 1");
+      $helpers.assert($helpers.eq($res_foo.inflightField, 123), "res.foo.inflightField == 123");
       (await $res.testTypeAccess());
     }
   }
@@ -128,9 +128,9 @@ module.exports = function({ $Foo, $MyEnum }) {
     }
     async testTypeAccess() {
       if (true) {
-        $helpers.assert($helpers.eq((await Bar.barStatic()),"bar static"), "Bar.barStatic() == \"bar static\"");
-        $helpers.assert($helpers.eq((await $Foo.fooStatic()),"foo static"), "Foo.fooStatic() == \"foo static\"");
-        $helpers.assert($helpers.eq(this.$this_e,$MyEnum.B), "this.e == MyEnum.B");
+        $helpers.assert($helpers.eq((await Bar.barStatic()), "bar static"), "Bar.barStatic() == \"bar static\"");
+        $helpers.assert($helpers.eq((await $Foo.fooStatic()), "foo static"), "Foo.fooStatic() == \"foo static\"");
+        $helpers.assert($helpers.eq(this.$this_e, $MyEnum.B), "this.e == MyEnum.B");
       }
     }
   }

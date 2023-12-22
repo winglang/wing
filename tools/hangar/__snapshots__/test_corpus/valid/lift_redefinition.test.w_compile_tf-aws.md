@@ -12,9 +12,9 @@ module.exports = function({ $y }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($y,"hello"), "y == \"hello\"");
+      $helpers.assert($helpers.eq($y, "hello"), "y == \"hello\"");
       const y = "z";
-      $helpers.assert($helpers.eq(y,"z"), "y == \"z\"");
+      $helpers.assert($helpers.eq(y, "z"), "y == \"z\"");
     }
   }
   return $Closure1;

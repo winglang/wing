@@ -38,14 +38,14 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      $helpers.assert($helpers.eq(e,"hello"), "e == \"hello\"");
+      $helpers.assert($helpers.eq(e, "hello"), "e == \"hello\"");
       x = "caught";
     }
     finally {
-      $helpers.assert($helpers.eq(x,"caught"), "x == \"caught\"");
+      $helpers.assert($helpers.eq(x, "caught"), "x == \"caught\"");
       x = "finally";
     }
-    $helpers.assert($helpers.eq(x,"finally"), "x == \"finally\"");
+    $helpers.assert($helpers.eq(x, "finally"), "x == \"finally\"");
     try {
       x = "I got here";
     }
@@ -54,10 +54,10 @@ class $Root extends $stdlib.std.Resource {
       x = "caught";
     }
     finally {
-      $helpers.assert($helpers.eq(x,"I got here"), "x == \"I got here\"");
+      $helpers.assert($helpers.eq(x, "I got here"), "x == \"I got here\"");
       x = "finally";
     }
-    $helpers.assert($helpers.eq(x,"finally"), "x == \"finally\"");
+    $helpers.assert($helpers.eq(x, "finally"), "x == \"finally\"");
     try {
       try {
         throw new Error("hello");
@@ -65,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
       finally {
         x = "finally with no catch";
       }
-      $helpers.assert($helpers.eq(x,"finally with no catch"), "x == \"finally with no catch\"");
+      $helpers.assert($helpers.eq(x, "finally with no catch"), "x == \"finally with no catch\"");
     }
     catch {
     }
@@ -74,14 +74,14 @@ class $Root extends $stdlib.std.Resource {
     finally {
       x = "finally with no catch and no exception";
     }
-    $helpers.assert($helpers.eq(x,"finally with no catch and no exception"), "x == \"finally with no catch and no exception\"");
+    $helpers.assert($helpers.eq(x, "finally with no catch and no exception"), "x == \"finally with no catch and no exception\"");
     $helpers.assert($helpers.eq(((() => {
       try {
       }
       finally {
         return 1;
       }
-    })()),1), "(():num => { try {} finally {return 1;}})() == 1");
+    })()), 1), "(():num => { try {} finally {return 1;}})() == 1");
     $helpers.assert($helpers.eq(((() => {
       try {
         throw new Error("");
@@ -89,14 +89,14 @@ class $Root extends $stdlib.std.Resource {
       catch {
         return 2;
       }
-    })()),2), "(():num => { try {throw \"\";} catch {return 2;}})() == 2");
+    })()), 2), "(():num => { try {throw \"\";} catch {return 2;}})() == 2");
     $helpers.assert($helpers.eq(((() => {
       try {
         return 3;
       }
       finally {
       }
-    })()),3), "(():num => { try {return 3;} finally {}})() == 3");
+    })()), 3), "(():num => { try {return 3;} finally {}})() == 3");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

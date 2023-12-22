@@ -12,21 +12,21 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       return $obj;
     }
     async handle(s) {
-      {console.log($myStr)};
+      console.log($myStr);
       const n = $myNum;
-      {console.log(String.raw({ raw: ["", ""] }, n))};
-      $helpers.assert($helpers.eq($mySecondBool,false), "mySecondBool == false");
+      console.log(String.raw({ raw: ["", ""] }, n));
+      $helpers.assert($helpers.eq($mySecondBool, false), "mySecondBool == false");
       if ($myBool) {
-        {console.log("bool=true")};
+        console.log("bool=true");
       }
       else {
-        {console.log("bool=false")};
+        console.log("bool=false");
       }
       const min = $myDur_minutes;
       const sec = $myDur_seconds;
       const hr = $myDur_hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
-      $helpers.assert($helpers.eq(split.length,3), "split.length == 3");
+      $helpers.assert($helpers.eq(split.length, 3), "split.length == 3");
     }
   }
   return $Closure1;

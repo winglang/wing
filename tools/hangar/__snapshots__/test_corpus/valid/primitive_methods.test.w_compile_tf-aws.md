@@ -36,11 +36,11 @@ class $Root extends $stdlib.std.Resource {
     const f = ((d) => {
     });
     const stringy = String.raw({ raw: ["", ":", ""] }, dur.minutes, dur.seconds);
-    {console.log(stringy)};
-    if ((stringy.includes("60") && $helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((stringy.split(":")), 0),"60"))) {
-      {console.log(String.raw({ raw: ["", "!"] }, stringy.length))};
+    console.log(stringy);
+    if ((stringy.includes("60") && $helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((stringy.split(":")), 0), "60"))) {
+      console.log(String.raw({ raw: ["", "!"] }, stringy.length));
     }
-    $helpers.assert($helpers.eq(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("123"),123), "num.fromStr(\"123\") == 123");
+    $helpers.assert($helpers.eq(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })("123"), 123), "num.fromStr(\"123\") == 123");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

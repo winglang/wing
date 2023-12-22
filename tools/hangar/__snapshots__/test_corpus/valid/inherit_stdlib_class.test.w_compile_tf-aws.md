@@ -33,7 +33,7 @@ module.exports = function({ $api_url, $http_Util }) {
     }
     async handle() {
       const response = (await $http_Util.get(String.raw({ raw: ["", "/"] }, $api_url)));
-      $helpers.assert($helpers.eq(response.status,200), "response.status == 200");
+      $helpers.assert($helpers.eq(response.status, 200), "response.status == 200");
     }
   }
   return $Closure2;

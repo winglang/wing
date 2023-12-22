@@ -12,7 +12,7 @@ module.exports = function({ $fn }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((await $fn.invoke("test")),"hello world!"), "fn.invoke(\"test\") == \"hello world!\"");
+      $helpers.assert($helpers.eq((await $fn.invoke("test")), "hello world!"), "fn.invoke(\"test\") == \"hello world!\"");
     }
   }
   return $Closure1;

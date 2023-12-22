@@ -12,10 +12,10 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($a_length,1), "a.length == 1");
-      $helpers.assert($helpers.eq($s_size,1), "s.size == 1");
-      $helpers.assert($helpers.eq($Object_keys_m__length,1), "m.size() == 1");
-      $helpers.assert($helpers.eq($aCloned_length,1), "aCloned.length == 1");
+      $helpers.assert($helpers.eq($a_length, 1), "a.length == 1");
+      $helpers.assert($helpers.eq($s_size, 1), "s.size == 1");
+      $helpers.assert($helpers.eq($Object_keys_m__length, 1), "m.size() == 1");
+      $helpers.assert($helpers.eq($aCloned_length, 1), "aCloned.length == 1");
     }
   }
   return $Closure1;

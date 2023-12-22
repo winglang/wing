@@ -33,7 +33,7 @@ module.exports = function({ $getBar }) {
     }
     async handle() {
       const bar = (await $getBar());
-      $helpers.assert($helpers.eq((await bar.foo.get()),42), "bar.foo.get() == 42");
+      $helpers.assert($helpers.eq((await bar.foo.get()), 42), "bar.foo.get() == 42");
     }
   }
   return $Closure2;

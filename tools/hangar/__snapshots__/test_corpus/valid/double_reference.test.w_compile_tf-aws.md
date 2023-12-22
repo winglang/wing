@@ -14,7 +14,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
     async handle() {
       (await $bar.callFoo());
       (await $bar_foo.method());
-      $helpers.assert($helpers.eq((await $initCount.peek()),2), "initCount.peek() == /*1*/ 2");
+      $helpers.assert($helpers.eq((await $initCount.peek()), 2), "initCount.peek() == /*1*/ 2");
     }
   }
   return $Closure1;

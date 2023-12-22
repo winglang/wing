@@ -12,8 +12,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight log 1.1")};
-      {console.log("inflight log 1.2")};
+      console.log("inflight log 1.1");
+      console.log("inflight log 1.2");
     }
   }
   return $Closure1;
@@ -33,8 +33,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight log 2.1")};
-      {console.log("inflight log 2.2")};
+      console.log("inflight log 2.1");
+      console.log("inflight log 2.2");
     }
   }
   return $Closure2;
@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    {console.log("preflight log")};
+    console.log("preflight log");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:log1", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:log2", new $Closure2(this, "$Closure2"));
   }

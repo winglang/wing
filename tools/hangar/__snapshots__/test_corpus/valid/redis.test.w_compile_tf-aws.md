@@ -34,12 +34,12 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     async handle() {
       (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
-      $helpers.assert($helpers.eq(value2,"does redis again"), "value2 == \"does redis again\"");
+      $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
-        return !$helpers.eq((await $r.get("hello")),undefined);
+        return !$helpers.eq((await $r.get("hello")), undefined);
       }));
-      $helpers.assert($helpers.eq("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
+      $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
   }
   return $Closure2;

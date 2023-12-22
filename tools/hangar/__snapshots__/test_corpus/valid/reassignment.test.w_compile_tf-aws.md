@@ -78,24 +78,24 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     let x = 5;
-    $helpers.assert($helpers.eq(x,5), "x == 5");
+    $helpers.assert($helpers.eq(x, 5), "x == 5");
     x = (x + 1);
-    $helpers.assert($helpers.eq(x,6), "x == 6");
+    $helpers.assert($helpers.eq(x, 6), "x == 6");
     let z = 1;
     z += 2;
-    $helpers.assert($helpers.eq(z,3), "z == 3");
+    $helpers.assert($helpers.eq(z, 3), "z == 3");
     z -= 1;
-    $helpers.assert($helpers.eq(z,2), "z == 2");
+    $helpers.assert($helpers.eq(z, 2), "z == 2");
     const r = new R(this, "R");
     (r.inc());
-    $helpers.assert($helpers.eq(r.f,2), "r.f == 2");
+    $helpers.assert($helpers.eq(r.f, 2), "r.f == 2");
     const f = ((arg) => {
       arg = 0;
       return arg;
     });
     const y = 1;
-    $helpers.assert($helpers.eq((f(y)),0), "f(y) == 0");
-    $helpers.assert($helpers.eq(y,1), "y == 1");
+    $helpers.assert($helpers.eq((f(y)), 0), "f(y) == 0");
+    $helpers.assert($helpers.eq(y, 1), "y == 1");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

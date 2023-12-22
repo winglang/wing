@@ -18,11 +18,11 @@ module.exports = function({ $Bar, $Foo, $foo }) {
         }
       }
       const bar = (await (async () => {const o = new $Bar(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq((await $Foo.foo()),1), "Foo.foo() == 1");
-      $helpers.assert($helpers.eq((await $Bar.bar()),2), "Bar.bar() == 2");
-      $helpers.assert($helpers.eq((await Zoo.zoo()),3), "Zoo.zoo() == 3");
-      $helpers.assert($helpers.eq((await $foo.callThis()),1), "foo.callThis() == 1");
-      $helpers.assert($helpers.eq((await bar.callThis()),2), "bar.callThis() == 2");
+      $helpers.assert($helpers.eq((await $Foo.foo()), 1), "Foo.foo() == 1");
+      $helpers.assert($helpers.eq((await $Bar.bar()), 2), "Bar.bar() == 2");
+      $helpers.assert($helpers.eq((await Zoo.zoo()), 3), "Zoo.zoo() == 3");
+      $helpers.assert($helpers.eq((await $foo.callThis()), 1), "foo.callThis() == 1");
+      $helpers.assert($helpers.eq((await bar.callThis()), 2), "bar.callThis() == 2");
     }
   }
   return $Closure1;

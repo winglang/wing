@@ -10,7 +10,7 @@ module.exports = function({  }) {
       this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
     }
     async foo() {
-      {console.log(this.$_this_s1_concat___world___)};
+      console.log(this.$_this_s1_concat___world___);
     }
   }
   return R;

@@ -21,9 +21,9 @@ module.exports = function({  }) {
           return (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0) + 10);
         }
       }
-      $helpers.assert($helpers.eq((await (await (async () => {const o = new Inner(); await o.$inflight_init?.(); return o; })()).dang()),11), "new Inner().dang() == 11");
-      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 1),2), "y.at(1) == 2");
-      $helpers.assert($helpers.eq(i,11), "i == 11");
+      $helpers.assert($helpers.eq((await (await (async () => {const o = new Inner(); await o.$inflight_init?.(); return o; })()).dang()), 11), "new Inner().dang() == 11");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 1), 2), "y.at(1) == 2");
+      $helpers.assert($helpers.eq(i, 11), "i == 11");
     }
   }
   return $Closure1;

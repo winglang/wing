@@ -17,7 +17,7 @@ module.exports = function({  }) {
         return (j + 1);
       };
       while (((await iterator(i)) < 3)) {
-        {console.log(String.raw({ raw: ["", ""] }, i))};
+        console.log(String.raw({ raw: ["", ""] }, i));
       }
     }
   }

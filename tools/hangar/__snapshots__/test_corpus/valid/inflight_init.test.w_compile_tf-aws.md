@@ -13,7 +13,7 @@ module.exports = function({ $Foo }) {
     }
     async handle() {
       const f = (await (async () => {const o = new $Foo(5); await o.$inflight_init?.(); return o; })());
-      $helpers.assert(($helpers.eq(f.field1,6) && $helpers.eq(f.field2,5)), "f.field1 == 6 && f.field2 == 5");
+      $helpers.assert(($helpers.eq(f.field1, 6) && $helpers.eq(f.field2, 5)), "f.field1 == 6 && f.field2 == 5");
     }
   }
   return $Closure1;
@@ -34,7 +34,7 @@ module.exports = function({ $FooChild }) {
     }
     async handle() {
       const f = (await (async () => {const o = new $FooChild(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert((($helpers.eq(f.field1,6) && $helpers.eq(f.field2,5)) && $helpers.eq(f.field3,4)), "f.field1 == 6 && f.field2 == 5 && f.field3 == 4");
+      $helpers.assert((($helpers.eq(f.field1, 6) && $helpers.eq(f.field2, 5)) && $helpers.eq(f.field3, 4)), "f.field1 == 6 && f.field2 == 5 && f.field3 == 4");
     }
   }
   return $Closure2;
@@ -70,7 +70,7 @@ module.exports = function({  }) {
         }
       }
       const f = (await (async () => {const o = new FooChild(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert($helpers.eq(f.field,1337), "f.field == 1337");
+      $helpers.assert($helpers.eq(f.field, 1337), "f.field == 1337");
     }
   }
   return $Closure3;
@@ -103,7 +103,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
         }
       }
       const f = (await (async () => {const o = new Foo(1, "Foo"); await o.$inflight_init?.(); return o; })());
-      $helpers.assert((($helpers.eq(f.foo_str,"Foo 1") && $helpers.eq((await f.field()),1)) && $helpers.eq(f.foo_num,6)), "f.foo_str == \"Foo 1\" && f.field() == 1 && f.foo_num == 6");
+      $helpers.assert((($helpers.eq(f.foo_str, "Foo 1") && $helpers.eq((await f.field()), 1)) && $helpers.eq(f.foo_num, 6)), "f.foo_str == \"Foo 1\" && f.field() == 1 && f.foo_num == 6");
       class FooChild extends Foo {
         constructor(){
           super(2, "FooChild");
@@ -115,7 +115,7 @@ module.exports = function({ $jsii_fixture_JsiiClass }) {
         }
       }
       const f_child = (await (async () => {const o = new FooChild(); await o.$inflight_init?.(); return o; })());
-      $helpers.assert(((($helpers.eq(f_child.foo_str,"FooChild 2") && $helpers.eq((await f_child.field()),2)) && $helpers.eq(f_child.foo_num,6)) && $helpers.eq(f_child.child_field,7)), "f_child.foo_str == \"FooChild 2\" && f_child.field() == 2 && f_child.foo_num == 6 && f_child.child_field == 7");
+      $helpers.assert(((($helpers.eq(f_child.foo_str, "FooChild 2") && $helpers.eq((await f_child.field()), 2)) && $helpers.eq(f_child.foo_num, 6)) && $helpers.eq(f_child.child_field, 7)), "f_child.foo_str == \"FooChild 2\" && f_child.field() == 2 && f_child.foo_num == 6 && f_child.child_field == 7");
     }
   }
   return $Closure4;
