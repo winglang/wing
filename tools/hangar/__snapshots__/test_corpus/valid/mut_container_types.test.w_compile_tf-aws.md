@@ -73,9 +73,9 @@ class $Root extends $stdlib.std.Resource {
     const arr2 = [1, 2, 3];
     const arr3 = [bucket1, bucket2];
     const arr4 = arr1;
-    ((obj, args) => { obj.push(...args); })(arr1, ["a"]);
-    ((obj, args) => { obj.push(...args); })(arr2, [4]);
-    ((obj, args) => { obj.push(...args); })(arr3, [bucket3]);
+    arr1.push("a");
+    arr2.push(4);
+    arr3.push(bucket3);
     $helpers.assert($helpers.eq((arr2.pop()),4), "arr2.pop() == 4");
     $helpers.assert($helpers.eq(arr1.length,4), "arr1.length == 4");
     $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr4, 0),"a"), "arr4.at(0) == \"a\"");

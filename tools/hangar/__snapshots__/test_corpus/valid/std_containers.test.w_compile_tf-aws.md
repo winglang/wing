@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
-    ((obj, args) => { obj.push(...args); })(mutArray, ["three"]);
+    mutArray.push("three");
     const immutArray = [...(mutArray)];
     const s = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1);
     $helpers.assert($helpers.eq(s,"two"), "s == \"two\"");

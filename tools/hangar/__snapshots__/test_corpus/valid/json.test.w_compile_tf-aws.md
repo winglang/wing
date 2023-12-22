@@ -92,11 +92,11 @@ class $Root extends $stdlib.std.Resource {
     const jsonMap = ({["1"]: 1, ["2"]: 2, ["3"]: 3});
     const jsonObj = ({"boom": 123});
     for (const j of [jsonNumber, jsonBool, jsonArray, jsonMap, jsonObj]) {
-      $helpers.assert($helpers.eq(j,(JSON.parse(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([j])))), "j == Json.parse(Json.stringify(j))");
+      $helpers.assert($helpers.eq(j,JSON.parse(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(j))), "j == Json.parse(Json.stringify(j))");
     }
     const jsonMutObj = ({"hello": 123, "world": [1, "cat", 3], "boom boom": ({"hello": 1233})});
     const message = "Coolness";
-    ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello", message]);
+    ((obj, key, value) => { obj[key] = value; })(jsonMutObj, "hello", message);
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(jsonMutObj, "hello"),message), "jsonMutObj.get(\"hello\") == message");
     const someNumber = 999;
     const jj = someNumber;
@@ -112,11 +112,11 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(jj4,"wow!"), "jj4 == Json \"wow!\"");
     const someJson = ({"x": someNumber});
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(someJson, "x"),someNumber), "someJson.get(\"x\") == someNumber");
-    ((obj, args) => { obj[args[0]] = args[1]; })(someJson, ["x", 111]);
+    ((obj, key, value) => { obj[key] = value; })(someJson, "x", 111);
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(someJson, "x"),111), "someJson.get(\"x\") == 111");
     const x = ({"cool": "beans"});
     const nestedJson = ({"a": "hello", "b": ({"c": "world", "d": ({"foo": "foo", "bar": 123})})});
-    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), ["foo", "tastic"]);
+    ((obj, key, value) => { obj[key] = value; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), "foo", "tastic");
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), "foo"),"tastic"), "nestedJson.get(\"b\").get(\"d\").get(\"foo\") == \"tastic\"");
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(nestedJson, "b"), "d"), "bar"),123), "nestedJson.get(\"b\").get(\"d\").get(\"bar\") == 123");
     const b = "buckle";
@@ -129,12 +129,12 @@ class $Root extends $stdlib.std.Resource {
     const emptyJsonArr = [];
     const emptyMutJson = ({});
     const emptyMutJsonArr = [];
-    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJson, ["cool", ({"a": 1, "b": 2})]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(emptyMutJson, "cool"), ["a", 3]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJsonArr, [0, ({"a": 1, "b": 2})]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(emptyMutJsonArr, 0), ["a", 3]);
+    ((obj, key, value) => { obj[key] = value; })(emptyMutJson, "cool", ({"a": 1, "b": 2}));
+    ((obj, key, value) => { obj[key] = value; })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(emptyMutJson, "cool"), "a", 3);
+    ((obj, idx, value) => { obj[idx] = value; })(emptyMutJsonArr, 0, ({"a": 1, "b": 2}));
+    ((obj, key, value) => { obj[key] = value; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(emptyMutJsonArr, 0), "a", 3);
     const theTowerOfJson = ({"a": ({}), "b": ({"c": ({}), "d": [[[({})]]]}), "e": ({"f": ({"g": ({}), "h": [({}), []]})})});
-    ((obj, args) => { obj[args[0]] = args[1]; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(theTowerOfJson, "e"), "f"), "h"), 0), ["a", 1]);
+    ((obj, key, value) => { obj[key] = value; })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(theTowerOfJson, "e"), "f"), "h"), 0), "a", 1);
     const thatSuperNestedValue = ((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(theTowerOfJson, "e"), "f"), "h"), 0), "a");
     $helpers.assert($helpers.eq((std.Number.fromJson(thatSuperNestedValue)),1), "num.fromJson(thatSuperNestedValue) == 1");
     const unestedJsonArr = [1, 2, 3];
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
     const notSpecified = ({"foo": "bar"});
     $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(notSpecified, "foo"),"bar"), "notSpecified.get(\"foo\") == \"bar\"");
     const empty = ({});
-    $helpers.assert($helpers.eq(((args) => { return args[0].hasOwnProperty(args[1]); })([empty, "something"]),false), "Json.has(empty, \"something\") == false");
+    $helpers.assert($helpers.eq(((json, key) => { return json.hasOwnProperty(key); })(empty, "something"),false), "Json.has(empty, \"something\") == false");
     const arrayStruct = [({"foo": "", "stuff": []})];
     const setStruct = new Set([({"foo": "", "stuff": []})]);
     const mapStruct = ({["1"]: ({"foo": "", "stuff": []})});

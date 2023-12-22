@@ -16,7 +16,7 @@ module.exports = function({  }) {
       let i = 10;
       class Inner {
         async dang() {
-          ((obj, args) => { obj.push(...args); })(y, [2]);
+          y.push(2);
           i = (i + 1);
           return (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(y, 0) + 10);
         }

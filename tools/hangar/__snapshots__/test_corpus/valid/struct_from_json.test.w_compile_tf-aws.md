@@ -12,7 +12,7 @@ module.exports = function({ $cloud_BucketProps, $j }) {
       return $obj;
     }
     async handle() {
-      const x = ((json, validateOptions) => ($cloud_BucketProps._fromJson(json, validateOptions)))($j);
+      const x = $cloud_BucketProps._fromJson($j);
       $helpers.assert($helpers.eq(x.public,false), "x.public == false");
     }
   }
@@ -34,7 +34,7 @@ module.exports = function({ $Student }) {
     }
     async handle() {
       const jStudent3 = ({"firstName": "struct", "lastName": "greatest", "enrolled": true, "schoolId": "s3-inflight", "dob": ({"month": 4, "day": 1, "year": 1999}), "coursesTaken": [({"grade": "B", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "A", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
-      const studentInflight1 = ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(jStudent3);
+      const studentInflight1 = $Student._fromJson(jStudent3);
       $helpers.assert($helpers.eq(studentInflight1.firstName,"struct"), "studentInflight1.firstName == \"struct\"");
       $helpers.assert($helpers.eq(studentInflight1.lastName,"greatest"), "studentInflight1.lastName == \"greatest\"");
       $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
@@ -74,7 +74,7 @@ module.exports = function({ $Student, $jStudent1 }) {
       return $obj;
     }
     async handle() {
-      const studentInflight1 = ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))($jStudent1);
+      const studentInflight1 = $Student._fromJson($jStudent1);
       $helpers.assert($helpers.eq(studentInflight1.firstName,"John"), "studentInflight1.firstName == \"John\"");
       $helpers.assert($helpers.eq(studentInflight1.lastName,"Smith"), "studentInflight1.lastName == \"Smith\"");
       $helpers.assert(studentInflight1.enrolled, "studentInflight1.enrolled");
@@ -101,9 +101,9 @@ module.exports = function({ $MyStruct, $_schema_asStr___, $expectedSchema, $jMyS
       return $obj;
     }
     async handle() {
-      const s = ($MyStruct);
+      const s = $MyStruct;
       (await s.validate($jMyStruct));
-      $helpers.assert($helpers.eq($_schema_asStr___,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$expectedSchema])), "schema.asStr() == Json.stringify(expectedSchema)");
+      $helpers.assert($helpers.eq($_schema_asStr___,((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     }
   }
   return $Closure4;
@@ -126,7 +126,7 @@ module.exports = function({ $Student, $std_Boolean, $std_Number, $std_String }) 
       (await $std_String.fromJson(10, { unsafe: true }));
       (await $std_Boolean.fromJson(10, { unsafe: true }));
       (await $std_Number.fromJson("cool", { unsafe: true }));
-      ((json, validateOptions) => ($Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
+      $Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
     }
   }
   return $Closure5;
@@ -360,22 +360,22 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const j = ({"public": false});
-    const x = ((json, validateOptions) => (cloud_BucketProps._fromJson(json, validateOptions)))(j);
+    const x = cloud_BucketProps._fromJson(j);
     $helpers.assert($helpers.eq(x.public,false), "x.public == false");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight jsii struct conversion", new $Closure1(this, "$Closure1"));
     const jFoo = ({"f": "bar"});
-    $helpers.assert($helpers.eq(((json, validateOptions) => (Foo._fromJson(json, validateOptions)))(jFoo).f,"bar"), "Foo.fromJson(jFoo).f == \"bar\"");
+    $helpers.assert($helpers.eq(Foo._fromJson(jFoo).f,"bar"), "Foo.fromJson(jFoo).f == \"bar\"");
     const jFoosible = ({});
     const jFoosible2 = ({"f": "bar"});
     {
-      const $if_let_value = ((json, validateOptions) => (Foosible._fromJson(json, validateOptions)))(jFoosible).f;
+      const $if_let_value = Foosible._fromJson(jFoosible).f;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
         $helpers.assert(false, "false");
       }
     }
     {
-      const $if_let_value = ((json, validateOptions) => (Foosible._fromJson(json, validateOptions)))(jFoosible2).f;
+      const $if_let_value = Foosible._fromJson(jFoosible2).f;
       if ($if_let_value != undefined) {
         const f = $if_let_value;
         $helpers.assert($helpers.eq(f,"bar"), "f == \"bar\"");
@@ -385,11 +385,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const jBar = ({"f": "bar", "b": 10});
-    const b = ((json, validateOptions) => (Bar._fromJson(json, validateOptions)))(jBar);
+    const b = Bar._fromJson(jBar);
     $helpers.assert($helpers.eq(b.f,"bar"), "b.f == \"bar\"");
     $helpers.assert($helpers.eq(b.b,10), "b.b == 10");
     const jStudent1 = ({"firstName": "John", "lastName": "Smith", "enrolled": true, "schoolId": "s1-xyz", "dob": ({"month": 10, "day": 10, "year": 2005}), "enrolledCourses": []});
-    const student1 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent1);
+    const student1 = Student._fromJson(jStudent1);
     $helpers.assert($helpers.eq(student1.firstName,"John"), "student1.firstName == \"John\"");
     $helpers.assert($helpers.eq(student1.lastName,"Smith"), "student1.lastName == \"Smith\"");
     $helpers.assert(student1.enrolled, "student1.enrolled");
@@ -398,7 +398,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq(student1.dob.day,10), "student1.dob.day == 10");
     $helpers.assert($helpers.eq(student1.dob.year,2005), "student1.dob.year == 2005");
     const jStudent2 = ({"advisor": ({"firstName": "Tom", "lastName": "Baker", "dob": ({"month": 1, "day": 1, "year": 1983}), "employeeID": "emp123"}), "firstName": "Sally", "lastName": "Reynolds", "enrolled": false, "schoolId": "s2-xyz", "dob": ({"month": 5, "day": 31, "year": 1987}), "enrolledCourses": [({"name": "COMP 101", "credits": 2}), ({"name": "COMP 121", "credits": 4})], "coursesTaken": [({"grade": "F", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 101", "credits": 2})}), ({"grade": "D", "dateTaken": ({"month": 5, "day": 10, "year": 2021}), "course": ({"name": "COMP 121", "credits": 4})})]});
-    const student2 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent2);
+    const student2 = Student._fromJson(jStudent2);
     $helpers.assert($helpers.eq(student2.firstName,"Sally"), "student2.firstName == \"Sally\"");
     $helpers.assert($helpers.eq(student2.lastName,"Reynolds"), "student2.lastName == \"Reynolds\"");
     $helpers.assert((!student2.enrolled), "!student2.enrolled");
@@ -423,7 +423,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const jStudent3 = ({"enrolled": false, "schoolId": "w/e", "firstName": student2.firstName, "lastName": student2.lastName, "dob": ({"month": 1, "day": 1, "year": 1959}), "additionalData": ({"notes": "wow such notes", "legacy": false, "emergencyContactsNumbers": ["123-345-9928"]})});
-    const student3 = ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(jStudent3);
+    const student3 = Student._fromJson(jStudent3);
     {
       const $if_let_value = student3.additionalData;
       if ($if_let_value != undefined) {
@@ -437,7 +437,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const invalidStudent = ({"firstName": "I dont have", "lastName": "Any other info"});
     {
-      const $if_let_value = ((json) => (Student._tryFromJson(json)))(invalidStudent);
+      const $if_let_value = Student._tryFromJson(invalidStudent);
       if ($if_let_value != undefined) {
         const student = $if_let_value;
         $helpers.assert(false, "false");
@@ -447,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $if_let_value = ((json) => (Student._tryFromJson(json)))(jStudent2);
+      const $if_let_value = Student._tryFromJson(jStudent2);
       if ($if_let_value != undefined) {
         const student = $if_let_value;
         $helpers.assert($helpers.eq(student.firstName,"Sally"), "student.firstName == \"Sally\"");
@@ -465,21 +465,21 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:flight school student :)", new $Closure2(this, "$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:lifting a student", new $Closure3(this, "$Closure3"));
     const jj1 = ({"data": ({"val": 10})});
-    const externalBar = ((json, validateOptions) => (externalStructs_MyOtherStruct._fromJson(json, validateOptions)))(jj1);
+    const externalBar = externalStructs_MyOtherStruct._fromJson(jj1);
     $helpers.assert($helpers.eq(externalBar.data.val,10), "externalBar.data.val == 10");
     const jMyStruct = ({"m1": ({"val": 10}), "m2": ({"val": "10"})});
-    const myStruct = ((json, validateOptions) => (MyStruct._fromJson(json, validateOptions)))(jMyStruct);
+    const myStruct = MyStruct._fromJson(jMyStruct);
     $helpers.assert($helpers.eq(myStruct.m1.val,10), "myStruct.m1.val == 10");
     $helpers.assert($helpers.eq(myStruct.m2.val,"10"), "myStruct.m2.val == \"10\"");
-    const schema = (MyStruct);
+    const schema = MyStruct;
     (schema.validate(jMyStruct));
     const expectedSchema = ({"id": "/MyStruct", "type": "object", "properties": ({"m1": ({"type": "object", "properties": ({"val": ({"type": "number"})}), "required": ["val"]}), "m2": ({"type": "object", "properties": ({"val": ({"type": "string"})}), "required": ["val"]})}), "required": ["m1", "m2"]});
-    $helpers.assert($helpers.eq((schema.asStr()),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([expectedSchema])), "schema.asStr() == Json.stringify(expectedSchema)");
+    $helpers.assert($helpers.eq((schema.asStr()),((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(expectedSchema)), "schema.asStr() == Json.stringify(expectedSchema)");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight schema usage", new $Closure4(this, "$Closure4"));
     (std.String.fromJson(10, { unsafe: true }));
     (std.Boolean.fromJson(10, { unsafe: true }));
     (std.Number.fromJson("cool", { unsafe: true }));
-    ((json, validateOptions) => (Student._fromJson(json, validateOptions)))(({"obviously": "not a student"}), { unsafe: true });
+    Student._fromJson(({"obviously": "not a student"}), { unsafe: true });
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:unsafe flight", new $Closure5(this, "$Closure5"));
     new otherExternalStructs.UsesStructInImportedFile(this, "otherExternalStructs.UsesStructInImportedFile");
   }
@@ -526,7 +526,7 @@ module.exports = function({ $stdlib }) {
   class UsesStructInImportedFile extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
-      this.someStruct = ((json, validateOptions) => (SomeStruct._fromJson(json, validateOptions)))(({"foo": "123"}));
+      this.someStruct = SomeStruct._fromJson(({"foo": "123"}));
     }
     static _toInflightType() {
       return `

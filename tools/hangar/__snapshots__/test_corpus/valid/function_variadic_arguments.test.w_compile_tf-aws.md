@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       for (const i of args) {
         $helpers.assert(((i > 0) && (i < 5)), "i > 0 && i < 5");
       }
-      ((obj, args) => { obj.push(...args); })(args, [10]);
+      args.push(10);
       $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10), "args.at(4) == 10");
     });
     (func1(1, "something", 1, 2, 3, 4));

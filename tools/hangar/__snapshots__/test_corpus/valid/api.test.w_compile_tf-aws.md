@@ -14,7 +14,7 @@ module.exports = function({ $counter, $std_Json }) {
     async handle(request) {
       const count = (await $counter.inc());
       const bodyResponse = ({"count": count});
-      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([bodyResponse]), "headers": ({["content-type"]: "application/json"}), "status": 200});
+      const resp = ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bodyResponse), "headers": ({["content-type"]: "application/json"}), "status": 200});
       return resp;
     }
   }

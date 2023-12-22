@@ -13,13 +13,13 @@ module.exports = function({ $bar }) {
     }
     async handle() {
       const result = [];
-      ((obj, args) => { obj.push(...args); })(result, [$bar]);
+      result.push($bar);
       if (true) {
         const bar = "world";
-        ((obj, args) => { obj.push(...args); })(result, [bar]);
+        result.push(bar);
       }
       const foo = "bang";
-      ((obj, args) => { obj.push(...args); })(result, [foo]);
+      result.push(foo);
       return [...(result)];
     }
   }
