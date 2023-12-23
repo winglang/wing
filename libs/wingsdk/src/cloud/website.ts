@@ -25,6 +25,18 @@ export interface WebsiteOptions {
    * @example "./dist"
    */
   readonly path: string;
+
+  /**
+   * Name of the index document for the website.
+   * @default "index.html"
+   */
+  readonly indexDocument?: string;
+
+  /**
+   * Name of the error document for the website.
+   * @example "404.html"
+   */
+  readonly errorDocument?: string;
 }
 
 /**

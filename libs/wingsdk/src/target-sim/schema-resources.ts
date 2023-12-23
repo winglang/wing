@@ -242,6 +242,10 @@ export interface WebsiteSchema extends BaseResourceSchema {
     staticFilesPath: string;
     /** Map of "files" contains dynamic content inserted from preflight */
     fileRoutes: FileRoutes;
+    /** Name of the index document for the website. */
+    indexDocument?: string;
+    /** Name of the error document for the website. */
+    errorDocument?: string;
   };
   readonly attrs: WebsiteAttributes & BaseResourceAttributes;
 }
