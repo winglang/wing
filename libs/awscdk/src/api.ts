@@ -13,15 +13,16 @@ import { App } from "./app";
 import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
-import { STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
+import { IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
 import { API_CORS_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.cors";
 
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.Api {
+export class Api extends cloud.Api implements IAwsApi {
   private readonly api: WingRestApi;
   private readonly handlers: Record<string, Function> = {};
+  private readonly endpoint: cloud.Endpoint;
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -29,10 +30,13 @@ export class Api extends cloud.Api {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
+      label: `Endpoint for Api ${this.node.path}`,
+    });
   }
 
-  public get url(): string {
-    return this.api.url;
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   /**
@@ -57,7 +61,7 @@ export class Api extends cloud.Api {
     }
     this._validatePath(path);
 
-    const fn = this.addHandler(inflight);
+    const fn = this.addHandler(inflight, method, path);
     const apiSpecEndpoint = this.api.addEndpoint(path, upperMethod, fn);
     this._addToSpec(path, upperMethod, apiSpecEndpoint, this.corsOptions);
 
@@ -179,8 +183,12 @@ export class Api extends cloud.Api {
    * @param props Endpoint props
    * @returns AWS Lambda Function
    */
-  private addHandler(inflight: cloud.IApiEndpointHandler): Function {
-    let fn = this.addInflightHandler(inflight);
+  private addHandler(
+    inflight: cloud.IApiEndpointHandler,
+    method: string,
+    path: string
+  ): Function {
+    let fn = this.addInflightHandler(inflight, method, path);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
     }
@@ -193,25 +201,27 @@ export class Api extends cloud.Api {
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
-  private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
+  private addInflightHandler(
+    inflight: cloud.IApiEndpointHandler,
+    method: string,
+    path: string
+  ): Function {
     let handler = this.handlers[inflight._hash];
 
     if (!handler) {
       const newInflight = convertBetweenHandlers(
         inflight,
-        join(
-          __dirname.replace("target-tf-aws", "shared-aws"),
-          "api.onrequest.inflight.js"
-        ),
+        join(__dirname, "api.onrequest.inflight.js"),
         "ApiOnRequestHandlerClient",
         {
           corsHeaders: this._generateCorsHeaders(this.corsOptions)
             ?.defaultResponse,
         }
       );
+      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
       handler = new Function(
         this,
-        App.of(this).makeId(this, "OnRequest"),
+        App.of(this).makeId(this, prefix),
         newInflight
       );
       this.handlers[inflight._hash] = handler;
@@ -234,7 +244,7 @@ export class Api extends cloud.Api {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "ApiClient",
       [`process.env["${this.urlEnvName()}"]`]
@@ -244,15 +254,39 @@ export class Api extends cloud.Api {
   private urlEnvName(): string {
     return `API_${this.node.addr.slice(-8)}`;
   }
+
+  public get restApiArn(): string {
+    return this.api.api.arnForExecuteApi();
+  }
+
+  public get restApiId(): string {
+    return this.api.api.restApiId;
+  }
+
+  public get restApiName(): string {
+    return this.api.api.restApiName;
+  }
+
+  public get stageName(): string {
+    return this.api.stage.stageName;
+  }
+
+  public get invokeUrl(): string {
+    return this.api.stage.urlForPath();
+  }
+
+  public get deploymentId(): string {
+    return this.api.deployment.deploymentId;
+  }
 }
 
 /**
- * Encapsulates the API Gateway REST API as a abstraction for Terraform.
+ * Encapsulates the API Gateway REST API as a abstraction for aws-cdk.
  */
 class WingRestApi extends Construct {
-  private readonly api: SpecRestApi;
-  private readonly deployment: Deployment;
-  private readonly stage: Stage;
+  public readonly api: SpecRestApi;
+  public readonly deployment: Deployment;
+  public readonly stage: Stage;
   private readonly region: string;
 
   constructor(
@@ -268,7 +302,7 @@ class WingRestApi extends Construct {
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
-    this.api = new SpecRestApi(this, "api", {
+    this.api = new SpecRestApi(this, `${id}`, {
       apiDefinition: ApiDefinition.fromInline(
         Lazy.any({
           produce: () => {
@@ -355,7 +389,7 @@ class WingRestApi extends Construct {
       action: "lambda:InvokeFunction",
       functionName: handler.functionName,
       principal: "apigateway.amazonaws.com",
-      sourceArn: this.api.arnForExecuteApi(method, path),
+      sourceArn: this.api.arnForExecuteApi(method, Api._toOpenApiPath(path)),
     });
   };
 }
