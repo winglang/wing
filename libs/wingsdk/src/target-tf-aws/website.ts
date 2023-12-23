@@ -38,7 +38,7 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
 
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
-      indexDocument: { suffix: props.indexDocument ?? INDEX_FILE },
+      indexDocument: { suffix: INDEX_FILE },
       errorDocument: props.errorDocument ? { key: props.errorDocument } : undefined,
     });
 
@@ -73,10 +73,10 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
           originAccessControlId: cloudfrontOac.id,
         },
       ],
-      defaultRootObject: props.indexDocument ?? INDEX_FILE,
+      defaultRootObject: INDEX_FILE,
       customErrorResponse: props.errorDocument ? [{
         errorCode: 404,
-        responseCode: 404,
+        responseCode: 200,
         responsePagePath: `/${props.errorDocument}`,
       },
       {

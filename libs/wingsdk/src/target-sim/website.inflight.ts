@@ -24,14 +24,6 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     // Set up an express server that handles the routes.
     this.app = express();
 
-    if (props.indexDocument) {
-      let indexDocument = props.indexDocument;
-
-      this.app.get("/", function(_, res) {
-        return res.sendFile(path.join(props.staticFilesPath, indexDocument));
-      });
-    }
-
     // Use static directory
     this.app.use(express.static(props.staticFilesPath));
   

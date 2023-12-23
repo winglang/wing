@@ -13,7 +13,6 @@ import { IInflightHost } from "../std";
 export class Website extends cloud.Website implements ISimulatorResource {
   private fileRoutes: FileRoutes = {};
   private readonly endpoint: cloud.Endpoint;
-  private readonly indexDocument?: string;
   private readonly errorDocument?: string;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
@@ -26,7 +25,6 @@ export class Website extends cloud.Website implements ISimulatorResource {
       { label: `Endpoint for Website ${this.node.path}`, browserSupport: true }
     );
 
-    this.indexDocument = props.indexDocument;
     this.errorDocument = props.errorDocument;
   }
 
@@ -57,7 +55,6 @@ export class Website extends cloud.Website implements ISimulatorResource {
       props: {
         staticFilesPath: this.path,
         fileRoutes: this.fileRoutes,
-        indexDocument: this.indexDocument,
         errorDocument: this.errorDocument,
       },
       attrs: {} as any,
