@@ -242,12 +242,14 @@ exports[`api configured for cors 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Ad6678f772a6670a301f0bf7f82d0655e": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
@@ -634,12 +636,14 @@ exports[`api url can be used as environment variable 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A8ec6e51d8234062be06df1a5fe1a856d": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApistageEFA10127": {
       "DependsOn": [
@@ -1079,12 +1083,14 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A5094d3ec4d03614fdde9acee4b463af0": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET7583b4d75A392565": {
       "Properties": {
@@ -1522,12 +1528,14 @@ exports[`api with 'name' parameter 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A45037ea440cef19952c1633b7be2c975": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET8602bc8a743DD738": {
       "Properties": {
@@ -1956,12 +1964,14 @@ exports[`api with CONNECT route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A4216258e6cb03327eb982e671dd2f9e9": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionCONNECTc2e3ffa8986D072A": {
       "Properties": {
@@ -2390,12 +2400,14 @@ exports[`api with DELETE route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Ae2eb44cd6a181c029493167252ce6e26": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionDELETEc2e3ffa80DE0710F": {
       "Properties": {
@@ -2824,12 +2836,14 @@ exports[`api with GET route at root 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A0d3d35551ad320cbd1c00e2158d1f425": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
@@ -3300,12 +3314,14 @@ exports[`api with GET routes with common prefix 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET01d4e10b81FB26D2": {
       "Properties": {
@@ -3810,12 +3826,14 @@ exports[`api with GET routes with different prefix 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A0f4667fb0915ad84bb895b3833c9f4ec": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET14d002e85A20F09F": {
       "Properties": {
@@ -4278,12 +4296,14 @@ exports[`api with HEAD route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A07e43ae7da0cb6e02cbde99f8d399fe4": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionHEADc2e3ffa8410D3C20": {
       "Properties": {
@@ -4712,12 +4732,14 @@ exports[`api with OPTIONS route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Ae2a2c49138c84afd5a019eb0624f1eb0": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionOPTIONSc2e3ffa8501F80B0": {
       "Properties": {
@@ -5146,12 +5168,14 @@ exports[`api with PATCH route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A40d97035978c95ab1c072bcbf105bca6": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionPATCHc2e3ffa8B10E55C5": {
       "Properties": {
@@ -5580,12 +5604,14 @@ exports[`api with POST route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Aab384616bd2cd6c4b0cc30230fc5f899": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionPOSTc2e3ffa801CBC553": {
       "Properties": {
@@ -6014,12 +6040,14 @@ exports[`api with PUT route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A0ac8dd34b94a8d26a0195d32f97c836d": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionPUTc2e3ffa86986289D": {
       "Properties": {
@@ -6490,12 +6518,14 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET01d4e10b81FB26D2": {
       "Properties": {
@@ -7000,12 +7030,14 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
@@ -7510,12 +7542,14 @@ exports[`api with multiple methods and one lambda 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET4984af0eE2501B82": {
       "Properties": {
@@ -8018,12 +8052,14 @@ exports[`api with multiple methods on same route 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77Acbd440390c9a033d1358a227add96c37": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGETc2e3ffa8B17BD863": {
       "Properties": {
@@ -8495,12 +8531,14 @@ exports[`api with path parameter 1`] = `
       "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApideploymentAD95F77A965f45d3113d9cee577d920535c9ddab": {
+      "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiApiApi89815FDF",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
+      "UpdateReplacePolicy": "Retain",
     },
     "ApiApiApipermissionGET0781b9f9CF0DCD4E": {
       "Properties": {
