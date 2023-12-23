@@ -24,6 +24,11 @@ exports[`basic function 1`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -224,6 +229,11 @@ exports[`basic function with custom log retention 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
@@ -430,6 +440,7 @@ exports[`basic function with environment variables 1`] = `
           "Variables": {
             "BOOM": "BAM",
             "FOO": "BAR",
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
@@ -633,6 +644,11 @@ exports[`basic function with infinite log retention 1`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -731,6 +747,11 @@ exports[`basic function with memory size specified 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 512,
@@ -932,6 +953,11 @@ exports[`basic function with timeout explicitly set 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
