@@ -247,7 +247,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage0_IamRole_961468EB.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage0_S3Object_720C2491.key}",
         "timeout": 60,

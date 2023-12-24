@@ -1,26 +1,11 @@
 ---
-id: getting-started
-title: Getting started
+id: why-wing
+title: Why Wing
 description: Wing is a cloud-oriented programming language. Most programming languages think about computers as individual machines. In Wing, the cloud is the computer.
 image: https://assets.website-files.com/63720940a94e098b4e2a542b/637e2d5495f59f7654160773_Social%20thumbnail.png
-slug: /
-hide_title: true
+
 ---
 
-# Welcome Wingnuts! :wave: 
-
-This handbook is your ultimate guide for learning about the Wing language. It is
-organized like a book, so you can read it by going from top to bottom by
-clicking "Next" at the bottom of each page. Alternatively, you can browse topics
-through the left-hand navigation bar. You know, the regular structure...
-
-You are invited to join the [Wing Community Slack]. We would love to get to know you!
-Come say hi, hang out, geek out, help friends and share your experience ❤️
-
-[Wing Community Slack]: https://t.winglang.io/slack
-
-TL;DR: if you can't be bothered with all the philosophical blabber, feel free to
-jump right in and [install the Wing CLI](./02-installation.md).
 
 ## What is a cloud-oriented language?
 

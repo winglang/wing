@@ -25,7 +25,7 @@ test("basic function", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs18.x",
+      Runtime: "nodejs20.x",
       Timeout: 60,
     })
   );
@@ -54,7 +54,7 @@ test("basic function with environment variables", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs18.x",
+      Runtime: "nodejs20.x",
       Timeout: 60,
       Environment: {
         Variables: {
@@ -82,7 +82,7 @@ test("basic function with timeout explicitly set", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs18.x",
+      Runtime: "nodejs20.x",
       Timeout: 300,
     })
   );
@@ -102,7 +102,7 @@ test("basic function with memory size specified", () => {
     "AWS::Lambda::Function",
     Match.objectLike({
       Handler: "index.handler",
-      Runtime: "nodejs18.x",
+      Runtime: "nodejs20.x",
       MemorySize: 512,
     })
   );

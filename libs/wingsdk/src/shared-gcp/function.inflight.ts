@@ -75,6 +75,10 @@ export class FunctionClient implements IFunctionClient {
     }
   }
 
+  public async invokeAsync(_payload: string): Promise<void> {
+    throw new Error("invokeAsync not implemented");
+  }
+
   /**
    * Invoke the function, passing the given payload as an argument.
    *
