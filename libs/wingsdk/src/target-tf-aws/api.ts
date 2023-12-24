@@ -239,6 +239,7 @@ export class Api extends cloud.Api implements IAwsApi {
         App.of(this).makeId(this, prefix),
         newInflight
       );
+      Node.of(handler).hidden = true;
       this.handlers[inflight._hash] = handler;
     }
 
