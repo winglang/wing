@@ -144,3 +144,49 @@ export const API_CORS_DEFAULT_RESPONSE = (
     };
   }
 };
+
+/**
+ * Mock API to inject instead of OPTIONS in each path
+ */
+export const corsOptionsMethod = (corsOptions: cloud.ApiCorsOptions) => ({
+  "x-amazon-apigateway-integration": {
+    type: "mock",
+    passthroughBehavior: "never",
+    requestTemplates: {
+      "application/json": `{"statusCode": 204}`,
+    },
+    responses: {
+      "204": {
+        statusCode: "204",
+        responseParameters: {
+          "method.response.header.Content-Type": "'application/json'",
+          "method.response.header.Access-Control-Allow-Origin": `'${corsOptions.allowOrigin}'`,
+          "method.response.header.Access-Control-Allow-Methods": `'${corsOptions.allowMethods}'`,
+          "method.response.header.Access-Control-Allow-Headers": `'${corsOptions.allowHeaders}'`,
+        },
+        responseTemplates: {
+          "application/json": "{}",
+        },
+      },
+    },
+  },
+  responses: {
+    204: {
+      description: "204 response",
+      headers: {
+        "Content-Type": {
+          type: "string",
+        },
+        "Access-Control-Allow-Origin": {
+          type: "string",
+        },
+        "Access-Control-Allow-Methods": {
+          type: "string",
+        },
+        "Access-Control-Allow-Headers": {
+          type: "string",
+        },
+      },
+    },
+  },
+});
