@@ -86,7 +86,7 @@ export class Website extends cloud.Website implements IAwsWebsite {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "WebsiteClient",
       []
