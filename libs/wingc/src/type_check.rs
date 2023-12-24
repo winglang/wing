@@ -1920,7 +1920,7 @@ impl<'a> TypeChecker<'a> {
 						s.parts.iter().for_each(|part| {
 							if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 								let (exp_type, p) = self.type_check_exp(interpolated_expr, env);
-								phase = Self::combine_phases(phase, p);
+								phase = combine_phases(phase, p);
 								self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 							}
 						});
@@ -1934,7 +1934,7 @@ impl<'a> TypeChecker<'a> {
 					let (rtype, rtype_phase) = self.type_check_exp(right, env);
 
 					// Resolve the phase
-					let phase = Self::combine_phases(ltype_phase, rtype_phase);
+					let phase = combine_phases(ltype_phase, rtype_phase);
 
 					match op {
 						BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
@@ -2639,23 +2639,6 @@ impl<'a> TypeChecker<'a> {
 		self.update_known_inferences(&mut t, &exp.span);
 
 		(t, phase)
-	}
-
-	// Give two phases will return the more restrictive of the two
-	fn combine_phases(phase1: Phase, phase2: Phase) -> Phase {
-		match (phase1, phase2) {
-			// If any of the expressions are inflight then the result is inflight
-			(Phase::Inflight, _) | (_, Phase::Inflight) => Phase::Inflight,
-			// // Othewise, if any of the expressions are preflight then the result is preflight
-			// (Phase::Preflight, _) | (_, Phase::Preflight) => Phase::Preflight,
-			// // Otherwise the result is independent
-			// (Phase::Independent, Phase::Independent) => Phase::Independent,
-
-			// Otherwise, if any of the expressions are independent then the result is independent
-			(Phase::Independent, _) | (_, Phase::Independent) => Phase::Independent,
-			// Othersize the result is preflight
-			(Phase::Preflight, Phase::Preflight) => Phase::Preflight,
-		}
 	}
 
 	fn resolved_error(&mut self) -> (TypeRef, Phase) {
@@ -5642,6 +5625,24 @@ impl<'a> TypeChecker<'a> {
 impl VisitorWithContext for TypeChecker<'_> {
 	fn ctx(&mut self) -> &mut VisitContext {
 		&mut self.ctx
+	}
+}
+
+/**
+ * Given two phases (typically from two sub expressions of an expression) will return a valid phase
+ * for the top level expression.
+ */
+fn combine_phases(phase1: Phase, phase2: Phase) -> Phase {
+	match (phase1, phase2) {
+		// If any of the expressions are inflight then the result is inflight since
+		// the entire expression can only be evaluated in inflight context.
+		(Phase::Inflight, _) | (_, Phase::Inflight) => Phase::Inflight,
+		// Otherwise, if any of the expressions are independent then the result is independent.
+		// We currently prefer independent over preflight in order to lift only subexpressions
+		// when possible.
+		(Phase::Independent, _) | (_, Phase::Independent) => Phase::Independent,
+		// Othersize the result is preflight (which needs to be lifted when used inflight)
+		(Phase::Preflight, Phase::Preflight) => Phase::Preflight,
 	}
 }
 
