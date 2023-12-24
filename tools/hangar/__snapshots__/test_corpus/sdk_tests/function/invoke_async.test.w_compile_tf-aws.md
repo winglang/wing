@@ -1,4 +1,4 @@
-# [invoke.test.w](../../../../../../examples/tests/sdk_tests/function/invoke.test.w) | compile | tf-aws
+# [invoke_async.test.w](../../../../../../examples/tests/sdk_tests/function/invoke_async.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -29,6 +29,25 @@
         "retention_in_days": 30
       }
     },
+    "aws_dynamodb_table": {
+      "cloudCounter": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Counter/Default",
+            "uniqueId": "cloudCounter"
+          }
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S"
+          }
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wing-counter-cloud.Counter-c866f225"
+      }
+    },
     "aws_iam_role": {
       "cloudFunction_IamRole_5A4430DC": {
         "//": {
@@ -48,7 +67,7 @@
             "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       }
     },
@@ -77,6 +96,7 @@
         ],
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"

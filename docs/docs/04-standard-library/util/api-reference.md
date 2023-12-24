@@ -30,6 +30,7 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.ulid">ulid</a></code> | Generates universally unique lexicographically sortable identifier. |
 | <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
 | <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
 
@@ -183,6 +184,26 @@ The name of the environment variable.
 
 ---
 
+##### `ulid` <a name="ulid" id="@winglang/sdk.util.Util.ulid"></a>
+
+```wing
+bring util;
+
+util.ulid(options?: UlidOptions);
+```
+
+Generates universally unique lexicographically sortable identifier.
+
+# @link https://github.com/ulid/javascript
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.ulid.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.UlidOptions">UlidOptions</a>
+
+Optional options object for generating the ID.
+
+---
+
 ##### `uuidv4` <a name="uuidv4" id="@winglang/sdk.util.Util.uuidv4"></a>
 
 ```wing
@@ -266,6 +287,41 @@ size: num;
 - *Default:* 21
 
 Size of ID.
+
+---
+
+### UlidOptions <a name="UlidOptions" id="@winglang/sdk.util.UlidOptions"></a>
+
+Options to generate universally unique lexicographically sortable identifiers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.UlidOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let UlidOptions = util.UlidOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.UlidOptions.property.seed">seed</a></code> | <code>num</code> | You can also input a seed time which will consistently give you the same string for the time component. |
+
+---
+
+##### `seed`<sup>Optional</sup> <a name="seed" id="@winglang/sdk.util.UlidOptions.property.seed"></a>
+
+```wing
+seed: num;
+```
+
+- *Type:* num
+- *Default:* Date.now()
+
+You can also input a seed time which will consistently give you the same string for the time component.
+
+This is useful for migrating to ulid.
 
 ---
 

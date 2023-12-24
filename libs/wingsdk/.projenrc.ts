@@ -7,7 +7,7 @@ const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.65.0",
+  "aws@~>5.31.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
   "google@~>4.63.1",
@@ -95,6 +95,7 @@ const project = new cdk.JsiiProject({
     "yaml",
     // enhanced diagnostics
     "stacktracey",
+    "ulid",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins

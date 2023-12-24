@@ -43,6 +43,9 @@ const runTest = async (
   const startTime = Date.now();
   try {
     const t = await client.runTest(resourcePath);
+    for (const log of t.traces.filter((t) => t.type === "log")) {
+      logger.log(log.data.message);
+    }
     result = {
       ...result,
       ...t,
