@@ -29,6 +29,7 @@ export interface WebsiteOptions {
   /**
    * Name of the error document for the website.
    * @example "404.html"
+   * @default - undefined
    */
   readonly errorDocument?: string;
 }
