@@ -5159,7 +5159,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		reference: &Reference,
 		env: &mut SymbolEnv,
-		calee_with_inflight_args: bool,
+		callee_with_inflight_args: bool,
 	) -> (VariableInfo, Phase) {
 		match reference {
 			Reference::Identifier(symbol) => {
@@ -5204,7 +5204,7 @@ impl<'a> TypeChecker<'a> {
 					// Store this reference for later when we can modify the final AST and replace the original reference with the new one
 					self.types.type_expressions.insert(object.id, new_ref.clone());
 
-					return self.resolve_reference(&new_ref, env, calee_with_inflight_args);
+					return self.resolve_reference(&new_ref, env, callee_with_inflight_args);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -5244,7 +5244,7 @@ impl<'a> TypeChecker<'a> {
 				property_phase = if property_phase == Phase::Independent {
 					// When the property is phase independent and either the object phase is inflight or we're
 					// passing inflight args to the method call, then we need treat the property as inflight too
-					if instance_phase == Phase::Inflight || calee_with_inflight_args {
+					if instance_phase == Phase::Inflight || callee_with_inflight_args {
 						Phase::Inflight
 					} else {
 						// Default to instance phase
@@ -5338,7 +5338,7 @@ impl<'a> TypeChecker<'a> {
 						}
 						// If the property is phase independent then but it's a method call with inflight
 						// args then treat it as an inflight property
-						let phase = if v.phase == Phase::Independent && calee_with_inflight_args {
+						let phase = if v.phase == Phase::Independent && callee_with_inflight_args {
 							Phase::Inflight
 						} else {
 							v.phase
