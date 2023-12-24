@@ -3,7 +3,6 @@ import { join } from "path";
 
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { corsOptionsMethod } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -20,7 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
+import { corsOptionsMethod } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -326,16 +325,16 @@ class WingRestApi extends Construct {
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectOptionsMethods = (openApiSpec: OpenApiSpec) => {
+          const injectOptionsMethod = (openApiSpec: OpenApiSpec) => {
             Object.keys(openApiSpec.paths).forEach(function (key) {
               if (!("options" in openApiSpec.paths[key]) && props.cors) {
-                openApiSpec.paths[key]["options"] = corsOptionsMethod(props.cors);
+                openApiSpec.paths[key].options = corsOptionsMethod(props.cors);
               }
             });
 
             return openApiSpec;
           };
-          return JSON.stringify(injectOptionsMethods(props.getApiSpec()));
+          return JSON.stringify(injectOptionsMethod(props.getApiSpec()));
         },
       }),
       lifecycle: {
