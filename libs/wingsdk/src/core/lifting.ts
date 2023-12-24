@@ -54,14 +54,6 @@ export function liftObject(obj: any): string {
         return `[${obj.map((o) => liftObject(o)).join(",")}]`;
       }
 
-      // if (obj instanceof Duration) {
-      //   return liftObject({
-      //     seconds: obj.seconds,
-      //     minutes: obj.minutes,
-      //     hours: obj.hours,
-      //   });
-      // }
-
       if (obj instanceof Set) {
         return `new Set(${liftObject(Array.from(obj))})`;
       }
