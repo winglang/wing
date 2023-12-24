@@ -38,22 +38,23 @@ let table2 = new ex.DynamodbTable(
 ) as "blog2";
 
 test "Global secondary index" {
-    for i in 1..11 {
-        let var id = util.nanoid();
+    let idCreated = [
+        {id: "zuegksw", createdAt: 1703412771},
+        {id: "dirnfhw", createdAt: 1703413971},
+        {id: "pdkeruf", createdAt: 1703422171},
+        {id: "azjekfw", createdAt: 1703432071},
+    ];
 
-        // Make the first item entered last, and the last item first
-        if i == 1 {
-            id = "0" + id;
-        } elif i == 10 {
-            id = "z" + id;
-        }
+    for i in idCreated {
+        let id = i.get("id").asStr();
+        let createAt = i.get("createdAt").asNum();
 
         table.putItem({
             item: {
                 "type": "post",
                 "id": id,
                 "title": "Title #{i}",
-                "createdAt": i,
+                "createdAt": createAt,
             },
         });
     }
@@ -71,7 +72,11 @@ test "Global secondary index" {
 
     // log("{Json.stringify(items.items)}");
 
-    assert(items.items.at(0).get("createdAt") != 1);
+    // returns all items order by id desc
+    let ids = ["zuegksw", "pdkeruf", "dirnfhw", "azjekfw"];
+    for i in 0..ids.length {
+        assert(items.items.at(i).get("id") == ids.at(i));
+    }
 
     let itemsCreatedAtIndex = table.query({
         indexName: "CreatedAtIndex",
@@ -87,7 +92,9 @@ test "Global secondary index" {
 
     // log("{Json.stringify(itemsCreatedAtIndex.items)}");
 
-    for i in 0..10 {
-        assert(itemsCreatedAtIndex.items.at(i).get("createdAt") == 10 - i);
+    // returns all items order by createdAt desc
+    let idsOrderByCreatedAt = ["azjekfw", "pdkeruf", "dirnfhw", "zuegksw"];
+    for i in 0..idsOrderByCreatedAt.length {
+        assert(itemsCreatedAtIndex.items.at(i).get("id") == idsOrderByCreatedAt.at(i));
     }
 }
