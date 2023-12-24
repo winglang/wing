@@ -10,7 +10,7 @@ exports[`api configured for cors 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -22,7 +22,7 @@ exports[`api configured for cors 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -38,7 +38,7 @@ exports[`api configured for cors 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -188,19 +188,19 @@ exports[`api configured for cors 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -208,7 +208,7 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -241,17 +241,17 @@ exports[`api configured for cors 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ad6678f772a6670a301f0bf7f82d0655e": {
+    "Apiapideployment63AA9006f966b9f7cd9b2b432eb5c29bb54b87c6": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
+    "ApiapipermissionGETc2e3ffa85BF93889": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -276,7 +276,7 @@ exports[`api configured for cors 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/",
             ],
@@ -285,16 +285,16 @@ exports[`api configured for cors 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ad6678f772a6670a301f0bf7f82d0655e",
+          "Ref": "Apiapideployment63AA9006f966b9f7cd9b2b432eb5c29bb54b87c6",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -501,7 +501,7 @@ exports[`api url can be used as environment variable 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -513,7 +513,7 @@ exports[`api url can be used as environment variable 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -529,7 +529,7 @@ exports[`api url can be used as environment variable 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -582,19 +582,19 @@ exports[`api url can be used as environment variable 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -602,7 +602,7 @@ exports[`api url can be used as environment variable 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -635,26 +635,26 @@ exports[`api url can be used as environment variable 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A8ec6e51d8234062be06df1a5fe1a856d": {
+    "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A8ec6e51d8234062be06df1a5fe1a856d",
+          "Ref": "Apiapideployment63AA900631e48b71dd3d2a7c890c7b7740417862",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -682,7 +682,7 @@ exports[`api url can be used as environment variable 1`] = `
                 [
                   "https://",
                   {
-                    "Ref": "ApiApiApi89815FDF",
+                    "Ref": "Apiapi93AB445C",
                   },
                   ".execute-api.",
                   {
@@ -694,7 +694,7 @@ exports[`api url can be used as environment variable 1`] = `
                   },
                   "/",
                   {
-                    "Ref": "ApiApiApistageEFA10127",
+                    "Ref": "Apiapistage69F1AB31",
                   },
                   "/",
                 ],
@@ -889,7 +889,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -901,7 +901,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -917,7 +917,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1029,19 +1029,19 @@ exports[`api with 'name' & 'age' parameter 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -1049,7 +1049,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1082,17 +1082,17 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A5094d3ec4d03614fdde9acee4b463af0": {
+    "Apiapideployment63AA90062f077666b7a242470d5f0af6cb54e2fa": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET7583b4d75A392565": {
+    "ApiapipermissionGET7583b4d702B1A11B": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1117,7 +1117,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/{name}/{age}",
             ],
@@ -1126,16 +1126,16 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A5094d3ec4d03614fdde9acee4b463af0",
+          "Ref": "Apiapideployment63AA90062f077666b7a242470d5f0af6cb54e2fa",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -1342,7 +1342,7 @@ exports[`api with 'name' parameter 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -1354,7 +1354,7 @@ exports[`api with 'name' parameter 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -1370,7 +1370,7 @@ exports[`api with 'name' parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1474,19 +1474,19 @@ exports[`api with 'name' parameter 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -1494,7 +1494,7 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1527,17 +1527,17 @@ exports[`api with 'name' parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A45037ea440cef19952c1633b7be2c975": {
+    "Apiapideployment63AA9006af4d0414e5191b586ce98d28f6b78244": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET8602bc8a743DD738": {
+    "ApiapipermissionGET8602bc8a990956A4": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1562,7 +1562,7 @@ exports[`api with 'name' parameter 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/{name}",
             ],
@@ -1571,16 +1571,16 @@ exports[`api with 'name' parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A45037ea440cef19952c1633b7be2c975",
+          "Ref": "Apiapideployment63AA9006af4d0414e5191b586ce98d28f6b78244",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -1787,7 +1787,7 @@ exports[`api with CONNECT route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -1799,7 +1799,7 @@ exports[`api with CONNECT route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -1815,7 +1815,7 @@ exports[`api with CONNECT route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -1910,19 +1910,19 @@ exports[`api with CONNECT route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -1930,7 +1930,7 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1963,17 +1963,17 @@ exports[`api with CONNECT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A4216258e6cb03327eb982e671dd2f9e9": {
+    "Apiapideployment63AA90062eecb976b06b1a8aede012adc45cedd4": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionCONNECTc2e3ffa8986D072A": {
+    "ApiapipermissionCONNECTc2e3ffa848E50D94": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -1998,7 +1998,7 @@ exports[`api with CONNECT route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/CONNECT/",
             ],
@@ -2007,16 +2007,16 @@ exports[`api with CONNECT route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A4216258e6cb03327eb982e671dd2f9e9",
+          "Ref": "Apiapideployment63AA90062eecb976b06b1a8aede012adc45cedd4",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -2223,7 +2223,7 @@ exports[`api with DELETE route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -2235,7 +2235,7 @@ exports[`api with DELETE route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -2251,7 +2251,7 @@ exports[`api with DELETE route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -2346,19 +2346,19 @@ exports[`api with DELETE route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -2366,7 +2366,7 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -2399,17 +2399,17 @@ exports[`api with DELETE route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ae2eb44cd6a181c029493167252ce6e26": {
+    "Apiapideployment63AA9006f5b6f478b64f41255a52bc405b0b1f59": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionDELETEc2e3ffa80DE0710F": {
+    "ApiapipermissionDELETEc2e3ffa888232744": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2434,7 +2434,7 @@ exports[`api with DELETE route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/DELETE/",
             ],
@@ -2443,16 +2443,16 @@ exports[`api with DELETE route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ae2eb44cd6a181c029493167252ce6e26",
+          "Ref": "Apiapideployment63AA9006f5b6f478b64f41255a52bc405b0b1f59",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -2659,7 +2659,7 @@ exports[`api with GET route at root 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -2671,7 +2671,7 @@ exports[`api with GET route at root 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -2687,7 +2687,7 @@ exports[`api with GET route at root 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -2782,19 +2782,19 @@ exports[`api with GET route at root 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -2802,7 +2802,7 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -2835,17 +2835,17 @@ exports[`api with GET route at root 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A0d3d35551ad320cbd1c00e2158d1f425": {
+    "Apiapideployment63AA90065584d3a19d622308711306be2c779d45": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
+    "ApiapipermissionGETc2e3ffa85BF93889": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -2870,7 +2870,7 @@ exports[`api with GET route at root 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/",
             ],
@@ -2879,16 +2879,16 @@ exports[`api with GET route at root 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A0d3d35551ad320cbd1c00e2158d1f425",
+          "Ref": "Apiapideployment63AA90065584d3a19d622308711306be2c779d45",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -3095,7 +3095,7 @@ exports[`api with GET routes with common prefix 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -3107,7 +3107,7 @@ exports[`api with GET routes with common prefix 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -3123,7 +3123,7 @@ exports[`api with GET routes with common prefix 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -3260,19 +3260,19 @@ exports[`api with GET routes with common prefix 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -3280,7 +3280,7 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -3313,17 +3313,17 @@ exports[`api with GET routes with common prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef": {
+    "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET01d4e10b81FB26D2": {
+    "ApiapipermissionGET01d4e10b58D09124": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3348,7 +3348,7 @@ exports[`api with GET routes with common prefix 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/bat",
             ],
@@ -3357,7 +3357,7 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionGET4984af0eE2501B82": {
+    "ApiapipermissionGET4984af0e7ED7CAA2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3382,7 +3382,7 @@ exports[`api with GET routes with common prefix 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/foo",
             ],
@@ -3391,16 +3391,16 @@ exports[`api with GET routes with common prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef",
+          "Ref": "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -3607,7 +3607,7 @@ exports[`api with GET routes with different prefix 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -3619,7 +3619,7 @@ exports[`api with GET routes with different prefix 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -3635,7 +3635,7 @@ exports[`api with GET routes with different prefix 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -3772,19 +3772,19 @@ exports[`api with GET routes with different prefix 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -3792,7 +3792,7 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -3825,17 +3825,17 @@ exports[`api with GET routes with different prefix 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A0f4667fb0915ad84bb895b3833c9f4ec": {
+    "Apiapideployment63AA9006ee649980e55c582022d7f57acb84dada": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET14d002e85A20F09F": {
+    "ApiapipermissionGET14d002e84040D816": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3860,7 +3860,7 @@ exports[`api with GET routes with different prefix 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/foo/bar",
             ],
@@ -3869,7 +3869,7 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionGET4984af0eE2501B82": {
+    "ApiapipermissionGET4984af0e7ED7CAA2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3894,7 +3894,7 @@ exports[`api with GET routes with different prefix 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/foo",
             ],
@@ -3903,16 +3903,16 @@ exports[`api with GET routes with different prefix 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A0f4667fb0915ad84bb895b3833c9f4ec",
+          "Ref": "Apiapideployment63AA9006ee649980e55c582022d7f57acb84dada",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -4119,7 +4119,7 @@ exports[`api with HEAD route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -4131,7 +4131,7 @@ exports[`api with HEAD route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -4147,7 +4147,7 @@ exports[`api with HEAD route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -4242,19 +4242,19 @@ exports[`api with HEAD route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -4262,7 +4262,7 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -4295,17 +4295,17 @@ exports[`api with HEAD route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A07e43ae7da0cb6e02cbde99f8d399fe4": {
+    "Apiapideployment63AA90064c4722c2255408b195925a72a6c54a91": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionHEADc2e3ffa8410D3C20": {
+    "ApiapipermissionHEADc2e3ffa84EAE7826": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -4330,7 +4330,7 @@ exports[`api with HEAD route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/HEAD/",
             ],
@@ -4339,16 +4339,16 @@ exports[`api with HEAD route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A07e43ae7da0cb6e02cbde99f8d399fe4",
+          "Ref": "Apiapideployment63AA90064c4722c2255408b195925a72a6c54a91",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -4555,7 +4555,7 @@ exports[`api with OPTIONS route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -4567,7 +4567,7 @@ exports[`api with OPTIONS route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -4583,7 +4583,7 @@ exports[`api with OPTIONS route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -4678,19 +4678,19 @@ exports[`api with OPTIONS route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -4698,7 +4698,7 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -4731,17 +4731,17 @@ exports[`api with OPTIONS route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ae2a2c49138c84afd5a019eb0624f1eb0": {
+    "Apiapideployment63AA9006c72b16e492265df5697b564498a0bda0": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionOPTIONSc2e3ffa8501F80B0": {
+    "ApiapipermissionOPTIONSc2e3ffa8A347CDD2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -4766,7 +4766,7 @@ exports[`api with OPTIONS route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/OPTIONS/",
             ],
@@ -4775,16 +4775,16 @@ exports[`api with OPTIONS route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ae2a2c49138c84afd5a019eb0624f1eb0",
+          "Ref": "Apiapideployment63AA9006c72b16e492265df5697b564498a0bda0",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -4991,7 +4991,7 @@ exports[`api with PATCH route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -5003,7 +5003,7 @@ exports[`api with PATCH route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -5019,7 +5019,7 @@ exports[`api with PATCH route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5114,19 +5114,19 @@ exports[`api with PATCH route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -5134,7 +5134,7 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -5167,17 +5167,17 @@ exports[`api with PATCH route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A40d97035978c95ab1c072bcbf105bca6": {
+    "Apiapideployment63AA900622411480af77d5aa223a4a205574ac7a": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionPATCHc2e3ffa8B10E55C5": {
+    "ApiapipermissionPATCHc2e3ffa81B1A24AB": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -5202,7 +5202,7 @@ exports[`api with PATCH route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/PATCH/",
             ],
@@ -5211,16 +5211,16 @@ exports[`api with PATCH route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A40d97035978c95ab1c072bcbf105bca6",
+          "Ref": "Apiapideployment63AA900622411480af77d5aa223a4a205574ac7a",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -5427,7 +5427,7 @@ exports[`api with POST route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -5439,7 +5439,7 @@ exports[`api with POST route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -5455,7 +5455,7 @@ exports[`api with POST route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5550,19 +5550,19 @@ exports[`api with POST route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -5570,7 +5570,7 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -5603,17 +5603,17 @@ exports[`api with POST route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Aab384616bd2cd6c4b0cc30230fc5f899": {
+    "Apiapideployment63AA9006b51b5d701a7af604832597fab4d8cceb": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionPOSTc2e3ffa801CBC553": {
+    "ApiapipermissionPOSTc2e3ffa84BF1BB79": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -5638,7 +5638,7 @@ exports[`api with POST route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/POST/",
             ],
@@ -5647,16 +5647,16 @@ exports[`api with POST route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Aab384616bd2cd6c4b0cc30230fc5f899",
+          "Ref": "Apiapideployment63AA9006b51b5d701a7af604832597fab4d8cceb",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -5863,7 +5863,7 @@ exports[`api with PUT route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -5875,7 +5875,7 @@ exports[`api with PUT route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -5891,7 +5891,7 @@ exports[`api with PUT route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -5986,19 +5986,19 @@ exports[`api with PUT route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -6006,7 +6006,7 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -6039,17 +6039,17 @@ exports[`api with PUT route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A0ac8dd34b94a8d26a0195d32f97c836d": {
+    "Apiapideployment63AA900643b5463773184a42423009af11510ad4": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionPUTc2e3ffa86986289D": {
+    "ApiapipermissionPUTc2e3ffa832C407B6": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -6074,7 +6074,7 @@ exports[`api with PUT route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/PUT/",
             ],
@@ -6083,16 +6083,16 @@ exports[`api with PUT route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A0ac8dd34b94a8d26a0195d32f97c836d",
+          "Ref": "Apiapideployment63AA900643b5463773184a42423009af11510ad4",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -6299,7 +6299,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -6311,7 +6311,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -6327,7 +6327,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -6464,19 +6464,19 @@ exports[`api with multiple GET route and one lambda 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -6484,7 +6484,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -6517,17 +6517,17 @@ exports[`api with multiple GET route and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef": {
+    "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET01d4e10b81FB26D2": {
+    "ApiapipermissionGET01d4e10b58D09124": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -6552,7 +6552,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/bat",
             ],
@@ -6561,7 +6561,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionGET4984af0eE2501B82": {
+    "ApiapipermissionGET4984af0e7ED7CAA2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -6586,7 +6586,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/foo",
             ],
@@ -6595,16 +6595,16 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Afe4491ae736a1ce7d101c09f3c22adef",
+          "Ref": "Apiapideployment63AA9006b8d83dac42ae9c9165969e69aa7ca2c6",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -6811,7 +6811,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -6823,7 +6823,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -6839,7 +6839,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -6976,19 +6976,19 @@ exports[`api with multiple methods and multiple lambda 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -6996,7 +6996,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -7029,17 +7029,17 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9": {
+    "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET4984af0eE2501B82": {
+    "ApiapipermissionGET4984af0e7ED7CAA2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7064,7 +7064,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/foo",
             ],
@@ -7073,7 +7073,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionPOST01d4e10bB17D19F6": {
+    "ApiapipermissionPOST01d4e10b1C72C9D7": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7098,7 +7098,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/POST/hello/bat",
             ],
@@ -7107,16 +7107,16 @@ exports[`api with multiple methods and multiple lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9",
+          "Ref": "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -7323,7 +7323,7 @@ exports[`api with multiple methods and one lambda 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -7335,7 +7335,7 @@ exports[`api with multiple methods and one lambda 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -7351,7 +7351,7 @@ exports[`api with multiple methods and one lambda 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -7488,19 +7488,19 @@ exports[`api with multiple methods and one lambda 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -7508,7 +7508,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -7541,17 +7541,17 @@ exports[`api with multiple methods and one lambda 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9": {
+    "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET4984af0eE2501B82": {
+    "ApiapipermissionGET4984af0e7ED7CAA2": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7576,7 +7576,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/foo",
             ],
@@ -7585,7 +7585,7 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionPOST01d4e10bB17D19F6": {
+    "ApiapipermissionPOST01d4e10b1C72C9D7": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -7610,7 +7610,7 @@ exports[`api with multiple methods and one lambda 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/POST/hello/bat",
             ],
@@ -7619,16 +7619,16 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Ab4f51bed3823c73ee30c39d68a3607a9",
+          "Ref": "Apiapideployment63AA9006a3018bfd9f41f9f0d3210e1e3fbf2b66",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -7835,7 +7835,7 @@ exports[`api with multiple methods on same route 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -7847,7 +7847,7 @@ exports[`api with multiple methods on same route 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -7863,7 +7863,7 @@ exports[`api with multiple methods on same route 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -7998,19 +7998,19 @@ exports[`api with multiple methods on same route 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -8018,7 +8018,7 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -8051,17 +8051,17 @@ exports[`api with multiple methods on same route 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77Acbd440390c9a033d1358a227add96c37": {
+    "Apiapideployment63AA90069d73ac8bd0a03c2fa1129cdb39ac09e2": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGETc2e3ffa8B17BD863": {
+    "ApiapipermissionGETc2e3ffa85BF93889": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -8086,7 +8086,7 @@ exports[`api with multiple methods on same route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/",
             ],
@@ -8095,7 +8095,7 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApipermissionPUTc2e3ffa86986289D": {
+    "ApiapipermissionPUTc2e3ffa832C407B6": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -8120,7 +8120,7 @@ exports[`api with multiple methods on same route 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/PUT/",
             ],
@@ -8129,16 +8129,16 @@ exports[`api with multiple methods on same route 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77Acbd440390c9a033d1358a227add96c37",
+          "Ref": "Apiapideployment63AA90069d73ac8bd0a03c2fa1129cdb39ac09e2",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
@@ -8345,7 +8345,7 @@ exports[`api with path parameter 1`] = `
           [
             "https://",
             {
-              "Ref": "ApiApiApi89815FDF",
+              "Ref": "Apiapi93AB445C",
             },
             ".execute-api.",
             {
@@ -8357,7 +8357,7 @@ exports[`api with path parameter 1`] = `
             },
             "/",
             {
-              "Ref": "ApiApiApistageEFA10127",
+              "Ref": "Apiapistage69F1AB31",
             },
             "/",
           ],
@@ -8373,7 +8373,7 @@ exports[`api with path parameter 1`] = `
     },
   },
   "Resources": {
-    "ApiApiApi89815FDF": {
+    "Apiapi93AB445C": {
       "Properties": {
         "Body": {
           "openapi": "3.0.3",
@@ -8477,19 +8477,19 @@ exports[`api with path parameter 1`] = `
             },
           },
         },
-        "Name": "ApiApi",
+        "Name": "api",
       },
       "Type": "AWS::ApiGateway::RestApi",
     },
-    "ApiApiApiAccountE4617A43": {
+    "ApiapiAccount3EE8A867": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
-        "ApiApiApi89815FDF",
+        "Apiapi93AB445C",
       ],
       "Properties": {
         "CloudWatchRoleArn": {
           "Fn::GetAtt": [
-            "ApiApiApiCloudWatchRole0C4C2412",
+            "ApiapiCloudWatchRole6C699FCE",
             "Arn",
           ],
         },
@@ -8497,7 +8497,7 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::ApiGateway::Account",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApiCloudWatchRole0C4C2412": {
+    "ApiapiCloudWatchRole6C699FCE": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -8530,17 +8530,17 @@ exports[`api with path parameter 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApideploymentAD95F77A965f45d3113d9cee577d920535c9ddab": {
+    "Apiapideployment63AA9006a7a2bebf9e729cdf383b0ef6e3972bac": {
       "DeletionPolicy": "Retain",
       "Properties": {
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
       },
       "Type": "AWS::ApiGateway::Deployment",
       "UpdateReplacePolicy": "Retain",
     },
-    "ApiApiApipermissionGET0781b9f9CF0DCD4E": {
+    "ApiapipermissionGET0781b9f92555BD3C": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -8565,7 +8565,7 @@ exports[`api with path parameter 1`] = `
               },
               ":",
               {
-                "Ref": "ApiApiApi89815FDF",
+                "Ref": "Apiapi93AB445C",
               },
               "/*/GET/hello/{world}",
             ],
@@ -8574,16 +8574,16 @@ exports[`api with path parameter 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "ApiApiApistageEFA10127": {
+    "Apiapistage69F1AB31": {
       "DependsOn": [
-        "ApiApiApiAccountE4617A43",
+        "ApiapiAccount3EE8A867",
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "ApiApiApideploymentAD95F77A965f45d3113d9cee577d920535c9ddab",
+          "Ref": "Apiapideployment63AA9006a7a2bebf9e729cdf383b0ef6e3972bac",
         },
         "RestApiId": {
-          "Ref": "ApiApiApi89815FDF",
+          "Ref": "Apiapi93AB445C",
         },
         "StageName": "prod",
       },
