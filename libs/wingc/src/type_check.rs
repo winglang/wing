@@ -5222,7 +5222,7 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
-				// Try to resolve phase independent propertie's actual phase
+				// Try to resolve phase independent property's actual phase
 				property_phase = if property_phase == Phase::Independent {
 					// When the property is phase independent and either the object phase is inflight or we're
 					// passing inflight args to the method call, then we need treat the property as inflight too
