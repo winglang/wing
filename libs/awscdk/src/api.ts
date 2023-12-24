@@ -26,7 +26,7 @@ export class Api extends cloud.Api implements IAwsApi {
 
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
-    this.api = new WingRestApi(this, `${id}Api`, {
+    this.api = new WingRestApi(this, "api", {
       getApiSpec: this._getOpenApiSpec.bind(this),
       cors: this.corsOptions,
     });
