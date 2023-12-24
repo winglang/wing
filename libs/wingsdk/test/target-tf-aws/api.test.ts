@@ -366,6 +366,6 @@ test("api configured for cors", () => {
   const apiSpec = extractApiSpec(output);
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
-  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get", "options"]);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get"]);
   expect(apiSpec).toMatchSnapshot();
 });
