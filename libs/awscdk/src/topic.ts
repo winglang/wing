@@ -82,6 +82,10 @@ export class Topic extends cloud.Topic implements IAwsTopic {
       [`process.env["${this.envName()}"]`]
     );
   }
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.TopicInflightMethods.PUBLISH];
+  }
 
   /** @internal */
   public get _topic(): SNSTopic {
