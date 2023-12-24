@@ -44,7 +44,7 @@ export class ReactApp extends ex.ReactApp implements aws.IAwsReactApp {
       {
         ...this._hostProps,
         path: this._buildPath,
-        errorDocument: "index.html",
+        errorDocument: ex.REACT_APP_ERROR_DOCUMENT,
       }
     );
 

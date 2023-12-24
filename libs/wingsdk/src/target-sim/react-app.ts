@@ -8,7 +8,6 @@ import * as ex from "../ex";
 import { BaseResourceSchema } from "../simulator";
 import { IInflightHost } from "../std";
 
-const ERROR_DOCUMENT = "index.html"
 const DEFAULT_START_COMMAND = "npm run start";
 export class ReactApp extends ex.ReactApp implements ISimulatorResource {
   private _host?: cloud.IWebsite;
@@ -27,7 +26,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
       this._host = new cloud.Website(this, `${this.node.id}-host`, {
         ...this._hostProps,
         path: this._buildPath,
-        errorDocument: ERROR_DOCUMENT,
+        errorDocument: ex.REACT_APP_ERROR_DOCUMENT,
       });
 
       this.node.addDependency(this._websiteHost);
