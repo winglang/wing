@@ -300,6 +300,25 @@ fn inflight_field() {
 }
 
 #[test]
+fn reference_preflight_field_from_inflight_expr() {
+	assert_compile_fail!(
+		r#"
+    class A {
+      x: str;
+      new() {
+        this.x = "hello";
+      }
+
+      inflight method() {
+        let y = this;
+        log(y.x);
+      }
+    }
+    "#
+	);
+}
+
+#[test]
 fn reference_inflight_field() {
 	assert_compile_ok!(
 		r#"
