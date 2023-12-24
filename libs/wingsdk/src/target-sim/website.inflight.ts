@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
+import { join } from "path";
 import express from "express";
-import path from "path";
 import { ApiAttributes, WebsiteSchema, FileRoutes } from "./schema-resources";
 import { IWebsiteClient, WEBSITE_FQN } from "../cloud";
 import {
@@ -26,14 +26,14 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
 
     // Use static directory
     this.app.use(express.static(props.staticFilesPath));
-  
+
     this.initiateFileRoutes(props.fileRoutes);
 
     if (props.errorDocument) {
       let errorDocument = props.errorDocument;
 
-      this.app.get("*", function(_, res) {
-        return res.sendFile(path.join(props.staticFilesPath, errorDocument));
+      this.app.get("*", function (_, res) {
+        return res.sendFile(join(props.staticFilesPath, errorDocument));
       });
     }
   }

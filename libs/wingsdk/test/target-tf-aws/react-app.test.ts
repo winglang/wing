@@ -156,19 +156,22 @@ describe("Testing ReactApp", () => {
       projectPath: "../test-files/react-website",
     });
     const output = app.synth();
-  
+
     // THEN
     expect(tfSanitize(output)).toMatchSnapshot();
-    expect(getTfResource(output, "aws_cloudfront_distribution", 0)["custom_error_response"]).toEqual([
+    expect(
+      getTfResource(output, "aws_cloudfront_distribution", 0)
+        .custom_error_response
+    ).toEqual([
       {
-        "error_code": 404,
-        "response_code": 200,
-        "response_page_path": "/index.html",
+        error_code: 404,
+        response_code: 200,
+        response_page_path: "/index.html",
       },
       {
-        "error_code": 403,
-        "response_code": 200,
-        "response_page_path": "/index.html",
+        error_code: 403,
+        response_code: 200,
+        response_page_path: "/index.html",
       },
     ]);
   });

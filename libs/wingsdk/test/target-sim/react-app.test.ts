@@ -229,19 +229,22 @@ window.wingEnv = {};`);
       projectPath: resolve(__dirname, "../test-files/react-website"),
       useBuildCommand: true,
     });
-  
+
     // WHEN
     const s = await app.startSimulator();
     const websiteUrl = getWebsiteUrl(s, "/website");
-  
+
     const errorPage = await fetch(`${websiteUrl}/page123`);
-  
+
     // THEN
     await s.stop();
     expect(await errorPage.text()).toEqual(
-      readFileSync(resolve(__dirname, "../test-files/react-website/index.html"), {
-        encoding: "utf-8",
-      })
+      readFileSync(
+        resolve(__dirname, "../test-files/react-website/index.html"),
+        {
+          encoding: "utf-8",
+        }
+      )
     );
   });
 });

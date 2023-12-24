@@ -39,7 +39,9 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
       indexDocument: { suffix: INDEX_FILE },
-      errorDocument: props.errorDocument ? { key: props.errorDocument } : undefined,
+      errorDocument: props.errorDocument
+        ? { key: props.errorDocument }
+        : undefined,
     });
 
     this.uploadFiles(this.path);
@@ -74,16 +76,20 @@ export class Website extends cloud.Website implements aws.IAwsWebsite {
         },
       ],
       defaultRootObject: INDEX_FILE,
-      customErrorResponse: props.errorDocument ? [{
-        errorCode: 404,
-        responseCode: 200,
-        responsePagePath: `/${props.errorDocument}`,
-      },
-      {
-        errorCode: 403,
-        responseCode: 200,
-        responsePagePath: `/${props.errorDocument}`,
-      }] : undefined,
+      customErrorResponse: props.errorDocument
+        ? [
+            {
+              errorCode: 404,
+              responseCode: 200,
+              responsePagePath: `/${props.errorDocument}`,
+            },
+            {
+              errorCode: 403,
+              responseCode: 200,
+              responsePagePath: `/${props.errorDocument}`,
+            },
+          ]
+        : undefined,
       defaultCacheBehavior: {
         allowedMethods: ["GET", "HEAD"],
         cachedMethods: ["GET", "HEAD"],
