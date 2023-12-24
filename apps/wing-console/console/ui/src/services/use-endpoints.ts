@@ -7,9 +7,11 @@ import { trpc } from "./trpc.js";
 export const useEndpoints = () => {
   const [endpointList, setEndpointList] = useState<EndpointItem[]>([]);
 
+  const endpointListQuery = trpc["endpoint.list"].useQuery();
+
   useEffect(() => {
-    return setEndpointList(trpc["endpoint.list"].useQuery().data || []);
-  }, [trpc["endpoint.list"].useQuery().data]);
+    return setEndpointList(endpointListQuery.data || []);
+  }, [endpointListQuery.data]);
 
   return {
     endpointList,
