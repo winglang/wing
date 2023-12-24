@@ -234,6 +234,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -499,6 +500,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -764,6 +766,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1029,6 +1032,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1294,6 +1298,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1559,6 +1564,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1956,6 +1962,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -2238,6 +2245,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name/:age",
               },
@@ -2512,6 +2520,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name",
               },
@@ -2774,6 +2783,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
@@ -3117,6 +3127,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -3130,6 +3141,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -3475,6 +3487,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/world",
               },
@@ -3488,6 +3501,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
@@ -3753,6 +3767,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -4027,6 +4042,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/:name",
               },
@@ -4292,6 +4308,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
