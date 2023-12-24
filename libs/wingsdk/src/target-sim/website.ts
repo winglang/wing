@@ -21,7 +21,7 @@ export class Website extends cloud.Website implements ISimulatorResource {
       this,
       "Endpoint",
       simulatorAttrToken(this, "url"),
-      { label: `Endpoint for Website ${this.node.path}`, browserSupport: true }
+      { label: `Website ${this.node.path}`, browserSupport: true }
     );
   }
 

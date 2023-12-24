@@ -38,15 +38,15 @@ const defaultLayoutConfig: LayoutConfig = {
         type: "explorer",
       },
       {
+        type: "endpoints",
+      },
+      {
         type: "tests",
       },
     ],
   },
   bottomPanel: {
     components: [
-      {
-        type: "endpoints",
-      },
       {
         type: "logs",
       },

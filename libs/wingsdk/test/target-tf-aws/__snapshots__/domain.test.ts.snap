@@ -237,7 +237,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "description": "Website root/Default/Website/Website-host",
                           "hidden": true,
                           "title": "Endpoint",
                         },
@@ -581,7 +581,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "description": "Website root/Default/Website/Website-host",
                           "hidden": true,
                           "title": "Endpoint",
                         },
@@ -933,7 +933,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "Endpoint for Website root/Default/Website",
+                      "description": "Website root/Default/Website",
                       "hidden": true,
                       "title": "Endpoint",
                     },
@@ -1281,7 +1281,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "Endpoint for Website root/Default/Website",
+                      "description": "Website root/Default/Website",
                       "hidden": true,
                       "title": "Endpoint",
                     },

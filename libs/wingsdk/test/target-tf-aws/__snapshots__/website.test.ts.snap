@@ -216,7 +216,7 @@ exports[`default website behavior 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "Endpoint for Website root/Default/Website",
+                      "description": "Website root/Default/Website",
                       "hidden": true,
                       "title": "Endpoint",
                     },
@@ -536,7 +536,7 @@ exports[`website with addFile 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "Endpoint for Website root/Default/Website",
+                      "description": "Website root/Default/Website",
                       "hidden": true,
                       "title": "Endpoint",
                     },
@@ -864,7 +864,7 @@ exports[`website with addJson 2`] = `
                       "version": "10.2.70",
                     },
                     "display": {
-                      "description": "Endpoint for Website root/Default/Website",
+                      "description": "Website root/Default/Website",
                       "hidden": true,
                       "title": "Endpoint",
                     },

@@ -58,7 +58,7 @@ export class Website extends cloud.Website implements IAwsWebsite {
 
     this._url = `https://${distribution.domainName}`;
 
-    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, { label: `Endpoint for Website ${this.node.path}`, browserSupport: true })
+    this.endpoint = new cloud.Endpoint(this, "Endpoint", this._url, { label: `Website ${this.node.path}`, browserSupport: true })
   }
 
   protected get _endpoint(): cloud.Endpoint {

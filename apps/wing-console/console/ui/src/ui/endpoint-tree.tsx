@@ -45,24 +45,18 @@ export const EndpointTree = ({ endpointList }: EndpointTreeProps) => {
                     itemId={endpoint.id}
                     selectable={false}
                     label={
-                      <div className="flex items-center gap-1">
-                        <span className="truncate">{endpoint.label}</span>
-                      </div>
-                    }
-                    secondaryLabel={
-                      <div
-                        className={classNames("items-center hover:underline ")}
-                      >
+                      <div className="flex items-center gap-1 hover:underline">
                         <a href={endpoint.url} target="_blank" rel="noreferrer">
-                          {endpoint.url}
+                          {endpoint.label}
                         </a>
-                        {/* <PlayIcon className="w-4 h-4" /> */}
                       </div>
                     }
-                    title={endpoint.label}
+                    title={endpoint.url}
                     icon={
                       <>
-                        <LinkIcon className="w-4 h-4" />
+                        <LinkIcon
+                          className={classNames("w-4 h-4", theme.text1)}
+                        />
                       </>
                     }
                   />

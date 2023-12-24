@@ -22,7 +22,7 @@ export const createEndpointRouter = () => {
       return endpoints.map((endpoint) => {
         return {
           id: endpoint.path,
-          label: endpoint.attrs.label || `Endpoint for ${endpoint.path}`,
+          label: endpoint.attrs.label || `${endpoint.path}`,
           url: endpoint.attrs.url,
         };
       });
