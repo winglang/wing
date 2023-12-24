@@ -29,7 +29,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
-        __dirname.replace("target-awscdk", "shared-aws"),
+        __dirname,
         "topic.onmessage.inflight.js"
       ),
       "TopicOnMessageHandlerClient"
@@ -76,7 +76,7 @@ export class Topic extends cloud.Topic implements IAwsTopic {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "TopicClient",
       [`process.env["${this.envName()}"]`]
