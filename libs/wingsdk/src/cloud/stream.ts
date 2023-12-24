@@ -111,7 +111,7 @@ export interface IStreamClient {
    * @param messages Data to send to the queue. Each message must be non-empty.
    * @inflight
    */
-  put(...messages: IStreamData[]): Promise<void>;
+  put(...messages: Json[]): Promise<void>;
 
   /**
    * Retrive a message from the stream.
