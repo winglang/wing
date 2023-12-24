@@ -180,7 +180,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get_test_path_0_IamRole_F541FB1C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get_test_path_0_S3Object_AD9D956B.key}",
         "timeout": 60,
