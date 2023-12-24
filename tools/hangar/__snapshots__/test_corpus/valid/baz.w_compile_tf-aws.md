@@ -3,6 +3,7 @@
 ## inflight.Baz-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Baz {
     constructor({  }) {
@@ -18,6 +19,7 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   class Baz extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);

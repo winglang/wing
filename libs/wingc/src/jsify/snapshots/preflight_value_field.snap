@@ -29,6 +29,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $t_last, $t_name, $t_name_length }) {
   class $Closure1 {
     constructor({  }) {
@@ -37,9 +38,9 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
       return $obj;
     }
     async handle() {
-      {console.log($t_name)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: t.name.length > 0")})(($t_name_length > 0))};
-      {console.log($t_last)};
+      console.log($t_name);
+      $helpers.assert(($t_name_length > 0), "t.name.length > 0");
+      console.log($t_last);
     }
   }
   return $Closure1;
@@ -51,6 +52,7 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyType {
     constructor({  }) {
@@ -70,6 +72,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
