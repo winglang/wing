@@ -34,6 +34,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({ $this_c }) {
@@ -43,7 +44,7 @@ module.exports = function({  }) {
       (await this.$this_c.inc());
     }
     async dontTouchCounter() {
-      {console.log("hello")};
+      console.log("hello");
     }
     async $inflight_init() {
       this.myField2 = "hello";
@@ -63,6 +64,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

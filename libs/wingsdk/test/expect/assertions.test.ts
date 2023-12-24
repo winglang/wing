@@ -4,7 +4,6 @@
 // coverage reports. See https://github.com/istanbuljs/v8-to-istanbul/issues/198
 import { test, describe, expect } from "vitest";
 import { Util as Assert } from "../../src/expect";
-import { Range } from "../../src/std/range";
 
 describe("equal string", () => {
   test("is equal", () => {
@@ -180,14 +179,6 @@ describe("is not nil", () => {
   test("is not null number", () => {
     expect(() => {
       Assert.notNil(5);
-    }).not.toThrow();
-  });
-});
-
-describe("range", () => {
-  test("works", () => {
-    expect(() => {
-      Assert.equal(Range.of(1, 5), [1, 2, 3, 4]);
     }).not.toThrow();
   });
 });
