@@ -2,7 +2,7 @@ bring cloud;
 bring http;
 bring fs;
 
-let w = new cloud.Website(path: "./website");
+let w = new cloud.Website(path: "./website", errorDocument: "error.html");
 let config = Json { json: 1 };
 let htmlContent = "<html>Hello World!</html>";
  
@@ -24,3 +24,7 @@ test "access files on the website" {
     assert(http.get(w.url + "/another-file.html").body == htmlContent);
 
 }  
+
+test "page not found" {
+  assert(http.get(w.url + "/page123").body.contains("Not found"));
+}

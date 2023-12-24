@@ -28,3 +28,6 @@ test "website is working" {
   assert(wingEnv == expected);
 }
 
+test "redirect to index.html" {
+  assert(http.get(website.url + "/page123").body.contains("Hello Wing!"));
+}
