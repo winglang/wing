@@ -1840,7 +1840,21 @@ impl<'a> TypeChecker<'a> {
 			message: message.into(),
 			span: Some(spanned.span()),
 			annotations: vec![],
-			hints: hints,
+			hints,
+		});
+	}
+
+	fn spanned_error_with_annotations<S: Into<String>>(
+		&self,
+		spanned: &impl Spanned,
+		message: S,
+		annotations: Vec<DiagnosticAnnotation>,
+	) {
+		report_diagnostic(Diagnostic {
+			message: message.into(),
+			span: Some(spanned.span()),
+			annotations,
+			hints: vec![],
 		});
 	}
 
@@ -5213,10 +5227,21 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
-				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
+				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env);
+
+				// Make sure we're not referencing a preflight field on an inflight instance
+				let mut property_phase = property_variable.phase;
+				if property_phase == Phase::Preflight && instance_phase == Phase::Inflight {
+					self.spanned_error_with_annotations(
+						property,
+						format!("Can't access preflight member \"{property}\" on inflight instance of type \"{instance_type}\"",),
+						vec![DiagnosticAnnotation::new("Object phase is in inflight", object)],
+					);
+					return (self.make_error_variable_info(), Phase::Independent);
+				}
 
 				// Try to resolve phase independent propertie's actual phase
-				let property_phase = if property_variable.phase == Phase::Independent {
+				property_phase = if property_phase == Phase::Independent {
 					// When the property is phase independent and either the object phase is inflight or we're
 					// passing inflight args to the method call, then we need treat the property as inflight too
 					if instance_phase == Phase::Inflight || calee_with_inflight_args {
@@ -5327,17 +5352,14 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Check if the given property on the given type with the given access modifier can be accessed from the current context
-
 	fn resolve_variable_from_instance_type(
 		&mut self,
 		instance_type: TypeRef,
 		property: &Symbol,
 		env: &SymbolEnv,
-		// only used for recursion
-		_object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env),
 			Type::Class(ref class) => self.get_property_from_class_like(class, property, false, env),
 			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false, env),
 			Type::Anything => VariableInfo {
