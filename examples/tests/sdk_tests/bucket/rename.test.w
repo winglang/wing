@@ -10,7 +10,7 @@ test "rename()" {
     try {
       block();
     } catch actual {
-      assert(actual.contains(expected));
+      expect.equal(actual, expected);
       error = true;
     }
     assert(error);

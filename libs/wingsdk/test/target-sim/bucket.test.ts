@@ -844,7 +844,7 @@ test("rename invalid object within the bucket", async () => {
 
   // THEN
   await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
-    /Renaming an object to its current name is not a valid operation/
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
   );
   await s.stop();
 });
