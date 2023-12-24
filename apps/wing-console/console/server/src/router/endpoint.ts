@@ -9,7 +9,6 @@ const listEndpoints = (simulator: Simulator) => {
     .listResources()
     .map((r) => simulator.getResourceConfig(r))
     .filter((r) => {
-      console.log(11, r.type);
       return r.type === ENDPOINT_FQN;
     })
     .map((r) => r as EndpointSchema);

@@ -238,6 +238,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         },
                         "display": {
                           "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "hidden": true,
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",
@@ -581,6 +582,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         },
                         "display": {
                           "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "hidden": true,
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",
@@ -932,6 +934,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                     },
                     "display": {
                       "description": "Endpoint for Website root/Default/Website",
+                      "hidden": true,
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
@@ -1279,6 +1282,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                     },
                     "display": {
                       "description": "Endpoint for Website root/Default/Website",
+                      "hidden": true,
                       "title": "Endpoint",
                     },
                     "id": "Endpoint",
