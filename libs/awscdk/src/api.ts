@@ -207,7 +207,6 @@ export class Api extends cloud.Api implements IAwsApi {
     path: string
   ): Function {
     let handler = this.handlers[inflight._hash];
-
     if (!handler) {
       const newInflight = convertBetweenHandlers(
         inflight,
