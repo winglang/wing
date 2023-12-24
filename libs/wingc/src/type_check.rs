@@ -1910,7 +1910,6 @@ impl<'a> TypeChecker<'a> {
 
 		self.curr_expr_info.push(expr_visit_info);
 
-		//let (mut t, phase) = self.type_check_exp_helper(&exp, env);
 		let (mut t, phase) = |exp: &Expr, env: &mut SymbolEnv| -> (TypeRef, Phase) {
 			match &exp.kind {
 				ExprKind::Literal(lit) => match lit {
