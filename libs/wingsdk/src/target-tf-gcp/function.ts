@@ -40,7 +40,9 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
-  // private permissions: Set<string> = new Set();
+  private permissions: Set<string> = new Set([
+    "cloudfunctions.functions.invoke",
+  ]);
   private functionCustomRole: ProjectIamCustomRole;
 
   constructor(
@@ -126,13 +128,13 @@ export class Function extends cloud.Function {
     // Step 2: Create Custom Role
     this.functionCustomRole = new ProjectIamCustomRole(
       this,
-      `CustomIamRole${this.node.addr.substring(-8)}`,
+      `CustomRole${this.node.addr.substring(-8)}`,
       {
         roleId: `cloudfunctions.custom${this.node.addr.substring(-8)}`,
-        title: `Custom IAM Role for Cloud Function ${this.node.addr.substring(
-          -8
-        )}`,
-        permissions: ["cloudfunctions.functions.invoke"],
+        title: `Custom Role for Cloud Function ${this.node.addr.substring(-8)}`,
+        permissions: Lazy.listValue({
+          produce: () => Array.from(this.permissions),
+        }),
       }
     );
     // Step 3: Grant Custom Role to Service Account on the Project
@@ -230,7 +232,8 @@ export class Function extends cloud.Function {
   }
 
   public addPermission(scopedResource: IResource, permission: RoleType): void {
-    this.functionCustomRole.permissions.push("storage.objects.create");
+    // this.functionCustomRole.permissions.push("storage.objects.create");
+    this.permissions.add("storage.objects.create");
     scopedResource;
     permission;
     // const uniqueId = scopedResource.node.addr.substring(-8);
