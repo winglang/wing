@@ -30,7 +30,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       this,
       "Endpoint",
       simulatorAttrToken(this, "url"),
-      { label: `Endpoint for Api ${this.node.path}` }
+      { label: `Api ${this.node.path}` }
     );
   }
 
