@@ -1,38 +1,34 @@
 bring cloud;
 bring util;
 
-class JSHelper { 
-  extern "./sleep-helper.js" pub static inflight getTime(): num;
-}
-
 let invokeCounter = new cloud.Counter();
 let oneHundredMiliseconds = 0.1s;
 let oneSecond = 1s;
 let fiveSeconds = 5s;
 
 test "returns true immediately" {
-  let start = JSHelper.getTime();
+  let start = datetime.systemNow().timestampMs;
   if util.waitUntil((): bool => { return true; }) {
-    assert(JSHelper.getTime() - start < 1000);
+    assert(datetime.systemNow().timestampMs - start < 1000);
   } else {
     assert(false);
   }
 }
 
 test "returns false goes to timeout" {
-  let start = JSHelper.getTime();
+  let start = datetime.systemNow().timestampMs;
   if util.waitUntil(inflight (): bool => { return false; }, timeout: oneSecond) {
       assert(false);
     } else {
-      assert(JSHelper.getTime() - start > 1 * 1000);
+      assert(datetime.systemNow().timestampMs - start > 1 * 1000);
   }
 }
 
 test "returns after some time waiting" {
-  let start = JSHelper.getTime();
+  let start = datetime.systemNow().timestampMs;
   let returnTrueAfter3Seconds = (): bool => { 
     invokeCounter.inc();
-    return JSHelper.getTime() - start > 3 * 1000; 
+    return datetime.systemNow().timestampMs - start > 3 * 1000; 
   };
   if util.waitUntil(returnTrueAfter3Seconds, interval: oneSecond) {
     let invocations = invokeCounter.peek();
@@ -43,7 +39,7 @@ test "returns after some time waiting" {
 }
 
 test "setting props" {
-  let start = JSHelper.getTime();
+  let start = datetime.systemNow().timestampMs;
   let returnFalse = (): bool => { 
     invokeCounter.inc();
     return false;
