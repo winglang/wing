@@ -4,11 +4,11 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
-import {
-  RoleType,
-  // addBucketPermission,
-  // addFunctionPermission,
-} from "./permissions";
+// import {
+// RoleType,
+// addBucketPermission,
+// addFunctionPermission,
+// } from "./permissions";
 import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
@@ -23,7 +23,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, IResource } from "../std";
+import { IInflightHost } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -40,10 +40,8 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
-  private permissions: Set<string> = new Set([
-    "cloudfunctions.functions.invoke",
-  ]);
-  private functionCustomRole: ProjectIamCustomRole;
+  private readonly functionCustomRole: ProjectIamCustomRole;
+  private readonly permissions: Set<string> = new Set();
 
   constructor(
     scope: Construct,
@@ -231,26 +229,10 @@ export class Function extends cloud.Function {
     );
   }
 
-  public addPermission(scopedResource: IResource, permission: RoleType): void {
-    // this.functionCustomRole.permissions.push("storage.objects.create");
-    this.permissions.add("storage.objects.create");
-    scopedResource;
-    permission;
-    // const uniqueId = scopedResource.node.addr.substring(-8);
-    // this.functionCustomIamRole.permissions.push;
-    // if (this.permissions.has(`${uniqueId}_${permission}`)) {
-    //   return; // already exists
-    // }
-    // if (scopedResource instanceof Bucket) {
-    //   addBucketPermission(this, scopedResource, permission);
-    // } else if (scopedResource instanceof Function) {
-    //   addFunctionPermission(this, scopedResource, permission);
-    // } else {
-    //   throw new Error(
-    //     `Unsupported resource type ${scopedResource.constructor.name}`
-    //   );
-    // }
-    // this.permissions.add(`${uniqueId}_${permission}`);
+  public addPermissions(permissions: string[]): void {
+    permissions.forEach((permission) => {
+      this.permissions.add(permission);
+    });
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -261,7 +243,7 @@ export class Function extends cloud.Function {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPermission(this, RoleType.FUNCTION_INVOKER);
+      host.addPermissions(["cloudfunctions.functions.invoke"]);
     }
 
     const { region, projectId } = App.of(this) as App;
