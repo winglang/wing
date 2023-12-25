@@ -45,7 +45,7 @@ export const EndpointTree = ({ endpointList }: EndpointTreeProps) => {
                     itemId={endpoint.id}
                     selectable={false}
                     label={
-                      <div className="flex items-center gap-1 hover:underline">
+                      <div className="flex items-center gap-1 hover:underline text-sky-500 hover:text-sky-600">
                         <a href={endpoint.url} target="_blank" rel="noreferrer">
                           {endpoint.label}
                         </a>
