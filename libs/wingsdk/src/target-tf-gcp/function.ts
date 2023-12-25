@@ -125,7 +125,7 @@ export class Function extends cloud.Function {
       description: "This function was created by Wing",
       project: app.projectId,
       region: app.region,
-      runtime: "nodejs18",
+      runtime: "nodejs20",
       availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
