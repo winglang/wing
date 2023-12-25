@@ -25,10 +25,14 @@ import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
+interface ApiRouteWithFunctionHandle extends ApiRoute {
+  functionHandle: string;
+}
+
 export class Api
   implements IApiClient, ISimulatorResourceInstance, IEventPublisher
 {
-  private readonly routes: ApiRoute[];
+  private readonly routes: ApiRouteWithFunctionHandle[];
   private readonly context: ISimulatorContext;
   private readonly app: express.Application;
   private server: Server | undefined;
@@ -118,6 +122,13 @@ export class Api
       this.routes.push(s);
       this.populateRoute(s, subscriber);
     });
+  }
+
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.routes.findIndex((s) => s.functionHandle === subscriber);
+    if (index >= 0) {
+      this.routes.splice(index, 1);
+    }
   }
 
   private populateRoute(route: ApiRoute, functionHandle: string): void {

@@ -1,5 +1,10 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
+import {
+  listMessages,
+  treeJsonOf,
+  waitUntilTrace,
+  waitUntilTraceCount,
+} from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
@@ -41,8 +46,11 @@ test("topic publishes messages as they are received", async () => {
   // WHEN
   await topicClient.publish("Alpha");
   await topicClient.publish("Beta");
-  await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Invoke")
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Received Alpha")
+  );
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Received Beta")
   );
 
   // THEN

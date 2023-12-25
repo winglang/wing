@@ -25,11 +25,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Domain\n```\n---\nA cloud Domain.\n\n### Initializer\n- `...props` — `DomainProps`\n  \n  - `domainName` — `str` — The website's custom domain name.\n### Fields\n- `domainName` — `str` — The domain name.\n- `node` — `Node` — The tree node.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Domain
+- label: Endpoint
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Endpoint\n```\n---\nA cloud Endpoint.\n\n### Initializer\n- `url` — `str`\n- `...props` — `EndpointProps?`\n  \n  - `browserSupport?` — `bool?` — Whether the endpoint is supported through browsers.\n  - `label?` — `str?` — The endpoint's label.\n### Fields\n- `node` — `Node` — The tree node.\n- `url` — `str` — The endpoint url.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+  sortText: gg|Endpoint
 - label: Function
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str): void`\n- `...props` — `FunctionProps?`\n  \n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str): str?`\n- `...props` — `FunctionProps?`\n  \n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — `inflight (payload: str): void` — Kicks off the execution of the function with a payload and returns immediately while the function is running.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Function
 - label: OnDeploy
   kind: 7
@@ -217,6 +223,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct DomainProps\n```\n---\nOptions for `Domain`.\n### Fields\n- `domainName` — `str` — The website's custom domain name."
   sortText: hh|DomainProps
+- label: EndpointProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct EndpointProps\n```\n---\nOptions for `Endpoint`.\n### Fields\n- `browserSupport?` — `bool?` — Whether the endpoint is supported through browsers.\n- `label?` — `str?` — The endpoint's label."
+  sortText: hh|EndpointProps
 - label: FunctionProps
   kind: 22
   documentation:
@@ -361,23 +373,29 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IDomainClient\n```\n---\nInflight interface for `Domain`."
   sortText: ii|IDomainClient
+- label: IEndpointClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IEndpointClient\n```\n---\nInflight interface for `Endpoint`."
+  sortText: ii|IEndpointClient
 - label: IFunctionClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result."
+    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — `inflight (payload: str): void` — Kicks off the execution of the function with a payload and returns immediately while the function is running."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — `inflight (event: str): void` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
+    value: "```wing\ninterface IFunctionHandler extends IInflight\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — `inflight (event: str): str?` — Entrypoint function that will be called when the cloud function is invoked.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void`"
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`.\n### Methods\n- `handle` — `inflight (event: str): void` — Entrypoint function that will be called when the cloud function is invoked."
+    value: "```wing\ninterface IFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`.\n### Methods\n- `handle` — `inflight (event: str): str?` — Entrypoint function that will be called when the cloud function is invoked."
   sortText: ii|IFunctionHandlerClient
 - label: IOnDeployClient
   kind: 8

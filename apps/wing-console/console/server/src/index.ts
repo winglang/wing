@@ -69,6 +69,7 @@ export interface CreateConsoleServerOptions {
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
+  stateDir?: string;
 }
 
 export const createConsoleServer = async ({
@@ -84,6 +85,7 @@ export const createConsoleServer = async ({
   requireAcceptTerms,
   layoutConfig,
   platform,
+  stateDir,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -111,11 +113,16 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler({ wingfile, platform, testing: false });
+  const compiler = createCompiler({
+    wingfile,
+    platform,
+    testing: false,
+    stateDir,
+  });
   let isStarting = false;
   let isStopping = false;
 
-  const simulator = createSimulator();
+  const simulator = createSimulator({ stateDir });
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
@@ -284,6 +291,7 @@ export const createConsoleServer = async ({
         server.close(),
         compiler.stop(),
         simulator.stop(),
+        testSimulator.stop(),
       ]);
     } catch (error) {
       log.error(error);

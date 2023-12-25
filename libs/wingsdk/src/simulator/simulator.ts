@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, rmdir } from "fs/promises";
+import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { makeSimulatorClient } from "./client";
@@ -257,32 +257,38 @@ export class Simulator {
 
     await this.startServer();
 
-    while (true) {
-      const next = initQueue.shift();
-      if (!next) {
-        break;
-      }
-
-      // we couldn't start this resource yet, so decrement the retry counter and put it back in
-      // the init queue.
-      if (!(await this.tryStartResource(next))) {
-        // we couldn't start this resource yet, so decrement the attempt counter
-        next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
-        next._attempts--;
-
-        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
-        if (next._attempts === 0) {
-          throw new Error(
-            `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
-          );
+    try {
+      while (true) {
+        const next = initQueue.shift();
+        if (!next) {
+          break;
         }
 
-        // put back in the queue for another round
-        initQueue.push(next);
-      }
-    }
+        // we couldn't start this resource yet, so decrement the retry counter and put it back in
+        // the init queue.
+        if (!(await this.tryStartResource(next))) {
+          // we couldn't start this resource yet, so decrement the attempt counter
+          next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
+          next._attempts--;
 
-    this._running = "running";
+          // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
+          if (next._attempts === 0) {
+            throw new Error(
+              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+            );
+          }
+
+          // put back in the queue for another round
+          initQueue.push(next);
+        }
+      }
+
+      this._running = "running";
+    } catch (err) {
+      this.stopServer();
+      this._running = "stopped";
+      throw err;
+    }
   }
 
   /**
@@ -329,8 +335,7 @@ export class Simulator {
       this._addTrace(event);
     }
 
-    this._server!.close();
-    this._server!.closeAllConnections();
+    this.stopServer();
 
     this._handles.reset();
     this._running = "stopped";
@@ -344,7 +349,7 @@ export class Simulator {
     await this.stop();
 
     if (resetState) {
-      await rmdir(this.statedir, { recursive: true });
+      await rm(this.statedir, { recursive: true });
     }
 
     const { config, treeData, connectionData } = this._loadApp(this.simdir);
@@ -569,6 +574,14 @@ export class Simulator {
         resolve();
       });
     });
+  }
+
+  /**
+   * Stop the simulator server.
+   */
+  private stopServer() {
+    this._server!.close();
+    this._server!.closeAllConnections();
   }
 
   /**

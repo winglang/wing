@@ -1,4 +1,4 @@
-import { javascript, typescript } from "projen";
+import { javascript, typescript, DependencyType } from "projen";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
@@ -20,7 +20,7 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   package: false,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
-  devDeps: ["@types/node@^18", "@types/yargs"],
+  devDeps: ["@types/yargs"],
 });
 
 const bumpTask = project.tasks.tryFind("bump")!;
@@ -36,5 +36,7 @@ project.addFields({
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();

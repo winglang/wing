@@ -5,6 +5,7 @@ import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Domain } from "./domain";
 import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { EVENT_MAPPING_FQN } from "./event-mapping";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
@@ -26,6 +27,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -54,6 +56,7 @@ const SIMULATOR_CLASS_DATA = {
   [COUNTER_FQN]: "Counter",
   [DOMAIN_FQN]: "Domain",
   [DYNAMODB_TABLE_FQN]: "DynamodbTable",
+  [ENDPOINT_FQN]: "Endpoint",
   [EVENT_MAPPING_FQN]: "EventMapping",
   [FUNCTION_FQN]: "Function",
   [ON_DEPLOY_FQN]: "OnDeploy",
@@ -106,6 +109,9 @@ export class App extends core.App {
 
       case DYNAMODB_TABLE_FQN:
         return require.resolve("./dynamodb-table.inflight");
+
+      case ENDPOINT_FQN:
+        return require.resolve("./endpoint.inflight");
 
       case EVENT_MAPPING_FQN:
         return require.resolve("./event-mapping.inflight");
@@ -169,6 +175,9 @@ export class App extends core.App {
 
       case DYNAMODB_TABLE_FQN:
         return DynamodbTable;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
 
       // EVENT_MAPPING_FQN skipped - it's not a multi-target construct
 

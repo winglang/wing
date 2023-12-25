@@ -15,21 +15,24 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-5).",
+  "InvokeAsync (payload=\\"a\\").",
   "Put (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-7).",
+  "InvokeAsync (payload=\\"a\\").",
   "Put (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "Publish (message=a).",
   "Sending message (message=a, subscriber=sim-9).",
+  "InvokeAsync (payload=\\"a\\").",
   "Delete (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
@@ -95,6 +98,10 @@ exports[`can add file in preflight 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -237,6 +244,10 @@ exports[`can add object in preflight 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -364,6 +375,10 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -500,6 +515,10 @@ exports[`get invalid object throws an error 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -693,9 +712,9 @@ exports[`removing a key will call onDelete method 1`] = `
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
   "Sending message (message=unknown.txt, subscriber=sim-2).",
+  "InvokeAsync (payload=\\"unknown.txt\\").",
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
-  "Invoke (payload=\\"unknown.txt\\").",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",
@@ -711,9 +730,8 @@ exports[`update an object in bucket 1`] = `
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=greeting.txt).",
   "Sending message (message=greeting.txt, subscriber=sim-2).",
+  "InvokeAsync (payload=\\"greeting.txt\\").",
   "Put (key=greeting.txt).",
-  "Invoke (payload=\\"greeting.txt\\").",
-  "Subscriber error: TypeError: this.handler.handle is not a function",
   "Put (key=greeting.txt).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",

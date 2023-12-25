@@ -858,6 +858,12 @@ impl Spanned for UserDefinedType {
 	}
 }
 
+impl Spanned for Scope {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
 impl<T> Spanned for Box<T>
 where
 	T: Spanned,

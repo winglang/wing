@@ -115,8 +115,8 @@
     "metadata": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": false, "issue": 4332 },
+      "tf-azure": { "implemented": false, "issue": 4333 },
+      "tf-gcp": { "implemented": true },
       "awscdk": { "implemented": true }
     },
     "rename": {
@@ -285,11 +285,11 @@
       "awscdk": { "implemented": true }
     },
     "invokeAsync": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
+      "sim": { "implemented": true },
+      "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false },
       "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     }
   },
   "Counter": {

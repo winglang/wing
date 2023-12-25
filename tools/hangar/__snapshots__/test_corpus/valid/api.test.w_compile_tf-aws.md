@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,7 +14,7 @@ module.exports = function({ $counter, $std_Json }) {
     async handle(request) {
       const count = (await $counter.inc());
       const bodyResponse = ({"count": count});
-      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([bodyResponse]), "headers": ({["content-type"]: "application/json"}), "status": 200});
+      const resp = ({"body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(bodyResponse), "headers": ({["content-type"]: "application/json"}), "status": 200});
       return resp;
     }
   }
@@ -25,6 +26,7 @@ module.exports = function({ $counter, $std_Json }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url }) {
   class $Closure2 {
     constructor({  }) {
@@ -34,7 +36,7 @@ module.exports = function({ $api_url }) {
     }
     async handle() {
       const url = $api_url;
-      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
+      $helpers.assert(url.startsWith("http"), "url.startsWith(\"http\")");
     }
   }
   return $Closure2;
@@ -45,6 +47,7 @@ module.exports = function({ $api_url }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
     constructor({  }) {
@@ -65,6 +68,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -84,7 +88,26 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "A": {
+              "cloud.Api": {
+                "Endpoint": {
+                  "Url": "A_cloudApi_Endpoint_Url_77CB2098"
+                }
+              }
+            },
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -96,6 +119,14 @@ module.exports = function({  }) {
           }
         }
       }
+    }
+  },
+  "output": {
+    "A_cloudApi_Endpoint_Url_77CB2098": {
+      "value": "https://${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.stage_name}"
+    },
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {
@@ -317,7 +348,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.A_cloudApi_get_endpoint1_0_IamRole_2E669099.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.A_cloudApi_get_endpoint1_0_S3Object_2ACC7AA8.key}",
         "timeout": 60,
@@ -349,7 +380,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get_hello_world_0_IamRole_18803888.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get_hello_world_0_S3Object_A19D89E0.key}",
         "timeout": 60,
@@ -434,6 +465,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

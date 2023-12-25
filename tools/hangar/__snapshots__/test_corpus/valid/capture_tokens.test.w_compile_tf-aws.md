@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $r }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $MyResource, $api_url, $url }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,8 +32,8 @@ module.exports = function({ $MyResource, $api_url, $url }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await $MyResource.isValidUrl($url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await $MyResource.isValidUrl($api_url)))};
+      $helpers.assert((await $MyResource.isValidUrl($url)), "MyResource.isValidUrl(url)");
+      $helpers.assert((await $MyResource.isValidUrl($api_url)), "MyResource.isValidUrl(api.url)");
     }
   }
   return $Closure2;
@@ -42,6 +44,7 @@ module.exports = function({ $MyResource, $api_url, $url }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_api_url, $this_url }) {
@@ -52,8 +55,8 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
     async foo() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.$this_url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.$this_api_url)))};
+      $helpers.assert((await MyResource.isValidUrl(this.$this_url)), "MyResource.isValidUrl(this.url)");
+      $helpers.assert((await MyResource.isValidUrl(this.$this_api_url)), "MyResource.isValidUrl(this.api.url)");
     }
   }
   return MyResource;
@@ -70,7 +73,26 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "MyResource": {
+              "cloud.Api": {
+                "Endpoint": {
+                  "Url": "MyResource_cloudApi_Endpoint_Url_02924D7C"
+                }
+              }
+            },
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_region": {
@@ -82,6 +104,14 @@ module.exports = function({  }) {
           }
         }
       }
+    }
+  },
+  "output": {
+    "MyResource_cloudApi_Endpoint_Url_02924D7C": {
+      "value": "https://${aws_api_gateway_rest_api.MyResource_cloudApi_api_4CB9B8E3.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.stage_name}"
+    },
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {
@@ -186,6 +216,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

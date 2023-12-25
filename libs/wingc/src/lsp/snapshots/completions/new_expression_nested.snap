@@ -45,11 +45,22 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: Endpoint
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass Endpoint\n```\n---\nA cloud Endpoint.\n\n### Initializer\n- `url` — `str`\n- `...props` — `EndpointProps?`\n  \n  - `browserSupport?` — `bool?` — Whether the endpoint is supported through browsers.\n  - `label?` — `str?` — The endpoint's label.\n### Fields\n- `node` — `Node` — The tree node.\n- `url` — `str` — The endpoint url.\n### Methods\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+  sortText: gg|Endpoint
+  insertText: Endpoint($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: Function
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str): void`\n- `...props` — `FunctionProps?`\n  \n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function.\n\n### Initializer\n- `handler` — `inflight (event: str): str?`\n- `...props` — `FunctionProps?`\n  \n  - `env?` — `Map<str>?` — Environment variables to pass to the function.\n  - `logRetentionDays?` — `num?` — Specifies the number of days that function logs will be kept.\n  - `memory?` — `num?` — The amount of memory to allocate to the function, in MB.\n  - `timeout?` — `duration?` — The maximum amount of time the function can run.\n### Fields\n- `env` — `Map<str>` — Returns the set of environment variables for this function.\n- `node` — `Node` — The tree node.\n### Methods\n- `addEnvironment` — `preflight (name: str, value: str): void` — Add an environment variable to the function.\n- `invoke` — `inflight (payload: str): str` — Invokes the function with a payload and waits for the result.\n- `invokeAsync` — `inflight (payload: str): void` — Kicks off the execution of the function with a payload and returns immediately while the function is running.\n- `isConstruct` — `preflight (x: any): bool` — Checks if `x` is a construct.\n- `onLift` — `preflight (host: IInflightHost, ops: Array<str>): void` — A hook called by the Wing compiler once for each inflight host that needs to use this resource inflight.\n- `toString` — `preflight (): str` — Returns a string representation of this construct."
   sortText: gg|Function
   insertText: Function($1)
   insertTextFormat: 2

@@ -9,7 +9,26 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {}
+    "outputs": {
+      "root": {
+        "Default": {
+          "Default": {
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            },
+            "ex.ReactApp": {
+              "ex.ReactApp-host": {
+                "Endpoint": {
+                  "Url": "exReactApp_exReactApp-host_Endpoint_Url_CC674145"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "data": {
     "aws_iam_policy_document": {
@@ -58,6 +77,14 @@
           }
         }
       }
+    }
+  },
+  "output": {
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
+    },
+    "exReactApp_exReactApp-host_Endpoint_Url_CC674145": {
+      "value": "https://${aws_cloudfront_distribution.exReactApp_exReactApp-host_Distribution_FE9291B1.domain_name}"
     }
   },
   "provider": {
@@ -246,7 +273,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get__0_IamRole_BA7625E6.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get__0_S3Object_806093F6.key}",
         "timeout": 60,
