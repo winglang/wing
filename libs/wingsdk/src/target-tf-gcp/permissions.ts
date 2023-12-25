@@ -64,22 +64,29 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
-    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.EXISTS)
   ) {
     permissions.push("storage.objects.get");
   }
+
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
   ) {
     permissions.push("storage.objects.create");
   }
+
   if (
     ops.includes(cloud.BucketInflightMethods.DELETE) ||
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
   ) {
     permissions.push("storage.objects.delete");
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+    permissions.push("storage.objects.list");
   }
 
   return permissions;
