@@ -207,7 +207,7 @@ async function main() {
   program
     .command("pack")
     .description("Package the current directory into an npm library (gzipped tarball).")
-    .addOption(new Option("-o --out-file <filename>", "Output filename"))
+    .addOption(new Option("-o --outfile <filename>", "Output filename"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
 
