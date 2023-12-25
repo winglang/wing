@@ -77,12 +77,7 @@ export function LayoutProvider({
           hide: true,
         },
         bottomPanel: {
-          size: "small",
-          components: [
-            {
-              type: "endpoints",
-            },
-          ],
+          hide: true,
         },
         statusBar: {
           hide: true,
