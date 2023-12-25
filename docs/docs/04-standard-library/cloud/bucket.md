@@ -325,7 +325,7 @@ inflight copy(srcKey: str, dstKey: str): void
 Copy an object to a new location in the bucket.
 
 If the destination object
-already exists, it will be overwritten. Returns once the copying is finished.
+already exists, it will be overwritten.
 
 ###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
 
