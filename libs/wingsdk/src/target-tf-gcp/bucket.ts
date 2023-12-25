@@ -185,8 +185,19 @@ export class Bucket extends cloud.Bucket {
     ) {
       host.addPermission(this, RoleType.STORAGE_READ_WRITE);
     }
-    host.addEnvironment(this.envName(), this.bucket.name);
 
+    // const permissions = calculateBucketPermissionsGCP(ops);
+    // permissions.forEach((permission) => {
+    //   // Method to apply each permission to the bucket
+    //   // This could involve creating custom IAM roles or directly applying permissions
+    //   applyPermissionToBucket(
+    //     this.bucket,
+    //     permission,
+    //     host.serviceAccountEmail
+    //   );
+    // });
+
+    host.addEnvironment(this.envName(), this.bucket.name);
     super.onLift(host, ops);
   }
 

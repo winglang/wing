@@ -3,6 +3,7 @@ import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
+import * as cloud from "../cloud";
 
 export enum RoleType {
   STORAGE_READ = "roles/storage.objectViewer",
@@ -54,4 +55,32 @@ export function addBucketPermission(
       member: `serviceAccount:${host.serviceAccountEmail}`,
     }
   );
+}
+
+export function calculateBucketPermissions(ops: string[]): string[] {
+  const permissions = [];
+
+  if (
+    ops.includes(cloud.BucketInflightMethods.GET) ||
+    ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
+  ) {
+    permissions.push("storage.objects.get");
+  }
+  if (
+    ops.includes(cloud.BucketInflightMethods.PUT) ||
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+  ) {
+    permissions.push("storage.objects.create");
+  }
+  if (
+    ops.includes(cloud.BucketInflightMethods.DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.PUT) ||
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+  ) {
+    permissions.push("storage.objects.delete");
+  }
+
+  return permissions;
 }

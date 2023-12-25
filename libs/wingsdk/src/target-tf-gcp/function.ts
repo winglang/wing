@@ -6,11 +6,13 @@ import { App } from "./app";
 import { Bucket } from "./bucket";
 import {
   RoleType,
-  addBucketPermission,
-  addFunctionPermission,
+  // addBucketPermission,
+  // addFunctionPermission,
 } from "./permissions";
 import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
+import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
@@ -38,7 +40,8 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
-  private permissions: Set<string> = new Set();
+  // private permissions: Set<string> = new Set();
+  private functionCustomRole: ProjectIamCustomRole;
 
   constructor(
     scope: Construct,
@@ -108,10 +111,11 @@ export class Function extends cloud.Function {
         source: asset.path,
       }
     );
+
     // Step 1: Create Custom Service Account
     this.functionServiceAccount = new ServiceAccount(
       this,
-      `serviceAccount${this.node.addr.substring(-8)}`,
+      `ServiceAccount${this.node.addr.substring(-8)}`,
       {
         accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
         displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
@@ -119,7 +123,25 @@ export class Function extends cloud.Function {
         )}`,
       }
     );
-    // create the cloud function
+    // Step 2: Create Custom Role
+    this.functionCustomRole = new ProjectIamCustomRole(
+      this,
+      `CustomIamRole${this.node.addr.substring(-8)}`,
+      {
+        roleId: `cloudfunctions.custom${this.node.addr.substring(-8)}`,
+        title: `Custom IAM Role for Cloud Function ${this.node.addr.substring(
+          -8
+        )}`,
+        permissions: ["cloudfunctions.functions.invoke"],
+      }
+    );
+    // Step 3: Grant Custom Role to Service Account on the Project
+    new ProjectIamMember(this, "ProjectIamMember", {
+      project: app.projectId,
+      role: `projects/${app.projectId}/roles/${this.functionCustomRole.roleId}`,
+      member: `serviceAccount:${this.functionServiceAccount.email}`,
+    });
+    // Step 4: Create the Cloud Function with Custom Service Account
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
@@ -208,22 +230,24 @@ export class Function extends cloud.Function {
   }
 
   public addPermission(scopedResource: IResource, permission: RoleType): void {
-    const uniqueId = scopedResource.node.addr.substring(-8);
-
-    if (this.permissions.has(`${uniqueId}_${permission}`)) {
-      return; // already exists
-    }
-    if (scopedResource instanceof Bucket) {
-      addBucketPermission(this, scopedResource, permission);
-    } else if (scopedResource instanceof Function) {
-      addFunctionPermission(this, scopedResource, permission);
-    } else {
-      throw new Error(
-        `Unsupported resource type ${scopedResource.constructor.name}`
-      );
-    }
-
-    this.permissions.add(`${uniqueId}_${permission}`);
+    this.functionCustomRole.permissions.push("storage.objects.create");
+    scopedResource;
+    permission;
+    // const uniqueId = scopedResource.node.addr.substring(-8);
+    // this.functionCustomIamRole.permissions.push;
+    // if (this.permissions.has(`${uniqueId}_${permission}`)) {
+    //   return; // already exists
+    // }
+    // if (scopedResource instanceof Bucket) {
+    //   addBucketPermission(this, scopedResource, permission);
+    // } else if (scopedResource instanceof Function) {
+    //   addFunctionPermission(this, scopedResource, permission);
+    // } else {
+    //   throw new Error(
+    //     `Unsupported resource type ${scopedResource.constructor.name}`
+    //   );
+    // }
+    // this.permissions.add(`${uniqueId}_${permission}`);
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
