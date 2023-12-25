@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
+import { formatTraceError } from "../utils/format-wing-error.js";
 import { ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 const getTestName = (testPath: string) => {
@@ -63,7 +64,8 @@ const runTest = async (
       },
     );
   } catch (error: any) {
-    logger.log(error?.message, "console", {
+    let output = await formatTraceError(error?.message);
+    logger.log(output, "console", {
       messageType: "fail",
     });
     logger.log(
