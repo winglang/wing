@@ -44,7 +44,7 @@ export class Api extends cloud.Api implements IAwsApi {
       cors: this.corsOptions,
     });
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
-      label: `Endpoint for Api ${this.node.path}`,
+      label: `Api ${this.node.path}`,
     });
   }
 
