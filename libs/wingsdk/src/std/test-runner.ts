@@ -88,7 +88,9 @@ export class TestRunner extends Resource {
     inflight: IFunctionHandler,
     props: FunctionProps
   ): Function | undefined {
+    // searching exactly for `env${number}`
     const testEnv = scope.node.path.match(/env[0-9]+/)?.at(0)!;
+    // searching for the rest of the path that appears after `env${number}`- this would be the test path
     const testPath =
       scope.node.path
         .match(/env[\d]+\/.+/)
