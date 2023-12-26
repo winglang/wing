@@ -1,4 +1,4 @@
-import { Storage, Bucket } from "@google-cloud/storage";
+import { Storage, Bucket, StorageError } from "@google-cloud/storage";
 import mime from "mime-types";
 import {
   BucketDeleteOptions,
@@ -142,16 +142,19 @@ export class BucketClient implements IBucketClient {
     key: string,
     opts: BucketDeleteOptions = {}
   ): Promise<void> {
-    const mustExist = opts.mustExist === undefined ? true : opts.mustExist;
+    const mustExist = opts?.mustExist ?? false;
+
+    if (mustExist && !(await this.exists(key))) {
+      throw new Error(`Object does not exist (key=${key}).`);
+    }
+
     try {
-      if (mustExist && !(await this.exists(key))) {
-        throw new Error(
-          `Cannot delete object that does not exist. (key=${key})`
-        );
-      }
       await this.bucket.file(key).delete();
-    } catch (error) {
-      throw new Error(`Failed to delete object. (key=${key})`);
+    } catch (error: any) {
+      if (!mustExist && error.code === 404) {
+        return;
+      }
+      throw new Error(`Object could not be deleted (key=${key}).`);
     }
   }
 
