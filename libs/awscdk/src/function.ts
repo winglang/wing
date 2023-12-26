@@ -43,7 +43,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
       runtime: Runtime.NODEJS_20_X,
-      environment: this.env,
+      environment: {
+        NODE_OPTIONS: "--enable-source-maps",
+        ...this.env
+      },
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(1),
