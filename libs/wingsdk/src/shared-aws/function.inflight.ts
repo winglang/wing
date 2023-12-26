@@ -13,7 +13,7 @@ export class FunctionClient implements IFunctionClient {
     private readonly functionArn: string,
     private readonly constructPath: string,
     private readonly lambdaClient = new LambdaClient({})
-  ) { }
+  ) {}
 
   /**
    * Invokes the function with a payload and waits for the result.
@@ -98,11 +98,12 @@ function parseCommandOutput(
     let errorData;
     try {
       errorData = JSON.parse(errorText);
-    } catch (_) { }
+    } catch (_) {}
 
     if (errorData && "errorMessage" in errorData) {
       const newError = new Error(
-        `Invoke failed with message: "${errorData.errorMessage
+        `Invoke failed with message: "${
+          errorData.errorMessage
         }"\nLogs: ${cloudwatchLogsPath(functionArn)}`
       );
       newError.name = errorData.errorType;
@@ -110,7 +111,8 @@ function parseCommandOutput(
       throw newError;
     }
     throw new Error(
-      `Invoke failed with message: "${payload.FunctionError
+      `Invoke failed with message: "${
+        payload.FunctionError
       }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
   } else {
@@ -138,7 +140,7 @@ function parseLogs(logs: string, sourcePath: string) {
     if (
       parts.length >= 3 &&
       parts[0].match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/) !==
-      null &&
+        null &&
       parts[1].match(/^[0-9a-fA-F-]{36}$/) !== null
     ) {
       const timestamp = parts[0];
