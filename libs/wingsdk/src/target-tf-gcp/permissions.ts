@@ -8,7 +8,7 @@ export enum RoleType {
 }
 
 export function calculateBucketPermissions(ops: string[]): string[] {
-  const permissions = [];
+  const permissions: string[] = [];
 
   if (
     ops.includes(cloud.BucketInflightMethods.GET) ||
