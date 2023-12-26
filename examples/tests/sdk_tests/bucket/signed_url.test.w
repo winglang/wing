@@ -5,15 +5,19 @@ bring expect;
 
 let bucket = new cloud.Bucket();
 
-// test "signedUrl DOWNLOAD" {
-//   let var error = "";
-//   testBucket.put("file1.txt", "Foo");
-  
-//   if (util.env("WING_TARGET") != "sim") { 
-//     let signedUrl = testBucket.signedUrl("file1.txt", { action: "GET" });
-//     assert(http.get(signedUrl).body ==  "Foo");
-//   }
-// }
+test "signedUrl GET" {
+  let KEY = "tempfile.txt";
+  let VALUE = "Hello, Wing!";
+
+  bucket.put(KEY, VALUE);
+
+  let getSignedUrl = bucket.signedUrl(KEY);
+
+  // // Download file from private bucket using GET presigned URL
+  let output = util.shell("curl \"{getSignedUrl}\"");
+
+  expect.equal(output, VALUE);
+}
 
 test "signedUrl PUT" {
   let KEY = "tempfile.txt";
@@ -28,7 +32,6 @@ test "signedUrl PUT" {
   // Upload file to private bucket using PUT presigned URL
   util.shell("curl -X PUT -T \"{tempFile}\" \"{putSignedUrl}\"");
 
-  expect.equal(bucket.exists(KEY), true);
   expect.equal(bucket.get(KEY), VALUE);
 }
 

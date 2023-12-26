@@ -335,12 +335,12 @@ export class BucketClient implements IBucketClient {
    */
   public async signedUrl(
     key: string,
-    opts: BucketSignedUrlOptions
+    opts?: BucketSignedUrlOptions
   ): Promise<string> {
     let command;
 
     // Set default action to GET if not provided
-    const action = opts.action ?? BucketSignedUrlAction.GET;
+    const action = opts?.action ?? BucketSignedUrlAction.GET;
 
     // Create the AWS S3 command based on the action method
     switch (action) {
@@ -357,13 +357,13 @@ export class BucketClient implements IBucketClient {
         });
         break;
       default:
-        throw new Error(`Invalid action: ${opts.action}`);
+        throw new Error(`Invalid action: ${opts?.action}`);
     }
 
     // Generate the presigned URL
     const signedUrl = await getSignedUrl(this.s3Client, command, {
       // Defaults to 900s if not set
-      expiresIn: opts.duration?.seconds,
+      expiresIn: opts?.duration?.seconds,
     });
 
     return signedUrl;
