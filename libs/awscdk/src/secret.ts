@@ -64,7 +64,7 @@ export class Secret extends cloud.Secret {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "SecretClient",
       [`process.env["${this.envName()}"]`]
