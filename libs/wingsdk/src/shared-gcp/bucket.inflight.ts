@@ -159,15 +159,12 @@ export class BucketClient implements IBucketClient {
   }
 
   public async tryDelete(key: string): Promise<boolean> {
-    try {
-      if (await this.exists(key)) {
-        await this.delete(key);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      throw new Error(`Failed to tryDelete object. (key=${key})`);
+    if (await this.exists(key)) {
+      await this.delete(key);
+      return true;
     }
+
+    return false;
   }
 
   public async list(prefix?: string): Promise<string[]> {
