@@ -1,0 +1,1 @@
+export { QueueClient } from "@winglang/sdk/lib/shared-aws/queue.inflight";
