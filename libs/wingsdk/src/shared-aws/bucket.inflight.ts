@@ -355,7 +355,6 @@ export class BucketClient implements IBucketClient {
         command = new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,
-          ContentType: "application/octet-stream",
         });
         break;
       default:
