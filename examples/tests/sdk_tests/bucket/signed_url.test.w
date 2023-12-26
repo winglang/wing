@@ -13,7 +13,7 @@ test "signedUrl GET" {
 
   let getSignedUrl = bucket.signedUrl(KEY);
 
-  // // Download file from private bucket using GET presigned URL
+  // Download file from private bucket using GET presigned URL
   let output = util.shell("curl \"{getSignedUrl}\"");
 
   expect.equal(output, VALUE);
@@ -35,16 +35,19 @@ test "signedUrl PUT" {
   expect.equal(bucket.get(KEY), VALUE);
 }
 
-// test "signedUrl for non existent key" {
-//   let var error = "";
-  
-//   if (util.env("WING_TARGET") != "sim") { 
-//     try{
-//       let signedUrl = testBucket.signedUrl("file.txt");
-//     } catch e {
-//       error = e;
-//     }
+test "signedUrl duration option is respected" {
+  let ACCESS_DENIED_ERROR = "<Error><Code>AccessDenied</Code><Message>Request has expired</Message>";
+  let KEY = "tempfile.txt";
+  let VALUE = "Hello, Wing!";
 
-//     assert(error == "Cannot provide signed url for a non-existent key (key=file.txt)");
-//   }
-// }
+  bucket.put(KEY, VALUE);
+
+  let getSignedUrl = bucket.signedUrl(KEY, { duration: 1s });
+
+  util.sleep(2s);
+
+  // Download file from private bucket using expired GET presigned URL
+  let output = util.shell("curl \"{getSignedUrl}\"", { throw: false });
+
+  assert(output.contains(ACCESS_DENIED_ERROR));
+}
