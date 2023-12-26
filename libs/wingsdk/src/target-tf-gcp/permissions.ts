@@ -79,6 +79,7 @@ export function calculateBucketPermissions(ops: string[]): string[] {
 
   if (
     ops.includes(cloud.BucketInflightMethods.DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
   ) {
