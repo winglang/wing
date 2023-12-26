@@ -184,7 +184,8 @@ export function calculateBucketPermissions(
   // putting an object
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
-    ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
   ) {
     actions.push("s3:PutObject*", "s3:Abort*");
   }

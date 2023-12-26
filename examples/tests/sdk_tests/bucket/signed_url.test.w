@@ -1,8 +1,9 @@
 bring cloud;
-bring http;
+bring fs;
 bring util;
+bring expect;
 
-let testBucket = new cloud.Bucket(public: true) as "testBucket";
+let bucket = new cloud.Bucket();
 
 // test "signedUrl DOWNLOAD" {
 //   let var error = "";
@@ -14,13 +15,21 @@ let testBucket = new cloud.Bucket(public: true) as "testBucket";
 //   }
 // }
 
-test "signedUrl UPLOAD" {
-  if (util.env("WING_TARGET") != "sim") { 
-    let signedUrl = testBucket.signedUrl("foo.txt", { action: "PUT" });
-    // assert(http.get(signedUrl).body ==  "Foo");
-    log(signedUrl);
-    util.sleep(10s);
-  }
+test "signedUrl PUT" {
+  let KEY = "tempfile.txt";
+  let VALUE = "Hello, Wing!";
+
+  let tempDir = fs.mkdtemp();
+  let tempFile = fs.join(tempDir, KEY);
+  fs.writeFile(tempFile, VALUE);
+
+  let putSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.PUT });
+
+  // Upload file to private bucket using PUT presigned URL
+  util.shell("curl -X PUT -T \"{tempFile}\" \"{putSignedUrl}\"");
+
+  expect.equal(bucket.exists(KEY), true);
+  expect.equal(bucket.get(KEY), VALUE);
 }
 
 // test "signedUrl for non existent key" {
