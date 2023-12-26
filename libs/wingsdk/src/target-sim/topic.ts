@@ -74,6 +74,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     const schema: TopicSchema = {
       type: cloud.TOPIC_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {},
       attrs: {} as any,
     };

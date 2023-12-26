@@ -24,7 +24,7 @@ export type RouterEvents = {
   invalidateQuery: QueryNames;
 };
 
-export type LayoutComponentType = "explorer" | "tests" | "logs";
+export type LayoutComponentType = "explorer" | "tests" | "logs" | "endpoints";
 
 export interface LayoutComponent {
   type: LayoutComponentType;
@@ -76,6 +76,7 @@ export interface FileLink {
 
 export interface RouterContext {
   simulator(): Promise<simulator.Simulator>;
+  testSimulator(): Promise<simulator.Simulator>;
   appDetails(): Promise<{
     wingVersion: string | undefined;
   }>;

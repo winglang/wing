@@ -2,11 +2,6 @@
 
 exports[`default queue behavior 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -59,11 +54,6 @@ exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/awscd
 
 exports[`queue with a consumer function 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -183,7 +173,7 @@ exports[`queue with a consumer function 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 30,
       },
       "Type": "AWS::Lambda::Function",
@@ -322,11 +312,6 @@ exports[`queue with a consumer function 2`] = `
 
 exports[`queue with custom retention 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -377,11 +362,6 @@ exports[`queue with custom retention 1`] = `
 
 exports[`queue with custom timeout 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",

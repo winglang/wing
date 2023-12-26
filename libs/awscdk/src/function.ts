@@ -36,13 +36,13 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-          ? undefined // Negative value means Infinite retention
-          : props.logRetentionDays;
+        ? undefined // Negative value means Infinite retention
+        : props.logRetentionDays;
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_20_X,
       environment: this.env,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
@@ -55,7 +55,10 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+    return [
+      cloud.FunctionInflightMethods.INVOKE,
+      cloud.FunctionInflightMethods.INVOKE_ASYNC,
+    ];
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {

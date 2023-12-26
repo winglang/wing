@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -160,7 +147,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.WidgetService_uiButton_Handler_IamRole_6B3512D4.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.WidgetService_uiButton_Handler_S3Object_EB849EC3.key}",
         "timeout": 60,
@@ -193,7 +180,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.WidgetService_uiField_Handler_IamRole_F0F1B44A.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.WidgetService_uiField_Handler_S3Object_86A8EAFA.key}",
         "timeout": 60,

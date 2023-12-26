@@ -53,8 +53,8 @@ let tryParseName = (fullName: str): Name? => {
     return nil;
   }
   return Name {
-    first: parts.at(0),
-    last: parts.at(1),
+    first: parts.tryAt(0)??"",
+    last: parts.tryAt(1)??"",
   };
 };
 
@@ -98,7 +98,7 @@ if let parsedName = tryParseName("Good Name") {
 
 if let parsedName = tryParseName("BadName") {
   assert(parsedName.first == "BadName");
-  if let lastName = parsedName.last {
+  if parsedName.last != "" {
     assert(false); // No last name should exist
   }
 }

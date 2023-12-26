@@ -2,11 +2,6 @@
 
 exports[`bucket is public 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "my_bucket": {
@@ -51,29 +46,6 @@ exports[`bucket is public 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -151,11 +123,6 @@ exports[`bucket is public 2`] = `
 
 exports[`bucket prefix must be lowercase 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "The-UncannyBucket": {
@@ -205,29 +172,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -266,11 +210,6 @@ exports[`bucket prefix must be lowercase 2`] = `
 
 exports[`bucket prefix valid 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "the-uncannybucket": {
@@ -297,29 +236,6 @@ exports[`bucket prefix valid 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "the-uncanny.bucket": {
                 "children": {
@@ -381,11 +297,6 @@ exports[`bucket prefix valid 2`] = `
 
 exports[`bucket with onCreate method 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "my_bucket_oncreate-OnMessage0_CloudwatchLogGroup_E35B13F5": {
@@ -426,7 +337,7 @@ exports[`bucket with onCreate method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_oncreate-OnMessage0_S3Object_AF838DF5.key}",
         "timeout": 60,
@@ -540,29 +451,6 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -764,11 +652,6 @@ exports[`bucket with onCreate method 2`] = `
 
 exports[`bucket with onDelete method 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "my_bucket_ondelete-OnMessage0_CloudwatchLogGroup_420A05F2": {
@@ -809,7 +692,7 @@ exports[`bucket with onDelete method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_ondelete-OnMessage0_S3Object_BB790A1F.key}",
         "timeout": 60,
@@ -923,29 +806,6 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -1147,11 +1007,6 @@ exports[`bucket with onDelete method 2`] = `
 
 exports[`bucket with onEvent method 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "my_bucket_oncreate-OnMessage0_CloudwatchLogGroup_E35B13F5": {
@@ -1222,7 +1077,7 @@ exports[`bucket with onEvent method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_oncreate-OnMessage0_IamRole_9CAD40D5.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_oncreate-OnMessage0_S3Object_AF838DF5.key}",
         "timeout": 60,
@@ -1246,7 +1101,7 @@ exports[`bucket with onEvent method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_ondelete-OnMessage0_IamRole_04EA7EBC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_ondelete-OnMessage0_S3Object_BB790A1F.key}",
         "timeout": 60,
@@ -1270,7 +1125,7 @@ exports[`bucket with onEvent method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_onupdate-OnMessage0_S3Object_CD6EE6AF.key}",
         "timeout": 60,
@@ -1446,29 +1301,6 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -1902,11 +1734,6 @@ exports[`bucket with onEvent method 2`] = `
 
 exports[`bucket with onUpdate method 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "my_bucket_onupdate-OnMessage0_CloudwatchLogGroup_25463B70": {
@@ -1947,7 +1774,7 @@ exports[`bucket with onUpdate method 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.my_bucket_onupdate-OnMessage0_IamRole_9C1FBCBE.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.my_bucket_onupdate-OnMessage0_S3Object_CD6EE6AF.key}",
         "timeout": 60,
@@ -2061,29 +1888,6 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -2285,11 +2089,6 @@ exports[`bucket with onUpdate method 2`] = `
 
 exports[`bucket with two preflight files 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "my_bucket": {
@@ -2346,29 +2145,6 @@ exports[`bucket with two preflight files 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -2462,11 +2238,6 @@ exports[`bucket with two preflight files 2`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "my_bucket": {
@@ -2523,29 +2294,6 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {
@@ -2639,11 +2387,6 @@ exports[`bucket with two preflight objects 2`] = `
 
 exports[`create a bucket 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_s3_bucket": {
       "my_bucket": {
@@ -2670,29 +2413,6 @@ exports[`create a bucket 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "children": {

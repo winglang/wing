@@ -1,4 +1,5 @@
 mod class_fields_init;
+mod has_return_stmt;
 mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
@@ -10,21 +11,23 @@ use crate::ast::{
 	TypeAnnotationKind,
 };
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
-	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
-	TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
+	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Spanned, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
+use crate::type_check::has_return_stmt::HasReturnStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME,
-	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON,
-	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE,
+	WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
 use derivative::Derivative;
@@ -94,7 +97,7 @@ pub enum SymbolKind {
 	Namespace(NamespaceRef),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum VariableKind {
 	/// a free variable not associated with a specific type
 	Free,
@@ -2672,12 +2675,23 @@ impl<'a> TypeChecker<'a> {
 		// Verify variadic args
 		if let Some(variadic_index) = variadic_index {
 			let variadic_args_param = func_sig.parameters.get(variadic_index).unwrap();
-			let variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
+			let mut variadic_args_inner_type = variadic_args_param.typeref.collection_item_type().unwrap();
 
 			for (arg_expr, arg_type) in izip!(
 				arg_list.pos_args.iter().skip(variadic_index),
 				arg_list_types.pos_args.iter().skip(variadic_index),
 			) {
+				// If your calling a method on some container type, and it takes a generic variadic argument,
+				// then substitute that argument type (T1) with the container's element type when typechecking the function arguments
+				if let Some(element_type) = func_sig.this_type.and_then(|x| x.collection_item_type()) {
+					if let Some(object) = variadic_args_inner_type.as_class() {
+						if let Some(fqn) = &object.fqn {
+							if fqn.contains(WINGSDK_GENERIC) {
+								variadic_args_inner_type = element_type;
+							}
+						}
+					}
+				}
 				self.validate_type(*arg_type, variadic_args_inner_type, arg_expr);
 			}
 		}
@@ -3119,7 +3133,7 @@ impl<'a> TypeChecker<'a> {
 			self.type_check_scope(scope);
 		}
 
-		if let SymbolEnvKind::Function { sig, .. } = env.kind {
+		if let SymbolEnvKind::Function { sig, is_init, .. } = env.kind {
 			let mut return_type = sig.as_function_sig().expect("a function type").return_type;
 			if let Type::Inferred(n) = &*return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
@@ -3127,6 +3141,20 @@ impl<'a> TypeChecker<'a> {
 					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
 				}
 				self.update_known_inferences(&mut return_type, &scope.span);
+			}
+
+			let mut has_return_stmt_visitor = HasReturnStatementVisitor::default();
+			has_return_stmt_visitor.visit(&scope.statements);
+
+			// If the scope doesn't contain any return statements and the return type isn't void or T?, throw an error
+			if !has_return_stmt_visitor.seen_return && !return_type.is_void() && !return_type.is_option() && !is_init {
+				self.spanned_error(
+					scope,
+					format!(
+						"A function whose return type is \"{}\" must return a value.",
+						return_type
+					),
+				);
 			}
 		}
 
@@ -3460,6 +3488,13 @@ impl<'a> TypeChecker<'a> {
 		access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
+		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+		if let Some(_) = env.parent {
+			self.spanned_error(
+				name,
+				format!("struct \"{name}\" must be declared at the top-level of a file"),
+			);
+		}
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 		//   fail type checking.
@@ -4101,13 +4136,20 @@ impl<'a> TypeChecker<'a> {
 		);
 
 		for elif_scope in &iflet.elif_statements {
-			self.type_check_if_let_statement(
-				&elif_scope.value,
-				&elif_scope.statements,
-				&elif_scope.reassignable,
-				&elif_scope.var_name,
-				env,
-			);
+			match elif_scope {
+				Elifs::ElifBlock(elif_block) => {
+					self.type_check_if_statement(&elif_block.condition, &elif_block.statements, env);
+				}
+				Elifs::ElifLetBlock(elif_let_block) => {
+					self.type_check_if_let_statement(
+						&elif_let_block.value,
+						&elif_let_block.statements,
+						&elif_let_block.reassignable,
+						&elif_let_block.var_name,
+						env,
+					);
+				}
+			}
 		}
 
 		if let Some(else_scope) = &iflet.else_statements {
@@ -5346,18 +5388,32 @@ impl<'a> TypeChecker<'a> {
 			match var.access {
 				AccessModifier::Private => {
 					if !private_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access private member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access private member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" or \"protected\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Protected => {
 					if !protected_access {
-						self.spanned_error(
-							property,
-							format!("Cannot access protected member \"{property}\" of \"{class}\""),
-						);
+						report_diagnostic(Diagnostic {
+							message: format!("Cannot access protected member \"{property}\" of \"{class}\""),
+							span: Some(property.span()),
+							annotations: vec![DiagnosticAnnotation {
+								message: "defined here".to_string(),
+								span: lookup_info.span,
+							}],
+							hints: vec![format!(
+								"the definition of \"{property}\" needs a broader access modifier like \"pub\" to be used outside of \"{class}\"",
+							)],
+						});
 					}
 				}
 				AccessModifier::Public => {} // keep this here to make sure we don't add a new access modifier without handling it here
@@ -5557,20 +5613,19 @@ fn add_parent_members_to_iface_env(
 		};
 		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
 		for (parent_member_name, parent_member, _) in parent_iface.env.iter(true) {
-			let member_type = parent_member
+			let member_var = parent_member
 				.as_variable()
-				.expect("Expected interface member to be a variable")
-				.type_;
+				.expect("Expected interface member to be a variable");
 			if let Some(existing_type) = iface_env.lookup(&parent_member_name.as_str().into(), None) {
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected interface member to be a variable")
 					.type_;
-				if !existing_type.is_same_type_as(&member_type) {
+				if !existing_type.is_same_type_as(&member_var.type_) {
 					return Err(TypeError {
 						message: format!(
 							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, member_type, member_type
+							name, parent_type, parent_member_name, member_var.type_, existing_type
 						),
 						span: name.span.clone(),
 						annotations: vec![],
@@ -5585,10 +5640,10 @@ fn add_parent_members_to_iface_env(
 					&sym,
 					SymbolKind::make_member_variable(
 						sym.clone(),
-						member_type,
-						false,
-						false,
-						iface_env.phase,
+						member_var.type_,
+						member_var.reassignable,
+						member_var.kind == VariableKind::StaticMember,
+						member_var.phase,
 						AccessModifier::Public,
 						None,
 					),

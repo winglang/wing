@@ -462,6 +462,53 @@ if let x = y {} elif let x = z {} else {}
     else_block: (block)))
 
 ================================================================================
+(If Let) (Elif) (Elif Let) (Else)
+================================================================================
+
+if let x = y {} elif let x = z {} else {}
+
+--------------------------------------------------------------------------------
+
+(source
+  (if_let_statement
+    name: (identifier)
+    value: (reference 
+      (reference_identifier))
+    block: (block)
+    elif_let_block: (elif_let_block
+      name: (identifier)
+      value: (reference
+        (reference_identifier))
+      block: (block))
+    else_block: (block)))
+
+================================================================================
+(If Let) (Elif Let) (Elif) (Else)
+================================================================================
+
+if let x = y {} elif let x = z {} elif v? {} else {}
+
+--------------------------------------------------------------------------------
+
+(source
+  (if_let_statement
+    name: (identifier)
+    value: (reference
+      (reference_identifier))
+    block: (block)
+    elif_let_block: (elif_let_block
+      name: (identifier)
+      value: (reference
+        (reference_identifier))
+      block: (block))
+    elif_block: (elif_block
+      condition: (optional_test
+        (reference
+          (reference_identifier)))
+      block: (block))
+    else_block: (block)))
+
+================================================================================
 If Let Var
 ================================================================================
 

@@ -3,6 +3,7 @@
 ## inflight.WingResource-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
@@ -22,20 +23,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -65,6 +53,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
@@ -74,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
+        console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id));
       }
       static _toInflightType() {
         return `
@@ -106,10 +95,10 @@ class $Root extends $stdlib.std.Resource {
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
-    {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
-    {console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))))};
+    console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));
+    console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))));
     const title = ((getDisplayName(wr)) ?? "no display name");
-    {console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title))};
+    console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

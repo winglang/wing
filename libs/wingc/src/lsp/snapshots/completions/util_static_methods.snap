@@ -73,6 +73,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: ulid
+  kind: 2
+  detail: "(options: UlidOptions?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\n# @link https://github.com/ulid/javascript"
+  sortText: ff|ulid
+  insertText: ulid($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: uuidv4
   kind: 2
   detail: "(): str"
@@ -85,7 +97,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
+    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
   sortText: gg|Util
 - label: NanoidOptions
   kind: 22
@@ -93,6 +105,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct NanoidOptions\n```\n---\nOptions to generating a unique ID.\n### Fields\n- `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n- `size?` — `num?` — Size of ID."
   sortText: hh|NanoidOptions
+- label: UlidOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct UlidOptions\n```\n---\nOptions to generate universally unique lexicographically sortable identifiers.\n### Fields\n- `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component."
+  sortText: hh|UlidOptions
 - label: WaitUntilProps
   kind: 22
   documentation:

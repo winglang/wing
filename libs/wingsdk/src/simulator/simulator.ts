@@ -1,11 +1,9 @@
 import { existsSync } from "fs";
+import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
-import {
-  deserializeValue,
-  makeSimulatorClient,
-  serializeValue,
-} from "./client";
+import { makeSimulatorClient } from "./client";
+import { deserialize, serialize } from "./serialization";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree, TREE_FILE_PATH } from "../core";
@@ -27,6 +25,13 @@ export interface SimulatorProps {
    * Path to a Wing simulator output directory (.wsim).
    */
   readonly simfile: string;
+
+  /**
+   * Path to a state directory where the simulator can store state between
+   * simulation runs.
+   * @default - a directory named ".state" inside the simulator output directory
+   */
+  readonly stateDir?: string;
 
   /**
    * The factory that produces resource simulations.
@@ -76,9 +81,14 @@ export interface IWithTraceProps {
  */
 export interface ISimulatorContext {
   /**
-   * This directory where the compilation output is
+   * The directory where the compilation output is
    */
   readonly simdir: string;
+
+  /**
+   * The directory for the resource's state.
+   */
+  readonly statedir: string;
 
   /**
    * The path of the resource that is being simulated.
@@ -157,6 +167,7 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private _config: WingSimulatorSchema;
   private readonly simdir: string;
+  private readonly statedir: string;
 
   // fields that change between simulation runs / reloads
   private _running: RunningState;
@@ -170,6 +181,7 @@ export class Simulator {
 
   constructor(props: SimulatorProps) {
     this.simdir = props.simfile;
+    this.statedir = props.stateDir ?? join(this.simdir, ".state");
     const { config, treeData, connectionData } = this._loadApp(props.simfile);
     this._config = config;
     this._tree = new Tree(treeData);
@@ -245,32 +257,38 @@ export class Simulator {
 
     await this.startServer();
 
-    while (true) {
-      const next = initQueue.shift();
-      if (!next) {
-        break;
-      }
-
-      // we couldn't start this resource yet, so decrement the retry counter and put it back in
-      // the init queue.
-      if (!(await this.tryStartResource(next))) {
-        // we couldn't start this resource yet, so decrement the attempt counter
-        next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
-        next._attempts--;
-
-        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
-        if (next._attempts === 0) {
-          throw new Error(
-            `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
-          );
+    try {
+      while (true) {
+        const next = initQueue.shift();
+        if (!next) {
+          break;
         }
 
-        // put back in the queue for another round
-        initQueue.push(next);
-      }
-    }
+        // we couldn't start this resource yet, so decrement the retry counter and put it back in
+        // the init queue.
+        if (!(await this.tryStartResource(next))) {
+          // we couldn't start this resource yet, so decrement the attempt counter
+          next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
+          next._attempts--;
 
-    this._running = "running";
+          // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
+          if (next._attempts === 0) {
+            throw new Error(
+              `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+            );
+          }
+
+          // put back in the queue for another round
+          initQueue.push(next);
+        }
+      }
+
+      this._running = "running";
+    } catch (err) {
+      this.stopServer();
+      this._running = "stopped";
+      throw err;
+    }
   }
 
   /**
@@ -297,8 +315,11 @@ export class Simulator {
           `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
         );
       }
+
       try {
-        const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
+        const resource = this._handles.find(handle);
+        await resource.save(this.getResourceStateDir(resourceConfig.path));
+        this._handles.deallocate(handle);
         await resource.cleanup();
       } catch (err) {
         console.warn(err);
@@ -314,8 +335,7 @@ export class Simulator {
       this._addTrace(event);
     }
 
-    this._server!.close();
-    this._server!.closeAllConnections();
+    this.stopServer();
 
     this._handles.reset();
     this._running = "stopped";
@@ -325,8 +345,12 @@ export class Simulator {
    * Stop the simulation, reload the simulation tree from the latest version of
    * the app file, and restart the simulation.
    */
-  public async reload(): Promise<void> {
+  public async reload(resetState: boolean): Promise<void> {
     await this.stop();
+
+    if (resetState) {
+      await rm(this.statedir, { recursive: true });
+    }
 
     const { config, treeData, connectionData } = this._loadApp(this.simdir);
     this._config = config;
@@ -401,6 +425,16 @@ export class Simulator {
   }
 
   /**
+   * Obtain a resource's state directory path.
+   * @param path The resource path
+   * @returns The resource state directory path
+   */
+  public getResourceStateDir(path: string): string {
+    const config = this.getResourceConfig(path);
+    return join(this.statedir, config.addr);
+  }
+
+  /**
    * Obtain a resource's visual interaction components.
    * @returns An array of UIComponent objects
    */
@@ -442,10 +476,7 @@ export class Simulator {
    * Start a server that allows any resource to be accessed via HTTP.
    */
   private async startServer(): Promise<void> {
-    const requestListener = async (
-      req: IncomingMessage,
-      res: ServerResponse
-    ) => {
+    const requestListener = (req: IncomingMessage, res: ServerResponse) => {
       if (!req.url?.startsWith("/v1/call")) {
         res.writeHead(404);
         res.end();
@@ -457,7 +488,7 @@ export class Simulator {
         body += chunk;
       });
       req.on("end", () => {
-        const request: SimulatorServerRequest = deserializeValue(body);
+        const request: SimulatorServerRequest = deserialize(body);
         const { handle, method, args } = request;
         const resource = this._handles.tryFind(handle);
 
@@ -468,8 +499,10 @@ export class Simulator {
           if (this._running === "starting") {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
-              serializeValue({
-                error: `Resource ${handle} not found. It may not have been initialized yet.`,
+              serialize({
+                error: {
+                  message: `Resource ${handle} not found. It may not have been initialized yet.`,
+                },
               }),
               "utf-8"
             );
@@ -477,8 +510,10 @@ export class Simulator {
           } else if (this._running === "stopping") {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
-              serializeValue({
-                error: `Resource ${handle} not found. It may have been cleaned up already.`,
+              serialize({
+                error: {
+                  message: `Resource ${handle} not found. It may have been cleaned up already.`,
+                },
               }),
               "utf-8"
             );
@@ -488,16 +523,30 @@ export class Simulator {
           }
         }
 
+        const methodExists = (resource as any)[method] !== undefined;
+        if (!methodExists) {
+          res.writeHead(500, { "Content-Type": "application/json" });
+          res.end(
+            serialize({
+              error: {
+                message: `Method ${method} not found on resource ${handle}.`,
+              },
+            }),
+            "utf-8"
+          );
+          return;
+        }
+
         (resource as any)
           [method](...args)
           .then((result: any) => {
             res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(serializeValue({ result }), "utf-8");
+            res.end(serialize({ result }), "utf-8");
           })
           .catch((err: any) => {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(
-              serializeValue({
+              serialize({
                 error: {
                   message: err.message ?? err,
                   stack: err.stack,
@@ -525,6 +574,14 @@ export class Simulator {
         resolve();
       });
     });
+  }
+
+  /**
+   * Stop the simulator server.
+   */
+  private stopServer() {
+    this._server!.close();
+    this._server!.closeAllConnections();
   }
 
   /**
@@ -566,13 +623,19 @@ export class Simulator {
     // look up the location of the code for the type
     const typeInfo = this.typeInfo(resourceConfig.type);
 
+    // set up a state directory for the resource
+    await mkdir(this.getResourceStateDir(resourceConfig.path), {
+      recursive: true,
+    });
+
     // create the resource based on its type
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const ResourceType = require(typeInfo.sourcePath)[typeInfo.className];
     const resourceObject = new ResourceType(resolvedProps, context);
-
-    // go ahead and initialize the resource
     const attrs = await resourceObject.init();
+
+    // save the current state
+    await resourceObject.save();
 
     // allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(resourceObject);
@@ -595,6 +658,7 @@ export class Simulator {
   private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
     return {
       simdir: this.simdir,
+      statedir: join(this.statedir, resourceConfig.addr),
       resourcePath: resourceConfig.path,
       serverUrl: this.url,
       findInstance: (handle: string) => {
@@ -847,6 +911,11 @@ export interface ISimulatorResourceInstance {
    * (files, ports, etc).
    */
   cleanup(): Promise<void>;
+
+  /**
+   * Save the resource's state into the state directory.
+   */
+  save(statedir: string): Promise<void>;
 }
 
 /** Schema for simulator.json */
@@ -871,6 +940,8 @@ export interface TypeSchema {
 export interface BaseResourceSchema {
   /** The resource path from the app's construct tree. */
   readonly path: string;
+  /** An opaque tree-unique address of the resource, calculated as a SHA-1 hash of the resource path. */
+  readonly addr: string;
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */

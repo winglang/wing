@@ -2,11 +2,6 @@
 
 exports[`counter with initial value 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -86,11 +81,6 @@ my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterC
 
 exports[`dec() policy statement 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -149,7 +139,7 @@ exports[`dec() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -346,11 +336,6 @@ exports[`dec() policy statement 2`] = `
 
 exports[`default counter behavior 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -430,11 +415,6 @@ my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterC
 
 exports[`function with a counter binding 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -493,7 +473,7 @@ exports[`function with a counter binding 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -708,11 +688,6 @@ my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterC
 
 exports[`inc() policy statement 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -771,7 +746,7 @@ exports[`inc() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -986,11 +961,6 @@ my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterC
 
 exports[`peek() policy statement 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1049,7 +1019,7 @@ exports[`peek() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -1264,11 +1234,6 @@ my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterC
 
 exports[`set() policy statement 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -1327,7 +1292,7 @@ exports[`set() policy statement 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",

@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -161,7 +148,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.envfn_S3Object_0080F00E.key}",
         "timeout": 60,
@@ -193,7 +180,7 @@
         "memory_size": 128,
         "publish": true,
         "role": "${aws_iam_role.memoryfn_IamRole_87751238.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.memoryfn_S3Object_3B51C445.key}",
         "timeout": 60,

@@ -1,8 +1,9 @@
+import { execSync } from "node:child_process";
 import IoRedis from "ioredis";
 import { v4 as uuidv4 } from "uuid";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../ex";
-import { runCommand, runDockerImage } from "../shared/misc";
+import { runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -20,7 +21,8 @@ export class Redis
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
-  private connection?: any;
+  private connection?: IoRedis;
+  private isCleanedUp = false;
 
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     super();
@@ -33,14 +35,18 @@ export class Redis
 
   public async init(): Promise<RedisAttributes> {
     try {
+      if (this.isCleanedUp) {
+        return {};
+      }
+
       const { hostPort } = await runDockerImage({
         imageName: this.WING_REDIS_IMAGE,
         containerName: this.containerName,
         containerPort: "6379",
       });
-
       // redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort}`;
+
       return {};
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
@@ -49,11 +55,14 @@ export class Redis
   }
 
   public async cleanup(): Promise<void> {
+    this.isCleanedUp = true;
     // disconnect from the redis server
-    await this.connection?.disconnect();
+    this.connection?.disconnect();
     // stop the redis container
-    await runCommand("docker", ["rm", "-f", `${this.containerName}`]);
+    execSync(`docker rm -f ${this.containerName}`);
   }
+
+  public async save(): Promise<void> {}
 
   public async rawClient(): Promise<any> {
     if (this.connection) {

@@ -12,6 +12,7 @@ import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
@@ -35,6 +36,9 @@ const defaultLayoutConfig: LayoutConfig = {
     components: [
       {
         type: "explorer",
+      },
+      {
+        type: "endpoints",
       },
       {
         type: "tests",
@@ -119,12 +123,6 @@ export const DefaultLayout = ({
     };
   }, [layoutConfig]);
 
-  const renderApp = useMemo(() => {
-    return !(
-      layout.errorScreen?.position === "default" && cloudAppState === "error"
-    );
-  }, [layout.errorScreen?.position, cloudAppState]);
-
   const selectedItemId = useMemo(() => selectedItems.at(0), [selectedItems]);
 
   const onTestsSelectedItemsChange = useCallback(
@@ -175,12 +173,12 @@ export const DefaultLayout = ({
                 theme.bg3,
               )}
             >
-              <LogsWidget
-                loading={deferredLoading}
-                onResourceClick={onResourceClick}
-              />
+              <LogsWidget onResourceClick={onResourceClick} />
             </div>
           );
+        }
+        case "endpoints": {
+          return <EndpointsTreeView key={component.type} />;
         }
       }
     },
@@ -196,7 +194,6 @@ export const DefaultLayout = ({
       onTestsSelectedItemsChange,
       showTests,
       theme.bg3,
-      deferredLoading,
       onResourceClick,
     ],
   );
@@ -243,7 +240,7 @@ export const DefaultLayout = ({
                 </div>
               )}
 
-            {renderApp && (
+            {cloudAppState !== "error" && (
               <>
                 {loading && (
                   <div
@@ -253,19 +250,6 @@ export const DefaultLayout = ({
                 )}
 
                 <div className="flex-1 flex relative gap-0.5">
-                  <div
-                    className={classNames(
-                      "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
-                      "transition-all",
-                      deferredLoading && "opacity-100 z-50",
-                      !deferredLoading && "opacity-100 -z-10",
-                    )}
-                  >
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <SpinnerLoader data-testid="main-view-loader" />
-                    </div>
-                  </div>
-
                   {!layout.leftPanel?.hide &&
                     layout.leftPanel?.components?.length && (
                       <RightResizableWidget
@@ -353,6 +337,19 @@ export const DefaultLayout = ({
                               "rounded-lg overflow-hidden",
                           )}
                         >
+                          <div
+                            className={classNames(
+                              "absolute h-full w-full bg-white/70 dark:bg-slate-600/70",
+                              "transition-all",
+                              deferredLoading && "opacity-100 z-50",
+                              !deferredLoading && "opacity-100 -z-10",
+                            )}
+                          >
+                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <SpinnerLoader data-testid="main-view-loader" />
+                            </div>
+                          </div>
+
                           {metadata.data && (
                             <ResourceMetadata
                               node={metadata.data?.node}
@@ -375,83 +372,82 @@ export const DefaultLayout = ({
                     </div>
                   </div>
                 </div>
-
-                {!layout.bottomPanel?.hide && (
-                  <TopResizableWidget
-                    className={classNames(
-                      USE_EXTERNAL_THEME_COLOR,
-                      "relative flex",
-                      theme.text2,
-                      "min-h-[5rem]",
-                      "gap-0.5",
-                      (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
-                        "h-[15rem]",
-                    )}
-                  >
-                    {layout.bottomPanel?.components?.map(
-                      (component: LayoutComponent, index: number) => {
-                        const panelComponent = (
-                          <div
-                            key={index}
-                            className={classNames(
-                              layout.panels?.rounded &&
-                                "rounded-lg overflow-hidden",
-                              "flex grow",
-                            )}
-                          >
-                            {renderLayoutComponent(component)}
-                          </div>
-                        );
-
-                        if (
-                          layout.bottomPanel?.components?.length &&
-                          layout.bottomPanel.components.length > 1 &&
-                          index !== layout.bottomPanel.components.length - 1
-                        ) {
-                          return (
-                            <RightResizableWidget
-                              key={component.type}
-                              className={classNames(
-                                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem]",
-                              )}
-                            >
-                              {panelComponent}
-                            </RightResizableWidget>
-                          );
-                        }
-                        return panelComponent;
-                      },
-                    )}
-                  </TopResizableWidget>
-                )}
-
-                {cloudAppState === "error" &&
-                  layout.errorScreen?.position === "bottom" && (
-                    <>
-                      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-40" />
-
-                      <div className="fixed bottom-0 max-h-[80vh] w-full z-50">
-                        <TopResizableWidget
-                          className={classNames(
-                            theme.border4,
-                            "absolute flex",
-                            theme.bg3,
-                            theme.text2,
-                            "min-h-[5rem] h-[30rem]",
-                          )}
-                        >
-                          <BlueScreenOfDeath
-                            title={"An error has occurred:"}
-                            error={errorMessage.data ?? ""}
-                            displayLinks={layout.errorScreen?.displayLinks}
-                            displayWingTitle={layout.errorScreen?.displayTitle}
-                          />
-                        </TopResizableWidget>
-                      </div>
-                    </>
-                  )}
               </>
             )}
+            {!layout.bottomPanel?.hide && (
+              <TopResizableWidget
+                className={classNames(
+                  USE_EXTERNAL_THEME_COLOR,
+                  "relative flex",
+                  theme.text2,
+                  "min-h-[5rem]",
+                  "gap-0.5",
+                  (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
+                    "h-[15rem]",
+                )}
+              >
+                {layout.bottomPanel?.components?.map(
+                  (component: LayoutComponent, index: number) => {
+                    const panelComponent = (
+                      <div
+                        key={index}
+                        className={classNames(
+                          layout.panels?.rounded &&
+                            "rounded-lg overflow-hidden",
+                          "flex grow",
+                        )}
+                      >
+                        {renderLayoutComponent(component)}
+                      </div>
+                    );
+
+                    if (
+                      layout.bottomPanel?.components?.length &&
+                      layout.bottomPanel.components.length > 1 &&
+                      index !== layout.bottomPanel.components.length - 1
+                    ) {
+                      return (
+                        <RightResizableWidget
+                          key={component.type}
+                          className={classNames(
+                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem]",
+                          )}
+                        >
+                          {panelComponent}
+                        </RightResizableWidget>
+                      );
+                    }
+                    return panelComponent;
+                  },
+                )}
+              </TopResizableWidget>
+            )}
+
+            {cloudAppState === "error" &&
+              layout.errorScreen?.position === "bottom" && (
+                <>
+                  <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-40" />
+
+                  <div className="fixed bottom-0 max-h-[80vh] w-full z-50">
+                    <TopResizableWidget
+                      className={classNames(
+                        theme.border4,
+                        "absolute flex",
+                        theme.bg3,
+                        theme.text2,
+                        "min-h-[5rem] h-[30rem]",
+                      )}
+                    >
+                      <BlueScreenOfDeath
+                        title={"An error has occurred:"}
+                        error={errorMessage.data ?? ""}
+                        displayLinks={layout.errorScreen?.displayLinks}
+                        displayWingTitle={layout.errorScreen?.displayTitle}
+                      />
+                    </TopResizableWidget>
+                  </div>
+                </>
+              )}
 
             {!layout.statusBar?.hide && (
               <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
