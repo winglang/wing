@@ -1,10 +1,10 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
-import * as os from "os";
 import { dirname, join } from "path";
 import * as url from "url";
 import mime from "mime-types";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
+import { exists } from "./util";
 import {
   ITopicClient,
   BucketSignedUrlOptions,
@@ -14,35 +14,55 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
 } from "../cloud";
+import { deserialize, serialize } from "../simulator/serialization";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
 import { Datetime, Json } from "../std";
 
+const METADATA_FILENAME = "metadata.json";
+
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
-  private readonly objectKeys: Set<string>;
   private readonly _fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
   private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
-  private readonly _metadata: Record<string, ObjectMetadata> = {};
+  private _metadata: Map<string, ObjectMetadata>;
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
-    this.objectKeys = new Set();
-    this._fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
+    this._fileDir = join(context.statedir, "files");
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
     this.topicHandlers = props.topics;
-  }
-
-  public get fileDir(): string {
-    return this._fileDir;
+    this._metadata = new Map();
   }
 
   public async init(): Promise<BucketAttributes> {
+    const fileDirExists = await exists(this._fileDir);
+    if (!fileDirExists) {
+      await fs.promises.mkdir(this._fileDir, { recursive: true });
+    }
+
+    const metadataFileExists = await exists(
+      join(this.context.statedir, METADATA_FILENAME)
+    );
+    if (metadataFileExists) {
+      const metadataContents = await fs.promises.readFile(
+        join(this.context.statedir, METADATA_FILENAME),
+        "utf-8"
+      );
+      const metadata = deserialize(metadataContents);
+      this._metadata = new Map(metadata);
+    } else {
+      await fs.promises.writeFile(
+        join(this.context.statedir, METADATA_FILENAME),
+        serialize({})
+      );
+    }
+
     for (const [key, value] of Object.entries(this.initialObjects)) {
       await this.context.withTrace({
         message: `Adding object from preflight (key=${key}).`,
@@ -51,11 +71,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         },
       });
     }
+
     return {};
   }
 
-  public async cleanup(): Promise<void> {
-    await fs.promises.rm(this._fileDir, { recursive: true, force: true });
+  public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {
+    // no need to save individual files, since they are already persisted in the state dir
+    // during the bucket's lifecycle
+    await fs.promises.writeFile(
+      join(this.context.statedir, METADATA_FILENAME),
+      serialize(Array.from(this._metadata.entries())) // metadata contains Datetime values, so we need to serialize it
+    );
   }
 
   private async notifyListeners(
@@ -77,7 +105,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Exists (key=${key}).`,
       activity: async () => {
-        return this.objectKeys.has(key);
+        return this._metadata.has(key);
       },
     });
   }
@@ -158,18 +186,18 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const mustExist = opts?.mustExist ?? false;
 
-        if (!this.objectKeys.has(key) && mustExist) {
+        if (!this._metadata.has(key) && mustExist) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
 
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           return;
         }
 
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         await fs.promises.unlink(filename);
-        this.objectKeys.delete(key);
+        this._metadata.delete(key);
         await this.notifyListeners(BucketEventType.DELETE, key);
       },
     });
@@ -188,7 +216,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `List (prefix=${prefix ?? "null"}).`,
       activity: async () => {
-        return Array.from(this.objectKeys.values()).filter((key) => {
+        return Array.from(this._metadata.keys()).filter((key) => {
           if (prefix) {
             return key.startsWith(prefix);
           } else {
@@ -208,7 +236,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const filePath = join(this._fileDir, key);
 
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           throw new Error(
             `Cannot provide public url for an non-existent key (key=${key})`
           );
@@ -240,13 +268,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Metadata (key=${key}).`,
       activity: async () => {
-        if (!this.objectKeys.has(key)) {
+        if (!this._metadata.has(key)) {
           throw new Error(`Object does not exist (key=${key}).`);
         }
-        if (!this._metadata[key]) {
-          throw new Error(`Metadata does not exist for object (key=${key}).`);
-        }
-        return this._metadata[key];
+        return this._metadata.get(key)!;
       },
     });
   }
@@ -255,7 +280,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Copy (srcKey=${srcKey} to dstKey=${dstKey}).`,
       activity: async () => {
-        if (!this.objectKeys.has(srcKey)) {
+        if (!this._metadata.has(srcKey)) {
           throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
         }
 
@@ -274,7 +299,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     value: string,
     contentType?: string
   ): Promise<void> {
-    const actionType: BucketEventType = this.objectKeys.has(key)
+    const actionType: BucketEventType = this._metadata.has(key)
       ? BucketEventType.UPDATE
       : BucketEventType.CREATE;
 
@@ -289,17 +314,16 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     const determinedContentType =
       (contentType ?? mime.lookup(key)) || "application/octet-stream";
 
-    this._metadata[key] = {
+    this._metadata.set(key, {
       size: filestat.size,
       lastModified: Datetime.fromDate(filestat.mtime),
       contentType: determinedContentType,
-    };
+    });
 
-    this.objectKeys.add(key);
     await this.notifyListeners(actionType, key);
   }
 
   private hashKey(key: string): string {
-    return crypto.createHash("sha512").update(key).digest("hex");
+    return crypto.createHash("sha512").update(key).digest("hex").slice(-32);
   }
 }

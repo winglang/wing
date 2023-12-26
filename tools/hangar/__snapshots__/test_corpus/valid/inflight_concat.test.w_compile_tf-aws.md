@@ -3,13 +3,14 @@
 ## inflight.R-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
     constructor({ $_this_s1_concat___world___ }) {
       this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
     }
     async foo() {
-      {console.log(this.$_this_s1_concat___world___)};
+      console.log(this.$_this_s1_concat___world___);
     }
   }
   return R;
@@ -26,20 +27,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -57,6 +45,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -85,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {

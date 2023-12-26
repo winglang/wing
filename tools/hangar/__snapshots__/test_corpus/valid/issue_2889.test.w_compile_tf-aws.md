@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,8 +12,8 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
-      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
+      const issues = JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]");
+      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(issues)});
     }
   }
   return $Closure1;
@@ -23,6 +24,7 @@ module.exports = function({ $std_Json }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,9 +34,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
-      const body = (JSON.parse(res.body));
+      const body = JSON.parse(res.body);
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
+      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"), "bar"), "a1.get(\"foo\") == \"bar\"");
     }
   }
   return $Closure2;
@@ -54,8 +56,12 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
           }
         }
       }
@@ -74,8 +80,8 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {
@@ -109,7 +115,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/foo\":{\"get\":{\"operationId\":\"get-foo\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/foo\":{\"get\":{\"operationId\":\"get-foo\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_foo_0_1FC193B8.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -130,58 +136,58 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       }
     },
     "aws_cloudwatch_log_group": {
-      "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E": {
+      "cloudApi_get_foo_0_CloudwatchLogGroup_ED1063ED": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/CloudwatchLogGroup",
-            "uniqueId": "cloudApi_OnRequest0_CloudwatchLogGroup_3E53832E"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_get_foo_0_CloudwatchLogGroup_ED1063ED"
           }
         },
-        "name": "/aws/lambda/OnRequest0-c8dd1349",
+        "name": "/aws/lambda/get_foo_-0-c8c183c7",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "cloudApi_OnRequest0_IamRole_0E0166CB": {
+      "cloudApi_get_foo_0_IamRole_B5D27436": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRole",
-            "uniqueId": "cloudApi_OnRequest0_IamRole_0E0166CB"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/IamRole",
+            "uniqueId": "cloudApi_get_foo_0_IamRole_B5D27436"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2": {
+      "cloudApi_get_foo_0_IamRolePolicy_1AF0974B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicy",
-            "uniqueId": "cloudApi_OnRequest0_IamRolePolicy_8DEF6CA2"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/IamRolePolicy",
+            "uniqueId": "cloudApi_get_foo_0_IamRolePolicy_1AF0974B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
+        "role": "${aws_iam_role.cloudApi_get_foo_0_IamRole_B5D27436.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F": {
+      "cloudApi_get_foo_0_IamRolePolicyAttachment_6C30798B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/IamRolePolicyAttachment",
-            "uniqueId": "cloudApi_OnRequest0_IamRolePolicyAttachment_442E974F"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/IamRolePolicyAttachment",
+            "uniqueId": "cloudApi_get_foo_0_IamRolePolicyAttachment_6C30798B"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.name}"
+        "role": "${aws_iam_role.cloudApi_get_foo_0_IamRole_B5D27436.name}"
       }
     },
     "aws_lambda_function": {
-      "cloudApi_OnRequest0_E65A93DD": {
+      "cloudApi_get_foo_0_1FC193B8": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/Default",
-            "uniqueId": "cloudApi_OnRequest0_E65A93DD"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/Default",
+            "uniqueId": "cloudApi_get_foo_0_1FC193B8"
           }
         },
         "architectures": [
@@ -190,18 +196,18 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "OnRequest0-c8dd1349",
+            "WING_FUNCTION_NAME": "get_foo_-0-c8c183c7",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "OnRequest0-c8dd1349",
+        "function_name": "get_foo_-0-c8c183c7",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudApi_OnRequest0_IamRole_0E0166CB.arn}",
-        "runtime": "nodejs18.x",
+        "role": "${aws_iam_role.cloudApi_get_foo_0_IamRole_B5D27436.arn}",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudApi_OnRequest0_S3Object_FDBBBF9D.key}",
+        "s3_key": "${aws_s3_object.cloudApi_get_foo_0_S3Object_E859AED1.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -218,7 +224,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.cloudApi_OnRequest0_E65A93DD.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_get_foo_0_1FC193B8.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/foo",
         "statement_id": "AllowExecutionFromAPIGateway-GET-4273ae49"
@@ -236,11 +242,11 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       }
     },
     "aws_s3_object": {
-      "cloudApi_OnRequest0_S3Object_FDBBBF9D": {
+      "cloudApi_get_foo_0_S3Object_E859AED1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/OnRequest0/S3Object",
-            "uniqueId": "cloudApi_OnRequest0_S3Object_FDBBBF9D"
+            "path": "root/Default/Default/cloud.Api/get_foo_}0/S3Object",
+            "uniqueId": "cloudApi_get_foo_0_S3Object_E859AED1"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -260,6 +266,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
@@ -290,7 +297,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -320,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

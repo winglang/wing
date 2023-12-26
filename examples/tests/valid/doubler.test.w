@@ -8,8 +8,9 @@ class Doubler {
     this.func = func;
   }
   inflight invoke(message: str): str {
-    this.func.handle(message);
-    this.func.handle(message);
+    let res1 = this.func.handle(message) ?? "";
+    let res2 = this.func.handle(res1) ?? "";
+    return res2;
   }
 }
 

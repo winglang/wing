@@ -613,6 +613,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
+                      "hidden": true,
                       "title": "Test",
                     },
                     "id": "test:dependency cycles",
@@ -625,6 +626,7 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
+                      "hidden": true,
                       "title": "Test",
                     },
                     "id": "test:test",
@@ -646,29 +648,6 @@ exports[`tree.json for an app with many resources 1`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "@winglang/sdk.std.TestRunner",
-                  "version": "0.0.0",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

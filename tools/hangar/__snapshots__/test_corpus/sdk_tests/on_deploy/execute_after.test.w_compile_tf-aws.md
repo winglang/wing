@@ -9,15 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_lambda_invocation": {
@@ -51,11 +43,6 @@
         "function_name": "${aws_lambda_function.init2_Function_C6177D5D.function_name}",
         "input": "{}"
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {
@@ -193,7 +180,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init1_Function_IamRole_3B884CB0.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.init1_Function_S3Object_EFA6F99F.key}",
         "timeout": 60,
@@ -225,7 +212,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.init2_Function_IamRole_A05B341B.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.init2_Function_S3Object_8A53C74F.key}",
         "timeout": 60,

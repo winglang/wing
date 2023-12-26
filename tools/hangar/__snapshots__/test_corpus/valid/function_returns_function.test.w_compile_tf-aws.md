@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,13 +14,13 @@ module.exports = function({  }) {
     async handle() {
       const iFn = async (s) => {
         return async () => {
-          return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"wing"));
+          return $helpers.eq(s, "wing");
         };
       };
       const wingInflightFn = (await iFn("wing"));
       const dingInflightFn = (await iFn("ding"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: wingInflightFn()")})((await wingInflightFn()))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !dingInflightFn()")})((!(await dingInflightFn())))};
+      $helpers.assert((await wingInflightFn()), "wingInflightFn()");
+      $helpers.assert((!(await dingInflightFn())), "!dingInflightFn()");
     }
   }
   return $Closure1;
@@ -36,20 +37,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -67,6 +55,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -95,18 +84,18 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     const fn = ((s) => {
       return (() => {
-        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"wing"));
+        return $helpers.eq(s, "wing");
       });
     });
     const wingFn = (fn("wing"));
     const dingFn = (fn("ding"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: wingFn()")})((wingFn()))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: !dingFn()")})((!(dingFn())))};
+    $helpers.assert((wingFn()), "wingFn()");
+    $helpers.assert((!(dingFn())), "!dingFn()");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight functions can return other inflight functions", new $Closure1(this, "$Closure1"));
   }
 }

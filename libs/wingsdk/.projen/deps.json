@@ -269,6 +269,10 @@
       "type": "bundled"
     },
     {
+      "name": "google-auth-library",
+      "type": "bundled"
+    },
+    {
       "name": "ioredis",
       "type": "bundled"
     },
@@ -299,6 +303,10 @@
       "type": "bundled"
     },
     {
+      "name": "ulid",
+      "type": "bundled"
+    },
+    {
       "name": "undici",
       "type": "bundled"
     },
@@ -309,6 +317,11 @@
     {
       "name": "yaml",
       "type": "bundled"
+    },
+    {
+      "name": "@types/node",
+      "version": "^18.17.13",
+      "type": "devenv"
     },
     {
       "name": "constructs",

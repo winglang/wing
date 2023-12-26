@@ -7,6 +7,7 @@ import { BucketEventType } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
 import { SimApp } from "../sim-app";
+import { mkdtemp } from "../util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -20,6 +21,7 @@ test("create a bucket", async () => {
       handle: expect.any(String),
     },
     path: "root/my_bucket",
+    addr: expect.any(String),
     props: {
       public: false,
       initialObjects: {},
@@ -36,7 +38,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler("null");
+  const testInflight = Testing.makeHandler("async handle() {}");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -60,7 +62,7 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
   const testInflight = Testing.makeHandler(
-    `async handle(key, event) { await this.bucket.put(key, event); }`,
+    `async handle(key, event) { await this.bucket.put(key, event); console.log("I am done"); }`,
     {
       bucket: {
         obj: logBucket,
@@ -79,17 +81,17 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   await client.put("a", "1");
   // wait for the subscriber to finish
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.includes("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
   await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
   await waitUntilTraceCount(s, 3, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
@@ -328,7 +330,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(s.listTraces()[1].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -380,7 +382,7 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("Received unknown.txt")
   );
 
   // THEN
@@ -768,6 +770,44 @@ test("copy non-existent object within the bucket", async () => {
     /Source object does not exist/
   );
   await s.stop();
+});
+
+test("bucket is stateful across simulations", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const bucket = new cloud.Bucket(app, "my_bucket");
+
+  // addObject means that each deployment, object ("a", "1") will be set on the bucket
+  // even if a different object with the same key is added in-flight
+  bucket.addObject("a", "1");
+
+  // WHEN
+  const stateDir = mkdtemp();
+  const s = await app.startSimulator(stateDir);
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  await client.put("a", "2"); // override contents of file "a" inflight
+  await client.put("b", "2");
+  const metadata1 = await client.metadata("a");
+  const metadata2 = await client.metadata("b");
+  await s.stop();
+
+  // restart the simulator, re-initializing all resources
+  // this will reset "a" to its original value
+
+  await s.start();
+  const client2 = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const dataA = await client2.get("a");
+  const dataB = await client2.get("b");
+  const metadata3 = await client2.metadata("a");
+  const metadata4 = await client2.metadata("b");
+
+  // THEN
+  await s.stop();
+  expect(dataA).toEqual("1");
+  expect(dataB).toEqual("2"); // "b" will be remembered
+  expect(metadata1).not.toEqual(metadata3);
+  expect(metadata2).toEqual(metadata4);
 });
 
 // Deceided to seperate this feature in a different release,(see https://github.com/winglang/wing/issues/4143)

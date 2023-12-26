@@ -12,8 +12,17 @@
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "cloud.Website": {
+              "Endpoint": {
+                "Url": "cloudWebsite_Endpoint_Url_31589343"
+              }
+            },
+            "website-2": {
+              "Endpoint": {
+                "Url": "website-2_Endpoint_Url_B3891500"
+              }
+            }
           }
         }
       }
@@ -94,8 +103,11 @@
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "cloudWebsite_Endpoint_Url_31589343": {
+      "value": "https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}"
+    },
+    "website-2_Endpoint_Url_B3891500": {
+      "value": "https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}"
     }
   },
   "provider": {

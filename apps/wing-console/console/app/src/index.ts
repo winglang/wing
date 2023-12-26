@@ -37,6 +37,8 @@ export interface CreateConsoleAppOptions {
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  platform?: string[];
+  stateDir?: string;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -109,8 +111,6 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
         action,
         ...properties,
       });
-      // resrouce specific event
-      analytics.track(`console_${resourceName}_${action}`, properties);
     },
     log: options.log ?? {
       info() {},

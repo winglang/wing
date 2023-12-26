@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -17,7 +18,7 @@ module.exports = function({  }) {
         }
       }
       const c = (await (async () => {const o = new C(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await c.foo()),"c1")))};
+      $helpers.assert($helpers.eq((await c.foo()), "c1"), "c.foo() == \"c1\"");
     }
   }
   return $Closure1;
@@ -28,6 +29,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $F }) {
   class $Closure2 {
     constructor({  }) {
@@ -47,6 +49,7 @@ module.exports = function({ $F }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $B, $a, $d, $fn, $innerD }) {
   class $Closure3 {
     constructor({  }) {
@@ -55,12 +58,12 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $a.goo()),"a2")))};
+      $helpers.assert($helpers.eq((await $a.goo()), "a2"), "a.goo() == \"a2\"");
       const b = (await (async () => {const o = new $B(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.foo()),"b1")))};
+      $helpers.assert($helpers.eq((await b.foo()), "b1"), "b.foo() == \"b1\"");
       (await $fn());
-      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $d.callInner()),"f1")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $innerD()),"f1")))};
+      $helpers.assert($helpers.eq((await $d.callInner()), "f1"), "d.callInner() == \"f1\"");
+      $helpers.assert($helpers.eq((await $innerD()), "f1"), "innerD() == \"f1\"");
     }
   }
   return $Closure3;
@@ -71,6 +74,7 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -87,6 +91,7 @@ module.exports = function({  }) {
 ## inflight.B-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class B {
     async foo() {
@@ -101,6 +106,7 @@ module.exports = function({  }) {
 ## inflight.D-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class D {
     constructor({ $this_inner }) {
@@ -118,6 +124,7 @@ module.exports = function({  }) {
 ## inflight.E-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class E {
     constructor({  }) {
@@ -131,6 +138,7 @@ module.exports = function({  }) {
 ## inflight.F-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class F {
     async foo() {
@@ -151,20 +159,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -182,6 +177,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -210,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["goo", "$inflight_init"];
+        return [...super._supportedOps(), "goo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
@@ -235,7 +231,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -262,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class D extends $stdlib.std.Resource {
@@ -293,11 +289,11 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["$inflight_init"];
+            return [...super._supportedOps(), "$inflight_init"];
           }
         }
         const pb = new E(this, "E");
-        {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((pb.foo()),"e1")))};
+        $helpers.assert($helpers.eq((pb.foo()), "e1"), "pb.foo() == \"e1\"");
         class F extends $stdlib.std.Resource {
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -320,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["foo", "$inflight_init"];
+            return [...super._supportedOps(), "foo", "$inflight_init"];
           }
         }
         const __parent_this_2 = this;
@@ -349,7 +345,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _supportedOps() {
-            return ["handle", "$inflight_init"];
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
         }
         this.inner = new $Closure2(this, "$Closure2");
@@ -376,7 +372,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["callInner", "$inflight_init"];
+        return [...super._supportedOps(), "callInner", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -417,7 +413,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -430,7 +426,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this, "A");
-    {((cond) => {if (!cond) throw new Error("assertion failed: a.foo() == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((a.foo()),"a1")))};
+    $helpers.assert($helpers.eq((a.foo()), "a1"), "a.foo() == \"a1\"");
     const fn = new $Closure1(this, "$Closure1");
     const d = new D(this, "D");
     const innerD = (d.getInner());

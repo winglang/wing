@@ -6,7 +6,7 @@ import { BuiltinPlatform } from "@winglang/compiler";
 import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 import { describe, test, expect, beforeEach, afterEach, vi, SpyInstance } from "vitest";
-import { filterTests, pickOneTestPerEnvironment, renderTestReport, test as wingTest } from ".";
+import { filterTests, renderTestReport, test as wingTest } from ".";
 import * as resultsFn from "./results";
 
 const defaultChalkLevel = chalk.level;
@@ -46,6 +46,50 @@ describe("printing test reports", () => {
   });
 });
 
+describe("wing test (custom platform)", () => {
+  let logSpy: SpyInstance;
+
+  beforeEach(() => {
+    chalk.level = 0;
+    logSpy = vi.spyOn(console, "log");
+  });
+
+  afterEach(() => {
+    chalk.level = defaultChalkLevel;
+    process.chdir(cwd);
+    logSpy.mockRestore();
+  });
+
+  test("test runner is loaded properly for customized tf-aws platform", async () => {
+    const outDir = await fsPromises.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+
+    // can't be resolved within tmp directory
+    const targetTfAws = require.resolve("@winglang/sdk/lib/target-tf-aws");
+
+    process.chdir(outDir);
+    fs.writeFileSync("foo.test.w", `bring cloud;`);
+    fs.writeFileSync(
+      "custom-platform.js",
+      `
+      const tfaws = require("${targetTfAws}");
+      class Platform {
+        target = "tf-aws";
+
+        newApp(appProps) {
+          return new tfaws.App(appProps);
+        }
+      }
+      module.exports = { Platform }`
+    );
+
+    await wingTest([], { clean: true, platform: ["./custom-platform.js"] });
+
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/^pass ─ foo\.test\.tfaws\.\d+ \(no tests\)$/)
+    );
+  });
+});
+
 describe("wing test (no options)", () => {
   let logSpy: SpyInstance;
 
@@ -78,19 +122,16 @@ describe("wing test (no options)", () => {
 
 describe("output-file option", () => {
   let writeResultsSpy: SpyInstance;
-  let writeFileSpy: SpyInstance;
 
   beforeEach(() => {
     chalk.level = 0;
     writeResultsSpy = vi.spyOn(resultsFn, "writeResultsToFile");
-    writeFileSpy = vi.spyOn(fsPromises, "writeFile");
   });
 
   afterEach(() => {
     chalk.level = defaultChalkLevel;
     process.chdir(cwd);
     writeResultsSpy.mockRestore();
-    writeFileSpy.mockRestore();
   });
 
   test("wing test with output file calls writeResultsToFile", async () => {
@@ -114,10 +155,10 @@ describe("output-file option", () => {
     expect(testName).toBe("test.test.w");
     expect(writeResultsSpy.mock.calls[0][2]).toBe(outputFile);
 
-    expect(writeFileSpy).toBeCalledTimes(2);
-    const [filePath, output] = writeFileSpy.mock.calls[1];
-    expect(filePath).toBe("out.json");
-    expect(JSON.parse(output as string)).toMatchObject(OUTPUT_FILE);
+    const outputFileExists = fs.existsSync(outputFile);
+    expect(outputFileExists).toBe(true);
+    const outputContents = fs.readFileSync(outputFile, "utf-8");
+    expect(JSON.parse(outputContents)).toMatchObject(OUTPUT_FILE);
   });
 
   test("wing test without output file calls writeResultsToFile", async () => {
@@ -157,7 +198,7 @@ describe("test-filter option", () => {
   });
 
   test("wing test (no test-filter)", () => {
-    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS));
+    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS);
 
     expect(filteredTests.length).toBe(3);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
@@ -166,7 +207,7 @@ describe("test-filter option", () => {
   });
 
   test("wing test --test-filter <regex>", () => {
-    const filteredTests = pickOneTestPerEnvironment(filterTests(EXAMPLE_UNFILTERED_TESTS, "get"));
+    const filteredTests = filterTests(EXAMPLE_UNFILTERED_TESTS, "get");
 
     expect(filteredTests.length).toBe(2);
     expect(filteredTests[0]).toBe("root/env0/test:get()");
@@ -385,12 +426,6 @@ const OUTPUT_FILE = {
 
 const EXAMPLE_UNFILTERED_TESTS: string[] = [
   "root/env0/test:get()",
-  "root/env0/test:get:At()",
-  "root/env0/test:stringify()",
-  "root/env1/test:get()",
   "root/env1/test:get:At()",
-  "root/env1/test:stringify()",
-  "root/env2/test:get()",
-  "root/env2/test:get:At()",
   "root/env2/test:stringify()",
 ];

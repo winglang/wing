@@ -2,11 +2,6 @@
 
 exports[`default topic behavior 1`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -81,11 +76,6 @@ return class Handler {
 
 exports[`topic with multiple subscribers 3`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -206,6 +196,11 @@ exports[`topic with multiple subscribers 3`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -214,7 +209,7 @@ exports[`topic with multiple subscribers 3`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -318,6 +313,11 @@ exports[`topic with multiple subscribers 3`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -326,7 +326,7 @@ exports[`topic with multiple subscribers 3`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",
@@ -448,11 +448,6 @@ return class Handler {
 
 exports[`topic with subscriber function 2`] = `
 {
-  "Outputs": {
-    "WingTestRunnerFunctionArns": {
-      "Value": "[]",
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -573,6 +568,11 @@ exports[`topic with subscriber function 2`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -581,7 +581,7 @@ exports[`topic with subscriber function 2`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs20.x",
         "Timeout": 60,
       },
       "Type": "AWS::Lambda::Function",

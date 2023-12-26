@@ -1,8 +1,69 @@
+import { exec, execFile } from "child_process";
 import { createHash } from "crypto";
+import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
+import { ulid } from "ulid";
 import { v4 } from "uuid";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
+
+const execPromise = promisify(exec);
+const execFilePromise = promisify(execFile);
+
+/**
+ * Base command options.
+ */
+export interface CommandOptions {
+  /**
+   * Path to a directory to run the command in.
+   * @default - the default working directory of the host
+   */
+  readonly cwd?: string;
+  /**
+   * Environment variables.
+   * @default - no environment variables
+   */
+  readonly env?: { [key: string]: string };
+  /**
+   * Whether to inherit environment variables from the host's environment.
+   * @default false
+   */
+  readonly inheritEnv?: boolean;
+}
+
+/**
+ * Additional options for `util.shell()`
+ */
+export interface ShellOptions extends CommandOptions {
+  /**
+   * Whether to throw an error on command execution failure.
+   * @default true
+   */
+  readonly throw?: boolean;
+}
+
+/**
+ * Additional options for `util.exec()`
+ */
+export interface ExecOptions extends CommandOptions {}
+
+/**
+ * Output of a finished process.
+ */
+export interface Output {
+  /**
+   * The standard output of a finished process.
+   */
+  readonly stdout: string;
+  /**
+   * The standard error of a finished process.
+   */
+  readonly stderr: string;
+  /**
+   * A process's exit status.
+   */
+  readonly status: number;
+}
 
 /**
  * Properties for `util.waitUntil`.
@@ -54,9 +115,101 @@ export interface NanoidOptions {
 }
 
 /**
+ * Options to generate universally unique lexicographically sortable identifiers.
+ */
+export interface UlidOptions {
+  /**
+   * You can also input a seed time which will consistently give you the same string for the time component. This is useful for migrating to ulid.
+   * @default Date.now()
+   */
+  readonly seed?: number;
+}
+
+/**
  * Utility functions.
  */
 export class Util {
+  /**
+   * Executes a command in the shell and returns its standard output.
+   * @param command The command string to execute in the shell.
+   * @param opts `ShellOptions`, such as the working directory and environment variables.
+   * @returns The standard output of the shell command.
+   * @throws An error if the shell command execution fails or returns a non-zero exit code.
+   */
+  public static async shell(
+    command: string,
+    opts?: ShellOptions
+  ): Promise<String> {
+    const shellOpts = {
+      cwd: opts?.cwd,
+      env:
+        opts?.inheritEnv === true
+          ? { ...process.env, ...opts?.env }
+          : { ...opts?.env },
+    };
+
+    const createErrorMessage = (error: any): string => {
+      if (error.stderr) {
+        return `Error executing command "${command}". Exited with error: ${error.stderr}`;
+      }
+      return `Error executing command "${command}". Exited with error code: ${error.code}`;
+    };
+
+    try {
+      const { stdout } = await execPromise(command, shellOpts);
+      return stdout.toString();
+    } catch (error: any) {
+      const errorMessage = createErrorMessage(error);
+
+      if (opts?.throw !== false) {
+        throw new Error(errorMessage);
+      }
+
+      return errorMessage;
+    }
+  }
+
+  /**
+   * Execute a program with the given arguments, wait for it to finish, and
+   * return its outputs.
+   * @param program The program to execute.
+   * @param args An array of arguments to pass to the program.
+   * @param opts `ExecOptions`, such as the working directory and environment variables.
+   * @returns A struct containing `stdout`, `stderr` and exit `status` of the executed program.
+   */
+  public static async exec(
+    program: string,
+    args: Array<string>,
+    opts?: ExecOptions
+  ): Promise<Output> {
+    const execOpts = {
+      cwd: opts?.cwd,
+      env:
+        opts?.inheritEnv === true
+          ? { ...process.env, ...opts?.env }
+          : { ...opts?.env },
+    };
+
+    try {
+      const { stdout, stderr } = await execFilePromise(program, args, execOpts);
+      return {
+        stdout: stdout.toString(),
+        stderr: stderr.toString(),
+        status: 0,
+      };
+    } catch (error: any) {
+      if (error.code === "ENOENT") {
+        throw new Error(`Program not found: ${error.message}`);
+      } else {
+        return {
+          stdout: error.stdout.toString(),
+          stderr: error.stderr.toString(),
+          status: error.code,
+        };
+      }
+    }
+  }
+
   /**
    * Returns the value of an environment variable. Throws if not found or empty.
    * @param name The name of the environment variable.
@@ -163,6 +316,16 @@ export class Util {
       ? customAlphabet(options.alphabet, size)
       : undefined;
     return nano ? nano(size) : nanoid(size);
+  }
+
+  /**
+   * Generates universally unique lexicographically sortable identifier.
+   # @link https://github.com/ulid/javascript
+   * @param options - Optional options object for generating the ID.
+   */
+  public static ulid(options?: UlidOptions): string {
+    const seed = options?.seed;
+    return ulid(seed);
   }
 
   /**

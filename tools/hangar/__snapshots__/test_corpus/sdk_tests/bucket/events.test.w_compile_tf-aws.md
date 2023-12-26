@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -335,7 +322,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_oncreate-OnMessage0_IamRole_781D1FBC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_oncreate-OnMessage0_S3Object_C2C8A7A9.key}",
         "timeout": 60,
@@ -370,7 +357,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_oncreate-OnMessage1_IamRole_5FEF97DC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_oncreate-OnMessage1_S3Object_73E1B72B.key}",
         "timeout": 60,
@@ -405,7 +392,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_ondelete-OnMessage0_IamRole_32E9B6B6.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_ondelete-OnMessage0_S3Object_E710FD99.key}",
         "timeout": 60,
@@ -440,7 +427,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_ondelete-OnMessage1_IamRole_3A69AD5D.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_ondelete-OnMessage1_S3Object_83BF5AC3.key}",
         "timeout": 60,
@@ -475,7 +462,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_onupdate-OnMessage0_IamRole_A18E1E60.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_onupdate-OnMessage0_S3Object_1E3DAE34.key}",
         "timeout": 60,
@@ -510,7 +497,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudBucket_onupdate-OnMessage1_IamRole_F9C45633.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudBucket_onupdate-OnMessage1_S3Object_0756209E.key}",
         "timeout": 60,

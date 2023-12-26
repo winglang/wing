@@ -28,6 +28,7 @@ test("create a service with on start method", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
@@ -59,6 +60,7 @@ test("create a service with a on stop method", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       environmentVariables: {},
@@ -100,6 +102,7 @@ test("create a service without autostart", async () => {
       handle: expect.any(String),
     },
     path: "root/my_service",
+    addr: expect.any(String),
     props: {
       sourceCodeFile: expect.any(String),
       environmentVariables: {},

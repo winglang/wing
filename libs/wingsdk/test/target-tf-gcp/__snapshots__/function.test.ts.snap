@@ -12,11 +12,18 @@ exports[`basic function 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
+        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
-        "timeout": 60,
+        "timeout": 120,
         "trigger_http": true,
+      },
+    },
+    "google_service_account": {
+      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
@@ -108,6 +115,14 @@ exports[`basic function 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
+                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -187,11 +202,18 @@ exports[`basic function with environment variables 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
+        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
-        "timeout": 60,
+        "timeout": 120,
         "trigger_http": true,
+      },
+    },
+    "google_service_account": {
+      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
@@ -283,6 +305,14 @@ exports[`basic function with environment variables 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
+                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -361,11 +391,18 @@ exports[`basic function with memory size specified 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
+        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
-        "timeout": 60,
+        "timeout": 120,
         "trigger_http": true,
+      },
+    },
+    "google_service_account": {
+      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
@@ -457,6 +494,14 @@ exports[`basic function with memory size specified 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
+                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -535,11 +580,18 @@ exports[`basic function with timeout explicitly set 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs16",
+        "runtime": "nodejs18",
+        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 30,
         "trigger_http": true,
+      },
+    },
+    "google_service_account": {
+      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+        "account_id": "function-c852aba6",
+        "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
@@ -630,6 +682,14 @@ exports[`basic function with timeout explicitly set 2`] = `
                     },
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
+                  },
+                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {

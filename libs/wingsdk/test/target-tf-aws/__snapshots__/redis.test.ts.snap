@@ -7,11 +7,6 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
       "Region": {},
     },
   },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_eip": {
       "EIP": {},
@@ -66,7 +61,6 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
             "gateway_id": null,
-            "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
             "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
@@ -90,7 +84,6 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
             "gateway_id": "\${aws_internet_gateway.InternetGateway.id}",
-            "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
             "nat_gateway_id": null,

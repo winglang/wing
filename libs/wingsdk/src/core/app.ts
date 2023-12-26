@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import { IResource } from "../std/resource";
+import type { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -20,13 +20,6 @@ export interface AppProps {
    * @default "app"
    */
   readonly name?: string;
-
-  /**
-   * The path to a state file which will track all synthesized files. If a
-   * statefile is not specified, we won't be able to remove extrenous files.
-   * @default - no state file
-   */
-  readonly stateFile?: string;
 
   /**
    * The root construct class that should be instantiated with a scope and id.
@@ -152,7 +145,7 @@ export abstract class App extends Construct implements IApp {
   /**
    * Whether or not this app is being synthesized into a test environment.
    */
-  public abstract readonly isTestEnvironment: boolean;
+  public readonly isTestEnvironment: boolean;
 
   /**
    * NewInstance hooks for defining resource implementations.
@@ -160,14 +153,26 @@ export abstract class App extends Construct implements IApp {
    */
   public readonly _newInstanceOverrides: any[];
 
+  /**
+   * The test runner for this app. Only created if `isTestEnvironment` is true.
+   * @internal
+   */
+  public _testRunner: TestRunner | undefined;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
       throw new Error("Missing environment variable: WING_SOURCE_DIR");
     }
 
+    // the app is also marked as root in the case where there is no root construct
+    if (!props.rootConstruct) {
+      Node._markRoot(this.constructor);
+    }
+
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
   /**
@@ -240,10 +245,6 @@ export abstract class App extends Construct implements IApp {
     return `${prefix}${this._idCounters[key]++}`;
   }
 
-  public tryFindChild(id: string): IConstruct | undefined {
-    return this.node.tryFindChild(id);
-  }
-
   /**
    * Can be overridden by derived classes to inject dependencies.
    *
@@ -283,29 +284,6 @@ export abstract class App extends Construct implements IApp {
       return undefined;
     }
     return new type(scope, id, ...args);
-  }
-
-  /**
-   * Synthesize the root construct if one was given. If this is a test environment, then
-   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
-   * one root construct.
-   *
-   * @param props The App props
-   * @param testRunner The test runner
-   */
-  protected synthRoots(props: AppProps, testRunner: TestRunner) {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
   }
 }
 

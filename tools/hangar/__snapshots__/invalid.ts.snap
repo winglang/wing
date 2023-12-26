@@ -47,29 +47,49 @@ error: Cannot override private method \\"method\\" of \\"Bar\\"
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
     |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
 109 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
     |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
 111 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
     |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
 115 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 117 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
@@ -117,92 +137,157 @@ error: Cannot override private method \\"private_method\\" of \\"Foo\\"
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 74 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 84 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 89 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 97 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 102 |     Bar.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
     |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
 123 |     log(foo.protected_field);
     |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
     |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
 125 |     log(foo.private_field);
     |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
     |
+ 47 |   protected protected_method() {}
+    |             ---------------- defined here
+    .
 129 |     foo.protected_method();
     |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
     |
+ 49 |   private_method() {}
+    |   -------------- defined here
+    .
 131 |     foo.private_method();
     |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
     |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
 137 |     Foo.protected_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 139 |     Foo.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
  
@@ -816,14 +901,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello {name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   |  
   = hint: expected phase to be inflight, but got preflight instead
 
@@ -2052,6 +2137,8 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   |
+   = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
  
@@ -2224,6 +2311,24 @@ exports[`json_static.test.w 1`] = `
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
   |          ^^^ Unknown symbol \\"set\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`missing_return.test.w 1`] = `
+"error: A function whose return type is \\"str\\" must return a value.
+  --> ../../../examples/tests/invalid/missing_return.test.w:1:40
+  |  
+1 |   let returnString = inflight (): str => {
+  | /----------------------------------------^
+2 | |   log(\\"i am not going to return anything!\\");
+3 | | };
+  | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
  
@@ -3322,6 +3427,20 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
+error: struct \\"PreflightStruct\\" must be declared at the top-level of a file
+   --> ../../../examples/tests/invalid/structs.test.w:51:10
+   |
+51 |   struct PreflightStruct {
+   |          ^^^^^^^^^^^^^^^ struct \\"PreflightStruct\\" must be declared at the top-level of a file
+
+
+error: struct \\"InflightStruct\\" must be declared at the top-level of a file
+   --> ../../../examples/tests/invalid/structs.test.w:58:10
+   |
+58 |   struct InflightStruct {
+   |          ^^^^^^^^^^^^^^ struct \\"InflightStruct\\" must be declared at the top-level of a file
+
+
  
  
 Tests 1 failed (1)
@@ -3653,6 +3772,27 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'void
   |
 7 | let y = 5 + log(\\"hello\\");
   |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:11:5
+   |
+11 | let z = returnsNothing();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:5
+   |
+15 | let w: str? = returnsNothing2();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Expected type to be \\"str?\\", but got \\"void\\" instead
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:15
+   |
+15 | let w: str? = returnsNothing2();
+   |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
 
 
  

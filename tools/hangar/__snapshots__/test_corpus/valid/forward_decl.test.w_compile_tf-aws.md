@@ -3,6 +3,7 @@
 ## inflight.R-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
     constructor({  }) {
@@ -22,20 +23,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -53,6 +41,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -63,7 +52,7 @@ class $Root extends $stdlib.std.Resource {
       }
       method2() {
         (this.method1());
-        {console.log(String.raw({ raw: ["", ""] }, this.f))};
+        console.log(String.raw({ raw: ["", ""] }, this.f));
         (this.method2());
       }
       method1() {
@@ -86,12 +75,12 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const x = "hi";
     if (true) {
-      {console.log(String.raw({ raw: ["", ""] }, x))};
+      console.log(String.raw({ raw: ["", ""] }, x));
       const y = new R(this, "R");
     }
   }

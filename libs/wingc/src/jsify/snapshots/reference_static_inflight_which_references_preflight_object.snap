@@ -26,6 +26,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $MyType }) {
   class $Closure1 {
     constructor({  }) {
@@ -34,7 +35,7 @@ module.exports = function({ $MyType }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $MyType.staticMethod()))};
+      console.log((await $MyType.staticMethod()));
     }
   }
   return $Closure1;
@@ -46,6 +47,7 @@ module.exports = function({ $MyType }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $b }) {
   class MyType {
     constructor({  }) {
@@ -69,6 +71,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -96,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["staticMethod", "$inflight_init"];
+        return [...super._supportedOps(), "staticMethod", "$inflight_init"];
       }
       static _registerOnLift(host, ops) {
         if (ops.includes("staticMethod")) {
@@ -130,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

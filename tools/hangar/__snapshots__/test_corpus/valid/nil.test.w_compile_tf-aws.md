@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,8 +12,8 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.returnNil(true))) != null),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.returnNil(false))) != null),false)))};
+      $helpers.assert($helpers.eq((((await $foo.returnNil(true))) != null), true), "foo.returnNil(true)? == true");
+      $helpers.assert($helpers.eq((((await $foo.returnNil(false))) != null), false), "foo.returnNil(false)? == false");
     }
   }
   return $Closure1;
@@ -23,6 +24,7 @@ module.exports = function({ $foo }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo }) {
   class $Closure2 {
     constructor({  }) {
@@ -31,13 +33,13 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),false)))};
+      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
       (await $foo.setOptionalValue("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.getOptionalValue()),undefined)))};
+      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), true), "foo.getOptionalValue()? == true");
+      $helpers.assert(!$helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
       (await $foo.setOptionalValue(undefined));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),false)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.getOptionalValue()),undefined)))};
+      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
+      $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");
     }
   }
   return $Closure2;
@@ -48,6 +50,7 @@ module.exports = function({ $foo }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -82,20 +85,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -113,6 +103,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -139,7 +130,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["optionalVar", "returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init"];
+        return [...super._supportedOps(), "optionalVar", "returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -167,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -201,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

@@ -295,7 +295,7 @@ export const ThemeProvider = ({
         .matchMedia("(prefers-color-scheme: dark)")
         .removeEventListener("change", reloadThemeMode);
     };
-  }, []);
+  }, [mode]);
 
   return (
     <ThemeContext.Provider

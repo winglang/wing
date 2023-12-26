@@ -2,7 +2,6 @@
 
 exports[`bucket on event creates 3 topics, and sends the right event and key in the event handlers 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.cloud.Topic created.",
@@ -15,22 +14,25 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-6).",
+  "Sending message (message=a, subscriber=sim-5).",
+  "InvokeAsync (payload=\\"a\\").",
   "Put (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-8).",
+  "Sending message (message=a, subscriber=sim-7).",
+  "InvokeAsync (payload=\\"a\\").",
   "Put (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "Publish (message=a).",
-  "Sending message (message=a, subscriber=sim-10).",
+  "Sending message (message=a, subscriber=sim-9).",
+  "InvokeAsync (payload=\\"a\\").",
   "Delete (key=a).",
   "Put (key=a).",
-  "Invoke (payload=\\"a\\").",
+  "I am done",
   "Get (key=a).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
@@ -43,20 +45,17 @@ exports[`bucket on event creates 3 topics, and sends the right event and key in 
   "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`can add file in preflight 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "Adding object from preflight (key=test.txt).",
   "@winglang/sdk.cloud.Bucket created.",
   "Get (key=test.txt).",
   "Get (key=test.txt).",
   "List (prefix=null).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -69,14 +68,7 @@ exports[`can add file in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -107,6 +99,10 @@ exports[`can add file in preflight 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -172,19 +168,6 @@ exports[`can add file in preflight 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -212,14 +195,12 @@ exports[`can add file in preflight 2`] = `
 
 exports[`can add object in preflight 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "Adding object from preflight (key=greeting.txt).",
   "@winglang/sdk.cloud.Bucket created.",
   "Get (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "List (prefix=null).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -232,14 +213,7 @@ exports[`can add object in preflight 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -270,6 +244,10 @@ exports[`can add object in preflight 2`] = `
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
       },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
+      },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
         "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
@@ -335,19 +313,6 @@ exports[`can add object in preflight 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -382,14 +347,7 @@ exports[`create a bucket 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -417,6 +375,10 @@ exports[`create a bucket 1`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -483,19 +445,6 @@ exports[`create a bucket 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -523,11 +472,9 @@ exports[`create a bucket 1`] = `
 
 exports[`get invalid object throws an error 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Get (key=unknown.txt).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
@@ -540,14 +487,7 @@ exports[`get invalid object throws an error 2`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -575,6 +515,10 @@ exports[`get invalid object throws an error 2`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -641,19 +585,6 @@ exports[`get invalid object throws an error 2`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -681,7 +612,6 @@ exports[`get invalid object throws an error 2`] = `
 
 exports[`list respects prefixes 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=path/dir1/file1.txt).",
   "Put (key=path/dir2/file2.txt).",
@@ -690,13 +620,11 @@ exports[`list respects prefixes 1`] = `
   "List (prefix=path/dir1).",
   "List (prefix=path/dir2).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`objects can have keys that look like directories 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=foo).",
   "Put (key=foo/).",
@@ -710,13 +638,11 @@ exports[`objects can have keys that look like directories 1`] = `
   "List (prefix=foo/bar/).",
   "List (prefix=foo/bar/baz).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`put and get metadata of objects from bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=file1.main.w).",
   "Put (key=file2.txt).",
@@ -725,107 +651,91 @@ exports[`put and get metadata of objects from bucket 1`] = `
   "Metadata (key=file2.txt).",
   "Metadata (key=file3.txt).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`put and get object from bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=greeting.txt).",
   "Get (key=greeting.txt).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`put multiple json objects and list all from bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put Json (key=greeting1.json).",
   "Put Json (key=greeting2.json).",
   "Put Json (key=greeting3.json).",
   "List (prefix=null).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=greeting1.txt).",
   "Put (key=greeting2.txt).",
   "Put (key=greeting3.txt).",
   "List (prefix=null).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`remove object from a bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
   "@winglang/sdk.cloud.Bucket deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`removing a key will call onDelete method 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Put (key=unknown.txt).",
   "Publish (message=unknown.txt).",
-  "Sending message (message=unknown.txt, subscriber=sim-3).",
+  "Sending message (message=unknown.txt, subscriber=sim-2).",
+  "InvokeAsync (payload=\\"unknown.txt\\").",
   "Delete (key=unknown.txt).",
   "Received unknown.txt",
-  "Invoke (payload=\\"unknown.txt\\").",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`update an object in bucket 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.cloud.Bucket created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=greeting.txt).",
-  "Sending message (message=greeting.txt, subscriber=sim-3).",
+  "Sending message (message=greeting.txt, subscriber=sim-2).",
+  "InvokeAsync (payload=\\"greeting.txt\\").",
   "Put (key=greeting.txt).",
-  "Invoke (payload=\\"greeting.txt\\").",
-  "Subscriber error: TypeError: this.handler.handle is not a function",
   "Put (key=greeting.txt).",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.cloud.Bucket deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;

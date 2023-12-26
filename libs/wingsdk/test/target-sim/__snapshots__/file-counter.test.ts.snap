@@ -75,14 +75,7 @@ bucket: (function() {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c87855e817fa3df0d5ce8ae290bf53c8ce4ecd8d46",
         "attrs": {},
         "path": "root/HelloWorld/Counter",
         "props": {
@@ -91,6 +84,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Counter",
       },
       {
+        "addr": "c80e3625bbefd53d8c61fbb978711d410b5f2a41c8",
         "attrs": {},
         "path": "root/HelloWorld/Bucket",
         "props": {
@@ -101,6 +95,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c8e82e9fd83d9e59c5af169a3042b9ed0b40e91185",
         "attrs": {},
         "path": "root/HelloWorld/Queue/SetConsumer0",
         "props": {
@@ -115,6 +110,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8de0494647ac0bdaec85a77e2a164cfbcfecc5ca1",
         "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
@@ -124,6 +120,7 @@ bucket: (function() {
         "type": "@winglang/sdk.cloud.Queue",
       },
       {
+        "addr": "c80de7940bef4e6ad61443a5ed07362f300a117b29",
         "attrs": {},
         "path": "root/HelloWorld/Queue/QueueEventMapping0",
         "props": {
@@ -153,6 +150,10 @@ bucket: (function() {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -290,19 +291,6 @@ bucket: (function() {
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
-        },
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
         },
       },
       "constructInfo": {

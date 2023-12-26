@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Bar, $Foo, $foo }) {
   class $Closure1 {
     constructor({  }) {
@@ -17,11 +18,11 @@ module.exports = function({ $Bar, $Foo, $foo }) {
         }
       }
       const bar = (await (async () => {const o = new $Bar(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.foo() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Foo.foo()),1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Bar.bar() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Bar.bar()),2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Zoo.zoo() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Zoo.zoo()),3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callThis() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callThis()),1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bar.callThis() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await bar.callThis()),2)))};
+      $helpers.assert($helpers.eq((await $Foo.foo()), 1), "Foo.foo() == 1");
+      $helpers.assert($helpers.eq((await $Bar.bar()), 2), "Bar.bar() == 2");
+      $helpers.assert($helpers.eq((await Zoo.zoo()), 3), "Zoo.zoo() == 3");
+      $helpers.assert($helpers.eq((await $foo.callThis()), 1), "foo.callThis() == 1");
+      $helpers.assert($helpers.eq((await bar.callThis()), 2), "bar.callThis() == 2");
     }
   }
   return $Closure1;
@@ -32,6 +33,7 @@ module.exports = function({ $Bar, $Foo, $foo }) {
 ## inflight.Bar-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Bar {
     static async bar() {
@@ -49,6 +51,7 @@ module.exports = function({  }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -77,20 +80,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -108,6 +98,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -133,7 +124,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["foo", "bar", "callThis", "$inflight_init"];
+        return [...super._supportedOps(), "foo", "bar", "callThis", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("callThis")) {
@@ -170,7 +161,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["bar", "callThis", "$inflight_init"];
+        return [...super._supportedOps(), "bar", "callThis", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -200,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

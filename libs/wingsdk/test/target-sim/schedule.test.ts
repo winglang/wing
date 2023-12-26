@@ -22,6 +22,7 @@ test("create a schedule", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: cron,
     },
@@ -70,6 +71,7 @@ test("schedule with one task using rate of 10m", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: expectedCron,
     },
@@ -96,6 +98,7 @@ test("schedule with one task using rate of 3h", async () => {
       handle: expect.any(String),
     },
     path: "root/my_schedule",
+    addr: expect.any(String),
     props: {
       cronExpression: expectedCron,
     },

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $__parent_this_1_b }) {
 ## inflight.$Closure1-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $store }) {
   class $Closure1 {
     constructor({  }) {
@@ -41,6 +43,7 @@ module.exports = function({ $store }) {
 ## inflight.Q-2.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Q {
     constructor({  }) {
@@ -57,6 +60,7 @@ module.exports = function({  }) {
 ## inflight.Store-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
@@ -74,6 +78,7 @@ module.exports = function({  }) {
 ## inflight.Triangle-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Triangle {
     constructor({  }) {
@@ -87,6 +92,7 @@ module.exports = function({  }) {
 ## inflight.Util-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -100,6 +106,7 @@ module.exports = function({  }) {
 ## inflight.Util-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -119,15 +126,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_lambda_invocation": {
@@ -142,11 +141,6 @@ module.exports = function({  }) {
         "function_name": "${aws_lambda_function.file1Store_cloudOnDeploy_Function_9539541F.function_name}",
         "input": "{}"
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {
@@ -226,7 +220,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.file1Store_cloudOnDeploy_Function_S3Object_CBBF816B.key}",
         "timeout": 60,
@@ -279,6 +273,7 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   return {  };
 };
 //# sourceMappingURL=preflight.empty-1.js.map
@@ -292,6 +287,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const file1 = require("./preflight.store-2.js")({ $stdlib });
 const file2 = require("./preflight.subfile-3.js")({ $stdlib });
 const file3 = require("./preflight.empty-1.js")({ $stdlib });
@@ -324,7 +320,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -358,7 +354,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Util extends $stdlib.std.Resource {
@@ -383,7 +379,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["$inflight_init"];
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const store = new file1.Store(this, "file1.Store");
@@ -391,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
-    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
+    $helpers.assert(!$helpers.eq(c, file1.Color.RED), "c != file1.Color.RED");
     const t = new Triangle(this, "Triangle");
   }
 }
@@ -406,6 +402,7 @@ $APP.synth();
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
@@ -431,7 +428,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
@@ -464,7 +461,7 @@ module.exports = function({ $stdlib }) {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -494,7 +491,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["store", "$inflight_init"];
+      return [...super._supportedOps(), "store", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -524,6 +521,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const math = $stdlib.math;
   class Q extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
@@ -547,7 +545,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["greet", "$inflight_init"];
+      return [...super._supportedOps(), "greet", "$inflight_init"];
     }
   }
   return { Q };

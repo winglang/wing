@@ -24,14 +24,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c83fbf14da06343c694e42a8758f43bcb1f1c2c389",
         "attrs": {},
         "path": "root/my_on_deploy/Function",
         "props": {
@@ -43,6 +36,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Function",
       },
       {
+        "addr": "c8e2618b976544550a8396a3817f0bad07099f7050",
         "attrs": {},
         "path": "root/my_on_deploy",
         "props": {
@@ -68,6 +62,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -134,19 +132,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_on_deploy": {
           "children": {
             "Function": {
@@ -189,7 +174,6 @@ return class Handler {
 
 exports[`create an OnDeploy 2`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "super duper success",
   "Invoke (payload=\\"\\").",
@@ -197,6 +181,5 @@ exports[`create an OnDeploy 2`] = `
   "@winglang/sdk.cloud.OnDeploy created.",
   "@winglang/sdk.cloud.OnDeploy deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;

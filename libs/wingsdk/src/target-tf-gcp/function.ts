@@ -1,12 +1,19 @@
-import { resolve } from "path";
+import { writeFileSync } from "fs";
+import { join, resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Bucket, addBucketPermission } from "./bucket";
+import { Bucket } from "./bucket";
+import {
+  RoleType,
+  addBucketPermission,
+  addFunctionPermission,
+} from "./permissions";
+import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
-import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
@@ -22,23 +29,6 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   case: CaseConventions.LOWERCASE,
 };
 
-export enum ResourceTypes {
-  BUCKET = "Bucket",
-  FUNCTION = "Function",
-}
-
-export enum ActionTypes {
-  STORAGE_READ = "roles/storage.objectViewer",
-  STORAGE_READ_WRITE = "roles/storage.objectUser",
-  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
-  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
-}
-
-interface IFunctionPermissions {
-  Action: ActionTypes;
-  Resource: ResourceTypes;
-}
-
 /**
  * GCP implementation of `cloud.Function`.
  *
@@ -47,7 +37,8 @@ interface IFunctionPermissions {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private permissions: Map<string, Set<IFunctionPermissions>> = new Map();
+  private readonly functionServiceAccount: ServiceAccount;
+  private permissions: Set<string> = new Set();
 
   constructor(
     scope: Construct,
@@ -61,7 +52,25 @@ export class Function extends cloud.Function {
     const app = App.of(this) as App;
 
     // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, [
+      "@google-cloud/functions-framework",
+    ]);
+
+    const packageJson = join(bundle.directory, "package.json");
+
+    writeFileSync(
+      packageJson,
+      JSON.stringify(
+        {
+          main: "index.js",
+          dependencies: {
+            "@google-cloud/functions-framework": "^3.0.0",
+          },
+        },
+        null,
+        2
+      )
+    );
 
     // Create Cloud Function executable
     const asset = new TerraformAsset(this, "Asset", {
@@ -99,78 +108,152 @@ export class Function extends cloud.Function {
         source: asset.path,
       }
     );
-
+    // Step 1: Create Custom Service Account
+    this.functionServiceAccount = new ServiceAccount(
+      this,
+      `serviceAccount${this.node.addr.substring(-8)}`,
+      {
+        accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
+        displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
+          -8
+        )}`,
+      }
+    );
     // create the cloud function
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
       project: app.projectId,
       region: app.region,
-      runtime: "nodejs16",
+      runtime: "nodejs18",
       availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
       triggerHttp: true,
-      timeout: props.timeout?.seconds ?? 60,
+      // It takes around 1 minutes to the function invocation permissions to be established -
+      // therefore, the timeout is higher than in other targets
+      timeout: props.timeout?.seconds ?? 120,
+      serviceAccountEmail: this.functionServiceAccount.email,
       environmentVariables: Lazy.anyValue({
         produce: () => this.env ?? {},
       }) as any,
     });
   }
 
+  /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+
+    inflightClient;
+    lines.push(
+      "const functions = require('@google-cloud/functions-framework');\n"
+    );
+    lines.push(`functions.http('handler', async (req, res) => {`);
+    lines.push("  res.set('Access-Control-Allow-Origin', '*')");
+    lines.push("  res.set('Access-Control-Allow-Methods', 'GET, POST')");
+
+    lines.push("  try {");
+    lines.push(
+      `  const result = await (${inflightClient}).handle(req.body ?? "")`
+    );
+    lines.push(`  res.send(result);`);
+    lines.push(`  } catch (error) {`);
+    lines.push(`  res.status(500).send(error.message);`);
+    lines.push("}});");
+
+    return lines;
+  }
+
   public get functionName(): string {
     return this.function.name;
   }
 
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get serviceAccountEmail(): string {
+    return this.function.serviceAccountEmail;
   }
 
-  // TODO: implement with https://github.com/winglang/wing/issues/4403
+  public get project(): string {
+    return this.function.project;
+  }
+
+  public get region(): string {
+    return this.function.region;
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
+  /** @internal */
   public _toInflight(): string {
-    throw new Error(
-      "cloud.Function cannot be used as an Inflight resource on GCP yet"
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-gcp", "shared-gcp"),
+      __filename,
+      "FunctionClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.projectEnv()}"]`,
+        `process.env["${this.regionEnv()}"]`,
+      ]
     );
   }
 
-  public addPermission(
-    scopedResource: IResource,
-    permissions: IFunctionPermissions
-  ): void {
+  public addPermission(scopedResource: IResource, permission: RoleType): void {
     const uniqueId = scopedResource.node.addr.substring(-8);
 
-    if (
-      this.permissions.has(uniqueId) &&
-      this.permissions.get(uniqueId)?.has(permissions)
-    ) {
+    if (this.permissions.has(`${uniqueId}_${permission}`)) {
       return; // already exists
     }
-    const app = App.of(this) as App;
-    // TODO: add support for other resource types
-    switch (permissions.Resource) {
-      case ResourceTypes.BUCKET:
-        addBucketPermission(
-          this,
-          scopedResource as Bucket,
-          permissions.Action,
-          app.projectId
-        );
-        break;
-      case ResourceTypes.FUNCTION:
-        throw new NotImplementedError(
-          "Function permissions not implemented yet"
-        );
-      default:
-        throw new Error(`Unsupported resource type ${permissions.Resource}`);
+    if (scopedResource instanceof Bucket) {
+      addBucketPermission(this, scopedResource, permission);
+    } else if (scopedResource instanceof Function) {
+      addFunctionPermission(this, scopedResource, permission);
+    } else {
+      throw new Error(
+        `Unsupported resource type ${scopedResource.constructor.name}`
+      );
     }
-    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
-    roleDefinitions.add(permissions);
-    this.permissions.set(uniqueId, roleDefinitions);
+
+    this.permissions.add(`${uniqueId}_${permission}`);
   }
 
-  public onLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error(
+        "tfgcp.Function can only be bound by tfgcp.Function for now"
+      );
+    }
+
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPermission(this, RoleType.FUNCTION_INVOKER);
+    }
+
+    const { region, projectId } = App.of(this) as App;
+    host.addEnvironment(this.envName(), this.function.name);
+    host.addEnvironment(this.projectEnv(), projectId);
+    host.addEnvironment(this.regionEnv(), region);
+
+    super.onLift(host, ops);
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  private regionEnv(): string {
+    return `REGION_${this.node.addr.slice(-8)}`;
+  }
+
+  private projectEnv(): string {
+    return `PROJECT_${this.node.addr.slice(-8)}`;
   }
 }

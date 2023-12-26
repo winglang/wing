@@ -3,6 +3,7 @@
 ## inflight.$Closure1-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fixture_Store }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,7 +12,7 @@ module.exports = function({ $fixture_Store }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fixture_Store.makeKeyInflight("hello")),"data/hello.json")))};
+      $helpers.assert($helpers.eq((await $fixture_Store.makeKeyInflight("hello")), "data/hello.json"), "fixture.Store.makeKeyInflight(\"hello\") == \"data/hello.json\"");
     }
   }
   return $Closure1;
@@ -22,6 +23,7 @@ module.exports = function({ $fixture_Store }) {
 ## inflight.Store-2.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $myutil_Util }) {
   class Store {
     constructor({ $this_data }) {
@@ -42,6 +44,7 @@ module.exports = function({ $myutil_Util }) {
 ## inflight.Util-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -64,20 +67,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -106,6 +96,7 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const FavoriteNumbers =
     (function (tmp) {
       tmp[tmp["SEVEN"] = 0] = ",SEVEN";
@@ -126,6 +117,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const fixture = require("./preflight.testfixture-5.js")({ $stdlib });
 const testfixture = require("./preflight.testfixture-5.js")({ $stdlib });
 const testfixture2 = require("./preflight.testfixture-5.js")({ $stdlib });
@@ -157,7 +149,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -170,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
     const fave_num = fixture.FavoriteNumbers.SEVEN;
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
-    {((cond) => {if (!cond) throw new Error("assertion failed: fixture.Store.makeKey(\"hello\") == \"data/hello.json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((fixture.Store.makeKey("hello")),"data/hello.json")))};
+    $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
@@ -185,6 +177,7 @@ $APP.synth();
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const cloud = $stdlib.cloud;
   const myutil = require("./preflight.util-2.js")({ $stdlib });
   class Store extends $stdlib.std.Resource {
@@ -215,7 +208,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["makeKeyInflight", "set", "$inflight_init"];
+      return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {
@@ -238,6 +231,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   return {
     ...require("./preflight.util-2.js")({ $stdlib }),
   };
@@ -250,6 +244,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   return {
     subdir: require("./preflight.subdir-4.js")({ $stdlib }),
     ...require("./preflight.store-3.js")({ $stdlib }),
@@ -264,6 +259,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   class Util extends $stdlib.std.Resource {
     constructor($scope, $id, ) {
       super($scope, $id);
@@ -286,7 +282,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["double", "$inflight_init"];
+      return [...super._supportedOps(), "double", "$inflight_init"];
     }
   }
   return { Util };

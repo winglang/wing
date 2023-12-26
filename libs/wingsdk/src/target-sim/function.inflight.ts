@@ -32,28 +32,45 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
+  public async save(): Promise<void> {}
+
+  private createSandbox(): Sandbox {
+    return new Sandbox(this.filename, {
+      env: {
+        ...this.env,
+        WING_SIMULATOR_URL: this.context.serverUrl,
+      },
+      timeout: this.timeout,
+      log: (internal, _level, message) => {
+        this.context.addTrace({
+          data: { message },
+          type: internal ? TraceType.RESOURCE : TraceType.LOG,
+          sourcePath: this.context.resourcePath,
+          sourceType: FUNCTION_FQN,
+          timestamp: new Date().toISOString(),
+        });
+      },
+    });
+  }
+
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = new Sandbox(this.filename, {
-          env: {
-            ...this.env,
-            WING_SIMULATOR_URL: this.context.serverUrl,
-          },
-          timeout: this.timeout,
-          log: (internal, _level, message) => {
-            this.context.addTrace({
-              data: { message },
-              type: internal ? TraceType.RESOURCE : TraceType.LOG,
-              sourcePath: this.context.resourcePath,
-              sourceType: FUNCTION_FQN,
-              timestamp: new Date().toISOString(),
-            });
-          },
-        });
+        const sb = this.createSandbox();
+        return sb.call("handler", JSON.stringify(payload)) ?? "";
+      },
+    });
+  }
 
-        return sb.call("handler", JSON.stringify(payload));
+  public async invokeAsync(payload: string): Promise<void> {
+    await this.context.withTrace({
+      message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
+      activity: async () => {
+        const sb = this.createSandbox();
+        process.nextTick(() => {
+          void sb.call("handler", JSON.stringify(payload));
+        });
       },
     });
   }

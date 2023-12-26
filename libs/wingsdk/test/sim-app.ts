@@ -6,6 +6,14 @@ import { Simulator, Testing } from "../src/simulator";
 import { App } from "../src/target-sim/app";
 
 /**
+ * @see AppProps
+ */
+export interface SimAppProps {
+  readonly isTestEnvironment?: boolean;
+  readonly rootConstruct?: any;
+}
+
+/**
  * A simulated app.
  *
  * A great way to write unit tests for the cloud. Just use this as your base app
@@ -16,8 +24,14 @@ export class SimApp extends App {
   private _synthesized: boolean = false;
   private functionIndex: number = 0;
 
-  constructor() {
-    super({ outdir: mkdtemp(), entrypointDir: __dirname });
+  constructor(props: SimAppProps = {}) {
+    const { isTestEnvironment, rootConstruct } = props;
+    super({
+      outdir: mkdtemp(),
+      entrypointDir: __dirname,
+      isTestEnvironment,
+      rootConstruct,
+    });
 
     // symlink the node_modules so we can test imports and stuffs
     fs.symlinkSync(
@@ -54,10 +68,10 @@ export class SimApp extends App {
    *
    * @returns A started `Simulator` instance. No need to call `start()` again.
    */
-  public async startSimulator(): Promise<Simulator> {
+  public async startSimulator(stateDir?: string): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simfile });
+    const s = new Simulator({ simfile, stateDir });
     await s.start();
     return s;
   }

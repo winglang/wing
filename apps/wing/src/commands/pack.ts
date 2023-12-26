@@ -19,7 +19,7 @@ export interface PackageOptions {
   /**
    * Output filename.
    */
-  readonly outfile?: string;
+  readonly outFile?: string;
 }
 
 async function containsWingFile(dir: string): Promise<boolean> {
@@ -60,7 +60,7 @@ async function validateWingDir(dir: string) {
 
 export async function pack(options: PackageOptions = {}): Promise<string> {
   const userDir = process.cwd();
-  const outfile = options.outfile ? resolve(options.outfile) : undefined;
+  const outfile = options.outFile ? resolve(options.outFile) : undefined;
   const outdir = outfile ? path.dirname(outfile) : userDir;
 
   // check package.json exists

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bar, $bar_foo, $initCount }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,7 +14,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
     async handle() {
       (await $bar.callFoo());
       (await $bar_foo.method());
-      {((cond) => {if (!cond) throw new Error("assertion failed: initCount.peek() == /*1*/ 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $initCount.peek()),2)))};
+      $helpers.assert($helpers.eq((await $initCount.peek()), 2), "initCount.peek() == /*1*/ 2");
     }
   }
   return $Closure1;
@@ -24,6 +25,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
 ## inflight.Bar-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Bar {
     constructor({ $this_foo }) {
@@ -41,6 +43,7 @@ module.exports = function({  }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $initCount }) {
   class Foo {
     constructor({  }) {
@@ -65,20 +68,7 @@ module.exports = function({ $initCount }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -117,6 +107,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -144,7 +135,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["method", "$inflight_init"];
+        return [...super._supportedOps(), "method", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -177,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["callFoo", "$inflight_init"];
+        return [...super._supportedOps(), "callFoo", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -216,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

@@ -21,6 +21,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $pf_obj }) {
   class $Closure1 {
     constructor({  }) {
@@ -42,6 +43,7 @@ module.exports = function({ $pf_obj }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -65,6 +67,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -90,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["hello", "goodbye", "$inflight_init"];
+        return [...super._supportedOps(), "hello", "goodbye", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -118,7 +121,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

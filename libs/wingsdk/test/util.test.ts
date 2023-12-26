@@ -6,3 +6,13 @@ describe("env", () => {
     expect(Util.env("NODE_ENV")).toBe("test");
   });
 });
+
+describe("ulid", () => {
+  test("ulid", () => {
+    expect(Util.ulid()).toMatch(/^[0-9A-Z]{26}$/);
+  });
+
+  test("seed", () => {
+    expect(Util.ulid({ seed: 1200 })).toMatch(/^000000015G[0-9A-Z]{16}$/);
+  });
+});

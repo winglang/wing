@@ -30,14 +30,7 @@ return class Handler {
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c8220a82a4ad9c25a4f236946f350d2ac081dd7bbc",
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
@@ -48,6 +41,7 @@ return class Handler {
         "type": "@winglang/sdk.cloud.Bucket",
       },
       {
+        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
         "attrs": {},
         "path": "root/my_function",
         "props": {
@@ -76,6 +70,10 @@ return class Handler {
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -142,19 +140,6 @@ return class Handler {
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",

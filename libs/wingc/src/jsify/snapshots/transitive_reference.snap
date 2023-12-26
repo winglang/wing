@@ -36,6 +36,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $t }) {
   class $Closure1 {
     constructor({  }) {
@@ -56,17 +57,18 @@ module.exports = function({ $t }) {
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyType {
     constructor({ $this_b }) {
       this.$this_b = $this_b;
     }
     async isEmpty() {
-      return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_b.list()).length,0));
+      return $helpers.eq((await this.$this_b.list()).length, 0);
     }
     async checkIfEmpty() {
       if ((await this.isEmpty())) {
-        {console.log("empty!")};
+        console.log("empty!");
       }
     }
   }
@@ -84,6 +86,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -112,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["isEmpty", "checkIfEmpty", "$inflight_init"];
+        return [...super._supportedOps(), "isEmpty", "checkIfEmpty", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -152,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $__parent_this_1_b }) {
 ## inflight.Store-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
@@ -39,6 +41,7 @@ module.exports = function({  }) {
 ## inflight.Util-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -54,6 +57,7 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   return {  };
 };
 //# sourceMappingURL=preflight.empty-1.js.map
@@ -64,6 +68,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
@@ -89,7 +94,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["$inflight_init"];
+      return [...super._supportedOps(), "$inflight_init"];
     }
   }
   class Store extends $stdlib.std.Resource {
@@ -122,7 +127,7 @@ module.exports = function({ $stdlib }) {
           `;
         }
         _supportedOps() {
-          return ["handle", "$inflight_init"];
+          return [...super._supportedOps(), "handle", "$inflight_init"];
         }
         _registerOnLift(host, ops) {
           if (ops.includes("handle")) {
@@ -152,7 +157,7 @@ module.exports = function({ $stdlib }) {
       `;
     }
     _supportedOps() {
-      return ["store", "$inflight_init"];
+      return [...super._supportedOps(), "store", "$inflight_init"];
     }
     _registerOnLift(host, ops) {
       if (ops.includes("$inflight_init")) {

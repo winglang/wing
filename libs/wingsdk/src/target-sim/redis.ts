@@ -20,6 +20,7 @@ export class Redis extends ex.Redis implements ISimulatorResource {
     const schema: RedisSchema = {
       type: ex.REDIS_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {},
       attrs: {} as any,
     };

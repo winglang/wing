@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket2 }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $bucket2 }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fn }) {
   class $Closure2 {
     constructor({  }) {
@@ -41,6 +43,7 @@ module.exports = function({ $fn }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   class $Closure3 {
     constructor({  }) {
@@ -50,9 +53,9 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
     }
     async handle() {
       (await $fn2());
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn2.bucket.get(\"hello\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn2_bucket.get("hello")),"world")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn2.listFiles().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn2.listFiles()).length,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bucket2.get(\"b2\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $bucket2.get("b2")),"world")))};
+      $helpers.assert($helpers.eq((await $fn2_bucket.get("hello")), "world"), "fn2.bucket.get(\"hello\") == \"world\"");
+      $helpers.assert($helpers.eq((await $fn2.listFiles()).length, 1), "fn2.listFiles().length == 1");
+      $helpers.assert($helpers.eq((await $bucket2.get("b2")), "world"), "bucket2.get(\"b2\") == \"world\"");
     }
   }
   return $Closure3;
@@ -63,6 +66,7 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
 ## inflight.MyClosure-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket2 }) {
   class MyClosure {
     constructor({ $this_bucket }) {
@@ -72,11 +76,11 @@ module.exports = function({ $bucket2 }) {
       return $obj;
     }
     async handle() {
-      {console.log("handle called")};
+      console.log("handle called");
       (await this.putFile());
     }
     async putFile() {
-      {console.log("putFile called")};
+      console.log("putFile called");
       (await this.$this_bucket.put("hello", "world"));
     }
     async listFiles() {
@@ -98,20 +102,7 @@ module.exports = function({ $bucket2 }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -153,6 +144,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -182,7 +174,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -217,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "putFile", "listFiles", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "putFile", "listFiles", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -261,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -297,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {

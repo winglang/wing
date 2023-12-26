@@ -14,7 +14,7 @@
   "scripts": {},
   "devDependencies": {
     "@types/fs-extra": "^11",
-    "@types/node": "^18.16.18",
+    "@types/node": "^18.17.13",
     "@types/semver": "^7.5.0",
     "typescript": "^5.1.3"
   },

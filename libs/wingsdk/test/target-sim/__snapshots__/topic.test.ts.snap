@@ -9,14 +9,7 @@ exports[`create a topic 1`] = `
   "simulator.json": {
     "resources": [
       {
-        "attrs": {},
-        "path": "root/cloud.TestRunner",
-        "props": {
-          "tests": {},
-        },
-        "type": "@winglang/sdk.std.TestRunner",
-      },
-      {
+        "addr": "c81b9a117401b1959f70a55462f9df8add290b0fda",
         "attrs": {},
         "path": "root/my_topic",
         "props": {},
@@ -40,6 +33,10 @@ exports[`create a topic 1`] = `
       "@winglang/sdk.cloud.Domain": {
         "className": "Domain",
         "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
+      },
+      "@winglang/sdk.cloud.Endpoint": {
+        "className": "Endpoint",
+        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
       },
       "@winglang/sdk.cloud.Function": {
         "className": "Function",
@@ -106,19 +103,6 @@ exports[`create a topic 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "cloud.TestRunner": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A suite of APIs for running tests and collecting results.",
-            "hidden": true,
-            "title": "TestRunner",
-          },
-          "id": "cloud.TestRunner",
-          "path": "root/cloud.TestRunner",
-        },
         "my_topic": {
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -146,41 +130,39 @@ exports[`create a topic 1`] = `
 
 exports[`topic publishes messages as they are received 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
+  "Sending message (message=Alpha, subscriber=sim-0).",
+  "InvokeAsync (payload=\\"Alpha\\").",
   "Publish (message=Beta).",
-  "Sending message (message=Beta, subscriber=sim-1).",
+  "Sending message (message=Beta, subscriber=sim-0).",
+  "InvokeAsync (payload=\\"Beta\\").",
   "Received Alpha",
-  "Invoke (payload=\\"Alpha\\").",
   "Received Beta",
-  "Invoke (payload=\\"Beta\\").",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;
 
 exports[`topic publishes messages to multiple subscribers 1`] = `
 [
-  "@winglang/sdk.std.TestRunner created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.cloud.Topic created.",
   "@winglang/sdk.sim.EventMapping created.",
   "@winglang/sdk.cloud.Function created.",
   "@winglang/sdk.sim.EventMapping created.",
   "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-1).",
-  "Sending message (message=Alpha, subscriber=sim-4).",
+  "Sending message (message=Alpha, subscriber=sim-0).",
+  "InvokeAsync (payload=\\"Alpha\\").",
+  "Sending message (message=Alpha, subscriber=sim-3).",
+  "InvokeAsync (payload=\\"Alpha\\").",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Function deleted.",
   "@winglang/sdk.sim.EventMapping deleted.",
   "@winglang/sdk.cloud.Topic deleted.",
   "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.std.TestRunner deleted.",
 ]
 `;

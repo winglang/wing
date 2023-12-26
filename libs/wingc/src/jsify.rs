@@ -11,9 +11,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, ElifLetBlock,
-		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
-		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
+		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
+		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -45,6 +45,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 const PLATFORMS_VAR: &str = "$platforms";
+const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -173,6 +174,7 @@ impl<'a> JSifier<'a> {
 
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
+		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 		output.add_code(imports);
 
 		if is_entrypoint {
@@ -509,10 +511,10 @@ impl<'a> JSifier<'a> {
 					match scope.clone() {
 						None => None,
 						Some(scope) => Some(if scope == "this" {
-								"this".to_string()
-							} else {
-								"$scope".to_string()
-							})
+							"this".to_string()
+						} else {
+							"$scope".to_string()
+						}),
 					}
 				};
 
@@ -528,7 +530,18 @@ impl<'a> JSifier<'a> {
 
 					// if a scope is defined, use it to find the root object, otherwise use "this"
 					if node_scope != "this" {
-						new_code!(expr_span, "($scope => $scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node_scope, ")")
+						new_code!(
+							expr_span,
+							"($scope => $scope.node.root.new(\"",
+							fqn,
+							"\", ",
+							ctor,
+							", ",
+							args,
+							"))(",
+							node_scope,
+							")"
+						)
 					} else {
 						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
 					}
@@ -597,28 +610,16 @@ impl<'a> JSifier<'a> {
 				Literal::Number(n) => new_code!(expr_span, n.to_string()),
 				Literal::Boolean(b) => new_code!(expr_span, (if *b { "true" } else { "false" }).to_string()),
 			},
-			ExprKind::Range { start, inclusive, end } => match ctx.visit_ctx.current_phase() {
-				Phase::Inflight => new_code!(expr_span,
-					"((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(",
-					self.jsify_expression(start, ctx),
-					",",
-					self.jsify_expression(end, ctx),
-					",",
-					inclusive.unwrap().to_string(),
-					")"
-				),
-				_ => new_code!(
-					expr_span,
-					STDLIB,
-					".std.Range.of(",
-					self.jsify_expression(start, ctx),
-					", ",
-					self.jsify_expression(end, ctx),
-					", ",
-					inclusive.unwrap().to_string(),
-					")"
-				),
-			},
+			ExprKind::Range { start, inclusive, end } => new_code!(
+				expr_span,
+				"$helpers.range(",
+				self.jsify_expression(start, ctx),
+				",",
+				self.jsify_expression(end, ctx),
+				",",
+				inclusive.unwrap().to_string(),
+				")"
+			),
 			ExprKind::Reference(_ref) => new_code!(expr_span, self.jsify_reference(&_ref, ctx)),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
@@ -679,7 +680,16 @@ impl<'a> JSifier<'a> {
 
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				new_code!(expr_span, "(", auto_await, expr_string, optional_access, "(", args_string, "))")
+				new_code!(
+					expr_span,
+					"(",
+					auto_await,
+					expr_string,
+					optional_access,
+					"(",
+					args_string,
+					"))"
+				)
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -701,21 +711,15 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Sub => "-",
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
-					BinaryOperator::FloorDiv => {
-						return new_code!(expr_span, "Math.trunc(", js_left, " / ", js_right, ")")
-					}
+					BinaryOperator::FloorDiv => return new_code!(expr_span, "Math.trunc(", js_left, " / ", js_right, ")"),
 					BinaryOperator::Mod => "%",
 					BinaryOperator::Power => "**",
 					BinaryOperator::Greater => ">",
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => {
-						return new_code!(expr_span, "(((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(", js_left, ",", js_right, "))")
-					},
-					BinaryOperator::NotEqual => {
-						return new_code!(expr_span, "(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(", js_left, ",", js_right, "))")
-					},
+					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, "!$helpers.eq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -727,21 +731,20 @@ impl<'a> JSifier<'a> {
 				new_code!(expr_span, "(", js_left, " ", js_op, " ", js_right, ")")
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-				let item_list = items
-					.iter()
-					.map(|expr| self.jsify_expression(expr, ctx))
-					.collect_vec();
+				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 
 				new_code!(expr_span, "[", item_list, "]")
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				new_code!(
 					expr_span,
-					"({",  
+					"({",
 					fields
-				.iter()
-				.map(|(name, expr)| new_code!(expr_span, "\"", &name.name, "\": ",  self.jsify_expression(expr, ctx)))
-				.collect_vec(), "})")
+						.iter()
+						.map(|(name, expr)| new_code!(expr_span, "\"", &name.name, "\": ", self.jsify_expression(expr, ctx)))
+						.collect_vec(),
+					"})"
+				)
 			}
 			ExprKind::JsonLiteral { element, .. } => {
 				ctx.visit_ctx.push_json();
@@ -752,15 +755,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonMapLiteral { fields } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| {
-						new_code!(
-							expr_span,
-							"\"",
-							&key.name,
-							"\": ",
-							self.jsify_expression(expr, ctx)
-						)
-					})
+					.map(|(key, expr)| new_code!(expr_span, "\"", &key.name, "\": ", self.jsify_expression(expr, ctx)))
 					.collect_vec();
 				new_code!(expr_span, "({", f, "})")
 			}
@@ -776,10 +771,7 @@ impl<'a> JSifier<'a> {
 				new_code!(expr_span, "({", f, "})")
 			}
 			ExprKind::SetLiteral { items, .. } => {
-				let item_list = items
-					.iter()
-					.map(|expr| self.jsify_expression(expr, ctx))
-					.collect_vec();
+				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
 			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx),
@@ -827,39 +819,50 @@ impl<'a> JSifier<'a> {
 	fn jsify_elif_statements(
 		&self,
 		code: &mut CodeMaker,
-		elif_statements: &Vec<ElifLetBlock>,
+		elif_statements: &Vec<Elifs>,
 		index: usize,
 		else_statements: &Option<Scope>,
 		ctx: &mut JSifyContext,
 	) {
-		let elif_let_value = "$elif_let_value";
+		match elif_statements.get(index).unwrap() {
+			Elifs::ElifLetBlock(elif_let_to_jsify) => {
+				// Emit a JavaScript "else {" for each Wing "elif_let_block",
+				// and emit the closing "}" bracket in jsify_statement()'s StmtKind::IfLet match case
+				code.open("else {");
+				let elif_let_value = "$elif_let_value";
 
-		let value = format!("{}{}", elif_let_value, index);
-		let elif_block = elif_statements.get(index).unwrap();
+				let value = format!("{}{}", elif_let_value, index);
 
-		code.line(new_code!(
-			&elif_block.value.span,
-			"const ",
-			value,
-			" = ",
-			self.jsify_expression(&elif_block.value, ctx),
-			";"
-		));
-		let value = format!("{}{}", elif_let_value, index);
-		code.open(format!("if ({value} != undefined) {{"));
-		if elif_block.reassignable {
-			code.line(format!("let {} = {};", elif_block.var_name, value));
-		} else {
-			code.line(format!("const {} = {};", elif_block.var_name, value));
+				code.line(new_code!(
+					&elif_let_to_jsify.value.span,
+					"const ",
+					value,
+					" = ",
+					self.jsify_expression(&elif_let_to_jsify.value, ctx),
+					";"
+				));
+				let value = format!("{}{}", elif_let_value, index);
+				code.open(format!("if ({value} != undefined) {{"));
+				if elif_let_to_jsify.reassignable {
+					code.line(format!("let {} = {};", elif_let_to_jsify.var_name, value));
+				} else {
+					code.line(format!("const {} = {};", elif_let_to_jsify.var_name, value));
+				}
+
+				code.add_code(self.jsify_scope_body(&elif_let_to_jsify.statements, ctx));
+				code.close("}");
+			}
+			Elifs::ElifBlock(elif_to_jsify) => {
+				let condition = self.jsify_expression(&elif_to_jsify.condition, ctx);
+				// TODO: this puts the "else if" in a separate line from the closing block but
+				// technically that shouldn't be a problem, its just ugly
+				code.open(new_code!(&elif_to_jsify.condition.span, "else if (", condition, ") {"));
+				code.add_code(self.jsify_scope_body(&elif_to_jsify.statements, ctx));
+				code.close("}");
+			}
 		}
-
-		code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
-		code.close("}");
-
 		if index < elif_statements.len() - 1 {
-			code.open("else {");
 			self.jsify_elif_statements(code, elif_statements, index + 1, else_statements, ctx);
-			code.close("}");
 		} else if let Some(else_scope) = else_statements {
 			code.open("else {");
 			code.add_code(self.jsify_scope_body(else_scope, ctx));
@@ -1066,9 +1069,15 @@ impl<'a> JSifier<'a> {
 				code.close("}");
 
 				if elif_statements.len() > 0 {
-					code.open("else {");
 					self.jsify_elif_statements(&mut code, elif_statements, 0, else_statements, ctx);
-					code.close("}");
+					for elif_statement in elif_statements {
+						if let Elifs::ElifLetBlock(_) = elif_statement {
+							// "elif_let_block" statements emit "else {" in jsify_elif_statements(),
+							//  but no closing bracket "}". The closing brackets are emitted here instead to
+							// deal with properly nesting "elif_let_block", "elif_block", and "else" statements
+							code.close("}");
+						}
+					}
 				} else if let Some(else_scope) = else_statements {
 					code.open("else {");
 					code.add_code(self.jsify_scope_body(else_scope, ctx));
@@ -1491,7 +1500,7 @@ impl<'a> JSifier<'a> {
 			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
 		}
 
-		code.line(format!("return [{}];", ops.join(", ")));
+		code.line(format!("return [...super._supportedOps(), {}];", ops.join(", ")));
 		code.close("}");
 		code
 	}
@@ -1617,6 +1626,7 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
+		code.line("const $helpers = require(\"@winglang/sdk/lib/helpers\");");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

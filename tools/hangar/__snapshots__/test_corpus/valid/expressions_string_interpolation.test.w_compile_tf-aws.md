@@ -9,20 +9,7 @@
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -40,6 +27,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -50,10 +38,10 @@ class $Root extends $stdlib.std.Resource {
     const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\{empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
     const beginingWithCoolStrings = String.raw({ raw: ["", " ", " <- cool"] }, regularString, number);
     const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"{1+1}\" == \"2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, (1 + 1)),"2")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" == \"\\{1+1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","{1+1}")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"2\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","2")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\{1+1}\" != \"\\{2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })("{1+1}","{2}")))};
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, (1 + 1)), "2"), "\"{1+1}\" == \"2\"");
+    $helpers.assert($helpers.eq("{1+1}", "{1+1}"), "\"\\{1+1}\" == \"\\{1+1}\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "2"), "\"\\{1+1}\" != \"2\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "{2}"), "\"\\{1+1}\" != \"\\{2}\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

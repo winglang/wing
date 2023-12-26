@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $r }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $queue, $r, $r2, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,12 +34,12 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     async handle() {
       (await $r2.set("wing", "does redis again"));
       const value2 = (await $r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
+      $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
-        return (((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $r.get("hello")),undefined));
+        return !$helpers.eq((await $r.get("hello")), undefined);
       }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"world!\" == \"{r.get(\"hello\")}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("world!",String.raw({ raw: ["", ""] }, (await $r.get("hello"))))))};
+      $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
   }
   return $Closure2;
@@ -54,15 +56,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
+    "outputs": {}
   },
   "data": {
     "aws_region": {
@@ -74,11 +68,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
           }
         }
       }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
     }
   },
   "provider": {
@@ -194,7 +183,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "uniqueId": "cloudQueue-SetConsumer0_IamRolePolicy_3E29E517"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":[\"*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.name}"
       }
     },
@@ -261,7 +250,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudQueue-SetConsumer0_S3Object_52D070FF.key}",
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
@@ -306,7 +295,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
             "gateway_id": null,
-            "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
             "nat_gateway_id": "${aws_nat_gateway.NATGateway.id}",
@@ -336,7 +324,6 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
             "gateway_id": "${aws_internet_gateway.InternetGateway.id}",
-            "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
             "nat_gateway_id": null,
@@ -551,6 +538,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;
@@ -582,7 +570,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
@@ -619,7 +607,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _supportedOps() {
-        return ["handle", "$inflight_init"];
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
