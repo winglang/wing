@@ -256,7 +256,13 @@ export interface BucketDeleteOptions {
  * Specifies the HTTP method permitted by a presigned URL for a bucket.
  */
 export enum BucketSignedUrlAction {
+  /**
+   * Represents a GET request for a presigned URL, allowing read access for an object in the bucket.
+   */
   GET = "GET",
+  /**
+   * Represents a PUT request for a presigned URL, allowing write access for an object in the bucket.
+   */
   PUT = "PUT",
 }
 
