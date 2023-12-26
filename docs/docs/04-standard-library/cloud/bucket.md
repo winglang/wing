@@ -827,7 +827,21 @@ let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.action">action</a></code> | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a></code> | The action allowed by the signed URL. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed URL to expire. |
+
+---
+
+##### `action`<sup>Optional</sup> <a name="action" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.action"></a>
+
+```wing
+action: BucketSignedUrlAction;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a>
+- *Default:* BucketSignedUrlAction.GET
+
+The action allowed by the signed URL.
 
 ---
 
@@ -839,7 +853,7 @@ duration: duration;
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
-The duration for the signed url to expire.
+The duration for the signed URL to expire.
 
 ---
 
@@ -983,6 +997,33 @@ Delete.
 ##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
 
 Update.
+
+---
+
+
+### BucketSignedUrlAction <a name="BucketSignedUrlAction" id="@winglang/sdk.cloud.BucketSignedUrlAction"></a>
+
+Specifies the HTTP method permitted by a presigned URL for a bucket.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.GET">GET</a></code> | Represents a GET request for a presigned URL, allowing read access for an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.PUT">PUT</a></code> | Represents a PUT request for a presigned URL, allowing write access for an object in the bucket. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.cloud.BucketSignedUrlAction.GET"></a>
+
+Represents a GET request for a presigned URL, allowing read access for an object in the bucket.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.BucketSignedUrlAction.PUT"></a>
+
+Represents a PUT request for a presigned URL, allowing write access for an object in the bucket.
 
 ---
 
