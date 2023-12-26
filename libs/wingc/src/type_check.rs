@@ -1944,7 +1944,7 @@ impl<'a> TypeChecker<'a> {
 						}
 						BinaryOperator::AddOrConcat => {
 							if ltype.is_subtype_of(&self.types.number()) && rtype.is_subtype_of(&self.types.number()) {
-								(self.types.number(), Phase::Independent)
+								(self.types.number(), phase)
 							} else if ltype.is_subtype_of(&self.types.string()) && rtype.is_subtype_of(&self.types.string()) {
 								(self.types.string(), phase)
 							} else {
