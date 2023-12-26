@@ -1,4 +1,4 @@
-import { Storage, Bucket, StorageError } from "@google-cloud/storage";
+import { Storage, Bucket } from "@google-cloud/storage";
 import mime from "mime-types";
 import {
   BucketDeleteOptions,
