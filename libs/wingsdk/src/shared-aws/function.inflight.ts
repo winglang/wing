@@ -130,7 +130,7 @@ function cloudwatchLogsPath(functionArn: string): string {
   return `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups/log-group/%2Faws%2Flambda%2F${functionName}`;
 }
 
-function parseLogs(logs: string, sourcePath: string) {
+export function parseLogs(logs: string, sourcePath: string) {
   const lines = logs.split("\n");
   const traces: Trace[] = [];
   for (const line of lines) {
