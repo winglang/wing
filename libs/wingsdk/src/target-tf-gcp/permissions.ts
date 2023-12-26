@@ -66,7 +66,8 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.EXISTS) ||
-    ops.includes(cloud.BucketInflightMethods.METADATA)
+    ops.includes(cloud.BucketInflightMethods.METADATA) ||
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
   ) {
     permissions.push("storage.objects.get");
   }
@@ -89,6 +90,10 @@ export function calculateBucketPermissions(ops: string[]): string[] {
 
   if (ops.includes(cloud.BucketInflightMethods.LIST)) {
     permissions.push("storage.objects.list");
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+    permissions.push("storage.buckets.get");
   }
 
   return permissions;

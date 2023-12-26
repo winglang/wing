@@ -180,21 +180,17 @@ export class BucketClient implements IBucketClient {
   }
 
   public async publicUrl(key: string): Promise<string> {
-    try {
-      if (!(await this.exists(key))) {
-        throw new Error(
-          `Cannot provide public URL for a non-existent object. (key=${key})`
-        );
-      }
-      if ((await this.isPublic()) === false) {
-        throw new Error(
-          `Cannot provide public URL for a non-public bucket. (bucket=${this.bucketName})`
-        );
-      }
-      return `https://storage.googleapis.com/${this.bucketName}/${key}`;
-    } catch (error) {
-      throw new Error(`Failed to get public URL. (key=${key})`);
+    if (!(await this.isPublic())) {
+      throw new Error("Cannot provide public url for a non-public bucket");
     }
+
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide public url for a non-existent key (key=${key})`
+      );
+    }
+
+    return `https://storage.googleapis.com/${this.bucketName}/${key}`;
   }
 
   // TODO: implement signedUrl
