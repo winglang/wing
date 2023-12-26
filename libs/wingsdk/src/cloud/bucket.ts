@@ -271,8 +271,9 @@ export interface BucketSignedUrlOptions {
 
   /**
    * The action allowed by the signed URL.
+   * @default BucketSignedUrlAction.GET
    */
-  readonly action: BucketSignedUrlAction;
+  readonly action?: BucketSignedUrlAction;
 }
 
 /**

@@ -339,8 +339,11 @@ export class BucketClient implements IBucketClient {
   ): Promise<string> {
     let command;
 
+    // Set default action to GET if not provided
+    const action = opts.action ?? BucketSignedUrlAction.GET;
+
     // Create the AWS S3 command based on the action method
-    switch (opts.action) {
+    switch (action) {
       case BucketSignedUrlAction.GET:
         command = new GetObjectCommand({
           Bucket: this.bucketName,
