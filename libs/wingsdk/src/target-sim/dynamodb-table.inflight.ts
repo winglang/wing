@@ -54,6 +54,7 @@ export class DynamodbTable
         imageName: this.WING_DYNAMODB_IMAGE,
         containerName: this.containerName,
         containerPort: "8000",
+        user: "root",
         args: [
           "-jar",
           "DynamoDBLocal.jar",

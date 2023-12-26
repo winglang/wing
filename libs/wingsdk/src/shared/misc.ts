@@ -35,6 +35,7 @@ export interface runDockerImageProps {
   imageName: string;
   containerName: string;
   containerPort: string;
+  user?: string;
   args?: string[];
   volumes?: Record<string, string>;
 }
@@ -46,6 +47,7 @@ export async function runDockerImage({
   imageName,
   containerName,
   containerPort,
+  user,
   volumes,
   args,
 }: runDockerImageProps): Promise<{ hostPort: string }> {
@@ -64,6 +66,10 @@ export async function runDockerImage({
     "-p",
     containerPort,
   ];
+
+  if (user) {
+    runArgs.push(`--user=${user}`);
+  }
 
   if (volumes) {
     for (let [src, dst] of Object.entries(volumes)) {
