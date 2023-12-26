@@ -4,11 +4,6 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
-// import {
-// RoleType,
-// addBucketPermission,
-// addFunctionPermission,
-// } from "./permissions";
 import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
 import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
