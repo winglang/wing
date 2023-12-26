@@ -345,6 +345,11 @@ export class BucketClient implements IBucketClient {
     // Create the AWS S3 command based on the action method
     switch (action) {
       case BucketSignedUrlAction.GET:
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
+          );
+        }
         command = new GetObjectCommand({
           Bucket: this.bucketName,
           Key: key,
