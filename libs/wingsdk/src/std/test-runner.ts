@@ -57,14 +57,14 @@ export class TestRunner extends Resource {
    * for a unit test. We keep track of these so that we don't synthesize
    * multiple test functions into the same isolated environment.
    */
-  private _synthedEnvs: string[] = [];
+  private _synthedEnvs: Set<string> = new Set();
 
   /**
    * List of test paths that we have already created a cloud.Function for.
    * We keep track of these so that we don't create identical test functions in multiple
    * isolated environments.
    */
-  private _synthedTests: string[] = [];
+  private _synthedTests: Set<string> = new Set();
 
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     if (new.target === TestRunner) {
@@ -88,14 +88,20 @@ export class TestRunner extends Resource {
     inflight: IFunctionHandler,
     props: FunctionProps
   ): Function | undefined {
-    const testEnv = scope.node.path.split("/").at(1)!;
-    const testPath = scope.node.path.split("/").slice(2).join("/") + "/" + id;
-    if (
-      !this._synthedEnvs.includes(testEnv) &&
-      !this._synthedTests.includes(testPath)
-    ) {
-      this._synthedEnvs.push(testEnv);
-      this._synthedTests.push(testPath);
+    // searching exactly for `env${number}`
+    const testEnv = scope.node.path.match(/env[0-9]+/)?.at(0)!;
+    // searching for the rest of the path that appears after `env${number}`- this would be the test path
+    const testPath =
+      scope.node.path
+        .match(/env[\d]+\/.+/)
+        ?.at(0)!
+        .replace(`${testEnv}/`, "") +
+      "/" +
+      id;
+
+    if (!this._synthedEnvs.has(testEnv) && !this._synthedTests.has(testPath)) {
+      this._synthedEnvs.add(testEnv);
+      this._synthedTests.add(testPath);
       return new Function(scope, id, inflight, props);
     }
 
