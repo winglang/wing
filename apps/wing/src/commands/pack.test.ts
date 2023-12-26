@@ -18,7 +18,7 @@ describe("wing pack", () => {
     const projectDir = join(fixturesDir, "invalid1");
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
-    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
       /No package.json found in the current directory./
     );
     await expectNoTarball(outdir);
@@ -29,7 +29,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(
       /Missing required field "license" in package.json/
     );
     await expectNoTarball(outdir);
@@ -40,7 +40,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow(/Expected ';'/);
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow(/Expected ';'/);
     await expectNoTarball(outdir);
   });
 
@@ -65,7 +65,7 @@ describe("wing pack", () => {
     const outdir = await generateTmpDir();
     process.chdir(projectDir);
 
-    await expect(pack({ outfile: join(outdir, "tarball.tgz") })).rejects.toThrow();
+    await expect(pack({ outFile: join(outdir, "tarball.tgz") })).rejects.toThrow();
     await expectNoTarball(outdir);
   });
 
@@ -84,7 +84,7 @@ describe("wing pack", () => {
     process.chdir(projectDir);
 
     // WHEN
-    await pack({ outfile: join(outdir, "tarball.tgz") });
+    await pack({ outFile: join(outdir, "tarball.tgz") });
 
     // THEN
     const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
@@ -103,7 +103,7 @@ describe("wing pack", () => {
     await fs.mkdir("target");
     await fs.writeFile("target/index.js", "console.log('hello world');");
 
-    await pack({ outfile: join(outdir, "tarball.tgz") });
+    await pack({ outFile: join(outdir, "tarball.tgz") });
     const tarballContents = await extractTarball(join(outdir, "tarball.tgz"), outdir);
     expect(tarballContents["target/index.js"]).toBeUndefined();
   });
@@ -143,7 +143,7 @@ describe("wing pack", () => {
     process.chdir(projectDir);
 
     // WHEN
-    await pack({ outfile: join(outdir, "tarball.tgz") });
+    await pack({ outFile: join(outdir, "tarball.tgz") });
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -169,6 +169,21 @@ describe("wing pack", () => {
     expect(pkgJson.keywords.includes("winglang")).toBe(true);
     expect(pkgJson.engines.wing).toEqual("*");
     expect(pkgJson.wing).toEqual(true);
+  });
+
+  it("creates a tarball with a custom filename when using the out-file option", async () => {
+    // GIVEN
+    const projectDir = goodFixtureDir;
+    const outdir = await generateTmpDir();
+    process.chdir(projectDir);
+    const customFilename = "custom-tarball.tgz";
+
+    // WHEN
+    await pack({ outFile: join(outdir, customFilename) });
+
+    // THEN
+    const files = await fs.readdir(outdir);
+    expect(files.includes(customFilename)).toBe(true);
   });
 });
 
