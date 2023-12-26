@@ -180,7 +180,7 @@ export class BucketClient implements IBucketClient {
           return;
         }
       }
-      throw Error(`unable to delete "${key}": ${error.details.message}`);
+      throw Error(`Failed to delete object (key=${key}).`);
     }
   }
 

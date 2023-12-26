@@ -2,10 +2,10 @@ import { Storage, Bucket } from "@google-cloud/storage";
 import mime from "mime-types";
 import {
   BucketDeleteOptions,
-  IBucketClient,
-  ObjectMetadata,
   BucketSignedUrlOptions,
   BucketPutOptions,
+  IBucketClient,
+  ObjectMetadata,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -154,7 +154,7 @@ export class BucketClient implements IBucketClient {
       if (!mustExist && error.code === 404) {
         return;
       }
-      throw new Error(`Object could not be deleted (key=${key}).`);
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 

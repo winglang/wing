@@ -191,7 +191,7 @@ export class BucketClient implements IBucketClient {
       if (!mustExist && error instanceof NoSuchKey) {
         return;
       }
-      throw new Error(`Object could not be deleted (key=${key}).`);
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 
