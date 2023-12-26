@@ -41,7 +41,9 @@ export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
   private readonly functionCustomRole: ProjectIamCustomRole;
-  private readonly permissions: Set<string> = new Set();
+  private readonly permissions: Set<string> = new Set([
+    "cloudfunctions.functions.get",
+  ]);
 
   constructor(
     scope: Construct,
