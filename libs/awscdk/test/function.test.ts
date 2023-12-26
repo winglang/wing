@@ -140,3 +140,25 @@ test("basic function with infinite log retention", () => {
   ).toEqual(0);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
+
+test("source map setting", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
+  const f = new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.hasResourceProperties(
+    "AWS::Lambda::Function",
+    Match.objectLike({
+      Environment: {
+        Variables: {
+          NODE_OPTIONS: "--enable-source-maps",
+        },
+      },
+    })
+  );
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+})

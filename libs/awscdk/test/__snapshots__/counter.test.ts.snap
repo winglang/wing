@@ -129,6 +129,7 @@ exports[`dec() policy statement 2`] = `
             "DYNAMODB_TABLE_NAME_c7ebcb7a": {
               "Ref": "Counter44A08DAC",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
@@ -463,6 +464,7 @@ exports[`function with a counter binding 2`] = `
             "DYNAMODB_TABLE_NAME_c7ebcb7a": {
               "Ref": "Counter44A08DAC",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
@@ -736,6 +738,7 @@ exports[`inc() policy statement 2`] = `
             "DYNAMODB_TABLE_NAME_c7ebcb7a": {
               "Ref": "Counter44A08DAC",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
@@ -1009,6 +1012,7 @@ exports[`peek() policy statement 2`] = `
             "DYNAMODB_TABLE_NAME_c7ebcb7a": {
               "Ref": "Counter44A08DAC",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
@@ -1282,6 +1286,7 @@ exports[`set() policy statement 2`] = `
             "DYNAMODB_TABLE_NAME_c7ebcb7a": {
               "Ref": "Counter44A08DAC",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",
