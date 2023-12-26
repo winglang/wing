@@ -1,12 +1,5 @@
 import * as cloud from "../cloud";
 
-export enum RoleType {
-  STORAGE_READ = "roles/storage.objectViewer",
-  STORAGE_READ_WRITE = "roles/storage.objectUser",
-  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
-  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
-}
-
 export function calculateBucketPermissions(ops: string[]): string[] {
   const permissions: string[] = [];
 

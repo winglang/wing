@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
-import { RoleType, calculateBucketPermissions } from "./permissions";
+import { calculateBucketPermissions } from "./permissions";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -74,7 +74,7 @@ export class Bucket extends cloud.Bucket {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: RoleType.STORAGE_READ,
+        role: "roles/storage.objectViewer",
         member: "allUsers",
       });
     }
