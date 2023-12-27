@@ -500,7 +500,7 @@ impl<'s> Parser<'s> {
 						if child.kind() == "class_implementation" && has_extends {
 							let mut cursor = child.walk();
 							child.children(&mut cursor).for_each(|child| {
-								if child.kind() == "initializer" {
+								if child.kind() == "initializer" || child.kind() == "initializer_initializer" {
 									nodes.push(child);
 								}
 							});
@@ -520,21 +520,37 @@ impl<'s> Parser<'s> {
 			match stmt_kind {
 				StmtKind::Class(class) => {
 					if class.parent.is_some() {
+						let mut super_call_present = false;
 						match &class.initializer.body {
 							FunctionBody::Statements(statements) => {
 								if &statements.statements.len() > &0 {
 									let first_statement = &statements.statements.first().unwrap().kind;
 									match first_statement {
-										StmtKind::SuperConstructor { arg_list: _ } => {}
-										_ => {
-											self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
+										StmtKind::SuperConstructor { arg_list: _ } => {
+											super_call_present = true;
 										}
+										_ => {}
 									}
-								} else {
-									self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
 								}
 							}
 							_ => {}
+						}
+						match &class.inflight_initializer.body {
+							FunctionBody::Statements(statements) => {
+								if &statements.statements.len() > &0 {
+									let first_statement = &statements.statements.first().unwrap().kind;
+									match first_statement {
+										StmtKind::SuperConstructor { arg_list: _ } => {
+											super_call_present = true;
+										}
+										_ => {}
+									}
+								}
+							}
+							_ => {}
+						}
+						if !super_call_present {
+							self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
 						}
 						counter += 1;
 					}
