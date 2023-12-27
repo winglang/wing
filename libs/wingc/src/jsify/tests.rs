@@ -1526,6 +1526,7 @@ fn base_class_with_fields_preflight() {
     class Derived extends Base {
       g: str;
       new() {
+        super();
         this.g = "world";
       }
 
@@ -1552,6 +1553,7 @@ fn base_class_with_fields_inflight() {
     class Derived extends Base {
       inflight g: str;
       inflight new() {
+        super();
         this.g = "world";
       }
 
