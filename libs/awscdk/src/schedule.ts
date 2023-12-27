@@ -67,7 +67,7 @@ export class Schedule extends cloud.Schedule {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
-        __dirname.replace("target-awscdk", "shared-aws"),
+        __dirname,
         "schedule.ontick.inflight.js"
       ),
       "ScheduleOnTickHandlerClient"
@@ -103,7 +103,7 @@ export class Schedule extends cloud.Schedule {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "ScheduleClient",
       [`process.env["${this.envName()}"]`]
