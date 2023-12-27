@@ -424,6 +424,8 @@ impl<'s> Parser<'s> {
 			_ => Scope::empty(),
 		};
 
+		self.report_missing_super_call(&root, &scope);
+
 		// Module files can only have certain kinds of statements
 		if !is_entrypoint_file(&self.source_name) {
 			for stmt in &scope.statements {
@@ -477,6 +479,65 @@ impl<'s> Parser<'s> {
 			)?
 		} else {
 			self.with_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
+		}
+	}
+
+	fn report_missing_super_call(&self, node: &Node, scope: &Scope) {
+		let mut cursor = node.walk();
+		let mut nodes = Vec::new();
+		for child in node.named_children(&mut cursor) {
+			if child.is_extra() {
+				continue;
+			}
+			match child.kind() {
+				"class_definition" => {
+					let mut cursor = child.walk();
+					let mut has_extends = false;
+					child.children(&mut cursor).for_each(|child| {
+						if child.kind() == "extends" {
+							has_extends = true;
+						}
+						if child.kind() == "class_implementation" && has_extends {
+							let mut cursor = child.walk();
+							child.children(&mut cursor).for_each(|child| {
+								if child.kind() == "initializer" {
+									nodes.push(child);
+								}
+							});
+						}
+					});
+				}
+				_ => {}
+			}
+		}
+
+		let mut counter = 0;
+		for stmt in &scope.statements {
+			let stmt_kind = &stmt.kind;
+			match stmt_kind {
+				StmtKind::Class(class) => {
+					if class.parent.is_some() {
+						match &class.initializer.body {
+							FunctionBody::Statements(statements) => {
+								if &statements.statements.len() > &0 {
+									let first_statement = &statements.statements.first().unwrap().kind;
+									match first_statement {
+										StmtKind::SuperConstructor { arg_list: _ } => {}
+										_ => {
+											self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
+										}
+									}
+								} else {
+									self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
+								}
+							}
+							_ => {}
+						}
+						counter += 1;
+					}
+				}
+				_ => {}
+			}
 		}
 	}
 
