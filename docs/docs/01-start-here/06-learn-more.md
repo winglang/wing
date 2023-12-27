@@ -13,7 +13,7 @@ Learn about Wing's [core concepts](https://www.winglang.io/docs/category/core-co
 
 Or check out the documentation of the varios resources in Wing's [standard library](https://www.winglang.io/docs/category/standard-library) which abstracts the cloud.
 
-You can also check out Wing's [toolchain](https://www.winglang.io/docs/category/tools), including the [compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that allow you to go below the abstraction layer and tweak the infrastructure definitions directly.
+You can also check out Wing's [toolchain](https://www.winglang.io/docs/category/tools), including the [platforms](https://www.winglang.io/docs/concepts/platforms) that allow you to go below the abstraction layer and tweak the infrastructure definitions directly.
 
 ### Interactive Tutorials 
 
