@@ -521,9 +521,11 @@ impl<'s> Parser<'s> {
 				StmtKind::Class(class) => {
 					if class.parent.is_some() {
 						let mut super_call_present = false;
+						let mut initializer_present = false;
 						match &class.initializer.body {
 							FunctionBody::Statements(statements) => {
 								if &statements.statements.len() > &0 {
+									initializer_present = true;
 									let first_statement = &statements.statements.first().unwrap().kind;
 									match first_statement {
 										StmtKind::SuperConstructor { arg_list: _ } => {
@@ -538,6 +540,7 @@ impl<'s> Parser<'s> {
 						match &class.inflight_initializer.body {
 							FunctionBody::Statements(statements) => {
 								if &statements.statements.len() > &0 {
+									initializer_present = true;
 									let first_statement = &statements.statements.first().unwrap().kind;
 									match first_statement {
 										StmtKind::SuperConstructor { arg_list: _ } => {
@@ -549,7 +552,7 @@ impl<'s> Parser<'s> {
 							}
 							_ => {}
 						}
-						if !super_call_present {
+						if !super_call_present && initializer_present {
 							self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
 						}
 						counter += 1;
