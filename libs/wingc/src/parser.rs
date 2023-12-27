@@ -511,6 +511,9 @@ impl<'s> Parser<'s> {
 			}
 		}
 
+		if nodes.len() == 0 {
+			return;
+		}
 		let mut counter = 0;
 		for stmt in &scope.statements {
 			let stmt_kind = &stmt.kind;
