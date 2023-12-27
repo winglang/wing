@@ -14,10 +14,17 @@ class Super {
   new() { this.name = "Super"; }
 }
 class Sub extends Super {
-  new() { this.name = "Sub"; }
+  new() { 
+    super();
+    this.name = "Sub";
+  }
 }
 class Sub1 extends Super {
-  new() { this.name = "Sub"; }
+  new() { 
+    super();
+    this.name = "Sub";
+  }
+
 }
 
 let optionalSup: Super? = new Super();
