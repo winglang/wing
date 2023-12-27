@@ -15,6 +15,7 @@ source: libs/wingc/src/jsify/tests.rs
     class Derived extends Base {
       g: str;
       new() {
+        super();
         this.g = "world";
       }
 

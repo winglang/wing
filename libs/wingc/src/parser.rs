@@ -500,7 +500,7 @@ impl<'s> Parser<'s> {
 						if child.kind() == "class_implementation" && has_extends {
 							let mut cursor = child.walk();
 							child.children(&mut cursor).for_each(|child| {
-								if child.kind() == "initializer" || child.kind() == "initializer_initializer" {
+								if child.kind() == "initializer" || child.kind() == "inflight_initializer" {
 									nodes.push(child);
 								}
 							});
