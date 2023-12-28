@@ -2072,22 +2072,15 @@ exports[`interface.test.w 1`] = `
 error: Access modifiers are not allowed in interfaces
    --> ../../../examples/tests/invalid/interface.test.w:36:3
    |
-36 |   pub inflight foo(body: Json): Json;  
-   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+36 |   pub method2(): str;  
+   |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
 
 
-error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/interface.test.w:36:16
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/interface.test.w:36:14
    |
-36 |   pub inflight foo(body: Json): Json;  
-   |                ^^^ Unexpected 'identifier'
-
-
-error: Unexpected 'json_container_type'
-   --> ../../../examples/tests/invalid/interface.test.w:36:26
-   |
-36 |   pub inflight foo(body: Json): Json;  
-   |                          ^^^^ Unexpected 'json_container_type'
+36 |   pub method2(): str;  
+   |              ^^ Unknown parser error
 
 
 error: Unknown symbol \\"IB\\"
