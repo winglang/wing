@@ -382,7 +382,7 @@ export class Util {
 
   /**
    * Convert a value to a new number base
-   * 
+   *
    * @param value The number to be converted
    * @param base The base of the new value
    * @returns A string representation of the new number
@@ -391,5 +391,5 @@ export class Util {
     return value.toString(base);
   }
 
-  private constructor() { }
+  private constructor() {}
 }
