@@ -160,7 +160,7 @@ module.exports = function({  }) {
             "uniqueId": "MyResource_cloudApi_api_4CB9B8E3"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{},\"x-amazon-apigateway-gateway-responses\":{\"MISSING_AUTHENTICATION_TOKEN\":{\"statusCode\":\"404\",\"responseTemplates\":{\"application/json\":\"{\\\"message\\\": $context.error.messageString }\"}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -173,7 +173,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{},\"x-amazon-apigateway-gateway-responses\":{\"MISSING_AUTHENTICATION_TOKEN\":{\"statusCode\":\"404\",\"responseTemplates\":{\"application/json\":\"{\\\"message\\\": $context.error.messageString }\"}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
