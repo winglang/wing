@@ -49,6 +49,8 @@ const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
+const NODE_MODULES_DIR: &str = "node_modules";
+const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -79,6 +81,7 @@ pub struct JSifier<'a> {
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
+	out_dir: &'a Utf8Path,
 }
 
 impl VisitorWithContext for JSifyContext<'_> {
@@ -101,6 +104,7 @@ impl<'a> JSifier<'a> {
 		source_files: &'a Files,
 		source_file_graph: &'a FileGraph,
 		compilation_init_path: &'a Utf8Path,
+		out_dir: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
@@ -108,6 +112,7 @@ impl<'a> JSifier<'a> {
 			source_files,
 			source_file_graph,
 			compilation_init_path,
+			out_dir,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
@@ -1314,10 +1319,64 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
-			FunctionBody::External(file_path) => {
+			FunctionBody::External(extern_path) => {
+				let extern_path = Utf8Path::new(extern_path);
+				let entrypoint_dir = if self.compilation_init_path.is_file() {
+					self.compilation_init_path.parent().unwrap()
+				} else {
+					self.compilation_init_path
+				};
+
+				// extern_path should always be a sub directory of entrypoint_dir
+				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
+					report_diagnostic(Diagnostic {
+						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+						annotations: vec![],
+						hints: vec![],
+						span: Some(func_def.span.clone()),
+					});
+					return CodeMaker::default();
+				};
+
+				let mut path_components = rel_path.components();
+
+				// check if the first part of the path is the node module directory
+				let require_path =
+					if path_components.next().expect("extern path must not be empty").as_str() == NODE_MODULES_DIR {
+						// We are loading an extern from a node module, so we want that path to be relative to the package itself
+						// e.g. require("../node_modules/@winglibs/blah/util.js") should be require("@winglibs/blah/util.js") instead
+
+						// the second part of the path will either be the package name or the package scope
+						let second_component = path_components
+							.next()
+							.expect("extern path in node module must have at least two components")
+							.as_str();
+
+						let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
+							// scoped package, prepend the scope to the next part of the path
+							format!(
+								"{second_component}/{}",
+								path_components
+									.next()
+									.expect("extern path in scoped node module must have at least three components")
+							)
+						} else {
+							// regular package
+							second_component.to_string()
+						};
+
+						// combine the module name with the rest of the iterator to get the full import path
+						format!("{module_name}/{}", path_components.join("/"))
+					} else {
+						// go from the out_dir to the entrypoint dir
+						let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+
+						format!("{up_dirs}{rel_path}")
+					};
+
 				new_code!(
 					&func_def.span,
-					format!("return (require(\"{file_path}\")[\"{name}\"])("),
+					format!("return (require(\"{require_path}\")[\"{name}\"])("),
 					parameters.clone(),
 					")"
 				)
