@@ -321,7 +321,9 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    const defaultResponse = props.cors
+      ? API_CORS_DEFAULT_RESPONSE(props.cors)
+      : {};
 
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
