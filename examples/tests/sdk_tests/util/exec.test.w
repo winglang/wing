@@ -38,7 +38,7 @@ test "exec() with invalid program" {
 
 test "exec() with explicit non-zero exit status" {
   let program = "bash";
-  let args = ["-c", "exit 1"];
+  let args = ["--norc", "--noprofile", "-c", "exit 1"];
 
   let output = util.exec(program, args);
 
@@ -49,7 +49,7 @@ test "exec() with explicit non-zero exit status" {
 
 test "exec() with env option" {
   let program = "bash";
-  let args = ["-c", "echo $WING_TARGET $ENV_VAR"];
+  let args = ["--norc", "--noprofile", "-c", "echo $WING_TARGET $ENV_VAR"];
   let opts = {
     env: { ENV_VAR: "Wing" },
   };
@@ -63,7 +63,7 @@ test "exec() with env option" {
 
 test "exec() with inheritEnv option" {
   let program = "bash";
-  let args = ["-c", "echo $WING_TARGET"];
+  let args = ["--norc", "--noprofile", "-c", "echo $WING_TARGET"];
   let opts = {
     inheritEnv: true,
   };
