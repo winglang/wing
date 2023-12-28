@@ -90,10 +90,9 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
     // check that the library compiles to the "sim" target
     console.log('Compiling to the "sim" target...');
-    const compilerOutputDir = path.join(
-      await compile(workdir, { platform: [BuiltinPlatform.SIM] }),
-      ".wing"
-    );
+    const compilerOutputDir = await compile(workdir, {
+      platform: [BuiltinPlatform.SIM],
+    });
 
     const pkgJsonPath = path.join(workdir, "package.json");
     const pkgJson = JSON.parse(await fs.readFile(pkgJsonPath, "utf8"));
@@ -108,7 +107,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
     // TODO Remove once we are generating .d.ts files
     await fs.writeFile(
-      path.join(compilerOutputDir, "preflight.d.ts"),
+      path.join(compilerOutputDir, ".wing", "preflight.d.ts"),
       `declare module '${pkgJson.name}';`
     );
 
