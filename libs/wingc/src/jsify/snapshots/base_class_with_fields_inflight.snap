@@ -60,6 +60,7 @@ module.exports = function({ $Base }) {
       this.g;
     }
     async $inflight_init() {
+      super($scope, $id, );
       this.g = "world";
     }
   }

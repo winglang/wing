@@ -99,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class Derived extends Base {
       constructor($scope, $id, ) {
-        super($scope, $id);
+        super($scope, $id, );
         this.g = "world";
       }
       foo() {
