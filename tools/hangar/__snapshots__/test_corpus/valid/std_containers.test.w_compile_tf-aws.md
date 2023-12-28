@@ -3,6 +3,7 @@
 ## inflight.Animal-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Animal {
     constructor({  }) {
@@ -16,6 +17,7 @@ module.exports = function({  }) {
 ## inflight.Cat-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Animal }) {
   class Cat extends $Animal {
     constructor({  }) {
@@ -30,6 +32,7 @@ module.exports = function({ $Animal }) {
 ## inflight.Dog-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Animal }) {
   class Dog extends $Animal {
     constructor({  }) {
@@ -68,6 +71,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -150,44 +154,44 @@ class $Root extends $stdlib.std.Resource {
     }
     const sArray = ["one", "two"];
     const mutArray = [...(sArray)];
-    ((obj, args) => { obj.push(...args); })(mutArray, ["three"]);
+    mutArray.push("three");
     const immutArray = [...(mutArray)];
     const s = ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: s == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"two")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.at(1) == \"two\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1),"two")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sArray.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sArray.length,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: immutArray.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutArray.length,3)))};
+    $helpers.assert($helpers.eq(s, "two"), "s == \"two\"");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sArray, 1), "two"), "sArray.at(1) == \"two\"");
+    $helpers.assert($helpers.eq(sArray.length, 2), "sArray.length == 2");
+    $helpers.assert($helpers.eq(immutArray.length, 3), "immutArray.length == 3");
     const sArray2 = ["if", "you", "build", "it"];
     const sArray3 = ["he", "will", "come", "for", "you"];
     const mergedArray = (sArray2.concat(sArray3));
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.length == 9")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.length,9)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(5) == \"will\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedArray, 5),"will")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.contains(\"build\")")})(mergedArray.includes("build"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: !mergedArray.contains(\"bring\")")})((!mergedArray.includes("bring")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.indexOf(\"you\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.indexOf("you"),1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.join(\" \") == \"if you build it he will come for you\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedArray.join(" ")),"if you build it he will come for you")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.join() == \"if,you,build,it,he,will,come,for,you\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mergedArray.join()),"if,you,build,it,he,will,come,for,you")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.lastIndexOf(\"you\") == 8")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedArray.lastIndexOf("you"),8)))};
+    $helpers.assert($helpers.eq(mergedArray.length, 9), "mergedArray.length == 9");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedArray, 5), "will"), "mergedArray.at(5) == \"will\"");
+    $helpers.assert(mergedArray.includes("build"), "mergedArray.contains(\"build\")");
+    $helpers.assert((!mergedArray.includes("bring")), "!mergedArray.contains(\"bring\")");
+    $helpers.assert($helpers.eq(mergedArray.indexOf("you"), 1), "mergedArray.indexOf(\"you\") == 1");
+    $helpers.assert($helpers.eq((mergedArray.join(" ")), "if you build it he will come for you"), "mergedArray.join(\" \") == \"if you build it he will come for you\"");
+    $helpers.assert($helpers.eq((mergedArray.join()), "if,you,build,it,he,will,come,for,you"), "mergedArray.join() == \"if,you,build,it,he,will,come,for,you\"");
+    $helpers.assert($helpers.eq(mergedArray.lastIndexOf("you"), 8), "mergedArray.lastIndexOf(\"you\") == 8");
     const mutArray2 = ["how", "does", "that", "look"];
     const mergedMutArray = (mutArray.concat(mutArray2));
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.length == 7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mergedMutArray.length,7)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mergedMutArray.at(5) == \"that\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedMutArray, 5),"that")))};
+    $helpers.assert($helpers.eq(mergedMutArray.length, 7), "mergedMutArray.length == 7");
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(mergedMutArray, 5), "that"), "mergedMutArray.at(5) == \"that\"");
     const sSet = new Set(["one", "two"]);
     const mutSet = new Set(sSet);
     (mutSet.add("three"));
     const immutSet = new Set(mutSet);
-    {((cond) => {if (!cond) throw new Error("assertion failed: sSet.has(\"one\")")})((sSet.has("one")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sSet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(sSet.size,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: immutSet.size == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(immutSet.size,3)))};
+    $helpers.assert((sSet.has("one")), "sSet.has(\"one\")");
+    $helpers.assert($helpers.eq(sSet.size, 2), "sSet.size == 2");
+    $helpers.assert($helpers.eq(immutSet.size, 3), "immutSet.size == 3");
     const sMap = ({["one"]: 1, ["two"]: 2});
     const nestedMap = ({["a"]: ({["b"]: ({"c": "hello"})})});
     const mutMap = {...(sMap)};
     ((obj, args) => { obj[args[0]] = args[1]; })(mutMap, ["five", 5]);
     const immutMap = ({...(mutMap)});
-    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.get(\"one\") == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(sMap, "one"),1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: sMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sMap).length,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: immutMap.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(immutMap).length,3)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(nestedMap, "a"), "b"), "c"),"hello")))};
+    $helpers.assert($helpers.eq(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(sMap, "one"), 1), "sMap.get(\"one\") == 1");
+    $helpers.assert($helpers.eq(Object.keys(sMap).length, 2), "sMap.size() == 2");
+    $helpers.assert($helpers.eq(Object.keys(immutMap).length, 3), "immutMap.size() == 3");
+    $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(nestedMap, "a"), "b"), "c"), "hello"), "nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"");
     const heterogeneousArray = [new Cat(this, "C1"), new Dog(this, "D1")];
     const heterogeneousDoubleArray = [[new Cat(this, "C2")], [new Cat(this, "C3"), new Dog(this, "D2")], [new Animal(this, "A1")]];
     const heterogeneousSet = new Set([new Cat(this, "C4"), new Dog(this, "D3")]);

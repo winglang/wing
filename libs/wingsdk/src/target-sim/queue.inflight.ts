@@ -20,11 +20,11 @@ export class Queue
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly processLoop: LoopController;
   private readonly context: ISimulatorContext;
-  private readonly timeout: number;
+  private readonly timeoutSeconds: number;
   private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    this.timeout = props.timeout;
+    this.timeoutSeconds = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.processLoop = runEvery(100, async () => this.processMessages()); // every 0.1 seconds
     this.context = context;
@@ -160,7 +160,9 @@ export class Queue
           sourceType: QUEUE_FQN,
           timestamp: new Date().toISOString(),
         });
-        // TODO: replace with await fnClient.invokeAsync()
+
+        // we don't use invokeAsync here because we want to wait for the function to finish
+        // and requeue the messages if it fails
         void fnClient
           .invoke(JSON.stringify({ messages: messagesPayload }))
           .catch((err) => {
@@ -174,26 +176,14 @@ export class Queue
               type: TraceType.RESOURCE,
               timestamp: new Date().toISOString(),
             });
-            void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
-              this.context.addTrace({
-                data: {
-                  message: `Error pushing ${messagesPayload.length} messages back to queue: ${requeueErr.message}`,
-                },
-                sourcePath: this.context.resourcePath,
-                sourceType: QUEUE_FQN,
-                type: TraceType.RESOURCE,
-                timestamp: new Date().toISOString(),
-              });
-            });
+            this.pushMessagesBackToQueue(messages);
           });
         processedMessages = true;
       }
     } while (processedMessages);
   }
 
-  public async pushMessagesBackToQueue(
-    messages: Array<QueueMessage>
-  ): Promise<void> {
+  public pushMessagesBackToQueue(messages: Array<QueueMessage>): void {
     setTimeout(() => {
       // Don't push back messages with retention timeouts that have expired
       const retainedMessages = messages.filter(
@@ -209,7 +199,7 @@ export class Queue
         type: TraceType.RESOURCE,
         timestamp: new Date().toISOString(),
       });
-    }, this.timeout * 1000);
+    }, this.timeoutSeconds * 1000);
   }
 }
 

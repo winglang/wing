@@ -42,8 +42,11 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
-      runtime: Runtime.NODEJS_18_X,
-      environment: this.env,
+      runtime: Runtime.NODEJS_20_X,
+      environment: {
+        NODE_OPTIONS: "--enable-source-maps",
+        ...this.env
+      },
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(1),
@@ -55,7 +58,10 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+    return [
+      cloud.FunctionInflightMethods.INVOKE,
+      cloud.FunctionInflightMethods.INVOKE_ASYNC,
+    ];
   }
 
   public onLift(host: std.IInflightHost, ops: string[]): void {
@@ -80,7 +86,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "FunctionClient",
       [`process.env["${this.envName()}"], "${this.node.path}"`]

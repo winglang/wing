@@ -45,9 +45,12 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 const PLATFORMS_VAR: &str = "$platforms";
+const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
+const NODE_MODULES_DIR: &str = "node_modules";
+const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -78,6 +81,7 @@ pub struct JSifier<'a> {
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
+	out_dir: &'a Utf8Path,
 }
 
 impl VisitorWithContext for JSifyContext<'_> {
@@ -100,6 +104,7 @@ impl<'a> JSifier<'a> {
 		source_files: &'a Files,
 		source_file_graph: &'a FileGraph,
 		compilation_init_path: &'a Utf8Path,
+		out_dir: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
@@ -107,6 +112,7 @@ impl<'a> JSifier<'a> {
 			source_files,
 			source_file_graph,
 			compilation_init_path,
+			out_dir,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
@@ -172,6 +178,7 @@ impl<'a> JSifier<'a> {
 
 		// "std" is implicitly imported
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
+		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 		output.add_code(imports);
 
 		if is_entrypoint {
@@ -505,10 +512,10 @@ impl<'a> JSifier<'a> {
 					match scope.clone() {
 						None => None,
 						Some(scope) => Some(if scope == "this" {
-								"this".to_string()
-							} else {
-								"$scope".to_string()
-							})
+							"this".to_string()
+						} else {
+							"$scope".to_string()
+						}),
 					}
 				};
 
@@ -524,7 +531,18 @@ impl<'a> JSifier<'a> {
 
 					// if a scope is defined, use it to find the root object, otherwise use "this"
 					if node_scope != "this" {
-						new_code!(expr_span, "($scope => $scope.node.root.new(\"", fqn, "\", ", ctor, ", ", args, "))(", node_scope, ")")
+						new_code!(
+							expr_span,
+							"($scope => $scope.node.root.new(\"",
+							fqn,
+							"\", ",
+							ctor,
+							", ",
+							args,
+							"))(",
+							node_scope,
+							")"
+						)
 					} else {
 						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
 					}
@@ -593,28 +611,16 @@ impl<'a> JSifier<'a> {
 				Literal::Number(n) => new_code!(expr_span, n.to_string()),
 				Literal::Boolean(b) => new_code!(expr_span, (if *b { "true" } else { "false" }).to_string()),
 			},
-			ExprKind::Range { start, inclusive, end } => match ctx.visit_ctx.current_phase() {
-				Phase::Inflight => new_code!(expr_span,
-					"((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(",
-					self.jsify_expression(start, ctx),
-					",",
-					self.jsify_expression(end, ctx),
-					",",
-					inclusive.unwrap().to_string(),
-					")"
-				),
-				_ => new_code!(
-					expr_span,
-					STDLIB,
-					".std.Range.of(",
-					self.jsify_expression(start, ctx),
-					", ",
-					self.jsify_expression(end, ctx),
-					", ",
-					inclusive.unwrap().to_string(),
-					")"
-				),
-			},
+			ExprKind::Range { start, inclusive, end } => new_code!(
+				expr_span,
+				"$helpers.range(",
+				self.jsify_expression(start, ctx),
+				",",
+				self.jsify_expression(end, ctx),
+				",",
+				inclusive.unwrap().to_string(),
+				")"
+			),
 			ExprKind::Reference(_ref) => new_code!(expr_span, self.jsify_reference(&_ref, ctx)),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = match callee {
@@ -675,7 +681,16 @@ impl<'a> JSifier<'a> {
 
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				new_code!(expr_span, "(", auto_await, expr_string, optional_access, "(", args_string, "))")
+				new_code!(
+					expr_span,
+					"(",
+					auto_await,
+					expr_string,
+					optional_access,
+					"(",
+					args_string,
+					"))"
+				)
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
@@ -697,21 +712,15 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Sub => "-",
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
-					BinaryOperator::FloorDiv => {
-						return new_code!(expr_span, "Math.trunc(", js_left, " / ", js_right, ")")
-					}
+					BinaryOperator::FloorDiv => return new_code!(expr_span, "Math.trunc(", js_left, " / ", js_right, ")"),
 					BinaryOperator::Mod => "%",
 					BinaryOperator::Power => "**",
 					BinaryOperator::Greater => ">",
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => {
-						return new_code!(expr_span, "(((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(", js_left, ",", js_right, "))")
-					},
-					BinaryOperator::NotEqual => {
-						return new_code!(expr_span, "(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(", js_left, ",", js_right, "))")
-					},
+					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, "!$helpers.eq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -723,21 +732,20 @@ impl<'a> JSifier<'a> {
 				new_code!(expr_span, "(", js_left, " ", js_op, " ", js_right, ")")
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-				let item_list = items
-					.iter()
-					.map(|expr| self.jsify_expression(expr, ctx))
-					.collect_vec();
+				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 
 				new_code!(expr_span, "[", item_list, "]")
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				new_code!(
 					expr_span,
-					"({",  
+					"({",
 					fields
-				.iter()
-				.map(|(name, expr)| new_code!(expr_span, "\"", &name.name, "\": ",  self.jsify_expression(expr, ctx)))
-				.collect_vec(), "})")
+						.iter()
+						.map(|(name, expr)| new_code!(expr_span, "\"", &name.name, "\": ", self.jsify_expression(expr, ctx)))
+						.collect_vec(),
+					"})"
+				)
 			}
 			ExprKind::JsonLiteral { element, .. } => {
 				ctx.visit_ctx.push_json();
@@ -748,15 +756,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonMapLiteral { fields } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| {
-						new_code!(
-							expr_span,
-							"\"",
-							&key.name,
-							"\": ",
-							self.jsify_expression(expr, ctx)
-						)
-					})
+					.map(|(key, expr)| new_code!(expr_span, "\"", &key.name, "\": ", self.jsify_expression(expr, ctx)))
 					.collect_vec();
 				new_code!(expr_span, "({", f, "})")
 			}
@@ -772,10 +772,7 @@ impl<'a> JSifier<'a> {
 				new_code!(expr_span, "({", f, "})")
 			}
 			ExprKind::SetLiteral { items, .. } => {
-				let item_list = items
-					.iter()
-					.map(|expr| self.jsify_expression(expr, ctx))
-					.collect_vec();
+				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
 			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx),
@@ -1297,10 +1294,64 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
-			FunctionBody::External(file_path) => {
+			FunctionBody::External(extern_path) => {
+				let extern_path = Utf8Path::new(extern_path);
+				let entrypoint_dir = if self.compilation_init_path.is_file() {
+					self.compilation_init_path.parent().unwrap()
+				} else {
+					self.compilation_init_path
+				};
+
+				// extern_path should always be a sub directory of entrypoint_dir
+				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
+					report_diagnostic(Diagnostic {
+						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+						annotations: vec![],
+						hints: vec![],
+						span: Some(func_def.span.clone()),
+					});
+					return CodeMaker::default();
+				};
+
+				let mut path_components = rel_path.components();
+
+				// check if the first part of the path is the node module directory
+				let require_path =
+					if path_components.next().expect("extern path must not be empty").as_str() == NODE_MODULES_DIR {
+						// We are loading an extern from a node module, so we want that path to be relative to the package itself
+						// e.g. require("../node_modules/@winglibs/blah/util.js") should be require("@winglibs/blah/util.js") instead
+
+						// the second part of the path will either be the package name or the package scope
+						let second_component = path_components
+							.next()
+							.expect("extern path in node module must have at least two components")
+							.as_str();
+
+						let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
+							// scoped package, prepend the scope to the next part of the path
+							format!(
+								"{second_component}/{}",
+								path_components
+									.next()
+									.expect("extern path in scoped node module must have at least three components")
+							)
+						} else {
+							// regular package
+							second_component.to_string()
+						};
+
+						// combine the module name with the rest of the iterator to get the full import path
+						format!("{module_name}/{}", path_components.join("/"))
+					} else {
+						// go from the out_dir to the entrypoint dir
+						let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+
+						format!("{up_dirs}{rel_path}")
+					};
+
 				new_code!(
 					&func_def.span,
-					format!("return (require(\"{file_path}\")[\"{name}\"])("),
+					format!("return (require(\"{require_path}\")[\"{name}\"])("),
 					parameters.clone(),
 					")"
 				)
@@ -1609,6 +1660,7 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
+		code.line("const $helpers = require(\"@winglang/sdk/lib/helpers\");");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));

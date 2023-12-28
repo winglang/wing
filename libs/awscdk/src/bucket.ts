@@ -211,7 +211,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "BucketClient",
       [

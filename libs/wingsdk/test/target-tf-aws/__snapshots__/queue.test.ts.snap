@@ -227,7 +227,7 @@ exports[`queue with a consumer function 2`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
         "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",

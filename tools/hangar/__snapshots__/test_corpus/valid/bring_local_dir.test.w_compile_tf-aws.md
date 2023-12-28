@@ -3,6 +3,7 @@
 ## inflight.Bar-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
@@ -16,6 +17,7 @@ module.exports = function({  }) {
 ## inflight.Foo-2.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -29,6 +31,7 @@ module.exports = function({  }) {
 ## inflight.Foo-3.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -42,6 +45,7 @@ module.exports = function({  }) {
 ## inflight.Widget-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Widget {
     constructor({  }) {
@@ -74,6 +78,7 @@ module.exports = function({  }) {
 ## preflight.file1-3.js
 ```js
 "use strict";
+<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const blah = require("./preflight.inner-2.js");
@@ -82,6 +87,44 @@ const util = $stdlib.util;
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
+=======
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
+  const blah = require("./preflight.inner-2.js")({ $stdlib });
+  const cloud = $stdlib.cloud;
+  const util = $stdlib.util;
+  class Foo extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    foo() {
+      return "foo";
+    }
+    checkWidget(widget) {
+      return ((widget.compute()) + (blah.Widget.staticCompute()));
+    }
+    static _toInflightType() {
+      return `
+        require("./inflight.Foo-2.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const FooClient = ${Foo._toInflightType(this)};
+          const client = new FooClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _supportedOps() {
+      return [...super._supportedOps(), "$inflight_init"];
+    }
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   foo() {
     return "foo";
@@ -117,12 +160,47 @@ module.exports = { Foo };
 ## preflight.file2-4.js
 ```js
 "use strict";
+<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const util = $stdlib.util;
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
+=======
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
+  const util = $stdlib.util;
+  class Bar extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    bar() {
+      (util.Util.nanoid());
+      return "bar";
+    }
+    static _toInflightType() {
+      return `
+        require("./inflight.Bar-3.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const BarClient = ${Bar._toInflightType(this)};
+          const client = new BarClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _supportedOps() {
+      return [...super._supportedOps(), "$inflight_init"];
+    }
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   bar() {
     (util.Util.nanoid());
@@ -181,10 +259,19 @@ module.exports = { Bar };
 ## preflight.inner-2.js
 ```js
 "use strict";
+<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 module.exports = {
   ...require("./preflight.widget-1.js"),
+=======
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
+  return {
+    ...require("./preflight.widget-1.js")({ $stdlib }),
+  };
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
 };
 //# sourceMappingURL=preflight.inner-2.js.map
 ```
@@ -197,20 +284,26 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+<<<<<<< HEAD
 const w = require("./preflight.widget-1.js");
 const subdir = require("./preflight.subdir2-5.js");
+=======
+const $helpers = $stdlib.helpers;
+const w = require("./preflight.widget-1.js")({ $stdlib });
+const subdir = require("./preflight.subdir2-5.js")({ $stdlib });
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     const widget1 = new w.Widget(this, "w.Widget");
-    {((cond) => {if (!cond) throw new Error("assertion failed: widget1.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget1.compute()),42)))};
+    $helpers.assert($helpers.eq((widget1.compute()), 42), "widget1.compute() == 42");
     const foo = new subdir.Foo(this, "subdir.Foo");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.foo()),"foo")))};
+    $helpers.assert($helpers.eq((foo.foo()), "foo"), "foo.foo() == \"foo\"");
     const bar = new subdir.Bar(this, "subdir.Bar");
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.bar()),"bar")))};
+    $helpers.assert($helpers.eq((bar.bar()), "bar"), "bar.bar() == \"bar\"");
     const widget2 = new subdir.inner.Widget(this, "subdir.inner.Widget");
-    {((cond) => {if (!cond) throw new Error("assertion failed: widget2.compute() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((widget2.compute()),42)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.checkWidget(widget2) == 1379")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.checkWidget(widget2)),1379)))};
+    $helpers.assert($helpers.eq((widget2.compute()), 42), "widget2.compute() == 42");
+    $helpers.assert($helpers.eq((foo.checkWidget(widget2)), 1379), "foo.checkWidget(widget2) == 1379");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
@@ -222,12 +315,23 @@ $APP.synth();
 ## preflight.subdir2-5.js
 ```js
 "use strict";
+<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 module.exports = {
   get inner() { return require("./preflight.inner-2.js") },
   ...require("./preflight.file2-4.js"),
   ...require("./preflight.file1-3.js"),
+=======
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
+  return {
+    inner: require("./preflight.inner-2.js")({ $stdlib }),
+    ...require("./preflight.file2-4.js")({ $stdlib }),
+    ...require("./preflight.file1-3.js")({ $stdlib }),
+  };
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
 };
 //# sourceMappingURL=preflight.subdir2-5.js.map
 ```
@@ -235,11 +339,47 @@ module.exports = {
 ## preflight.widget-1.js
 ```js
 "use strict";
+<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 class Widget extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
+=======
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
+  class Widget extends $stdlib.std.Resource {
+    constructor($scope, $id, ) {
+      super($scope, $id);
+    }
+    compute() {
+      return 42;
+    }
+    static staticCompute() {
+      return 1337;
+    }
+    static _toInflightType() {
+      return `
+        require("./inflight.Widget-1.js")({
+        })
+      `;
+    }
+    _toInflight() {
+      return `
+        (await (async () => {
+          const WidgetClient = ${Widget._toInflightType(this)};
+          const client = new WidgetClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `;
+    }
+    _supportedOps() {
+      return [...super._supportedOps(), "$inflight_init"];
+    }
+>>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   compute() {
     return 42;
