@@ -321,52 +321,61 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
+    this.api = this._initializeApiGatewayRestApi(id, props);
+    this.deployment = this._initializeApiGatewayDeployment();
+    this.stage = this._initializeApiGatewayStage();
+    this.url = this._constructInvokeUrl();
+  }
+
+  private _initializeApiGatewayRestApi(
+    id: string,
+    props: {
+      getApiSpec: () => OpenApiSpec;
+      cors?: cloud.ApiCorsOptions;
+    }
+  ): ApiGatewayRestApi {
     const defaultResponse = props.cors
       ? API_CORS_DEFAULT_RESPONSE(props.cors)
       : {};
-
-    this.api = new ApiGatewayRestApi(this, `${id}`, {
+    return new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
-            };
-            return openApiSpec;
-          };
-          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
+          const apiSpec = props.getApiSpec();
+          return JSON.stringify({
+            ...apiSpec,
+            paths: { ...apiSpec.paths, ...defaultResponse },
+          });
         },
       }),
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
+      lifecycle: { createBeforeDestroy: true },
     });
+  }
 
-    this.deployment = new ApiGatewayDeployment(this, "deployment", {
+  private _initializeApiGatewayDeployment(): ApiGatewayDeployment {
+    return new ApiGatewayDeployment(this, "deployment", {
       restApiId: this.api.id,
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-      triggers: {
-        // Trigger redeployment when the api spec changes
-        redeployment: Fn.sha256(this.api.body),
-      },
+      lifecycle: { createBeforeDestroy: true },
+      // Trigger redeployment when the api spec changes
+      triggers: { redeployment: Fn.sha256(this.api.body) },
     });
+  }
 
-    this.stage = new ApiGatewayStage(this, "stage", {
+  private _initializeApiGatewayStage(): ApiGatewayStage {
+    return new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
+  }
 
-    // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
-    // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
-    // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
-    // in Terraform. Hence, we're creating our own url here.
-    this.url = `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${this.stage.stageName}`;
+  // Intentionally not using `this.stage.invokeUrl`, it looks like it's shared with
+  // the `invokeUrl` from the api deployment, which gets recreated on every deployment.
+  // When this `invokeUrl` is referenced somewhere else in the stack, it can cause cyclic dependencies
+  // in Terraform. Hence, we're creating our own url here.
+  private _constructInvokeUrl(): string {
+    return `https://${this.api.id}.execute-api.${this.region}.amazonaws.com/${STAGE_NAME}`;
   }
 
   /**
@@ -377,8 +386,8 @@ class WingRestApi extends Construct {
    * @returns OpenApi spec extension for the endpoint
    */
   public addEndpoint(path: string, method: string, handler: Function) {
-    const endpointExtension = this.createApiSpecExtension(handler);
-    this.addHandlerPermissions(path, method, handler);
+    const endpointExtension = this._createApiSpecExtension(handler);
+    this._addHandlerPermissions(path, method, handler);
     return endpointExtension;
   }
 
@@ -387,7 +396,7 @@ class WingRestApi extends Construct {
    * @param handler Lambda function to handle the endpoint
    * @returns OpenApi extension object for the endpoint and handler
    */
-  private createApiSpecExtension(handler: Function) {
+  private _createApiSpecExtension(handler: Function) {
     const extension = {
       "x-amazon-apigateway-integration": {
         uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
@@ -412,7 +421,7 @@ class WingRestApi extends Construct {
    * @param method Method of the endpoint
    * @param handler Lambda function to handle the endpoint
    */
-  private addHandlerPermissions = (
+  private _addHandlerPermissions = (
     path: string,
     method: string,
     handler: Function
