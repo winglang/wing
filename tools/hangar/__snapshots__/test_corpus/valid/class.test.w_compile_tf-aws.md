@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $c5 }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,10 +12,10 @@ module.exports = function({ $c5 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.x,123)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.y,321)))};
+      $helpers.assert($helpers.eq($c5.x, 123), "c5.x == 123");
+      $helpers.assert($helpers.eq($c5.y, 321), "c5.y == 321");
       (await $c5.set(111));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.y,111)))};
+      $helpers.assert($helpers.eq($c5.y, 111), "c5.y == 111");
     }
   }
   return $Closure1;
@@ -25,6 +26,7 @@ module.exports = function({ $c5 }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
     constructor({  }) {
@@ -33,9 +35,9 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_name,"Tom")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_major,"MySpace")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_hrlyWage,38)))};
+      $helpers.assert($helpers.eq($student_name, "Tom"), "student.name == \"Tom\"");
+      $helpers.assert($helpers.eq($student_major, "MySpace"), "student.major == \"MySpace\"");
+      $helpers.assert($helpers.eq($student_hrlyWage, 38), "student.hrlyWage == 38");
     }
   }
   return $Closure2;
@@ -46,6 +48,7 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
     constructor({  }) {
@@ -54,7 +57,7 @@ module.exports = function({ $ta_hrlyWage }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($ta_hrlyWage,10)))};
+      $helpers.assert($helpers.eq($ta_hrlyWage, 10), "ta.hrlyWage == 10");
     }
   }
   return $Closure3;
@@ -65,6 +68,7 @@ module.exports = function({ $ta_hrlyWage }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $B }) {
   class $Closure4 {
     constructor({  }) {
@@ -74,7 +78,7 @@ module.exports = function({ $B }) {
     }
     async handle() {
       const b = (await (async () => {const o = new $B("ba"); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
+      $helpers.assert($helpers.eq(b.sound, "ba"), "b.sound == \"ba\"");
     }
   }
   return $Closure4;
@@ -85,6 +89,7 @@ module.exports = function({ $B }) {
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor(sound){
@@ -101,6 +106,7 @@ module.exports = function({  }) {
 ## inflight.B-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $A }) {
   class B extends $A {
     constructor(sound){
@@ -119,6 +125,7 @@ module.exports = function({ $A }) {
 ## inflight.Bam-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Boom }) {
   class Bam extends $Boom {
     constructor({  }) {
@@ -133,6 +140,7 @@ module.exports = function({ $Boom }) {
 ## inflight.Bar-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Bar {
     constructor({  }) {
@@ -146,6 +154,7 @@ module.exports = function({  }) {
 ## inflight.Baz-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Bar }) {
   class Baz extends $Bar {
     constructor({  }) {
@@ -160,6 +169,7 @@ module.exports = function({ $Bar }) {
 ## inflight.Boom-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Boom {
     constructor({  }) {
@@ -173,6 +183,7 @@ module.exports = function({  }) {
 ## inflight.C1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class C1 {
     constructor({  }) {
@@ -186,6 +197,7 @@ module.exports = function({  }) {
 ## inflight.C2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class C2 {
     constructor({  }) {
@@ -199,6 +211,7 @@ module.exports = function({  }) {
 ## inflight.C3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class C3 {
     constructor({  }) {
@@ -212,6 +225,7 @@ module.exports = function({  }) {
 ## inflight.C4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class C4 {
     constructor({  }) {
@@ -225,6 +239,7 @@ module.exports = function({  }) {
 ## inflight.C5-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class C5 {
     constructor({  }) {
@@ -245,6 +260,7 @@ module.exports = function({  }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Bar }) {
   class Foo extends $Bar {
     constructor({  }) {
@@ -261,6 +277,7 @@ module.exports = function({ $Bar }) {
 ## inflight.PaidStudent-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Student }) {
   class PaidStudent extends $Student {
     constructor({  }) {
@@ -275,6 +292,7 @@ module.exports = function({ $Student }) {
 ## inflight.Person-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Person {
     constructor({  }) {
@@ -288,6 +306,7 @@ module.exports = function({  }) {
 ## inflight.Student-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Person }) {
   class Student extends $Person {
     constructor({  }) {
@@ -302,6 +321,7 @@ module.exports = function({ $Person }) {
 ## inflight.TeacherAid-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $PaidStudent }) {
   class TeacherAid extends $PaidStudent {
     constructor({  }) {
@@ -340,6 +360,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -905,11 +926,11 @@ class $Root extends $stdlib.std.Resource {
     }
     new C1(this, "C1");
     const c2 = new C2(this, "C2");
-    {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c2.x,1)))};
+    $helpers.assert($helpers.eq(c2.x, 1), "c2.x == 1");
     const c3 = new C3(this, "C3", 1, 2);
-    {((cond) => {if (!cond) throw new Error("assertion failed: c3.x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c3.x,1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: c3.y == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c3.y,2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: C4.m() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((C4.m()),1)))};
+    $helpers.assert($helpers.eq(c3.x, 1), "c3.x == 1");
+    $helpers.assert($helpers.eq(c3.y, 2), "c3.y == 2");
+    $helpers.assert($helpers.eq((C4.m()), 1), "C4.m() == 1");
     const c5 = new C5(this, "C5");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:access inflight field", new $Closure1(this, "$Closure1"));
     const student = new PaidStudent(this, "PaidStudent", "Tom", "MySpace", 38);

@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -21,6 +22,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $strToStr }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,7 +32,7 @@ module.exports = function({ $strToStr }) {
     }
     async handle(s) {
       (await $strToStr.invoke("one"));
-      {console.log((await $strToStr.invoke("two")))};
+      console.log((await $strToStr.invoke("two")));
     }
   }
   return $Closure2;
@@ -165,7 +167,7 @@ module.exports = function({ $strToStr }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.func_IamRole_EED2D17C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.func_S3Object_82AC2651.key}",
         "timeout": 60,
@@ -196,7 +198,7 @@ module.exports = function({ $strToStr }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.strToStr_IamRole_3B9A4F9A.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.strToStr_S3Object_1E7679F7.key}",
         "timeout": 60,
@@ -266,6 +268,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

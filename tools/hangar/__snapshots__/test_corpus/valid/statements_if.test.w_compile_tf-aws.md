@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -13,22 +14,22 @@ module.exports = function({  }) {
     async handle() {
       if (true) {
         const x = 2;
-        if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 2),4)))) {
-          if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),4)))) {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        if ((true && $helpers.eq((x + 2), 4))) {
+          if ((true && $helpers.eq((x + 3), 4))) {
+            $helpers.assert(false, "false");
           }
-          else if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),6)))) {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          else if ((true && $helpers.eq((x + 3), 6))) {
+            $helpers.assert(false, "false");
           }
-          else if ((false || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),5)))) {
-            {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+          else if ((false || $helpers.eq((x + 3), 5))) {
+            $helpers.assert(true, "true");
           }
           else {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
         }
         else {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          $helpers.assert(false, "false");
         }
       }
     }
@@ -65,6 +66,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -99,25 +101,25 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       const x = 2;
       const f = false;
-      if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 2),4)))) {
-        if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),4)))) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      if ((true && $helpers.eq((x + 2), 4))) {
+        if ((true && $helpers.eq((x + 3), 4))) {
+          $helpers.assert(false, "false");
         }
-        else if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),6)))) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        else if ((true && $helpers.eq((x + 3), 6))) {
+          $helpers.assert(false, "false");
         }
-        else if ((false || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),5)))) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+        else if ((false || $helpers.eq((x + 3), 5))) {
+          $helpers.assert(true, "true");
         }
         else if ((!f)) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: !!!f")})((!(!(!f))))};
+          $helpers.assert((!(!(!f))), "!!!f");
         }
         else {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          $helpers.assert(false, "false");
         }
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+        $helpers.assert(false, "false");
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));
@@ -129,19 +131,19 @@ class $Root extends $stdlib.std.Resource {
         const $if_let_value = a;
         if ($if_let_value != undefined) {
           const d = $if_let_value;
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          $helpers.assert(false, "false");
         }
         else if (((b) != null)) {
-          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+          $helpers.assert(true, "true");
         }
         else {
           const $elif_let_value1 = c;
           if ($elif_let_value1 != undefined) {
             const e = $elif_let_value1;
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
           else {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
         }
       }
@@ -154,19 +156,19 @@ class $Root extends $stdlib.std.Resource {
         const $if_let_value = a;
         if ($if_let_value != undefined) {
           const d = $if_let_value;
-          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          $helpers.assert(false, "false");
         }
         else {
           const $elif_let_value0 = c;
           if ($elif_let_value0 != undefined) {
             const e = $elif_let_value0;
-            {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+            $helpers.assert(true, "true");
           }
           else if (((b) != null)) {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
           else {
-            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+            $helpers.assert(false, "false");
           }
         }
       }

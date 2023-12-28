@@ -161,7 +161,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_put_path_id_nn_user_0_IamRole_EE0ADE87.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_put_path_id_nn_user_0_S3Object_AD9086D4.key}",
         "timeout": 60,

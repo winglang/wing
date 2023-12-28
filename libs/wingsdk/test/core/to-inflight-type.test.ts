@@ -22,6 +22,7 @@ const skip = [
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum
   "util.HttpMethod", // an enum
+  "util.Stdio", // an enum
 ];
 
 // checks that the class `className` in module `module` has a `_toInflightType()` method and that it

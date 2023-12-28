@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $__parent_this_1_b }) {
 ## inflight.Store-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Store {
     constructor({ $this_b }) {
@@ -39,6 +41,7 @@ module.exports = function({  }) {
 ## inflight.Util-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
@@ -54,6 +57,7 @@ module.exports = function({  }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   return {  };
 };
 //# sourceMappingURL=preflight.empty-1.js.map
@@ -64,6 +68,7 @@ module.exports = function({ $stdlib }) {
 "use strict";
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const $helpers = $stdlib.helpers;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
