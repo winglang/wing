@@ -23,6 +23,20 @@ import { corsOptionsMethod } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
 
 /**
+ * Custom error when the resource doesn't exist
+ */
+const GATEWAY_404_RESPONSE = {
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "statusCode": "404",
+      "responseTemplates": {
+        "application/json": "{\"message\": $context.error.messageString }",
+      },
+    },
+  }
+}
+
+/**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
  */
 const NAME_OPTS: NameOptions = {
@@ -332,7 +346,10 @@ class WingRestApi extends Construct {
               }
             });
 
-            return openApiSpec;
+            return {
+              ...openApiSpec,
+              ...GATEWAY_404_RESPONSE,
+            }
           };
           return JSON.stringify(injectOptionsMethod(props.getApiSpec()));
         },
