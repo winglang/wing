@@ -524,39 +524,36 @@ impl<'s> Parser<'s> {
 						let mut initializer_present = false;
 						match &class.initializer.body {
 							FunctionBody::Statements(statements) => {
-								if &statements.statements.len() > &0 {
-									initializer_present = true;
-									let first_statement = &statements.statements.first().unwrap().kind;
-									match first_statement {
-										StmtKind::SuperConstructor { arg_list: _ } => {
-											super_call_present = true;
-										}
-										_ => {}
-									}
-								}
+								self.has_super_constructor(&statements, &mut initializer_present, &mut super_call_present);
 							}
 							_ => {}
 						}
 						match &class.inflight_initializer.body {
 							FunctionBody::Statements(statements) => {
-								if &statements.statements.len() > &0 {
-									initializer_present = true;
-									let first_statement = &statements.statements.first().unwrap().kind;
-									match first_statement {
-										StmtKind::SuperConstructor { arg_list: _ } => {
-											super_call_present = true;
-										}
-										_ => {}
-									}
-								}
+								self.has_super_constructor(&statements, &mut initializer_present, &mut super_call_present);
 							}
 							_ => {}
 						}
 						if !super_call_present && initializer_present {
 							self.add_error("Super call missing in initializer of derived class", &nodes[counter]);
 						}
-						counter += 1;
+						if initializer_present {
+							counter += 1;
+						}
 					}
+				}
+				_ => {}
+			}
+		}
+	}
+
+	fn has_super_constructor(&self, scope: &Scope, initializer_present: &mut bool, super_call_present: &mut bool) {
+		if &scope.statements.len() > &0 {
+			*initializer_present = true;
+			let first_statement = &scope.statements.first().unwrap().kind;
+			match first_statement {
+				StmtKind::SuperConstructor { arg_list: _ } => {
+					*super_call_present = true;
 				}
 				_ => {}
 			}

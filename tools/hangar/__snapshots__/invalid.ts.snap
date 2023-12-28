@@ -712,10 +712,30 @@ error: Call to super constructor can only be done from within a class constructo
 
 
 error: Reserved method name. Initializers are declared with \\"init\\"
-    --> ../../../examples/tests/invalid/class.test.w:160:3
+    --> ../../../examples/tests/invalid/class.test.w:168:3
     |
-160 |   constructor() {
+168 |   constructor() {
     |   ^^^^^^^^^^^ Reserved method name. Initializers are declared with \\"init\\"
+
+
+error: Super call missing in initializer of derived class
+    --> ../../../examples/tests/invalid/class.test.w:96:3
+    |  
+ 96 | /   new(name: str, major: str, hrlyWage: num) {
+ 97 | |     this.hrlyWage = hrlyWage;
+ 98 | |     super(name, major);
+ 99 | | //  ^^^^^^^^^^^^^^^^^^^ Expected call to super to be first statement in constructor
+100 | |   }
+    | \\\\---^ Super call missing in initializer of derived class
+
+
+error: Super call missing in initializer of derived class
+    --> ../../../examples/tests/invalid/class.test.w:149:3
+    |  
+149 | /   new(someNum: num, someStr: str) {
+150 | |     this.someStr = someStr;
+151 | |   }
+    | \\\\---^ Super call missing in initializer of derived class
 
 
 error: Expected block
@@ -845,9 +865,9 @@ error: Unknown symbol \\"C11\\"
 
 
 error: Cannot instantiate abstract class \\"Resource\\"
-    --> ../../../examples/tests/invalid/class.test.w:165:1
+    --> ../../../examples/tests/invalid/class.test.w:173:1
     |
-165 | new std.Resource();
+173 | new std.Resource();
     | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
@@ -887,9 +907,9 @@ error: Expected 1 positional argument(s) but got 2
 
 
 error: Expected 1 positional argument(s) but got 0
-    --> ../../../examples/tests/invalid/class.test.w:157:5
+    --> ../../../examples/tests/invalid/class.test.w:165:5
     |
-157 |     super();
+165 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 

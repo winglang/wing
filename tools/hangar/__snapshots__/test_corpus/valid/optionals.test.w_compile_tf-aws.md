@@ -149,7 +149,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub extends Super {
       constructor($scope, $id, ) {
-        super($scope, $id);
+        super($scope, $id, );
         this.name = "Sub";
       }
       static _toInflightType() {
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class Sub1 extends Super {
       constructor($scope, $id, ) {
-        super($scope, $id);
+        super($scope, $id, );
         this.name = "Sub";
       }
       static _toInflightType() {

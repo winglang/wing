@@ -144,6 +144,14 @@ class Four extends One {
   }
 }
 
+class Five extends One {
+  someStr: str;
+  new(someNum: num, someStr: str) {
+    this.someStr = someStr;
+  }
+//^ Super call missing in initializer of derived class
+}
+
 // Super inflight
 inflight class Plane {
   year: num;
