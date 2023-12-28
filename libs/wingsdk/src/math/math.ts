@@ -387,7 +387,7 @@ export class Util {
    * @param base The base of the new value
    * @returns A string representation of the new number
    */
-  public static toBase(value: number, base: number): string {
+  public static toRadix(value: number, base: number): string {
     return value.toString(base);
   }
 

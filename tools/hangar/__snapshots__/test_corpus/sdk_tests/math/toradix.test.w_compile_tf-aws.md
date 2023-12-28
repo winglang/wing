@@ -1,4 +1,4 @@
-# [tobase.test.w](../../../../../../examples/tests/sdk_tests/math/tobase.test.w) | compile | tf-aws
+# [toradix.test.w](../../../../../../examples/tests/sdk_tests/math/toradix.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json

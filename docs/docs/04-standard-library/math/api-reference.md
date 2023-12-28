@@ -56,7 +56,7 @@ Utility class for mathematical operations.
 | <code><a href="#@winglang/sdk.math.Util.sin">sin</a></code> | Returns the sine of a number in radians. |
 | <code><a href="#@winglang/sdk.math.Util.sqrt">sqrt</a></code> | Returns the square root of a number. |
 | <code><a href="#@winglang/sdk.math.Util.tan">tan</a></code> | Returns the tangent of a number in radians. |
-| <code><a href="#@winglang/sdk.math.Util.toBase">toBase</a></code> | Convert a value to a new number base. |
+| <code><a href="#@winglang/sdk.math.Util.toRadix">toRadix</a></code> | Convert a value to a new number base. |
 
 ---
 
@@ -676,17 +676,17 @@ A number representing an angle in radians.
 
 ---
 
-##### `toBase` <a name="toBase" id="@winglang/sdk.math.Util.toBase"></a>
+##### `toRadix` <a name="toRadix" id="@winglang/sdk.math.Util.toRadix"></a>
 
 ```wing
 bring math;
 
-math.toBase(value: num, base: num);
+math.toRadix(value: num, base: num);
 ```
 
 Convert a value to a new number base.
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.toBase.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.toRadix.parameter.value"></a>
 
 - *Type:* num
 
@@ -694,7 +694,7 @@ The number to be converted.
 
 ---
 
-###### `base`<sup>Required</sup> <a name="base" id="@winglang/sdk.math.Util.toBase.parameter.base"></a>
+###### `base`<sup>Required</sup> <a name="base" id="@winglang/sdk.math.Util.toRadix.parameter.base"></a>
 
 - *Type:* num
 
