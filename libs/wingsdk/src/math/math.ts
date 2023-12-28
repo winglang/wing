@@ -380,5 +380,16 @@ export class Util {
     return Math.random() * (max || 1);
   }
 
-  private constructor() {}
+  /**
+   * Convert a value to a new number base
+   * 
+   * @param value The number to be converted
+   * @param base The base of the new value
+   * @returns A string representation of the new number
+   */
+  public static toBase(value: number, base: number): string {
+    return value.toString(base);
+  }
+
+  private constructor() { }
 }
