@@ -184,6 +184,8 @@ export class Util {
   ): Promise<Output> {
     const execOpts = {
       cwd: opts?.cwd,
+      windowsHide: true,
+      shell: false,
       env:
         opts?.inheritEnv === true
           ? { ...process.env, ...opts?.env }
