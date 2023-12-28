@@ -93,6 +93,14 @@ exports[`api configured for cors 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -142,6 +150,14 @@ exports[`api with 'name' & 'age' parameter 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -183,6 +199,14 @@ exports[`api with 'name' parameter 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -213,6 +237,14 @@ exports[`api with CONNECT route 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_connect__0_51B16936.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -247,6 +279,14 @@ exports[`api with DELETE route 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -277,6 +317,14 @@ exports[`api with GET route at root 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get__0_28A24394.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -335,6 +383,14 @@ exports[`api with GET routes with common prefix 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -391,6 +447,14 @@ exports[`api with GET routes with different prefix 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -421,6 +485,14 @@ exports[`api with HEAD route 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_head__0_C5A391F7.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -455,6 +527,14 @@ exports[`api with OPTIONS route 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -485,6 +565,14 @@ exports[`api with PATCH route 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_patch__0_2A535309.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -519,6 +607,14 @@ exports[`api with POST route 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -549,6 +645,14 @@ exports[`api with PUT route 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_put__0_C3CFB295.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -607,6 +711,14 @@ exports[`api with multiple GET route and one lambda 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -661,6 +773,14 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_foo_0_2252DDE1.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }
@@ -719,6 +839,14 @@ exports[`api with multiple methods and one lambda 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -773,6 +901,14 @@ exports[`api with multiple methods on same route 1`] = `
       },
     },
   },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
+    },
+  },
 }
 `;
 
@@ -812,6 +948,14 @@ exports[`api with path parameter 1`] = `
           "uri": "arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_get_hello_world_0_DAB3CC5C.arn}/invocations",
         },
       },
+    },
+  },
+  "x-amazon-apigateway-gateway-responses": {
+    "MISSING_AUTHENTICATION_TOKEN": {
+      "responseTemplates": {
+        "application/json": "{\\"message\\": $context.error.messageString }",
+      },
+      "statusCode": "404",
     },
   },
 }

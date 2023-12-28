@@ -27,14 +27,14 @@ import { IInflightHost, Node } from "../std";
  */
 const GATEWAY_404_RESPONSE = {
   "x-amazon-apigateway-gateway-responses": {
-    "MISSING_AUTHENTICATION_TOKEN": {
-      "statusCode": "404",
-      "responseTemplates": {
-        "application/json": "{\"message\": $context.error.messageString }",
+    MISSING_AUTHENTICATION_TOKEN: {
+      statusCode: "404",
+      responseTemplates: {
+        "application/json": '{"message": $context.error.messageString }',
       },
     },
-  }
-}
+  },
+};
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -350,7 +350,7 @@ class WingRestApi extends Construct {
             return {
               ...openApiSpec,
               ...GATEWAY_404_RESPONSE,
-            }
+            };
           };
           return JSON.stringify(injectOptionsMethod(props.getApiSpec()));
         },
