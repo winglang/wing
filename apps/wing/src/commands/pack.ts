@@ -15,6 +15,7 @@ import { compile } from "./compile";
 
 const defaultGlobs = ["**/*.js", "**/*.w", "README*", "LICENSE*", "!target"];
 const compilerOutputFolder = "$lib";
+const dotWingDir = ".wing";
 
 export interface PackageOptions {
   /**
@@ -107,7 +108,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
     // TODO Remove once we are generating .d.ts files
     await fs.writeFile(
-      path.join(compilerOutputDir, ".wing", "preflight.d.ts"),
+      path.join(compilerOutputDir, dotWingDir, "preflight.d.ts"),
       `declare module '${pkgJson.name}';`
     );
 
@@ -124,7 +125,7 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
     pkgJson.files = [...pkgJsonFiles];
-    pkgJson.main = path.join(compilerOutputFolder, "preflight.js");
+    pkgJson.main = path.join(compilerOutputFolder, dotWingDir, "preflight.js");
 
     // add "winglang" to "keywords"
     const keywords = new Set(pkgJson.keywords ?? []);

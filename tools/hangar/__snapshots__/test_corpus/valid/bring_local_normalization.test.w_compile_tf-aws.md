@@ -64,44 +64,12 @@ module.exports = function({  }) {
 ## preflight.bar-1.js
 ```js
 "use strict";
-<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-=======
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  class Bar extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static bar() {
-      return "bar";
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Bar-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const BarClient = ${Bar._toInflightType(this)};
-          const client = new BarClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   static bar() {
     return "bar";
@@ -134,44 +102,12 @@ module.exports = { Bar };
 ## preflight.baz-2.js
 ```js
 "use strict";
-<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class Baz extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-=======
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  class Baz extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static baz() {
-      return "baz";
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Baz-2.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const BazClient = ${Baz._toInflightType(this)};
-          const client = new BazClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   static baz() {
     return "baz";
@@ -204,54 +140,14 @@ module.exports = { Baz };
 ## preflight.foo-3.js
 ```js
 "use strict";
-<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const bar = require("./preflight.bar-1.js");
 const baz = require("./preflight.baz-2.js");
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-=======
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  const bar = require("./preflight.bar-1.js")({ $stdlib });
-  const baz = require("./preflight.baz-2.js")({ $stdlib });
-  class Foo extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static foo() {
-      return "foo";
-    }
-    static bar() {
-      return (bar.Bar.bar());
-    }
-    static baz() {
-      return (baz.Baz.baz());
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Foo-3.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const FooClient = ${Foo._toInflightType(this)};
-          const client = new FooClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   static foo() {
     return "foo";
@@ -295,16 +191,10 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-<<<<<<< HEAD
+const $helpers = $stdlib.helpers;
 const foo = require("./preflight.foo-3.js");
 const bar = require("./preflight.bar-1.js");
 const baz = require("./preflight.baz-2.js");
-=======
-const $helpers = $stdlib.helpers;
-const foo = require("./preflight.foo-3.js")({ $stdlib });
-const bar = require("./preflight.bar-1.js")({ $stdlib });
-const baz = require("./preflight.baz-2.js")({ $stdlib });
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);

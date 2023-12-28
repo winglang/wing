@@ -55,64 +55,25 @@ module.exports = function({  }) {
 ## preflight.empty-1.js
 ```js
 "use strict";
-<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 module.exports = {  };
-=======
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  return {  };
-};
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
 //# sourceMappingURL=preflight.empty-1.js.map
 ```
 
 ## preflight.js
 ```js
 "use strict";
-<<<<<<< HEAD
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-=======
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  const file3 = require("./preflight.empty-1.js")({ $stdlib });
-  const math = $stdlib.math;
-  const cloud = $stdlib.cloud;
-  class Util extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Util-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const UtilClient = ${Util._toInflightType(this)};
-          const client = new UtilClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
->>>>>>> 339fec8a7671f8c4f0ff69adea9e14815616e8dd
   }
   static _toInflightType() {
     return `
