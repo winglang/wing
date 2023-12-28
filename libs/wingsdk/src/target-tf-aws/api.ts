@@ -334,6 +334,13 @@ class WingRestApi extends Construct {
       cors?: cloud.ApiCorsOptions;
     }
   ): ApiGatewayRestApi {
+    /**
+     * Configures the default response for requests to undefined routes (`/{proxy+}`).
+     * - If CORS options are provided, `defaultResponse` sets up CORS-compliant mock responses:
+     *   - 204 (No Content) for OPTIONS requests.
+     *   - 404 (Not Found) for other HTTP methods.
+     * - If `props.cors == undefined`, `defaultResponse` defaults to a mock 404 response for any HTTP method.
+     */
     const defaultResponse = props.cors
       ? API_CORS_DEFAULT_RESPONSE(props.cors)
       : {};
@@ -342,7 +349,13 @@ class WingRestApi extends Construct {
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
+          // Retrieves the API specification from `props.getApiSpec()`.
           const apiSpec = props.getApiSpec();
+
+          // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
+          // This integration ensures comprehensive route handling:
+          // - Predefined paths are maintained as specified.
+          // - Requests to paths not explicitly defined are managed by `defaultResponse`.
           return JSON.stringify({
             ...apiSpec,
             paths: { ...apiSpec.paths, ...defaultResponse },
