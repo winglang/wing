@@ -1328,31 +1328,51 @@ impl<'a> JSifier<'a> {
 				};
 
 				// extern_path should always be a sub directory of entrypoint_dir
-				let rel_path = extern_path
-					.strip_prefix(&entrypoint_dir)
-					.expect(&format!("{extern_path} is not a sub directory of {entrypoint_dir}"));
+				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
+					report_diagnostic(Diagnostic {
+						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+						annotations: vec![],
+						hints: vec![],
+						span: Some(func_def.span.clone()),
+					});
+					return CodeMaker::default();
+				};
 
 				let mut path_components = rel_path.components();
-				let first_component = path_components.next();
 
-				let require_path = if first_component.unwrap().as_str() == NODE_MODULES_DIR {
-					let second_component = path_components.next().unwrap().as_str();
-					let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
-						// namespaced package
-						format!("{second_component}/{}", path_components.next().unwrap())
+				// check if the first part of the path is the node module directory
+				let require_path =
+					if path_components.next().expect("extern path must not be empty").as_str() == NODE_MODULES_DIR {
+						// We are loading an extern from a node module, so we want that path to be relative to the package itself
+						// e.g. require("../node_modules/@winglibs/blah/util.js") should be require("@winglibs/blah/util.js") instead
+
+						// the second part of the path will either be the package name or the package scope
+						let second_component = path_components
+							.next()
+							.expect("extern path in node module must have at least two components")
+							.as_str();
+
+						let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
+							// scoped package, prepend the scope to the next part of the path
+							format!(
+								"{second_component}/{}",
+								path_components
+									.next()
+									.expect("extern path in scoped node module must have at least three components")
+							)
+						} else {
+							// regular package
+							second_component.to_string()
+						};
+
+						// combine the module name with the rest of the iterator to get the full import path
+						format!("{module_name}/{}", path_components.join("/"))
 					} else {
-						// regular package
-						second_component.to_string()
+						// go from the out_dir to the entrypoint dir
+						let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+
+						format!("{up_dirs}{rel_path}")
 					};
-
-					// combine the module name with the rest of the iterator
-					format!("{module_name}/{}", path_components.join("/"))
-				} else {
-					// go from the out_dir to the entrypoint dir
-					let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
-
-					format!("{up_dirs}{rel_path}")
-				};
 
 				new_code!(
 					&func_def.span,
