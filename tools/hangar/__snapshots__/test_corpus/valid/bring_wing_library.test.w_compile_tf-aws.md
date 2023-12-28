@@ -30,7 +30,7 @@ module.exports = function({ $myutil_Util }) {
       this.$this_data = $this_data;
     }
     static async makeKeyInflight(name) {
-      return (require("../../../node_modules/@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
+      return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
     async set(message) {
       (await this.$this_data.put("data.txt", (await $myutil_Util.double(message))));
@@ -186,7 +186,7 @@ module.exports = function({ $stdlib }) {
       this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     }
     static makeKey(name) {
-      return (require("../../../node_modules/@winglibs/testfixture/util.js")["makeKey"])(name)
+      return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
     }
     static _toInflightType() {
       return `

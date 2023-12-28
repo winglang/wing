@@ -49,6 +49,8 @@ const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
+const NODE_MODULES_DIR: &str = "node_modules";
+const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -1328,15 +1330,33 @@ impl<'a> JSifier<'a> {
 				// extern_path should always be a sub directory of entrypoint_dir
 				let rel_path = extern_path
 					.strip_prefix(&entrypoint_dir)
-					.expect(&format!("{extern_path} is not a sub directory of {entrypoint_dir}"))
-					.to_string();
+					.expect(&format!("{extern_path} is not a sub directory of {entrypoint_dir}"));
 
-				// go from the out_dir to the entrypoint dir
-				let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+				let mut path_components = rel_path.components();
+				let first_component = path_components.next();
+
+				let require_path = if first_component.unwrap().as_str() == NODE_MODULES_DIR {
+					let second_component = path_components.next().unwrap().as_str();
+					let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
+						// namespaced package
+						format!("{second_component}/{}", path_components.next().unwrap())
+					} else {
+						// regular package
+						second_component.to_string()
+					};
+
+					// combine the module name with the rest of the iterator
+					format!("{module_name}/{}", path_components.join("/"))
+				} else {
+					// go from the out_dir to the entrypoint dir
+					let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+
+					format!("{up_dirs}{rel_path}")
+				};
 
 				new_code!(
 					&func_def.span,
-					format!("return (require(\"{up_dirs}{rel_path}\")[\"{name}\"])("),
+					format!("return (require(\"{require_path}\")[\"{name}\"])("),
 					parameters.clone(),
 					")"
 				)
