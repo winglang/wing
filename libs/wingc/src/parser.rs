@@ -11,9 +11,10 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-	IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Spanned, Stmt,
-	StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
+	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
+	Scope, Spanned, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan, ERR_EXPECTED_SEMICOLON};
@@ -734,17 +735,31 @@ impl<'s> Parser<'s> {
 
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
-		for node in statement_node.children_by_field_name("elif_let_block", &mut cursor) {
-			let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
-			let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
-			let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
-			let elif = ElifLetBlock {
-				reassignable: node.child_by_field_name("reassignable").is_some(),
-				statements: statements,
-				value: value,
-				var_name: name,
-			};
-			elif_vec.push(elif);
+		for node in statement_node.children(&mut cursor) {
+			match node.kind() {
+				"elif_let_block" => {
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let value = self.build_expression(&node.child_by_field_name("value").unwrap(), phase)?;
+					let name = self.check_reserved_symbol(&node.child_by_field_name("name").unwrap())?;
+					let elif = Elifs::ElifLetBlock(ElifLetBlock {
+						reassignable: node.child_by_field_name("reassignable").is_some(),
+						statements: statements,
+						value: value,
+						var_name: name,
+					});
+					elif_vec.push(elif);
+				}
+				"elif_block" => {
+					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap(), phase);
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap(), phase);
+					let elif = Elifs::ElifBlock(ElifBlock {
+						condition: conditions.unwrap(),
+						statements: statements,
+					});
+					elif_vec.push(elif);
+				}
+				_ => {}
+			}
 		}
 
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {

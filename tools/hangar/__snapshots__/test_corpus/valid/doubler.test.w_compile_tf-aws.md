@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $handler, $std_Json, $std_Number }) {
   class $Closure2 {
     constructor({  }) {
@@ -33,7 +35,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })(x);
       const y = (await $handler(xStr));
       const z = (await $handler(y));
-      return ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([z]);
+      return ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(z);
     }
   }
   return $Closure2;
@@ -44,6 +46,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -63,6 +66,7 @@ module.exports = function({  }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $f }) {
   class $Closure4 {
     constructor({  }) {
@@ -72,7 +76,7 @@ module.exports = function({ $f }) {
     }
     async handle() {
       const result = (await $f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"8")))};
+      $helpers.assert($helpers.eq(result, "8"), "result == \"8\"");
     }
   }
   return $Closure4;
@@ -83,14 +87,16 @@ module.exports = function({ $f }) {
 ## inflight.Doubler-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Doubler {
     constructor({ $this_func }) {
       this.$this_func = $this_func;
     }
     async invoke(message) {
-      (await this.$this_func.handle(message));
-      (await this.$this_func.handle(message));
+      const res1 = ((await this.$this_func.handle(message)) ?? "");
+      const res2 = ((await this.$this_func.handle(res1)) ?? "");
+      return res2;
     }
   }
   return Doubler;
@@ -101,6 +107,7 @@ module.exports = function({  }) {
 ## inflight.Doubler2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Doubler2 {
     constructor({  }) {
@@ -120,20 +127,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -211,7 +205,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.Doubler2_cloudFunction_IamRole_3E4BED38.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.Doubler2_cloudFunction_S3Object_8029A145.key}",
         "timeout": 60,
@@ -257,6 +251,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

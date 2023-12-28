@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $foo }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,8 +32,8 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(true)),1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(false)),2)))};
+      $helpers.assert($helpers.eq((await $foo.callFn(true)), 1), "foo.callFn(true) == 1");
+      $helpers.assert($helpers.eq((await $foo.callFn(false)), 2), "foo.callFn(false) == 2");
       (await $foo.callFn2());
     }
   }
@@ -43,13 +45,14 @@ module.exports = function({ $foo }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({ $this_inflight1 }) {
       this.$this_inflight1 = $this_inflight1;
     }
     async makeFn(x) {
-      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,true))) {
+      if ($helpers.eq(x, true)) {
         return this.$this_inflight1;
       }
       else {
@@ -63,15 +66,15 @@ module.exports = function({  }) {
     async callFn2() {
       const one = (await this.$this_inflight1());
       const two = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(one,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(two,2)))};
+      $helpers.assert($helpers.eq(one, 1), "one == 1");
+      $helpers.assert($helpers.eq(two, 2), "two == 2");
     }
     async $inflight_init() {
       this.inflight2 = async () => {
         return 2;
       };
       const ret = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error("assertion failed: ret == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ret,2)))};
+      $helpers.assert($helpers.eq(ret, 2), "ret == 2");
     }
   }
   return Foo;
@@ -88,20 +91,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -119,6 +109,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);

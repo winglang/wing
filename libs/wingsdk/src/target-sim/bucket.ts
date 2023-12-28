@@ -66,6 +66,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     const schema: BucketSchema = {
       type: cloud.BUCKET_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         public: this.public,
         initialObjects: this.initialObjects,

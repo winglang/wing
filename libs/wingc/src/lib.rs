@@ -113,6 +113,7 @@ const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
+// const WINGSDK_NODE: &'static str = "std.Node";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -217,8 +218,6 @@ pub fn type_check(
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
-	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
-	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
 		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
@@ -231,7 +230,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{console.log($args$)}".to_string()),
+			js_override: Some("console.log($args$)".to_string()),
 			docs: Docs::with_summary("Logs a message"),
 		}),
 		scope,
@@ -249,9 +248,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some(
-				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
-			),
+			js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
 			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,

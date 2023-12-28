@@ -12,8 +12,12 @@
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "cloud.Api": {
+              "Endpoint": {
+                "Url": "cloudApi_Endpoint_Url_CD8AC9A6"
+              }
+            }
           }
         }
       }
@@ -32,8 +36,8 @@
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "cloudApi_Endpoint_Url_CD8AC9A6": {
+      "value": "https://${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.stage_name}"
     }
   },
   "provider": {
@@ -235,7 +239,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_connect_path_0_IamRole_372127E9.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_connect_path_0_S3Object_31BCDE9B.key}",
         "timeout": 60,
@@ -266,7 +270,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_head_path_0_IamRole_C6940D62.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_head_path_0_S3Object_3B3422F6.key}",
         "timeout": 60,
@@ -297,7 +301,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_options_path_0_IamRole_C94B1F2A.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_options_path_0_S3Object_A0FC37D3.key}",
         "timeout": 60,

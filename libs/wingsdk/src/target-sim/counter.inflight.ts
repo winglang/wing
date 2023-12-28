@@ -1,9 +1,14 @@
+import * as fs from "fs";
+import { join } from "path";
 import { CounterAttributes, CounterSchema } from "./schema-resources";
+import { exists } from "./util";
 import { ICounterClient } from "../cloud";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../simulator/simulator";
+
+const VALUES_FILENAME = "values.json";
 
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private values: Map<string, number>;
@@ -20,10 +25,24 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
   }
 
   public async init(): Promise<CounterAttributes> {
+    const valuesFile = join(this.context.statedir, VALUES_FILENAME);
+    const valueFilesExists = await exists(valuesFile);
+    if (valueFilesExists) {
+      const valuesContents = await fs.promises.readFile(valuesFile, "utf-8");
+      const values = JSON.parse(valuesContents);
+      this.values = new Map(values);
+    }
     return {};
   }
 
   public async cleanup(): Promise<void> {}
+
+  public async save(): Promise<void> {
+    await fs.promises.writeFile(
+      join(this.context.statedir, VALUES_FILENAME),
+      JSON.stringify(Array.from(this.values.entries()))
+    );
+  }
 
   public async inc(
     amount: number = 1,

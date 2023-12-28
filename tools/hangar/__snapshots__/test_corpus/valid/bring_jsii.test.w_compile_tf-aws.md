@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $greeting, $stuff_HelloWorld }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,9 +12,9 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($greeting,"Hello, wingnuts")))};
+      $helpers.assert($helpers.eq($greeting, "Hello, wingnuts"), "greeting == \"Hello, wingnuts\"");
       const helloInflight = new $stuff_HelloWorld();
-      {((cond) => {if (!cond) throw new Error("assertion failed: helloInflight.sayHello(\"wingnuts\") == greeting")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await helloInflight.sayHello("wingnuts")),$greeting)))};
+      $helpers.assert($helpers.eq((await helloInflight.sayHello("wingnuts")), $greeting), "helloInflight.sayHello(\"wingnuts\") == greeting");
     }
   }
   return $Closure1;
@@ -30,20 +31,7 @@ module.exports = function({ $greeting, $stuff_HelloWorld }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -61,6 +49,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const stuff = require("jsii-code-samples");
 class $Root extends $stdlib.std.Resource {

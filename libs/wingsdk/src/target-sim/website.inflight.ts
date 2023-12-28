@@ -66,6 +66,8 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
     this.server?.closeAllConnections();
   }
 
+  public async save(): Promise<void> {}
+
   private addTrace(message: string): void {
     this.context.addTrace({
       type: TraceType.RESOURCE,

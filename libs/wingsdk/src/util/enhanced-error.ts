@@ -171,6 +171,7 @@ function printItem(item: StackTracey.Entry) {
   // These are typically useless
   // TODO These can possibly be removed when sourcemaps support "names" mappings
   if (
+    item.calleeShort === "$Root" ||
     item.calleeShort === "new $Root" ||
     item.calleeShort.includes("<anonymous>")
   ) {

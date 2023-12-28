@@ -3,7 +3,6 @@ use std::collections::BTreeMap;
 use crate::{
 	ast::{AccessModifier, Phase, Symbol},
 	debug,
-	diagnostic::{WingLocation, WingSpan},
 	docs::Docs,
 	type_check::{
 		self,
@@ -591,25 +590,14 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn jsii_name_to_symbol(name: &str, jsii_source_location: &Option<jsii::SourceLocation>) -> Symbol {
-		let span = if let Some(jsii_source_location) = jsii_source_location {
-			WingSpan {
-				start: WingLocation {
-					line: (jsii_source_location.line - 1.0) as u32,
-					col: 0,
-				},
-				end: WingLocation {
-					line: (jsii_source_location.line - 1.0) as u32,
-					col: 0,
-				},
-				file_id: jsii_source_location.filename.clone(),
-			}
-		} else {
-			Default::default()
-		};
+	fn jsii_name_to_symbol(name: &str, _jsii_source_location: &Option<jsii::SourceLocation>) -> Symbol {
+		// JSII source location is not used right now since it doesn't necessarily map to a file on the user's disk
+		// (the JSII library might include .js files but not the original .ts files)
+		// if this information is useful, we could consider changing `Span` or `Symbol` to
+		// model whether or not the span represents a file on disk that we can read.
 		Symbol {
 			name: name.to_string(),
-			span,
+			span: Default::default(),
 		}
 	}
 

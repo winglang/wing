@@ -274,9 +274,11 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 				self.ctx.pop_env();
 
 				for elif in elif_statements {
-					self.push_scope_env(&elif.statements);
-					self.visit_symbol(&elif.var_name);
-					self.ctx.pop_env();
+					if let Elifs::ElifLetBlock(elif_let_block) = elif {
+						self.push_scope_env(&elif_let_block.statements);
+						self.visit_symbol(&elif_let_block.var_name);
+						self.ctx.pop_env();
+					}
 				}
 			}
 			_ => {}

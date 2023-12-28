@@ -1,12 +1,13 @@
 import { readdirSync } from "fs";
-import { JsonFile, cdk, javascript } from "projen";
+import { join } from "path";
+import { JsonFile, cdk, javascript, DependencyType } from "projen";
 import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@~10.2.69"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>4.65.0",
+  "aws@~>5.31.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
   "google@~>4.63.1",
@@ -18,9 +19,9 @@ const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
 
-const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
-const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/02-ex/";
-const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/03-std/";
+const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/cloud/";
+const EX_DOCS_PREFIX = "../../docs/docs/04-standard-library/ex/";
+const STD_DOCS_PREFIX = "../../docs/docs/04-standard-library/std/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -94,6 +95,7 @@ const project = new cdk.JsiiProject({
     "yaml",
     // enhanced diagnostics
     "stacktracey",
+    "ulid",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
@@ -186,6 +188,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 
 // Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
+  "@typescript-eslint/no-misused-promises": "error",
   "import/no-restricted-paths": [
     "error",
     {
@@ -266,10 +269,6 @@ sidebar_position: 100
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy readme docs
-docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
-docgen.exec(`cp -r src/ex/*.md ${EX_DOCS_PREFIX}`);
-
 // generate api reference for each submodule
 for (const mod of publicModules) {
   const prefix = docsPrefix(mod);
@@ -281,7 +280,7 @@ for (const mod of publicModules) {
 }
 
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
-const UNDOCUMENTED_EX_FILES = ["index"];
+const UNDOCUMENTED_EX_FILES = ["index", "dynamodb-table"];
 
 const toCamelCase = (str: string) =>
   str.replace(/_(.)/g, (_, chr) => chr.toUpperCase());
@@ -289,14 +288,21 @@ const toCamelCase = (str: string) =>
 function generateResourceApiDocs(
   module: string,
   pathToFolder: string,
-  docsPath: string,
-  excludedFiles: string[] = [],
-  allowUndocumented = false
+  options: {
+    docsPath: string;
+    excludedFiles?: string[];
+    allowUndocumented?: boolean;
+  }
 ) {
+  const { docsPath, excludedFiles = [], allowUndocumented = false } = options;
+
+  // copy readme docs
+  docgen.exec(`cp -r ${pathToFolder}/*.md ${docsPath}`);
+
   const cloudFiles = readdirSync(pathToFolder);
 
   const cloudResources: Set<string> = new Set(
-    cloudFiles.map((filename) => filename.split(".")[0])
+    cloudFiles.map((filename: string) => filename.split(".")[0])
   );
 
   excludedFiles.forEach((file) => cloudResources.delete(file));
@@ -328,26 +334,33 @@ function generateResourceApiDocs(
   }
 }
 
-generateResourceApiDocs(
-  "cloud",
-  "./src/cloud",
-  CLOUD_DOCS_PREFIX,
-  UNDOCUMENTED_CLOUD_FILES
-);
-generateResourceApiDocs(
-  "ex",
-  "./src/ex",
-  EX_DOCS_PREFIX,
-  UNDOCUMENTED_EX_FILES
-);
+generateResourceApiDocs("cloud", "./src/cloud", {
+  docsPath: CLOUD_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_CLOUD_FILES,
+});
+generateResourceApiDocs("ex", "./src/ex", {
+  docsPath: EX_DOCS_PREFIX,
+  excludedFiles: UNDOCUMENTED_EX_FILES,
+});
 
-generateResourceApiDocs(
-  "std",
-  "./src/std",
-  STD_DOCS_PREFIX,
-  ["README", "index", "test-runner", "resource", "test", "range", "generics"],
-  true
-);
+generateResourceApiDocs("ex/dynamodb-table", "./src/ex/dynamodb-table", {
+  docsPath: join(EX_DOCS_PREFIX, "/dynamodb-table/"),
+  excludedFiles: ["index"],
+});
+
+generateResourceApiDocs("std", "./src/std", {
+  docsPath: STD_DOCS_PREFIX,
+  excludedFiles: [
+    "README",
+    "index",
+    "test-runner",
+    "resource",
+    "test",
+    "range",
+    "generics",
+  ],
+  allowUndocumented: true,
+});
 
 docgen.exec("rm API.md");
 
@@ -397,5 +410,7 @@ project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
+
+project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
 
 project.synth();

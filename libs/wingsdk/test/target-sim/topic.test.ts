@@ -1,5 +1,10 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf, waitUntilTraceCount } from "./util";
+import {
+  listMessages,
+  treeJsonOf,
+  waitUntilTrace,
+  waitUntilTraceCount,
+} from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Node } from "../../src/std";
@@ -17,6 +22,7 @@ test("create a topic", async () => {
       handle: expect.any(String),
     },
     path: "root/my_topic",
+    addr: expect.any(String),
     props: {},
     type: cloud.TOPIC_FQN,
   });
@@ -40,8 +46,11 @@ test("topic publishes messages as they are received", async () => {
   // WHEN
   await topicClient.publish("Alpha");
   await topicClient.publish("Beta");
-  await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Invoke")
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Received Alpha")
+  );
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Received Beta")
   );
 
   // THEN
@@ -53,11 +62,9 @@ test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(
-    "Handler1",
     `async handle(message) { console.log("Received " + message); }`
   );
   const otherHandler = Testing.makeHandler(
-    "Handler2",
     `async handle(message) { console.log("Also received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");

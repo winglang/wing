@@ -12,8 +12,12 @@
     "outputs": {
       "root": {
         "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
+          "Default": {
+            "api": {
+              "Endpoint": {
+                "Url": "api_Endpoint_Url_E5DB9C2F"
+              }
+            }
           }
         }
       }
@@ -32,8 +36,8 @@
     }
   },
   "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
+    "api_Endpoint_Url_E5DB9C2F": {
+      "value": "https://${aws_api_gateway_rest_api.api_DD79FE08.id}.execute-api.${data.aws_region.Region.name}.amazonaws.com/${aws_api_gateway_stage.api_stage_ABA3AD8B.stage_name}"
     }
   },
   "provider": {
@@ -157,7 +161,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.api_get_api_0_IamRole_EB61CF92.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.api_get_api_0_S3Object_797A12CE.key}",
         "timeout": 60,

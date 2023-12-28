@@ -2,6 +2,7 @@ import { Api } from "./api";
 import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { DynamodbTable } from "./dynamodb-table";
+import { Endpoint } from "./endpoint";
 import { Function } from "./function";
 import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
@@ -29,6 +30,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   DOMAIN_FQN,
+  ENDPOINT_FQN,
   FUNCTION_FQN,
   ON_DEPLOY_FQN,
   QUEUE_FQN,
@@ -49,11 +51,6 @@ import { TEST_RUNNER_FQN } from "../std";
  * for AWS resources.
  */
 export class App extends CdktfApp {
-  /**
-   * The test runner for this app.
-   */
-  protected readonly testRunner: TestRunner;
-
   public readonly _target = "tf-aws";
 
   private awsRegionProvider?: DataAwsRegion;
@@ -68,10 +65,9 @@ export class App extends CdktfApp {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    this.testRunner = new TestRunner(this, "cloud.TestRunner");
     this.subnets = {};
 
-    this.synthRoots(props, this.testRunner);
+    TestRunner._createTree(this, props.rootConstruct);
   }
 
   protected typeForFqn(fqn: string): any {
@@ -126,6 +122,9 @@ export class App extends CdktfApp {
 
       case DYNAMODB_TABLE_FQN:
         return DynamodbTable;
+
+      case ENDPOINT_FQN:
+        return Endpoint;
     }
 
     return undefined;
