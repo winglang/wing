@@ -32,7 +32,7 @@ interface INoProps {
 }
 
 // interfaces can't have access modifiers in their method signatures
-interface AccessModifier {
-  pub inflight foo(body: Json): Json;  
+interface IPointy {
+  pub method2(): str;  
 //^^^ Access modifiers are not allowed in interfaces
 }
