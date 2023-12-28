@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $globalBucket }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
     constructor({  }) {
@@ -41,6 +43,7 @@ module.exports = function({ $storeInBucket }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
     constructor({  }) {
@@ -50,7 +53,7 @@ module.exports = function({ $func1, $globalBucket }) {
     }
     async handle() {
       (await $func1.invoke("hi1"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $globalBucket.get("file1")),"hi1")))};
+      $helpers.assert($helpers.eq((await $globalBucket.get("file1")), "hi1"), "globalBucket.get(\"file1\") == \"hi1\"");
     }
   }
   return $Closure3;
@@ -61,6 +64,7 @@ module.exports = function({ $func1, $globalBucket }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
     constructor({  }) {
@@ -81,6 +85,7 @@ module.exports = function({ $globalBucket }) {
 ## inflight.$Closure5-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $x }) {
   class $Closure5 {
     constructor({  }) {
@@ -90,7 +95,7 @@ module.exports = function({ $x }) {
     }
     async handle() {
       const val = (await $x.foo());
-      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,"hello")))};
+      $helpers.assert($helpers.eq(val, "hello"), "val == \"hello\"");
     }
   }
   return $Closure5;
@@ -101,6 +106,7 @@ module.exports = function({ $x }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_closure }) {
@@ -259,6 +265,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

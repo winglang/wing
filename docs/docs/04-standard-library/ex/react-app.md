@@ -72,11 +72,11 @@ Currently, we can only pass preflight string variables to the React app environm
 
 ### Simulator (`sim`)
 
-sim implementations of `ex.ReactApp` is using either the [Website resource](../01-cloud/website.md) (when `useBuildCommand` is `true`) or starts React development server when `false`.
+sim implementations of `ex.ReactApp` is using either the [Website resource](../cloud/website) (when `useBuildCommand` is `true`) or starts React development server when `false`.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-AWS implementations of `ex.ReactApp` uses the [Website resource](../01-cloud/website.md).
+AWS implementations of `ex.ReactApp` uses the [Website resource](../cloud/website).
 
 ### Azure (`tf-azure`)
 

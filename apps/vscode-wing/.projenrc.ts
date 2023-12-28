@@ -208,6 +208,10 @@ const contributes: VSCodeExtensionContributions = {
         id: "consoleTestsExplorer",
         name: "Wing Tests",
       },
+      {
+        id: "consoleEndpointsExplorer",
+        name: "Wing Endpoints",
+      },
     ],
   },
 };

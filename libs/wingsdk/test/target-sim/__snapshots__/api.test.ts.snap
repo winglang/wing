@@ -40,7 +40,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -221,7 +221,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -234,6 +235,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -319,7 +321,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -486,7 +488,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -499,6 +502,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -584,7 +588,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -751,7 +755,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -764,6 +769,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -849,7 +855,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -1016,7 +1022,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1029,6 +1036,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1114,7 +1122,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -1281,7 +1289,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1294,6 +1303,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1379,7 +1389,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -1546,7 +1556,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1559,6 +1570,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -1692,7 +1704,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -1943,7 +1955,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -1956,6 +1969,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -2041,7 +2055,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -2225,7 +2239,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2238,6 +2253,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name/:age",
               },
@@ -2323,7 +2339,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -2499,7 +2515,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2512,6 +2529,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /:name",
               },
@@ -2578,7 +2596,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -2761,7 +2779,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -2774,6 +2793,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/foo",
               },
@@ -2886,7 +2906,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -3104,7 +3124,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3117,6 +3138,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -3130,6 +3152,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -3242,7 +3265,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -3462,7 +3485,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3475,6 +3499,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/world",
               },
@@ -3488,6 +3513,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello/wingnuts",
               },
@@ -3573,7 +3599,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -3740,7 +3766,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -3753,6 +3780,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /hello",
               },
@@ -3838,7 +3866,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -4014,7 +4042,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4027,6 +4056,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "GET /users/:name",
               },
@@ -4112,7 +4142,7 @@ return class Handler {
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -4279,7 +4309,8 @@ return class Handler {
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",
@@ -4292,6 +4323,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "hidden": true,
                 "sourceModule": "@winglang/sdk",
                 "title": "POST /hello",
               },
@@ -4349,7 +4381,7 @@ exports[`create an api 1`] = `
         "path": "root/my_api/Endpoint",
         "props": {
           "inputUrl": "\${wsim#root/my_api#attrs.url}",
-          "label": "Endpoint for Api root/my_api",
+          "label": "Api root/my_api",
           "url": "\${wsim#root/my_api#attrs.url}",
         },
         "type": "@winglang/sdk.cloud.Endpoint",
@@ -4450,7 +4482,8 @@ exports[`create an api 1`] = `
                 "version": "10.2.70",
               },
               "display": {
-                "description": "Endpoint for Api root/my_api",
+                "description": "Api root/my_api",
+                "hidden": true,
                 "title": "Endpoint",
               },
               "id": "Endpoint",

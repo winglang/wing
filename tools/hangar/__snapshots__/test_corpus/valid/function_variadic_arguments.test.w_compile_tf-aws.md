@@ -3,6 +3,7 @@
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -16,6 +17,7 @@ module.exports = function({  }) {
 ## inflight.B-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {
@@ -88,6 +90,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -150,18 +153,18 @@ class $Root extends $stdlib.std.Resource {
     const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket3");
     (bucket3.node.addDependency(bucket1, bucket2));
     const funcBucket = ((...buckets) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,2)))};
+      $helpers.assert($helpers.eq(buckets.length, 2), "buckets.length == 2");
     });
     (funcBucket(bucket1, bucket2));
     const func1 = ((x, y, ...args) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"something\" || y == nil")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,"something")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,undefined))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: args.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(args.length,4)))};
+      $helpers.assert($helpers.eq(x, 1), "x == 1");
+      $helpers.assert(($helpers.eq(y, "something") || $helpers.eq(y, undefined)), "y == \"something\" || y == nil");
+      $helpers.assert($helpers.eq(args.length, 4), "args.length == 4");
       for (const i of args) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: i > 0 && i < 5")})(((i > 0) && (i < 5)))};
+        $helpers.assert(((i > 0) && (i < 5)), "i > 0 && i < 5");
       }
-      ((obj, args) => { obj.push(...args); })(args, [10]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: args.at(4) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4),10)))};
+      args.push(10);
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(args, 4), 10), "args.at(4) == 10");
     });
     (func1(1, "something", 1, 2, 3, 4));
     (func1(1, undefined, 1, 2, 3, 4));
@@ -172,8 +175,8 @@ class $Root extends $stdlib.std.Resource {
       }
       return total;
     });
-    {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1, 2, 3)),6)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: addNums() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums()),0)))};
+    $helpers.assert($helpers.eq((addNums(1, 2, 3)), 6), "addNums(1, 2, 3) == 6");
+    $helpers.assert($helpers.eq((addNums()), 0), "addNums() == 0");
     const arityFunc = ((n, b, ...events) => {
       let error = false;
       try {
@@ -183,17 +186,17 @@ class $Root extends $stdlib.std.Resource {
         const ex = $error_ex.message;
         error = true;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      $helpers.assert(error, "error");
     });
     (arityFunc(1, true, "a", "b", "c", "d"));
     const subTypeFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0).message == \"this is A\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message,"this is A")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1).message == \"this is B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message,"this is B")))};
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0).message, "this is A"), "events.at(0).message == \"this is A\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1).message, "this is B"), "events.at(1).message == \"this is B\"");
     });
     (subTypeFunc(new A(this, "A", "this is A"), new B(this, "B", "this is B")));
     const jsonCastingFunc = ((...events) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(0) == \"str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0),"str")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: events.at(1) == \"json str\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1),"json str")))};
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 0), "str"), "events.at(0) == \"str\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(events, 1), "json str"), "events.at(1) == \"json str\"");
     });
     const jsonStr = "json str";
     (jsonCastingFunc("str", jsonStr));

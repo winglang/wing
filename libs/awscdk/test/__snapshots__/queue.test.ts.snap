@@ -165,6 +165,11 @@ exports[`queue with a consumer function 2`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {

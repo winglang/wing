@@ -11,6 +11,10 @@ import {
 } from "vscode";
 
 import {
+  EndpointItem,
+  EndpointsExplorerProvider,
+} from "./explorer-providers/EndpointsExplorerProvider";
+import {
   ResourceItem,
   ResourcesExplorerProvider,
 } from "./explorer-providers/ResourcesExplorerProvider";
@@ -46,11 +50,13 @@ export const createConsoleManager = (
   const instances: Record<string, ConsoleInstance> = {};
   const resourcesExplorer = new ResourcesExplorerProvider();
   const testsExplorer = new TestsExplorerProvider();
+  const endpointsExplorer = new EndpointsExplorerProvider();
 
   let activeInstanceId: string | undefined;
   let webviewPanel: WebviewPanel | undefined;
   let explorerView: TreeView<ResourceItem> | undefined;
   let testsExplorerView: TreeView<TestItem> | undefined;
+  let endpointsExplorerView: TreeView<EndpointItem> | undefined;
 
   let timeout: NodeJS.Timeout | undefined;
   let logsTimestamp: number = 0;
@@ -154,6 +160,7 @@ export const createConsoleManager = (
           }
           resourcesExplorer.update(await instance.client.listResources());
           testsExplorer.update(await instance.client.listTests());
+          endpointsExplorer.update(await instance.client.listEndpoints());
         }, 300);
       },
       onError: (err) => {
@@ -230,6 +237,7 @@ export const createConsoleManager = (
       webviewPanel.onDidDispose(async () => {
         resourcesExplorer.clear();
         testsExplorer.clear();
+        endpointsExplorer.clear();
         webviewPanel = undefined;
         activeInstanceId = undefined;
 
@@ -273,6 +281,7 @@ export const createConsoleManager = (
 
     resourcesExplorer.update(await instance.client.listResources());
     testsExplorer.update(await instance.client.listTests());
+    endpointsExplorer.update(await instance.client.listEndpoints());
     await updateLogs(instance);
 
     explorerView = window.createTreeView("consoleExplorer", {
@@ -283,7 +292,16 @@ export const createConsoleManager = (
       treeDataProvider: testsExplorer,
     });
 
-    context.subscriptions.push(webviewPanel, explorerView, testsExplorerView);
+    endpointsExplorerView = window.createTreeView("consoleEndpointsExplorer", {
+      treeDataProvider: endpointsExplorer,
+    });
+
+    context.subscriptions.push(
+      webviewPanel,
+      explorerView,
+      testsExplorerView,
+      endpointsExplorerView
+    );
     activeInstanceId = instanceId;
   };
 
