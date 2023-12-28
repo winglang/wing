@@ -2069,6 +2069,20 @@ exports[`interface.test.w 1`] = `
    |   ^^^^^^^^^ Properties are not supported in interfaces
 
 
+error: Access modifiers are not allowed in interfaces
+   --> ../../../examples/tests/invalid/interface.test.w:36:3
+   |
+36 |   pub method2(): str;  
+   |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/interface.test.w:36:14
+   |
+36 |   pub method2(): str;  
+   |              ^^ Unknown parser error
+
+
 error: Unknown symbol \\"IB\\"
   --> ../../../examples/tests/invalid/interface.test.w:2:22
   |
