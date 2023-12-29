@@ -380,5 +380,16 @@ export class Util {
     return Math.random() * (max || 1);
   }
 
+  /**
+   * Convert a value to a new number base
+   *
+   * @param value The number to be converted
+   * @param base The base of the new value
+   * @returns A string representation of the new number
+   */
+  public static toRadix(value: number, base: number): string {
+    return value.toString(base);
+  }
+
   private constructor() {}
 }
