@@ -112,7 +112,7 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(this.$this_myBool, true), "this.myBool == true");
     }
     async testCaptureOptional() {
-      $helpers.assert($helpers.eq(this.$_this_myOptStr_______, "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
+      $helpers.assert($helpers.eq((this.$this_myOptStr ?? ""), "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
     }
     async testCaptureResource() {
       (await this.$this_myResource.put("f1.txt", "f1"));
