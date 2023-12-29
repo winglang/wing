@@ -8,6 +8,7 @@ import {
 
 import type { ExplorerItem, Router, LogEntry } from "@wingconsole/server";
 
+import { EndpointItem } from "../explorer-providers/EndpointsExplorerProvider";
 import { TestItem } from "../explorer-providers/TestsExplorerProvider";
 
 export interface SubscriptionOptions {
@@ -24,6 +25,7 @@ export interface Client {
   runTest: (resourcePath: string) => Promise<any>;
   runAllTests: () => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
+  listEndpoints: () => Promise<EndpointItem[]>;
   onInvalidateQuery: (options: SubscriptionOptions) => void;
   onOpenFileInEditor: (options: SubscriptionOptions) => void;
   close: () => void;
@@ -95,6 +97,10 @@ export const createClient = (host: string): Client => {
     return client["app.explorerTree"].query();
   };
 
+  const listEndpoints = (): Promise<EndpointItem[]> => {
+    return client["endpoint.list"].query();
+  };
+
   const onInvalidateQuery = (options: SubscriptionOptions) => {
     return client["app.invalidateQuery"].subscribe(undefined, options);
   };
@@ -119,6 +125,7 @@ export const createClient = (host: string): Client => {
     runTest,
     runAllTests,
     listResources,
+    listEndpoints,
     onInvalidateQuery,
     onOpenFileInEditor,
     close,

@@ -1257,6 +1257,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`extern_above.test.w 1`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
+  --> ../../../examples/tests/invalid/extern_above.test.w:2:3
+  |
+2 |   extern \\"../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.test.w:2:45
@@ -2067,6 +2082,20 @@ exports[`interface.test.w 1`] = `
    |
 30 |   bar: str;
    |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Access modifiers are not allowed in interfaces
+   --> ../../../examples/tests/invalid/interface.test.w:36:3
+   |
+36 |   pub method2(): str;  
+   |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/interface.test.w:36:14
+   |
+36 |   pub method2(): str;  
+   |              ^^ Unknown parser error
 
 
 error: Unknown symbol \\"IB\\"

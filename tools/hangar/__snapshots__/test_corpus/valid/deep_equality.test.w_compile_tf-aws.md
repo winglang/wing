@@ -3,7 +3,8 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numB__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strB__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,10 +12,10 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA == numB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______numA_numB__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA == strB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______strA_strB__)};
+      $helpers.assert($helpers.eq($numA, $numA), "numA == numA");
+      $helpers.assert($helpers.eq($numA, $numB), "numA == numB");
+      $helpers.assert($helpers.eq($strA, $strA), "strA == strA");
+      $helpers.assert($helpers.eq($strA, $strB), "strA == strB");
     }
   }
   return $Closure1;
@@ -25,7 +26,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
 ## inflight.$Closure10-1.js
 ```js
 "use strict";
-module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayC__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure10 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -33,8 +35,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayC__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(arrayA != arrayB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB___)};
+      $helpers.assert(!$helpers.eq($arrayA, $arrayC), "arrayA != arrayC");
+      $helpers.assert((!!$helpers.eq($arrayA, $arrayB)), "!(arrayA != arrayB)");
     }
   }
   return $Closure10;
@@ -45,7 +47,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
 ## inflight.$Closure11-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat1__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $cat1, $cat2 }) {
   class $Closure11 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -53,8 +56,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat1")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat1__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2__)};
+      $helpers.assert($helpers.eq($cat1, $cat1), "cat1 == cat1");
+      $helpers.assert($helpers.eq($cat1, $cat2), "cat1 == cat2");
     }
   }
   return $Closure11;
@@ -65,7 +68,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
 ## inflight.$Closure12-1.js
 ```js
 "use strict";
-module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat3__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -73,8 +77,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat3__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(cat1 != cat2)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______cat1_cat2___)};
+      $helpers.assert(!$helpers.eq($cat1, $cat3), "cat1 != cat3");
+      $helpers.assert((!!$helpers.eq($cat1, $cat2)), "!(cat1 != cat2)");
     }
   }
   return $Closure12;
@@ -85,7 +89,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______numA_numC__, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______strA_strC__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -93,8 +98,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___notDeep
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______numA_numC__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______strA_strC__)};
+      $helpers.assert(!$helpers.eq($numA, $numC), "numA != numC");
+      $helpers.assert(!$helpers.eq($strA, $strC), "strA != strC");
     }
   }
   return $Closure2;
@@ -105,7 +110,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___notDeep
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -113,8 +119,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB__)};
+      $helpers.assert($helpers.eq($jsonA, $jsonA), "jsonA == jsonA");
+      $helpers.assert($helpers.eq($jsonA, $jsonB), "jsonA == jsonB");
     }
   }
   return $Closure3;
@@ -125,7 +131,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
-module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonC__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -133,8 +140,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonC__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(jsonA != jsonB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______jsonA_jsonB___)};
+      $helpers.assert(!$helpers.eq($jsonA, $jsonC), "jsonA != jsonC");
+      $helpers.assert((!!$helpers.eq($jsonA, $jsonB)), "!(jsonA != jsonB)");
     }
   }
   return $Closure4;
@@ -145,7 +152,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
 ## inflight.$Closure5-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setB__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $setA, $setB }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -153,8 +161,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______setA_setB__)};
+      $helpers.assert($helpers.eq($setA, $setA), "setA == setA");
+      $helpers.assert($helpers.eq($setA, $setB), "setA == setB");
     }
   }
   return $Closure5;
@@ -165,7 +173,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
 ## inflight.$Closure6-1.js
 ```js
 "use strict";
-module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setC__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $setA, $setB, $setC }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -173,8 +182,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setC__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(setA != setB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______setA_setB___)};
+      $helpers.assert(!$helpers.eq($setA, $setC), "setA != setC");
+      $helpers.assert((!!$helpers.eq($setA, $setB)), "!(setA != setB)");
     }
   }
   return $Closure6;
@@ -185,7 +194,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
 ## inflight.$Closure7-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $mapA, $mapB }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -193,8 +203,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB__)};
+      $helpers.assert($helpers.eq($mapA, $mapA), "mapA == mapA");
+      $helpers.assert($helpers.eq($mapA, $mapB), "mapA == mapB");
     }
   }
   return $Closure7;
@@ -205,7 +215,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
 ## inflight.$Closure8-1.js
 ```js
 "use strict";
-module.exports = function({ $_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB___, $___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapC__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -213,8 +224,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})($___a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapC__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: !(mapA != mapB)")})($_____a_b_______try___return_require__assert___notDeepStrictEqual_a_b______undefined____catch___return_false_______mapA_mapB___)};
+      $helpers.assert(!$helpers.eq($mapA, $mapC), "mapA != mapC");
+      $helpers.assert((!!$helpers.eq($mapA, $mapB)), "!(mapA != mapB)");
     }
   }
   return $Closure8;
@@ -225,7 +236,8 @@ module.exports = function({ $_____a_b_______try___return_require__assert___notDe
 ## inflight.$Closure9-1.js
 ```js
 "use strict";
-module.exports = function({ $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayA__, $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB__ }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $arrayA, $arrayB }) {
   class $Closure9 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -233,8 +245,8 @@ module.exports = function({ $___a_b_______try___return_require__assert___deepStr
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayA")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayA__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayB")})($___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______arrayA_arrayB__)};
+      $helpers.assert($helpers.eq($arrayA, $arrayA), "arrayA == arrayA");
+      $helpers.assert($helpers.eq($arrayA, $arrayB), "arrayA == arrayB");
     }
   }
   return $Closure9;
@@ -269,6 +281,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);

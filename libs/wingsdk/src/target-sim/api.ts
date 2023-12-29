@@ -30,7 +30,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       this,
       "Endpoint",
       simulatorAttrToken(this, "url"),
-      { label: `Endpoint for Api ${this.node.path}` }
+      { label: `Api ${this.node.path}` }
     );
   }
 
@@ -65,6 +65,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${path}`;
+    Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
       this,
