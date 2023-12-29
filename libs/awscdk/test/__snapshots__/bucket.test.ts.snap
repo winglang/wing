@@ -440,6 +440,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -880,6 +885,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 1024,
@@ -1344,6 +1354,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -1784,6 +1799,11 @@ def submit_response(event: dict, context, response_status: str, error_message: s
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 1024,

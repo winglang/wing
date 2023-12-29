@@ -186,7 +186,14 @@ fn partial_compile(
 
 	// -- LIFTING PHASE --
 
-	let jsifier = JSifier::new(&mut types, &project_data.files, &project_data.file_graph, &source_path);
+	let jsifier = JSifier::new(
+		&mut types,
+		&project_data.files,
+		&project_data.file_graph,
+		&source_path,
+		// out_dir will not be used
+		&source_path,
+	);
 	for file in &topo_sorted_files {
 		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");

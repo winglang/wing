@@ -40,7 +40,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
-        __dirname.replace("target-awscdk", "shared-aws"),
+        __dirname,
         "queue.setconsumer.inflight.js"
       ),
       "QueueSetConsumerHandlerClient"
@@ -107,7 +107,7 @@ export class Queue extends cloud.Queue implements IAwsQueue {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "QueueClient",
       [`process.env["${this.envName()}"]`]

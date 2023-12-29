@@ -15,7 +15,7 @@ export const NoResources = () => {
         <span>Learn how to add resources </span>
         <a
           className="text-sky-500 hover:text-sky-600"
-          href="https://www.winglang.io/docs/category/cloud-library"
+          href="https://www.winglang.io/docs/category/cloud"
           target="_blank"
           rel="noreferrer"
         >
