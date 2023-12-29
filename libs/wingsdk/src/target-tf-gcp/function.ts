@@ -132,7 +132,7 @@ export class Function extends cloud.Function {
         }),
       }
     );
-    // Step 3: Grant Custom Role to Service Account on the Project
+    // Step 3: Grant Custom Role to Custom Service Account on the Project
     new ProjectIamMember(this, "ProjectIamMember", {
       project: app.projectId,
       role: `projects/${app.projectId}/roles/${this.functionCustomRole.roleId}`,
