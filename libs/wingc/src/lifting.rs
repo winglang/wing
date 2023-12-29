@@ -203,7 +203,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			if expr_phase == Phase::Inflight && expr_type.is_preflight_class() && v.ctx.current_property().is_some() {
 				report_diagnostic(Diagnostic {
 					message: format!(
-						"Reference to lifted preflight object of type \"{expr_type}\" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details)"
+						"Expression of type \"{expr_type}\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
 					),
 					span: Some(node.span.clone()),
 					annotations: vec![],

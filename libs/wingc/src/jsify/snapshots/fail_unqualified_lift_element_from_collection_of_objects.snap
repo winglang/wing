@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Reference to lifted preflight object of type "Bucket" of unknown origin, can't qualify the lift (see https://github.com/winglang/wing/issues/76 for details) 6:6
+Expression of type "Bucket" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details) 6:6
