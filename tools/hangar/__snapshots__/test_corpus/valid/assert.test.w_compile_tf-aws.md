@@ -4,7 +4,7 @@
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $s1, $s2 }) {
+module.exports = function({ $_helpers_eq_s1__s1_, $s1, $s2 }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -18,7 +18,7 @@ module.exports = function({ $s1, $s2 }) {
       $helpers.assert($helpers.eq("`", "`"), "\"`\" == \"`\"");
       $helpers.assert($helpers.eq("``", "``"), "\"``\" == \"``\"");
       $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
-      $helpers.assert($helpers.eq($s1, $s1), "s1 == s1");
+      $helpers.assert($_helpers_eq_s1__s1_, "s1 == s1");
       $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s1)), "\"{s1}\" == \"{s1}\"");
       $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
       $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["a", ""] }, $s1)), "\"a{s1}\" == \"a{s1}\"");
@@ -74,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $___a_b_______try___return_require__assert___deepStrictEqual_a_b______undefined____catch___return_false_______s1_s1__: ${$stdlib.core.liftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)))},
+            $_helpers_eq_s1__s1_: ${$stdlib.core.liftObject($helpers.eq(s1, s1))},
             $s1: ${$stdlib.core.liftObject(s1)},
             $s2: ${$stdlib.core.liftObject(s2)},
           })
@@ -96,7 +96,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)), host, []);
+          $Closure1._registerOnLiftObject($helpers.eq(s1, s1), host, []);
           $Closure1._registerOnLiftObject(s1, host, []);
           $Closure1._registerOnLiftObject(s2, host, []);
         }
