@@ -70,13 +70,12 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
+    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr }) {
       this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
       this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_;
       this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_;
       this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
       this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
-      this.$_this_myOptStr_______ = $_this_myOptStr_______;
       this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
       this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
       this.$this_another = $this_another;
@@ -87,6 +86,7 @@ module.exports = function({  }) {
       this.$this_extNum = $this_extNum;
       this.$this_myBool = $this_myBool;
       this.$this_myNum = $this_myNum;
+      this.$this_myOptStr = $this_myOptStr;
       this.$this_myQueue = $this_myQueue;
       this.$this_myResource = $this_myResource;
       this.$this_myStr = $this_myStr;
@@ -112,7 +112,7 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(this.$this_myBool, true), "this.myBool == true");
     }
     async testCaptureOptional() {
-      $helpers.assert($helpers.eq(this.$_this_myOptStr_______, "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
+      $helpers.assert($helpers.eq((this.$this_myOptStr ?? ""), "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
     }
     async testCaptureResource() {
       (await this.$this_myResource.put("f1.txt", "f1"));
@@ -338,7 +338,6 @@ class $Root extends $stdlib.std.Resource {
               $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1))},
               $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
               $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
-              $_this_myOptStr_______: ${$stdlib.core.liftObject((this.myOptStr ?? ""))},
               $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
               $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
               $this_another: ${$stdlib.core.liftObject(this.another)},
@@ -349,6 +348,7 @@ class $Root extends $stdlib.std.Resource {
               $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
               $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
               $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
+              $this_myOptStr: ${$stdlib.core.liftObject(this.myOptStr)},
               $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
               $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
               $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
@@ -368,7 +368,6 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), host, []);
           MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
           MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
-          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
           MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
           MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
           MyResource._registerOnLiftObject(this.another, host, []);
@@ -379,6 +378,7 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerOnLiftObject(this.extNum, host, []);
           MyResource._registerOnLiftObject(this.myBool, host, []);
           MyResource._registerOnLiftObject(this.myNum, host, []);
+          MyResource._registerOnLiftObject(this.myOptStr, host, []);
           MyResource._registerOnLiftObject(this.myQueue, host, []);
           MyResource._registerOnLiftObject(this.myResource, host, []);
           MyResource._registerOnLiftObject(this.myStr, host, []);
@@ -394,7 +394,7 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
         }
         if (ops.includes("testCaptureOptional")) {
-          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
+          MyResource._registerOnLiftObject(this.myOptStr, host, []);
         }
         if (ops.includes("testCapturePrimitives")) {
           MyResource._registerOnLiftObject(this.myBool, host, []);

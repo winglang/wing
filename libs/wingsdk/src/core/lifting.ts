@@ -1,6 +1,6 @@
 import { getTokenResolver } from "./tokens";
-import { Duration } from "../std/duration";
-import { IResource } from "../std/resource";
+import { ILiftable } from "../std/resource";
+
 /**
  * Creates a liftable type from a class or enum
  * @param type The type to lift, Should be a class or enum.
@@ -53,14 +53,6 @@ export function liftObject(obj: any): string {
         return `[${obj.map((o) => liftObject(o)).join(",")}]`;
       }
 
-      if (obj instanceof Duration) {
-        return liftObject({
-          seconds: obj.seconds,
-          minutes: obj.minutes,
-          hours: obj.hours,
-        });
-      }
-
       if (obj instanceof Set) {
         return `new Set(${liftObject(Array.from(obj))})`;
       }
@@ -71,8 +63,8 @@ export function liftObject(obj: any): string {
 
       // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
       // itself.
-      if (typeof (obj as IResource)._toInflight === "function") {
-        return (obj as IResource)._toInflight();
+      if (typeof (obj as ILiftable)._toInflight === "function") {
+        return (obj as ILiftable)._toInflight();
       }
 
       // structs are just plain objects

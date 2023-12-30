@@ -12,3 +12,9 @@ assert("{1+1}" == "2");
 assert("\{1+1}" == "\{1+1}");
 assert("\{1+1}" != "2");
 assert("\{1+1}" != "\{2}");
+
+test "str interpolation with lifted expr" {
+    let i = 1336;
+    let s = "leet: {i+number}";
+    assert(s == "leet: 1337");
+}
