@@ -4,7 +4,7 @@
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_numA__numA_, $_helpers_eq_numA__numB_, $_helpers_eq_strA__strA_, $_helpers_eq_strA__strB_ }) {
+module.exports = function({ $numA, $numB, $strA, $strB }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,10 +12,10 @@ module.exports = function({ $_helpers_eq_numA__numA_, $_helpers_eq_numA__numB_, 
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_numA__numA_, "numA == numA");
-      $helpers.assert($_helpers_eq_numA__numB_, "numA == numB");
-      $helpers.assert($_helpers_eq_strA__strA_, "strA == strA");
-      $helpers.assert($_helpers_eq_strA__strB_, "strA == strB");
+      $helpers.assert($helpers.eq($numA, $numA), "numA == numA");
+      $helpers.assert($helpers.eq($numA, $numB), "numA == numB");
+      $helpers.assert($helpers.eq($strA, $strA), "strA == strA");
+      $helpers.assert($helpers.eq($strA, $strB), "strA == strB");
     }
   }
   return $Closure1;
@@ -27,7 +27,7 @@ module.exports = function({ $_helpers_eq_numA__numA_, $_helpers_eq_numA__numB_, 
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $____helpers_eq_arrayA__arrayB__, $__helpers_eq_arrayA__arrayC_ }) {
+module.exports = function({ $arrayA, $arrayB, $arrayC }) {
   class $Closure10 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -35,8 +35,8 @@ module.exports = function({ $____helpers_eq_arrayA__arrayB__, $__helpers_eq_arra
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_arrayA__arrayC_, "arrayA != arrayC");
-      $helpers.assert($____helpers_eq_arrayA__arrayB__, "!(arrayA != arrayB)");
+      $helpers.assert(!$helpers.eq($arrayA, $arrayC), "arrayA != arrayC");
+      $helpers.assert((!!$helpers.eq($arrayA, $arrayB)), "!(arrayA != arrayB)");
     }
   }
   return $Closure10;
@@ -48,7 +48,7 @@ module.exports = function({ $____helpers_eq_arrayA__arrayB__, $__helpers_eq_arra
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_cat1__cat1_, $_helpers_eq_cat1__cat2_ }) {
+module.exports = function({ $cat1, $cat2 }) {
   class $Closure11 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -56,8 +56,8 @@ module.exports = function({ $_helpers_eq_cat1__cat1_, $_helpers_eq_cat1__cat2_ }
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_cat1__cat1_, "cat1 == cat1");
-      $helpers.assert($_helpers_eq_cat1__cat2_, "cat1 == cat2");
+      $helpers.assert($helpers.eq($cat1, $cat1), "cat1 == cat1");
+      $helpers.assert($helpers.eq($cat1, $cat2), "cat1 == cat2");
     }
   }
   return $Closure11;
@@ -69,7 +69,7 @@ module.exports = function({ $_helpers_eq_cat1__cat1_, $_helpers_eq_cat1__cat2_ }
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $____helpers_eq_cat1__cat2__, $__helpers_eq_cat1__cat3_ }) {
+module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -77,8 +77,8 @@ module.exports = function({ $____helpers_eq_cat1__cat2__, $__helpers_eq_cat1__ca
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_cat1__cat3_, "cat1 != cat3");
-      $helpers.assert($____helpers_eq_cat1__cat2__, "!(cat1 != cat2)");
+      $helpers.assert(!$helpers.eq($cat1, $cat3), "cat1 != cat3");
+      $helpers.assert((!!$helpers.eq($cat1, $cat2)), "!(cat1 != cat2)");
     }
   }
   return $Closure12;
@@ -90,7 +90,7 @@ module.exports = function({ $____helpers_eq_cat1__cat2__, $__helpers_eq_cat1__ca
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__helpers_eq_numA__numC_, $__helpers_eq_strA__strC_ }) {
+module.exports = function({ $numA, $numC, $strA, $strC }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -98,8 +98,8 @@ module.exports = function({ $__helpers_eq_numA__numC_, $__helpers_eq_strA__strC_
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_numA__numC_, "numA != numC");
-      $helpers.assert($__helpers_eq_strA__strC_, "strA != strC");
+      $helpers.assert(!$helpers.eq($numA, $numC), "numA != numC");
+      $helpers.assert(!$helpers.eq($strA, $strC), "strA != strC");
     }
   }
   return $Closure2;
@@ -111,7 +111,7 @@ module.exports = function({ $__helpers_eq_numA__numC_, $__helpers_eq_strA__strC_
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_jsonA__jsonA_, $_helpers_eq_jsonA__jsonB_ }) {
+module.exports = function({ $jsonA, $jsonB }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -119,8 +119,8 @@ module.exports = function({ $_helpers_eq_jsonA__jsonA_, $_helpers_eq_jsonA__json
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_jsonA__jsonA_, "jsonA == jsonA");
-      $helpers.assert($_helpers_eq_jsonA__jsonB_, "jsonA == jsonB");
+      $helpers.assert($helpers.eq($jsonA, $jsonA), "jsonA == jsonA");
+      $helpers.assert($helpers.eq($jsonA, $jsonB), "jsonA == jsonB");
     }
   }
   return $Closure3;
@@ -132,7 +132,7 @@ module.exports = function({ $_helpers_eq_jsonA__jsonA_, $_helpers_eq_jsonA__json
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $____helpers_eq_jsonA__jsonB__, $__helpers_eq_jsonA__jsonC_ }) {
+module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -140,8 +140,8 @@ module.exports = function({ $____helpers_eq_jsonA__jsonB__, $__helpers_eq_jsonA_
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_jsonA__jsonC_, "jsonA != jsonC");
-      $helpers.assert($____helpers_eq_jsonA__jsonB__, "!(jsonA != jsonB)");
+      $helpers.assert(!$helpers.eq($jsonA, $jsonC), "jsonA != jsonC");
+      $helpers.assert((!!$helpers.eq($jsonA, $jsonB)), "!(jsonA != jsonB)");
     }
   }
   return $Closure4;
@@ -153,7 +153,7 @@ module.exports = function({ $____helpers_eq_jsonA__jsonB__, $__helpers_eq_jsonA_
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_setA__setA_, $_helpers_eq_setA__setB_ }) {
+module.exports = function({ $setA, $setB }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -161,8 +161,8 @@ module.exports = function({ $_helpers_eq_setA__setA_, $_helpers_eq_setA__setB_ }
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_setA__setA_, "setA == setA");
-      $helpers.assert($_helpers_eq_setA__setB_, "setA == setB");
+      $helpers.assert($helpers.eq($setA, $setA), "setA == setA");
+      $helpers.assert($helpers.eq($setA, $setB), "setA == setB");
     }
   }
   return $Closure5;
@@ -174,7 +174,7 @@ module.exports = function({ $_helpers_eq_setA__setA_, $_helpers_eq_setA__setB_ }
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $____helpers_eq_setA__setB__, $__helpers_eq_setA__setC_ }) {
+module.exports = function({ $setA, $setB, $setC }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -182,8 +182,8 @@ module.exports = function({ $____helpers_eq_setA__setB__, $__helpers_eq_setA__se
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_setA__setC_, "setA != setC");
-      $helpers.assert($____helpers_eq_setA__setB__, "!(setA != setB)");
+      $helpers.assert(!$helpers.eq($setA, $setC), "setA != setC");
+      $helpers.assert((!!$helpers.eq($setA, $setB)), "!(setA != setB)");
     }
   }
   return $Closure6;
@@ -195,7 +195,7 @@ module.exports = function({ $____helpers_eq_setA__setB__, $__helpers_eq_setA__se
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_mapA__mapA_, $_helpers_eq_mapA__mapB_ }) {
+module.exports = function({ $mapA, $mapB }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -203,8 +203,8 @@ module.exports = function({ $_helpers_eq_mapA__mapA_, $_helpers_eq_mapA__mapB_ }
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_mapA__mapA_, "mapA == mapA");
-      $helpers.assert($_helpers_eq_mapA__mapB_, "mapA == mapB");
+      $helpers.assert($helpers.eq($mapA, $mapA), "mapA == mapA");
+      $helpers.assert($helpers.eq($mapA, $mapB), "mapA == mapB");
     }
   }
   return $Closure7;
@@ -216,7 +216,7 @@ module.exports = function({ $_helpers_eq_mapA__mapA_, $_helpers_eq_mapA__mapB_ }
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $____helpers_eq_mapA__mapB__, $__helpers_eq_mapA__mapC_ }) {
+module.exports = function({ $mapA, $mapB, $mapC }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -224,8 +224,8 @@ module.exports = function({ $____helpers_eq_mapA__mapB__, $__helpers_eq_mapA__ma
       return $obj;
     }
     async handle() {
-      $helpers.assert($__helpers_eq_mapA__mapC_, "mapA != mapC");
-      $helpers.assert($____helpers_eq_mapA__mapB__, "!(mapA != mapB)");
+      $helpers.assert(!$helpers.eq($mapA, $mapC), "mapA != mapC");
+      $helpers.assert((!!$helpers.eq($mapA, $mapB)), "!(mapA != mapB)");
     }
   }
   return $Closure8;
@@ -237,7 +237,7 @@ module.exports = function({ $____helpers_eq_mapA__mapB__, $__helpers_eq_mapA__ma
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_helpers_eq_arrayA__arrayA_, $_helpers_eq_arrayA__arrayB_ }) {
+module.exports = function({ $arrayA, $arrayB }) {
   class $Closure9 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -245,8 +245,8 @@ module.exports = function({ $_helpers_eq_arrayA__arrayA_, $_helpers_eq_arrayA__a
       return $obj;
     }
     async handle() {
-      $helpers.assert($_helpers_eq_arrayA__arrayA_, "arrayA == arrayA");
-      $helpers.assert($_helpers_eq_arrayA__arrayB_, "arrayA == arrayB");
+      $helpers.assert($helpers.eq($arrayA, $arrayA), "arrayA == arrayA");
+      $helpers.assert($helpers.eq($arrayA, $arrayB), "arrayA == arrayB");
     }
   }
   return $Closure9;
@@ -294,10 +294,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_helpers_eq_numA__numA_: ${$stdlib.core.liftObject($helpers.eq(numA, numA))},
-            $_helpers_eq_numA__numB_: ${$stdlib.core.liftObject($helpers.eq(numA, numB))},
-            $_helpers_eq_strA__strA_: ${$stdlib.core.liftObject($helpers.eq(strA, strA))},
-            $_helpers_eq_strA__strB_: ${$stdlib.core.liftObject($helpers.eq(strA, strB))},
+            $numA: ${$stdlib.core.liftObject(numA)},
+            $numB: ${$stdlib.core.liftObject(numB)},
+            $strA: ${$stdlib.core.liftObject(strA)},
+            $strB: ${$stdlib.core.liftObject(strB)},
           })
         `;
       }
@@ -317,10 +317,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject($helpers.eq(numA, numA), host, []);
-          $Closure1._registerOnLiftObject($helpers.eq(numA, numB), host, []);
-          $Closure1._registerOnLiftObject($helpers.eq(strA, strA), host, []);
-          $Closure1._registerOnLiftObject($helpers.eq(strA, strB), host, []);
+          $Closure1._registerOnLiftObject(numA, host, []);
+          $Closure1._registerOnLiftObject(numB, host, []);
+          $Closure1._registerOnLiftObject(strA, host, []);
+          $Closure1._registerOnLiftObject(strB, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -334,8 +334,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $__helpers_eq_numA__numC_: ${$stdlib.core.liftObject(!$helpers.eq(numA, numC))},
-            $__helpers_eq_strA__strC_: ${$stdlib.core.liftObject(!$helpers.eq(strA, strC))},
+            $numA: ${$stdlib.core.liftObject(numA)},
+            $numC: ${$stdlib.core.liftObject(numC)},
+            $strA: ${$stdlib.core.liftObject(strA)},
+            $strC: ${$stdlib.core.liftObject(strC)},
           })
         `;
       }
@@ -355,8 +357,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(!$helpers.eq(numA, numC), host, []);
-          $Closure2._registerOnLiftObject(!$helpers.eq(strA, strC), host, []);
+          $Closure2._registerOnLiftObject(numA, host, []);
+          $Closure2._registerOnLiftObject(numC, host, []);
+          $Closure2._registerOnLiftObject(strA, host, []);
+          $Closure2._registerOnLiftObject(strC, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -370,8 +374,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure3-1.js")({
-            $_helpers_eq_jsonA__jsonA_: ${$stdlib.core.liftObject($helpers.eq(jsonA, jsonA))},
-            $_helpers_eq_jsonA__jsonB_: ${$stdlib.core.liftObject($helpers.eq(jsonA, jsonB))},
+            $jsonA: ${$stdlib.core.liftObject(jsonA)},
+            $jsonB: ${$stdlib.core.liftObject(jsonB)},
           })
         `;
       }
@@ -391,8 +395,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject($helpers.eq(jsonA, jsonA), host, []);
-          $Closure3._registerOnLiftObject($helpers.eq(jsonA, jsonB), host, []);
+          $Closure3._registerOnLiftObject(jsonA, host, []);
+          $Closure3._registerOnLiftObject(jsonB, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -406,8 +410,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure4-1.js")({
-            $____helpers_eq_jsonA__jsonB__: ${$stdlib.core.liftObject((!!$helpers.eq(jsonA, jsonB)))},
-            $__helpers_eq_jsonA__jsonC_: ${$stdlib.core.liftObject(!$helpers.eq(jsonA, jsonC))},
+            $jsonA: ${$stdlib.core.liftObject(jsonA)},
+            $jsonB: ${$stdlib.core.liftObject(jsonB)},
+            $jsonC: ${$stdlib.core.liftObject(jsonC)},
           })
         `;
       }
@@ -427,8 +432,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerOnLiftObject(!$helpers.eq(jsonA, jsonC), host, []);
-          $Closure4._registerOnLiftObject((!!$helpers.eq(jsonA, jsonB)), host, []);
+          $Closure4._registerOnLiftObject(jsonA, host, []);
+          $Closure4._registerOnLiftObject(jsonB, host, []);
+          $Closure4._registerOnLiftObject(jsonC, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -442,8 +448,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure5-1.js")({
-            $_helpers_eq_setA__setA_: ${$stdlib.core.liftObject($helpers.eq(setA, setA))},
-            $_helpers_eq_setA__setB_: ${$stdlib.core.liftObject($helpers.eq(setA, setB))},
+            $setA: ${$stdlib.core.liftObject(setA)},
+            $setB: ${$stdlib.core.liftObject(setB)},
           })
         `;
       }
@@ -463,8 +469,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerOnLiftObject($helpers.eq(setA, setA), host, []);
-          $Closure5._registerOnLiftObject($helpers.eq(setA, setB), host, []);
+          $Closure5._registerOnLiftObject(setA, host, []);
+          $Closure5._registerOnLiftObject(setB, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -478,8 +484,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure6-1.js")({
-            $____helpers_eq_setA__setB__: ${$stdlib.core.liftObject((!!$helpers.eq(setA, setB)))},
-            $__helpers_eq_setA__setC_: ${$stdlib.core.liftObject(!$helpers.eq(setA, setC))},
+            $setA: ${$stdlib.core.liftObject(setA)},
+            $setB: ${$stdlib.core.liftObject(setB)},
+            $setC: ${$stdlib.core.liftObject(setC)},
           })
         `;
       }
@@ -499,8 +506,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure6._registerOnLiftObject(!$helpers.eq(setA, setC), host, []);
-          $Closure6._registerOnLiftObject((!!$helpers.eq(setA, setB)), host, []);
+          $Closure6._registerOnLiftObject(setA, host, []);
+          $Closure6._registerOnLiftObject(setB, host, []);
+          $Closure6._registerOnLiftObject(setC, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -514,8 +522,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure7-1.js")({
-            $_helpers_eq_mapA__mapA_: ${$stdlib.core.liftObject($helpers.eq(mapA, mapA))},
-            $_helpers_eq_mapA__mapB_: ${$stdlib.core.liftObject($helpers.eq(mapA, mapB))},
+            $mapA: ${$stdlib.core.liftObject(mapA)},
+            $mapB: ${$stdlib.core.liftObject(mapB)},
           })
         `;
       }
@@ -535,8 +543,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerOnLiftObject($helpers.eq(mapA, mapA), host, []);
-          $Closure7._registerOnLiftObject($helpers.eq(mapA, mapB), host, []);
+          $Closure7._registerOnLiftObject(mapA, host, []);
+          $Closure7._registerOnLiftObject(mapB, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -550,8 +558,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure8-1.js")({
-            $____helpers_eq_mapA__mapB__: ${$stdlib.core.liftObject((!!$helpers.eq(mapA, mapB)))},
-            $__helpers_eq_mapA__mapC_: ${$stdlib.core.liftObject(!$helpers.eq(mapA, mapC))},
+            $mapA: ${$stdlib.core.liftObject(mapA)},
+            $mapB: ${$stdlib.core.liftObject(mapB)},
+            $mapC: ${$stdlib.core.liftObject(mapC)},
           })
         `;
       }
@@ -571,8 +580,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerOnLiftObject(!$helpers.eq(mapA, mapC), host, []);
-          $Closure8._registerOnLiftObject((!!$helpers.eq(mapA, mapB)), host, []);
+          $Closure8._registerOnLiftObject(mapA, host, []);
+          $Closure8._registerOnLiftObject(mapB, host, []);
+          $Closure8._registerOnLiftObject(mapC, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -586,8 +596,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure9-1.js")({
-            $_helpers_eq_arrayA__arrayA_: ${$stdlib.core.liftObject($helpers.eq(arrayA, arrayA))},
-            $_helpers_eq_arrayA__arrayB_: ${$stdlib.core.liftObject($helpers.eq(arrayA, arrayB))},
+            $arrayA: ${$stdlib.core.liftObject(arrayA)},
+            $arrayB: ${$stdlib.core.liftObject(arrayB)},
           })
         `;
       }
@@ -607,8 +617,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure9._registerOnLiftObject($helpers.eq(arrayA, arrayA), host, []);
-          $Closure9._registerOnLiftObject($helpers.eq(arrayA, arrayB), host, []);
+          $Closure9._registerOnLiftObject(arrayA, host, []);
+          $Closure9._registerOnLiftObject(arrayB, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -622,8 +632,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure10-1.js")({
-            $____helpers_eq_arrayA__arrayB__: ${$stdlib.core.liftObject((!!$helpers.eq(arrayA, arrayB)))},
-            $__helpers_eq_arrayA__arrayC_: ${$stdlib.core.liftObject(!$helpers.eq(arrayA, arrayC))},
+            $arrayA: ${$stdlib.core.liftObject(arrayA)},
+            $arrayB: ${$stdlib.core.liftObject(arrayB)},
+            $arrayC: ${$stdlib.core.liftObject(arrayC)},
           })
         `;
       }
@@ -643,8 +654,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure10._registerOnLiftObject(!$helpers.eq(arrayA, arrayC), host, []);
-          $Closure10._registerOnLiftObject((!!$helpers.eq(arrayA, arrayB)), host, []);
+          $Closure10._registerOnLiftObject(arrayA, host, []);
+          $Closure10._registerOnLiftObject(arrayB, host, []);
+          $Closure10._registerOnLiftObject(arrayC, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -658,8 +670,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure11-1.js")({
-            $_helpers_eq_cat1__cat1_: ${$stdlib.core.liftObject($helpers.eq(cat1, cat1))},
-            $_helpers_eq_cat1__cat2_: ${$stdlib.core.liftObject($helpers.eq(cat1, cat2))},
+            $cat1: ${$stdlib.core.liftObject(cat1)},
+            $cat2: ${$stdlib.core.liftObject(cat2)},
           })
         `;
       }
@@ -679,8 +691,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure11._registerOnLiftObject($helpers.eq(cat1, cat1), host, []);
-          $Closure11._registerOnLiftObject($helpers.eq(cat1, cat2), host, []);
+          $Closure11._registerOnLiftObject(cat1, host, []);
+          $Closure11._registerOnLiftObject(cat2, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -694,8 +706,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure12-1.js")({
-            $____helpers_eq_cat1__cat2__: ${$stdlib.core.liftObject((!!$helpers.eq(cat1, cat2)))},
-            $__helpers_eq_cat1__cat3_: ${$stdlib.core.liftObject(!$helpers.eq(cat1, cat3))},
+            $cat1: ${$stdlib.core.liftObject(cat1)},
+            $cat2: ${$stdlib.core.liftObject(cat2)},
+            $cat3: ${$stdlib.core.liftObject(cat3)},
           })
         `;
       }
@@ -715,8 +728,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure12._registerOnLiftObject(!$helpers.eq(cat1, cat3), host, []);
-          $Closure12._registerOnLiftObject((!!$helpers.eq(cat1, cat2)), host, []);
+          $Closure12._registerOnLiftObject(cat1, host, []);
+          $Closure12._registerOnLiftObject(cat2, host, []);
+          $Closure12._registerOnLiftObject(cat3, host, []);
         }
         super._registerOnLift(host, ops);
       }

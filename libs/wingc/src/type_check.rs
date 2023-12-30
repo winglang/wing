@@ -5637,12 +5637,10 @@ fn combine_phases(phase1: Phase, phase2: Phase) -> Phase {
 		// If any of the expressions are inflight then the result is inflight since
 		// the entire expression can only be evaluated in inflight context.
 		(Phase::Inflight, _) | (_, Phase::Inflight) => Phase::Inflight,
-		// Otherwise, if any of the expressions are independent then the result is independent.
-		// We currently prefer independent over preflight in order to lift only subexpressions
-		// when possible.
-		(Phase::Independent, _) | (_, Phase::Independent) => Phase::Independent,
-		// Othersize the result is preflight (which needs to be lifted when used inflight)
-		(Phase::Preflight, Phase::Preflight) => Phase::Preflight,
+		// Otherwise we'll treat the expression as phase independent
+		// Note: we never result in a preflight expression since we currently prefer
+		// to lift the smaller preflight components and evaluate them in inflight context
+		_ => Phase::Independent,
 	}
 }
 

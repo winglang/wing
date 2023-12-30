@@ -18,7 +18,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $_x___y_ }) {
+module.exports = function({ $x, $y }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -26,7 +26,7 @@ module.exports = function({ $_x___y_ }) {
       return $obj;
     }
     async handle() {
-      $_x___y_;
+      ($x + $y);
     }
   }
   return $Closure1;
@@ -56,7 +56,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_x___y_: ${$stdlib.core.liftObject((x + y))},
+            $x: ${$stdlib.core.liftObject(x)},
+            $y: ${$stdlib.core.liftObject(y)},
           })
         `;
       }
@@ -76,7 +77,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject((x + y), host, []);
+          $Closure1._registerOnLiftObject(x, host, []);
+          $Closure1._registerOnLiftObject(y, host, []);
         }
         super._registerOnLift(host, ops);
       }
