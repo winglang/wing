@@ -1365,11 +1365,11 @@ importers:
         specifier: workspace:^
         version: link:../../apps/jsii-docgen
       aws-sdk-client-mock:
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: 3.0.0
+        version: 3.0.0
       aws-sdk-client-mock-jest:
-        specifier: ^2.2.0
-        version: 2.2.0(aws-sdk-client-mock@2.2.0)
+        specifier: 3.0.0
+        version: 3.0.0(aws-sdk-client-mock@3.0.0)
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
@@ -12425,18 +12425,18 @@ packages:
       - table
       - yaml
 
-  /aws-sdk-client-mock-jest@2.2.0(aws-sdk-client-mock@2.2.0):
-    resolution: {integrity: sha512-lpPapmCjTe70qhXYFIjUL9cdA75YmtC0surig3QSr2Y5doaG1e4fuXlgkNeH6V873rlwu9TWCG2MFOr4rHuMfg==}
+  /aws-sdk-client-mock-jest@3.0.0(aws-sdk-client-mock@3.0.0):
+    resolution: {integrity: sha512-oV1rBQZc4UumLbzZAhi8UAehUq+k75hkQYGLrVIP0iJj85Z9xw+EaSsmJke/KQ8Z3vng+Xv1xbounsxpvZpunQ==}
     peerDependencies:
-      aws-sdk-client-mock: 2.2.0
+      aws-sdk-client-mock: 3.0.0
     dependencies:
       '@types/jest': 28.1.8
-      aws-sdk-client-mock: 2.2.0
+      aws-sdk-client-mock: 3.0.0
       tslib: 2.6.2
     dev: true
 
-  /aws-sdk-client-mock@2.2.0:
-    resolution: {integrity: sha512-Kq2N+6gHRDedbrgTA0NMMfyN1XDWEA5Kbpm9/M/cenSxoNjfvQBOtBawI1lQe5h4UziLl///E7u17K9PBoHEKA==}
+  /aws-sdk-client-mock@3.0.0:
+    resolution: {integrity: sha512-4mBiWhuLYLZe1+K/iB8eYy5SAZyW2se+Keyh5u9QouMt6/qJ5SRZhss68xvUX5g3ApzROJ06QPRziYHP6buuvQ==}
     dependencies:
       '@types/sinon': 10.0.19
       sinon: 14.0.2
@@ -14563,7 +14563,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231222
+      typescript: 5.4.0-dev.20231230
     dev: true
 
   /dset@3.1.2:
@@ -22639,6 +22639,7 @@ packages:
 
   /sinon@14.0.2:
     resolution: {integrity: sha512-PDpV0ZI3ZCS3pEqx0vpNp6kzPhHrLx72wA0G+ZLaaJjLIYeE0n8INlgaohKuGy7hP0as5tbUd23QWu5U233t+w==}
+    deprecated: 16.1.1
     dependencies:
       '@sinonjs/commons': 2.0.0
       '@sinonjs/fake-timers': 9.1.2
@@ -24101,8 +24102,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231222:
-    resolution: {integrity: sha512-SK3Hak67HL8l08jLRYOFF0cXL0ODM/tvA6w2+HOOYKijxGOmpc0xWz7zvOi6RLihS9BGgBG6Hk1zD/bN4qR4Qg==}
+  /typescript@5.4.0-dev.20231230:
+    resolution: {integrity: sha512-H0/vWwH9SqG9CgKGESiHv+JimN/MjQAmfZDzmnPp8kIjQiwvyaScmIMYqkOkB6nPTblagwfZ+PrTMaZPboIC3A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
