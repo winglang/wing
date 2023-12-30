@@ -1,4 +1,6 @@
+import { ILiftable } from "./resource";
 import { InflightClient } from "../core/inflight";
+import { normalPath } from "../shared/misc";
 
 /**
  * Interface that is used for setting Datetime date
@@ -42,7 +44,7 @@ export interface DatetimeComponents {
  * Represents a local or UTC date object
  * @wingType datetime
  */
-export class Datetime {
+export class Datetime implements ILiftable {
   /**
    * @internal
    */
@@ -112,6 +114,13 @@ export class Datetime {
   private constructor(date: Date = new Date(), timezoneOffset = 0) {
     this._date = date;
     this._timezoneOffset = timezoneOffset;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(require("${normalPath(
+      __filename
+    )}").Datetime.fromIso("${this.toIso()}"))`;
   }
 
   /**
