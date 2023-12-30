@@ -19,8 +19,22 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
+import { corsOptionsMethod } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
+
+/**
+ * Custom error when the resource doesn't exist
+ */
+const GATEWAY_404_RESPONSE = {
+  "x-amazon-apigateway-gateway-responses": {
+    MISSING_AUTHENTICATION_TOKEN: {
+      statusCode: "404",
+      responseTemplates: {
+        "application/json": '{"message": $context.error.messageString }',
+      },
+    },
+  },
+};
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -321,21 +335,24 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
-            openApiSpec.paths = {
-              ...openApiSpec.paths,
-              ...defaultResponse,
+          const injectOptionsMethod = (openApiSpec: OpenApiSpec) => {
+            Object.keys(openApiSpec.paths).forEach(function (key) {
+              if (!("options" in openApiSpec.paths[key]) && props.cors) {
+                openApiSpec.paths[key].options = corsOptionsMethod(props.cors);
+              }
+            });
+
+            return {
+              ...openApiSpec,
+              ...GATEWAY_404_RESPONSE,
             };
-            return openApiSpec;
           };
-          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
+          return JSON.stringify(injectOptionsMethod(props.getApiSpec()));
         },
       }),
       lifecycle: {
