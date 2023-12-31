@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, rmdir } from "fs/promises";
+import { mkdir, rm } from "fs/promises";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import { join } from "path";
 import { makeSimulatorClient } from "./client";
@@ -349,7 +349,7 @@ export class Simulator {
     await this.stop();
 
     if (resetState) {
-      await rmdir(this.statedir, { recursive: true });
+      await rm(this.statedir, { recursive: true });
     }
 
     const { config, treeData, connectionData } = this._loadApp(this.simdir);

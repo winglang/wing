@@ -49,11 +49,13 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock",
+      "name": "aws-sdk-client-mock-jest",
+      "version": "3.0.0",
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock-jest",
+      "name": "aws-sdk-client-mock",
+      "version": "3.0.0",
       "type": "build"
     },
     {
@@ -303,6 +305,10 @@
       "type": "bundled"
     },
     {
+      "name": "ulid",
+      "type": "bundled"
+    },
+    {
       "name": "undici",
       "type": "bundled"
     },
@@ -313,6 +319,11 @@
     {
       "name": "yaml",
       "type": "bundled"
+    },
+    {
+      "name": "@types/node",
+      "version": "^18.17.13",
+      "type": "devenv"
     },
     {
       "name": "constructs",

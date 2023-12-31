@@ -161,7 +161,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.api_get_api_0_IamRole_EB61CF92.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.api_get_api_0_S3Object_797A12CE.key}",
         "timeout": 60,

@@ -26,10 +26,13 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.base64Decode">base64Decode</a></code> | Converts a string from base64 to UTF-8. |
 | <code><a href="#@winglang/sdk.util.Util.base64Encode">base64Encode</a></code> | Converts a string from UTF-8 to base64. |
 | <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.exec">exec</a></code> | Execute a program with the given arguments, wait for it to finish, and return its outputs. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
+| <code><a href="#@winglang/sdk.util.Util.shell">shell</a></code> | Executes a command in the shell and returns its standard output. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.ulid">ulid</a></code> | Generates universally unique lexicographically sortable identifier. |
 | <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
 | <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
 
@@ -107,6 +110,40 @@ The name of the environment variable.
 
 ---
 
+##### `exec` <a name="exec" id="@winglang/sdk.util.Util.exec"></a>
+
+```wing
+bring util;
+
+util.exec(program: str, args: MutArray<str>, opts?: ExecOptions);
+```
+
+Execute a program with the given arguments, wait for it to finish, and return its outputs.
+
+###### `program`<sup>Required</sup> <a name="program" id="@winglang/sdk.util.Util.exec.parameter.program"></a>
+
+- *Type:* str
+
+The program to execute.
+
+---
+
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/sdk.util.Util.exec.parameter.args"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+An array of arguments to pass to the program.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.util.Util.exec.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.ExecOptions">ExecOptions</a>
+
+`ExecOptions`, such as the working directory and environment variables.
+
+---
+
 ##### `nanoid` <a name="nanoid" id="@winglang/sdk.util.Util.nanoid"></a>
 
 ```wing
@@ -145,6 +182,32 @@ The string to be hashed.
 
 ---
 
+##### `shell` <a name="shell" id="@winglang/sdk.util.Util.shell"></a>
+
+```wing
+bring util;
+
+util.shell(command: str, opts?: ShellOptions);
+```
+
+Executes a command in the shell and returns its standard output.
+
+###### `command`<sup>Required</sup> <a name="command" id="@winglang/sdk.util.Util.shell.parameter.command"></a>
+
+- *Type:* str
+
+The command string to execute in the shell.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.util.Util.shell.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.ShellOptions">ShellOptions</a>
+
+`ShellOptions`, such as the working directory and environment variables.
+
+---
+
 ##### `sleep` <a name="sleep" id="@winglang/sdk.util.Util.sleep"></a>
 
 ```wing
@@ -180,6 +243,26 @@ Returns `nil` if not found or empty.
 - *Type:* str
 
 The name of the environment variable.
+
+---
+
+##### `ulid` <a name="ulid" id="@winglang/sdk.util.Util.ulid"></a>
+
+```wing
+bring util;
+
+util.ulid(options?: UlidOptions);
+```
+
+Generates universally unique lexicographically sortable identifier.
+
+# @link https://github.com/ulid/javascript
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.ulid.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.UlidOptions">UlidOptions</a>
+
+Optional options object for generating the ID.
 
 ---
 
@@ -222,6 +305,128 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### CommandOptions <a name="CommandOptions" id="@winglang/sdk.util.CommandOptions"></a>
+
+Base command options.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.CommandOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let CommandOptions = util.CommandOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.CommandOptions.property.cwd">cwd</a></code> | <code>str</code> | Path to a directory to run the command in. |
+| <code><a href="#@winglang/sdk.util.CommandOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables. |
+| <code><a href="#@winglang/sdk.util.CommandOptions.property.inheritEnv">inheritEnv</a></code> | <code>bool</code> | Whether to inherit environment variables from the host's environment. |
+
+---
+
+##### `cwd`<sup>Optional</sup> <a name="cwd" id="@winglang/sdk.util.CommandOptions.property.cwd"></a>
+
+```wing
+cwd: str;
+```
+
+- *Type:* str
+- *Default:* the default working directory of the host
+
+Path to a directory to run the command in.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.util.CommandOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* no environment variables
+
+Environment variables.
+
+---
+
+##### `inheritEnv`<sup>Optional</sup> <a name="inheritEnv" id="@winglang/sdk.util.CommandOptions.property.inheritEnv"></a>
+
+```wing
+inheritEnv: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to inherit environment variables from the host's environment.
+
+---
+
+### ExecOptions <a name="ExecOptions" id="@winglang/sdk.util.ExecOptions"></a>
+
+Additional options for `util.exec()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.ExecOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let ExecOptions = util.ExecOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.ExecOptions.property.cwd">cwd</a></code> | <code>str</code> | Path to a directory to run the command in. |
+| <code><a href="#@winglang/sdk.util.ExecOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables. |
+| <code><a href="#@winglang/sdk.util.ExecOptions.property.inheritEnv">inheritEnv</a></code> | <code>bool</code> | Whether to inherit environment variables from the host's environment. |
+
+---
+
+##### `cwd`<sup>Optional</sup> <a name="cwd" id="@winglang/sdk.util.ExecOptions.property.cwd"></a>
+
+```wing
+cwd: str;
+```
+
+- *Type:* str
+- *Default:* the default working directory of the host
+
+Path to a directory to run the command in.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.util.ExecOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* no environment variables
+
+Environment variables.
+
+---
+
+##### `inheritEnv`<sup>Optional</sup> <a name="inheritEnv" id="@winglang/sdk.util.ExecOptions.property.inheritEnv"></a>
+
+```wing
+inheritEnv: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to inherit environment variables from the host's environment.
+
+---
 
 ### NanoidOptions <a name="NanoidOptions" id="@winglang/sdk.util.NanoidOptions"></a>
 
@@ -266,6 +471,174 @@ size: num;
 - *Default:* 21
 
 Size of ID.
+
+---
+
+### Output <a name="Output" id="@winglang/sdk.util.Output"></a>
+
+Output of a finished process.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.Output.Initializer"></a>
+
+```wing
+bring util;
+
+let Output = util.Output{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.Output.property.status">status</a></code> | <code>num</code> | A process's exit status. |
+| <code><a href="#@winglang/sdk.util.Output.property.stderr">stderr</a></code> | <code>str</code> | The standard error of a finished process. |
+| <code><a href="#@winglang/sdk.util.Output.property.stdout">stdout</a></code> | <code>str</code> | The standard output of a finished process. |
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.util.Output.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+
+A process's exit status.
+
+---
+
+##### `stderr`<sup>Required</sup> <a name="stderr" id="@winglang/sdk.util.Output.property.stderr"></a>
+
+```wing
+stderr: str;
+```
+
+- *Type:* str
+
+The standard error of a finished process.
+
+---
+
+##### `stdout`<sup>Required</sup> <a name="stdout" id="@winglang/sdk.util.Output.property.stdout"></a>
+
+```wing
+stdout: str;
+```
+
+- *Type:* str
+
+The standard output of a finished process.
+
+---
+
+### ShellOptions <a name="ShellOptions" id="@winglang/sdk.util.ShellOptions"></a>
+
+Additional options for `util.shell()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.ShellOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let ShellOptions = util.ShellOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.ShellOptions.property.cwd">cwd</a></code> | <code>str</code> | Path to a directory to run the command in. |
+| <code><a href="#@winglang/sdk.util.ShellOptions.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables. |
+| <code><a href="#@winglang/sdk.util.ShellOptions.property.inheritEnv">inheritEnv</a></code> | <code>bool</code> | Whether to inherit environment variables from the host's environment. |
+| <code><a href="#@winglang/sdk.util.ShellOptions.property.throw">throw</a></code> | <code>bool</code> | Whether to throw an error on command execution failure. |
+
+---
+
+##### `cwd`<sup>Optional</sup> <a name="cwd" id="@winglang/sdk.util.ShellOptions.property.cwd"></a>
+
+```wing
+cwd: str;
+```
+
+- *Type:* str
+- *Default:* the default working directory of the host
+
+Path to a directory to run the command in.
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.util.ShellOptions.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* no environment variables
+
+Environment variables.
+
+---
+
+##### `inheritEnv`<sup>Optional</sup> <a name="inheritEnv" id="@winglang/sdk.util.ShellOptions.property.inheritEnv"></a>
+
+```wing
+inheritEnv: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to inherit environment variables from the host's environment.
+
+---
+
+##### `throw`<sup>Optional</sup> <a name="throw" id="@winglang/sdk.util.ShellOptions.property.throw"></a>
+
+```wing
+throw: bool;
+```
+
+- *Type:* bool
+- *Default:* true
+
+Whether to throw an error on command execution failure.
+
+---
+
+### UlidOptions <a name="UlidOptions" id="@winglang/sdk.util.UlidOptions"></a>
+
+Options to generate universally unique lexicographically sortable identifiers.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.UlidOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let UlidOptions = util.UlidOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.UlidOptions.property.seed">seed</a></code> | <code>num</code> | You can also input a seed time which will consistently give you the same string for the time component. |
+
+---
+
+##### `seed`<sup>Optional</sup> <a name="seed" id="@winglang/sdk.util.UlidOptions.property.seed"></a>
+
+```wing
+seed: num;
+```
+
+- *Type:* num
+- *Default:* Date.now()
+
+You can also input a seed time which will consistently give you the same string for the time component.
+
+This is useful for migrating to ulid.
 
 ---
 

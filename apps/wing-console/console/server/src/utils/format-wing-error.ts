@@ -130,3 +130,13 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
     return `Unexpected error: ${error}`;
   }
 };
+
+export const formatTraceError = async (error: string): Promise<string> => {
+  let output = await prettyPrintError(error);
+
+  // Remove ANSI color codes
+  const regex =
+    /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+  return output.replaceAll(regex, "");
+};

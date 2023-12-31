@@ -2,7 +2,8 @@ import * as path from "path";
 import * as fs from "fs";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
-export const testDir = path.join(repoRoot, "examples/tests");
+export const examplesDir = path.join(repoRoot, "examples");
+export const testDir = path.join(examplesDir, "tests");
 export const validTestDir = path.join(testDir, "valid");
 export const sdkTestsDir = path.join(testDir, "sdk_tests");
 export const platformsDir = path.join(validTestDir, "platforms");
@@ -10,13 +11,14 @@ export const sdkTests = path.join(testDir, "sdk_tests");
 export const invalidTestDir = path.join(testDir, "invalid");
 export const benchmarksTestDir = path.join(validTestDir, "benchmarks");
 export const errorTestDir = path.join(testDir, "error");
-export const hangarDir = path.join(repoRoot, "tools/hangar");
+export const hangarDir = path.join(repoRoot, "tools", "hangar");
 export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
-export const wingSdkDir = path.join(tmpDir, "node_modules/@winglang/sdk");
+export const tmpNodeModulesDir = path.join(tmpDir, "node_modules");
+export const wingSdkDir = path.join(tmpNodeModulesDir, "@winglang/sdk");
 
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
-export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
+export const wingBin = path.join(tmpNodeModulesDir, ".bin/wing");
 
 export const snapshotDir = path.join(hangarDir, "__snapshots__");
 

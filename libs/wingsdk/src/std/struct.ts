@@ -19,7 +19,7 @@ export class Struct {
   /**
    * Converts a Json to a Struct
    *
-   * @macro ((json, validateOptions) => ($self$._fromJson(json, validateOptions)))($args$)
+   * @macro $self$._fromJson($args$)
    */
   public static fromJson(json: Json, options?: JsonValidationOptions): T1 {
     json;
@@ -30,7 +30,7 @@ export class Struct {
   /**
    * Converts a Json to a Struct, returning nil if the Json is not valid
    *
-   * @macro ((json) => ($self$._tryFromJson(json)))($args$)
+   * @macro $self$._tryFromJson($args$)
    */
   public static tryFromJson(json: Json): T1 | undefined {
     json;
@@ -40,7 +40,7 @@ export class Struct {
   /**
    * Parse a Json string into a Struct
    *
-   * @macro ((json) => ($self$._fromJson(JSON.parse(json))))($args$)
+   * @macro $self$._fromJson(JSON.parse($args$))
    */
   public static parseJson(json: string): T1 {
     json;
@@ -50,7 +50,7 @@ export class Struct {
   /**
    * Parse a Json string into a Struct, returning nil if the Json is not valid
    *
-   * @macro ((json) => ($self$._tryParseJson(json)))($args$)
+   * @macro $self$._tryParseJson($args$)
    */
   public static tryParseJson(json: string | undefined): T1 | undefined {
     json;
@@ -59,7 +59,7 @@ export class Struct {
 
   /**
    * Retrieve the schema for this struct
-   * @macro ($self$)
+   * @macro $self$
    */
   public static schema(): JsonSchema {
     throw new Error("Macro");

@@ -42,7 +42,7 @@ export class Array {
   /**
    * Get the value at the given index, returning nil if the index is out of bounds.
    *
-   * @macro ($self$.at($args$))
+   * @macro $self$.at($args$)
    *
    * @param index index of the value to get
    * @returns the value at the given index, or undefined if the index is out of bounds
@@ -238,7 +238,7 @@ export class MutArray {
   /**
    * Add values to end of array
    *
-   * @macro ((obj, args) => { obj.push(...args); })($self$, [$args$])
+   * @macro $self$.push($args$)
    *
    * @param values values to add
    */

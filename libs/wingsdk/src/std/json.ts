@@ -40,7 +40,7 @@ export class Json {
   /**
    * Returns the keys from the Json.
    *
-   * @macro (Object.keys($args$))
+   * @macro Object.keys($args$)
    *
    * @param json map to get the keys from
    * @returns the keys as Array<String>
@@ -53,7 +53,7 @@ export class Json {
   /**
    * Returns the values from the Json.
    *
-   * @macro (Object.values($args$))
+   * @macro Object.values($args$)
    *
    * @param json map to get the values from
    * @returns the values as Array<Json>
@@ -76,7 +76,7 @@ export class Json {
   /**
    * Deletes a key in a given Json
    *
-   * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
+   * @macro ((json, key) => { delete json[key]; })($args$)
    *
    * @param json to delete key from
    * @param key the key to delete
@@ -90,7 +90,7 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$args$])
+   * @macro ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })($args$)
    *
    * @param json to format as string
    * @returns string representation of the Json
@@ -120,7 +120,7 @@ export class Json {
   /**
    * Creates a mutable deep copy of the Json.
    *
-   * @macro (JSON.parse(JSON.stringify($args$)))
+   * @macro JSON.parse(JSON.stringify($args$))
    *
    * @param json to copy
    * @returns the mutable copy of the Json
@@ -133,7 +133,7 @@ export class Json {
   /**
    * Parse a string into a Json
    *
-   * @macro (JSON.parse($args$))
+   * @macro JSON.parse($args$)
    *
    * @param str to parse as Json
    * @returns Json representation of the string
@@ -159,7 +159,7 @@ export class Json {
   /**
    * Checks if a Json object has a given key
    *
-   * @macro ((args) => { return args[0].hasOwnProperty(args[1]); })([$args$])
+   * @macro ((json, key) => { return json.hasOwnProperty(key); })($args$)
    *
    * @param json The json object to inspect
    * @param key The key to check
@@ -338,7 +338,7 @@ export class MutJson {
   /**
    * Adds or updates an element in MutJson with a specific key and value
    *
-   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, key, value) => { obj[key] = value; })($self$, $args$)
    *
    * @param key The key of the element to add
    * @param value The value of the element to add
@@ -352,7 +352,7 @@ export class MutJson {
   /**
    * Set element in MutJson Array with a specific key and value
    *
-   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   * @macro ((obj, idx, value) => { obj[idx] = value; })($self$, $args$)
    *
    * @param value The value of the element to set
    */

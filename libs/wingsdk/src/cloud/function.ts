@@ -146,6 +146,12 @@ export interface IFunctionClient {
    * @inflight
    */
   invoke(payload: string): Promise<string>;
+
+  /**
+   * Kicks off the execution of the function with a payload and returns immediately while the function is running.
+   * @inflight
+   */
+  invokeAsync(payload: string): Promise<void>;
 }
 
 /**
@@ -164,7 +170,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event: string): Promise<void>;
+  handle(event: string): Promise<string | undefined>;
 }
 
 /**
@@ -174,4 +180,6 @@ export interface IFunctionHandlerClient {
 export enum FunctionInflightMethods {
   /** `Function.invoke` */
   INVOKE = "invoke",
+  /** `Function.invokeAsync` */
+  INVOKE_ASYNC = "invokeAsync",
 }

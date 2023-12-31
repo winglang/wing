@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $InflightB, $expect_Util }) {
   class $Closure1 {
     constructor({  }) {
@@ -23,6 +24,7 @@ module.exports = function({ $InflightB, $expect_Util }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $expect_Util, $extended }) {
   class $Closure2 {
     constructor({  }) {
@@ -42,6 +44,7 @@ module.exports = function({ $expect_Util, $extended }) {
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -55,6 +58,7 @@ module.exports = function({  }) {
 ## inflight.B-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $A }) {
   class B extends $A {
     constructor({  }) {
@@ -69,6 +73,7 @@ module.exports = function({ $A }) {
 ## inflight.BaseClass-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $b }) {
   class BaseClass {
     constructor({  }) {
@@ -85,6 +90,7 @@ module.exports = function({ $b }) {
 ## inflight.C-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $B }) {
   class C extends $B {
     constructor({  }) {
@@ -99,6 +105,7 @@ module.exports = function({ $B }) {
 ## inflight.D-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $C }) {
   class D extends $C {
     constructor({  }) {
@@ -113,6 +120,7 @@ module.exports = function({ $C }) {
 ## inflight.E-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $D }) {
   class E extends $D {
     constructor({  }) {
@@ -127,6 +135,7 @@ module.exports = function({ $D }) {
 ## inflight.ExtendedClass-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $BaseClass, $b }) {
   class ExtendedClass extends $BaseClass {
     constructor({  }) {
@@ -145,6 +154,7 @@ module.exports = function({ $BaseClass, $b }) {
 ## inflight.InflightA-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class InflightA {
     async description() {
@@ -159,6 +169,7 @@ module.exports = function({  }) {
 ## inflight.InflightB-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $InflightA }) {
   class InflightB extends $InflightA {
     async description() {
@@ -211,6 +222,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const expect = $stdlib.expect;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {

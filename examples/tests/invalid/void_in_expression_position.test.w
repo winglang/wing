@@ -7,6 +7,10 @@ let x = "my name is {log("mister cloud")}";
 let y = 5 + log("hello");
 //          ^^^^^^^^^^^^^^ Expected type to be "num", but got "void" instead
 
-let returnsNothing = () => {};
+let returnsNothing = (): void => {};
 let z = returnsNothing();
 //      ^^^^^^^^^^^^^^^^^ Cannot assign expression of type "void" to a variable
+
+let returnsNothing2 = (): void => {};
+let w: str? = returnsNothing2();
+//            ^^^^^^^^^^^^^^^^^ Cannot assign expression of type "void" to a variable

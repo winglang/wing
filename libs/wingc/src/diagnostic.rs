@@ -290,6 +290,15 @@ pub struct DiagnosticAnnotation {
 	pub span: WingSpan,
 }
 
+impl DiagnosticAnnotation {
+	pub fn new(msg: impl ToString, span: &impl Spanned) -> Self {
+		Self {
+			message: msg.to_string(),
+			span: span.span(),
+		}
+	}
+}
+
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		if let Some(span) = &self.span {

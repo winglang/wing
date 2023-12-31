@@ -1,10 +1,12 @@
+import { ILiftable } from "./resource";
 import { InflightClient } from "../core";
+import { normalPath } from "../shared/misc";
 
 /**
  * Represents a length of time.
  * @wingType duration
  */
-export class Duration {
+export class Duration implements ILiftable {
   /**
    * @internal
    */
@@ -145,5 +147,12 @@ export class Duration {
    */
   public get years() {
     return this.days / 365;
+  }
+
+  /** @internal */
+  public _toInflight(): string {
+    return `(new (require("${normalPath(__filename)}").Duration)(${
+      this.seconds
+    }))`;
   }
 }

@@ -1482,6 +1482,15 @@ impl<'s> Parser<'s> {
 					}
 				}
 				"class_field" => {
+					// Interface method signatures can't have access modifiers like 'pub'
+					if let Some(first_child_node) = interface_element.child(0) {
+						if let "field_modifiers" = first_child_node.kind() {
+							self
+								.with_error::<Node>("Access modifiers are not allowed in interfaces", &interface_element)
+								.err();
+							continue;
+						}
+					}
 					self
 						.with_error::<Node>("Properties are not supported in interfaces", &interface_element)
 						.err();
