@@ -35,19 +35,20 @@ export class ChildProcess {
   private exitStatus: number | null = null;
 
   constructor(program: string, args: string[], opts?: SpawnOptions) {
-    // Prepare stdio options based on `SpawnOptions`
-    const stdio = [
-      opts?.stdin ?? Stdio.PIPED,
-      opts?.stdout ?? Stdio.PIPED,
-      opts?.stderr ?? Stdio.PIPED,
-    ];
+    const spawnOpts = {
+      cwd: opts?.cwd,
+      env: opts?.inheritEnv
+        ? { ...process.env, ...opts.env }
+        : { ...opts?.env },
+      stdio: [
+        opts?.stdin ?? Stdio.PIPED,
+        opts?.stdout ?? Stdio.PIPED,
+        opts?.stderr ?? Stdio.PIPED,
+      ],
+    };
 
     // Spawn the child process with the provided options
-    this.child = spawn(program, args, {
-      cwd: opts?.cwd,
-      env: opts?.inheritEnv ? { ...process.env, ...opts.env } : opts?.env,
-      stdio: stdio,
-    });
+    this.child = spawn(program, args, spawnOpts);
 
     this.pid = this.child.pid;
     console.log(`Spawned child process with PID: ${this.pid}`);
