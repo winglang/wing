@@ -140,6 +140,11 @@ exports[`schedule behavior with cron 1`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -378,6 +383,11 @@ exports[`schedule behavior with rate 1`] = `
           },
           "S3Key": "<S3Key>",
         },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
+        },
         "Handler": "index.handler",
         "MemorySize": 1024,
         "Role": {
@@ -615,6 +625,11 @@ exports[`schedule with two functions 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "<S3Key>",
+        },
+        "Environment": {
+          "Variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
         "MemorySize": 1024,

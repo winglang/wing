@@ -4,7 +4,7 @@ import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
 import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
-import { Node } from "../std";
+import { Datetime, JsonSchema, Node } from "../std";
 
 /**
  * A resource that can run inflight code.
@@ -29,7 +29,7 @@ export interface IInflightHost extends IResource {
  * @link https://www.winglang.io/docs/concepts/inflights
  * @skipDocs
  */
-export interface IInflight extends ILiftable {
+export interface IInflight extends IHostedLiftable {
   /**
    * Tracks the content hash
    * @internal
@@ -42,6 +42,24 @@ export interface IInflight extends ILiftable {
  * @skipDocs
  */
 export interface ILiftable {
+  /**
+   * Return a code snippet that can be used to reference this resource inflight.
+   *
+   * Note this code snippet may be async code, so it's unsafe to run it in a
+   * constructor or other sync context.
+   *
+   * @internal
+   */
+  _toInflight(): string;
+}
+
+/**
+ * A liftable object that needs to be registered on the host as part of
+ * the lifting process.
+ * This is generally used so the host can set up permissions
+ * to access the lifted object inflight.
+ */
+export interface IHostedLiftable extends ILiftable {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this object inflight. The list of requested inflight methods
@@ -62,16 +80,6 @@ export interface ILiftable {
   _registerOnLift(host: IInflightHost, ops: string[]): void;
 
   /**
-   * Return a code snippet that can be used to reference this resource inflight.
-   *
-   * Note this code snippet may be async code, so it's unsafe to run it in a
-   * constructor or other sync context.
-   *
-   * @internal
-   */
-  _toInflight(): string;
-
-  /**
    * Return a list of all inflight operations that are supported by this resource.
    *
    * If this method doesn't exist, the resource is assumed to not support any inflight operations.
@@ -85,7 +93,7 @@ export interface ILiftable {
  * Abstract interface for `Resource`.
  * @skipDocs
  */
-export interface IResource extends IConstruct, ILiftable {
+export interface IResource extends IConstruct, IHostedLiftable {
   /**
    * A hook for performing operations after the tree of resources has been
    * created, but before they are synthesized.
@@ -152,7 +160,11 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        if (obj instanceof Duration) {
+        if (obj instanceof Duration || obj instanceof Datetime) {
+          return;
+        }
+
+        if (obj instanceof JsonSchema) {
           return;
         }
 
@@ -189,7 +201,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-        if (isLiftableType(obj)) {
+        if (isHostedLiftableType(obj)) {
           obj._registerOnLift(host, ops);
           return;
         }
@@ -353,7 +365,7 @@ export interface OperationAnnotation {
   };
 }
 
-function isLiftable(t: any): t is ILiftable {
+function isHostedLiftable(t: any): t is IHostedLiftable {
   return (
     t !== undefined &&
     typeof t.onLift === "function" &&
@@ -361,6 +373,8 @@ function isLiftable(t: any): t is ILiftable {
   );
 }
 
-function isLiftableType(t: any): t is ILiftable {
-  return typeof t._registerOnLift === "function" && isLiftable(t.prototype);
+function isHostedLiftableType(t: any): t is IHostedLiftable {
+  return (
+    typeof t._registerOnLift === "function" && isHostedLiftable(t.prototype)
+  );
 }

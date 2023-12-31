@@ -11,6 +11,8 @@ id: datetime
 
 ### Datetime <a name="Datetime" id="@winglang/sdk.std.Datetime"></a>
 
+- *Implements:* <a href="#@winglang/sdk.std.ILiftable">ILiftable</a>
+
 Represents a local or UTC date object.
 
 #### Methods <a name="Methods" id="Methods"></a>
