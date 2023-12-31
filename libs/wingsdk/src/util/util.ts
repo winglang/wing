@@ -30,6 +30,24 @@ export enum Stdio {
 }
 
 /**
+ * Output of a finished process.
+ */
+export interface Output {
+  /**
+   * The standard output of a finished process.
+   */
+  readonly stdout: string;
+  /**
+   * The standard error of a finished process.
+   */
+  readonly stderr: string;
+  /**
+   * A process's exit status.
+   */
+  readonly status: number;
+}
+
+/**
  * Base command options.
  */
 export interface CommandOptions {
@@ -51,6 +69,11 @@ export interface CommandOptions {
 }
 
 /**
+ * Additional options for `util.exec()`
+ */
+export interface ExecOptions extends CommandOptions {}
+
+/**
  * Additional options for `util.shell()`
  */
 export interface ShellOptions extends CommandOptions {
@@ -60,11 +83,6 @@ export interface ShellOptions extends CommandOptions {
    */
   readonly throw?: boolean;
 }
-
-/**
- * Additional options for `util.exec()`
- */
-export interface ExecOptions extends CommandOptions {}
 
 /**
  * Additional options for `util.spawn()`
@@ -85,24 +103,6 @@ export interface SpawnOptions extends CommandOptions {
    * @default - Stdio.INHERIT
    */
   readonly stderr?: Stdio;
-}
-
-/**
- * Output of a finished process.
- */
-export interface Output {
-  /**
-   * The standard output of a finished process.
-   */
-  readonly stdout: string;
-  /**
-   * The standard error of a finished process.
-   */
-  readonly stderr: string;
-  /**
-   * A process's exit status.
-   */
-  readonly status: number;
 }
 
 /**

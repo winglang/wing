@@ -37,39 +37,25 @@ export class ChildProcess {
   constructor(program: string, args: string[], opts?: SpawnOptions) {
     // Prepare stdio options based on `SpawnOptions`
     const stdio = [
-      opts?.stdin === Stdio.PIPED
-        ? "pipe"
-        : opts?.stdin === Stdio.NULL
-        ? "ignore"
-        : "inherit",
-      opts?.stdout === Stdio.PIPED
-        ? "pipe"
-        : opts?.stdout === Stdio.NULL
-        ? "ignore"
-        : "inherit",
-      opts?.stderr === Stdio.PIPED
-        ? "pipe"
-        : opts?.stderr === Stdio.NULL
-        ? "ignore"
-        : "inherit",
+      opts?.stdin ?? Stdio.INHERIT,
+      opts?.stdout ?? Stdio.INHERIT,
+      opts?.stderr ?? Stdio.INHERIT,
     ];
 
     // Spawn the child process with the provided options
     this.child = spawn(program, args, {
       cwd: opts?.cwd,
       env: opts?.inheritEnv ? { ...process.env, ...opts.env } : opts?.env,
-      stdio: stdio as [
-        "pipe" | "ignore" | "inherit",
-        "pipe" | "ignore" | "inherit",
-        "pipe" | "ignore" | "inherit"
-      ],
+      stdio: stdio,
     });
 
     this.pid = this.child.pid;
+    console.log(`Spawned child process with PID: ${this.child.pid}`);
 
     // If stdio for stdout is set to `pipe`, listen for data events on stdout.
     if (this.child.stdout) {
       this.child.stdout.on("data", (data: Buffer) => {
+        console.log("Received stdout data:", data.toString());
         this.stdout += data.toString();
       });
     }
@@ -77,11 +63,13 @@ export class ChildProcess {
     // If stdio for stderr is set to `pipe`, listen for data events on stderr.
     if (this.child.stderr) {
       this.child.stderr.on("data", (data: Buffer) => {
+        console.log("Received stderr data:", data.toString());
         this.stderr += data.toString();
       });
     }
 
     this.child.on("exit", (code) => {
+      console.log(`Child process exited with code: ${code}`);
       this.exitStatus = code;
     });
   }
@@ -99,7 +87,10 @@ export class ChildProcess {
    * Calling this method multiple times will return the same output.
    */
   public async wait(): Promise<Output> {
+    console.log("Waiting for child process to finish...");
+
     if (this.exitStatus !== null) {
+      console.log("Process already finished, returning output.");
       return {
         stdout: this.stdout,
         stderr: this.stderr,
