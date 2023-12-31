@@ -1,9 +1,10 @@
-import { exec, execFile, spawn } from "child_process";
+import { exec, execFile } from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
 import { ulid } from "ulid";
 import { v4 } from "uuid";
+import { ChildProcess } from "./child-process";
 import { InflightClient } from "../core";
 import { Duration, IInflight } from "../std";
 
@@ -102,127 +103,6 @@ export interface Output {
    * A process's exit status.
    */
   readonly status: number;
-}
-
-/**
- * Handle to a running child process.
- */
-export class ChildProcess {
-  /**
-   * @internal
-   */
-  public static _toInflightType(): string {
-    return InflightClient.forType(__filename, this.name);
-  }
-
-  /**
-   * The underlying native child process object representing the spawned process.
-   */
-  private childProcess: ReturnType<typeof spawn>;
-  /**
-   * The child's OS-assigned process ID.
-   */
-  public readonly pid: number | undefined;
-  /**
-   * The accumulated standard output from the child process.
-   */
-  private stdout: string = "";
-  /**
-   * The accumulated standard error from the child process.
-   */
-  private stderr: string = "";
-  /**
-   * The exit status of the child process. Null if the process has not yet finished.
-   */
-  private exitStatus: number | null = null;
-
-  constructor(program: string, args: string[], opts?: SpawnOptions) {
-    // Prepare stdio options based on `SpawnOptions`
-    const stdio = [
-      opts?.stdin === Stdio.PIPED
-        ? "pipe"
-        : opts?.stdin === Stdio.NULL
-        ? "ignore"
-        : "inherit",
-      opts?.stdout === Stdio.PIPED
-        ? "pipe"
-        : opts?.stdout === Stdio.NULL
-        ? "ignore"
-        : "inherit",
-      opts?.stderr === Stdio.PIPED
-        ? "pipe"
-        : opts?.stderr === Stdio.NULL
-        ? "ignore"
-        : "inherit",
-    ];
-
-    // Spawn the child process with the provided options
-    this.childProcess = spawn(program, args, {
-      cwd: opts?.cwd,
-      env: opts?.inheritEnv ? { ...process.env, ...opts.env } : opts?.env,
-      stdio: stdio as [
-        "pipe" | "ignore" | "inherit",
-        "pipe" | "ignore" | "inherit",
-        "pipe" | "ignore" | "inherit"
-      ],
-    });
-
-    this.pid = this.childProcess.pid;
-
-    // If stdio for stdout is set to `pipe`, listen for data events on stdout.
-    if (this.childProcess.stdout) {
-      this.childProcess.stdout.on("data", (data: Buffer) => {
-        this.stdout += data.toString();
-      });
-    }
-
-    // If stdio for stderr is set to `pipe`, listen for data events on stderr.
-    if (this.childProcess.stderr) {
-      this.childProcess.stderr.on("data", (data: Buffer) => {
-        this.stderr += data.toString();
-      });
-    }
-
-    this.childProcess.on("exit", (code) => {
-      this.exitStatus = code;
-    });
-  }
-
-  /**
-   * Kill the process.
-   * @param signal - the signal to send to the process (defaults to SIGTERM)
-   */
-  public kill(signal: number = 15): void {
-    this.childProcess.kill(signal);
-  }
-
-  /**
-   * Wait for the process to finish and return its output.
-   * Calling this method multiple times will return the same output.
-   */
-  public async wait(): Promise<Output> {
-    if (this.exitStatus !== null) {
-      return {
-        stdout: this.stdout,
-        stderr: this.stderr,
-        status: this.exitStatus,
-      };
-    }
-
-    return new Promise((resolve, reject) => {
-      this.childProcess.on("exit", (code, signal) => {
-        if (code !== null) {
-          resolve({ stdout: this.stdout, stderr: this.stderr, status: code });
-        } else {
-          reject(new Error(`Process terminated by signal ${signal}`));
-        }
-      });
-
-      this.childProcess.on("error", (error) => {
-        reject(error);
-      });
-    });
-  }
 }
 
 /**
