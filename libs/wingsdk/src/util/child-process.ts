@@ -37,9 +37,9 @@ export class ChildProcess {
   constructor(program: string, args: string[], opts?: SpawnOptions) {
     // Prepare stdio options based on `SpawnOptions`
     const stdio = [
-      opts?.stdin ?? Stdio.INHERIT,
-      opts?.stdout ?? Stdio.INHERIT,
-      opts?.stderr ?? Stdio.INHERIT,
+      opts?.stdin ?? Stdio.PIPED,
+      opts?.stdout ?? Stdio.PIPED,
+      opts?.stderr ?? Stdio.PIPED,
     ];
 
     // Spawn the child process with the provided options
