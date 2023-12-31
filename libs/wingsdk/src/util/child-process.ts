@@ -108,17 +108,47 @@ export class ChildProcess {
     }
 
     return new Promise((resolve, reject) => {
-      this.child.on("exit", (code, signal) => {
+      const cleanup = () => {
+        this.child.off("exit", onExit);
+        this.child.off("error", onError);
+        if (this.child.stdout) {
+          this.child.stdout.off("data", onDataStdout);
+        }
+        if (this.child.stderr) {
+          this.child.stderr.off("data", onDataStderr);
+        }
+      };
+
+      const onExit = (code: number | null, signal: string | null) => {
+        cleanup();
         if (code !== null) {
           resolve({ stdout: this.stdout, stderr: this.stderr, status: code });
         } else {
           reject(new Error(`Process terminated by signal ${signal}`));
         }
-      });
+      };
 
-      this.child.on("error", (error) => {
+      const onError = (error: Error) => {
+        cleanup();
         reject(error);
-      });
+      };
+
+      const onDataStdout = (data: Buffer) => {
+        this.stdout += data.toString();
+      };
+
+      const onDataStderr = (data: Buffer) => {
+        this.stderr += data.toString();
+      };
+
+      this.child.on("exit", onExit);
+      this.child.on("error", onError);
+      if (this.child.stdout) {
+        this.child.stdout.on("data", onDataStdout);
+      }
+      if (this.child.stderr) {
+        this.child.stderr.on("data", onDataStderr);
+      }
     });
   }
 }
