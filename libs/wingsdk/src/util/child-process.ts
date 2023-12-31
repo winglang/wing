@@ -50,7 +50,7 @@ export class ChildProcess {
     });
 
     this.pid = this.child.pid;
-    console.log(`Spawned child process with PID: ${this.child.pid}`);
+    console.log(`Spawned child process with PID: ${this.pid}`);
 
     // If stdio for stdout is set to `pipe`, listen for data events on stdout.
     // if (this.child.stdout) {
