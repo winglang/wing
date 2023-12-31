@@ -87,8 +87,6 @@ export class ChildProcess {
    * Calling this method multiple times will return the same output.
    */
   public async wait(): Promise<Output> {
-    console.log("Waiting for child process to finish...");
-
     if (this.exitStatus !== null) {
       console.log("Process already finished, returning output.");
       return {
@@ -97,6 +95,8 @@ export class ChildProcess {
         status: this.exitStatus,
       };
     }
+
+    console.log("Waiting for child process to finish..." + this.exitStatus);
 
     return new Promise((resolve, reject) => {
       const cleanup = () => {
