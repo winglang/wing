@@ -219,6 +219,24 @@ pub fn type_check(
 	types.set_scope_env(scope, env);
 
 	add_builtin(
+		UtilityFunctions::Print.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "message".into(),
+				typeref: types.string(),
+				docs: Docs::with_summary("The message to print"),
+				variadic: false,
+			}],
+			return_type: types.void(),
+			phase: Phase::Independent,
+			js_override: Some("process.stdout.write($args$)".to_string()),
+			docs: Docs::with_summary("Prints a message (without a newline)"),
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
 		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			this_type: None,

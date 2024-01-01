@@ -2,14 +2,8 @@
 
 ## stdout.log
 ```log
-preflight log
-preflight log
-pass ┌ print.test.wsim » root/env0/test:log1
-     │ inflight log 1.1
-     └ inflight log 1.2
-pass ┌ print.test.wsim » root/env1/test:log2
-     │ inflight log 2.1
-     └ inflight log 2.2
+preflight logpreflight loginflight log 1.1inflight log 1.2inflight log 2.1inflight log 2.2pass ─ print.test.wsim » root/env0/test:log1
+pass ─ print.test.wsim » root/env1/test:log2
  
  
 Tests 2 passed (2)

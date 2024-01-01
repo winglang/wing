@@ -5092,12 +5092,7 @@ impl<'a> TypeChecker<'a> {
 						)
 					}
 				} else {
-					// Give a specific error message if someone tries to write "print" instead of "log"
-					if symbol.name == "print" {
-						self.spanned_error(symbol, "Unknown symbol \"print\", did you mean to use \"log\"?");
-					} else {
-						self.type_error(lookup_result_mut_to_type_error(lookup_res, symbol));
-					}
+					self.type_error(lookup_result_mut_to_type_error(lookup_res, symbol));
 					(self.make_error_variable_info(), Phase::Independent)
 				}
 			}

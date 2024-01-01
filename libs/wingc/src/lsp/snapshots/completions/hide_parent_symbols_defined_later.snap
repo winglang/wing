@@ -39,6 +39,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: print
+  kind: 3
+  detail: "(message: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nprint: (message: str): void\n```\n---\nPrints a message (without a newline)\n### Parameters\n- `message` — `str` — The message to print"
+  sortText: cc|print
+  insertText: print($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: unsafeCast
   kind: 3
   detail: "(value: any): any"
