@@ -171,7 +171,6 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.rename">rename</a></code> | Move an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
@@ -325,7 +324,7 @@ inflight copy(srcKey: str, dstKey: str): void
 Copy an object to a new location in the bucket.
 
 If the destination object
-already exists, it will be overwritten.
+already exists, it will be overwritten. Returns once the copying is finished.
 
 ###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
 
@@ -514,33 +513,6 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
-
----
-
-##### `rename` <a name="rename" id="@winglang/sdk.cloud.IBucketClient.rename"></a>
-
-```wing
-inflight rename(srcKey: str, dstKey: str): void
-```
-
-Move an object to a new location in the bucket.
-
-If the destination object
-already exists, it will be overwritten. Returns once the renaming is finished.
-
-###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.srcKey"></a>
-
-- *Type:* str
-
-The key of the source object you wish to rename.
-
----
-
-###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.dstKey"></a>
-
-- *Type:* str
-
-The key of the destination object after renaming.
 
 ---
 

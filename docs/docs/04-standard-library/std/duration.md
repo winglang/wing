@@ -11,8 +11,6 @@ id: duration
 
 ### Duration <a name="Duration" id="@winglang/sdk.std.Duration"></a>
 
-- *Implements:* <a href="#@winglang/sdk.std.ILiftable">ILiftable</a>
-
 Represents a length of time.
 
 
