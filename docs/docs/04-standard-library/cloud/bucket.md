@@ -880,6 +880,7 @@ duration: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 15m
 
 The duration for the signed URL to expire.
 
