@@ -242,6 +242,38 @@ export class Util {
   }
 
   /**
+   * Returns the natural logarithm (base e) of a number.
+   * @param value The input number.
+   */
+  public static log(value: number): number {
+    return Math.log(value);
+  }
+
+  /**
+   * Returns the base-2 logarithm of a number.
+   * @param value The input number.
+   */
+  public static log2(value: number): number {
+    return Math.log2(value);
+  }
+
+  /**
+   * Returns the base-10 logarithm of a number.
+   * @param value The input number.
+   */
+  public static log10(value: number): number {
+    return Math.log10(value);
+  }
+
+  /**
+   * Returns 1 or -1, indicating the sign of the number passed as an argument, 0 for 0.
+   * @param value The input number.
+   */
+  public static sign(value: number): number {
+    return Math.sign(value);
+  }
+
+  /**
    * Returns the sine of a number in radians.
    * @param value A number representing an angle in radians.
    */

@@ -14,7 +14,15 @@ const CDKTF_PROVIDERS = [
 ];
 
 // those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const SKIPPED_MODULES = [
+  "cloud",
+  "ex",
+  "std",
+  "simulator",
+  "core",
+  "platform",
+  "helpers",
+];
 const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
