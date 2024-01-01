@@ -106,6 +106,7 @@ export const createAppRouter = () => {
         z
           .object({
             showTests: z.boolean().optional(),
+            includeHiddens: z.boolean().optional(),
           })
           .optional(),
       )
@@ -116,6 +117,7 @@ export const createAppRouter = () => {
           shakeTree(tree),
           simulator,
           input?.showTests,
+          input?.includeHiddens,
         );
       }),
     "app.nodeIds": createProcedure
@@ -637,6 +639,7 @@ function createExplorerItemFromConstructTreeNode(
   node: ConstructTreeNode,
   simulator: Simulator,
   showTests = false,
+  includeHiddens = false,
 ): ExplorerItem {
   const label =
     node.display?.sourceModule === "@winglang/sdk" && node.display?.title
@@ -652,11 +655,17 @@ function createExplorerItemFromConstructTreeNode(
       ? Object.values(node.children)
           .filter((node) => {
             return (
-              !node.display?.hidden && (showTests || !matchTest(node.path))
+              (includeHiddens || !node.display?.hidden) &&
+              (showTests || !matchTest(node.path))
             );
           })
           .map((node) =>
-            createExplorerItemFromConstructTreeNode(node, simulator),
+            createExplorerItemFromConstructTreeNode(
+              node,
+              simulator,
+              showTests,
+              includeHiddens,
+            ),
           )
       : undefined,
   };
