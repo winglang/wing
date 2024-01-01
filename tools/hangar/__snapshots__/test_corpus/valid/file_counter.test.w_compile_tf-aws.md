@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket, $counter }) {
   class $Closure1 {
     constructor({  }) {
@@ -211,6 +212,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

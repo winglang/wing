@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -90,7 +91,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello/world\":{\"get\":{\"operationId\":\"get-hello/world\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_hello_world_0_544AFF00.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/hello/world\":{\"get\":{\"operationId\":\"get-hello/world\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_hello_world_0_544AFF00.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -241,6 +242,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -273,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const preflightClosure = ((nice) => {
-      {console.log(nice)};
+      console.log(nice);
       return true;
     });
     const recursiveClosure = ((nice) => {
@@ -286,10 +288,10 @@ class $Root extends $stdlib.std.Resource {
     const num_array = emptyArray;
     const emptyArray2 = [];
     const clonedArray2 = [...(emptyArray2)];
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [1]);
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [2]);
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1))]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2),3)))};
+    clonedArray2.push(1);
+    clonedArray2.push(2);
+    clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1)));
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
     const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
@@ -316,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         const $if_let_value = optionalString;
         if ($if_let_value != undefined) {
           const justString = $if_let_value;
-          {console.log(justString)};
+          console.log(justString);
         }
       }
     });

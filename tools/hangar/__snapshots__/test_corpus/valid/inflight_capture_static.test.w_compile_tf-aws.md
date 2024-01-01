@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Preflight }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,7 +12,7 @@ module.exports = function({ $Preflight }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Preflight.staticMethod(123)),"foo-123")))};
+      $helpers.assert($helpers.eq((await $Preflight.staticMethod(123)), "foo-123"), "Preflight.staticMethod(123) == \"foo-123\"");
     }
   }
   return $Closure1;
@@ -22,6 +23,7 @@ module.exports = function({ $Preflight }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,7 +32,7 @@ module.exports = function({ $OuterInflight }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $OuterInflight.staticMethod("hello")),5)))};
+      $helpers.assert($helpers.eq((await $OuterInflight.staticMethod("hello")), 5), "OuterInflight.staticMethod(\"hello\") == 5");
     }
   }
   return $Closure2;
@@ -41,6 +43,7 @@ module.exports = function({ $OuterInflight }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure3 {
     constructor({  }) {
@@ -54,7 +57,7 @@ module.exports = function({  }) {
           return "hello";
         }
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await InnerInflight.staticMethod()),"hello")))};
+      $helpers.assert($helpers.eq((await InnerInflight.staticMethod()), "hello"), "InnerInflight.staticMethod() == \"hello\"");
     }
   }
   return $Closure3;
@@ -65,6 +68,7 @@ module.exports = function({  }) {
 ## inflight.$Closure4-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $util_Util }) {
   class $Closure4 {
     constructor({  }) {
@@ -77,10 +81,10 @@ module.exports = function({ $util_Util }) {
         const $if_let_value = (await $util_Util.tryEnv("WING_TARGET"));
         if ($if_let_value != undefined) {
           const target = $if_let_value;
-          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
+          console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target));
         }
         else {
-          {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};
+          $helpers.assert(false, "false /* target not defined*/");
         }
       }
     }
@@ -93,6 +97,7 @@ module.exports = function({ $util_Util }) {
 ## inflight.OuterInflight-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class OuterInflight {
     static async staticMethod(b) {
@@ -107,6 +112,7 @@ module.exports = function({  }) {
 ## inflight.Preflight-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Preflight {
     constructor({  }) {
@@ -147,6 +153,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

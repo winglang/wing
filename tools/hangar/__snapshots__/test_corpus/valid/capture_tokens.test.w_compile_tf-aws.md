@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $r }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $r }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $MyResource, $api_url, $url }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,8 +32,8 @@ module.exports = function({ $MyResource, $api_url, $url }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await $MyResource.isValidUrl($url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await $MyResource.isValidUrl($api_url)))};
+      $helpers.assert((await $MyResource.isValidUrl($url)), "MyResource.isValidUrl(url)");
+      $helpers.assert((await $MyResource.isValidUrl($api_url)), "MyResource.isValidUrl(api.url)");
     }
   }
   return $Closure2;
@@ -42,6 +44,7 @@ module.exports = function({ $MyResource, $api_url, $url }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
     constructor({ $this_api_url, $this_url }) {
@@ -49,11 +52,11 @@ module.exports = function({  }) {
       this.$this_url = $this_url;
     }
     static async isValidUrl(url) {
-      return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
+      return (require("../../../url_utils.js")["isValidUrl"])(url)
     }
     async foo() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.$this_url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.$this_api_url)))};
+      $helpers.assert((await MyResource.isValidUrl(this.$this_url)), "MyResource.isValidUrl(this.url)");
+      $helpers.assert((await MyResource.isValidUrl(this.$this_api_url)), "MyResource.isValidUrl(this.api.url)");
     }
   }
   return MyResource;
@@ -157,7 +160,7 @@ module.exports = function({  }) {
             "uniqueId": "MyResource_cloudApi_api_4CB9B8E3"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -170,7 +173,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -213,6 +216,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {

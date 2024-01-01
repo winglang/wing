@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,8 +12,8 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
-      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([issues])});
+      const issues = JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]");
+      return ({"status": 200, "headers": ({["Content-Type"]: "application/json"}), "body": ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(issues)});
     }
   }
   return $Closure1;
@@ -23,6 +24,7 @@ module.exports = function({ $std_Json }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
@@ -32,9 +34,9 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
     }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
-      const body = (JSON.parse(res.body));
+      const body = JSON.parse(res.body);
       const a1 = ((obj, args) => { if (obj[args] === undefined) throw new Error("Index out of bounds"); return obj[args] })(body, 0);
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"),"bar")))};
+      $helpers.assert($helpers.eq(((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(a1, "foo"), "bar"), "a1.get(\"foo\") == \"bar\"");
     }
   }
   return $Closure2;
@@ -113,7 +115,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/foo\":{\"get\":{\"operationId\":\"get-foo\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_foo_0_1FC193B8.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/foo\":{\"get\":{\"operationId\":\"get-foo\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get_foo_0_1FC193B8.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -264,6 +266,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {

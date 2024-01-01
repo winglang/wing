@@ -127,7 +127,7 @@ export interface IPlatform {
 
 ### Using a custom platform
 
-When running the `wing compile` command, the `--platform` option is used to specify the platform provider(s) you wish to use. This option is accepts variadic arguments, which means you can specify any number of platforms. 
+When running the `wing compile` command, the `--platform` option is used to specify the platform provider(s) you wish to use. This option accepts variadic arguments, which means you can specify any number of platforms. 
 
 The specified platform can be a built-in platform, or a path to a custom platform. For example, if you have a custom platform named `my-platform`, you can specify it as follows:
 

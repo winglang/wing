@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bar }) {
   class $Closure1 {
     constructor({  }) {
@@ -12,13 +13,13 @@ module.exports = function({ $bar }) {
     }
     async handle() {
       const result = [];
-      ((obj, args) => { obj.push(...args); })(result, [$bar]);
+      result.push($bar);
       if (true) {
         const bar = "world";
-        ((obj, args) => { obj.push(...args); })(result, [bar]);
+        result.push(bar);
       }
       const foo = "bang";
-      ((obj, args) => { obj.push(...args); })(result, [foo]);
+      result.push(foo);
       return [...(result)];
     }
   }
@@ -30,6 +31,7 @@ module.exports = function({ $bar }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $fn }) {
   class $Closure2 {
     constructor({  }) {
@@ -39,10 +41,10 @@ module.exports = function({ $fn }) {
     }
     async handle() {
       const result = (await $fn());
-      {((cond) => {if (!cond) throw new Error("assertion failed: result.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result.length,3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 0),"hola!")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 1),"world")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 2),"bang")))};
+      $helpers.assert($helpers.eq(result.length, 3), "result.length == 3");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 0), "hola!"), "result.at(0) == \"hola!\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 1), "world"), "result.at(1) == \"world\"");
+      $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(result, 2), "bang"), "result.at(2) == \"bang\"");
     }
   }
   return $Closure2;
@@ -77,6 +79,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
