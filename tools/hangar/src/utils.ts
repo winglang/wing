@@ -63,7 +63,7 @@ function sanitizeOutput(output: string) {
       // Remove absolute stacktraces
       .replace(/\(\/.+:\d+:\d+\)/g, "(<ABSOLUTE>:LINE:COL)")
       // Remove absolute paths
-      .replace(/(?<=[\s"])(\/|\w:)\S+\/(.+)/g, "<ABSOLUTE>/$2")
+      .replace(/(?<=[\s"])(\/|\w:)\S+\/(\S+)/g, "<ABSOLUTE>/$2")
       // Remove duration from test results
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
   ;

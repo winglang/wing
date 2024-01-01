@@ -52,7 +52,7 @@ export class Counter extends cloud.Counter implements IAwsCounter {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "CounterClient",
       [`process.env["${this.envName()}"]`, `${this.initial}`]

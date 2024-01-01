@@ -3,7 +3,6 @@ import { join } from "path";
 
 import { Fn, Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { API_CORS_DEFAULT_RESPONSE } from "./api.cors";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
@@ -19,14 +18,9 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IAwsApi } from "../shared-aws";
+import { IAwsApi, STAGE_NAME } from "../shared-aws";
+import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
-
-/**
- * The stage name for the API, used in its url.
- * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html
- */
-const STAGE_NAME = "prod";
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -50,7 +44,7 @@ export class Api extends cloud.Api implements IAwsApi {
       cors: this.corsOptions,
     });
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
-      label: `Endpoint for Api ${this.node.path}`,
+      label: `Api ${this.node.path}`,
     });
   }
 
@@ -245,6 +239,7 @@ export class Api extends cloud.Api implements IAwsApi {
         App.of(this).makeId(this, prefix),
         newInflight
       );
+      Node.of(handler).hidden = true;
       this.handlers[inflight._hash] = handler;
     }
 

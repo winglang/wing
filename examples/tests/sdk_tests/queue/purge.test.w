@@ -3,33 +3,18 @@ bring util;
 
 let q = new cloud.Queue();
 
-
 test "purge" {
   q.push("foo");
   q.push("bar");
   q.push("baz");
 
-  let wait = inflight (pred: inflight (): bool): bool => {
-    let var i = 0;
-    while i < 60 {
-      if pred() {
-        return true;
-      } 
-  
-      util.sleep(1s);
-      i = i + 1;
-    }
-  
-    return false;
-  };
-  
-  assert(wait(inflight (): bool => { 
+  assert(util.waitUntil(inflight () => { 
     return q.approxSize() == 3;
-  }));
+  }, timeout: 1m, interval: 1s));
 
   q.purge();
 
-  assert(wait(inflight (): bool => {
+  assert(util.waitUntil(inflight () => {
     return q.approxSize() == 0;
-  }));
+  }, timeout: 1m, interval: 1s));
 }

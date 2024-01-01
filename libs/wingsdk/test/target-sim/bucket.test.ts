@@ -38,7 +38,7 @@ test("update an object in bucket", async () => {
   // GIVEN
   const app = new SimApp();
   const bucket = new cloud.Bucket(app, "my_bucket");
-  const testInflight = Testing.makeHandler("null");
+  const testInflight = Testing.makeHandler("async handle() {}");
   bucket.onCreate(testInflight);
 
   const s = await app.startSimulator();
@@ -62,7 +62,7 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   const bucket = new cloud.Bucket(app, "my_bucket");
   const logBucket = new cloud.Bucket(app, "log_bucket");
   const testInflight = Testing.makeHandler(
-    `async handle(key, event) { await this.bucket.put(key, event); }`,
+    `async handle(key, event) { await this.bucket.put(key, event); console.log("I am done"); }`,
     {
       bucket: {
         obj: logBucket,
@@ -81,17 +81,17 @@ test("bucket on event creates 3 topics, and sends the right event and key in the
   await client.put("a", "1");
   // wait for the subscriber to finish
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.includes("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.CREATE);
   await client.put("a", "2");
   await waitUntilTraceCount(s, 2, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.UPDATE);
   await client.delete("a");
   await waitUntilTraceCount(s, 3, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("I am done")
   );
   expect(await logClient.get("a")).toBe(BucketEventType.DELETE);
   await s.stop();
@@ -382,7 +382,7 @@ test("removing a key will call onDelete method", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
   const response = await client.delete(fileName);
   await waitUntilTraceCount(s, 1, (trace) =>
-    trace.data.message.startsWith("Invoke")
+    trace.data.message.startsWith("Received unknown.txt")
   );
 
   // THEN
@@ -767,6 +767,102 @@ test("copy non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    /Source object does not exist/
+  );
+  await s.stop();
+});
+
+test("rename valid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename valid object with overwrite within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "to-overwrite.txt";
+  let DST_VALUE = "Hello, World!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+  await client.put(DST_KEY, DST_VALUE);
+
+  await client.rename(SRC_KEY, DST_KEY);
+  const srcFileExists = await client.exists(SRC_KEY);
+  const dstFileExists = await client.exists(DST_KEY);
+  const dstFileValue = await client.get(DST_KEY);
+
+  // THEN
+  await s.stop();
+  expect(srcFileExists).toBe(false);
+  expect(dstFileExists).toBe(true);
+  expect(dstFileValue).toEqual(SRC_VALUE);
+});
+
+test("rename invalid object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+
+  // WHEN
+  await client.put(SRC_KEY, SRC_VALUE);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+  await s.stop();
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  let SRC_KEY = "original.txt";
+  let SRC_VALUE = "Hello, Wing!";
+  let DST_KEY = "renamed.txt";
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
     /Source object does not exist/
   );
   await s.stop();

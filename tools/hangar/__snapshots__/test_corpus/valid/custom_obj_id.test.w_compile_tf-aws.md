@@ -3,6 +3,7 @@
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
@@ -40,6 +41,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -70,8 +72,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const foo1 = new Foo(this, "Foo");
     const bar2 = new Foo(this, "bar2");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(foo1.node.id,"Foo")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(bar2.node.id,"bar2")))};
+    $helpers.assert($helpers.eq(foo1.node.id, "Foo"), "foo1.node.id == \"Foo\"");
+    $helpers.assert($helpers.eq(bar2.node.id, "bar2"), "bar2.node.id == \"bar2\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

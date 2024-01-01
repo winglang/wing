@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,15 +17,15 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       (await $bucket2.get("file2.txt"));
       (await $bucket3.get("file3.txt"));
       for (const stuff of (await $bucket1.list())) {
-        {console.log(stuff)};
+        console.log(stuff);
       }
-      {console.log((await $bucket2.publicUrl("file.txt")))};
+      console.log((await $bucket2.publicUrl("file.txt")));
       try {
         (await $bucket1.publicUrl("file.txt"));
       }
       catch ($error_error) {
         const error = $error_error.message;
-        {console.log(error)};
+        console.log(error);
       }
     }
   }
@@ -36,8 +37,29 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
-module.exports = function({ $headers }) {
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $handler }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle(event) {
+      (await $handler(event));
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.js.map
+```
+
+## inflight.$Closure3-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $headers }) {
+  class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
@@ -47,9 +69,9 @@ module.exports = function({ $headers }) {
       return ({"status": 200, "headers": $headers, "body": "Hello, world!"});
     }
   }
-  return $Closure2;
+  return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## main.tf.json
@@ -346,7 +368,7 @@ module.exports = function({ $headers }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.AnotherFunction_S3Object_6987727B.key}",
         "timeout": 60,
@@ -377,7 +399,7 @@ module.exports = function({ $headers }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get_hello_0_IamRole_AF63D6EC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get_hello_0_S3Object_B8DCD8E8.key}",
         "timeout": 60,
@@ -411,7 +433,7 @@ module.exports = function({ $headers }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
         "timeout": 60,
@@ -445,7 +467,7 @@ module.exports = function({ $headers }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudQueue-SetConsumer0_IamRole_968DB138.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudQueue-SetConsumer0_S3Object_52D070FF.key}",
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
@@ -612,6 +634,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -663,7 +686,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure2-1.js")({
-            $headers: ${$stdlib.core.liftObject(headers)},
+            $handler: ${$stdlib.core.liftObject(handler)},
           })
         `;
       }
@@ -683,7 +706,41 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerOnLift(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(headers, host, []);
+          $Closure2._registerOnLiftObject(handler, host, ["handle"]);
+        }
+        super._registerOnLift(host, ops);
+      }
+    }
+    class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure3-1.js")({
+            $headers: ${$stdlib.core.liftObject(headers)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure3._registerOnLiftObject(headers, host, []);
         }
         super._registerOnLift(host, ops);
       }
@@ -693,13 +750,13 @@ class $Root extends $stdlib.std.Resource {
     const bucket3 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "PrivateBucket", { public: false });
     const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
-    (queue.setConsumer(handler, { batchSize: 5 }));
+    (queue.setConsumer(new $Closure2(this, "$Closure2"), { batchSize: 5 }));
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", handler, { env: ({}) });
     const emptyEnv = ({});
     this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "AnotherFunction", handler, { env: emptyEnv });
     const headers = ({["my-fancy-header"]: "my-fancy-value", ["not-even-real\""]: "wow` !"});
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
-    (api.get("/hello", new $Closure2(this, "$Closure2")));
+    (api.get("/hello", new $Closure3(this, "$Closure3")));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

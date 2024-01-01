@@ -33,6 +33,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyType {
     constructor({ $this_b, $this_s_length }) {
@@ -40,8 +41,8 @@ module.exports = function({  }) {
       this.$this_s_length = $this_s_length;
     }
     async boom() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.s.length > 0")})((this.$this_s_length > 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.b.list().length > 0")})(((await this.$this_b.list()).length > 0))};
+      $helpers.assert((this.$this_s_length > 0), "this.s.length > 0");
+      $helpers.assert(((await this.$this_b.list()).length > 0), "this.b.list().length > 0");
     }
     async bam() {
       (await this.$this_b.put("hello", "world"));
@@ -62,6 +63,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
