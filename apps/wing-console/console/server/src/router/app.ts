@@ -416,6 +416,7 @@ export const createAppRouter = () => {
           node: {
             id: node.id,
             path: node.path,
+            display: node.display,
             type: getResourceType(node, simulator),
             props: config?.props,
             attributes: config?.attrs,
