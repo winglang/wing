@@ -2,8 +2,6 @@ bring cloud;
 bring ex;
 bring util;
 
-let api = new cloud.Api();
-
 let table = new ex.DynamodbTable(
     name: "blog",
     attributeDefinitions: {
