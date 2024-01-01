@@ -541,12 +541,14 @@ test("query with GSI", async () => {
     attributeDefinitions: { id: "S", age: "N", table: "S" } as any,
     hashKey: "table",
     rangeKey: "id",
-    globalSecondaryIndex: [{
-      name: "AgeIndex",
-      hashKey: "table",
-      rangeKey: "age",
-      projectionType: "ALL"
-    }],
+    globalSecondaryIndex: [
+      {
+        name: "AgeIndex",
+        hashKey: "table",
+        rangeKey: "age",
+        projectionType: "ALL",
+      },
+    ],
   });
   const s = await app.startSimulator();
   const client = s.getResource("/query_table") as ex.IDynamodbTableClient;
