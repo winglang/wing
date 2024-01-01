@@ -42,9 +42,7 @@ export class BucketClient implements IBucketClient {
       const srcFile = this.bucket.file(srcKey);
       await srcFile.copy(this.bucket.file(dstKey));
     } catch (error) {
-      throw new Error(
-        `Failed to copy object from (srcKey=${srcKey}) to (dstKey=${dstKey}).`
-      );
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
     }
   }
 
