@@ -1,10 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
-import {
-  ActionTypes,
-  Function as GCPFunction,
-  ResourceTypes,
-} from "./function";
+import { Function as GCPFunction } from "./function";
+import { calculateCounterPermissions } from "./permissions";
 import { FirestoreDatabase } from "../.gen/providers/google/firestore-database";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -61,23 +58,11 @@ export class Counter extends cloud.Counter {
     if (!(host instanceof GCPFunction)) {
       throw new Error("counters can only be bound by tfgcp.Function for now");
     }
-    if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
-      host.addPermission(this, {
-        Action: ActionTypes.DATASTORE_READ,
-        Resource: ResourceTypes.COUNTER,
-      });
-    } else if (
-      cloud.CounterInflightMethods.INC ||
-      cloud.CounterInflightMethods.DEC ||
-      cloud.CounterInflightMethods.SET
-    ) {
-      host.addPermission(this, {
-        Action: ActionTypes.DATASTORE_READ_WRITE,
-        Resource: ResourceTypes.COUNTER,
-      });
-    }
-    host.addEnvironment(this.envName(), this.database.name);
 
+    const permissions = calculateCounterPermissions(ops);
+    host.addPermissions(permissions);
+
+    host.addEnvironment(this.envName(), this.database.name);
     super.onLift(host, ops);
   }
 
