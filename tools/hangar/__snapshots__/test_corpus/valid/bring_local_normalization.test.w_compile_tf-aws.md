@@ -64,125 +64,122 @@ module.exports = function({  }) {
 ## preflight.bar-1.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  class Bar extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static bar() {
-      return "bar";
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Bar-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const BarClient = ${Bar._toInflightType(this)};
-          const client = new BarClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+class Bar extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  return { Bar };
-};
+  static bar() {
+    return "bar";
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Bar-1.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const BarClient = ${Bar._toInflightType(this)};
+        const client = new BarClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
+  }
+}
+module.exports = { Bar };
 //# sourceMappingURL=preflight.bar-1.js.map
 ```
 
 ## preflight.baz-2.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  class Baz extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static baz() {
-      return "baz";
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Baz-2.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const BazClient = ${Baz._toInflightType(this)};
-          const client = new BazClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+class Baz extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  return { Baz };
-};
+  static baz() {
+    return "baz";
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Baz-2.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const BazClient = ${Baz._toInflightType(this)};
+        const client = new BazClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
+  }
+}
+module.exports = { Baz };
 //# sourceMappingURL=preflight.baz-2.js.map
 ```
 
 ## preflight.foo-3.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  const bar = require("./preflight.bar-1.js")({ $stdlib });
-  const baz = require("./preflight.baz-2.js")({ $stdlib });
-  class Foo extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static foo() {
-      return "foo";
-    }
-    static bar() {
-      return (bar.Bar.bar());
-    }
-    static baz() {
-      return (baz.Baz.baz());
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Foo-3.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const FooClient = ${Foo._toInflightType(this)};
-          const client = new FooClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const bar = require("./preflight.bar-1.js");
+const baz = require("./preflight.baz-2.js");
+class Foo extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  return { Foo };
-};
+  static foo() {
+    return "foo";
+  }
+  static bar() {
+    return (bar.Bar.bar());
+  }
+  static baz() {
+    return (baz.Baz.baz());
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Foo-3.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const FooClient = ${Foo._toInflightType(this)};
+        const client = new FooClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
+  }
+}
+module.exports = { Foo };
 //# sourceMappingURL=preflight.foo-3.js.map
 ```
 
@@ -195,9 +192,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const foo = require("./preflight.foo-3.js")({ $stdlib });
-const bar = require("./preflight.bar-1.js")({ $stdlib });
-const baz = require("./preflight.baz-2.js")({ $stdlib });
+const foo = require("./preflight.foo-3.js");
+const bar = require("./preflight.bar-1.js");
+const baz = require("./preflight.baz-2.js");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);

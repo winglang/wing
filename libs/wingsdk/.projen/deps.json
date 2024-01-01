@@ -49,11 +49,13 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock",
+      "name": "aws-sdk-client-mock-jest",
+      "version": "3.0.0",
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock-jest",
+      "name": "aws-sdk-client-mock",
+      "version": "3.0.0",
       "type": "build"
     },
     {
