@@ -10,7 +10,7 @@ const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
-  "google@~>5.3.0",
+  "google@~>5.10.0",
 ];
 
 // those will be skipped out of the docs
