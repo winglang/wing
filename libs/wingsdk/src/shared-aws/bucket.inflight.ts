@@ -367,8 +367,7 @@ export class BucketClient implements IBucketClient {
 
     // Generate the presigned URL
     const signedUrl = await getSignedUrl(this.s3Client, command, {
-      // Defaults to 900s if not set
-      expiresIn: opts?.duration?.seconds,
+      expiresIn: opts?.duration?.seconds ?? 900,
     });
 
     return signedUrl;

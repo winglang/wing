@@ -272,6 +272,7 @@ export enum BucketSignedUrlAction {
 export interface BucketSignedUrlOptions {
   /**
    * The duration for the signed URL to expire.
+   * @default 15m
    */
   readonly duration?: Duration;
 
