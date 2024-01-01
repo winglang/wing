@@ -5,13 +5,27 @@ bring expect;
 
 let bucket = new cloud.Bucket();
 
-test "signedUrl GET" {
+test "signedUrl GET (implicit)" {
   let KEY = "tempfile.txt";
   let VALUE = "Hello, Wing!";
 
   bucket.put(KEY, VALUE);
 
   let getSignedUrl = bucket.signedUrl(KEY);
+
+  // Download file from private bucket using GET presigned URL
+  let output = util.shell("curl \"{getSignedUrl}\"");
+
+  expect.equal(output, VALUE);
+}
+
+test "signedUrl GET (explicit)" {
+  let KEY = "tempfile.txt";
+  let VALUE = "Hello, Wing!";
+
+  bucket.put(KEY, VALUE);
+
+  let getSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.GET });
 
   // Download file from private bucket using GET presigned URL
   let output = util.shell("curl \"{getSignedUrl}\"");
