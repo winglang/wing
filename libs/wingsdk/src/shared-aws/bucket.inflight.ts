@@ -187,12 +187,11 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
-    } catch (e: any) {
-      if (!mustExist && e instanceof NoSuchKey) {
+    } catch (error) {
+      if (!mustExist && error instanceof NoSuchKey) {
         return;
       }
-
-      throw new Error(`Unable to delete "${key}": ${e.message}`);
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 
