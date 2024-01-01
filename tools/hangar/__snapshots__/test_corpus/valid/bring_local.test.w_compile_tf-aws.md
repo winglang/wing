@@ -49,7 +49,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async greet(name) {
-      return (require("<ABSOLUTE_PATH>/util.js")["greet"])(name)
+      return (require("../../../subdir/util.js")["greet"])(name)
     }
   }
   return Q;
@@ -271,11 +271,10 @@ module.exports = function({  }) {
 ## preflight.empty-1.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  return {  };
-};
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.js.map
 ```
 
@@ -288,9 +287,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const file1 = require("./preflight.store-2.js")({ $stdlib });
-const file2 = require("./preflight.subfile-3.js")({ $stdlib });
-const file3 = require("./preflight.empty-1.js")({ $stdlib });
+const file1 = require("./preflight.store-2.js");
+const file2 = require("./preflight.subfile-3.js");
+const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -400,156 +399,154 @@ $APP.synth();
 ## preflight.store-2.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  const file3 = require("./preflight.empty-1.js")({ $stdlib });
-  const math = $stdlib.math;
-  const cloud = $stdlib.cloud;
-  class Util extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Util-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const UtilClient = ${Util._toInflightType(this)};
-          const client = new UtilClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const file3 = require("./preflight.empty-1.js");
+const math = $stdlib.math;
+const cloud = $stdlib.cloud;
+class Util extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  class Store extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-      this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-      const __parent_this_1 = this;
-      class $Closure1 extends $stdlib.std.Resource {
-        _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
-        constructor($scope, $id, ) {
-          super($scope, $id);
-          (std.Node.of(this)).hidden = true;
-        }
-        static _toInflightType() {
-          return `
-            require("./inflight.$Closure1-1.js")({
-              $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
-            })
-          `;
-        }
-        _toInflight() {
-          return `
-            (await (async () => {
-              const $Closure1Client = ${$Closure1._toInflightType(this)};
-              const client = new $Closure1Client({
-              });
-              if (client.$inflight_init) { await client.$inflight_init(); }
-              return client;
-            })())
-          `;
-        }
-        _supportedOps() {
-          return [...super._supportedOps(), "handle", "$inflight_init"];
-        }
-        _registerOnLift(host, ops) {
-          if (ops.includes("handle")) {
-            $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
-          }
-          super._registerOnLift(host, ops);
-        }
-      }
-      const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Store-1.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const StoreClient = ${Store._toInflightType(this)};
-          const client = new StoreClient({
-            $this_b: ${$stdlib.core.liftObject(this.b)},
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "store", "$inflight_init"];
-    }
-    _registerOnLift(host, ops) {
-      if (ops.includes("$inflight_init")) {
-        Store._registerOnLiftObject(this.b, host, []);
-      }
-      if (ops.includes("store")) {
-        Store._registerOnLiftObject(this.b, host, ["put"]);
-      }
-      super._registerOnLift(host, ops);
-    }
+  static _toInflightType() {
+    return `
+      require("./inflight.Util-1.js")({
+      })
+    `;
   }
-  const Color =
-    (function (tmp) {
-      tmp[tmp["RED"] = 0] = ",RED";
-      tmp[tmp["GREEN"] = 1] = ",GREEN";
-      tmp[tmp["BLUE"] = 2] = ",BLUE";
-      return tmp;
-    })({})
-  ;
-  return { Util, Store, Color };
-};
+  _toInflight() {
+    return `
+      (await (async () => {
+        const UtilClient = ${Util._toInflightType(this)};
+        const client = new UtilClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
+  }
+}
+class Store extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const __parent_this_1 = this;
+    class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        (std.Node.of(this)).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure1-1.js")({
+            $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
+        }
+        super._registerOnLift(host, ops);
+      }
+    }
+    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Store-1.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const StoreClient = ${Store._toInflightType(this)};
+        const client = new StoreClient({
+          $this_b: ${$stdlib.core.liftObject(this.b)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "store", "$inflight_init"];
+  }
+  _registerOnLift(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      Store._registerOnLiftObject(this.b, host, []);
+    }
+    if (ops.includes("store")) {
+      Store._registerOnLiftObject(this.b, host, ["put"]);
+    }
+    super._registerOnLift(host, ops);
+  }
+}
+const Color =
+  (function (tmp) {
+    tmp[tmp["RED"] = 0] = ",RED";
+    tmp[tmp["GREEN"] = 1] = ",GREEN";
+    tmp[tmp["BLUE"] = 2] = ",BLUE";
+    return tmp;
+  })({})
+;
+module.exports = { Util, Store, Color };
 //# sourceMappingURL=preflight.store-2.js.map
 ```
 
 ## preflight.subfile-3.js
 ```js
 "use strict";
-module.exports = function({ $stdlib }) {
-  const std = $stdlib.std;
-  const $helpers = $stdlib.helpers;
-  const math = $stdlib.math;
-  class Q extends $stdlib.std.Resource {
-    constructor($scope, $id, ) {
-      super($scope, $id);
-    }
-    static _toInflightType() {
-      return `
-        require("./inflight.Q-2.js")({
-        })
-      `;
-    }
-    _toInflight() {
-      return `
-        (await (async () => {
-          const QClient = ${Q._toInflightType(this)};
-          const client = new QClient({
-          });
-          if (client.$inflight_init) { await client.$inflight_init(); }
-          return client;
-        })())
-      `;
-    }
-    _supportedOps() {
-      return [...super._supportedOps(), "greet", "$inflight_init"];
-    }
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const math = $stdlib.math;
+class Q extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
   }
-  return { Q };
-};
+  static _toInflightType() {
+    return `
+      require("./inflight.Q-2.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const QClient = ${Q._toInflightType(this)};
+        const client = new QClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "greet", "$inflight_init"];
+  }
+}
+module.exports = { Q };
 //# sourceMappingURL=preflight.subfile-3.js.map
 ```
 

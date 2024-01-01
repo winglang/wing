@@ -49,16 +49,16 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async regexInflight(pattern, text) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
+      return (require("../../../external_js.js")["regexInflight"])(pattern, text)
     }
     static async getUuid() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
+      return (require("../../../external_js.js")["getUuid"])()
     }
     static async getData() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
+      return (require("../../../external_js.js")["getData"])()
     }
     static async print(msg) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
+      return (require("../../../external_js.js")["print"])(msg)
     }
     async call() {
       $helpers.assert((await Foo.regexInflight("[a-z]+-\\d+", "abc-123")), "Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")");
@@ -109,7 +109,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static getGreeting(name) {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
+        return (require("../../../external_js.js")["getGreeting"])(name)
       }
       static _toInflightType() {
         return `

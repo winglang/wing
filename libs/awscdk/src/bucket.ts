@@ -98,6 +98,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
       cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
 
@@ -211,7 +212,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "BucketClient",
       [
