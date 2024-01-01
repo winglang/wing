@@ -13,7 +13,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (srcKey: str, dstKey: str): void"
   documentation:
     kind: markdown
-    value: "```wing\ninflight copy: inflight (srcKey: str, dstKey: str): void\n```\n---\nCopy an object to a new location in the bucket.\n### Parameters\n- `srcKey` — `str` — The key of the source object you wish to copy.\n- `dstKey` — `str` — The key of the destination object after copying.\n\n### Remarks\nIf the destination object\nalready exists, it will be overwritten. Returns once the copying is finished.\n\n*@throws* *if `srcKey` object doesn't exist.*"
+    value: "```wing\ninflight copy: inflight (srcKey: str, dstKey: str): void\n```\n---\nCopy an object to a new location in the bucket.\n### Parameters\n- `srcKey` — `str` — The key of the source object you wish to copy.\n- `dstKey` — `str` — The key of the destination object after copying.\n\n### Remarks\nIf the destination object\nalready exists, it will be overwritten.\n\n*@throws* *if `srcKey` object doesn't exist.*"
   sortText: ff|copy
   insertText: copy($1)
   insertTextFormat: 2
@@ -124,6 +124,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\ninflight putJson: inflight (key: str, body: Json): void\n```\n---\nPut a Json object in the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `body` — `Json` — Json object that we want to store into the bucket."
   sortText: ff|putJson
   insertText: putJson($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: rename
+  kind: 2
+  detail: "inflight (srcKey: str, dstKey: str): void"
+  documentation:
+    kind: markdown
+    value: "```wing\ninflight rename: inflight (srcKey: str, dstKey: str): void\n```\n---\nMove an object to a new location in the bucket.\n### Parameters\n- `srcKey` — `str` — The key of the source object you wish to rename.\n- `dstKey` — `str` — The key of the destination object after renaming.\n\n### Remarks\nIf the destination object\nalready exists, it will be overwritten. Returns once the renaming is finished.\n\n*@throws* *if `srcKey` object doesn't exist or if it matches `dstKey`.*"
+  sortText: ff|rename
+  insertText: rename($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

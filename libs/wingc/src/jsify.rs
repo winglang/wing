@@ -49,6 +49,8 @@ const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
+const NODE_MODULES_DIR: &str = "node_modules";
+const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
@@ -79,6 +81,7 @@ pub struct JSifier<'a> {
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
 	compilation_init_path: &'a Utf8Path,
+	out_dir: &'a Utf8Path,
 }
 
 impl VisitorWithContext for JSifyContext<'_> {
@@ -101,6 +104,7 @@ impl<'a> JSifier<'a> {
 		source_files: &'a Files,
 		source_file_graph: &'a FileGraph,
 		compilation_init_path: &'a Utf8Path,
+		out_dir: &'a Utf8Path,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
@@ -108,6 +112,7 @@ impl<'a> JSifier<'a> {
 			source_files,
 			source_file_graph,
 			compilation_init_path,
+			out_dir,
 			referenced_struct_schemas: RefCell::new(BTreeMap::new()),
 			inflight_file_counter: RefCell::new(0),
 			inflight_file_map: RefCell::new(IndexMap::new()),
@@ -157,8 +162,9 @@ impl<'a> JSifier<'a> {
 
 		output.line("\"use strict\";");
 
+		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+
 		if is_entrypoint {
-			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!(
 				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
 				PLATFORMS_VAR
@@ -168,8 +174,6 @@ impl<'a> JSifier<'a> {
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
 			));
-		} else {
-			output.open(format!("module.exports = function({{ {} }}) {{", STDLIB));
 		}
 
 		// "std" is implicitly imported
@@ -205,37 +209,34 @@ impl<'a> JSifier<'a> {
 			// supposing a directory has two files and two subdirectories in it,
 			// we generate code like this:
 			// ```
-			// return {
-			//   inner_directory1: require("./preflight.inner-directory1.js")({ $stdlib }),
-			//   inner_directory2: require("./preflight.inner-directory2.js")({ $stdlib }),
-			//   ...require("./preflight.inner-file1.js")({ $stdlib }),
-			//   ...require("./preflight.inner-file2.js")({ $stdlib }),
+			// module.exports = {
+			//   get inner_directory1() { return require("./preflight.inner-directory1.js") },
+			//   get inner_directory2() { return require("./preflight.inner-directory2.js") },
+			//   ...require("./preflight.inner-file1.js"),
+			//   ...require("./preflight.inner-file2.js"),
 			// };
 			// ```
-			output.open("return {");
+			output.open("module.exports = {");
 			for file in directory_children {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
 					output.line(format!(
-						"{}: require(\"./{}\")({{ {} }}),",
-						directory_name, preflight_file_name, STDLIB
+						"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
 					));
 				} else {
-					output.line(format!("...require(\"./{}\")({{ {} }}),", preflight_file_name, STDLIB));
+					output.line(format!("...require(\"./{preflight_file_name}\"),"));
 				}
 			}
-			output.close("};");
 			output.close("};");
 		} else {
 			output.add_code(self.jsify_struct_schemas());
 			output.add_code(js);
 			let exports = get_public_symbols(&scope);
 			output.line(format!(
-				"return {{ {} }};",
+				"module.exports = {{ {} }};",
 				exports.iter().map(ToString::to_string).join(", ")
 			));
-			output.close("};");
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
@@ -879,62 +880,41 @@ impl<'a> JSifier<'a> {
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => {
-					let var_name = if let Some(identifier) = identifier {
-						identifier
-					} else {
-						name
-					};
+					let var_name = identifier.as_ref().unwrap_or(&name);
 
-					code.line(format!("const {} = {}.{};", var_name, STDLIB, name))
+					code.line(format!("const {var_name} = {STDLIB}.{name};"))
 				}
 				BringSource::TrustedModule(name, module_dir) => {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					code.line(format!(
-						"const {} = require(\"./{}\")({{ {} }});",
-						identifier.as_ref().unwrap_or(&name),
-						preflight_file_name,
-						STDLIB,
-					))
+					let var_name = identifier.as_ref().unwrap_or(&name);
+					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
-				BringSource::JsiiModule(name) => code.line(format!(
-					"const {} = require(\"{}\");",
+				BringSource::JsiiModule(name) => {
 					// checked during type checking
-					identifier.as_ref().expect("bring jsii module requires an alias"),
-					name
-				)),
+					let var_name = identifier.as_ref().unwrap_or(&name);
+					code.line(format!("const {var_name} = require(\"{name}\");"))
+				}
 				BringSource::WingLibrary(_, module_dir) => {
+					// checked during type checking
+					let var_name = identifier.as_ref().expect("bring wing library requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
-					code.line(format!(
-						"const {} = require(\"./{}\")({{ {} }});",
-						// checked during type checking
-						identifier.as_ref().expect("bring wing file requires an alias"),
-						preflight_file_name,
-						STDLIB,
-					))
+					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
 				BringSource::WingFile(name) => {
+					// checked during type checking
+					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					code.line(format!(
-						"const {} = require(\"./{}\")({{ {} }});",
-						// checked during type checking
-						identifier.as_ref().expect("bring wing file requires an alias"),
-						preflight_file_name,
-						STDLIB,
-					))
+					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
 				BringSource::Directory(name) => {
+					// checked during type checking
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
-					code.line(format!(
-						"const {} = require(\"./{}\")({{ {} }});",
-						// checked during type checking
-						identifier.as_ref().expect("bring wing file requires an alias"),
-						preflight_file_name,
-						STDLIB,
-					))
+					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
+					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
 			},
 			StmtKind::SuperConstructor { arg_list } => {
@@ -1314,10 +1294,64 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
-			FunctionBody::External(file_path) => {
+			FunctionBody::External(extern_path) => {
+				let extern_path = Utf8Path::new(extern_path);
+				let entrypoint_dir = if self.compilation_init_path.is_file() {
+					self.compilation_init_path.parent().unwrap()
+				} else {
+					self.compilation_init_path
+				};
+
+				// extern_path should always be a sub directory of entrypoint_dir
+				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
+					report_diagnostic(Diagnostic {
+						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+						annotations: vec![],
+						hints: vec![],
+						span: Some(func_def.span.clone()),
+					});
+					return CodeMaker::default();
+				};
+
+				let mut path_components = rel_path.components();
+
+				// check if the first part of the path is the node module directory
+				let require_path =
+					if path_components.next().expect("extern path must not be empty").as_str() == NODE_MODULES_DIR {
+						// We are loading an extern from a node module, so we want that path to be relative to the package itself
+						// e.g. require("../node_modules/@winglibs/blah/util.js") should be require("@winglibs/blah/util.js") instead
+
+						// the second part of the path will either be the package name or the package scope
+						let second_component = path_components
+							.next()
+							.expect("extern path in node module must have at least two components")
+							.as_str();
+
+						let module_name = if second_component.starts_with(NODE_MODULES_SCOPE_SPECIFIER) {
+							// scoped package, prepend the scope to the next part of the path
+							format!(
+								"{second_component}/{}",
+								path_components
+									.next()
+									.expect("extern path in scoped node module must have at least three components")
+							)
+						} else {
+							// regular package
+							second_component.to_string()
+						};
+
+						// combine the module name with the rest of the iterator to get the full import path
+						format!("{module_name}/{}", path_components.join("/"))
+					} else {
+						// go from the out_dir to the entrypoint dir
+						let up_dirs = "../".repeat(self.out_dir.components().count() - entrypoint_dir.components().count());
+
+						format!("{up_dirs}{rel_path}")
+					};
+
 				new_code!(
 					&func_def.span,
-					format!("return (require(\"{file_path}\")[\"{name}\"])("),
+					format!("return (require(\"{require_path}\")[\"{name}\"])("),
 					parameters.clone(),
 					")"
 				)

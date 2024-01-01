@@ -50,7 +50,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
       return true;
     } catch (error) {
-      if ((error as Error).name === "NotFound") {
+      if (error instanceof NotFound) {
         return false;
       }
       throw error;
@@ -188,12 +188,11 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
-    } catch (e: any) {
-      if (!mustExist && e instanceof NoSuchKey) {
+    } catch (error) {
+      if (!mustExist && error instanceof NoSuchKey) {
         return;
       }
-
-      throw new Error(`Unable to delete "${key}": ${e.message}`);
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 
@@ -246,7 +245,6 @@ export class BucketClient implements IBucketClient {
   /**
    * Copy an object to a new location in the bucket. If the destination object
    * already exists, it will be overwritten.
-   *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    */
@@ -283,6 +281,25 @@ export class BucketClient implements IBucketClient {
       }
       throw error;
     }
+  }
+
+  /**
+   * Move an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the renaming is finished.
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after renaming.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   * @inflight
+   */
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
   }
 
   /**

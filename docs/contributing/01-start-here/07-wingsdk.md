@@ -54,7 +54,7 @@ Here is an example of adding a package named "fast-json-stringify" pinned to maj
 ## 🧱 How do I add a new Terraform provider for use in the SDK?
 
 The SDK uses [CDK for Terraform] to generate Terraform files.
-This means that you can generate bindings for any Terraform provider and reference in in the SDK using TypeScript.
+This means that you can generate bindings for any Terraform provider and reference it in the SDK using TypeScript.
 
 To add a new provider, go to `libs/wingsdk/.projenrc.ts` and edit the section
 that says "CDKTF_BINDINGS" to add the new provider.

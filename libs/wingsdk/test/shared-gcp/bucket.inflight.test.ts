@@ -125,7 +125,7 @@ test("delete object from the bucket with mustExist option", async () => {
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
-  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
+  ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
 test("delete a non-existent object from the bucket with mustExist option", async () => {
@@ -138,7 +138,7 @@ test("delete a non-existent object from the bucket with mustExist option", async
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
-  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
+  ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
@@ -152,7 +152,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   await client.put(KEY, VALUE);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to get public URL. (key=${KEY})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
   );
 });
 
@@ -165,7 +165,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to get public URL. (key=${KEY})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
   );
 });
 

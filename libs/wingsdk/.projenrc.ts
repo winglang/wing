@@ -14,7 +14,15 @@ const CDKTF_PROVIDERS = [
 ];
 
 // those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const SKIPPED_MODULES = [
+  "cloud",
+  "ex",
+  "std",
+  "simulator",
+  "core",
+  "platform",
+  "helpers",
+];
 const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
@@ -106,8 +114,8 @@ const project = new cdk.JsiiProject({
     "@types/mime-types",
     "mock-gcs@^1.0.0",
     "@types/express",
-    "aws-sdk-client-mock",
-    "aws-sdk-client-mock-jest",
+    "aws-sdk-client-mock@3.0.0",
+    "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
