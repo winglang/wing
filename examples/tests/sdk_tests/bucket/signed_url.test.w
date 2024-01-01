@@ -66,7 +66,7 @@ test "signedUrl duration option is respected" {
   util.sleep(2s);
 
   // Download file from private bucket using expired GET presigned URL
-  let output = util.shell("curl \"{getSignedUrl}\"", { throw: true });
+  let output = util.shell("curl \"{getSignedUrl}\"", { throw: false });
 
   assert(output.contains(ACCESS_DENIED_ERROR));
 }
