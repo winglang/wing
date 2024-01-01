@@ -19,6 +19,7 @@ test("create an OnDeploy", async () => {
       handle: expect.any(String),
     },
     path: "root/my_on_deploy",
+    addr: expect.any(String),
     props: {
       functionHandle: expect.any(String),
     },

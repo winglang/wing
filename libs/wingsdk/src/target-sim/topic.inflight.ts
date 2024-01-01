@@ -30,6 +30,8 @@ export class Topic
 
   public async cleanup(): Promise<void> {}
 
+  public async save(): Promise<void> {}
+
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(
@@ -50,21 +52,7 @@ export class Topic
         timestamp: new Date().toISOString(),
       });
 
-      // we are not awaiting `fnClient.invoke` so that if the function sleeps,
-      // performs IO, etc. it does not block the other subscribers
-      process.nextTick(() => {
-        fnClient.invoke(message).catch((err) => {
-          this.context.addTrace({
-            data: {
-              message: `Subscriber error: ${err}`,
-            },
-            sourcePath: this.context.resourcePath,
-            sourceType: TOPIC_FQN,
-            type: TraceType.RESOURCE,
-            timestamp: new Date().toISOString(),
-          });
-        });
-      });
+      await fnClient.invokeAsync(message);
     }
   }
 
@@ -77,6 +65,15 @@ export class Topic
       ...subscriptionProps,
     } as TopicSubscriber;
     this.subscribers.push(s);
+  }
+
+  public async removeEventSubscription(subscriber: string): Promise<void> {
+    const index = this.subscribers.findIndex(
+      (s) => s.functionHandle === subscriber
+    );
+    if (index >= 0) {
+      this.subscribers.splice(index, 1);
+    }
   }
 
   public async publish(message: string): Promise<void> {

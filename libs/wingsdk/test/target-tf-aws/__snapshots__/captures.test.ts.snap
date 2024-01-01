@@ -35,11 +35,6 @@ function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\"
 
 exports[`function with a function binding 3`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function1_CloudwatchLogGroup_2120A680": {
@@ -95,7 +90,7 @@ exports[`function with a function binding 3`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
         "timeout": 60,
@@ -120,7 +115,7 @@ exports[`function with a function binding 3`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
         "timeout": 60,
@@ -183,11 +178,6 @@ return class Handler {
 
 exports[`function with a queue binding 3`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -251,7 +241,7 @@ exports[`function with a queue binding 3`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -275,7 +265,7 @@ exports[`function with a queue binding 3`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Queue-SetConsumer0_S3Object_2AD0A795.key}",
         "timeout": "\${aws_sqs_queue.Queue.visibility_timeout_seconds}",
@@ -330,11 +320,6 @@ bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).B
 
 exports[`function with bucket binding > put operation 2`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -376,7 +361,7 @@ exports[`function with bucket binding > put operation 2`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -408,11 +393,6 @@ exports[`function with bucket binding > put operation 2`] = `
 
 exports[`two functions reusing the same IFunctionHandler 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function1_CloudwatchLogGroup_2120A680": {
@@ -468,7 +448,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function1_S3Object_AFBA38E0.key}",
         "timeout": 60,
@@ -492,7 +472,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function2_IamRole_62EBED55.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function2_S3Object_6F3ED347.key}",
         "timeout": 60,

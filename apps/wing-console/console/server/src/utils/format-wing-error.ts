@@ -54,6 +54,10 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
         }
 
         for (const annotation of annotations) {
+          // file_id might be "" if the span is synthetic (see #2521)
+          if (!annotation.span?.file_id) {
+            continue;
+          }
           const source = await readFile(annotation.span.file_id, "utf8");
           const start = offsetFromLineAndColumn(
             source,
@@ -125,4 +129,14 @@ export const formatWingError = async (error: unknown, entryPoint?: string) => {
   } catch (error) {
     return `Unexpected error: ${error}`;
   }
+};
+
+export const formatTraceError = async (error: string): Promise<string> => {
+  let output = await prettyPrintError(error);
+
+  // Remove ANSI color codes
+  const regex =
+    /[\u001B\u009B][#();?[]*(?:\d{1,4}(?:;\d{0,4})*)?[\d<=>A-ORZcf-nqry]/g;
+
+  return output.replaceAll(regex, "");
 };

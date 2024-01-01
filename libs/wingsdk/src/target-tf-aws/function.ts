@@ -14,7 +14,7 @@ import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsFunction, PolicyStatement } from "../shared-aws";
+import { Effect, IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -59,6 +59,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   private readonly role: IamRole;
   private policyStatements?: any[];
   private subnets?: Set<string>;
+  private vpcPermissionsAdded = false;
   private securityGroups?: Set<string>;
 
   /**
@@ -127,27 +128,15 @@ export class Function extends cloud.Function implements IAwsFunction {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          // If there are subnets to attach then the role needs to be able to
-          // create network interfaces
-          if ((this.subnets?.size ?? 0) !== 0) {
-            this.policyStatements?.push({
-              Effect: "Allow",
-              Action: [
-                "ec2:CreateNetworkInterface",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-              ],
-              Resource: "*",
-            });
-          }
-          if ((this.policyStatements ?? []).length !== 0) {
+          this.policyStatements = this.policyStatements ?? [];
+
+          if (this.policyStatements.length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
           }
+
           // policy must contain at least one statement, so include a no-op statement
           return JSON.stringify({
             Version: "2012-10-17",
@@ -194,7 +183,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
-      runtime: "nodejs18.x",
+      runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
       vpcConfig: {
@@ -237,7 +226,10 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.FunctionInflightMethods.INVOKE];
+    return [
+      cloud.FunctionInflightMethods.INVOKE,
+      cloud.FunctionInflightMethods.INVOKE_ASYNC,
+    ];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -245,7 +237,10 @@ export class Function extends cloud.Function implements IAwsFunction {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (
+      ops.includes(cloud.FunctionInflightMethods.INVOKE) ||
+      ops.includes(cloud.FunctionInflightMethods.INVOKE_ASYNC)
+    ) {
       host.addPolicyStatements({
         actions: ["lambda:InvokeFunction"],
         resources: [`${this.function.arn}`],
@@ -279,6 +274,22 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
     vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
     vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
+
+    if (!this.vpcPermissionsAdded) {
+      this.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: [
+          "ec2:CreateNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeSubnets",
+          "ec2:DescribeSecurityGroups",
+        ],
+        resources: ["*"],
+      });
+
+      this.vpcPermissionsAdded = true;
+    }
   }
 
   /**

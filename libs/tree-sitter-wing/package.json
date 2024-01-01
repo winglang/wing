@@ -20,6 +20,7 @@
   },
   "scripts": {
     "test": "tree-sitter test",
+    "parse": "tree-sitter parse",
     "test:update": "tree-sitter test --update",
     "test:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"turbo test\"",
     "build:generate": "tree-sitter generate",

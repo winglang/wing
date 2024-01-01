@@ -1,12 +1,16 @@
-import { resolve } from "path";
+import { writeFileSync } from "fs";
+import { join, resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Bucket, addBucketPermission } from "./bucket";
+import { Bucket } from "./bucket";
+import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
+import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
+import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
-import { NotImplementedError } from "../core/errors";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import {
@@ -14,33 +18,13 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, IResource } from "../std";
+import { IInflightHost } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
   disallowedRegex: /[^a-z0-9]+/g,
   case: CaseConventions.LOWERCASE,
 };
-
-export enum ResourceTypes {
-  BUCKET = "Bucket",
-  FUNCTION = "Function",
-  COUNTER = "Counter",
-}
-
-export enum ActionTypes {
-  STORAGE_READ = "roles/storage.objectViewer",
-  STORAGE_READ_WRITE = "roles/storage.objectUser",
-  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
-  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
-  DATASTORE_READ = "roles/datastore.viewer",
-  DATASTORE_READ_WRITE = "roles/datastore.user",
-}
-
-interface IFunctionPermissions {
-  Action: ActionTypes;
-  Resource: ResourceTypes;
-}
 
 /**
  * GCP implementation of `cloud.Function`.
@@ -50,7 +34,11 @@ interface IFunctionPermissions {
 
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
-  private permissions: Map<string, Set<IFunctionPermissions>> = new Map();
+  private readonly functionServiceAccount: ServiceAccount;
+  private readonly functionCustomRole: ProjectIamCustomRole;
+  private readonly permissions: Set<string> = new Set([
+    "cloudfunctions.functions.get",
+  ]);
 
   constructor(
     scope: Construct,
@@ -64,7 +52,25 @@ export class Function extends cloud.Function {
     const app = App.of(this) as App;
 
     // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, [
+      "@google-cloud/functions-framework",
+    ]);
+
+    const packageJson = join(bundle.directory, "package.json");
+
+    writeFileSync(
+      packageJson,
+      JSON.stringify(
+        {
+          main: "index.js",
+          dependencies: {
+            "@google-cloud/functions-framework": "^3.0.0",
+          },
+        },
+        null,
+        2
+      )
+    );
 
     // Create Cloud Function executable
     const asset = new TerraformAsset(this, "Asset", {
@@ -103,79 +109,157 @@ export class Function extends cloud.Function {
       }
     );
 
-    // create the cloud function
+    // Step 1: Create Custom Service Account
+    this.functionServiceAccount = new ServiceAccount(
+      this,
+      `ServiceAccount${this.node.addr.substring(-8)}`,
+      {
+        accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
+        displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
+          -8
+        )}`,
+      }
+    );
+    // Step 2: Create Custom Role
+    this.functionCustomRole = new ProjectIamCustomRole(
+      this,
+      `CustomRole${this.node.addr.substring(-8)}`,
+      {
+        roleId: `cloudfunctions.custom${this.node.addr.substring(-8)}`,
+        title: `Custom Role for Cloud Function ${this.node.addr.substring(-8)}`,
+        permissions: Lazy.listValue({
+          produce: () => Array.from(this.permissions),
+        }),
+      }
+    );
+    // Step 3: Grant Custom Role to Custom Service Account on the Project
+    new ProjectIamMember(this, "ProjectIamMember", {
+      project: app.projectId,
+      role: `projects/${app.projectId}/roles/${this.functionCustomRole.roleId}`,
+      member: `serviceAccount:${this.functionServiceAccount.email}`,
+    });
+    // Step 4: Create the Cloud Function with Custom Service Account
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
       project: app.projectId,
       region: app.region,
-      runtime: "nodejs16",
+      runtime: "nodejs18",
       availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
       entryPoint: "handler",
       triggerHttp: true,
-      timeout: props.timeout?.seconds ?? 60,
+      // It takes around 1 minutes to the function invocation permissions to be established -
+      // therefore, the timeout is higher than in other targets
+      timeout: props.timeout?.seconds ?? 120,
+      serviceAccountEmail: this.functionServiceAccount.email,
       environmentVariables: Lazy.anyValue({
         produce: () => this.env ?? {},
       }) as any,
     });
   }
 
+  /**
+   * @internal
+   * @param handler IFunctionHandler
+   * @returns the function code lines as strings
+   */
+  protected _getCodeLines(handler: cloud.IFunctionHandler): string[] {
+    const inflightClient = handler._toInflight();
+    const lines = new Array<string>();
+
+    lines.push('"use strict";');
+
+    inflightClient;
+    lines.push(
+      "const functions = require('@google-cloud/functions-framework');\n"
+    );
+    lines.push(`functions.http('handler', async (req, res) => {`);
+    lines.push("  res.set('Access-Control-Allow-Origin', '*')");
+    lines.push("  res.set('Access-Control-Allow-Methods', 'GET, POST')");
+
+    lines.push("  try {");
+    lines.push(
+      `  const result = await (${inflightClient}).handle(req.body ?? "")`
+    );
+    lines.push(`  res.send(result);`);
+    lines.push(`  } catch (error) {`);
+    lines.push(`  res.status(500).send(error.message);`);
+    lines.push("}});");
+
+    return lines;
+  }
+
   public get functionName(): string {
     return this.function.name;
   }
 
-  /** @internal */
-  public _supportedOps(): string[] {
-    return [];
+  public get serviceAccountEmail(): string {
+    return this.function.serviceAccountEmail;
   }
 
-  // TODO: implement with https://github.com/winglang/wing/issues/4403
+  public get project(): string {
+    return this.function.project;
+  }
+
+  public get region(): string {
+    return this.function.region;
+  }
+
+  /** @internal */
+  public _supportedOps(): string[] {
+    return [cloud.FunctionInflightMethods.INVOKE];
+  }
+
+  /** @internal */
   public _toInflight(): string {
-    throw new Error(
-      "cloud.Function cannot be used as an Inflight resource on GCP yet"
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-gcp", "shared-gcp"),
+      __filename,
+      "FunctionClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.projectEnv()}"]`,
+        `process.env["${this.regionEnv()}"]`,
+      ]
     );
   }
 
-  public addPermission(
-    scopedResource: IResource,
-    permissions: IFunctionPermissions
-  ): void {
-    const uniqueId = scopedResource.node.addr.substring(-8);
-
-    if (
-      this.permissions.has(uniqueId) &&
-      this.permissions.get(uniqueId)?.has(permissions)
-    ) {
-      return; // already exists
-    }
-    const app = App.of(this) as App;
-    // TODO: add support for other resource types
-    switch (permissions.Resource) {
-      case ResourceTypes.BUCKET:
-        addBucketPermission(
-          this,
-          scopedResource as Bucket,
-          permissions.Action,
-          app.projectId
-        );
-        break;
-      case ResourceTypes.COUNTER:
-        break;
-      case ResourceTypes.FUNCTION:
-        throw new NotImplementedError(
-          "Function permissions not implemented yet"
-        );
-      default:
-        throw new Error(`Unsupported resource type ${permissions.Resource}`);
-    }
-    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
-    roleDefinitions.add(permissions);
-    this.permissions.set(uniqueId, roleDefinitions);
+  public addPermissions(permissions: string[]): void {
+    permissions.forEach((permission) => {
+      this.permissions.add(permission);
+    });
   }
 
-  public onLift(_host: IInflightHost, _ops: string[]): void {
-    throw new Error("Method not implemented.");
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error(
+        "tfgcp.Function can only be bound by tfgcp.Function for now"
+      );
+    }
+
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPermissions(["cloudfunctions.functions.invoke"]);
+    }
+
+    const { region, projectId } = App.of(this) as App;
+    host.addEnvironment(this.envName(), this.function.name);
+    host.addEnvironment(this.projectEnv(), projectId);
+    host.addEnvironment(this.regionEnv(), region);
+
+    super.onLift(host, ops);
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  private regionEnv(): string {
+    return `REGION_${this.node.addr.slice(-8)}`;
+  }
+
+  private projectEnv(): string {
+    return `PROJECT_${this.node.addr.slice(-8)}`;
   }
 }

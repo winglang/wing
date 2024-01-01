@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
     constructor({  }) {
@@ -11,21 +12,21 @@ module.exports = function({ $s1, $s2 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\" == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("","")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\'\" == \"\'\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("'","'")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"\\\"\" == \"\\\"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("\"","\"")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\" == \"`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`","`")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("``","``")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`s1`","`s1`")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s1,$s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" == \"{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" != \"{s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, $s1),String.raw({ raw: ["", ""] }, $s2))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" == \"a{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["a", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" != \"b{s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, $s1),String.raw({ raw: ["b", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" == \"{s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "a"] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" != \"{s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, $s1),String.raw({ raw: ["", "b"] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'{s1}\" == \"`\'{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, $s1),String.raw({ raw: ["`'", ""] }, $s1))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2),String.raw({ raw: ["a", "b", "c"] }, $s1, $s2))))};
+      $helpers.assert($helpers.eq("", ""), "\"\" == \"\"");
+      $helpers.assert($helpers.eq("'", "'"), "\"\'\" == \"\'\"");
+      $helpers.assert($helpers.eq("\"", "\""), "\"\\\"\" == \"\\\"\"");
+      $helpers.assert($helpers.eq("`", "`"), "\"`\" == \"`\"");
+      $helpers.assert($helpers.eq("``", "``"), "\"``\" == \"``\"");
+      $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
+      $helpers.assert($helpers.eq($s1, $s1), "s1 == s1");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s1)), "\"{s1}\" == \"{s1}\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["a", ""] }, $s1)), "\"a{s1}\" == \"a{s1}\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["b", ""] }, $s1)), "\"a{s1}\" != \"b{s1}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "a"] }, $s1)), "\"{s1}a\" == \"{s1}a\"");
+      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "b"] }, $s1)), "\"{s1}a\" != \"{s1}b\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, $s1), String.raw({ raw: ["`'", ""] }, $s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
+      $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2), String.raw({ raw: ["a", "b", "c"] }, $s1, $s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     }
   }
   return $Closure1;
@@ -42,20 +43,7 @@ module.exports = function({ $s1, $s2 }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -73,6 +61,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -114,21 +103,21 @@ class $Root extends $stdlib.std.Resource {
     }
     const s1 = "foo";
     const s2 = "bar";
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\" == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("","")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\'\" == \"\'\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("'","'")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\\"\" == \"\\\"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("\"","\"")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"`\" == \"`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`","`")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("``","``")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("`s1`","`s1`")))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1,s1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" == \"{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}\" != \"{s2}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", ""] }, s1),String.raw({ raw: ["", ""] }, s2))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" == \"a{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["a", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}\" != \"b{s1}\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", ""] }, s1),String.raw({ raw: ["b", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" == \"{s1}a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "a"] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"{s1}a\" != \"{s1}b\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["", "a"] }, s1),String.raw({ raw: ["", "b"] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'{s1}\" == \"`\'{s1}\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["`'", ""] }, s1),String.raw({ raw: ["`'", ""] }, s1))))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["a", "b", "c"] }, s1, s2),String.raw({ raw: ["a", "b", "c"] }, s1, s2))))};
+    $helpers.assert($helpers.eq("", ""), "\"\" == \"\"");
+    $helpers.assert($helpers.eq("'", "'"), "\"\'\" == \"\'\"");
+    $helpers.assert($helpers.eq("\"", "\""), "\"\\\"\" == \"\\\"\"");
+    $helpers.assert($helpers.eq("`", "`"), "\"`\" == \"`\"");
+    $helpers.assert($helpers.eq("``", "``"), "\"``\" == \"``\"");
+    $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
+    $helpers.assert($helpers.eq(s1, s1), "s1 == s1");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s1)), "\"{s1}\" == \"{s1}\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s2)), "\"{s1}\" != \"{s2}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["a", ""] }, s1)), "\"a{s1}\" == \"a{s1}\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["b", ""] }, s1)), "\"a{s1}\" != \"b{s1}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "a"] }, s1)), "\"{s1}a\" == \"{s1}a\"");
+    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "b"] }, s1)), "\"{s1}a\" != \"{s1}b\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, s1), String.raw({ raw: ["`'", ""] }, s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
+    $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, s1, s2), String.raw({ raw: ["a", "b", "c"] }, s1, s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:assert works inflight", new $Closure1(this, "$Closure1"));
   }
 }

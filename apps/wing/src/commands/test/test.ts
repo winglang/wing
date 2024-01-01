@@ -125,6 +125,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
       return testSimulator(synthDir, options);
     case BuiltinPlatform.TF_AZURE:
     case BuiltinPlatform.TF_AWS:
+    case BuiltinPlatform.TF_GCP:
       return testTf(synthDir, options);
     case BuiltinPlatform.AWSCDK:
       return testAwsCdk(synthDir, options);
@@ -282,7 +283,7 @@ async function testSimulator(synthDir: string, options: TestOptions) {
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = pickOneTestPerEnvironment(filterTests(tests, testFilter));
+  const filteredTests = filterTests(tests, testFilter);
 
   const results = await runTestsWithRetry(testRunner, filteredTests, retry ?? 0);
 
@@ -304,7 +305,8 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
   const { clean, testFilter, retry, platform = [BuiltinPlatform.SIM] } = options;
 
   try {
-    if (!isTerraformInstalled(synthDir)) {
+    const installed = await isTerraformInstalled(synthDir);
+    if (!installed) {
       throw new Error(
         "Terraform is not installed. Please install Terraform to run tests in the cloud."
       );
@@ -323,7 +325,7 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
+      const filteredTests = filterTests(allTests, testFilter);
       return [runner, filteredTests];
     });
 
@@ -373,7 +375,7 @@ async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.T
       const runner = new TestRunnerClient(testArns);
 
       const allTests = await runner.listTests();
-      const filteredTests = pickOneTestPerEnvironment(filterTests(allTests, testFilter));
+      const filteredTests = filterTests(allTests, testFilter);
       return [runner, filteredTests];
     });
 
@@ -438,6 +440,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
 const targetFolder: Record<string, string> = {
   [BuiltinPlatform.TF_AWS]: "shared-aws",
   [BuiltinPlatform.TF_AZURE]: "shared-azure",
+  [BuiltinPlatform.TF_GCP]: "shared-gcp",
 };
 
 async function cleanupTf(synthDir: string) {
@@ -469,50 +472,6 @@ async function terraformOutput(synthDir: string, name: string) {
     throw new Error(`terraform output ${name} not found`);
   }
   return parsed[name].value;
-}
-
-export function pickOneTestPerEnvironment(testPaths: string[]) {
-  // Given a list of test paths like so:
-  //
-  // root/Default/env0/a/b/test:test1
-  // root/Default/env0/d/e/f/test:test2
-  // root/Default/env0/g/test:test3
-  // root/Default/env1/a/b/test:test1
-  // root/Default/env1/d/e/f/test:test2
-  // root/Default/env1/g/test:test3
-  // root/Default/env2/a/b/test:test1
-  // root/Default/env2/d/e/f/test:test2
-  // root/Default/env2/g/test:test3
-  //
-  // This function returns a list of test paths which uses each test name
-  // exactly once and each "env" exactly once. In this case, the result would
-  // be:
-  //
-  // root/Default/env0/a/b/test:test1
-  // root/Default/env1/d/e/f/test:test2
-  // root/Default/env2/g/test:test3
-
-  const tests = new Map<string, string>();
-  const envs = new Set<string>();
-
-  for (const testPath of testPaths) {
-    const testSuffix = testPath.substring(testPath.indexOf("env") + 1); // "<env #>/<path to test>"
-    const env = testSuffix.substring(0, testSuffix.indexOf("/")); // "<env #>"
-    const testName = testSuffix.substring(testSuffix.indexOf("/") + 1); // "<path to test>"
-
-    if (envs.has(env)) {
-      continue;
-    }
-
-    if (tests.has(testName)) {
-      continue;
-    }
-
-    tests.set(testName, testPath);
-    envs.add(env);
-  }
-
-  return Array.from(tests.values());
 }
 
 function sortTests(a: std.TestResult, b: std.TestResult) {

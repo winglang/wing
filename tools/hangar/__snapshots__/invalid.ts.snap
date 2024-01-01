@@ -47,29 +47,49 @@ error: Cannot override private method \\"method\\" of \\"Bar\\"
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:109:9
     |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
 109 | log(foo.protected_field);
     |         ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:111:9
     |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
 111 | log(foo.private_field);
     |         ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:115:5
     |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
 115 | Foo.protected_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:117:5
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 117 | Foo.private_static_method();
     |     ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot override public method \\"public_method\\" of \\"Foo\\" with a private method
@@ -117,92 +137,157 @@ error: Cannot override private method \\"private_method\\" of \\"Foo\\"
 error: Cannot access private member \\"private_field\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:61:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 61 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Bar\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:66:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 66 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Bar\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:74:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 74 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:84:14
    |
+ 9 |   private_field: str;
+   |   ------------- defined here
+   .
 84 |     log(this.private_field);
    |              ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Baz\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:89:10
    |
+49 |   private_method() {}
+   |   -------------- defined here
+   .
 89 |     this.private_method();
    |          ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Baz\\"
+   |
+   = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Baz\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
    --> ../../../examples/tests/invalid/access_modifiers.test.w:97:9
    |
+54 |   static private_static_method() {}
+   |          --------------------- defined here
+   .
 97 |     Foo.private_static_method();
    |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+   |
+   = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Bar\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:102:9
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 102 |     Bar.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Bar\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Bar\\"
 
 
 error: Cannot access protected member \\"protected_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:123:13
     |
+  8 |   protected protected_field: str;
+    |             --------------- defined here
+    .
 123 |     log(foo.protected_field);
     |             ^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_field\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_field\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:125:13
     |
+  9 |   private_field: str;
+    |   ------------- defined here
+    .
 125 |     log(foo.private_field);
     |             ^^^^^^^^^^^^^ Cannot access private member \\"private_field\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_field\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:129:9
     |
+ 47 |   protected protected_method() {}
+    |             ---------------- defined here
+    .
 129 |     foo.protected_method();
     |         ^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:131:9
     |
+ 49 |   private_method() {}
+    |   -------------- defined here
+    .
 131 |     foo.private_method();
     |         ^^^^^^^^^^^^^^ Cannot access private member \\"private_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:137:9
     |
+ 53 |   protected static protected_static_method() {}
+    |                    ----------------------- defined here
+    .
 137 |     Foo.protected_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access protected member \\"protected_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"protected_static_method\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Foo\\"
 
 
 error: Cannot access private member \\"private_static_method\\" of \\"Foo\\"
     --> ../../../examples/tests/invalid/access_modifiers.test.w:139:9
     |
+ 54 |   static private_static_method() {}
+    |          --------------------- defined here
+    .
 139 |     Foo.private_static_method();
     |         ^^^^^^^^^^^^^^^^^^^^^ Cannot access private member \\"private_static_method\\" of \\"Foo\\"
+    |
+    = hint: the definition of \\"private_static_method\\" needs a broader access modifier like \\"pub\\" or \\"protected\\" to be used outside of \\"Foo\\"
 
 
  
@@ -816,14 +901,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello {name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
   |  
   = hint: expected phase to be inflight, but got preflight instead
 
@@ -1163,6 +1248,21 @@ exports[`extern.test.w 1`] = `
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
   |   ^^^^^^^^^^^^^^^^^ File not found: \\"./sad.js\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`extern_above.test.w 1`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
+  --> ../../../examples/tests/invalid/extern_above.test.w:2:3
+  |
+2 |   extern \\"../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
 
 
  
@@ -1904,25 +2004,25 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:13:12
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+36 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:34:13
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
-34 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+43 |     q.push(\\"push!\\");
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:47:13
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
-47 |     let b = this.array.at(1);
-   |             ^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+48 |     assert(b.list().length == 0);
+   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -1933,18 +2033,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:13:12
+"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+32 |     q.push(\\"push!\\");
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:18:12
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
-18 |     return globalQueue;
-   |            ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+35 |     q2.push(\\"push!\\");
+   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -1955,18 +2055,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:13:13
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
-13 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:17:13
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
-17 |     let y = globalB;
-   |             ^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+19 |     y.put(\\"boom\\", \\"shakalaka\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -1982,6 +2082,20 @@ exports[`interface.test.w 1`] = `
    |
 30 |   bar: str;
    |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Access modifiers are not allowed in interfaces
+   --> ../../../examples/tests/invalid/interface.test.w:36:3
+   |
+36 |   pub method2(): str;  
+   |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/interface.test.w:36:14
+   |
+36 |   pub method2(): str;  
+   |              ^^ Unknown parser error
 
 
 error: Unknown symbol \\"IB\\"
@@ -2052,6 +2166,8 @@ exports[`jsii_access_modifiers.test.w 1`] = `
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
    |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   |
+   = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
  
@@ -2224,6 +2340,24 @@ exports[`json_static.test.w 1`] = `
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
   |          ^^^ Unknown symbol \\"set\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`missing_return.test.w 1`] = `
+"error: A function whose return type is \\"str\\" must return a value.
+  --> ../../../examples/tests/invalid/missing_return.test.w:1:40
+  |  
+1 |   let returnString = inflight (): str => {
+  | /----------------------------------------^
+2 | |   log(\\"i am not going to return anything!\\");
+3 | | };
+  | \\\\-^ A function whose return type is \\"str\\" must return a value.
 
 
  
@@ -2904,11 +3038,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/resource_captures.test.w:13:13
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/resource_captures.test.w:15:5
    |
-13 |     let b = this.bucket;
-   |             ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     b.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -3046,13 +3180,6 @@ error: Inflight classes cannot have a scope
    |
 17 |   new InflightClass() in pc;
    |                          ^^ Inflight classes cannot have a scope
-
-
-error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/scope_and_id.test.w:17:26
-   |
-17 |   new InflightClass() in pc;
-   |                          ^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -3322,6 +3449,20 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
    |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
+error: struct \\"PreflightStruct\\" must be declared at the top-level of a file
+   --> ../../../examples/tests/invalid/structs.test.w:51:10
+   |
+51 |   struct PreflightStruct {
+   |          ^^^^^^^^^^^^^^^ struct \\"PreflightStruct\\" must be declared at the top-level of a file
+
+
+error: struct \\"InflightStruct\\" must be declared at the top-level of a file
+   --> ../../../examples/tests/invalid/structs.test.w:58:10
+   |
+58 |   struct InflightStruct {
+   |          ^^^^^^^^^^^^^^ struct \\"InflightStruct\\" must be declared at the top-level of a file
+
+
  
  
 Tests 1 failed (1)
@@ -3563,18 +3704,18 @@ error: Unknown symbol \\"unknown\\"
    | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
-error: Unknown symbol \\"assert\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
-   |
-20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Unknown symbol \\"assert\\"
-
-
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:24
    |
 20 |     this.bucket.assert(2 + \\"2\\");
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unknown symbol \\"assert\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
+   |
+20 |     this.bucket.assert(2 + \\"2\\");
+   |                 ^^^^^^ Unknown symbol \\"assert\\"
 
 
 error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
@@ -3653,6 +3794,27 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'void
   |
 7 | let y = 5 + log(\\"hello\\");
   |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:11:5
+   |
+11 | let z = returnsNothing();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Cannot assign expression of type \\"void\\" to a variable
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:5
+   |
+15 | let w: str? = returnsNothing2();
+   |     ^ Cannot assign expression of type \\"void\\" to a variable
+
+
+error: Expected type to be \\"str?\\", but got \\"void\\" instead
+   --> ../../../examples/tests/invalid/void_in_expression_position.test.w:15:15
+   |
+15 | let w: str? = returnsNothing2();
+   |               ^^^^^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"void\\" instead
 
 
  

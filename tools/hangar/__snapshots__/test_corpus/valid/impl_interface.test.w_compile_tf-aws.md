@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $x }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $x }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $i3 }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,7 +32,7 @@ module.exports = function({ $i3 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: i3.method2(\"hello\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $i3.method2("hello")),"hello")))};
+      $helpers.assert($helpers.eq((await $i3.method2("hello")), "hello"), "i3.method2(\"hello\") == \"hello\"");
     }
   }
   return $Closure2;
@@ -41,6 +43,7 @@ module.exports = function({ $i3 }) {
 ## inflight.A-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class A {
     constructor({  }) {
@@ -60,6 +63,7 @@ module.exports = function({  }) {
 ## inflight.Dog-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Dog {
     constructor({  }) {
@@ -76,6 +80,7 @@ module.exports = function({  }) {
 ## inflight.Terrier-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Dog }) {
   class Terrier extends $Dog {
     constructor({  }) {
@@ -93,6 +98,7 @@ module.exports = function({ $Dog }) {
 ## inflight.r-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class r {
     constructor({  }) {
@@ -115,20 +121,7 @@ module.exports = function({  }) {
       "stackName": "root",
       "version": "0.17.0"
     },
-    "outputs": {
-      "root": {
-        "Default": {
-          "cloud.TestRunner": {
-            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS"
-          }
-        }
-      }
-    }
-  },
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]"
-    }
+    "outputs": {}
   },
   "provider": {
     "aws": [
@@ -146,6 +139,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -331,9 +325,9 @@ class $Root extends $stdlib.std.Resource {
     const i3 = ((() => {
       return new r(this, "r");
     })());
-    {((cond) => {if (!cond) throw new Error("assertion failed: i3.method1(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i3.method1(1)),1)))};
+    $helpers.assert($helpers.eq((i3.method1(1)), 1), "i3.method1(1) == 1");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:can call inherited inflight interface method", new $Closure2(this, "$Closure2"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: i3.method3([1, 2, 3]) == [1, 2, 3]")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i3.method3([1, 2, 3])),[1, 2, 3])))};
+    $helpers.assert($helpers.eq((i3.method3([1, 2, 3])), [1, 2, 3]), "i3.method3([1, 2, 3]) == [1, 2, 3]");
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
   }

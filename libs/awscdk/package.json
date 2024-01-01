@@ -20,7 +20,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "aws-cdk-lib": "^2.64.0",
+    "aws-cdk-lib": "^2.116.0",
     "constructs": "~10.2.69",
     "safe-stable-stringify": "^2.4.3",
     "@winglang/sdk": "workspace:^"

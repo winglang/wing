@@ -21,12 +21,21 @@ export class Api extends cloud.Api implements ISimulatorResource {
     { func: Function; mapping: EventMapping }
   > = {};
 
+  private readonly endpoint: cloud.Endpoint;
+
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
+
+    this.endpoint = new cloud.Endpoint(
+      this,
+      "Endpoint",
+      simulatorAttrToken(this, "url"),
+      { label: `Api ${this.node.path}` }
+    );
   }
 
-  public get url(): string {
-    return simulatorAttrToken(this, "url");
+  protected get _endpoint(): cloud.Endpoint {
+    return this.endpoint;
   }
 
   private createOrGetFunction(
@@ -56,6 +65,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
     Node.of(fn).title = `${method.toUpperCase()} ${path}`;
+    Node.of(fn).hidden = true;
 
     const eventMapping = new EventMapping(
       this,
@@ -215,6 +225,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const schema: ApiSchema = {
       type: cloud.API_FQN,
       path: this.node.path,
+      addr: this.node.addr,
       props: {
         openApiSpec: this._getOpenApiSpec(),
         corsHeaders: this._generateCorsHeaders(this.corsOptions),

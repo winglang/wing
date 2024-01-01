@@ -2461,7 +2461,7 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 ### 6.1 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/string).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 

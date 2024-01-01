@@ -2,11 +2,6 @@
 
 exports[`counter name valid 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "TheAmazing-Counter_01": {
@@ -63,29 +58,6 @@ exports[`counter name valid 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -124,11 +96,6 @@ exports[`counter name valid 2`] = `
 
 exports[`counter with initial value 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "Counter": {
@@ -185,29 +152,6 @@ exports[`counter with initial value 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -246,11 +190,6 @@ exports[`counter with initial value 2`] = `
 
 exports[`dec() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -305,7 +244,7 @@ exports[`dec() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -447,29 +386,6 @@ exports[`dec() policy statement 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -508,11 +424,6 @@ exports[`dec() policy statement 2`] = `
 
 exports[`default counter behavior 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "Counter": {
@@ -551,11 +462,6 @@ my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\
 
 exports[`function with a counter binding 2`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -610,7 +516,7 @@ exports[`function with a counter binding 2`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -752,29 +658,6 @@ exports[`function with a counter binding 3`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -813,11 +696,6 @@ exports[`function with a counter binding 3`] = `
 
 exports[`inc() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -872,7 +750,7 @@ exports[`inc() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -1014,29 +892,6 @@ exports[`inc() policy statement 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -1075,11 +930,6 @@ exports[`inc() policy statement 2`] = `
 
 exports[`peek() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -1134,7 +984,7 @@ exports[`peek() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -1276,29 +1126,6 @@ exports[`peek() policy statement 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -1337,11 +1164,6 @@ exports[`peek() policy statement 2`] = `
 
 exports[`replace invalid character from counter name 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_dynamodb_table": {
       "TheAmazingCounter01": {
@@ -1398,29 +1220,6 @@ exports[`replace invalid character from counter name 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
-              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -1459,11 +1258,6 @@ exports[`replace invalid character from counter name 2`] = `
 
 exports[`set() policy statement 1`] = `
 {
-  "output": {
-    "WING_TEST_RUNNER_FUNCTION_IDENTIFIERS": {
-      "value": "[]",
-    },
-  },
   "resource": {
     "aws_cloudwatch_log_group": {
       "Function_CloudwatchLogGroup_ABDCF4C4": {
@@ -1518,7 +1312,7 @@ exports[`set() policy statement 1`] = `
         "memory_size": 1024,
         "publish": true,
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
         "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
         "timeout": 60,
@@ -1659,29 +1453,6 @@ exports[`set() policy statement 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
-              },
-              "cloud.TestRunner": {
-                "children": {
-                  "TestFunctionArns": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformOutput",
-                      "version": "0.17.0",
-                    },
-                    "id": "TestFunctionArns",
-                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
-                  },
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.2.70",
-                },
-                "display": {
-                  "description": "A suite of APIs for running tests and collecting results.",
-                  "hidden": true,
-                  "title": "TestRunner",
-                },
-                "id": "cloud.TestRunner",
-                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

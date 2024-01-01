@@ -88,6 +88,11 @@
       "type": "build"
     },
     {
+      "name": "@types/node",
+      "version": "^18.17.13",
+      "type": "devenv"
+    },
+    {
       "name": "chalk",
       "type": "runtime"
     },

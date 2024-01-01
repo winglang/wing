@@ -79,16 +79,18 @@ Now, utilize the Winglang static plugin for injecting the S3 backend configurati
 ```javascript
 // plugin.static-backend.js
 
-exports.postSynth = function(config) {
-  config.terraform.backend = {
-    s3: {
-      bucket: "<bucket-name>",
-      region: "<region>",
-      key: "path/to/my/key/terraform.tfstate",
-      dynamodb_table: "<table-name>"
+exports.Platform = class TFBackend {
+  postSynth(config) {
+    config.terraform.backend = {
+      s3: {
+        bucket: "<bucket-name>",
+        region: "<region>",
+        key: "path/to/my/key/terraform.tfstate",
+        dynamodb_table: "<table-name>"
+      }
     }
+    return config;
   }
-  return config;
 }
 ```
 

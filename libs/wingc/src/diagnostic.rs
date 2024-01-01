@@ -290,13 +290,37 @@ pub struct DiagnosticAnnotation {
 	pub span: WingSpan,
 }
 
+impl DiagnosticAnnotation {
+	pub fn new(msg: impl ToString, span: &impl Spanned) -> Self {
+		Self {
+			message: msg.to_string(),
+			span: span.span(),
+		}
+	}
+}
+
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		if let Some(span) = &self.span {
-			write!(f, "Error at {} | {}", span, self.message.bold().white())
+			write!(f, "Error at {} | {}", span, self.message.bold().white())?;
 		} else {
-			write!(f, "Error | {}", self.message.bold().white())
+			write!(f, "Error | {}", self.message.bold().white())?;
 		}
+		if !self.annotations.is_empty() {
+			if self.annotations.len() == 1 {
+				write!(f, " ({} annotation)", self.annotations.len())?;
+			} else {
+				write!(f, " ({} annotations)", self.annotations.len())?;
+			}
+		}
+		if !self.hints.is_empty() {
+			if self.hints.len() == 1 {
+				write!(f, " ({} hint)", self.hints.len())?;
+			} else {
+				write!(f, " ({} hints)", self.hints.len())?;
+			}
+		}
+		Ok(())
 	}
 }
 
