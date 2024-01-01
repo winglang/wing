@@ -33,7 +33,7 @@ test "signedUrl GET (explicit)" {
   expect.equal(output, VALUE);
 }
 
-test "signedUrl GET with unexisting key" {
+test "signedUrl GET with non-existent key" {
   let assertThrows = (expected: str, block: (): void) => {
     let var error = false;
     try {
