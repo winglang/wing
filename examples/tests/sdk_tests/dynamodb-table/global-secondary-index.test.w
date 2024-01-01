@@ -39,10 +39,10 @@ let table2 = new ex.DynamodbTable(
 
 test "Global secondary index" {
     let idCreated = [
-        {id: "zuegksw", createdAt: 1703412771},
-        {id: "dirnfhw", createdAt: 1703413971},
-        {id: "pdkeruf", createdAt: 1703422171},
-        {id: "azjekfw", createdAt: 1703432071},
+        {id: "zuegksw", createdAt: 1},
+        {id: "dirnfhw", createdAt: 3},
+        {id: "pdkeruf", createdAt: 5},
+        {id: "azjekfw", createdAt: 7},
     ];
 
     for i in idCreated {
