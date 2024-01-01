@@ -1271,8 +1271,8 @@ importers:
         specifier: 12.14.0
         version: 12.14.0
       '@google-cloud/datastore':
-        specifier: 8.2.2
-        version: 8.2.2
+        specifier: 8.3.0
+        version: 8.3.0
       '@google-cloud/storage':
         specifier: 6.9.5
         version: 6.9.5
@@ -5612,8 +5612,8 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: true
 
-  /@google-cloud/datastore@8.2.2:
-    resolution: {integrity: sha512-XnxJrR438nJ3h/t+lZnPub7wI+yHZj6Y12xQcoO9GN3E9BRTVY33AkpGIjUpGLxWQVeRGblMU1x80Nbll3DLng==}
+  /@google-cloud/datastore@8.3.0:
+    resolution: {integrity: sha512-zd535qNbj0LJOEsEY5ovjj5uKqrkYxHnzWsHfuAJJLXIYV9Cfdynvnn7mPpDk0XbWWM6hfbe4IoL4aSUTVhYjg==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@google-cloud/promisify': 4.0.0
@@ -10813,6 +10813,10 @@ packages:
     resolution: {integrity: sha512-Vrjz5N5Ia4SEzWWgIVwnHNEnb1UE1XMkvY5DGXrAeOGE9imk0hgTHh5GyDjLDJi9OTCn9oo9dXH1uToK1VRfrg==}
     dev: true
 
+  /@types/long@4.0.2:
+    resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
+    dev: false
+
   /@types/mdast@4.0.3:
     resolution: {integrity: sha512-LsjtqsyF+d2/yFOYaN22dHZI1Cpwkrj+g06G8+qtUKlhovPW89YhqSnfKtMbkgmEtYpH2gydRNULd6y8mciAFg==}
     dependencies:
@@ -14666,7 +14670,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231230
+      typescript: 5.4.0-dev.20240101
     dev: true
 
   /dset@3.1.2:
@@ -24358,8 +24362,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231230:
-    resolution: {integrity: sha512-H0/vWwH9SqG9CgKGESiHv+JimN/MjQAmfZDzmnPp8kIjQiwvyaScmIMYqkOkB6nPTblagwfZ+PrTMaZPboIC3A==}
+  /typescript@5.4.0-dev.20240101:
+    resolution: {integrity: sha512-fIfemSahB5H/1Lc+kv3AEaI1UZc2SDtl0Qjk+SkfKRxyS2EdujUWJp62PzPeVflfCxyhpAuAF2M+WIR1Fo/ByA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
