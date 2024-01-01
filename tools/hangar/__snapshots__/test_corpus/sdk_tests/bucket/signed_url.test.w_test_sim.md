@@ -11,6 +11,7 @@ It might not be implemented yet.
 7 | test "signedUrl" {
   |                  ^
 at _registerOnLift (<ABSOLUTE>:LINE:COL)
+at (<ABSOLUTE>:LINE:COL)
  
  
 Tests 1 unsupported (1)
