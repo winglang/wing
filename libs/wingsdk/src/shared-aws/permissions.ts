@@ -213,7 +213,8 @@ export function calculateBucketPermissions(
   // deleting an object
   if (
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
-    ops.includes(cloud.BucketInflightMethods.DELETE)
+    ops.includes(cloud.BucketInflightMethods.DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.RENAME)
   ) {
     actions.push(
       "s3:DeleteObject*",
@@ -223,7 +224,10 @@ export function calculateBucketPermissions(
   }
 
   // copying an object
-  if (ops.includes(cloud.BucketInflightMethods.COPY)) {
+  if (
+    ops.includes(cloud.BucketInflightMethods.COPY) ||
+    ops.includes(cloud.BucketInflightMethods.RENAME)
+  ) {
     actions.push("s3:CopyObject");
   }
   if (actions.length === 0) {

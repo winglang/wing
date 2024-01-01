@@ -98,6 +98,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
       cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
 
