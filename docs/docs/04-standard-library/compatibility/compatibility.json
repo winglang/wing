@@ -130,7 +130,7 @@
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": false, "issue": 4398 },
+      "tf-gcp": { "implemented": true },
       "awscdk": { "implemented": true }
     },
     "list": {
