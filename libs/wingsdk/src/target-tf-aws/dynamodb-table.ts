@@ -65,6 +65,12 @@ export class DynamodbTable
       ...calculateDynamodbTablePermissions(this.table.arn, ops)
     );
 
+    if (this.table.globalSecondaryIndex) {
+      host.addPolicyStatements(
+        ...calculateDynamodbTablePermissions(`${this.table.arn}/index/*`, ops)
+      );
+    }
+
     host.addEnvironment(this.envName(), this.table.name);
 
     super.onLift(host, ops);
