@@ -185,15 +185,19 @@ impl Fold for ClosureTransformer {
 
 				// class_init_body :=
 				// ```
-				// nodeof(this).hidden = true;
+				// std.Node.of(this).hidden = true;
 				// ```
 				let std_display_of_this = Expr::new(
 					ExprKind::Call {
 						callee: CalleeKind::Expr(Box::new(Expr::new(
-							ExprKind::Reference(Reference::Identifier(Symbol::new(
-								"nodeof",
-								WingSpan::for_file(file_id),
-							))),
+							ExprKind::Reference(Reference::TypeMember {
+								type_name: UserDefinedType {
+									root: Symbol::new("std", WingSpan::for_file(file_id)),
+									fields: vec![Symbol::new("Node", WingSpan::for_file(file_id))],
+									span: WingSpan::for_file(file_id),
+								},
+								property: Symbol::new("of", WingSpan::for_file(file_id)),
+							}),
 							WingSpan::for_file(file_id),
 						))),
 						arg_list: ArgList {
