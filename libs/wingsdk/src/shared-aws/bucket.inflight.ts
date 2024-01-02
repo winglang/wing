@@ -357,11 +357,11 @@ export class BucketClient implements IBucketClient {
     let command;
 
     // Set default action to GET if not provided
-    const action = opts?.action ?? BucketSignedUrlAction.GET;
+    const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
 
     // Create the AWS S3 command based on the action method
     switch (action) {
-      case BucketSignedUrlAction.GET:
+      case BucketSignedUrlAction.DOWNLOAD:
         if (!(await this.exists(key))) {
           throw new Error(
             `Cannot provide signed url for a non-existent key (key=${key})`
@@ -372,7 +372,7 @@ export class BucketClient implements IBucketClient {
           Key: key,
         });
         break;
-      case BucketSignedUrlAction.PUT:
+      case BucketSignedUrlAction.UPLOAD:
         command = new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,

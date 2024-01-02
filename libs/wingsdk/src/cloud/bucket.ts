@@ -253,17 +253,17 @@ export interface BucketDeleteOptions {
 }
 
 /**
- * Specifies the HTTP method permitted by a presigned URL for a bucket.
+ * Specifies the action permitted by a presigned URL for a bucket.
  */
 export enum BucketSignedUrlAction {
   /**
-   * Represents a GET request for a presigned URL, allowing read access for an object in the bucket.
+   * Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
    */
-  GET = "GET",
+  DOWNLOAD = "DOWNLOAD",
   /**
-   * Represents a PUT request for a presigned URL, allowing write access for an object in the bucket.
+   * Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
    */
-  PUT = "PUT",
+  UPLOAD = "UPLOAD",
 }
 
 /**
@@ -278,7 +278,7 @@ export interface BucketSignedUrlOptions {
 
   /**
    * The action allowed by the signed URL.
-   * @default BucketSignedUrlAction.GET
+   * @default BucketSignedUrlAction.DOWNLOAD
    */
   readonly action?: BucketSignedUrlAction;
 }

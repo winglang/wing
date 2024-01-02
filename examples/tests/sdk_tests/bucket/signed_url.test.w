@@ -25,7 +25,7 @@ test "signedUrl GET (explicit)" {
 
   bucket.put(KEY, VALUE);
 
-  let getSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.GET });
+  let getSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.DOWNLOAD });
 
   // Download file from private bucket using GET presigned URL
   let output = util.shell("curl \"{getSignedUrl}\"");
@@ -60,7 +60,7 @@ test "signedUrl PUT" {
   let tempFile = fs.join(tempDir, KEY);
   fs.writeFile(tempFile, VALUE);
 
-  let putSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.PUT });
+  let putSignedUrl = bucket.signedUrl(KEY, { action: cloud.BucketSignedUrlAction.UPLOAD });
 
   // Upload file to private bucket using PUT presigned URL
   util.shell("curl -X PUT -T \"{tempFile}\" \"{putSignedUrl}\"");
