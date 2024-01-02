@@ -19,7 +19,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
-import { corsOptionsMethod } from "../shared-aws/api.cors";
+import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -44,7 +44,7 @@ export class Api extends cloud.Api implements IAwsApi {
       cors: this.corsOptions,
     });
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
-      label: `Endpoint for Api ${this.node.path}`,
+      label: `Api ${this.node.path}`,
     });
   }
 
@@ -239,6 +239,7 @@ export class Api extends cloud.Api implements IAwsApi {
         App.of(this).makeId(this, prefix),
         newInflight
       );
+      Node.of(handler).hidden = true;
       this.handlers[inflight._hash] = handler;
     }
 
@@ -320,21 +321,21 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
+    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          const injectOptionsMethod = (openApiSpec: OpenApiSpec) => {
-            Object.keys(openApiSpec.paths).forEach(function (key) {
-              if (!("options" in openApiSpec.paths[key]) && props.cors) {
-                openApiSpec.paths[key].options = corsOptionsMethod(props.cors);
-              }
-            });
-
+          const injectGreedy404Handler = (openApiSpec: OpenApiSpec) => {
+            openApiSpec.paths = {
+              ...openApiSpec.paths,
+              ...defaultResponse,
+            };
             return openApiSpec;
           };
-          return JSON.stringify(injectOptionsMethod(props.getApiSpec()));
+          return JSON.stringify(injectGreedy404Handler(props.getApiSpec()));
         },
       }),
       lifecycle: {

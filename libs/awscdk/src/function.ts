@@ -36,14 +36,17 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-        ? undefined // Negative value means Infinite retention
-        : props.logRetentionDays;
+          ? undefined // Negative value means Infinite retention
+          : props.logRetentionDays;
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
       code: Code.fromAsset(resolve(bundle.directory)),
       runtime: Runtime.NODEJS_20_X,
-      environment: this.env,
+      environment: {
+        NODE_OPTIONS: "--enable-source-maps",
+        ...this.env
+      },
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(1),
@@ -83,7 +86,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** @internal */
   public _toInflight(): string {
     return core.InflightClient.for(
-      __dirname.replace("target-awscdk", "shared-aws"),
+      __dirname,
       __filename,
       "FunctionClient",
       [`process.env["${this.envName()}"], "${this.node.path}"`]

@@ -357,4 +357,5 @@ export interface EndpointSchema extends BaseResourceSchema {
     /** Browser support of the Endpoint. */
     readonly browserSupport: boolean | undefined;
   };
+  readonly attrs: EndpointAttributes & BaseResourceAttributes;
 }

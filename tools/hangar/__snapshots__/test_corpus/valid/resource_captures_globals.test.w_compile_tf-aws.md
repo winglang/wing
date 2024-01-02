@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $res }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $res }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another }) {
   class $Closure2 {
     constructor({  }) {
@@ -30,7 +32,7 @@ module.exports = function({ $Another }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Another.myStaticMethod()),0)))};
+      $helpers.assert($helpers.eq((await $Another.myStaticMethod()), 0), "Another.myStaticMethod() == 0");
     }
   }
   return $Closure2;
@@ -41,6 +43,7 @@ module.exports = function({ $Another }) {
 ## inflight.Another-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $globalCounter }) {
   class Another {
     constructor({  }) {
@@ -53,7 +56,7 @@ module.exports = function({ $globalCounter }) {
       return (await $globalCounter.peek());
     }
     async $inflight_init() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $globalCounter.peek()),0)))};
+      $helpers.assert($helpers.eq((await $globalCounter.peek()), 0), "globalCounter.peek() == 0");
     }
   }
   return Another;
@@ -64,6 +67,7 @@ module.exports = function({ $globalCounter }) {
 ## inflight.First-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class First {
     constructor({  }) {
@@ -77,6 +81,7 @@ module.exports = function({  }) {
 ## inflight.MyResource-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Another, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
     constructor({ $this_localTopic }) {
@@ -85,16 +90,16 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
     async myPut() {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key", "value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalStr,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalBool,true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalNum,42)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_,"hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__,(-5))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($globalAnother_myField,"hello!")))};
+      $helpers.assert($helpers.eq($globalStr, "hello"), "globalStr == \"hello\"");
+      $helpers.assert($helpers.eq($globalBool, true), "globalBool == true");
+      $helpers.assert($helpers.eq($globalNum, 42), "globalNum == 42");
+      $helpers.assert($helpers.eq($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_, "hello"), "globalArrayOfStr.at(0) == \"hello\"");
+      $helpers.assert($helpers.eq($__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__, (-5)), "globalMapOfNum.get(\"a\") == -5");
+      $helpers.assert($_globalSetOfStr_has__a___, "globalSetOfStr.has(\"a\")");
+      $helpers.assert($helpers.eq($globalAnother_myField, "hello!"), "globalAnother.myField == \"hello!\"");
       (await $globalAnother_first_myResource.put("key", "value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await $Another.myStaticMethod()) > 0))};
+      $helpers.assert(((await $globalAnother.myMethod()) > 0), "globalAnother.myMethod() > 0");
+      $helpers.assert(((await $Another.myStaticMethod()) > 0), "Another.myStaticMethod() > 0");
     }
   }
   return MyResource;
@@ -105,6 +110,7 @@ module.exports = function({ $Another, $__arr__index_______if__index___0____index
 ## inflight.R-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
     constructor({  }) {
@@ -351,6 +357,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
