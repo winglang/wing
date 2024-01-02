@@ -867,7 +867,7 @@ action: BucketSignedUrlAction;
 ```
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a>
-- *Default:* BucketSignedUrlAction.GET
+- *Default:* BucketSignedUrlAction.DOWNLOAD
 
 The action allowed by the signed URL.
 
@@ -1032,27 +1032,27 @@ Update.
 
 ### BucketSignedUrlAction <a name="BucketSignedUrlAction" id="@winglang/sdk.cloud.BucketSignedUrlAction"></a>
 
-Specifies the HTTP method permitted by a presigned URL for a bucket.
+Specifies the action permitted by a presigned URL for a bucket.
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.GET">GET</a></code> | Represents a GET request for a presigned URL, allowing read access for an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.PUT">PUT</a></code> | Represents a PUT request for a presigned URL, allowing write access for an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD">DOWNLOAD</a></code> | Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD">UPLOAD</a></code> | Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket. |
 
 ---
 
-##### `GET` <a name="GET" id="@winglang/sdk.cloud.BucketSignedUrlAction.GET"></a>
+##### `DOWNLOAD` <a name="DOWNLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD"></a>
 
-Represents a GET request for a presigned URL, allowing read access for an object in the bucket.
+Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
 
 ---
 
 
-##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.BucketSignedUrlAction.PUT"></a>
+##### `UPLOAD` <a name="UPLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD"></a>
 
-Represents a PUT request for a presigned URL, allowing write access for an object in the bucket.
+Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
 
 ---
 

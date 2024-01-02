@@ -527,7 +527,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the HTTP method permitted by a presigned URL for a bucket.\n- `GET`\n- `PUT`"
+    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD`\n- `UPLOAD`"
   sortText: jj|BucketSignedUrlAction
 - label: HttpMethod
   kind: 13
