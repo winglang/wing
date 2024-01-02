@@ -26,7 +26,7 @@ export class CounterClient implements ICounterClient {
     const [existingCounter] = await this.client.get(counterKey);
 
     // Determine the current value of the counter or use the initial value
-    const currentValue = existingCounter?.data?.count || this.initial;
+    const currentValue = existingCounter?.data?.count ?? this.initial;
 
     // Calculate the new value
     const newValue = currentValue + amount;
