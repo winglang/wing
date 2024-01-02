@@ -7,6 +7,11 @@ let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 let api = new cloud.Api();
 
+// just a comment that does nothing...
+
+let node = std.Node.of(bucket);
+node.description = "Would be nice to see me";
+
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
