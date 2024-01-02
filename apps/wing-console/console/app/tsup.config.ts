@@ -9,7 +9,6 @@ export default defineConfig({
   format: ["cjs"],
   env: {
     SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY ?? "",
-    WING_DISABLE_ANALYTICS: process.env.WING_DISABLE_ANALYTICS ?? "",
   },
   dts: true,
   clean: true,
