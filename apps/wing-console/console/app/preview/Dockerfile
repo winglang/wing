@@ -10,4 +10,4 @@ RUN npm init -y && npm install --no-package-lock ./dist/*-[0-9]*.[0-9]*.[0-9]*.t
 
 ENV WING_DISABLE_ANALYTICS=true
 
-ENTRYPOINT ["node", "dist/index.mjs"]
+ENTRYPOINT node dist/index.mjs
