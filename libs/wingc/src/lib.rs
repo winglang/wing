@@ -24,7 +24,7 @@ use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
 use type_check::type_reference_transform::TypeReferenceTransformer;
-use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check::{add_jsii_module_to_env, FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
@@ -113,7 +113,7 @@ const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
-// const WINGSDK_NODE: &'static str = "std.Node";
+const WINGSDK_NODE: &'static str = "std.Node";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
@@ -273,14 +273,46 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
-	tc.add_jsii_module_to_env(
+	add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],
 		&Symbol::global(WINGSDK_STD_MODULE),
 		None,
+		file_path,
+		types,
+		jsii_imports,
+		jsii_types,
 	);
+
+	let std_node_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_NODE);
+	let std_node = types
+		.libraries
+		.lookup_nested_str(&std_node_fqn, None)
+		.expect("std.Node not found in type system")
+		.0
+		.as_type()
+		.expect("std.Node was found but it's not a type");
+	add_builtin(
+		UtilityFunctions::Nodeof.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			this_type: None,
+			parameters: vec![FunctionParameter {
+				name: "construct".into(),
+				typeref: types.construct_interface(),
+				docs: Docs::with_summary("The construct to obtain the tree node of"),
+				variadic: false,
+			}],
+			return_type: std_node,
+			phase: Phase::Preflight,
+			js_override: Some("$helpers.nodeof($args$)".to_string()),
+			docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
+		}),
+		scope,
+		types,
+	);
+
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
 
 	tc.type_check_file_or_dir(file_path, scope);
 }

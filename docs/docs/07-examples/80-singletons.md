@@ -16,8 +16,8 @@ bring cloud;
 class SingletonBucket {
   pub static of(scope: std.IResource): cloud.Bucket {
     let uid = "SingletonBucket";
-    let root = std.Node.of(scope).root;
-    let rootNode = std.Node.of(root);
+    let root = nodeof(scope).root;
+    let rootNode = nodeof(root);
     return unsafeCast(rootNode.tryFindChild(uid)) ?? new cloud.Bucket() as uid in root;
   }
 }
