@@ -368,38 +368,46 @@ test("get object's metadata from bucket", async () => {
   });
 });
 
+test("copy non-existing object", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  await expect(client.copy(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY})`
+  );
+});
+
 test("copy objects within the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
   const SRC_VALUE = "hello world";
+
   const mockStorage = new MockStorage();
-  await mockStorage.bucket(BUCKET_NAME).file(SRC_KEY).save(SRC_VALUE);
-  const copySpy = vi.spyOn(
-    mockStorage.bucket(BUCKET_NAME).file(SRC_KEY),
-    "copy"
-  );
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME, mockStorage as any);
 
-  const response1 = await client.copy(SRC_KEY, SRC_KEY);
-  const response2 = await client.copy(SRC_KEY, DST_KEY);
+  await client.put(SRC_KEY, SRC_VALUE);
 
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
   // THEN
   expect(response1).toEqual(undefined);
-  expect(response2).toEqual(undefined);
+  expect(await client.get(SRC_KEY)).toBe(SRC_VALUE);
+  expect(await client.exists(DST_KEY)).toBe(false);
 
-  expect(copySpy).toHaveBeenCalledTimes(2);
-  expect(copySpy).toHaveBeenNthCalledWith(
-    1,
-    mockStorage.bucket(BUCKET_NAME).file(SRC_KEY)
-  );
-  expect(copySpy).toHaveBeenNthCalledWith(
-    2,
-    mockStorage.bucket(BUCKET_NAME).file(DST_KEY)
-  );
+  // WHEN
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+  // THEN
+  expect(response2).toEqual(undefined);
+  expect(await client.get(DST_KEY)).toBe(SRC_VALUE);
 });
 
 // TODO: implement signedUrl related tests
