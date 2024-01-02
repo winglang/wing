@@ -38,9 +38,12 @@ export class BucketClient implements IBucketClient {
   }
 
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    try {
+      const srcFile = this.bucket.file(srcKey);
+      await srcFile.copy(this.bucket.file(dstKey));
+    } catch (error) {
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+    }
   }
 
   /**
