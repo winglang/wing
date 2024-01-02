@@ -11,14 +11,16 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
     ops.includes(cloud.BucketInflightMethods.EXISTS) ||
     ops.includes(cloud.BucketInflightMethods.METADATA) ||
-    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.COPY)
   ) {
     permissions.push("storage.objects.get");
   }
 
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
-    ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.COPY)
   ) {
     permissions.push("storage.objects.create");
   }
@@ -27,7 +29,8 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.DELETE) ||
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
     ops.includes(cloud.BucketInflightMethods.PUT) ||
-    ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.COPY)
   ) {
     permissions.push("storage.objects.delete");
   }
