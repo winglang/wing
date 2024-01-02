@@ -129,6 +129,12 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Array",
 	"MutArray",
 
+	// wing global functions
+	"log",
+	"assert",
+	"unsafeCast",
+	"nodeof",
+
 	// nodejs globals used in emitted code
 	"require",
 	"module",
