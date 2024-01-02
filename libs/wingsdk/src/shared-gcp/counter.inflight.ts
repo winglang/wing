@@ -1,11 +1,7 @@
 import { Datastore } from "@google-cloud/datastore";
 import type { ICounterClient } from "../cloud";
 
-// const AMOUNT_TOKEN = "amount";
-// const INITIAL_VALUE_TOKEN = "initial";
-const COUNTER_ID = "counter";
-// const VALUE_ATTRIBUTE = "counter_value";
-// const SET_VALUE = "set_value";
+const DEFAULT_COUNTER_KEY = "counter";
 
 export class CounterClient implements ICounterClient {
   private readonly client: Datastore;
@@ -17,7 +13,7 @@ export class CounterClient implements ICounterClient {
     this.client = new Datastore({ databaseId: this.databaseName });
   }
 
-  public async inc(amount = 1, key = COUNTER_ID): Promise<number> {
+  public async inc(amount = 1, key = DEFAULT_COUNTER_KEY): Promise<number> {
     const kind = "Counter";
     const name = key;
     const counterKey = this.client.key([kind, name]);
@@ -46,15 +42,21 @@ export class CounterClient implements ICounterClient {
     return currentValue;
   }
 
-  public async dec(amount = 1, key: string = COUNTER_ID): Promise<number> {
+  public async dec(
+    amount = 1,
+    key: string = DEFAULT_COUNTER_KEY
+  ): Promise<number> {
     throw new Error(`Method not implemented. ${amount} ${key}`);
   }
 
-  public async peek(key: string = COUNTER_ID): Promise<number> {
+  public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
     throw new Error(`Method not implemented. ${key}`);
   }
 
-  public async set(value: number, key: string = COUNTER_ID): Promise<void> {
+  public async set(
+    value: number,
+    key: string = DEFAULT_COUNTER_KEY
+  ): Promise<void> {
     throw new Error(`Method not implemented. ${value} ${key}`);
   }
 }
