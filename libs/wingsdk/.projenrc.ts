@@ -10,11 +10,19 @@ const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
-  "google@~>4.63.1",
+  "google@~>5.10.0",
 ];
 
 // those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const SKIPPED_MODULES = [
+  "cloud",
+  "ex",
+  "std",
+  "simulator",
+  "core",
+  "platform",
+  "helpers",
+];
 const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
@@ -104,10 +112,10 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "mock-gcs@^1.0.0",
+    "mock-gcs@^1.2.0",
     "@types/express",
-    "aws-sdk-client-mock",
-    "aws-sdk-client-mock-jest",
+    "aws-sdk-client-mock@3.0.0",
+    "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",

@@ -5,7 +5,7 @@ import { Template } from "aws-cdk-lib/assertions";
  */
 export function sanitizeCode(code: string): string {
   function removeAbsolutePaths(text: string) {
-    const regex = /".+\/libs\/awscdk\/(.+)"/g;
+    const regex = /"[^"]+?\/libs\/awscdk\/(.+?)"/g;
 
     // replace first group with static text
     return text.replace(regex, '"[REDACTED]/awscdk/$1"');

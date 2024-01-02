@@ -30,3 +30,9 @@ interface INoProps {
   bar: str;
 //^^^^^^^^ interfaces can't have properties 
 }
+
+// interfaces can't have access modifiers in their method signatures
+interface IPointy {
+  pub method2(): str;  
+//^^^ Access modifiers are not allowed in interfaces
+}

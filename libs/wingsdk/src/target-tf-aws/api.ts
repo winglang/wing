@@ -44,7 +44,7 @@ export class Api extends cloud.Api implements IAwsApi {
       cors: this.corsOptions,
     });
     this.endpoint = new cloud.Endpoint(this, "Endpoint", this.api.url, {
-      label: `Endpoint for Api ${this.node.path}`,
+      label: `Api ${this.node.path}`,
     });
   }
 
@@ -239,6 +239,7 @@ export class Api extends cloud.Api implements IAwsApi {
         App.of(this).makeId(this, prefix),
         newInflight
       );
+      Node.of(handler).hidden = true;
       this.handlers[inflight._hash] = handler;
     }
 

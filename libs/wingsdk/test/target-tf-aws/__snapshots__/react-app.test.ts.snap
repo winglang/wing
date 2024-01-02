@@ -378,7 +378,8 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "description": "Website root/Default/Website/Website-host",
+                          "hidden": true,
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",
@@ -701,7 +702,8 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                           "version": "10.2.70",
                         },
                         "display": {
-                          "description": "Endpoint for Website root/Default/Website/Website-host",
+                          "description": "Website root/Default/Website/Website-host",
+                          "hidden": true,
                           "title": "Endpoint",
                         },
                         "id": "Endpoint",

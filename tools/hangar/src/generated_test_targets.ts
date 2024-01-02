@@ -60,11 +60,10 @@ export async function compileTest(
     }
     let fileContents = await fs.readFile(dotFile, "utf8");
 
-    // remove requires with absolute paths
-    fileContents = fileContents.replace(
-      /require\("(\/|\w:).*\/(.+)"\)/g,
-      'require("<ABSOLUTE_PATH>/$2")'
-    );
+    // ensure no absolute requires are included in the snapshot
+    if(/require\("(\/|\w:).*\/(.+)"\)/g.test(fileContents)) {
+      throw new Error(`Found absolute path in ${dotFile}`);
+    }
 
     fileMap[subpath] = fileContents;
   }
