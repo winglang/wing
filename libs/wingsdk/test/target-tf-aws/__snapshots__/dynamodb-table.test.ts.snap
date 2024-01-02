@@ -67,7 +67,7 @@ exports[`function with a table binding 2`] = `
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
