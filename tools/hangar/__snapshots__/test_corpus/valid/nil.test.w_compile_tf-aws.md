@@ -36,7 +36,7 @@ module.exports = function({ $foo }) {
       $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
       (await $foo.setOptionalValue("hello"));
       $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), true), "foo.getOptionalValue()? == true");
-      $helpers.assert($helpers.neq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
+      $helpers.assert(!$helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
       (await $foo.setOptionalValue(undefined));
       $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
       $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");

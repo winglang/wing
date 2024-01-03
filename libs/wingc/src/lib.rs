@@ -58,7 +58,6 @@ pub mod jsify;
 pub mod json_schema_generator;
 mod lifting;
 pub mod lsp;
-pub mod nodeof_transform;
 pub mod parser;
 pub mod struct_schema;
 pub mod type_check;
@@ -294,10 +293,8 @@ pub fn type_check(
 		.0
 		.as_type()
 		.expect("std.Node was found but it's not a type");
-
 	add_builtin(
 		UtilityFunctions::Nodeof.to_string().as_str(),
-		// important: the function type must be the same as std.Node.of
 		Type::Function(FunctionSignature {
 			this_type: None,
 			parameters: vec![FunctionParameter {
@@ -308,7 +305,7 @@ pub fn type_check(
 			}],
 			return_type: std_node,
 			phase: Phase::Preflight,
-			js_override: None, // implementation replaced by nodeof_transform
+			js_override: Some("$helpers.nodeof($args$)".to_string()),
 			docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
 		}),
 		scope,
@@ -358,16 +355,12 @@ pub fn compile(
 
 	// -- DESUGARING PHASE --
 
+	// Transform all inflight closures defined in preflight into single-method resources
 	let mut asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			// Transform all inflight closures defined in preflight into single-method resources
 			let mut inflight_transformer = ClosureTransformer::new();
 			let scope = inflight_transformer.fold_scope(scope);
-
-			// Transform `nodeof` calls into `std.Node.of` calls
-			let mut nodeof_transformer = nodeof_transform::NodeofTransformer::new();
-			let scope = nodeof_transformer.fold_scope(scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<Utf8PathBuf, Scope>>();

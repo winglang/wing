@@ -23,7 +23,7 @@ class SingletonBucket {
 }
 ```
 
-The `SingletonBucket.of()` static method uses `nodeof(scope).root` to find the root node of the app.
+The `SingletonBucket.of()` static method uses `std.Node.of(scope).root` to find the root node of the app.
 Then, if there is already a child with the identifier `SingletonBucket` at that level, it returns
 it or otherwise it creates a new bucket with this id (`as uid`) under the root node (`in root`).
 

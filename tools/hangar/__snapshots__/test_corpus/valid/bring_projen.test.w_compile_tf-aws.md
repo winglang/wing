@@ -32,7 +32,7 @@ const projen = require("projen");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    $helpers.assert($helpers.neq(projen.LogLevel.OFF, projen.LogLevel.VERBOSE), "projen.LogLevel.OFF != projen.LogLevel.VERBOSE");
+    $helpers.assert(!$helpers.eq(projen.LogLevel.OFF, projen.LogLevel.VERBOSE), "projen.LogLevel.OFF != projen.LogLevel.VERBOSE");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

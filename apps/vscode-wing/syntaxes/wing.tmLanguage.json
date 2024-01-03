@@ -129,7 +129,7 @@
         },
         {
           "name": "support.function.wing",
-          "match": "\\b(log|assert|unsafeCast|nodeof)\\b"
+          "match": "\\b(log|assert|throw|panic)\\b"
         }
       ]
     },

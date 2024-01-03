@@ -96,8 +96,8 @@ class $Root extends $stdlib.std.Resource {
     const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
     $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, (1 + 1)), "2"), "\"{1+1}\" == \"2\"");
     $helpers.assert($helpers.eq("{1+1}", "{1+1}"), "\"\\{1+1}\" == \"\\{1+1}\"");
-    $helpers.assert($helpers.neq("{1+1}", "2"), "\"\\{1+1}\" != \"2\"");
-    $helpers.assert($helpers.neq("{1+1}", "{2}"), "\"\\{1+1}\" != \"\\{2}\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "2"), "\"\\{1+1}\" != \"2\"");
+    $helpers.assert(!$helpers.eq("{1+1}", "{2}"), "\"\\{1+1}\" != \"\\{2}\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:str interpolation with lifted expr", new $Closure1(this, "$Closure1"));
   }
 }

@@ -37,7 +37,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
-        return $helpers.neq((await $r.get("hello")), undefined);
+        return !$helpers.eq((await $r.get("hello")), undefined);
       }));
       $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
