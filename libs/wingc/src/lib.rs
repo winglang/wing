@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{AccessModifier, Scope, Symbol, UtilityFunctions};
+use ast::{Scope, Symbol};
 use camino::{Utf8Path, Utf8PathBuf};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
@@ -22,16 +22,14 @@ use lifting::LiftVisitor;
 use parser::parse_wing_project;
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
-use type_check::symbol_env::{StatementIdx, SymbolEnvKind};
+use type_check::symbol_env::SymbolEnvKind;
 use type_check::type_reference_transform::TypeReferenceTransformer;
-use type_check::{add_jsii_module_to_env, FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
 use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
-use crate::docs::Docs;
 use crate::parser::normalize_path;
 use std::alloc::{alloc, dealloc, Layout};
 
@@ -39,7 +37,7 @@ use std::mem;
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::{FunctionParameter, TypeChecker, Types};
+use crate::type_check::{TypeChecker, Types};
 
 #[macro_use]
 #[cfg(test)]
@@ -218,117 +216,17 @@ pub fn type_check(
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
-	add_builtin(
-		UtilityFunctions::Log.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "message".into(),
-				typeref: types.string(),
-				docs: Docs::with_summary("The message to log"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("console.log($args$)".to_string()),
-			docs: Docs::with_summary("Logs a message"),
-		}),
-		scope,
-		types,
-	);
-	add_builtin(
-		UtilityFunctions::Assert.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "condition".into(),
-				typeref: types.bool(),
-				docs: Docs::with_summary("The condition to assert"),
-				variadic: false,
-			}],
-			return_type: types.void(),
-			phase: Phase::Independent,
-			js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
-			docs: Docs::with_summary("Asserts that a condition is true"),
-		}),
-		scope,
-		types,
-	);
-	add_builtin(
-		UtilityFunctions::UnsafeCast.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "value".into(),
-				typeref: types.anything(),
-				docs: Docs::with_summary("The value to cast into a different type"),
-				variadic: false,
-			}],
-			return_type: types.anything(),
-			phase: Phase::Independent,
-			js_override: Some("$args$".to_string()),
-			docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
-		}),
-		scope,
-		types,
-	);
-
-	add_jsii_module_to_env(
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
 		vec![WINGSDK_STD_MODULE.to_string()],
 		&Symbol::global(WINGSDK_STD_MODULE),
 		None,
-		file_path,
-		types,
-		jsii_imports,
-		jsii_types,
 	);
-
-	let std_node_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_NODE);
-	let std_node = types
-		.libraries
-		.lookup_nested_str(&std_node_fqn, None)
-		.expect("std.Node not found in type system")
-		.0
-		.as_type()
-		.expect("std.Node was found but it's not a type");
-	add_builtin(
-		UtilityFunctions::Nodeof.to_string().as_str(),
-		Type::Function(FunctionSignature {
-			this_type: None,
-			parameters: vec![FunctionParameter {
-				name: "construct".into(),
-				typeref: types.construct_interface(),
-				docs: Docs::with_summary("The construct to obtain the tree node of"),
-				variadic: false,
-			}],
-			return_type: std_node,
-			phase: Phase::Preflight,
-			js_override: Some("$helpers.nodeof($args$)".to_string()),
-			docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
-		}),
-		scope,
-		types,
-	);
-
-	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	tc.add_builtins(scope);
 
 	tc.type_check_file_or_dir(file_path, scope);
-}
-
-// TODO: refactor this (why is scope needed?) (move to separate module?)
-fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
-	let sym = Symbol::global(name);
-	let mut scope_env = types.get_scope_env(&scope);
-	scope_env
-		.define(
-			&sym,
-			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),
-			AccessModifier::Private,
-			StatementIdx::Top,
-		)
-		.expect("Failed to add builtin");
 }
 
 pub fn compile(
