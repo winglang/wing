@@ -206,13 +206,56 @@ export class BucketClient implements IBucketClient {
     return `https://storage.googleapis.com/${this.bucketName}/${key}`;
   }
 
-  // TODO: implement signedUrl
-  // https://github.com/winglang/wing/issues/4599
-
+  /**
+   * Returns a presigned URL for the specified key in the bucket.
+   * @param key The key of the object in the bucket.
+   * @param opts The options including the action and the duration for the signed URL.
+   * @returns The presigned URL string.
+   * @inflight
+   */
   public async signedUrl(
-    _key: string,
-    _options?: BucketSignedUrlOptions
+    key: string,
+    opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    throw new Error("Method not implemented.");
+    let gcsAction;
+
+    // Set default action to DOWNLOAD if not provided
+    const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
+
+    // Create the AWS S3 command based on the action method
+    switch (action) {
+      case BucketSignedUrlAction.DOWNLOAD:
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
+          );
+        }
+        gcsAction = "read";
+        break;
+      case BucketSignedUrlAction.UPLOAD:
+        gcsAction = "write";
+        break;
+      default:
+        throw new Error(`Invalid action: ${opts?.action}`);
+    }
+
+    // Set options for the presigned URL
+    const opts = {
+      version: "v4",
+      action: action,
+      expires: Date.now() + (options?.duration?.seconds ?? 900) * 1000, // Default expiration 15 minutes
+      // Additional options can be added here
+    };
+
+    // Generate the presigned URL
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: opts?.duration?.seconds ?? 900,
+    });
+
+    // Generate the signed URL
+    const [url] = await file.getSignedUrl(opts);
+    return url;
+
+    return signedUrl;
   }
 }
