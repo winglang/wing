@@ -356,7 +356,7 @@ export class BucketClient implements IBucketClient {
   ): Promise<string> {
     let command;
 
-    // Set default action to GET if not provided
+    // Set default action to DOWNLOAD if not provided
     const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
 
     // Create the AWS S3 command based on the action method
