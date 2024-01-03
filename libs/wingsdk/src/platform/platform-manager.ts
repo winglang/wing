@@ -84,19 +84,19 @@ export class PlatformManager {
 
     this.platformInstances.forEach((instance) => {
       if (instance.preSynth) {
-        synthHooks.preSynthesize!.push(instance.preSynth);
+        synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
       }
 
       if (instance.postSynth) {
-        synthHooks.postSynthesize!.push(instance.postSynth);
+        synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
       }
 
       if (instance.validate) {
-        synthHooks.validate!.push(instance.validate);
+        synthHooks.validate!.push(instance.validate.bind(instance));
       }
 
       if (instance.newInstance) {
-        newInstanceOverrides.push(instance.newInstance);
+        newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
     });
 
