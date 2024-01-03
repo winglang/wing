@@ -256,6 +256,13 @@ util.ulid(options?: UlidOptions);
 
 Generates universally unique lexicographically sortable identifier.
 
+This works with a precision of 1ms, which might not be sufficient for some cases where the strict order of
+creation is a desired property - e.g. batch creation of resources. In these cases, the generated IDs will
+be still unique (can generate 1.21e+24 unique ULIDs per millisecond) but might not be strictly reflecting the order of creation.
+To mitigate this, you could sleep for 1ms between creation of resources. However, in distributed
+systems where the strict order of creation is a requirement, this is not sufficient
+and you should consider using a different ID generation strategy.
+
 # @link https://github.com/ulid/javascript
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.ulid.parameter.options"></a>

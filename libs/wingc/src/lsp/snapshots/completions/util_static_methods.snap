@@ -102,7 +102,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: UlidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\n# @link https://github.com/ulid/javascript"
+    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\nThis works with a precision of 1ms, which might not be sufficient for some cases where the strict order of\ncreation is a desired property - e.g. batch creation of resources. In these cases, the generated IDs will\nbe still unique (can generate 1.21e+24 unique ULIDs per millisecond) but might not be strictly reflecting the order of creation.\nTo mitigate this, you could sleep for 1ms between creation of resources. However, in distributed\nsystems where the strict order of creation is a requirement, this is not sufficient\nand you should consider using a different ID generation strategy.\n\n# @link https://github.com/ulid/javascript"
   sortText: ff|ulid
   insertText: ulid($1)
   insertTextFormat: 2
