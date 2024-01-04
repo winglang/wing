@@ -13,7 +13,6 @@ test "is sorted ascending for batch creation" {
   let b = util.ulid();
   util.sleep(1ms);
   let c = util.ulid();
-  util.sleep(1ms);
 
   let sorted = Sortable.sortStringListAsc([c, b, a]);
   expect.equal(a, sorted.at(0));
@@ -27,7 +26,6 @@ test "is sorted descending for batch creation" {
   let b = util.ulid();
   util.sleep(1ms);
   let c = util.ulid();
-  util.sleep(1ms);
 
   let sorted = Sortable.sortStringListDesc([a, b, c]);
   expect.equal(c, sorted.at(0));
