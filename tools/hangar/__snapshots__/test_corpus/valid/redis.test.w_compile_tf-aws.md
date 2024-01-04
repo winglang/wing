@@ -37,7 +37,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
       (await $util_Util.waitUntil(async () => {
-        return !$helpers.eq((await $r.get("hello")), undefined);
+        return $helpers.neq((await $r.get("hello")), undefined);
       }));
       $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -583,7 +583,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

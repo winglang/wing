@@ -90,7 +90,7 @@ class $Root extends $stdlib.std.Resource {
       return c.node.path;
     });
     const getDisplayName = ((r) => {
-      return (std.Node.of(r)).title;
+      return $helpers.nodeof(r).title;
     });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this, "WingResource");

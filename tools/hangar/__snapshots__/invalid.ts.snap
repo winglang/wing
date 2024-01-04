@@ -1559,6 +1559,98 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`global_symbols.test.w 1`] = `
+"error: Symbol \\"log\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:1:5
+  |
+1 | let log = \\"hi\\";
+  |     ^^^ Symbol \\"log\\" already defined in this scope
+
+
+error: Symbol \\"assert\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:3:5
+  |
+3 | let assert = \\"there\\";
+  |     ^^^^^^ Symbol \\"assert\\" already defined in this scope
+
+
+error: Symbol \\"unsafeCast\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:5:5
+  |
+5 | let unsafeCast = \\"wingnuts\\";
+  |     ^^^^^^^^^^ Symbol \\"unsafeCast\\" already defined in this scope
+
+
+error: Symbol \\"nodeof\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:7:5
+  |
+7 | let nodeof = \\"!\\";
+  |     ^^^^^^ Symbol \\"nodeof\\" already defined in this scope
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:10:1
+   |
+10 | log = \\"hi\\";
+   | ^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:10:7
+   |
+10 | log = \\"hi\\";
+   |       ^^^^ Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:12:1
+   |
+12 | assert = \\"there\\";
+   | ^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
+   |
+12 | assert = \\"there\\";
+   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:14:1
+   |
+14 | unsafeCast = \\"wingnuts\\";
+   | ^^^^^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(value: any): any\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:14:14
+   |
+14 | unsafeCast = \\"wingnuts\\";
+   |              ^^^^^^^^^^ Expected type to be \\"(value: any): any\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:16:1
+   |
+16 | nodeof = \\"!\\";
+   | ^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:16:10
+   |
+16 | nodeof = \\"!\\";
+   |          ^^^ Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`immutable_container_types.test.w 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4

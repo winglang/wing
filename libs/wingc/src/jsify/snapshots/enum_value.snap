@@ -28,7 +28,7 @@ module.exports = function({ $MyEnum, $x }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($MyEnum.B, $MyEnum.C), "MyEnum.B != MyEnum.C");
+      $helpers.assert($helpers.neq($MyEnum.B, $MyEnum.C), "MyEnum.B != MyEnum.C");
       $helpers.assert($helpers.eq($x, $MyEnum.C), "x == MyEnum.C");
     }
   }
@@ -54,7 +54,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

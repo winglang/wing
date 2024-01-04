@@ -720,7 +720,7 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
 					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
-					BinaryOperator::NotEqual => return new_code!(expr_span, "!$helpers.eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, "$helpers.neq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
