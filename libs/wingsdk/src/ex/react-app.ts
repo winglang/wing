@@ -10,6 +10,12 @@ import { Resource, Node } from "../std";
 const DEFAULT_BUILD_FOLDER = "/build";
 export const DEFAULT_REACT_APP_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
+
+/**
+ * SPA - Redirect all requests to index.html
+ */
+export const REACT_APP_ERROR_DOCUMENT = "index.html";
+
 /**
  * The file that contains the wing environment variables. Will be written into the project files.
  */

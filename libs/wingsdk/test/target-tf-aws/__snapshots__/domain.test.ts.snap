@@ -46,6 +46,18 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
         "aliases": [
           "www.example.com",
         ],
+        "custom_error_response": [
+          {
+            "error_code": 404,
+            "response_code": 200,
+            "response_page_path": "/index.html",
+          },
+          {
+            "error_code": 403,
+            "response_code": 200,
+            "response_page_path": "/index.html",
+          },
+        ],
         "default_cache_behavior": {
           "allowed_methods": [
             "GET",
@@ -126,6 +138,9 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
     "aws_s3_bucket_website_configuration": {
       "Website_Website-host_BucketWebsiteConfiguration_6A151F57": {
         "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
+        "error_document": {
+          "key": "index.html",
+        },
         "index_document": {
           "suffix": "index.html",
         },
@@ -390,6 +405,18 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
         "aliases": [
           "www.example.com",
         ],
+        "custom_error_response": [
+          {
+            "error_code": 404,
+            "response_code": 200,
+            "response_page_path": "/index.html",
+          },
+          {
+            "error_code": 403,
+            "response_code": 200,
+            "response_page_path": "/index.html",
+          },
+        ],
         "default_cache_behavior": {
           "allowed_methods": [
             "GET",
@@ -470,6 +497,9 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
     "aws_s3_bucket_website_configuration": {
       "Website_Website-host_BucketWebsiteConfiguration_6A151F57": {
         "bucket": "\${aws_s3_bucket.Website_Website-host_WebsiteBucket_0ECE7584.bucket}",
+        "error_document": {
+          "key": "index.html",
+        },
         "index_document": {
           "suffix": "index.html",
         },
