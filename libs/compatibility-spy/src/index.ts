@@ -12,7 +12,7 @@ const PARENT_PROPERTIES: Set<string> = new Set([
 ]);
 
 export class Platform implements IPlatform {
-  public readonly target = "compatibility-spy";
+  public readonly target = "*";
   /**
    * A summary of methods and property usage for each resource time
    * @internal
