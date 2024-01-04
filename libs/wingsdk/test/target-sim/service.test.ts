@@ -199,11 +199,13 @@ test("throws during service start", async () => {
     async handle() {
       throw new Error("ThisIsAnError");
       return () => console.log("stop!");
-    }`),
+    }`)
   );
 
   const s = await app.startSimulator();
-  const msg = s.listTraces().find(t => t.data.message.startsWith("Failed to start service"));
+  const msg = s
+    .listTraces()
+    .find((t) => t.data.message.startsWith("Failed to start service"));
   expect(msg).toBeTruthy();
   expect(msg?.data.message).toEqual("Failed to start service: ThisIsAnError");
 });

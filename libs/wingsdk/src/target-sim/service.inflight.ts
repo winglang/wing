@@ -51,7 +51,7 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
     await this.stop();
   }
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   public async start(): Promise<void> {
     // Do nothing if service is already running.
