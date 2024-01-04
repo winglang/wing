@@ -4,7 +4,7 @@
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Sortable, $expect_Util, $std_Duration, $util_Util }) {
+module.exports = function({ $expect_Util, $preflightUlid_length }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,16 +12,7 @@ module.exports = function({ $Sortable, $expect_Util, $std_Duration, $util_Util }
       return $obj;
     }
     async handle() {
-      const a = (await $util_Util.ulid());
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
-      const b = (await $util_Util.ulid());
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
-      const c = (await $util_Util.ulid());
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
-      const sorted = (await $Sortable.sortStringListAsc([c, b, a]));
-      (await $expect_Util.equal(a, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 0)));
-      (await $expect_Util.equal(b, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 1)));
-      (await $expect_Util.equal(c, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 2)));
+      (await $expect_Util.equal(26, $preflightUlid_length));
     }
   }
   return $Closure1;
@@ -46,16 +37,43 @@ module.exports = function({ $Sortable, $expect_Util, $std_Duration, $util_Util }
       const b = (await $util_Util.ulid());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
       const c = (await $util_Util.ulid());
+      const sorted = (await $Sortable.sortStringListAsc([c, b, a]));
+      (await $expect_Util.equal(a, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 0)));
+      (await $expect_Util.equal(b, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 1)));
+      (await $expect_Util.equal(c, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 2)));
+    }
+  }
+  return $Closure2;
+}
+//# sourceMappingURL=inflight.$Closure2-1.js.map
+```
+
+## inflight.$Closure3-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $Sortable, $expect_Util, $std_Duration, $util_Util }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const a = (await $util_Util.ulid());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
+      const b = (await $util_Util.ulid());
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(0.001))));
+      const c = (await $util_Util.ulid());
       const sorted = (await $Sortable.sortStringListDesc([a, b, c]));
       (await $expect_Util.equal(c, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 0)));
       (await $expect_Util.equal(b, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 1)));
       (await $expect_Util.equal(a, ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(sorted, 2)));
     }
   }
-  return $Closure2;
+  return $Closure3;
 }
-//# sourceMappingURL=inflight.$Closure2-1.js.map
+//# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.Sortable-1.js
@@ -143,10 +161,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Sortable: ${$stdlib.core.liftObject(Sortable)},
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+            $preflightUlid_length: ${$stdlib.core.liftObject(preflightUlid.length)},
           })
         `;
       }
@@ -163,6 +179,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerOnLiftObject(preflightUlid.length, host, []);
+        }
+        super._registerOnLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -196,8 +218,41 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:is sorted ascending for batch creation", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:is sorted descending for batch creation", new $Closure2(this, "$Closure2"));
+    class $Closure3 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure3-1.js")({
+            $Sortable: ${$stdlib.core.liftObject(Sortable)},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
+            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
+            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+    }
+    const preflightUlid = (util.Util.ulid());
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:preflight ulid works", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:is sorted ascending for batch creation", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:is sorted descending for batch creation", new $Closure3(this, "$Closure3"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
