@@ -19,11 +19,6 @@ export class Platform implements IPlatform {
    */
   public _usageContext: Map<string, Set<string>> = new Map();
 
-  constructor() {
-    this.newInstance = this.newInstance.bind(this);
-    this.preSynth = this.preSynth.bind(this);
-  }
-
   newInstance(app: App, fqn: string, scope: Construct, id: string, args: any) {
     //@ts-expect-error - accessing protected method
     const type = app.typeForFqn(fqn);

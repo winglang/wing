@@ -293,29 +293,6 @@ export abstract class App extends Construct implements IApp {
 
     return new type(scope, id, ...args);
   }
-
-  /**
-   * Synthesize the root construct if one was given. If this is a test environment, then
-   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
-   * one root construct.
-   *
-   * @param props The App props
-   * @param testRunner The test runner
-   */
-  protected synthRoots(props: AppProps, testRunner: TestRunner) {
-    if (props.rootConstruct) {
-      const Root = props.rootConstruct;
-      if (this.isTestEnvironment) {
-        new Root(this, "env0");
-        const tests = testRunner.findTests();
-        for (let i = 1; i < tests.length; i++) {
-          new Root(this, "env" + i);
-        }
-      } else {
-        new Root(this, "Default");
-      }
-    }
-  }
 }
 
 export function preSynthesizeAllConstructs(app: App): void {
