@@ -7,6 +7,12 @@ inflight class Sortable {
   pub static extern "./sort.js" sortStringListDesc(arr: Array<str>): Array<str>;
 }
 
+let preflightUlid = util.ulid();
+
+test "preflight ulid works" {
+  expect.equal(26, preflightUlid.length);
+}
+
 test "is sorted ascending for batch creation" {
   let a = util.ulid();
   util.sleep(1ms);
