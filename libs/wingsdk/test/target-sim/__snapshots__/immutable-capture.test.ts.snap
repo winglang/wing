@@ -408,7 +408,7 @@ if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\
 }
 };
 })())({
-my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]
+my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]
 })).handle(event);
 };",
   "connections.json": {
@@ -1330,7 +1330,7 @@ if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assert
 }
 };
 })())({
-my_map: new Map([[\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(2400))]]])
+my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]],[\\"bar\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1800)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(2400))]]])
 })).handle(event);
 };",
   "connections.json": {
@@ -2021,7 +2021,7 @@ if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertio
 }
 };
 })())({
-my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))])
+my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))])
 })).handle(event);
 };",
   "connections.json": {

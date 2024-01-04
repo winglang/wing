@@ -1435,8 +1435,8 @@ importers:
         specifier: ^1.88.0
         version: 1.90.0
       mock-gcs:
-        specifier: ^1.0.0
-        version: 1.1.0
+        specifier: ^1.2.0
+        version: 1.2.0
       npm-check-updates:
         specifier: ^16
         version: 16.14.5
@@ -19970,8 +19970,8 @@ packages:
       obliterator: 1.6.1
     dev: false
 
-  /mock-gcs@1.1.0:
-    resolution: {integrity: sha512-FOr/++36kErcRrJZ72aghbYEdHvHbdw9t8YZEkxnPl6jzXXKz4+aZGOheoLI0sJB7qrOgelQ5d41E7IOTdkKiQ==}
+  /mock-gcs@1.2.0:
+    resolution: {integrity: sha512-/RsqqS9ZsjFnTNTYjOwW7q0y9Y84idZVNMA+S9kVdbWjPVq92jzxNWqBmOIEFY9D2O1JZw+wyGh9gwuMm3TT+g==}
     dependencies:
       stream-buffers: 3.0.2
     dev: true

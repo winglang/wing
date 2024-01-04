@@ -298,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -386,7 +386,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
-    $helpers.assert(!$helpers.eq(c, file1.Color.RED), "c != file1.Color.RED");
+    $helpers.assert($helpers.neq(c, file1.Color.RED), "c != file1.Color.RED");
     const t = new Triangle(this, "Triangle");
   }
 }
@@ -439,7 +439,7 @@ class Store extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
