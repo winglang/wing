@@ -17,11 +17,25 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   assert(error);
 };
 
+class PreflightTest {
+  pub output: str;
+
+  new() {
+    this.output = util.shell("echo Hello, Wing!");
+  }
+}
+
+let preflightTest = new PreflightTest();
+
+test "preflight" {
+  expect.equal(preflightTest.output, "Hello, Wing!\n");
+}
+
 test "shell() with valid command" {
   let command = "echo Hello, Wing!";
 
   let output = util.shell(command);
-  
+
   if Util.platform() != "win32" {
     expect.equal(output, "Hello, Wing!\n");
   } else {
