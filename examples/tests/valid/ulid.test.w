@@ -2,6 +2,7 @@ bring util;
 bring expect;
 
 inflight class Sortable {
+  // TODO: https://github.com/winglang/wing/issues/4998
   pub static extern "./sort.js" sortStringListAsc(arr: Array<str>): Array<str>;
   pub static extern "./sort.js" sortStringListDesc(arr: Array<str>): Array<str>;
 }
