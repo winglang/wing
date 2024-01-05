@@ -136,7 +136,7 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
-/// Parses a Wing file and the transitive closure of all files it depends on.
+/// Parses a Wing file or directory, and the transitive closure of all files it depends on.
 ///
 /// Expects an initial Wing file to be parsed. For Wing's CLI, this is usually
 /// the file the user asked to compile, and in the case of the LSP, the file that was
@@ -160,7 +160,7 @@ pub fn parse_wing_project(
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<Utf8PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<Utf8PathBuf, Scope>,
-) -> Vec<Utf8PathBuf> {
+) {
 	// Parse the initial path (even if we have already seen it before)
 	let dependent_wing_paths = match init_path.is_dir() {
 		true => parse_wing_directory(&init_path, files, file_graph, tree_sitter_trees, asts),
@@ -195,8 +195,10 @@ pub fn parse_wing_project(
 		// Add the dependent files to the stack of files to parse
 		unparsed_files.extend(dependent_wing_paths);
 	}
+}
 
-	// Return the files in the order they should be compiled
+// get a topological sort of the files so files are type checked in the right order
+pub fn topo_sort_files<'a>(source_path: &Utf8Path, files: &'a Files, file_graph: &'a FileGraph) -> Vec<Utf8PathBuf> {
 	match file_graph.toposort() {
 		Ok(files) => files,
 		Err(cycle) => {
@@ -205,7 +207,7 @@ pub fn parse_wing_project(
 			report_diagnostic(Diagnostic {
 				message: format!(
 					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
-					init_path,
+					source_path,
 					formatted_cycle.trim_end()
 				),
 				span: None,
@@ -214,11 +216,12 @@ pub fn parse_wing_project(
 			});
 
 			// return a list of all files just so we can continue type-checking
-			asts.keys().cloned().collect::<Vec<_>>()
+			files.keys().cloned().collect::<Vec<_>>()
 		}
 	}
 }
 
+/// Parse a single Wing file, returning the list of files that it depends on.
 fn parse_wing_file(
 	source_path: &Utf8Path,
 	source_text: Option<String>,
@@ -229,7 +232,7 @@ fn parse_wing_file(
 ) -> Vec<Utf8PathBuf> {
 	let source_text = match source_text {
 		Some(text) => text,
-		None => fs::read_to_string(source_path).expect("read_to_string call failed"),
+		None => fs::read_to_string(source_path).expect(&format!("read_to_string {} failed", source_path)),
 	};
 
 	// Update our files collection with the new source text. On a fresh compilation,
@@ -257,7 +260,7 @@ fn parse_wing_file(
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
 	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
+	file_graph.set_file_deps(source_path, &dependent_wing_paths);
 
 	dependent_wing_paths
 }
@@ -298,6 +301,7 @@ fn check_valid_wing_dir_name(dir_path: &Utf8Path) {
 	}
 }
 
+/// Parse a single Wing directory, returning the list of files that it depends on.
 fn parse_wing_directory(
 	source_path: &Utf8Path,
 	files: &mut Files,
@@ -355,7 +359,7 @@ fn parse_wing_directory(
 	files.update_file(&source_path, "".to_string());
 	tree_sitter_trees.insert(source_path.to_owned(), tree_sitter_tree);
 	asts.insert(source_path.to_owned(), scope);
-	file_graph.update_file(source_path, &dependent_wing_paths);
+	file_graph.set_file_deps(source_path, &dependent_wing_paths);
 
 	dependent_wing_paths
 }

@@ -14,8 +14,17 @@ pub fn main() {
 
 	let source_path = Utf8Path::new(&args[1]).canonicalize_utf8().unwrap();
 	let target_dir: Utf8PathBuf = env::current_dir().unwrap().join("target").try_into().unwrap();
+	let sdk_in_wing_dir = Utf8Path::new("../../libs/wingcompiler/sdk")
+		.canonicalize_utf8()
+		.unwrap();
 
-	let results = compile(source_path.parent().unwrap(), &source_path, None, &target_dir);
+	let results = compile(
+		source_path.parent().unwrap(),
+		&source_path,
+		None,
+		&target_dir,
+		&sdk_in_wing_dir,
+	);
 	if results.is_err() {
 		let mut diags = get_diagnostics();
 		// Sort error messages by line number (ascending)

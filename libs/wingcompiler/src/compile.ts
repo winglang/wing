@@ -298,7 +298,7 @@ npm i ts4w
 
     const arg = `${normalPath(props.entrypointFile)};${normalPath(props.workDir)};${normalPath(
       props.wingDir
-    )}`;
+    )};${normalPath(join(__dirname, "..", "sdk"))}`;
     props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
     try {

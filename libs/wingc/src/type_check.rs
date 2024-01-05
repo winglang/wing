@@ -1731,6 +1731,9 @@ pub struct TypeChecker<'a> {
 	/// The JSII type system
 	jsii_types: &'a mut TypeSystem,
 
+	/// The path of a directory whose symbol environment should be injected into the `cloud` namespace.
+	sdk_in_wing_dir: &'a Utf8Path,
+
 	is_in_mut_json: bool,
 
 	// Stack of extra information we need to keep track of while visiting nested
@@ -1757,6 +1760,7 @@ impl<'a> TypeChecker<'a> {
 		file_graph: &'a FileGraph,
 		jsii_types: &'a mut TypeSystem,
 		jsii_imports: &'a mut Vec<JsiiImportSpec>,
+		sdk_in_wing_dir: &'a Utf8Path,
 	) -> Self {
 		Self {
 			types,
@@ -1765,6 +1769,7 @@ impl<'a> TypeChecker<'a> {
 			source_path,
 			file_graph,
 			jsii_imports,
+			sdk_in_wing_dir,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
 			curr_expr_info: vec![],
@@ -3249,6 +3254,20 @@ impl<'a> TypeChecker<'a> {
 					return;
 				}
 				seen_public_symbols.insert(key.clone());
+			}
+		}
+
+		if source_path == self.sdk_in_wing_dir {
+			let mut cloud_ns = self
+				.types
+				.libraries
+				.lookup_nested_str("@winglang/sdk.cloud", None)
+				.unwrap()
+				.0
+				.as_namespace_ref()
+				.unwrap();
+			for child_env in &child_envs {
+				cloud_ns.envs.push(*child_env);
 			}
 		}
 

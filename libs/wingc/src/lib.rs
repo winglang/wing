@@ -30,7 +30,7 @@ use visit::Visit;
 use wasm_util::{ptr_to_str, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
-use crate::parser::normalize_path;
+use crate::parser::{normalize_path, topo_sort_files};
 use std::alloc::{alloc, dealloc, Layout};
 
 use std::mem;
@@ -171,9 +171,9 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_str(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	if split.len() != 3 {
+	if split.len() != 4 {
 		report_diagnostic(Diagnostic {
-			message: format!("Expected 3 arguments to wingc_compile, got {}", split.len()),
+			message: format!("Expected 4 arguments to wingc_compile, got {}", split.len()),
 			span: None,
 			annotations: vec![],
 			hints: vec![],
@@ -186,6 +186,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		.get(2)
 		.map(|s| Utf8Path::new(s))
 		.expect("project dir not provided");
+	let sdk_in_wing_dir = split
+		.get(3)
+		.map(|s| Utf8Path::new(s))
+		.expect("sdk_in_wing_dir not provided");
 
 	if !source_path.exists() {
 		report_diagnostic(Diagnostic {
@@ -197,7 +201,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 		return WASM_RETURN_ERROR;
 	}
 
-	let results = compile(project_dir, source_path, None, output_dir);
+	let results = compile(project_dir, source_path, None, output_dir, sdk_in_wing_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
@@ -212,11 +216,12 @@ pub fn type_check(
 	file_graph: &FileGraph,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
+	sdk_in_wing_dir: &Utf8Path,
 ) {
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
 	types.set_scope_env(scope, env);
 
-	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports, sdk_in_wing_dir);
 	tc.add_jsii_module_to_env(
 		&mut env,
 		WINGSDK_ASSEMBLY_NAME.to_string(),
@@ -234,6 +239,7 @@ pub fn compile(
 	source_path: &Utf8Path,
 	source_text: Option<String>,
 	out_dir: &Utf8Path,
+	sdk_in_wing_dir: &Utf8Path,
 ) -> Result<CompilerOutput, ()> {
 	let source_path = normalize_path(source_path, None);
 
@@ -242,7 +248,20 @@ pub fn compile(
 	let mut file_graph = FileGraph::default();
 	let mut tree_sitter_trees = IndexMap::new();
 	let mut asts = IndexMap::new();
-	let topo_sorted_files = parse_wing_project(
+
+	// first, add SDK files that are written in Wing to the file graph and parse them
+	let sdk_in_wing_dir = normalize_path(sdk_in_wing_dir, None);
+	parse_wing_project(
+		&sdk_in_wing_dir,
+		None,
+		&mut files,
+		&mut file_graph,
+		&mut tree_sitter_trees,
+		&mut asts,
+	);
+
+	// then, parse the user's code
+	parse_wing_project(
 		&source_path,
 		source_text,
 		&mut files,
@@ -250,6 +269,13 @@ pub fn compile(
 		&mut tree_sitter_trees,
 		&mut asts,
 	);
+
+	// add a dependency from the user's code to the SDK
+	file_graph.add_file_dep(&source_path, &sdk_in_wing_dir);
+
+	// get a topological sort of the files so files are type checked in the right order
+	// this will raise a diagnostic and return an arbitrary order if there are cycles
+	let topo_sorted_files = topo_sort_files(&source_path, &files, &file_graph);
 
 	// -- DESUGARING PHASE --
 
@@ -283,6 +309,7 @@ pub fn compile(
 			&file_graph,
 			&mut jsii_types,
 			&mut jsii_imports,
+			&sdk_in_wing_dir,
 		);
 
 		// Make sure all type reference are no longer considered references
@@ -404,7 +431,11 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(&test_dir, &test_file, None, &out_dir);
+			let sdk_in_wing_dir = Utf8Path::new("../../libs/wingcompiler/sdk")
+				.canonicalize_utf8()
+				.unwrap();
+
+			let result = compile(&test_dir, &test_file, None, &out_dir, &sdk_in_wing_dir);
 
 			if result.is_err() {
 				assert!(
