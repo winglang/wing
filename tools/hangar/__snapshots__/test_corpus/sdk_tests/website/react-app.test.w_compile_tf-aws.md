@@ -146,6 +146,18 @@
             "uniqueId": "exReactApp_exReactApp-host_Distribution_FE9291B1"
           }
         },
+        "custom_error_response": [
+          {
+            "error_code": 404,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          },
+          {
+            "error_code": 403,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          }
+        ],
         "default_cache_behavior": {
           "allowed_methods": [
             "GET",
@@ -340,6 +352,9 @@
           }
         },
         "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
+        "error_document": {
+          "key": "index.html"
+        },
         "index_document": {
           "suffix": "index.html"
         }

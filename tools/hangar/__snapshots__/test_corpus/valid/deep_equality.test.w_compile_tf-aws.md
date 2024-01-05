@@ -35,8 +35,8 @@ module.exports = function({ $arrayA, $arrayB, $arrayC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($arrayA, $arrayC), "arrayA != arrayC");
-      $helpers.assert((!!$helpers.eq($arrayA, $arrayB)), "!(arrayA != arrayB)");
+      $helpers.assert($helpers.neq($arrayA, $arrayC), "arrayA != arrayC");
+      $helpers.assert((!$helpers.neq($arrayA, $arrayB)), "!(arrayA != arrayB)");
     }
   }
   return $Closure10;
@@ -77,8 +77,8 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($cat1, $cat3), "cat1 != cat3");
-      $helpers.assert((!!$helpers.eq($cat1, $cat2)), "!(cat1 != cat2)");
+      $helpers.assert($helpers.neq($cat1, $cat3), "cat1 != cat3");
+      $helpers.assert((!$helpers.neq($cat1, $cat2)), "!(cat1 != cat2)");
     }
   }
   return $Closure12;
@@ -98,8 +98,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($numA, $numC), "numA != numC");
-      $helpers.assert(!$helpers.eq($strA, $strC), "strA != strC");
+      $helpers.assert($helpers.neq($numA, $numC), "numA != numC");
+      $helpers.assert($helpers.neq($strA, $strC), "strA != strC");
     }
   }
   return $Closure2;
@@ -140,8 +140,8 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($jsonA, $jsonC), "jsonA != jsonC");
-      $helpers.assert((!!$helpers.eq($jsonA, $jsonB)), "!(jsonA != jsonB)");
+      $helpers.assert($helpers.neq($jsonA, $jsonC), "jsonA != jsonC");
+      $helpers.assert((!$helpers.neq($jsonA, $jsonB)), "!(jsonA != jsonB)");
     }
   }
   return $Closure4;
@@ -182,8 +182,8 @@ module.exports = function({ $setA, $setB, $setC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($setA, $setC), "setA != setC");
-      $helpers.assert((!!$helpers.eq($setA, $setB)), "!(setA != setB)");
+      $helpers.assert($helpers.neq($setA, $setC), "setA != setC");
+      $helpers.assert((!$helpers.neq($setA, $setB)), "!(setA != setB)");
     }
   }
   return $Closure6;
@@ -224,8 +224,8 @@ module.exports = function({ $mapA, $mapB, $mapC }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(!$helpers.eq($mapA, $mapC), "mapA != mapC");
-      $helpers.assert((!!$helpers.eq($mapA, $mapB)), "!(mapA != mapB)");
+      $helpers.assert($helpers.neq($mapA, $mapC), "mapA != mapC");
+      $helpers.assert((!$helpers.neq($mapA, $mapB)), "!(mapA != mapB)");
     }
   }
   return $Closure8;
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -329,7 +329,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -369,7 +369,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -405,7 +405,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -479,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -517,7 +517,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -553,7 +553,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -591,7 +591,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -627,7 +627,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -665,7 +665,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -701,7 +701,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

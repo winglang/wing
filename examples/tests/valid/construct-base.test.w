@@ -14,7 +14,7 @@ let getPath = (c: cx.Construct): str => {
 };
 
 let getDisplayName = (r: std.Resource): str? => {
-  return std.Node.of(r).title;
+  return nodeof(r).title;
 };
 
 let q = new aws.sqsQueue.SqsQueue();

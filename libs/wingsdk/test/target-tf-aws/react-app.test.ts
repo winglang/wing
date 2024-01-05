@@ -4,6 +4,7 @@ import { test, expect, vi, afterAll, describe } from "vitest";
 import * as ex from "../../src/ex";
 import * as tfaws from "../../src/target-tf-aws";
 import {
+  getTfResource,
   mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
@@ -146,5 +147,32 @@ describe("Testing ReactApp", () => {
       cwd: resolve(__dirname, "../test-files/react-website"),
       maxBuffer: 10485760,
     });
+  });
+
+  test("custom error page", () => {
+    // GIVEN
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    new ex.ReactApp(app, "Website", {
+      projectPath: "../test-files/react-website",
+    });
+    const output = app.synth();
+
+    // THEN
+    expect(tfSanitize(output)).toMatchSnapshot();
+    expect(
+      getTfResource(output, "aws_cloudfront_distribution", 0)
+        .custom_error_response
+    ).toEqual([
+      {
+        error_code: 404,
+        response_code: 200,
+        response_page_path: "/index.html",
+      },
+      {
+        error_code: 403,
+        response_code: 200,
+        response_page_path: "/index.html",
+      },
+    ]);
   });
 });
