@@ -469,12 +469,6 @@ impl<'a> JsiiImporter<'a> {
 		// Add methods to the class environment
 		if let Some(methods) = &jsii_interface.methods() {
 			for m in methods {
-				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
-				if class_phase == Phase::Preflight && m.name == "capture" {
-					debug!("Skipping capture method on resource");
-					continue;
-				}
-
 				let is_static = if let Some(true) = m.static_ { true } else { false };
 
 				debug!("Adding method {} to class", m.name.green());
@@ -485,10 +479,13 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
-				// Check if there's an explicit inflight phase override on this method
-				let member_phase = extract_docstring_tag(&m.docs, "inflight")
-					.map(|_| Phase::Inflight)
-					.unwrap_or(member_phase);
+				// Check if this function has two phase implementations
+				let inflight_impl = extract_docstring_tag(&m.docs, "inflightImpl");
+				let member_phase = if inflight_impl.is_some() {
+					Phase::Independent
+				} else {
+					member_phase
+				};
 
 				let mut fn_params = vec![];
 
@@ -510,6 +507,7 @@ impl<'a> JsiiImporter<'a> {
 					parameters: fn_params,
 					return_type,
 					phase: member_phase,
+					inflight_impl: inflight_impl.map(|s| s.to_string()),
 					js_override: m
 						.docs
 						.as_ref()
@@ -773,6 +771,7 @@ impl<'a> JsiiImporter<'a> {
 				return_type: new_type,
 				phase: member_phase,
 				js_override: None,
+				inflight_impl: None,
 				docs: Docs::from(&initializer.docs),
 			}));
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);

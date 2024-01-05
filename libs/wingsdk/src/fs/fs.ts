@@ -187,24 +187,39 @@ export class Util {
    * Check if the path exists.
    * @param path The path to evaluate.
    * @returns `true` if the path exists, `false` otherwise.
+   * @inflightImpl __exists__inflight
    */
   public static exists(path: string): boolean {
     return fs.existsSync(path);
+  }
+
+  /** @internal */
+  public static async __exists__inflight(path: string): Promise<boolean> {
+    return existsPromise(path);
   }
 
   /**
    * Read the contents of the directory.
    * @param dirpath The path to evaluate.
    * @returns The contents of the directory.
+   * @inflightImpl __readdir__inflight
    */
   public static readdir(dirpath: string): Array<string> {
     return fs.readdirSync(dirpath);
+  }
+
+  /** @internal */
+  public static async __readdir__inflight(
+    dirpath: string
+  ): Promise<Array<string>> {
+    return fs.promises.readdir(dirpath);
   }
 
   /**
    * If the path exists, read the contents of the directory; otherwise, return `undefined`.
    * @param dirpath The path to evaluate.
    * @returns The contents of the directory if the path exists, `undefined` otherwise.
+   * @inflightImpl __tryReaddir__inflight
    */
   public static tryReaddir(dirpath: string): Array<string> | undefined {
     try {
@@ -214,12 +229,31 @@ export class Util {
     }
   }
 
+  /** @internal */
+  public static async __tryReaddir__inflight(
+    dirpath: string
+  ): Promise<Array<string> | undefined> {
+    return Util.__readdir__inflight(dirpath).catch(() => undefined);
+  }
+
   /**
    * Create a directory.
    * @param dirpath The path to the directory you want to create.
+   * @inflightImpl __mkdir__inflight
    */
   public static mkdir(dirpath: string, opts?: MkdirOptions): void {
     fs.mkdirSync(dirpath, {
+      recursive: opts?.recursive ?? true,
+      mode: opts?.mode ?? "0777",
+    });
+  }
+
+  /** @internal */
+  public static async __mkdir__inflight(
+    dirpath: string,
+    opts?: MkdirOptions
+  ): Promise<void> {
+    await fs.promises.mkdir(dirpath, {
       recursive: opts?.recursive ?? true,
       mode: opts?.mode ?? "0777",
     });
@@ -230,6 +264,7 @@ export class Util {
    * Generates six random characters to be appended behind a required prefix to create a unique temporary directory.
    * @param prefix The prefix for the directory to be created, default `wingtemp`.
    * @returns The created directory path.
+   * @inflightImpl __mkdtemp__inflight
    */
   public static mkdtemp(prefix?: string): string {
     if (prefix == undefined) {
@@ -239,15 +274,36 @@ export class Util {
     return normalPath(dirpath);
   }
 
+  /** @internal */
+  public static async __mkdtemp__inflight(prefix?: string): Promise<string> {
+    if (prefix == undefined) {
+      prefix = "wingtemp";
+    }
+    const dirpath = await fs.promises.mkdtemp(
+      nodePath.join(os.tmpdir(), prefix)
+    );
+    return normalPath(dirpath);
+  }
+
   /**
    * Read the entire contents of a file.
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
    * If a flag is not provided, it defaults to `"r"`.
    * @returns The contents of the `filepath`.
+   * @inflightImpl __readFile__inflight
    */
   public static readFile(filepath: string, options?: ReadFileOptions): string {
     const buf = fs.readFileSync(filepath, options);
+    return buf.toString();
+  }
+
+  /** @internal */
+  public static async __readFile__inflight(
+    filepath: string,
+    options?: ReadFileOptions
+  ): Promise<string> {
+    const buf = await fs.promises.readFile(filepath, options);
     return buf.toString();
   }
 
@@ -257,6 +313,7 @@ export class Util {
    * @param filepath The path of the file to be read.
    * @param options The `encoding` can be set to specify the character encoding, or the `flag` can be set to specify the attributes.
    * @returns The contents of the `filepath`, `undefined` otherwise.
+   * @inflightImpl __tryReadFile__inflight
    */
   public static tryReadFile(
     filepath: string,
@@ -269,14 +326,33 @@ export class Util {
     }
   }
 
+  /** @internal */
+  public static async __tryReadFile__inflight(
+    filepath: string,
+    options?: ReadFileOptions
+  ): Promise<string | undefined> {
+    try {
+      return await Util.__readFile__inflight(filepath, options);
+    } catch {
+      return undefined;
+    }
+  }
+
   /**
    * Read the contents of the file and convert it to JSON.
    * @param filepath The file path of the JSON file.
    * @returns The JSON object contained in the file.
    * @throws Will throw if the content is not in valid JSON format.
+   * @inflightImpl __readJson__inflight
    */
   public static readJson(filepath: string): Json {
     const text = Util.readFile(filepath);
+    return JSON.parse(text) as Json;
+  }
+
+  /** @internal */
+  public static async __readJson__inflight(filepath: string): Promise<Json> {
+    const text = await Util.__readFile__inflight(filepath);
     return JSON.parse(text) as Json;
   }
 
@@ -286,10 +362,22 @@ export class Util {
    * @param filepath The file path of the JSON file.
    * @returns The JSON object contained in the file, `undefined` otherwise.
    * @throws Will throw if the content is not in valid JSON format.
+   * @inflightImpl __tryReadJson__inflight
    */
   public static tryReadJson(filepath: string): Json | undefined {
     try {
       return Util.readJson(filepath);
+    } catch {
+      return undefined;
+    }
+  }
+
+  /** @internal */
+  public static async __tryReadJson__inflight(
+    filepath: string
+  ): Promise<Json | undefined> {
+    try {
+      return await Util.__readJson__inflight(filepath);
     } catch {
       return undefined;
     }
@@ -300,9 +388,23 @@ export class Util {
    * @param filepath The file path of the YAML file.
    * @returns The JSON objects converted from YAML objects in the file.
    * @throws Will throw if the content is not in valid YAML format.
+   * @inflightImpl __readYaml__inflight
    */
   public static readYaml(filepath: string): Json[] {
     const text = Util.readFile(filepath);
+    const yamlDocs = yaml.parseAllDocuments(text);
+    return yamlDocs.map((doc) => {
+      if (doc.contents && doc.contents.toJSON) {
+        return doc.contents.toJSON();
+      } else {
+        throw new Error(`Unexpected document structure: ${doc}`);
+      }
+    });
+  }
+
+  /** @internal */
+  public static async __readYaml__inflight(filepath: string): Promise<Json[]> {
+    const text = await Util.__readFile__inflight(filepath);
     const yamlDocs = yaml.parseAllDocuments(text);
     return yamlDocs.map((doc) => {
       if (doc.contents && doc.contents.toJSON) {
@@ -319,6 +421,7 @@ export class Util {
    * @param filepath The file path of the YAML file.
    * @returns The JSON objects converted from YAML objects in the file, `undefined` otherwise.
    * @throws Will throw if the content is not in valid YAML format.
+   * @inflightImpl __tryReadYaml__inflight
    */
   public static tryReadYaml(filepath: string): Json[] | undefined {
     try {
@@ -327,12 +430,25 @@ export class Util {
       return undefined;
     }
   }
+
+  /** @internal */
+  public static async __tryReadYaml__inflight(
+    filepath: string
+  ): Promise<Json[] | undefined> {
+    try {
+      return await Util.__readYaml__inflight(filepath);
+    } catch {
+      return undefined;
+    }
+  }
+
   /**
    * Writes data to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
    * @param data The data to write.
    * @param options The `encoding` can be set to specify the character encoding. And the `flag` can be set to specify the attributes.
    * If a flag is not provided, it defaults to `"w"`.
+   * @inflightImpl __writeFile__inflight
    */
   public static writeFile(
     filepath: string,
@@ -342,20 +458,40 @@ export class Util {
     fs.writeFileSync(filepath, data, options);
   }
 
+  /** @internal */
+  public static async __writeFile__inflight(
+    filepath: string,
+    data: string,
+    options?: WriteFileOptions
+  ): Promise<void> {
+    await fs.promises.writeFile(filepath, data, options);
+  }
+
   /**
    * Writes JSON to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
    * @param obj The JSON object to be dumped.
+   * @inflightImpl __writeJson__inflight
    */
   public static writeJson(filepath: string, obj: Json): void {
     const text = JSON.stringify(obj, null, 2);
     fs.writeFileSync(filepath, text);
   }
 
+  /** @internal */
+  public static async __writeJson__inflight(
+    filepath: string,
+    obj: Json
+  ): Promise<void> {
+    const text = JSON.stringify(obj, null, 2);
+    await fs.promises.writeFile(filepath, text);
+  }
+
   /**
    * Writes multiple YAML objects to a file, replacing the file if it already exists.
    * @param filepath The file path that needs to be written.
-   * @param objs The YANL objects to be dumped.
+   * @param objs The YAML objects to be dumped.
+   * @inflightImpl __writeYaml__inflight
    */
   public static writeYaml(filepath: string, ...objs: Json[]): void {
     const contents = objs.map((o) =>
@@ -364,12 +500,35 @@ export class Util {
     fs.writeFileSync(filepath, contents.join("---\n"));
   }
 
+  /** @internal */
+  public static async __writeYaml__inflight(
+    filepath: string,
+    ...objs: Json[]
+  ): Promise<void> {
+    const contents = objs.map((o) =>
+      yaml.stringify(o, { aliasDuplicateObjects: false })
+    );
+    await fs.promises.writeFile(filepath, contents.join("---\n"));
+  }
+
   /**
-   * Remove files and directories (modeled on the standard POSIX `rm`utility). Returns `undefined`.
+   * Remove files and directories (modeled on the standard POSIX `rm` utility). Returns `undefined`.
    * @param path The path to the file or directory you want to remove.
+   * @inflightImpl __remove__inflight
    */
   public static remove(path: string, opts?: RemoveOptions): void {
     fs.rmSync(path, {
+      force: opts?.force ?? true,
+      recursive: opts?.recursive ?? true,
+    });
+  }
+
+  /** @internal */
+  public static async __remove__inflight(
+    path: string,
+    opts?: RemoveOptions
+  ): Promise<void> {
+    await fs.promises.rm(path, {
       force: opts?.force ?? true,
       recursive: opts?.recursive ?? true,
     });
@@ -379,6 +538,7 @@ export class Util {
    * Checks if the given path is a directory and exists.
    * @param path The path to check.
    * @returns `true` if the path is an existing directory, `false` otherwise.
+   * @inflightImpl __isDir__inflight
    */
   public static isDir(path: string): boolean {
     try {
@@ -388,22 +548,41 @@ export class Util {
     }
   }
 
+  /** @internal */
+  public static async __isDir__inflight(path: string): Promise<boolean> {
+    return fs.promises.stat(path).then((stat) => stat.isDirectory());
+  }
+
   /**
    * Gets the stats of the given path.
    * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
+   * @inflightImpl __metadata__inflight
    */
   public static metadata(path: string): Metadata {
     return this._metadata(fs.statSync(path));
+  }
+
+  /** @internal */
+  public static async __metadata__inflight(path: string): Promise<Metadata> {
+    return fs.promises.stat(path).then((stat) => this._metadata(stat));
   }
 
   /**
    * Gets the stats of the given path without following symbolic links.
    * @param path The path to get stats for.
    * @returns The stats of the path, formatted as a `Metadata` object.
+   * @inflightImpl __symlinkMetadata__inflight
    */
   public static symlinkMetadata(path: string): Metadata {
     return this._metadata(fs.lstatSync(path));
+  }
+
+  /** @internal */
+  public static async __symlinkMetadata__inflight(
+    path: string
+  ): Promise<Metadata> {
+    return fs.promises.lstat(path).then((stat) => this._metadata(stat));
   }
 
   /**
@@ -411,9 +590,18 @@ export class Util {
    * Expects a permission string like `"755"` or `"644"`.
    * @param path The path of the file or directory.
    * @param permissions The mode to set as a string.
+   * @inflightImpl __setPermissions__inflight
    */
   public static setPermissions(path: string, permissions: string): void {
     fs.chmodSync(path, parseInt(permissions, 8));
+  }
+
+  /** @internal */
+  public static async __setPermissions__inflight(
+    path: string,
+    permissions: string
+  ): Promise<void> {
+    await fs.promises.chmod(path, parseInt(permissions, 8));
   }
 
   /**
@@ -437,6 +625,7 @@ export class Util {
    * @param path The path to the symbolic link to be created.
    * @param type The type of the target. It can be `FILE`, `DIRECTORY`, or `JUNCTION` (Windows only).
    *             Defaults to `FILE` if not specified.
+   * @inflightImpl __symlink__inflight
    */
   public static symlink(
     target: string,
@@ -444,6 +633,15 @@ export class Util {
     type: SymlinkType = SymlinkType.FILE
   ): void {
     fs.symlinkSync(target, path, type);
+  }
+
+  /** @internal */
+  public static async __symlink__inflight(
+    target: string,
+    path: string,
+    type: SymlinkType = SymlinkType.FILE
+  ): Promise<void> {
+    await fs.promises.symlink(target, path, type);
   }
 
   /**
@@ -496,5 +694,20 @@ export class Util {
   private static _formatPermissions(mode: number): string {
     const octalString = mode.toString(8);
     return octalString.substring(octalString.length - 3);
+  }
+}
+
+/**
+ * Check if a file exists for an specific path
+ */
+async function existsPromise(filePath: string): Promise<boolean> {
+  try {
+    await fs.promises.access(
+      filePath,
+      fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK //eslint-disable-line no-bitwise
+    );
+    return true;
+  } catch (er) {
+    return false;
   }
 }

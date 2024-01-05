@@ -1,4 +1,10 @@
-import { exec, execFile } from "child_process";
+import {
+  exec,
+  execFile,
+  execSync,
+  ExecSyncOptions as NodeExecSyncOptions,
+  ExecOptions as NodeExecOptions,
+} from "child_process";
 import { createHash } from "crypto";
 import { promisify } from "util";
 import { nanoid, customAlphabet } from "nanoid";
@@ -135,32 +141,37 @@ export class Util {
    * @param opts `ShellOptions`, such as the working directory and environment variables.
    * @returns The standard output of the shell command.
    * @throws An error if the shell command execution fails or returns a non-zero exit code.
+   * @inflightImpl __shell__inflight
    */
-  public static async shell(
+  public static shell(command: string, opts?: ShellOptions): string {
+    const shellOpts = Util.prepareShellOpts(opts);
+
+    try {
+      const stdout = execSync(command, shellOpts);
+      return stdout.toString();
+    } catch (error: any) {
+      const errorMessage = Util.createErrorMessage(error, command);
+
+      if (opts?.throw !== false) {
+        throw new Error(errorMessage);
+      }
+
+      return errorMessage;
+    }
+  }
+
+  /** @internal */
+  public static async __shell__inflight(
     command: string,
     opts?: ShellOptions
-  ): Promise<String> {
-    const shellOpts = {
-      windowsHide: true,
-      cwd: opts?.cwd,
-      env:
-        opts?.inheritEnv === true
-          ? { ...process.env, ...opts?.env }
-          : { ...opts?.env },
-    };
-
-    const createErrorMessage = (error: any): string => {
-      if (error.stderr) {
-        return `Error executing command "${command}". Exited with error: ${error.stderr}`;
-      }
-      return `Error executing command "${command}". Exited with error code: ${error.code}`;
-    };
+  ): Promise<string> {
+    const shellOpts = Util.prepareShellOpts(opts);
 
     try {
       const { stdout } = await execPromise(command, shellOpts);
       return stdout.toString();
     } catch (error: any) {
-      const errorMessage = createErrorMessage(error);
+      const errorMessage = Util.createErrorMessage(error, command);
 
       if (opts?.throw !== false) {
         throw new Error(errorMessage);
@@ -259,9 +270,19 @@ export class Util {
   /**
    * Suspends execution for a given duration.
    * @param delay The time to suspend execution.
-   * @inflight
+   * @inflightImpl __sleep__inflight
    */
-  public static async sleep(delay: Duration): Promise<void> {
+  public static sleep(delay: Duration): void {
+    Atomics.wait(
+      new Int32Array(new SharedArrayBuffer(4)),
+      0,
+      0,
+      delay.seconds * 1000
+    );
+  }
+
+  /** @internal */
+  public static async __sleep__inflight(delay: Duration): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, delay.seconds * 1000));
   }
 
@@ -337,5 +358,25 @@ export class Util {
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
+
+  private static prepareShellOpts(
+    opts: ShellOptions = {}
+  ): NodeExecSyncOptions & NodeExecOptions {
+    return {
+      cwd: opts.cwd,
+      env:
+        opts.inheritEnv === true
+          ? { ...process.env, ...opts.env }
+          : { ...opts.env },
+    };
+  }
+
+  private static createErrorMessage(error: any, command: string): string {
+    if (error.stderr) {
+      return `Error executing command "${command}". Exited with error: ${error.stderr}`;
+    }
+    return `Error executing command "${command}". Exited with error code: ${error.code}`;
+  }
+
   private constructor() {}
 }

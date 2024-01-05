@@ -801,6 +801,8 @@ pub struct FunctionSignature {
 	/// - `$args$`: the arguments passed to this function call
 	/// - `$args_text$`: the original source text of the arguments passed to this function call, escaped
 	pub js_override: Option<String>,
+	/// During jsify, calls to this function will be replaced with this other function name
+	pub inflight_impl: Option<String>,
 	pub docs: Docs,
 }
 
@@ -1909,6 +1911,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("console.log($args$)".to_string()),
+				inflight_impl: None,
 				docs: Docs::with_summary("Logs a message"),
 			}),
 			scope,
@@ -1926,6 +1929,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.void(),
 				phase: Phase::Independent,
 				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
+				inflight_impl: None,
 				docs: Docs::with_summary("Asserts that a condition is true"),
 			}),
 			scope,
@@ -1943,6 +1947,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: self.types.anything(),
 				phase: Phase::Independent,
 				js_override: Some("$args$".to_string()),
+				inflight_impl: None,
 				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
 			}),
 			scope,
@@ -1970,6 +1975,7 @@ impl<'a> TypeChecker<'a> {
 				return_type: std_node,
 				phase: Phase::Preflight,
 				js_override: Some("$helpers.nodeof($args$)".to_string()),
+				inflight_impl: None,
 				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
 			}),
 			scope,
@@ -3383,6 +3389,7 @@ impl<'a> TypeChecker<'a> {
 					return_type: self.resolve_type_annotation(ast_sig.return_type.as_ref(), env),
 					phase: ast_sig.phase,
 					js_override: None,
+					inflight_impl: None,
 					docs: Docs::default(),
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -5001,6 +5008,7 @@ impl<'a> TypeChecker<'a> {
 							return_type: new_return_type,
 							phase: sig.phase,
 							js_override: sig.js_override.clone(),
+							inflight_impl: None,
 							docs: Docs::default(),
 						};
 
@@ -6127,6 +6135,7 @@ mod tests {
 			return_type: ret,
 			phase,
 			js_override: None,
+			inflight_impl: None,
 			docs: Docs::default(),
 		})
 	}

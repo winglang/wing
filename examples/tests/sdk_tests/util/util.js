@@ -1,5 +1,5 @@
 const os = require("os");
 
-exports.platform = function () {
+exports.platformPreflight = exports.platformInflight = function () {
   return os.platform();
 };

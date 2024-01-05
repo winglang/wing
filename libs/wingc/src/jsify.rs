@@ -631,13 +631,38 @@ impl<'a> JSifier<'a> {
 							.0
 					}
 				};
+
+				let phase = ctx.visit_ctx.current_phase();
+				if phase == Phase::Independent {
+					// Putting this here to make sure we don't forget to implement this.
+					//
+					// Suppose we are emitting code for an unphased function `foo`, and inside it calls an unphased
+					// function `bar`. If `bar` is phase independent, then either of these could be true:
+					//
+					// - (a) the body of `bar` is phase agnostic (imagine string/array methods)
+					// - (b) `bar` has a preflight and inflight implementation
+					//
+					// if we have (b), then instead of jsifying `foo` as a single function, we need to
+					// split it into two implementations, one for preflight and one for inflight.
+					// The preflight impl will call the preflight impl of `bar` and the inflight one
+					// will call the inflight impl of `bar`.
+					//
+					// This also means any calls to `foo` will have to be updated to call the correct
+					// implementation depending on the phase.
+					//
+					// The only reason we're panicking instead of emitting an error is because there is
+					// no way to create unphased scopes in Wing today.
+					panic!("Calling functions in independent phases is unsupported");
+				}
+
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
-				let expr_string = match callee {
+				let mut expr_string = match callee {
 					CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx).to_string(),
 					CalleeKind::SuperCall(method) => format!("super.{}", method),
 				};
+
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx).to_string();
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -674,6 +699,32 @@ impl<'a> JSifier<'a> {
 						let replace_with = &[self_string, args_string, args_text_string];
 						let ac = AhoCorasick::new(patterns).expect("Failed to create macro pattern");
 						return new_code!(expr_span, ac.replace_all(js_override, replace_with));
+					}
+
+					if phase == Phase::Inflight {
+						if let Some(inflight_impl) = &function_sig.inflight_impl {
+							// hacky -- how can we do this better?
+							expr_string = match callee {
+								CalleeKind::Expr(expr) => match &expr.kind {
+									ExprKind::Reference(Reference::Identifier(_)) => inflight_impl.to_string(),
+									ExprKind::Reference(Reference::InstanceMember { property, .. }) => expr_string
+										.split(".")
+										.filter(|s| s != &property.name)
+										.chain(std::iter::once(inflight_impl.as_str()))
+										.join("."),
+									ExprKind::Reference(Reference::TypeMember { property, .. }) => {
+										// replace the property name
+										expr_string
+											.split(".")
+											.filter(|s| s != &property.name)
+											.chain(std::iter::once(inflight_impl.as_str()))
+											.join(".")
+									}
+									_ => panic!("unhandled phase independent function call"),
+								},
+								CalleeKind::SuperCall { .. } => panic!("unhandled phase independent function call"),
+							};
+						}
 					}
 				}
 
