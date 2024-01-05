@@ -479,6 +479,11 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
+				// Check if there's an explicit inflight phase override on this method
+				let member_phase = extract_docstring_tag(&m.docs, "inflight")
+					.map(|_| Phase::Inflight)
+					.unwrap_or(member_phase);
+
 				// Check if this function has two phase implementations
 				let inflight_impl = extract_docstring_tag(&m.docs, "inflightImpl");
 				let member_phase = if inflight_impl.is_some() {
