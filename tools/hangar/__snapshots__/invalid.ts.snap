@@ -633,17 +633,10 @@ Duration <DURATION>"
 
 exports[`call_inflight_from_preflight.test.w 1`] = `
 "error: Cannot call into inflight phase while preflight
-  --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:4:1
+  --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:8:1
   |
-4 | util.sleep(1s);
-  | ^^^^^^^^^^^^^^ Cannot call into inflight phase while preflight
-
-
-error: Cannot call into inflight phase while preflight
-   --> ../../../examples/tests/invalid/call_inflight_from_preflight.test.w:12:1
-   |
-12 | foo.do();
-   | ^^^^^^^^ Cannot call into inflight phase while preflight
+8 | foo.do();
+  | ^^^^^^^^ Cannot call into inflight phase while preflight
 
 
  
