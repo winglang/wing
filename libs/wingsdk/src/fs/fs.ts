@@ -550,7 +550,10 @@ export class Util {
 
   /** @internal */
   public static async __isDir__inflight(path: string): Promise<boolean> {
-    return fs.promises.stat(path).then((stat) => stat.isDirectory());
+    return fs.promises
+      .stat(path)
+      .then((stat) => stat.isDirectory())
+      .catch(() => false);
   }
 
   /**
