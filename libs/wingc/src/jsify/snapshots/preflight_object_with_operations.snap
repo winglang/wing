@@ -14,7 +14,40 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-1.js
+## inflight.$Closure1-2.js
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $__parent_this_1_checkid, $__parent_this_1_checkpath, $__parent_this_1_node_path, $__parent_this_1_results, $handler, $std_Datetime, $std_Json }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      console.log(String.raw({ raw: ["running check ", " (", ")..."] }, $__parent_this_1_node_path, $__parent_this_1_checkid));
+      const ts = (await (await $std_Datetime.utcNow()).toIso());
+      let result = ({"checkid": $__parent_this_1_checkid, "checkpath": $__parent_this_1_checkpath, "timestamp": ts, "ok": true});
+      try {
+        (await $handler());
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        console.log(String.raw({ raw: ["check failed: ", ""] }, e));
+        result = ({"checkid": $__parent_this_1_checkid, "checkpath": $__parent_this_1_checkpath, "timestamp": ts, "ok": false, "error": e});
+      }
+      (await $__parent_this_1_results.store(result));
+      return ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(result);
+    }
+  }
+  return $Closure1;
+}
+//# sourceMappingURL=inflight.$Closure1-2.js.map
+```
+
+## inflight.$Closure1-3.js
 
 ```js
 "use strict";
@@ -33,7 +66,191 @@ module.exports = function({ $b }) {
   }
   return $Closure1;
 }
-//# sourceMappingURL=inflight.$Closure1-1.js.map
+//# sourceMappingURL=inflight.$Closure1-3.js.map
+```
+
+## inflight.Check-2.js
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $r_CheckResult, $std_Json }) {
+  class Check {
+    constructor({ $this_checkid, $this_invoker, $this_results }) {
+      this.$this_checkid = $this_checkid;
+      this.$this_invoker = $this_invoker;
+      this.$this_results = $this_results;
+    }
+    async run() {
+      const result = (await this.$this_invoker.invoke(""));
+      return $r_CheckResult._fromJson(JSON.parse(result));
+    }
+    async latest() {
+      return (await this.$this_results.latest(this.$this_checkid));
+    }
+  }
+  return Check;
+}
+//# sourceMappingURL=inflight.Check-2.js.map
+```
+
+## inflight.Results-1.js
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $CheckResult, $std_Json }) {
+  class Results {
+    constructor({ $this_bucket }) {
+      this.$this_bucket = $this_bucket;
+    }
+    async store(result) {
+      const checkid = result.checkid;
+      const body = ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(result);
+      const key = (await this.makeLatestKey(checkid));
+      console.log(String.raw({ raw: ["storing ", ""] }, key));
+      (await this.$this_bucket.putJson(key, result));
+      (await this.$this_bucket.putJson((await this.makeKey(checkid, String.raw({ raw: ["", ".json"] }, result.timestamp))), result));
+    }
+    async latest(checkid) {
+      const key = (await this.makeLatestKey(checkid));
+      const s = (await this.$this_bucket.tryGetJson(key));
+      return $CheckResult._fromJson(s);
+    }
+    async makeKey(checkid, key) {
+      return String.raw({ raw: ["", "/", ""] }, checkid, key);
+    }
+    async makeLatestKey(checkid) {
+      return (await this.makeKey(checkid, "latest.json"));
+    }
+  }
+  return Results;
+}
+//# sourceMappingURL=inflight.Results-1.js.map
+```
+
+## preflight.check-2.js
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const cloud = $stdlib.cloud;
+const r = require("./preflight.results-1.js");
+const CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
+const r_CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
+class Check extends $stdlib.std.Resource {
+  constructor($scope, $id, handler, props) {
+    super($scope, $id);
+    this.checkid = (std.Node.of(this)).addr;
+    this.checkpath = (std.Node.of(this)).path;
+    this.results = (r.Results.of(this));
+    const __parent_this_1 = this;
+    class $Closure1 extends $stdlib.std.Resource {
+      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("./inflight.$Closure1-2.js")({
+            $__parent_this_1_checkid: ${$stdlib.core.liftObject(__parent_this_1.checkid)},
+            $__parent_this_1_checkpath: ${$stdlib.core.liftObject(__parent_this_1.checkpath)},
+            $__parent_this_1_node_path: ${$stdlib.core.liftObject(__parent_this_1.node.path)},
+            $__parent_this_1_results: ${$stdlib.core.liftObject(__parent_this_1.results)},
+            $handler: ${$stdlib.core.liftObject(handler)},
+            $std_Datetime: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Datetime, "@winglang/sdk/std", "Datetime"))},
+            $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      _registerOnLift(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerOnLiftObject(__parent_this_1.checkid, host, []);
+          $Closure1._registerOnLiftObject(__parent_this_1.checkpath, host, []);
+          $Closure1._registerOnLiftObject(__parent_this_1.node.path, host, []);
+          $Closure1._registerOnLiftObject(__parent_this_1.results, host, ["store"]);
+          $Closure1._registerOnLiftObject(handler, host, ["handle"]);
+        }
+        super._registerOnLift(host, ops);
+      }
+    }
+    const wrapper = new $Closure1(this, "$Closure1");
+    if ((props?.deploy ?? true)) {
+      this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", wrapper);
+    }
+    {
+      const $if_let_value = props?.rate;
+      if ($if_let_value != undefined) {
+        const rate = $if_let_value;
+        const schedule = this.node.root.new("@winglang/sdk.cloud.Schedule", cloud.Schedule, this, "cloud.Schedule", { rate: rate });
+        (schedule.onTick(wrapper));
+      }
+    }
+    if ((props?.testing ?? true)) {
+      this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test", handler);
+    }
+    this.invoker = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "run", wrapper);
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Check-2.js")({
+        $r_CheckResult: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(r_CheckResult, "", "CheckResult"))},
+        $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const CheckClient = ${Check._toInflightType(this)};
+        const client = new CheckClient({
+          $this_checkid: ${$stdlib.core.liftObject(this.checkid)},
+          $this_invoker: ${$stdlib.core.liftObject(this.invoker)},
+          $this_results: ${$stdlib.core.liftObject(this.results)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "run", "latest", "$inflight_init"];
+  }
+  _registerOnLift(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      Check._registerOnLiftObject(this.checkid, host, []);
+      Check._registerOnLiftObject(this.invoker, host, []);
+      Check._registerOnLiftObject(this.results, host, []);
+    }
+    if (ops.includes("latest")) {
+      Check._registerOnLiftObject(this.checkid, host, []);
+      Check._registerOnLiftObject(this.results, host, ["latest"]);
+    }
+    if (ops.includes("run")) {
+      Check._registerOnLiftObject(this.invoker, host, ["invoke"]);
+    }
+    super._registerOnLift(host, ops);
+  }
+}
+module.exports = { Check };
+//# sourceMappingURL=preflight.check-2.js.map
 ```
 
 ## preflight.js
@@ -50,6 +267,8 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
+    const r_CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
     class $Closure1 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
@@ -58,7 +277,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("./inflight.$Closure1-3.js")({
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
@@ -92,5 +311,96 @@ const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $p
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "main", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
+```
+
+## preflight.results-1.js
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+const cloud = $stdlib.cloud;
+const CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
+const r_CheckResult = $stdlib.std.Struct._createJsonSchema({id:"/CheckResult",type:"object",properties:{checkid:{type:"string"},checkpath:{type:"string"},error:{type:"string"},ok:{type:"boolean"},timestamp:{type:"string"},},required:["checkid","checkpath","ok","timestamp",]});
+class Results extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+    this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "results");
+  }
+  static of(scope) {
+    let root = (std.Node.of(scope)).root;
+    const rootNode = (std.Node.of(root));
+    if ($helpers.neq((rootNode.tryFindChild("cloud.TestRunner")), undefined)) {
+      {
+        const $if_let_value = rootNode.defaultChild;
+        if ($if_let_value != undefined) {
+          const defaultChild = $if_let_value;
+          root = defaultChild;
+        }
+      }
+    }
+    const id = "checks.Results";
+    const exists = ((std.Node.of(root)).tryFindChild(id));
+    const rootAsResource = root;
+    return (exists ?? new Results(rootAsResource, id));
+  }
+  static _toInflightType() {
+    return `
+      require("./inflight.Results-1.js")({
+        $CheckResult: ${$stdlib.core.liftObject(CheckResult)},
+        $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ResultsClient = ${Results._toInflightType(this)};
+        const client = new ResultsClient({
+          $this_bucket: ${$stdlib.core.liftObject(this.bucket)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  _supportedOps() {
+    return [...super._supportedOps(), "store", "latest", "makeKey", "makeLatestKey", "$inflight_init"];
+  }
+  _registerOnLift(host, ops) {
+    if (ops.includes("$inflight_init")) {
+      Results._registerOnLiftObject(this.bucket, host, []);
+    }
+    if (ops.includes("latest")) {
+      Results._registerOnLiftObject(this, host, ["makeLatestKey"]);
+      Results._registerOnLiftObject(this.bucket, host, ["tryGetJson"]);
+    }
+    if (ops.includes("makeLatestKey")) {
+      Results._registerOnLiftObject(this, host, ["makeKey"]);
+    }
+    if (ops.includes("store")) {
+      Results._registerOnLiftObject(this, host, ["makeKey", "makeLatestKey"]);
+      Results._registerOnLiftObject(this.bucket, host, ["putJson"]);
+    }
+    super._registerOnLift(host, ops);
+  }
+}
+module.exports = { Results };
+//# sourceMappingURL=preflight.results-1.js.map
+```
+
+## preflight.sdk-3.js
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+module.exports = {
+  ...require("./preflight.results-1.js"),
+  ...require("./preflight.check-2.js"),
+};
+//# sourceMappingURL=preflight.sdk-3.js.map
 ```
 
