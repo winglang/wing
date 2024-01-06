@@ -242,6 +242,8 @@ export interface WebsiteSchema extends BaseResourceSchema {
     staticFilesPath: string;
     /** Map of "files" contains dynamic content inserted from preflight */
     fileRoutes: FileRoutes;
+    /** Name of the error document for the website. */
+    errorDocument?: string;
   };
   readonly attrs: WebsiteAttributes & BaseResourceAttributes;
 }
@@ -352,4 +354,5 @@ export interface EndpointSchema extends BaseResourceSchema {
     /** Browser support of the Endpoint. */
     readonly browserSupport: boolean | undefined;
   };
+  readonly attrs: EndpointAttributes & BaseResourceAttributes;
 }

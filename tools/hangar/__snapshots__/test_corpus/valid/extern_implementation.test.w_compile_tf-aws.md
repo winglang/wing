@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $f }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({ $f }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $Foo }) {
   class $Closure2 {
     constructor({  }) {
@@ -41,27 +43,28 @@ module.exports = function({ $Foo }) {
 ## inflight.Foo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
     static async regexInflight(pattern, text) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
+      return (require("../../../external_js.js")["regexInflight"])(pattern, text)
     }
     static async getUuid() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
+      return (require("../../../external_js.js")["getUuid"])()
     }
     static async getData() {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
+      return (require("../../../external_js.js")["getData"])()
     }
     static async print(msg) {
-      return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
+      return (require("../../../external_js.js")["print"])(msg)
     }
     async call() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")")})((await Foo.regexInflight("[a-z]+-\\d+", "abc-123")))};
+      $helpers.assert((await Foo.regexInflight("[a-z]+-\\d+", "abc-123")), "Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")");
       const uuid = (await Foo.getUuid());
-      {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(uuid.length,36)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Foo.getData()),"Cool data!")))};
+      $helpers.assert($helpers.eq(uuid.length, 36), "uuid.length == 36");
+      $helpers.assert($helpers.eq((await Foo.getData()), "Cool data!"), "Foo.getData() == \"Cool data!\"");
     }
   }
   return Foo;
@@ -96,6 +99,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -105,7 +109,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static getGreeting(name) {
-        return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
+        return (require("../../../external_js.js")["getGreeting"])(name)
       }
       static _toInflightType() {
         return `
@@ -138,7 +142,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -172,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -202,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.getGreeting("Wingding")),"Hello, Wingding!")))};
+    $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
     const f = new Foo(this, "Foo");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:console", new $Closure2(this, "$Closure2"));

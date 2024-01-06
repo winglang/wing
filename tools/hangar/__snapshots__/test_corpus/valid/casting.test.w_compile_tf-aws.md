@@ -46,6 +46,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const aws = require("@cdktf/provider-aws");
@@ -53,10 +54,10 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
-    if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("WING_TARGET")),"tf-aws"))) {
+    if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
       const s3Bucket = (b.node.findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
-      {console.log(s3Bucket.node.path)};
+      console.log(s3Bucket.node.path);
     }
   }
 }

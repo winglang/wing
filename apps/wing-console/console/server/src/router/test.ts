@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
+import { formatTraceError } from "../utils/format-wing-error.js";
 import { ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 const getTestName = (testPath: string) => {
@@ -62,7 +63,11 @@ const runTest = async (
         messageType: "success",
       },
     );
-  } catch {
+  } catch (error: any) {
+    let output = await formatTraceError(error?.message);
+    logger.log(output, "console", {
+      messageType: "fail",
+    });
     logger.log(
       `Test "${getTestName(resourcePath)}" failed (${
         Date.now() - startTime

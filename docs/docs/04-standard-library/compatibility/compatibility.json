@@ -115,22 +115,22 @@
     "metadata": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 4333 },
+      "tf-azure": { "implemented": true },
       "tf-gcp": { "implemented": true },
       "awscdk": { "implemented": true }
     },
     "rename": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
+      "sim": { "implemented": true },
+      "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": false },
       "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "awscdk": { "implemented": true }
     },
     "copy": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
       "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": false, "issue": 4398 },
+      "tf-gcp": { "implemented": true },
       "awscdk": { "implemented": true }
     },
     "list": {
@@ -143,7 +143,7 @@
     "publicUrl": {
       "sim": { "implemented": true },
       "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1805 },
+      "tf-azure": { "implemented": true },
       "tf-gcp": { "implemented": true },
       "awscdk": { "implemented": true }
     },

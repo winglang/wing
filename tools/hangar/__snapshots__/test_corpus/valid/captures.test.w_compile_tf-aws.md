@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,15 +17,15 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       (await $bucket2.get("file2.txt"));
       (await $bucket3.get("file3.txt"));
       for (const stuff of (await $bucket1.list())) {
-        {console.log(stuff)};
+        console.log(stuff);
       }
-      {console.log((await $bucket2.publicUrl("file.txt")))};
+      console.log((await $bucket2.publicUrl("file.txt")));
       try {
         (await $bucket1.publicUrl("file.txt"));
       }
       catch ($error_error) {
         const error = $error_error.message;
-        {console.log(error)};
+        console.log(error);
       }
     }
   }
@@ -36,6 +37,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $handler }) {
   class $Closure2 {
     constructor({  }) {
@@ -55,6 +57,7 @@ module.exports = function({ $handler }) {
 ## inflight.$Closure3-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $headers }) {
   class $Closure3 {
     constructor({  }) {
@@ -631,6 +634,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -639,7 +643,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -677,7 +681,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -711,7 +715,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

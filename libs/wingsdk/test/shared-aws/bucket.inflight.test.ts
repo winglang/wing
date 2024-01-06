@@ -212,11 +212,9 @@ test("delete non-existent object from the bucket with mustExist option", async (
   const KEY = "KEY";
 
   s3Mock
-    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .resolves({});
-  s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
+
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -256,7 +254,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   );
 });
 
-test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
+test("Given a public bucket when reaching to a non-existent key, public url it should throw an error", async () => {
   // GIVEN
   let error;
   const BUCKET_NAME = "BUCKET_NAME";
@@ -271,19 +269,17 @@ test("Given a public bucket when reaching to a non existent key, public url it s
     },
   });
   s3Mock
-    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
-    .resolves({ LocationConstraint: "us-east-2" });
-  s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
-  //WHEN
+  // WHEN
   const client = new BucketClient(BUCKET_NAME);
   try {
     await client.publicUrl(KEY);
   } catch (err) {
     error = err;
   }
+
   // THEN
   expect(error?.message).toBe(
     "Cannot provide public url for a non-existent key (key=KEY)"
@@ -357,7 +353,7 @@ test("check that an object doesn't exist in the bucket", async () => {
 
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -548,12 +544,10 @@ test("tryDelete a non-existent object from the bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
-  s3Mock
-    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .resolves({});
+
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -563,7 +557,7 @@ test("tryDelete a non-existent object from the bucket", async () => {
   expect(objectTryDelete).toEqual(false);
 });
 
-test("Given a bucket when reaching to a non existent key, signed url it should throw an error", async () => {
+test("Given a bucket when reaching to a non-existent key, signed url it should throw an error", async () => {
   // GIVEN
   let error;
   const BUCKET_NAME = "BUCKET_NAME";
@@ -571,15 +565,16 @@ test("Given a bucket when reaching to a non existent key, signed url it should t
 
   s3Mock
     .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects({ name: "NotFound" });
+    .rejects(new NotFound({ message: "Object not found", $metadata: {} }));
 
-  //WHEN
+  // WHEN
   const client = new BucketClient(BUCKET_NAME);
   try {
     await client.signedUrl(KEY);
   } catch (err) {
     error = err;
   }
+
   // THEN
   expect(error?.message).toBe(
     `Cannot provide signed url for a non-existent key (key=${KEY})`
@@ -689,7 +684,6 @@ test("copy objects within the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
-
   s3Mock
     .on(CopyObjectCommand, {
       Bucket: BUCKET_NAME,
@@ -713,7 +707,6 @@ test("copy a non-existent object within the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
-
   s3Mock
     .on(CopyObjectCommand, {
       Bucket: BUCKET_NAME,
@@ -727,6 +720,66 @@ test("copy a non-existent object within the bucket", async () => {
 
   // THEN
   await expect(() => client.copy(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
+});
+
+test("rename valid object in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  s3Mock
+    .resolves({})
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .resolves({})
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: SRC_KEY })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.rename(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
+test("renaming an object to its current name should throw an error", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  s3Mock
+    .on(CopyObjectCommand, {
+      Bucket: BUCKET_NAME,
+      CopySource: `${BUCKET_NAME}/${SRC_KEY}`,
+      Key: DST_KEY,
+    })
+    .rejects(new NotFound({ message: "NotFound error", $metadata: {} }));
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
     `Source object does not exist (srcKey=${SRC_KEY}).`
   );
 });

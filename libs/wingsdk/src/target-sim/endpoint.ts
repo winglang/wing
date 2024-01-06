@@ -36,7 +36,7 @@ export class Endpoint extends cloud.Endpoint {
         label: this.label,
         browserSupport: this.browserSupport,
       },
-      attrs: {},
+      attrs: {} as any,
     };
   }
 }

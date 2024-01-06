@@ -2,7 +2,7 @@ bring cloud;
 bring expect;
 
 let bucket = new cloud.Bucket();
-let app = std.Node.of(bucket).app;
+let app = nodeof(bucket).app;
 assert(app.workdir.endsWith(".wing"));
 assert(app.entrypointDir.endsWith("/sdk_tests/std") || app.entrypointDir.endsWith("\\sdk_tests\\std"));
 app.isTestEnvironment; // don't care if it's true or false, just that it compiles
@@ -10,8 +10,8 @@ app.isTestEnvironment; // don't care if it's true or false, just that it compile
 class SingletonBucket {
   pub static of(scope: std.IResource): cloud.Bucket {
     let uid = "SingletonBucket";
-    let root = std.Node.of(scope).root;
-    let root_node = std.Node.of(root);
+    let root = nodeof(scope).root;
+    let root_node = nodeof(root);
     return unsafeCast(root_node.tryFindChild(uid)) ?? new cloud.Bucket() as uid in root;
   }
 }

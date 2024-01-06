@@ -92,6 +92,7 @@ exports[`function with a table binding 1`] = `
             "DYNAMODB_TABLE_NAME_8aa2f938": {
               "Ref": "TableCD117FA1",
             },
+            "NODE_OPTIONS": "--enable-source-maps",
           },
         },
         "Handler": "index.handler",

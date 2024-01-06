@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
     constructor({  }) {
@@ -16,13 +17,13 @@ module.exports = function({ $NotGoo }) {
           return 456;
         }
         async anotherMethod() {
-          {console.log("also fine")};
+          console.log("also fine");
         }
       }
       const y = (await (async () => {const o = new YesGoo(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
+      $helpers.assert($helpers.eq((await y.handle()), 456), "y.handle() == 456");
       const x = (await (async () => {const o = new $NotGoo(); await o.$inflight_init?.(); return o; })());
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
+      $helpers.assert($helpers.eq((await x.handle()), 123), "x.handle() == 123");
     }
   }
   return $Closure1;
@@ -33,6 +34,7 @@ module.exports = function({ $NotGoo }) {
 ## inflight.NotGoo-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class NotGoo {
     async handle() {
@@ -71,6 +73,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -104,7 +107,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

@@ -24,7 +24,7 @@ export type RouterEvents = {
   invalidateQuery: QueryNames;
 };
 
-export type LayoutComponentType = "explorer" | "tests" | "logs";
+export type LayoutComponentType = "explorer" | "tests" | "logs" | "endpoints";
 
 export interface LayoutComponent {
   type: LayoutComponentType;
