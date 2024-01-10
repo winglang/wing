@@ -47,12 +47,12 @@ The following Wing application contains several inputs, in this section of the R
 (draft sketch)
 ```js
 let enableNotifications = cloud.Input("/features/notifications");
-let emailList = cloud.Input("/email-list"); // comma seperated string
+let emailList = cloud.Input("/email-list"); // comma separated string
 
 let inbox = new cloud.Bucket() as "inbox";
 
 // conditionally provision infrastructure based on enableNotification
-if (enableNotifications.asBool()) {
+if enableNotifications.asBool() {
 	inbox.onCreate(inflight () => {
 		// use emailList input inflight
 		for email in emailList.asStr().split(",") {
