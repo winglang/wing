@@ -1,9 +1,8 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
-import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize } from "./util";
+import { sanitizeCode, awscdkSanitize, createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -11,7 +10,7 @@ const CDK_APP_OPTS = {
 };
 
 test("default counter behavior", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   new cloud.Counter(app, "Counter");
   const output = app.synth();
 
@@ -28,7 +27,7 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
@@ -47,7 +46,7 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = simulator.Testing.makeHandler(`async handle(event) {
   const val = await this.my_counter.inc(2);
@@ -73,7 +72,7 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = simulator.Testing.makeHandler(`async handle(event) {
   const val = await this.my_counter.inc(2);
@@ -105,7 +104,7 @@ test("inc() policy statement", () => {
 });
 
 test("dec() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = simulator.Testing.makeHandler(`async handle(event) {
   const val = await this.my_counter.dec(2);
@@ -137,7 +136,7 @@ test("dec() policy statement", () => {
 });
 
 test("peek() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = simulator.Testing.makeHandler(`async handle(event) {
   const val = await this.my_counter.peek();
@@ -169,7 +168,7 @@ test("peek() policy statement", () => {
 });
 
 test("set() policy statement", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = simulator.Testing.makeHandler(`async handle(event) {
   const val = await this.my_counter.set();

@@ -461,12 +461,12 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -542,7 +542,7 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+        this.api = $PlatformManager.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -601,15 +601,14 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "$inflight_init"];
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
-    const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+    const api = $PlatformManager.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
+    const counter = $PlatformManager.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const handler = new $Closure1(this, "$Closure1");
     (api.get("/hello/world", handler));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:api url", new $Closure2(this, "$Closure2"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:api url", new $Closure2(this, "$Closure2"));
     new A(this, "A");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

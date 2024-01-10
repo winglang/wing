@@ -45,11 +45,11 @@ module.exports = function({ $number }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -98,10 +98,9 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq("{1+1}", "{1+1}"), "\"\\{1+1}\" == \"\\{1+1}\"");
     $helpers.assert($helpers.neq("{1+1}", "2"), "\"\\{1+1}\" != \"2\"");
     $helpers.assert($helpers.neq("{1+1}", "{2}"), "\"\\{1+1}\" != \"\\{2}\"");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:str interpolation with lifted expr", new $Closure1(this, "$Closure1"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:str interpolation with lifted expr", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "expressions_string_interpolation.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

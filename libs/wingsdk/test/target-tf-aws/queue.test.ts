@@ -3,18 +3,18 @@ import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import * as std from "../../src/std";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   sanitizeCode,
   tfResourcesOf,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 test("default queue behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new Queue(app, "Queue");
   const output = app.synth();
 
@@ -26,7 +26,7 @@ test("default queue behavior", () => {
 
 test("queue with custom timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -40,7 +40,7 @@ test("queue with custom timeout", () => {
 
 test("queue with custom retention", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new Queue(app, "Queue", {
     retentionPeriod: std.Duration.fromMinutes(30),
   });
@@ -54,7 +54,7 @@ test("queue with custom retention", () => {
 
 test("queue with a consumer function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = new Queue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
@@ -85,7 +85,7 @@ async handle(event) {
 
 test("queue name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = new Queue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
@@ -101,7 +101,7 @@ test("queue name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = new Queue(app, "The*Incredible$Queue");
   const output = app.synth();
 

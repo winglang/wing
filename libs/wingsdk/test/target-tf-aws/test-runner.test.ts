@@ -2,8 +2,7 @@ import { Construct } from "constructs";
 import { describe, expect, test } from "vitest";
 import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
-import { App } from "../../src/target-tf-aws/app";
-import { mkdtemp } from "../util";
+import { mkdtemp, createTFAWSApp } from "../util";
 
 describe("Single test", () => {
   class Root extends Construct {
@@ -15,7 +14,7 @@ describe("Single test", () => {
   }
 
   test("No function handlers should exist in a non test environment", () => {
-    const app = new App({
+    const app = createTFAWSApp({
       entrypointDir: __dirname,
       outdir: mkdtemp(),
       isTestEnvironment: false,
@@ -28,7 +27,7 @@ describe("Single test", () => {
   });
 
   test("A single function handler should exist in a test environment", () => {
-    const app = new App({
+    const app = createTFAWSApp({
       entrypointDir: __dirname,
       outdir: mkdtemp(),
       isTestEnvironment: true,
@@ -53,7 +52,7 @@ describe("Multiple tests", () => {
   }
 
   test("Multiple function handlers should exist in a test environment", () => {
-    const app = new App({
+    const app = createTFAWSApp({
       entrypointDir: __dirname,
       outdir: mkdtemp(),
       isTestEnvironment: true,

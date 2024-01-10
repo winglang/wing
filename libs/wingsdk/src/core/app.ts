@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { PlatformManager } from "../platform";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import type { IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
@@ -59,6 +60,13 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
+
+  /**
+   * Back reference to platform manager that created this App
+   * @default - No platform manager
+   * @internal
+   */
+  readonly _platformManager?: PlatformManager;
 }
 
 /**
@@ -154,6 +162,12 @@ export abstract class App extends Construct implements IApp {
   public readonly _newInstanceOverrides: any[];
 
   /**
+   * Back reference to the platform manager that created this app instance
+   * @internal
+   */
+  public readonly _platformManager?: PlatformManager;
+
+  /**
    * The test runner for this app. Only created if `isTestEnvironment` is true.
    * @internal
    */
@@ -173,6 +187,7 @@ export abstract class App extends Construct implements IApp {
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
     this.isTestEnvironment = props.isTestEnvironment ?? false;
+    this._platformManager = props._platformManager;
   }
 
   /**
@@ -190,33 +205,6 @@ export abstract class App extends Construct implements IApp {
   public abstract synth(): string;
 
   /**
-   * Creates a new object of the given FQN.
-   * @param fqn the fqn of the class to instantiate
-   * @param ctor the constructor of the class to instantiate (undefined for abstract classes)
-   * @param scope the scope of the resource
-   * @param id the id of the resource
-   * @param args the arguments to pass to the resource
-   * @returns the new instance
-   * @throws if the FQN is not supported
-   */
-  public new(
-    fqn: string,
-    ctor: any,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
-    const instance = this.tryNew(fqn, scope, id, ...args);
-    if (instance) {
-      return instance;
-    }
-
-    // no injection, so we'll just create a new instance
-    return new ctor(scope, id, ...args);
-  }
-
-  /**
    * Creates a new object of the given abstract class FQN.
    */
   public newAbstract(
@@ -225,8 +213,13 @@ export abstract class App extends Construct implements IApp {
     id: string,
     ...args: any[]
   ): any {
-    // next delegate to "tryNew", which will allow derived classes to inject
-    const instance = this.tryNew(fqn, scope, id, ...args);
+    // uses the Back Reference for the platform manager to determine which what type to create
+    const instance = this._platformManager?._tryNewInstance(
+      fqn,
+      scope,
+      id,
+      ...args
+    );
     if (!instance) {
       const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
       throw new NotImplementedError(
@@ -243,47 +236,6 @@ export abstract class App extends Construct implements IApp {
     this._idCounters[key] = this._idCounters[key] ?? 0;
 
     return `${prefix}${this._idCounters[key]++}`;
-  }
-
-  /**
-   * Can be overridden by derived classes to inject dependencies.
-   *
-   * @param fqn The fully qualified name of the class we want the type for (jsii).
-   *
-   * @returns The dependency injected specific target type for the given FQN, or undefined if not found.
-   */
-  protected typeForFqn(fqn: string): any {
-    fqn;
-    return undefined;
-  }
-
-  /**
-   * Can be overridden by derived classes to inject dependencies.
-   *
-   * @param fqn The fully qualified name of the class to instantiate (jsii).
-   * @param scope The construct scope.
-   * @param id The construct id.
-   * @param args The arguments to pass to the constructor.
-   */
-  private tryNew(
-    fqn: string,
-    scope: Construct,
-    id: string,
-    ...args: any[]
-  ): any {
-    // first check if overrides have been provided
-    for (const override of this._newInstanceOverrides) {
-      const instance = override(fqn, scope, id, ...args);
-      if (instance) {
-        return instance;
-      }
-    }
-
-    const type = this.typeForFqn(fqn);
-    if (!type) {
-      return undefined;
-    }
-    return new type(scope, id, ...args);
   }
 }
 

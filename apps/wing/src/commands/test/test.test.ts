@@ -72,12 +72,13 @@ describe("wing test (custom platform)", () => {
       "custom-platform.js",
       `
       const tfaws = require("${targetTfAws}");
-      class Platform {
+      class Platform extends tfaws.Platform {
         target = "tf-aws";
 
         newApp(appProps) {
           return new tfaws.App(appProps);
         }
+
       }
       module.exports = { Platform }`
     );

@@ -49,7 +49,6 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -57,6 +56,7 @@ const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -92,7 +92,7 @@ class $Root extends $stdlib.std.Resource {
     const getDisplayName = ((r) => {
       return $helpers.nodeof(r).title;
     });
-    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
+    const q = $PlatformManager.new("@cdktf/provider-aws.sqsQueue.SqsQueue", aws.sqsQueue.SqsQueue, this, "aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this, "WingResource");
     const another_resource = wr;
     console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))));
@@ -101,7 +101,6 @@ class $Root extends $stdlib.std.Resource {
     console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "construct-base.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

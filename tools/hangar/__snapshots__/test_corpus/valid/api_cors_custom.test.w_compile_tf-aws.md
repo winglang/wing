@@ -317,7 +317,6 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -326,6 +325,7 @@ const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const http = $stdlib.http;
 const expect = $stdlib.expect;
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -466,14 +466,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"], "allowCredentials": true, "exposeHeaders": ["Content-Type"]}) });
+    const api = $PlatformManager.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["winglang.io"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type", "Authorization", "X-Custom-Header"], "allowCredentials": true, "exposeHeaders": ["Content-Type"]}) });
     (api.get("/users", new $Closure1(this, "$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:GET /users has cors headers", new $Closure2(this, "$Closure2"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users has cors headers", new $Closure3(this, "$Closure3"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:OPTIONS /users responds with proper headers for requested", new $Closure4(this, "$Closure4"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "api_cors_custom.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

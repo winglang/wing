@@ -3,7 +3,6 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   sanitizeCode,
@@ -11,11 +10,12 @@ import {
   tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new cloud.Topic(app, "Topic");
   const output = app.synth();
 
@@ -27,7 +27,7 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`
@@ -56,7 +56,7 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subOne = Testing.makeHandler(
     `async handle(event) { console.log("Got Event: ", event); }`
@@ -88,7 +88,7 @@ test("topic with multiple subscribers", () => {
 
 test("topic name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
@@ -104,7 +104,7 @@ test("topic name valid", () => {
 
 test("replace invalid character from queue name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
@@ -120,7 +120,7 @@ test("replace invalid character from queue name", () => {
 
 test("topic with subscriber function timeout", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`

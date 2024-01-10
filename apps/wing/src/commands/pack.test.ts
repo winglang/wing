@@ -196,6 +196,7 @@ describe("wing pack", () => {
         "$lib/.wing/inflight.Store-2.js.map",
         "$lib/.wing/inflight.Util-1.js",
         "$lib/.wing/inflight.Util-1.js.map",
+        "$lib/.wing/platform_manager.js",
         "$lib/.wing/preflight.d.ts",
         "$lib/.wing/preflight.enums-1.js",
         "$lib/.wing/preflight.enums-1.js.map",

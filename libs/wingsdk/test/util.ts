@@ -1,8 +1,39 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join, basename } from "path";
-import { App } from "../src/core";
+import * as cdktf from "cdktf";
+import { App, AppProps } from "../src/core";
+import { PlatformManager } from "../src/platform";
 import { WingSimulatorSchema } from "../src/simulator";
+import * as tfgcp from "../src/target-tf-gcp/app";
+
+// TODO: This is a hack to ensure the cdktf module is loaded, there seems to be some issue
+// with the way the module is loaded in the tests
+cdktf;
+
+export function createTFAzureApp(props: AppProps): App {
+  const platformManager = new PlatformManager({ platformPaths: ["tf-azure"] });
+  return platformManager.createApp({
+    _platformManager: platformManager,
+    ...props,
+  }) as App;
+}
+
+export function createTFGCPApp(props: tfgcp.AppProps): tfgcp.App {
+  const platformManager = new PlatformManager({ platformPaths: ["tf-gcp"] });
+  return platformManager.createApp({
+    _platformManager: platformManager,
+    ...props,
+  }) as any;
+}
+
+export function createTFAWSApp(props: AppProps): App {
+  const platformManager = new PlatformManager({ platformPaths: ["tf-aws"] });
+  return platformManager.createApp({
+    _platformManager: platformManager,
+    ...props,
+  }) as App;
+}
 
 export function treeJsonOf(outdir: string): any {
   return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));

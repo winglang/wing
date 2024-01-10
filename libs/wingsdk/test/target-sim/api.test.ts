@@ -1,6 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
+import { PlatformManager } from "../../src/platform";
 import { Simulator, Testing } from "../../src/simulator";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp } from "../sim-app";
@@ -24,6 +25,8 @@ const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status:
 const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }`;
 // Handler that responds to a request without a response body
 const INFLIGHT_CODE_NO_BODY = `async handle(req) { return { status: 200 }; }`;
+
+const _platformManager = new PlatformManager({ platformPaths: ["sim"] });
 
 test("create an api", async () => {
   // GIVEN

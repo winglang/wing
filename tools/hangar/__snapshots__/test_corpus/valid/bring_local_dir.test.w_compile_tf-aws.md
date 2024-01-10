@@ -84,6 +84,7 @@ const $helpers = $stdlib.helpers;
 const blah = require("./preflight.inner-2.js");
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
+const $PlatformManager = require('./platform_manager.js');
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -126,6 +127,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const util = $stdlib.util;
+const $PlatformManager = require('./platform_manager.js');
 class Bar extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -190,6 +192,7 @@ module.exports = { Bar };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 module.exports = {
   ...require("./preflight.widget-1.js"),
 };
@@ -200,13 +203,13 @@ module.exports = {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const w = require("./preflight.widget-1.js");
 const subdir = require("./preflight.subdir2-5.js");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -221,7 +224,6 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((foo.checkWidget(widget2)), 1379), "foo.checkWidget(widget2) == 1379");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local_dir.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
@@ -233,6 +235,7 @@ $APP.synth();
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 module.exports = {
   get inner() { return require("./preflight.inner-2.js") },
   ...require("./preflight.file2-4.js"),
@@ -247,6 +250,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 class Widget extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

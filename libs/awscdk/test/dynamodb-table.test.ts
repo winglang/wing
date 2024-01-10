@@ -1,18 +1,17 @@
-import { Match, Template } from "aws-cdk-lib/assertions";
+import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { cloud, simulator, ex } from "@winglang/sdk";
-import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
+import { awscdkSanitize, createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
-  entrypointDir: __dirname,
+  entrypointDir: __dirname
 };
 
 test("default dynamodb table behavior", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -27,7 +26,7 @@ test("default dynamodb table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const table = new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",

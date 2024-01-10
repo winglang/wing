@@ -16,7 +16,6 @@ export class OnDeploy extends cloud.OnDeploy {
     props: cloud.OnDeployProps = {}
   ) {
     super(scope, id, handler, props);
-
     let fn = new cloud.Function(this, "Function", handler, props);
     const awsFn = fn as AwsFunction;
 

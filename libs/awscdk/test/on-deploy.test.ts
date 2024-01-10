@@ -1,9 +1,8 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import { expect, test } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
-import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
+import { awscdkSanitize, createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -13,7 +12,7 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
 test("create an OnDeploy", () => {
   // GIVEN
-  const app = new awscdk.App({
+  const app = createApp({
     outdir: mkdtemp(),
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
@@ -30,7 +29,7 @@ test("create an OnDeploy", () => {
 
 test("execute OnDeploy after other resources", () => {
   // GIVEN
-  const app = new awscdk.App({
+  const app = createApp({
     outdir: mkdtemp(),
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,
@@ -53,7 +52,7 @@ test("execute OnDeploy after other resources", () => {
 
 test("execute OnDeploy before other resources", () => {
   // GIVEN
-  const app = new awscdk.App({
+  const app = createApp({
     outdir: mkdtemp(),
     entrypointDir: __dirname,
     ...CDK_APP_OPTS,

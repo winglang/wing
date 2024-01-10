@@ -10,46 +10,11 @@ const FOO_FQN = "@winglang/sdk.foo.Foo";
 const BAR_FQN = "@winglang/sdk.foo.Bar";
 const ANOTHER_FQN = "@winglang/sdk.another.Another";
 
-test("new() allows derived classes to inject a different implementation", () => {
-  const app = new MyApp();
-  const foo = app.new(FOO_FQN, Foo, app, "foo", 99);
-  expect(foo).toBeInstanceOf(MyFoo);
-  expect(foo.hi()).toEqual("hi 99");
-});
-
-test("newAbstract() allows derived classes to inject a different implementation", () => {
-  const app = new MyApp();
-  const foo = app.newAbstract(BAR_FQN, app, "my-bar");
-  expect(foo).toBeInstanceOf(Bar);
-});
-
-test("new() defaults to just creating an instance", () => {
-  const app = new MyApp();
-  const bar = app.new(ANOTHER_FQN, Bar, app, "bar");
-  expect(bar).toBeInstanceOf(Bar);
-});
-
 test("newAbstract() throws if there is no implementation", () => {
   const app = new MyApp();
   expect(() => app.newAbstract(ANOTHER_FQN, app, "bar")).toThrow(
     /Resource \"@winglang\/sdk\.another.Another\" is not yet implemented for "awscdk" target\. Please refer to the roadmap https:\/\/github\.com\/orgs\/winglang\/projects\/3\/views\/1\?filterQuery=another\.Another/
   );
-});
-
-describe("appForTarget", () => {
-  const map = {
-    sim: SimApp,
-    "tf-aws": TfAwsApp,
-    "tf-azure": TfAzureApp,
-    "tf-gcp": TfGcpApp,
-  };
-
-  for (const [target, app] of Object.entries(map)) {
-    test(`returns the app for the target "${target}"`, () => {
-      const appActual = App.for(target);
-      expect(appActual.constructor).equal(app.constructor);
-    });
-  }
 });
 
 class MyApp extends App {
@@ -65,7 +30,7 @@ class MyApp extends App {
     throw new Error("Method not implemented.");
   }
 
-  protected typeForFqn(fqn: string) {
+  public typeForFqn(fqn: string) {
     switch (fqn) {
       case FOO_FQN:
         return MyFoo;

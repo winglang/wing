@@ -2,7 +2,6 @@ import child_process from "child_process";
 import { resolve } from "path";
 import { test, expect, vi, afterAll, describe } from "vitest";
 import * as ex from "../../src/ex";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   getTfResource,
   mkdtemp,
@@ -11,6 +10,7 @@ import {
   tfResourcesWithProperty,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 describe("Testing ReactApp", () => {
@@ -22,7 +22,7 @@ describe("Testing ReactApp", () => {
 
   test("default React App behavior", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
     new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
@@ -60,7 +60,7 @@ describe("Testing ReactApp", () => {
   test("React App with invalid path should throw error", () => {
     // GIVEN
     expect(() => {
-      const app = new tfaws.App({
+      const app = createTFAWSApp({
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
@@ -74,7 +74,7 @@ describe("Testing ReactApp", () => {
 
   test("website with addEnvironment", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
     const website = new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
@@ -116,7 +116,7 @@ describe("Testing ReactApp", () => {
 
   test("website with useBuildCommand=false still uses build command", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
     const website = new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
@@ -134,7 +134,7 @@ describe("Testing ReactApp", () => {
   test("website with custom build path", () => {
     // GIVEN
     const CUSTOM_COMMAND = "echo 'custom command'";
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     // this isn't a React App, but a website with a package json and a build command
     new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
@@ -151,7 +151,7 @@ describe("Testing ReactApp", () => {
 
   test("custom error page", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     new ex.ReactApp(app, "Website", {
       projectPath: "../test-files/react-website",
     });

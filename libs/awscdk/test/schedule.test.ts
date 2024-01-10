@@ -1,9 +1,8 @@
-import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
+import { Match, Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { simulator, cloud, std } from "@winglang/sdk";
-import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { awscdkSanitize } from "./util";
+import { awscdkSanitize, createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -12,7 +11,7 @@ const CDK_APP_OPTS = {
 
 test("schedule behavior with rate", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`
   );
@@ -33,7 +32,7 @@ test("schedule behavior with rate", () => {
 
 test("schedule behavior with cron", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`
   );
@@ -54,7 +53,7 @@ test("schedule behavior with cron", () => {
 
 test("schedule with two functions", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Received: ", event); }`
   );
@@ -78,7 +77,7 @@ test("schedule with two functions", () => {
 
 test("schedule with rate and cron simultaneously", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
   expect(
@@ -92,7 +91,7 @@ test("schedule with rate and cron simultaneously", () => {
 
 test("cron with more than five values", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
   expect(
@@ -107,7 +106,7 @@ test("cron with more than five values", () => {
 
 test("schedule without rate or cron", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
@@ -117,7 +116,7 @@ test("schedule without rate or cron", () => {
 
 test("schedule with rate less than 1 minute", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
   expect(
@@ -130,7 +129,7 @@ test("schedule with rate less than 1 minute", () => {
 
 test("cron with Day-of-month and Day-of-week setting with *", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
 
   // THEN
   expect(

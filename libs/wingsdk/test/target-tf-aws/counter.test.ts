@@ -2,17 +2,17 @@ import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   sanitizeCode,
   tfResourcesOf,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 test("default counter behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new cloud.Counter(app, "Counter");
   const output = app.synth();
 
@@ -21,7 +21,7 @@ test("default counter behavior", () => {
 });
 
 test("counter with initial value", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new cloud.Counter(app, "Counter", {
     initial: 9991,
   });
@@ -33,7 +33,7 @@ test("counter with initial value", () => {
 });
 
 test("function with a counter binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     `async handle(event) {
@@ -66,7 +66,7 @@ test("function with a counter binding", () => {
 });
 
 test("inc() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     `async handle(event) {
@@ -89,7 +89,7 @@ test("inc() policy statement", () => {
 });
 
 test("dec() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     `async handle(event) {
@@ -112,7 +112,7 @@ test("dec() policy statement", () => {
 });
 
 test("peek() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     `async handle(event) {
@@ -135,7 +135,7 @@ test("peek() policy statement", () => {
 });
 
 test("set() policy statement", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = Testing.makeHandler(
     `async handle(event) {
@@ -158,7 +158,7 @@ test("set() policy statement", () => {
 
 test("counter name valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
@@ -177,7 +177,7 @@ test("counter name valid", () => {
 
 test("replace invalid character from counter name", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const counter = new cloud.Counter(app, "The*Amazing%Counter@01");
   const output = app.synth();
 

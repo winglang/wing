@@ -4,6 +4,7 @@ import { test, expect } from "vitest";
 import { cloud } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
+import { createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -12,7 +13,7 @@ const CDK_APP_OPTS = {
 
 test("default secret behavior", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   new cloud.Secret(app, "Secret");
   const output = app.synth();
 
@@ -24,7 +25,7 @@ test("default secret behavior", () => {
 
 test("secret with a name", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const secret = new cloud.Secret(app, "Secret", {
     name: "my-secret",
   }) as awscdk.Secret;

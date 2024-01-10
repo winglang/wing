@@ -274,6 +274,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 module.exports = {  };
 //# sourceMappingURL=preflight.empty-1.js.map
 ```
@@ -282,7 +283,6 @@ module.exports = {  };
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -291,6 +291,7 @@ const file1 = require("./preflight.store-2.js");
 const file2 = require("./preflight.subfile-3.js");
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -383,14 +384,13 @@ class $Root extends $stdlib.std.Resource {
     }
     const store = new file1.Store(this, "file1.Store");
     const q = new file2.Q(this, "file2.Q");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:add data to store", new $Closure1(this, "$Closure1"));
     const s = ({"x": 1, "y": 2});
     const c = file1.Color.BLUE;
     $helpers.assert($helpers.neq(c, file1.Color.RED), "c != file1.Color.RED");
     const t = new Triangle(this, "Triangle");
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_local.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
@@ -405,6 +405,7 @@ const $helpers = $stdlib.helpers;
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
+const $PlatformManager = require('./platform_manager.js');
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -433,7 +434,7 @@ class Util extends $stdlib.std.Resource {
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.b = $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -469,7 +470,7 @@ class Store extends $stdlib.std.Resource {
         super._registerOnLift(host, ops);
       }
     }
-    const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
+    const prefill = $PlatformManager.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `
@@ -521,6 +522,7 @@ const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const math = $stdlib.math;
+const $PlatformManager = require('./platform_manager.js');
 class Q extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

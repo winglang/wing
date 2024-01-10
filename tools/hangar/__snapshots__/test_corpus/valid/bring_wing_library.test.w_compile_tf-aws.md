@@ -97,6 +97,7 @@ module.exports = function({  }) {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 const FavoriteNumbers =
   (function (tmp) {
     tmp[tmp["SEVEN"] = 0] = ",SEVEN";
@@ -112,7 +113,6 @@ module.exports = { FavoriteNumbers };
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -120,6 +120,7 @@ const $helpers = $stdlib.helpers;
 const fixture = require("./preflight.testfixture-5.js");
 const testfixture = require("./preflight.testfixture-5.js");
 const testfixture2 = require("./preflight.testfixture-5.js");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -162,10 +163,9 @@ class $Root extends $stdlib.std.Resource {
     const fave_num2 = testfixture.FavoriteNumbers.SEVEN;
     const fave_num3 = testfixture2.FavoriteNumbers.SEVEN;
     $helpers.assert($helpers.eq((fixture.Store.makeKey("hello")), "data/hello.json"), "fixture.Store.makeKey(\"hello\") == \"data/hello.json\"");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:makeKeyInflight", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_wing_library.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
@@ -179,10 +179,11 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const myutil = require("./preflight.util-2.js");
+const $PlatformManager = require('./platform_manager.js');
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
-    this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.data = $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
   }
   static makeKey(name) {
     return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
@@ -230,6 +231,7 @@ module.exports = { Store };
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 module.exports = {
   ...require("./preflight.util-2.js"),
 };
@@ -242,6 +244,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 module.exports = {
   get subdir() { return require("./preflight.subdir-4.js") },
   ...require("./preflight.store-3.js"),
@@ -256,6 +259,7 @@ module.exports = {
 const $stdlib = require('@winglang/sdk');
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
+const $PlatformManager = require('./platform_manager.js');
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);

@@ -1,6 +1,5 @@
 import { test, expect } from "vitest";
-import * as tfazure from "../../src/target-tf-azure";
-import { mkdtemp } from "../util";
+import { mkdtemp, createTFAzureApp } from "../util";
 
 test("throw error when no location provided", () => {
   // GIVEN
@@ -11,7 +10,7 @@ test("throw error when no location provided", () => {
   };
 
   // THEN
-  expect(() => new tfazure.App(props)).toThrow(
+  expect(() => createTFAzureApp(props)).toThrow(
     /Location must be specified in the AZURE_LOCATION environment variable/
   );
 });
@@ -25,9 +24,9 @@ test("can read location from environment variable", () => {
   };
   const expectedLocation = "East US";
   process.env.AZURE_LOCATION = expectedLocation;
-  let app: tfazure.App;
+  let app: any;
 
   // THEN
-  expect(() => (app = new tfazure.App(props))).not.toThrow();
+  expect(() => (app = createTFAzureApp(props))).not.toThrow();
   expect(app!.location).toEqual(expectedLocation);
 });

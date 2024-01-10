@@ -3,11 +3,14 @@ import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
+import { PlatformManager } from "../../src/platform";
 import { Testing } from "../../src/simulator";
 import { Test } from "../../src/std";
 import { App } from "../../src/target-sim/app";
 import { SimApp } from "../sim-app";
 import { mkdtemp } from "../util";
+
+const _platformManager = new PlatformManager({ platformPaths: ["sim"] });
 
 const TEST_CODE = `
 async handle(event) {
@@ -20,7 +23,12 @@ test("app name can be customized", () => {
 
   // WHEN
   const outdir = join(mkdtemp(), `${APP_NAME}.wsim`);
-  const app = new App({ outdir, name: APP_NAME, entrypointDir: __dirname });
+  const app = new App({
+    outdir,
+    name: APP_NAME,
+    entrypointDir: __dirname,
+    _platformManager,
+  });
   new Bucket(app, "my_bucket");
   const simfile = app.synth();
 

@@ -1,7 +1,6 @@
 import path from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   getTfResource,
   mkdtemp,
@@ -10,11 +9,12 @@ import {
   tfResourcesWithProperty,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 test("default website behavior", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
@@ -48,7 +48,7 @@ test("default website behavior", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     new cloud.Website(app, "Website", {
       path: "/absolute/non-existent",
     });
@@ -62,7 +62,7 @@ test("website with invalid path should throw error", () => {
 
 test("website with addFile", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
@@ -99,7 +99,7 @@ test("website with addFile", () => {
 
 test("website with addJson", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const website = new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
   });
@@ -137,7 +137,7 @@ test("website with addJson", () => {
 test("website with invalid path should throw error", () => {
   // GIVEN
   expect(() => {
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const website = new cloud.Website(app, "Website", {
       path: path.resolve(__dirname, "../test-files/website"),
     });
@@ -151,7 +151,7 @@ test("website with invalid path should throw error", () => {
 
 test("custom error page", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new cloud.Website(app, "Website", {
     path: path.resolve(__dirname, "../test-files/website"),
     errorDocument: "b.html",

@@ -2,17 +2,17 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as ex from "../../src/ex";
 import { Testing } from "../../src/simulator";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   sanitizeCode,
   tfResourcesOf,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 test("default dynamodb table behavior", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",
@@ -25,7 +25,7 @@ test("default dynamodb table behavior", () => {
 });
 
 test("function with a table binding", () => {
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const table = new ex.DynamodbTable(app, "Table", {
     attributeDefinitions: { id: "S" } as any,
     hashKey: "id",

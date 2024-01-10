@@ -42,7 +42,6 @@
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -50,10 +49,11 @@ const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const aws = require("@cdktf/provider-aws");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const b = $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     if ($helpers.eq((util.Util.env("WING_TARGET")), "tf-aws")) {
       const s3Bucket = (b.node.findChild("Default"));
       (s3Bucket.addOverride("bucket_prefix", "my-prefix-"));
@@ -61,7 +61,6 @@ class $Root extends $stdlib.std.Resource {
     }
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "casting.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

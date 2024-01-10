@@ -2,13 +2,13 @@ import { describe, it, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import * as ex from "../../src/ex";
 import { Testing } from "../../src/simulator";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   getTfResource,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
+  createTFAWSApp,
 } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
@@ -16,7 +16,7 @@ const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 describe("When creating a Redis resource", () => {
   it("should create an elasticache cluster and required vpc networking resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     new ex.Redis(app, "Redis");
 
     // WHEN
@@ -40,7 +40,7 @@ describe("When creating a Redis resource", () => {
 
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     new ex.Redis(app, "Redis");
 
     // WHEN
@@ -57,7 +57,7 @@ describe("When creating a Redis resource", () => {
   describe("that is used by a function", () => {
     it("lambda function should have access to the redis cluster", () => {
       // GIVEN
-      const app = new tfaws.App({
+      const app = createTFAWSApp({
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });
@@ -82,7 +82,7 @@ describe("When creating a Redis resource", () => {
 describe("When creating multiple Redis resources", () => {
   it("should only contain a single instance of the vpc resources", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     new ex.Redis(app, "RedisOne");
     new ex.Redis(app, "RedisTwo");
 
@@ -103,7 +103,7 @@ describe("When creating multiple Redis resources", () => {
   describe("that are used by a function", () => {
     it("the function should have access to both clusters", () => {
       // GIVEN
-      const app = new tfaws.App({
+      const app = createTFAWSApp({
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });

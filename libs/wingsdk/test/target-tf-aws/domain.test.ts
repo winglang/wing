@@ -2,13 +2,13 @@ import path from "path";
 import { beforeEach, describe, expect, test } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as ex from "../../src/ex";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   tfResourcesOf,
   tfResourcesWithProperty,
   tfSanitize,
   treeJsonOf,
+  createTFAWSApp,
 } from "../util";
 
 export const containCertificate = (
@@ -41,7 +41,7 @@ describe("cloud.Domain for tf-aws", () => {
     // GIVEN
     process.env.WING_VALUES =
       "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -78,7 +78,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("website with a domain when passing values from file", () => {
     // GIVEN
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -114,7 +114,7 @@ describe("cloud.Domain for tf-aws", () => {
 
   test("react website with a domain when passing values on the command line", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES =
       "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
     const domain = new cloud.Domain(app, "Domain", {
@@ -154,7 +154,7 @@ describe("cloud.Domain for tf-aws", () => {
 
   test("react website with a domain when passing values from file", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
@@ -194,7 +194,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("default domain behavior without hostedZoneId and certificate information", () => {
     expect(() => {
       // GIVEN
-      const app = new tfaws.App({
+      const app = createTFAWSApp({
         outdir: mkdtemp(),
         entrypointDir: __dirname,
       });

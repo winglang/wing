@@ -3,11 +3,11 @@ import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../util";
+import { mkdtemp, createTFAWSApp } from "../util";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler("async handle() {}");
   new Function(app, "Function", inflight);
   new Function(app, "Function2", inflight);
@@ -26,7 +26,7 @@ test("artifacts are located in app root level outdir", () => {
 
 test("no assets folder exists if app does synthesize asset producing resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new tfaws.Bucket(app, "Bucket", {});
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;
   const expectedAssetsDir = `${app.outdir}/assets`;

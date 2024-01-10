@@ -2,6 +2,7 @@ import * as fs from "fs";
 import { join } from "path";
 import { directorySnapshot, mkdtemp } from "./util";
 import { Function, IFunctionClient } from "../src/cloud";
+import { PlatformManager } from "../src/platform";
 import { Simulator, Testing } from "../src/simulator";
 import { App } from "../src/target-sim/app";
 
@@ -31,6 +32,7 @@ export class SimApp extends App {
       entrypointDir: __dirname,
       isTestEnvironment,
       rootConstruct,
+      _platformManager: new PlatformManager({ platformPaths: ["sim"] }),
     });
 
     // symlink the node_modules so we can test imports and stuffs

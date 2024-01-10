@@ -1,23 +1,24 @@
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
-import * as tfgcp from "../../src/target-tf-gcp";
 import {
   mkdtemp,
   tfResourcesOf,
   tfResourcesOfCount,
   tfSanitize,
   treeJsonOf,
+  createTFGCPApp,
 } from "../util";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
   region: "us-central1",
   entrypointDir: __dirname,
+  zone: "somezone",
 };
 
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   new Bucket(app, "my_bucket");
   const output = app.synth();
 
@@ -29,7 +30,7 @@ test("create a bucket", () => {
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   new Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -45,7 +46,7 @@ test("bucket is public", () => {
 
 test("two buckets", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   new Bucket(app, "my_bucket1");
   new Bucket(app, "my_bucket2");
   const output = app.synth();
@@ -60,7 +61,7 @@ test("two buckets", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const bucket = new Bucket(app, "my_bucket");
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -79,7 +80,7 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const bucket = new Bucket(app, "my_bucket");
   bucket.addFile("file1.txt", "../test-files/test1.txt");
   bucket.addFile("file2.txt", "../test-files/test2.txt");

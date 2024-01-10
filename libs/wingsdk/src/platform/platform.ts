@@ -15,12 +15,19 @@ export interface IPlatform {
   /**
    * Hooks for overriding newInstance calls
    *
-   * @param type string fqn of the resource type
+   * @param fqn string fqn of the resource type
    * @param scope construct scope
    * @param id unique string id for resource
    * @param props props to pass to the resource
    */
-  newInstance?(type: string, scope: Construct, id: string, props: any): any;
+  newInstance?(fqn: string, scope: Construct, id: string, props: any): any;
+
+  /**
+   * Hook for defining how fqn maps to a type
+   *
+   * @param fqn string fqn of the resource type
+   */
+  typeForFqn?(fqn: string): any;
 
   /**
    * New App Method

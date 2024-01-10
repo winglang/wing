@@ -2,14 +2,22 @@ import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
+import { Construct } from "constructs";
 import { IPlatform } from "./platform";
-import { App, AppProps, SynthHooks } from "../core";
-
+import { App, AppProps } from "../core";
 interface PlatformManagerOptions {
   /**
    * Either a builtin platform name or a path to a custom platform
    */
   readonly platformPaths?: string[];
+}
+
+interface PlatformHooks {
+  newInstance: any[];
+  typeForFqn: any[];
+  preSynth: any[];
+  postSynth: any[];
+  validate: any[];
 }
 
 const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
@@ -18,9 +26,19 @@ const BUILTIN_PLATFORMS = ["tf-aws", "tf-azure", "tf-gcp", "sim"];
 export class PlatformManager {
   private readonly platformPaths: string[];
   private readonly platformInstances: IPlatform[] = [];
+  private hooks: PlatformHooks = {
+    newInstance: [],
+    typeForFqn: [],
+    preSynth: [],
+    postSynth: [],
+    validate: [],
+  };
 
   constructor(options: PlatformManagerOptions) {
     this.platformPaths = options.platformPaths ?? [];
+
+    this.createPlatformInstances();
+    this.collectCallBacks();
   }
 
   private loadPlatformPath(platformPath: string) {
@@ -47,6 +65,7 @@ export class PlatformManager {
   private loadBuiltinPlatform(builtinPlatformPath: string): any {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const loadedPlatform = require(builtinPlatformPath);
+
     if (!loadedPlatform || !loadedPlatform.Platform) {
       console.error(`Failed to load platform from ${builtinPlatformPath}`);
       return;
@@ -61,11 +80,49 @@ export class PlatformManager {
     });
   }
 
+  public new(
+    fqn: string,
+    ctor: any,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    const instance = this._tryNewInstance(fqn, scope, id, ...args);
+    if (instance) {
+      return instance;
+    }
+    return new ctor(scope, id, ...args);
+  }
+
+  public typeForFqn(fqn: string): any {
+    for (let t4f of this.hooks.typeForFqn) {
+      const result = t4f(fqn);
+      if (result) {
+        return result;
+      }
+    }
+    return undefined;
+  }
+
+  public _tryNewInstance(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    for (let callBack of this.hooks.newInstance) {
+      const result = callBack(fqn, scope, id, ...args);
+      if (result) {
+        return result;
+      }
+    }
+
+    return undefined;
+  }
+
   // This method is called from preflight.js in order to return an App instance
   // that can be synthesized
   public createApp(appProps: AppProps): App {
-    this.createPlatformInstances();
-
     let appCall = this.platformInstances[0].newApp;
 
     if (!appCall) {
@@ -74,33 +131,43 @@ export class PlatformManager {
       );
     }
 
-    let synthHooks: SynthHooks = {
-      preSynthesize: [],
-      postSynthesize: [],
-      validate: [],
-    };
+    return appCall!({
+      ...appProps,
+      _platformManager: this,
+      synthHooks: {
+        preSynthesize: this.hooks.preSynth,
+        postSynthesize: this.hooks.postSynth,
+        validate: this.hooks.validate,
+      },
+    }) as App;
+  }
 
-    let newInstanceOverrides: any[] = [];
-
+  /**
+   * Collect all the callback hooks from the platform instances
+   */
+  private collectCallBacks() {
+    // TODO: Create a single property called callbackHooks maybe and reset it each time
     this.platformInstances.forEach((instance) => {
       if (instance.preSynth) {
-        synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
+        this.hooks.preSynth.push(instance.preSynth.bind(instance));
       }
 
       if (instance.postSynth) {
-        synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
+        this.hooks.postSynth.push(instance.postSynth.bind(instance));
       }
 
       if (instance.validate) {
-        synthHooks.validate!.push(instance.validate.bind(instance));
+        this.hooks.validate!.push(instance.validate.bind(instance));
       }
 
       if (instance.newInstance) {
-        newInstanceOverrides.push(instance.newInstance.bind(instance));
+        this.hooks.newInstance.push(instance.newInstance.bind(instance));
+      }
+
+      if (instance.typeForFqn) {
+        this.hooks.typeForFqn.push(instance.typeForFqn.bind(instance));
       }
     });
-
-    return appCall!({ ...appProps, synthHooks, newInstanceOverrides }) as App;
   }
 }
 

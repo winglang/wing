@@ -3,7 +3,7 @@ import { test, expect } from "vitest";
 import { cloud, simulator } from "@winglang/sdk";
 import * as awscdk from "../src";
 import { mkdtemp } from "@winglang/sdk/test/util";
-import { sanitizeCode, awscdkSanitize } from "./util";
+import { sanitizeCode, awscdkSanitize, createApp } from "./util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -12,7 +12,7 @@ const CDK_APP_OPTS = {
 
 test("default topic behavior", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   new cloud.Topic(app, "Topic");
   const output = app.synth();
 
@@ -23,7 +23,7 @@ test("default topic behavior", () => {
 
 test("topic with subscriber function", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const topic = new cloud.Topic(app, "Topic");
   const subscriber = simulator.Testing.makeHandler(`async handle(event) { console.log("Received: ", event); }`
   );
@@ -43,7 +43,7 @@ test("topic with subscriber function", () => {
 
 test("topic with multiple subscribers", () => {
   // GIVEN
-  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const app = createApp({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const topic = new cloud.Topic(app, "Topic");
   const subOne = simulator.Testing.makeHandler(
     `async handle(event) { console.log("Got Event: ", event); }`

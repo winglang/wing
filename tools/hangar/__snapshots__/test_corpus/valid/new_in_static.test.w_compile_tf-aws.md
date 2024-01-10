@@ -91,13 +91,13 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const c = require("constructs");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
       }
       static createBucket(scope) {
-        return ($scope => $scope.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(scope);
+        return ($scope => $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, $scope, "cloud.Bucket"))(scope);
       }
       static createMyClass(scope) {
         return new MyClass(scope, "MyClass");
@@ -167,19 +167,18 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const createBucket = (() => {
-      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
+      $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b1");
     });
     if (true) {
-      this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
+      $PlatformManager.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "b2");
     }
-    const scope = this.node.root.new("constructs.Construct", c.Construct, this, "c.Construct");
+    const scope = $PlatformManager.new("constructs.Construct", c.Construct, this, "c.Construct");
     const bucket = (MyClass.createBucket(scope));
     const bucket2 = (createBucket());
     const my = (MyClass.createMyClass(scope));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:play with bucket", new $Closure1(this, "$Closure1"));
+    $PlatformManager.new("@winglang/sdk.std.Test", std.Test, this, "test:play with bucket", new $Closure1(this, "$Closure1"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "new_in_static.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

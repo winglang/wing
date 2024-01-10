@@ -4,6 +4,7 @@ export * from "./bucket";
 export * from "./counter";
 export * from "./dynamodb-table";
 export * from "./function";
+export * from "./platform";
 export * from "./queue";
 export * from "./schedule";
 export * from "./secret";

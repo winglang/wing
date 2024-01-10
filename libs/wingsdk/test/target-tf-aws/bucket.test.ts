@@ -2,7 +2,6 @@ import * as cdktf from "cdktf";
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import * as tfaws from "../../src/target-tf-aws";
 import {
   mkdtemp,
   tfResourcesOf,
@@ -10,11 +9,12 @@ import {
   tfSanitize,
   treeJsonOf,
   getTfResource,
+  createTFAWSApp,
 } from "../util";
 
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new Bucket(app, "my_bucket");
   const output = app.synth();
 
@@ -28,7 +28,7 @@ test("create a bucket", () => {
 
 test("bucket has force_destroy if App is a test environment", () => {
   // GIVEN
-  const app = new tfaws.App({
+  const app = createTFAWSApp({
     outdir: mkdtemp(),
     isTestEnvironment: true,
     entrypointDir: __dirname,
@@ -44,7 +44,7 @@ test("bucket has force_destroy if App is a test environment", () => {
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   new Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -60,7 +60,7 @@ test("bucket is public", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -80,7 +80,7 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   bucket.addFile("file1.txt", "../test-files/test1.txt");
   bucket.addFile("file2.txt", "../test-files/test2.txt");
@@ -100,7 +100,7 @@ test("bucket with two preflight files", () => {
 
 test("bucket prefix valid", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "the-uncanny.bucket");
   const output = app.synth();
 
@@ -116,7 +116,7 @@ test("bucket prefix valid", () => {
 
 test("bucket prefix must be lowercase", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "The-Uncanny.Bucket");
   const output = app.synth();
 
@@ -132,7 +132,7 @@ test("bucket prefix must be lowercase", () => {
 
 test("bucket prefix must begin with an alphanumeric character", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => new Bucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
@@ -142,7 +142,7 @@ test("bucket prefix must begin with an alphanumeric character", () => {
 
 test("bucket prefix can not begining with 'xn--'", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
 
   // THEN
   expect(() => new Bucket(app, "xn--The-Uncanny-Bucket")).toThrow(
@@ -152,7 +152,7 @@ test("bucket prefix can not begining with 'xn--'", () => {
 
 test("bucket with onCreate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler("null");
   bucket.onCreate(inflightTest);
@@ -191,7 +191,7 @@ test("bucket with onCreate method", () => {
 
 test("bucket with onDelete method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler("null");
   bucket.onDelete(inflightTest);
@@ -230,7 +230,7 @@ test("bucket with onDelete method", () => {
 
 test("bucket with onUpdate method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler("null");
   bucket.onUpdate(inflightTest);
@@ -269,7 +269,7 @@ test("bucket with onUpdate method", () => {
 
 test("bucket with onEvent method", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = new Bucket(app, "my_bucket", { public: true });
   const inflightTest = Testing.makeHandler("null");
   bucket.onEvent(inflightTest);

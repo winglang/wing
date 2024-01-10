@@ -45,6 +45,8 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 const PLATFORMS_VAR: &str = "$platforms";
+const PLATFORM_MANAGER: &str = "$PlatformManager";
+const PLATFORM_MANAGER_FILE: &str = "platform_manager.js";
 const HELPERS_VAR: &str = "$helpers";
 
 const ROOT_CLASS: &str = "$Root";
@@ -154,6 +156,8 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
+		self.emit_platform_manager_file();
+
 		let mut output = CodeMaker::default();
 
 		let is_compilation_init = source_path == self.compilation_init_path;
@@ -165,10 +169,6 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 
 		if is_entrypoint {
-			output.line(format!(
-				"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
-				PLATFORMS_VAR
-			));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
@@ -180,6 +180,10 @@ impl<'a> JSifier<'a> {
 		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.line(format!("const {HELPERS_VAR} = {STDLIB}.helpers;"));
 		output.add_code(imports);
+		output.line(format!(
+			"const {} = require('./{}');",
+			PLATFORM_MANAGER, PLATFORM_MANAGER_FILE
+		));
 
 		if is_entrypoint {
 			let mut root_class = CodeMaker::default();
@@ -192,14 +196,10 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 
 			output.add_code(root_class);
-			output.line(format!(
-				"const $PlatformManager = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
-				PLATFORMS_VAR
-			));
 			let app_name = source_path.file_stem().unwrap();
 			output.line(format!(
-				"const $APP = $PlatformManager.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
-				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
+				"const $APP = {}.createApp({{ outdir: {}, name: \"{}\", rootConstruct: {}, isTestEnvironment: {}, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }});",
+				PLATFORM_MANAGER, OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 			output.line("$APP.synth();".to_string());
 		} else if is_directory {
@@ -533,7 +533,7 @@ impl<'a> JSifier<'a> {
 					if node_scope != "this" {
 						new_code!(
 							expr_span,
-							"($scope => $scope.node.root.new(\"",
+							"($scope => $PlatformManager.new(\"",
 							fqn,
 							"\", ",
 							ctor,
@@ -544,7 +544,7 @@ impl<'a> JSifier<'a> {
 							")"
 						)
 					} else {
-						new_code!(expr_span, "this.node.root.new(\"", fqn, "\", ", ctor, ", ", args, ")")
+						new_code!(expr_span, "$PlatformManager.new(\"", fqn, "\", ", ctor, ", ", args, ")")
 					}
 				} else {
 					// If we're inflight and this new expression evaluates to a type with an inflight init (that's not empty)
@@ -1435,7 +1435,7 @@ impl<'a> JSifier<'a> {
 				if let Some(fqn) = &parent_type.as_class().unwrap().fqn {
 					code.append(new_code!(
 						&class.name.span,
-						" extends (this.node.root.typeForFqn(\"",
+						" extends ($PlatformManager.typeForFqn(\"",
 						fqn,
 						"\") ?? ",
 						self.jsify_user_defined_type(parent, ctx),
@@ -1640,6 +1640,37 @@ impl<'a> JSifier<'a> {
 	pub fn add_referenced_struct_schema(&self, struct_name: String, schema: CodeMaker) {
 		let mut struct_schemas = self.referenced_struct_schemas.borrow_mut();
 		struct_schemas.insert(struct_name, schema);
+	}
+
+	fn emit_platform_manager_file(&self) {
+		if self.output_files.borrow().contains_file(PLATFORM_MANAGER_FILE) {
+			return;
+		}
+
+		let mut code = CodeMaker::default();
+
+		code.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+
+		code.line(format!(
+			"const {} = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);",
+			PLATFORMS_VAR
+		));
+
+		code.line(format!(
+			"const {} = new $stdlib.platform.PlatformManager({{platformPaths: {}}});",
+			PLATFORM_MANAGER, PLATFORMS_VAR
+		));
+
+		code.line(format!("module.exports = {};", PLATFORM_MANAGER));
+
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(PLATFORM_MANAGER_FILE.to_string(), code.to_string())
+		{
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {

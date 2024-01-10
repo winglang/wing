@@ -54,20 +54,20 @@ module.exports = function({  }) {
 ```js
 "use strict";
 const $stdlib = require('@winglang/sdk');
-const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const aws = require("@cdktf/provider-aws");
 const cdktf = require("cdktf");
+const $PlatformManager = require('./platform_manager.js');
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.node.root.new("cdktf.S3Backend", cdktf.S3Backend, this, ({"bucket": "foo", "key": "bar"}));
+        $PlatformManager.new("cdktf.S3Backend", cdktf.S3Backend, this, ({"bucket": "foo", "key": "bar"}));
       }
       static _toInflightType() {
         return `
@@ -90,10 +90,9 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "$inflight_init"];
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
+    $PlatformManager.new("@cdktf/provider-aws.s3Bucket.S3Bucket", aws.s3Bucket.S3Bucket, this, "Bucket", { bucketPrefix: "hello", versioning: ({"enabled": true, "mfaDelete": true}) });
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
 const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "bring_cdktf.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map

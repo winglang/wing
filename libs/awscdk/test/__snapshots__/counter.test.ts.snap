@@ -75,7 +75,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+my_counter: new (require(\\"[REDACTED]/awscdk/lib/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
 })"
 `;
 
@@ -410,7 +410,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+my_counter: new (require(\\"[REDACTED]/awscdk/lib/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
 })"
 `;
 
@@ -684,7 +684,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+my_counter: new (require(\\"[REDACTED]/awscdk/lib/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
 })"
 `;
 
@@ -958,7 +958,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+my_counter: new (require(\\"[REDACTED]/awscdk/lib/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
 })"
 `;
 
@@ -1232,7 +1232,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/awscdk/src/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+my_counter: new (require(\\"[REDACTED]/awscdk/lib/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
 })"
 `;
 

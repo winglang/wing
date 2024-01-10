@@ -1,8 +1,13 @@
 import { test, expect, describe } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/simulator";
-import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp, sanitizeCode, tfResourcesOf, tfSanitize } from "../util";
+import {
+  mkdtemp,
+  sanitizeCode,
+  tfResourcesOf,
+  tfSanitize,
+  createTFAWSApp,
+} from "../util";
 
 describe("function with bucket binding", () => {
   // Dirty little helper to check if a config contains a set of actions
@@ -30,7 +35,7 @@ describe("function with bucket binding", () => {
 
   test("put operation", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
@@ -61,7 +66,7 @@ describe("function with bucket binding", () => {
 
   test("put json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
@@ -82,7 +87,7 @@ describe("function with bucket binding", () => {
 
   test("get json operation has correct permissions", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+    const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
     const bucket = new cloud.Bucket(app, "Bucket");
     const inflight = Testing.makeHandler(
       `async handle(event) { await this.bucket.put("hello.txt", event); }`,
@@ -108,7 +113,7 @@ describe("function with bucket binding", () => {
 
 test("function with a function binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight1 = Testing.makeHandler(
     `async handle(event) { console.log(event); }`
   );
@@ -146,7 +151,7 @@ test("function with a function binding", () => {
 
 test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(
     `async handle(event) { console.log(event); }`
   );
@@ -171,7 +176,7 @@ test("two functions reusing the same IFunctionHandler", () => {
 
 test("function with a queue binding", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const app = createTFAWSApp({ outdir: mkdtemp(), entrypointDir: __dirname });
   const queue = new cloud.Queue(app, "Queue");
   const pusher = Testing.makeHandler(
     `async handle(event) { await this.queue.push("info"); }`,

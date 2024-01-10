@@ -1,17 +1,17 @@
 import { test, expect } from "vitest";
 import { Table, ColumnType } from "../../src/ex";
-import * as tfgcp from "../../src/target-tf-gcp";
-import { mkdtemp, tfResourcesOf, tfSanitize } from "../util";
+import { mkdtemp, tfResourcesOf, tfSanitize, createTFGCPApp } from "../util";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",
   storageLocation: "US",
   entrypointDir: __dirname,
   region: "us-central1",
+  zone: "us-central1-a",
 };
 
 test("create a table", () => {
-  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const app = createTFGCPApp({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   new Table(app, "my_table", {
     primaryKey: "id",
     columns: { name: ColumnType.STRING },
