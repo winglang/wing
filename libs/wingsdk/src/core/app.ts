@@ -280,7 +280,7 @@ export abstract class App extends Construct implements IApp {
   ): any {
     // first check if overrides have been provided
     for (const override of this._newInstanceOverrides) {
-      const instance = override(this, fqn, scope, id, args);
+      const instance = override(fqn, scope, id, args);
       if (instance) {
         return instance;
       }

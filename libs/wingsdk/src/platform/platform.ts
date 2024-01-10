@@ -15,19 +15,12 @@ export interface IPlatform {
   /**
    * Hooks for overriding newInstance calls
    *
-   * @param app the base app instance
    * @param type string fqn of the resource type
    * @param scope construct scope
    * @param id unique string id for resource
    * @param props props to pass to the resource
    */
-  newInstance?(
-    app: Construct,
-    type: string,
-    scope: Construct,
-    id: string,
-    props: any
-  ): any;
+  newInstance?(type: string, scope: Construct, id: string, props: any): any;
 
   /**
    * New App Method
