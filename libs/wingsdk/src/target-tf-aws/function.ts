@@ -106,6 +106,9 @@ export class Function extends cloud.Function implements IAwsFunction {
       key: objectKey,
       source: Lazy.stringValue({
         produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
           return this.assetPath;
         },
       }),

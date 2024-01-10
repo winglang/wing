@@ -191,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
     const cloud_BucketProps = $stdlib.std.Struct._createJsonSchema({id:"/BucketProps",type:"object",properties:{public:{type:"boolean"},},required:[]});
     const externalStructs_MyOtherStruct = $stdlib.std.Struct._createJsonSchema({id:"/MyOtherStruct",type:"object",properties:{data:{type:"object",properties:{val:{type:"number"},},required:["val",]},},required:["data",]});
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -254,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -329,7 +329,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;

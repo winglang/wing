@@ -797,7 +797,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -843,7 +843,7 @@ class $Root extends $stdlib.std.Resource {
         this.t = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic");
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          _hash = $helpers.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
             $helpers.nodeof(this).hidden = true;
@@ -879,7 +879,7 @@ class $Root extends $stdlib.std.Resource {
         (this.t.onMessage(new $Closure2(this, "$Closure2")));
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          _hash = $helpers.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
             $helpers.nodeof(this).hidden = true;
@@ -915,7 +915,7 @@ class $Root extends $stdlib.std.Resource {
         (this.q.setConsumer(new $Closure3(this, "$Closure3")));
         const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+          _hash = $helpers.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
             $helpers.nodeof(this).hidden = true;
@@ -993,7 +993,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _hash = $helpers.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
