@@ -19,7 +19,7 @@ export class Platform implements IPlatform {
    */
   public _usageContext: Map<string, Set<string>> = new Map();
 
-  newInstance(fqn: string, scope: Construct, id: string, args: any) {
+  newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
     //@ts-expect-error - accessing protected method
     const type = App.of(scope).typeForFqn(fqn);
 
