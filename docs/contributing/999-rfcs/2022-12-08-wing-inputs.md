@@ -17,7 +17,7 @@ Inputs can be Platform agnostic, such as an a retry count that is dictated by bu
 ### Context
 
 There are a few things that are considered out-of-scope for this RFC. 
-- Inputs are all treated as string data
+- Inputs are all treated as string data, but helper methods can convert them to primitive Wing types like num, bool, and Json
 - Inputs cannot be created, or updated inflight
 
 ## Use cases
