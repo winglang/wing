@@ -51,9 +51,10 @@ export class Function extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
 
   /**
-   * The path to the entrypoint source code of the function.
+   * The path where the entrypoint of the function source code will be eventually written to.
    */
   protected readonly entrypoint!: string;
+  private readonly handler!: IFunctionHandler;
 
   constructor(
     scope: Construct,
@@ -67,6 +68,8 @@ export class Function extends Resource implements IInflightHost {
 
     super(scope, id);
 
+    this.handler = handler;
+
     Node.of(this).title = "Function";
     Node.of(this).description = "A cloud function (FaaS)";
 
@@ -78,7 +81,6 @@ export class Function extends Resource implements IInflightHost {
     // inflight "handle" method on the handler resource.
     handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
-    const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
       disallowedRegex: /[><:"/\\|?*\s]/g,
@@ -86,18 +88,25 @@ export class Function extends Resource implements IInflightHost {
       sep: "_",
     });
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
-
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
     const entrypoint = join(workdir, `${assetName}.js`);
-    writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
+
+    const lines = this._getCodeLines(this.handler);
+    writeFileSync(this.entrypoint, lines.join("\n"));
   }
 
   /**

@@ -22,13 +22,16 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IInflight {
-    const clients: Record<string, string> = {};
+    return {
+      _hash: createHash("md5").update(code).digest("hex"),
+      _toInflight: () => {
+        const clients: Record<string, string> = {};
 
-    for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = liftObject(v.obj);
-    }
+        for (const [k, v] of Object.entries(bindings)) {
+          clients[k] = liftObject(v.obj);
+        }
 
-    const inflightCode = `\
+        const inflightCode = `\
 new ((function(){
 return class Handler {
   constructor(clients) {
@@ -44,9 +47,8 @@ ${Object.entries(clients)
   .join(",\n")}
 })`;
 
-    return {
-      _hash: createHash("md5").update(inflightCode).digest("hex"),
-      _toInflight: () => inflightCode,
+        return inflightCode;
+      },
       _registerOnLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
           Resource._registerOnLiftObject(v.obj, host, v.ops);

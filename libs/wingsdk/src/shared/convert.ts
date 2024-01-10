@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import { normalPath } from "./misc";
 import { IInflight } from "../std";
 
@@ -14,18 +13,17 @@ export function convertBetweenHandlers(
   newHandlerClientClassName: string,
   args: Record<string, unknown> = {}
 ): IInflight {
-  const handlerClient = baseHandler._toInflight();
-  const newCode = `\
-new (require("${normalPath(
-    newHandlerClientPath
-  )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
-    args
-  )} })`;
-
   const newHandler = {
     ...baseHandler,
-    _hash: createHash("md5").update(newCode).digest("hex"),
+    _hash: baseHandler._hash,
     _toInflight() {
+      const handlerClient = baseHandler._toInflight();
+      const newCode = `\
+new (require("${normalPath(
+        newHandlerClientPath
+      )}")).${newHandlerClientClassName}({ handler: ${handlerClient}, args: ${JSON.stringify(
+        args
+      )} })`;
       return newCode;
     },
   };
