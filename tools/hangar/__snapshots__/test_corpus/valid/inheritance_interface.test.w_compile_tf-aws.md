@@ -76,12 +76,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const baz = new Baz(this, "Baz");
     (expect.Util.equal((baz.foo()), "foo"));

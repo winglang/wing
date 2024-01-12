@@ -429,12 +429,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     const handler = new $Closure1(this, "$Closure1");

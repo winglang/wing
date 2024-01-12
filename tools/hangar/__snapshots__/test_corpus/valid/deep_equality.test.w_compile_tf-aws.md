@@ -326,9 +326,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -371,9 +368,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -411,9 +405,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -455,9 +446,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure5 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -495,9 +483,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
@@ -539,9 +524,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure7 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -579,9 +561,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
@@ -623,9 +602,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure9 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -663,9 +639,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
@@ -707,9 +680,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure11 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -747,9 +717,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure12 extends $stdlib.std.Resource {
@@ -790,9 +757,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const numA = 1;

@@ -420,7 +420,7 @@ Options for the route.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.onLiftType">onLiftType</a></code> | TODO. |
+| <code><a href="#@winglang/sdk.cloud.Api.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
 
 ---
 
@@ -432,7 +432,13 @@ bring cloud;
 cloud.Api.onLiftType(host: IInflightHost, ops: MutArray<str>);
 ```
 
-TODO.
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
 
 ###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Api.onLiftType.parameter.host"></a>
 

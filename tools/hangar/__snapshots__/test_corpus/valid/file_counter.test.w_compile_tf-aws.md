@@ -254,9 +254,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter", { initial: 100 });

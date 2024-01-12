@@ -169,12 +169,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -211,9 +205,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class r extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -244,12 +235,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "method2", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -287,9 +272,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Dog extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -314,12 +296,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "eat", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class Terrier extends Dog {
@@ -346,12 +322,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "eat", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const x = new A(this, "A");

@@ -208,12 +208,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "goo", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class B extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -238,12 +232,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -271,12 +259,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class D extends $stdlib.std.Resource {
@@ -309,12 +291,6 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "$inflight_init"];
           }
-          onLift(host, ops) {
-            super.onLift(host, ops);
-          }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
-          }
         }
         const pb = new E(this, "E");
         $helpers.assert($helpers.eq((pb.foo()), "e1"), "pb.foo() == \"e1\"");
@@ -341,12 +317,6 @@ class $Root extends $stdlib.std.Resource {
           }
           _supportedOps() {
             return [...super._supportedOps(), "foo", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            super.onLift(host, ops);
-          }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
           }
         }
         const __parent_this_2 = this;
@@ -376,12 +346,6 @@ class $Root extends $stdlib.std.Resource {
           }
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            super.onLift(host, ops);
-          }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
           }
         }
         this.inner = new $Closure2(this, "$Closure2");
@@ -420,9 +384,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -466,9 +427,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const a = new A(this, "A");

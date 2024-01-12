@@ -95,12 +95,6 @@ class $Root extends $stdlib.std.Resource {
             _supportedOps() {
               return [...super._supportedOps(), "handle", "$inflight_init"];
             }
-            onLift(host, ops) {
-              super.onLift(host, ops);
-            }
-            static onLiftType(host, ops) {
-              super.onLiftType(host, ops);
-            }
           }
           new $Closure1(this, "$Closure1");
         });
@@ -124,12 +118,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     new Foo(this, "Foo");

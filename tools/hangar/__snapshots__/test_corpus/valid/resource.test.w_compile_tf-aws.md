@@ -745,9 +745,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Bar extends $stdlib.std.Resource {
       constructor($scope, $id, name, b, e) {
@@ -802,9 +799,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -844,9 +838,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -892,9 +883,6 @@ class $Root extends $stdlib.std.Resource {
             });
             super.onLift(host, ops);
           }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
-          }
         }
         (this.t.onMessage(new $Closure2(this, "$Closure2")));
         const __parent_this_3 = this;
@@ -933,9 +921,6 @@ class $Root extends $stdlib.std.Resource {
             });
             super.onLift(host, ops);
           }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
-          }
         }
         (this.q.setConsumer(new $Closure3(this, "$Closure3")));
         const __parent_this_4 = this;
@@ -973,9 +958,6 @@ class $Root extends $stdlib.std.Resource {
               ],
             });
             super.onLift(host, ops);
-          }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
           }
         }
         (this.b2.onCreate(new $Closure4(this, "$Closure4")));
@@ -1023,9 +1005,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure5 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -1062,9 +1041,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Dummy extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -1092,12 +1068,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
@@ -1134,12 +1104,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const MyEnum =

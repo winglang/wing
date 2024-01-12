@@ -389,12 +389,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class C2 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -420,12 +414,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class C3 extends $stdlib.std.Resource {
@@ -456,12 +444,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class C4 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -490,12 +472,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class C5 extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -520,12 +496,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "x", "y", "set", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -563,9 +533,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Person extends $stdlib.std.Resource {
       constructor($scope, $id, name) {
@@ -591,12 +558,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class Student extends Person {
@@ -625,12 +586,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class PaidStudent extends Student {
       constructor($scope, $id, name, major, hrlyWage) {
@@ -657,12 +612,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -704,9 +653,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class TeacherAid extends PaidStudent {
       constructor($scope, $id, name, major, hrlyWage) {
@@ -733,12 +679,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -776,9 +716,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class A extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -811,9 +748,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class B extends A {
       constructor($scope, $id, ) {
@@ -839,12 +773,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -874,12 +802,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Bar extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -904,12 +826,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class Foo extends Bar {
@@ -937,12 +853,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "doStuff", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Baz extends Bar {
       constructor($scope, $id, ) {
@@ -969,12 +879,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class Boom extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -999,12 +903,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class Bam extends Boom {
@@ -1031,12 +929,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     new C1(this, "C1");

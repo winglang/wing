@@ -97,9 +97,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const ar = [1, 2, 3];
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Use phase independent methods on lifted object", new $Closure1(this, "$Closure1"));

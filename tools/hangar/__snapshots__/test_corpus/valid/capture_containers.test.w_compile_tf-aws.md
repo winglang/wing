@@ -111,9 +111,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const arr = ["hello", "world"];
     const mySet = new Set(["my", "my", "set"]);

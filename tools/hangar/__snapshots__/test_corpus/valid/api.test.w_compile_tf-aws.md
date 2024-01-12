@@ -506,9 +506,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
@@ -544,9 +541,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -589,9 +583,6 @@ class $Root extends $stdlib.std.Resource {
             });
             super.onLift(host, ops);
           }
-          static onLiftType(host, ops) {
-            super.onLiftType(host, ops);
-          }
         }
         (this.api.get("/endpoint1", new $Closure3(this, "$Closure3")));
       }
@@ -614,12 +605,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
-      }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");

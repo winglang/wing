@@ -114,12 +114,6 @@ class Foo extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
   }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
-  }
 }
 module.exports = { Foo };
 //# sourceMappingURL=preflight.file1-3.js.map
@@ -160,12 +154,6 @@ class Bar extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
   }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
-  }
 }
 class Foo extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -190,12 +178,6 @@ class Foo extends $stdlib.std.Resource {
   }
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
-  }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
   }
 }
 module.exports = { Bar };
@@ -294,12 +276,6 @@ class Widget extends $stdlib.std.Resource {
   }
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
-  }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
   }
 }
 module.exports = { Widget };

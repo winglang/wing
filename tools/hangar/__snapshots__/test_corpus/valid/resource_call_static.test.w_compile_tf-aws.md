@@ -115,9 +115,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "myStaticMethod", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
       static onLiftType(host, ops) {
         Another._onLiftMatrix(host, ops, {
           "myStaticMethod": [
@@ -161,9 +158,6 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
         super.onLift(host, ops);
-      }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
       }
     }
     const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");

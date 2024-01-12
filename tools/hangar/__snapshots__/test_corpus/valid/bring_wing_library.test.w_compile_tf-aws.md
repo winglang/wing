@@ -158,9 +158,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     new fixture.Store(this, "fixture.Store");
     const fave_num = fixture.FavoriteNumbers.SEVEN;
@@ -226,9 +223,6 @@ class Store extends $stdlib.std.Resource {
     });
     super.onLift(host, ops);
   }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
-  }
 }
 module.exports = { Store };
 //# sourceMappingURL=preflight.store-3.js.map
@@ -289,12 +283,6 @@ class Util extends $stdlib.std.Resource {
   }
   _supportedOps() {
     return [...super._supportedOps(), "double", "$inflight_init"];
-  }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
   }
 }
 module.exports = { Util };

@@ -95,12 +95,6 @@ class Util extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
   }
-  onLift(host, ops) {
-    super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
-  }
 }
 class Store extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
@@ -142,9 +136,6 @@ class Store extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
   }
@@ -179,9 +170,6 @@ class Store extends $stdlib.std.Resource {
       ],
     });
     super.onLift(host, ops);
-  }
-  static onLiftType(host, ops) {
-    super.onLiftType(host, ops);
   }
 }
 const Color =
