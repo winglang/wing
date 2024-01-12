@@ -53,7 +53,7 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { children, className } = props;
+  const { mapSize, children, className } = props;
 
   const transformRef = useRef<Transform>(IDENTITY_TRANSFORM);
 
@@ -132,37 +132,32 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
 
   const zoomToFit = useCallback(
     (viewport?: Viewport) => {
-      const target = targetRef.current;
-      if (!target) {
+      const container = containerRef.current;
+      if (!container) {
         return;
       }
+      const boundingRect = container.getBoundingClientRect();
       viewport ??= {
         x: 0,
         y: 0,
-        width: target.clientWidth,
-        height: target.clientHeight,
+        width: mapSize?.width ?? boundingRect.width,
+        height: mapSize?.height ?? boundingRect.height,
       };
-      const width = target.clientWidth;
-      const height = target.clientHeight;
-      const x0 = viewport.x;
-      const y0 = viewport.y;
-      const x1 = x0 + viewport.width;
-      const y1 = y0 + viewport.height;
-      const scale = Math.min(
-        8,
-        0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
-      );
+      // const zx = viewport.width / boundingRect.width;
+      // const zy = viewport.height / boundingRect.height;
+      const zx = boundingRect.width / viewport.width;
+      const zy = boundingRect.height / viewport.height;
       const newTransform = {
-        x: width / 2,
-        y: height / 2,
-        // z: Math.min(1, scale),
-        z: scale,
+        x: viewport.x,
+        y: viewport.y,
+        z: Math.min(zx, zy),
       };
-      console.log("zoomToFit", { viewport, newTransform });
+      // console.log(viewport, newTransform, boundingRect);
+
       transformRef.current = newTransform;
       applyTransform();
     },
-    [applyTransform],
+    [mapSize, applyTransform],
   );
 
   useImperativeHandle(

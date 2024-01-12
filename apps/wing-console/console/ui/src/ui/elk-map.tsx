@@ -11,6 +11,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -20,7 +21,12 @@ import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import { IDENTITY_TRANSFORM, Transform, ZoomPane } from "./zoom-pane.js";
+import {
+  IDENTITY_TRANSFORM,
+  Transform,
+  ZoomPane,
+  ZoomPaneRef,
+} from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
@@ -538,29 +544,6 @@ export const ElkMap = <T extends unknown = undefined>({
     });
   }, [graph, nodeRecord, offsets, edges, setNodeList]);
 
-  // const { zoomToFit } = useZoomPaneContext();
-
-  // // Zoom to fit when map changes
-  // const previousNodeList = useRef<NodeData[]>();
-  // useEffect(() => {
-  //   // Skip animation if there was no previous node list (eg, first render)
-  //   const skipAnimation =
-  //     !previousNodeList.current || previousNodeList.current.length === 0;
-
-  //   zoomToFit(
-  //     {
-  //       x: 0,
-  //       y: 0,
-  //       width: graph?.width ?? 0,
-  //       height: graph?.height ?? 0,
-  //     },
-  //     skipAnimation,
-  //   );
-
-  //   previousNodeList.current = nodeList;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [graph, nodeList]);
-
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
       return node.edges.some(
@@ -605,7 +588,17 @@ export const ElkMap = <T extends unknown = undefined>({
   //   console.log({ selectedNodeId });
   // }, [selectedNodeId, zoomToFit]);
 
-  // const [transform, setTransform] = useState<Transform>(IDENTITY_TRANSFORM);
+  const mapSize = useMemo(() => {
+    if (!graph) {
+      return;
+    }
+
+    return {
+      width: graph.width!,
+      height: graph.height!,
+    };
+  }, [graph]);
+  const zoomPaneRef = useRef<ZoomPaneRef>(null);
 
   return (
     <>
@@ -616,8 +609,8 @@ export const ElkMap = <T extends unknown = undefined>({
       />
 
       <ZoomPane
-        // transform={transform}
-        // onTransformChange={setTransform}
+        ref={zoomPaneRef}
+        mapSize={mapSize}
         className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
       >
