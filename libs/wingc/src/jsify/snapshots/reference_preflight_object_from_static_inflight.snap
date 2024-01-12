@@ -74,9 +74,6 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "addToQueue", "$inflight_init"];
       }
-      onLift(host, ops) {
-        super.onLift(host, ops);
-      }
       static onLiftType(host, ops) {
         MyType._onLiftMatrix(host, ops, {
           "addToQueue": [

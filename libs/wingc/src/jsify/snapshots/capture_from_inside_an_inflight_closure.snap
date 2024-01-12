@@ -86,9 +86,6 @@ class $Root extends $stdlib.std.Resource {
         });
         super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        super.onLiftType(host, ops);
-      }
     }
     const foo = "test";
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:my test", new $Closure1(this, "$Closure1"));
