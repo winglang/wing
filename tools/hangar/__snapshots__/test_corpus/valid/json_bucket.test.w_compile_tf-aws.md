@@ -219,12 +219,17 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(b, host, ["getJson"]);
-          $Closure1._registerOnLiftObject(fileName, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [b, ["getJson"]],
+            [fileName, []],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -257,14 +262,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(b, host, ["putJson"]);
-          $Closure2._registerOnLiftObject(fileName, host, []);
-          $Closure2._registerOnLiftObject(getJson, host, ["invoke"]);
-          $Closure2._registerOnLiftObject(j, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure2._onLiftMatrix(host, ops, {
+          "handle": [
+            [b, ["putJson"]],
+            [fileName, []],
+            [getJson, ["invoke"]],
+            [j, []],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

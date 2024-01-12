@@ -207,6 +207,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
+      }
     }
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -231,6 +237,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "hello", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const words = ["wing", "lang", "dang"];

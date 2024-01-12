@@ -13,6 +13,7 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
+import { log } from "../shared/log";
 import {
   CaseConventions,
   NameOptions,
@@ -233,7 +234,7 @@ export class Api extends cloud.Api implements IAwsApi {
             ?.defaultResponse,
         }
       );
-      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
+      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
@@ -248,6 +249,12 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public onLift(host: IInflightHost, ops: string[]): void {
+    log(
+      `onLift called on a resource (${this.node.path}) with a host (${
+        host.node.path
+      }) and ops: ${JSON.stringify(ops)}`
+    );
+
     if (!(host instanceof Function)) {
       throw new Error("apis can only be bound by tfaws.Function for now");
     }

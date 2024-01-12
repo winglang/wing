@@ -74,11 +74,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "addToQueue", "$inflight_init"];
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("addToQueue")) {
-          MyType._registerOnLiftObject(q, host, ["push"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        MyType._onLiftMatrix(host, ops, {
+          "addToQueue": [
+            [q, ["push"]],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
     const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");

@@ -98,14 +98,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "lhs", "rhs", "add", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        if (ops.includes("add")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        BinaryOperation._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this, ["lhs", "rhs"]],
+          ],
+          "add": [
+            [this, ["lhs", "rhs"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -134,6 +139,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class outside inflight closure", new $Closure1(this, "$Closure1"));

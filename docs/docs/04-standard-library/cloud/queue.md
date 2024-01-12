@@ -186,6 +186,35 @@ Each message must be non-empty.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Queue.onLiftType">onLiftType</a></code> | TODO. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Queue.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Queue.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Queue.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Queue.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

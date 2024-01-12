@@ -277,11 +277,16 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $Closure1._onLiftMatrix(host, ops, {
+              "handle": [
+                [__parent_this_1.b, ["put"]],
+              ],
+            });
+            super.onLift(host, ops);
+          }
+          static onLiftType(host, ops) {
+            super.onLiftType(host, ops);
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
@@ -306,6 +311,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -335,11 +346,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(f, host, ["invoke"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure2._onLiftMatrix(host, ops, {
+          "handle": [
+            [f, ["invoke"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -367,6 +383,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const p = new PreflightClass(this, "PreflightClass");

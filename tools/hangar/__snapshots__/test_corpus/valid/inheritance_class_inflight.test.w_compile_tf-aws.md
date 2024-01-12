@@ -119,6 +119,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "bug", "over_inflight", "$inflight_init"];
       }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
+      }
     }
     class Foo extends FooBase {
       constructor($scope, $id, ) {
@@ -144,6 +150,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "bang", "over_inflight", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -174,11 +186,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(foo, host, ["bang", "bug", "over_inflight"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [foo, ["bang", "bug", "over_inflight"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

@@ -13,6 +13,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
+import { log } from "../shared/log";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Effect, IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
@@ -233,6 +234,12 @@ export class Function extends cloud.Function implements IAwsFunction {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
+    log(
+      `onLift called on a resource (${this.node.path}) with a host (${
+        host.node.path
+      }) and ops: ${JSON.stringify(ops)}`
+    );
+
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }

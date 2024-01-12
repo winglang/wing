@@ -94,6 +94,12 @@ class Bar extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
   }
+  onLift(host, ops) {
+    super.onLift(host, ops);
+  }
+  static onLiftType(host, ops) {
+    super.onLiftType(host, ops);
+  }
 }
 module.exports = { Bar };
 //# sourceMappingURL=preflight.bar-1.js.map
@@ -131,6 +137,12 @@ class Baz extends $stdlib.std.Resource {
   }
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
+  }
+  onLift(host, ops) {
+    super.onLift(host, ops);
+  }
+  static onLiftType(host, ops) {
+    super.onLiftType(host, ops);
   }
 }
 module.exports = { Baz };
@@ -177,6 +189,12 @@ class Foo extends $stdlib.std.Resource {
   }
   _supportedOps() {
     return [...super._supportedOps(), "$inflight_init"];
+  }
+  onLift(host, ops) {
+    super.onLift(host, ops);
+  }
+  static onLiftType(host, ops) {
+    super.onLiftType(host, ops);
   }
 }
 module.exports = { Foo };

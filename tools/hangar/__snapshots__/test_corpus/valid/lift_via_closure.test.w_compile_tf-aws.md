@@ -176,11 +176,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(bucket2, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [bucket2, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class MyClosure extends $stdlib.std.Resource {
@@ -211,21 +216,26 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "putFile", "listFiles", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyClosure._registerOnLiftObject(this.bucket, host, []);
-        }
-        if (ops.includes("handle")) {
-          MyClosure._registerOnLiftObject(this, host, ["putFile"]);
-        }
-        if (ops.includes("listFiles")) {
-          MyClosure._registerOnLiftObject(bucket2, host, ["put"]);
-          MyClosure._registerOnLiftObject(this.bucket, host, ["list"]);
-        }
-        if (ops.includes("putFile")) {
-          MyClosure._registerOnLiftObject(this.bucket, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        MyClosure._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.bucket, []],
+          ],
+          "handle": [
+            [this, ["putFile"]],
+          ],
+          "listFiles": [
+            [bucket2, ["put"]],
+            [this.bucket, ["list"]],
+          ],
+          "putFile": [
+            [this.bucket, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -255,11 +265,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(fn, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure2._onLiftMatrix(host, ops, {
+          "handle": [
+            [fn, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -291,13 +306,18 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(bucket2, host, ["get"]);
-          $Closure3._registerOnLiftObject(fn2, host, ["handle", "listFiles"]);
-          $Closure3._registerOnLiftObject(fn2.bucket, host, ["get"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure3._onLiftMatrix(host, ops, {
+          "handle": [
+            [bucket2, ["get"]],
+            [fn2, ["handle", "listFiles"]],
+            [fn2.bucket, ["get"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const bucket2 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

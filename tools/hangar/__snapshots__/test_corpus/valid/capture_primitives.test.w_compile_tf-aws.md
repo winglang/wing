@@ -205,17 +205,22 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(myBool, host, []);
-          $Closure1._registerOnLiftObject(myDur.hours, host, []);
-          $Closure1._registerOnLiftObject(myDur.minutes, host, []);
-          $Closure1._registerOnLiftObject(myDur.seconds, host, []);
-          $Closure1._registerOnLiftObject(myNum, host, []);
-          $Closure1._registerOnLiftObject(mySecondBool, host, []);
-          $Closure1._registerOnLiftObject(myStr, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [myBool, []],
+            [myDur.hours, []],
+            [myDur.minutes, []],
+            [myDur.seconds, []],
+            [myNum, []],
+            [mySecondBool, []],
+            [myStr, []],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const myStr = "hello, string";

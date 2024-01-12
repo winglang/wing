@@ -71,15 +71,6 @@ export interface IHostedLiftable extends ILiftable {
   onLift(host: IInflightHost, ops: string[]): void;
 
   /**
-   * Register that the resource needs to be lifted to the host for the given
-   * operations. This means that the resource's `onLift` method will be called
-   * during pre-synthesis.
-   *
-   * @internal
-   */
-  _registerOnLift(host: IInflightHost, ops: string[]): void;
-
-  /**
    * Return a list of all inflight operations that are supported by this resource.
    *
    * If this method doesn't exist, the resource is assumed to not support any inflight operations.
@@ -111,16 +102,46 @@ export interface IResource extends IConstruct, IHostedLiftable {
  */
 export abstract class Resource extends Construct implements IResource {
   /**
-   * Register that the resource type needs to be lifted to the host for the given
-   * operations. A type being lifted to a host means that that type's static members
-   * will be lifted to the host.
+   * TODO
+   */
+  public static onLiftType(host: IInflightHost, ops: string[]): void {
+    log(
+      `onLiftType called on a resource type (${
+        this.constructor.name
+      }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
+    );
+  }
+
+  /**
+   * Registers a lifting between different resources and a host.
    *
+   * Internally, this deduplicates lifting operations so that _onLiftObject() is called
+   * at most once per preflight object.
    * @internal
    */
-  public static _registerOnLift(host: IInflightHost, ops: string[]): void {
-    // Do nothing by default
-    host;
-    ops;
+  public static _onLiftMatrix(
+    host: IInflightHost,
+    ops: string[],
+    matrix: Record<string, Array<[any, Array<string>]>>
+  ): void {
+    const neededOps = new Map<any, Set<string>>();
+    for (const [givenOp, pairs] of Object.entries(matrix)) {
+      for (const [obj, thenOps] of pairs) {
+        for (const thenOp of thenOps) {
+          if (!ops.includes(givenOp)) {
+            continue;
+          }
+
+          const objOps = neededOps.get(obj) ?? new Set();
+          objOps.add(thenOp);
+          neededOps.set(obj, objOps);
+        }
+      }
+    }
+
+    for (const [obj, objOps] of neededOps.entries()) {
+      this._onLiftObject(obj, host, Array.from(objOps));
+    }
   }
 
   /**
@@ -137,7 +158,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public static _registerOnLiftObject(
+  public static _onLiftObject(
     obj: any,
     host: IInflightHost,
     ops: string[] = []
@@ -156,7 +177,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "object":
         if (Array.isArray(obj)) {
-          obj.forEach((item) => this._registerOnLiftObject(item, host));
+          obj.forEach((item) => this._onLiftObject(item, host));
           return;
         }
 
@@ -170,13 +191,13 @@ export abstract class Resource extends Construct implements IResource {
 
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
-            this._registerOnLiftObject(item, host)
+            this._onLiftObject(item, host)
           );
         }
 
         if (obj instanceof Map) {
           Array.from(obj.values()).forEach((item) =>
-            this._registerOnLiftObject(item, host)
+            this._onLiftObject(item, host)
           );
           return;
         }
@@ -184,16 +205,16 @@ export abstract class Resource extends Construct implements IResource {
         // structs are just plain objects
         if (obj.constructor.name === "Object") {
           Object.values(obj).forEach((item) =>
-            this._registerOnLiftObject(item, host, ops)
+            this._onLiftObject(item, host, ops)
           );
           return;
         }
 
         // if the object is a resource, register a lifting between it and the host.
-        if (typeof obj._addOnLift === "function") {
+        if (typeof obj.onLift === "function") {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._addOnLift(host, [...ops, "$inflight_init"]);
+          obj.onLift(host, [...ops, "$inflight_init"]);
           return;
         }
 
@@ -202,7 +223,7 @@ export abstract class Resource extends Construct implements IResource {
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
         if (isHostedLiftableType(obj)) {
-          obj._registerOnLift(host, ops);
+          obj.onLiftType(host, ops);
           return;
         }
         break;
@@ -239,8 +260,6 @@ export abstract class Resource extends Construct implements IResource {
     return App.of(scope).newAbstract(fqn, scope, id, ...props);
   }
 
-  private readonly onLiftMap: Map<IInflightHost, Set<string>> = new Map();
-
   /**
    * @internal
    * */
@@ -268,65 +287,21 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    // Do nothing by default
-    host;
-    ops;
-  }
-
-  /**
-   * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `onLift` method will be called
-   * during pre-synthesis.
-   *
-   * @internal
-   */
-  public _registerOnLift(_host: IInflightHost, _ops: string[]) {
-    return;
-  }
-
-  /**
-   * Adds a binding between this resource and the host.
-   * @param host The host to bind to
-   * @param ops The operations that may access this resource
-   * @returns `true` if a new bind was added or `false` if there was already a bind
-   */ // @ts-ignore
-  private _addOnLift(host: IInflightHost, ops: string[]) {
-    log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
-      }) with ops: ${JSON.stringify(ops)}`
-    );
-
-    // Register the binding between this resource and the host
-    if (!this.onLiftMap.has(host)) {
-      this.onLiftMap.set(host, new Set());
-    }
-
-    const opsForHost = this.onLiftMap.get(host)!;
-
-    // For each operation, check if the host supports it. If it does, register the binding.
     const supportedOps = [...(this._supportedOps() ?? []), "$inflight_init"];
     for (const op of ops) {
+      // For each operation, check if the host supports it
       if (!supportedOps.includes(op)) {
         throw new NotImplementedError(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
         );
       }
 
-      if (!opsForHost.has(op)) {
-        // first add the operation to the set of operations for the host so that we can avoid
-        // infinite recursion.
-        opsForHost.add(op);
-
-        this._registerOnLift(host, [op]);
-
-        // add connection metadata
-        Node.of(this).addConnection({
-          source: host,
-          target: this,
-          name: op.endsWith("()") ? op : `${op}()`,
-        });
-      }
+      // Add connection metadata
+      Node.of(this).addConnection({
+        source: host,
+        target: this,
+        name: op.endsWith("()") ? op : `${op}()`,
+      });
     }
   }
 
@@ -339,12 +314,12 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // Perform the live bindings between resources and hosts
-    // By aggregating the binding operations, we can avoid performing
-    // multiple bindings for the same resource-host pairs.
-    for (const [host, ops] of this.onLiftMap.entries()) {
-      this.onLift(host, Array.from(ops));
-    }
+    // // Perform the live bindings between resources and hosts
+    // // By aggregating the binding operations, we can avoid performing
+    // // multiple bindings for the same resource-host pairs.
+    // for (const [host, ops] of this.onLiftMap.entries()) {
+    //   this.onLift(host, Array.from(ops));
+    // }
   }
 }
 
@@ -365,16 +340,21 @@ export interface OperationAnnotation {
   };
 }
 
-function isHostedLiftable(t: any): t is IHostedLiftable {
-  return (
-    t !== undefined &&
-    typeof t.onLift === "function" &&
-    typeof t._registerOnLift === "function"
-  );
+function isHostedLiftableType(t: any): t is IHostedLiftableType {
+  return typeof t.onLiftType === "function";
 }
 
-function isHostedLiftableType(t: any): t is IHostedLiftable {
-  return (
-    typeof t._registerOnLift === "function" && isHostedLiftable(t.prototype)
-  );
+/**
+ * TODO
+ */
+export interface IHostedLiftableType {
+  /**
+   * A hook called by the Wing compiler once for each inflight host that needs to
+   * use this object inflight. The list of requested inflight methods
+   * needed by the inflight host are given by `ops`.
+   *
+   * This method is commonly used for adding permissions, environment variables, or
+   * other capabilities to the inflight host.
+   */
+  onLiftType(host: IInflightHost, ops: string[]): void;
 }

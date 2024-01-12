@@ -1475,7 +1475,7 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-			// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
+			// emit `onLift` to register bindings (for type & instance binds)
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1757,8 +1757,8 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerOnLift"),
-			BindMethod::Instance => ("", "_registerOnLift"),
+			BindMethod::Type => ("static ", "onLiftType"),
+			BindMethod::Instance => ("", "onLift"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1783,23 +1783,28 @@ impl<'a> JSifier<'a> {
 			})
 			.collect_vec();
 
-		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		if lift_qualifications.is_empty() {
-			return bind_method;
-		}
+		// // Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
+		// if lift_qualifications.is_empty() {
+		// 	return bind_method;
+		// }
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
-		for (method_name, method_qual) in lift_qualifications {
-			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (code, method_lift_qual) in method_qual {
-				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 
-				bind_method.line(format!(
-					"{class_name}._registerOnLiftObject({code}, host, [{ops_strings}]);",
-				));
+		if !lift_qualifications.is_empty() {
+			bind_method.open(format!("{class_name}._onLiftMatrix(host, ops, {{"));
+
+			for (method_name, method_qual) in lift_qualifications {
+				bind_method.open(format!("\"{method_name}\": [",));
+				for (code, method_lift_qual) in method_qual {
+					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+					bind_method.line(format!("[{code}, [{ops_strings}]],",));
+				}
+				bind_method.close("],");
 			}
-			bind_method.close("}");
+
+			bind_method.close("});");
 		}
+
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method

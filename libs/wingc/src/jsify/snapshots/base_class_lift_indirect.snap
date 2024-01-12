@@ -106,14 +106,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "put", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Base._registerOnLiftObject(this.b, host, []);
-        }
-        if (ops.includes("put")) {
-          Base._registerOnLiftObject(this.b, host, ["list", "put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        Base._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.b, []],
+          ],
+          "put": [
+            [this.b, ["list", "put"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class Derived extends Base {
@@ -141,11 +146,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("foo")) {
-          Derived._registerOnLiftObject(this, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        Derived._onLiftMatrix(host, ops, {
+          "foo": [
+            [this, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
   }

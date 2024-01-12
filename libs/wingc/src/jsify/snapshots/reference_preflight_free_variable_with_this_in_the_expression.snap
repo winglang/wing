@@ -82,15 +82,20 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "method", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this.name, host, []);
-        }
-        if (ops.includes("method")) {
-          Foo._registerOnLiftObject(b, host, ["put"]);
-          Foo._registerOnLiftObject(this.name, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        Foo._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.name, []],
+          ],
+          "method": [
+            [b, ["put"]],
+            [this.name, []],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

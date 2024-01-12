@@ -71,11 +71,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "staticMethod", "$inflight_init"];
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("staticMethod")) {
-          MyType._registerOnLiftObject(s, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        MyType._onLiftMatrix(host, ops, {
+          "staticMethod": [
+            [s, []],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
     const s = "hello";

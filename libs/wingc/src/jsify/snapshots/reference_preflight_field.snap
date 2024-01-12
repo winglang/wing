@@ -77,14 +77,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "method", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this.x, host, []);
-        }
-        if (ops.includes("method")) {
-          Foo._registerOnLiftObject(this.x, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        Foo._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.x, []],
+          ],
+          "method": [
+            [this.x, []],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
   }

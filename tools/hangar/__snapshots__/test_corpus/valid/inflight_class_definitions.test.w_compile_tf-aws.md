@@ -208,6 +208,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "goo", "$inflight_init"];
       }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
+      }
     }
     class B extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -232,6 +238,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -259,6 +271,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class D extends $stdlib.std.Resource {
@@ -291,6 +309,12 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "$inflight_init"];
           }
+          onLift(host, ops) {
+            super.onLift(host, ops);
+          }
+          static onLiftType(host, ops) {
+            super.onLiftType(host, ops);
+          }
         }
         const pb = new E(this, "E");
         $helpers.assert($helpers.eq((pb.foo()), "e1"), "pb.foo() == \"e1\"");
@@ -317,6 +341,12 @@ class $Root extends $stdlib.std.Resource {
           }
           _supportedOps() {
             return [...super._supportedOps(), "foo", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            super.onLift(host, ops);
+          }
+          static onLiftType(host, ops) {
+            super.onLiftType(host, ops);
           }
         }
         const __parent_this_2 = this;
@@ -347,6 +377,12 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
+          onLift(host, ops) {
+            super.onLift(host, ops);
+          }
+          static onLiftType(host, ops) {
+            super.onLiftType(host, ops);
+          }
         }
         this.inner = new $Closure2(this, "$Closure2");
       }
@@ -374,14 +410,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "callInner", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          D._registerOnLiftObject(this.inner, host, []);
-        }
-        if (ops.includes("callInner")) {
-          D._registerOnLiftObject(this.inner, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        D._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.inner, []],
+          ],
+          "callInner": [
+            [this.inner, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -415,14 +456,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(a, host, ["goo"]);
-          $Closure3._registerOnLiftObject(d, host, ["callInner"]);
-          $Closure3._registerOnLiftObject(fn, host, ["handle"]);
-          $Closure3._registerOnLiftObject(innerD, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure3._onLiftMatrix(host, ops, {
+          "handle": [
+            [a, ["goo"]],
+            [d, ["callInner"]],
+            [fn, ["handle"]],
+            [innerD, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const a = new A(this, "A");

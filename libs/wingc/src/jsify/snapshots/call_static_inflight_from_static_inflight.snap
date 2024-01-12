@@ -88,6 +88,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
+      }
     }
     class B extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
@@ -114,11 +120,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "bar", "$inflight_init"];
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("bar")) {
-          B._registerOnLiftObject(A, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        B._onLiftMatrix(host, ops, {
+          "bar": [
+            [A, ["foo"]],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
   }

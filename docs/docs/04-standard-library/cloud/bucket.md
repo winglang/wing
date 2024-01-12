@@ -616,6 +616,35 @@ Key of the object.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onLiftType">onLiftType</a></code> | TODO. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Bucket.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Bucket.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Bucket.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Bucket.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

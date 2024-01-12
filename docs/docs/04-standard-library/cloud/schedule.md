@@ -116,6 +116,35 @@ Create a function that runs when receiving the scheduled event.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.onLiftType">onLiftType</a></code> | TODO. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Schedule.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Schedule.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Schedule.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Schedule.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

@@ -15,6 +15,7 @@ import { S3BucketPublicAccessBlock } from "../.gen/providers/aws/s3-bucket-publi
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { log } from "../shared/log";
 import {
   CaseConventions,
   NameOptions,
@@ -131,6 +132,12 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
+    log(
+      `onLift called on a resource (${this.node.path}) with a host (${
+        host.node.path
+      }) and ops: ${JSON.stringify(ops)}`
+    );
+
     if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }

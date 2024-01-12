@@ -86,7 +86,7 @@
             "uniqueId": "WidgetService_uiButton_Handler_IamRolePolicy_E258A8AD"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.arn}\",\"${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.WidgetService_cloudCounter_5741B0CD.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.WidgetService_cloudCounter_5741B0CD.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.arn}\",\"${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.WidgetService_uiButton_Handler_IamRole_6B3512D4.name}"
       },
       "WidgetService_uiField_Handler_IamRolePolicy_5A8ECF8B": {
@@ -169,7 +169,6 @@
         "environment": {
           "variables": {
             "BUCKET_NAME_c70730ce": "${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.bucket}",
-            "DYNAMODB_TABLE_NAME_fa6d1fc4": "${aws_dynamodb_table.WidgetService_cloudCounter_5741B0CD.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c876ab08",
             "WING_TARGET": "tf-aws"

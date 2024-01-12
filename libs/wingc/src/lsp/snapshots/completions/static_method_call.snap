@@ -21,4 +21,16 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: onLiftType
+  kind: 2
+  detail: "preflight (host: IInflightHost, ops: Array<str>): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight onLiftType: preflight (host: IInflightHost, ops: Array<str>): void\n```\n---\nTODO.\n### Parameters\n- `host` — `IInflightHost`\n- `ops` — `Array<str>`"
+  sortText: ff|onLiftType
+  insertText: onLiftType($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

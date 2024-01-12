@@ -49,7 +49,30 @@ new ui.Button(label: str, handler: IButtonHandler);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.ui.Button.onLiftType">onLiftType</a></code> | TODO. |
 | <code><a href="#@winglang/sdk.ui.Button.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.Button.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.Button.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.Button.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Button.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
@@ -133,7 +156,30 @@ new ui.Field(label: str, handler: IFieldHandler, props?: FieldProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.ui.Field.onLiftType">onLiftType</a></code> | TODO. |
 | <code><a href="#@winglang/sdk.ui.Field.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.Field.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.Field.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.Field.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Field.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
@@ -279,7 +325,30 @@ Shorthand for `add(new ui.Field(...))`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.ui.Section.onLiftType">onLiftType</a></code> | TODO. |
 | <code><a href="#@winglang/sdk.ui.Section.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.Section.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.Section.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.Section.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.Section.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
@@ -344,7 +413,30 @@ new ui.VisualComponent();
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.ui.VisualComponent.onLiftType">onLiftType</a></code> | TODO. |
 | <code><a href="#@winglang/sdk.ui.VisualComponent.isVisualComponent">isVisualComponent</a></code> | Returns whether the given construct is a visual component. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ui.VisualComponent.onLiftType"></a>
+
+```wing
+bring ui;
+
+ui.VisualComponent.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ui.VisualComponent.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ui.VisualComponent.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 

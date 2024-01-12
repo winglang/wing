@@ -117,17 +117,22 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "isEmpty", "checkIfEmpty", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyType._registerOnLiftObject(this.b, host, []);
-        }
-        if (ops.includes("checkIfEmpty")) {
-          MyType._registerOnLiftObject(this, host, ["isEmpty"]);
-        }
-        if (ops.includes("isEmpty")) {
-          MyType._registerOnLiftObject(this.b, host, ["list"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        MyType._onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.b, []],
+          ],
+          "checkIfEmpty": [
+            [this, ["isEmpty"]],
+          ],
+          "isEmpty": [
+            [this.b, ["list"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -157,11 +162,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(t, host, ["checkIfEmpty"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [t, ["checkIfEmpty"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const t = new MyType(this, "MyType");

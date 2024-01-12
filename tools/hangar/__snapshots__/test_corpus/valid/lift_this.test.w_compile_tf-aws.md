@@ -98,11 +98,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "x", "bar", "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("foo")) {
-          Foo._registerOnLiftObject(this, host, ["bar"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        Foo._onLiftMatrix(host, ops, {
+          "foo": [
+            [this, ["bar"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -132,11 +137,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(f, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $Closure1._onLiftMatrix(host, ops, {
+          "handle": [
+            [f, ["foo"]],
+          ],
+        });
+        super.onLift(host, ops);
+      }
+      static onLiftType(host, ops) {
+        super.onLiftType(host, ops);
       }
     }
     const f = new Foo(this, "Foo");

@@ -232,6 +232,35 @@ dynamodb UpdateItem options.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.onLiftType">onLiftType</a></code> | TODO. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ex.DynamodbTable.onLiftType"></a>
+
+```wing
+bring ex;
+
+ex.DynamodbTable.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+TODO.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ex.DynamodbTable.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ex.DynamodbTable.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
