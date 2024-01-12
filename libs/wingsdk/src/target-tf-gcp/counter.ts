@@ -46,6 +46,7 @@ export class Counter extends cloud.Counter {
       appEngineIntegrationMode: "DISABLED",
       pointInTimeRecoveryEnablement: "POINT_IN_TIME_RECOVERY_DISABLED",
       deleteProtectionState: "DELETE_PROTECTION_DISABLED",
+      deletepolicy: "DELETE",
     });
   }
 
