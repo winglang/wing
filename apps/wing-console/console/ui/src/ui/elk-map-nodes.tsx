@@ -101,8 +101,8 @@ export const ContainerNode = memo(
           },
         )}
         tabIndex={-1}
-        onClick={onClick}
-        onMouseEnter={onMouseEnter}
+        // onClick={onClick}
+        // onMouseEnter={onMouseEnter}
       >
         <div
           className={classNames(

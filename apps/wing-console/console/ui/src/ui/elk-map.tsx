@@ -20,23 +20,27 @@ import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
+import { IDENTITY_TRANSFORM, Transform, ZoomPane } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const layoutOptions: LayoutOptions = {
-  "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  "elk.direction": "RIGHT",
-  "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "MIN_WIDTH",
-  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
-  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
-  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
-  "elk.layered.spacing.baseValue": "32",
-  "elk.edgeRouting": "ORTHOGONAL",
+
+  "elk.hierarchyHandling": "INCLUDE_CHILDREN",
+
+  "elk.layered.layering.strategy": "INTERACTIVE",
+  "elk.layered.cycleBreaking.strategy": "INTERACTIVE",
+  "elk.layered.spacing.baseValue": "12",
+  "elk.layered.spacing.edgeNodeBetweenLayers": "12",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "12",
+
+  "elk.spacing.edgeNode": "24",
+  "elk.spacing.edgeEdge": "12",
+  "elk.spacing.nodeNode": "24",
+  // "elk.spacing.portPort": "12",
+
   "elk.padding": "[top=52,left=20,bottom=20,right=20]",
 };
 
@@ -383,8 +387,8 @@ const NodesContainer = memo(
               opacity: 0,
             }}
             onClick={() => onSelectedNodeIdChange?.(node.id)}
-            onMouseEnter={() => setHighlighted(node.id)}
-            onMouseLeave={() => setHighlighted(undefined)}
+            // onMouseEnter={() => setHighlighted(node.id)}
+            // onMouseLeave={() => setHighlighted(undefined)}
           >
             <NodeItem
               node={node.data}
@@ -534,28 +538,28 @@ export const ElkMap = <T extends unknown = undefined>({
     });
   }, [graph, nodeRecord, offsets, edges, setNodeList]);
 
-  const { zoomToFit } = useZoomPaneContext();
+  // const { zoomToFit } = useZoomPaneContext();
 
-  // Zoom to fit when map changes
-  const previousNodeList = useRef<NodeData[]>();
-  useEffect(() => {
-    // Skip animation if there was no previous node list (eg, first render)
-    const skipAnimation =
-      !previousNodeList.current || previousNodeList.current.length === 0;
+  // // Zoom to fit when map changes
+  // const previousNodeList = useRef<NodeData[]>();
+  // useEffect(() => {
+  //   // Skip animation if there was no previous node list (eg, first render)
+  //   const skipAnimation =
+  //     !previousNodeList.current || previousNodeList.current.length === 0;
 
-    zoomToFit(
-      {
-        x: 0,
-        y: 0,
-        width: graph?.width ?? 0,
-        height: graph?.height ?? 0,
-      },
-      skipAnimation,
-    );
+  //   zoomToFit(
+  //     {
+  //       x: 0,
+  //       y: 0,
+  //       width: graph?.width ?? 0,
+  //       height: graph?.height ?? 0,
+  //     },
+  //     skipAnimation,
+  //   );
 
-    previousNodeList.current = nodeList;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [graph, nodeList]);
+  //   previousNodeList.current = nodeList;
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [graph, nodeList]);
 
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
@@ -568,33 +572,40 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  const zoomPane = useRef<HTMLDivElement>(null);
-  const rootElement = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!zoomPane.current || !rootElement.current) {
-      console.error("No zoom pane or root element");
-      return;
-    }
+  // const zoomPane = useRef<HTMLDivElement>(null);
+  // const rootElement = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (!zoomPane.current || !rootElement.current) {
+  //     console.error("No zoom pane or root element");
+  //     return;
+  //   }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) {
-            zoomToFit();
-            return;
-          }
-        }
-      },
-      {
-        root: zoomPane.current,
-        rootMargin: "-20px",
-      },
-    );
-    observer.observe(rootElement.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, [zoomToFit]);
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       for (const entry of entries) {
+  //         if (!entry.isIntersecting) {
+  //           zoomToFit();
+  //           return;
+  //         }
+  //       }
+  //     },
+  //     {
+  //       root: zoomPane.current,
+  //       rootMargin: "-20px",
+  //     },
+  //   );
+  //   observer.observe(rootElement.current);
+  //   return () => {
+  //     observer.disconnect();
+  //   };
+  // }, [zoomToFit]);
+
+  // useEffect(() => {
+  //   // zoomToFit();
+  //   console.log({ selectedNodeId });
+  // }, [selectedNodeId, zoomToFit]);
+
+  // const [transform, setTransform] = useState<Transform>(IDENTITY_TRANSFORM);
 
   return (
     <>
@@ -605,26 +616,25 @@ export const ElkMap = <T extends unknown = undefined>({
       />
 
       <ZoomPane
-        ref={zoomPane}
+        // transform={transform}
+        // onTransformChange={setTransform}
         className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
       >
-        <div ref={rootElement}>
-          {graph && (
-            <Graph
-              graph={graph}
-              node={node}
-              nodeList={nodeList}
-              offsets={offsets!}
-              selectedNodeId={selectedNodeId}
-              onSelectedNodeIdChange={onSelectedNodeIdChange}
-              onSelectedEdgeIdChange={onSelectedEdgeIdChange}
-              isHighlighted={isHighlighted}
-              hasHighlightedEdge={hasHighlightedEdge}
-              setHighlighted={setHighlighted}
-            />
-          )}
-        </div>
+        {graph && (
+          <Graph
+            graph={graph}
+            node={node}
+            nodeList={nodeList}
+            offsets={offsets!}
+            selectedNodeId={selectedNodeId}
+            onSelectedNodeIdChange={onSelectedNodeIdChange}
+            onSelectedEdgeIdChange={onSelectedEdgeIdChange}
+            isHighlighted={isHighlighted}
+            hasHighlightedEdge={hasHighlightedEdge}
+            setHighlighted={setHighlighted}
+          />
+        )}
       </ZoomPane>
     </>
   );
