@@ -223,7 +223,6 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         Foo._onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["field1", "field2", "get_six"]],
           ],
         });
         super.onLift(host, ops);
@@ -260,7 +259,6 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         FooChild._onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["field3"]],
           ],
         });
         super.onLift(host, ops);

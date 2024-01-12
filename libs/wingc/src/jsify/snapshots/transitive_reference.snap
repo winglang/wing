@@ -123,7 +123,6 @@ class $Root extends $stdlib.std.Resource {
             [this.b, []],
           ],
           "checkIfEmpty": [
-            [this, ["isEmpty"]],
           ],
           "isEmpty": [
             [this.b, ["list"]],

@@ -101,10 +101,8 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         BinaryOperation._onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["lhs", "rhs"]],
           ],
           "add": [
-            [this, ["lhs", "rhs"]],
           ],
         });
         super.onLift(host, ops);

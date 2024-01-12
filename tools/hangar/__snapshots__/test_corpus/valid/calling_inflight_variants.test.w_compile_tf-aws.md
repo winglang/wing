@@ -176,18 +176,14 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         Foo._onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["inflight2"]],
             [this.inflight1, []],
           ],
           "callFn": [
-            [this, ["makeFn"]],
           ],
           "callFn2": [
-            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
           "makeFn": [
-            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
         });

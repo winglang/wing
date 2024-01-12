@@ -1796,6 +1796,12 @@ impl<'a> JSifier<'a> {
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
+					// skip any objects named "this" since lifting oneself is redundant
+					// TODO: is this a bug? not sure if these need to be lifted
+					if code == "this" {
+						continue;
+					}
+
 					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 					bind_method.line(format!("[{code}, [{ops_strings}]],",));
 				}

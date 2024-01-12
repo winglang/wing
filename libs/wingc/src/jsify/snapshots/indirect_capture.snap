@@ -116,7 +116,6 @@ class $Root extends $stdlib.std.Resource {
             [b, ["list"]],
           ],
           "goo": [
-            [this, ["foo"]],
           ],
         });
         super.onLift(host, ops);

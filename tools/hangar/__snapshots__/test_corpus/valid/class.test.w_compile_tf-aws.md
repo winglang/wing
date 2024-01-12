@@ -807,7 +807,6 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         A._onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["sound"]],
           ],
         });
         super.onLift(host, ops);

@@ -102,7 +102,12 @@ export interface IResource extends IConstruct, IHostedLiftable {
  */
 export abstract class Resource extends Construct implements IResource {
   /**
-   * TODO
+   * A hook called by the Wing compiler once for each inflight host that needs to
+   * use this type inflight. The list of requested inflight methods
+   * needed by the inflight host are given by `ops`.
+   *
+   * This method is commonly used for adding permissions, environment variables, or
+   * other capabilities to the inflight host.
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
     log(
@@ -313,12 +318,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   public _preSynthesize(): void {
-    // // Perform the live bindings between resources and hosts
-    // // By aggregating the binding operations, we can avoid performing
-    // // multiple bindings for the same resource-host pairs.
-    // for (const [host, ops] of this.onLiftMap.entries()) {
-    //   this.onLift(host, Array.from(ops));
-    // }
+    // do nothing by default
   }
 }
 
@@ -344,12 +344,12 @@ function isHostedLiftableType(t: any): t is IHostedLiftableType {
 }
 
 /**
- * TODO
+ * Represents a type with static methods that may have other things to lift.
  */
 export interface IHostedLiftableType {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
-   * use this object inflight. The list of requested inflight methods
+   * use this type inflight. The list of requested inflight methods
    * needed by the inflight host are given by `ops`.
    *
    * This method is commonly used for adding permissions, environment variables, or

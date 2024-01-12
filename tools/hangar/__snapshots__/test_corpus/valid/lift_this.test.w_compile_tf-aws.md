@@ -101,7 +101,6 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         Foo._onLiftMatrix(host, ops, {
           "foo": [
-            [this, ["bar"]],
           ],
         });
         super.onLift(host, ops);
