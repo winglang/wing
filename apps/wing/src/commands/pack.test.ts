@@ -192,7 +192,6 @@ describe("wing pack", () => {
 
     expect(Object.keys(tarballContents).sort()).toMatchInlineSnapshot(`
       [
-        "$lib/.manifest",
         "$lib/.wing/inflight.Store-2.js",
         "$lib/.wing/inflight.Store-2.js.map",
         "$lib/.wing/inflight.Util-1.js",
