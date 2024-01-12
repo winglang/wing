@@ -557,6 +557,27 @@ export const ElkMap = <T extends unknown = undefined>({
 
   // const zoomPane = useRef<HTMLDivElement>(null);
   // const rootElement = useRef<HTMLDivElement>(null);
+
+  const mapSize = useMemo(() => {
+    if (!graph) {
+      return;
+    }
+
+    return {
+      width: graph.width!,
+      height: graph.height!,
+    };
+  }, [graph]);
+  const zoomPaneRef = useRef<ZoomPaneRef>(null);
+
+  useEffect(() => {
+    zoomPaneRef.current?.zoomToFit();
+    // console.log({ selectedNodeId });
+  }, [
+    // selectedNodeId,
+    offsets,
+  ]);
+
   // useEffect(() => {
   //   if (!zoomPane.current || !rootElement.current) {
   //     console.error("No zoom pane or root element");
@@ -582,23 +603,6 @@ export const ElkMap = <T extends unknown = undefined>({
   //     observer.disconnect();
   //   };
   // }, [zoomToFit]);
-
-  // useEffect(() => {
-  //   // zoomToFit();
-  //   console.log({ selectedNodeId });
-  // }, [selectedNodeId, zoomToFit]);
-
-  const mapSize = useMemo(() => {
-    if (!graph) {
-      return;
-    }
-
-    return {
-      width: graph.width!,
-      height: graph.height!,
-    };
-  }, [graph]);
-  const zoomPaneRef = useRef<ZoomPaneRef>(null);
 
   return (
     <>

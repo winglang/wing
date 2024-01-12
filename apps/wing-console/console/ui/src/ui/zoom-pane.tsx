@@ -49,7 +49,7 @@ export interface ZoomPaneProps
 }
 
 export interface ZoomPaneRef {
-  zoomToFit(viewport: Viewport): void;
+  zoomToFit(viewport?: Viewport): void;
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
@@ -147,12 +147,17 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       // const zy = viewport.height / boundingRect.height;
       const zx = boundingRect.width / viewport.width;
       const zy = boundingRect.height / viewport.height;
+      const z = Math.min(zx, zy);
+
+      // Center contents.
+      const dx = (boundingRect.width - viewport.width * z) / 2 / z;
+      const dy = (boundingRect.height - viewport.height * z) / 2 / z;
+
       const newTransform = {
-        x: viewport.x,
-        y: viewport.y,
-        z: Math.min(zx, zy),
+        x: viewport.x - dx,
+        y: viewport.y - dy,
+        z,
       };
-      // console.log(viewport, newTransform, boundingRect);
 
       transformRef.current = newTransform;
       applyTransform();
