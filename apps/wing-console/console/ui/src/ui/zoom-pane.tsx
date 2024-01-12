@@ -1,5 +1,12 @@
 import classNames from "classnames";
-import { DetailedHTMLProps, HTMLAttributes, useCallback, useRef } from "react";
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { ReactNode } from "react";
 import { useEvent } from "react-use";
 
@@ -32,131 +39,25 @@ export interface ZoomPaneProviderProps {
 
 const MIN_ZOOM_LEVEL = 0.125;
 const MAX_ZOOM_LEVEL = 1.5;
+const ZOOM_SENSITIVITY = 1.25;
 const MOVE_SENSITIVITY = 1.5;
 const SCALE_SENSITIVITY = 0.01;
 
-// export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
-//   props,
-// ) => {
-//   // const targetRef = useRef<HTMLDivElement>(null);
-//   const [transform, setTransform] = useState(IDENTITY_TRANSFORM);
+export interface ZoomPaneProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  mapSize?: { width: number; height: number };
+}
 
-//   const zoomToFit = useCallback(
-//     (viewport?: Viewport, skipAnimation?: boolean) => {
-//       // const node = selection?.node();
-//       // if (!selection || !node) {
-//       //   return;
-//       // }
-//       // if (!targetRef.current) {
-//       //   return;
-//       // }
-//       // viewport ??= {
-//       //   x: 0,
-//       //   y: 0,
-//       //   width: targetRef.current.clientWidth,
-//       //   height: targetRef.current.clientHeight,
-//       // };
-//       // const width = node.clientWidth;
-//       // const height = node.clientHeight;
-//       // const x0 = viewport.x;
-//       // const y0 = viewport.y;
-//       // const x1 = x0 + viewport.width;
-//       // const y1 = y0 + viewport.height;
-//       // const defaultScale = 1.25;
-//       // const scale = Math.min(
-//       //   8,
-//       //   0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
-//       // );
-//       // const newTransform = d3Zoom.zoomIdentity
-//       //   .translate(width / 2, height / 2)
-//       //   .scale(Math.min(defaultScale, scale))
-//       //   .translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
-//       // if (skipAnimation) {
-//       //   zoom.transform(selection, newTransform);
-//       // } else {
-//       //   selectionTransition(selection, 500).call(zoom.transform, newTransform);
-//       // }
-//     },
-//     [
-//       //selection, zoom, targetRef
-//     ],
-//   );
+export interface ZoomPaneRef {
+  zoomToFit(viewport: Viewport): void;
+}
 
-//   const zoomOut = useCallback(
-//     () => {
-//       // if (!selection) {
-//       //   return;
-//       // }
-//       // selectionTransition(selection).call(zoom.scaleBy, 0.9);
-//     },
-//     [
-//       //selection, zoom
-//     ],
-//   );
-
-//   const zoomIn = useCallback(() => {
-//     // if (!selection) {
-//     //   return;
-//     // }
-//     // selectionTransition(selection).call(zoom.scaleBy, 1.1);
-//     setTransform({
-//       ...transform,
-//       z: transform.z * 1.1,
-//     });
-//   }, [
-//     transform,
-//     setTransform,
-//     //selection, zoom
-//   ]);
-
-//   // const transformRef = useRef({ x: 0, y: 0, z: 1 });
-
-//   return (
-//     <ZoomPanePrivateContext.Provider
-//       value={{
-//         // transformRef,
-//         transform,
-//         setTransform,
-//       }}
-//     >
-//       <ZoomPaneContext.Provider
-//         value={{
-//           zoomIn,
-//           zoomOut,
-//           zoomToFit,
-//         }}
-//       >
-//         {typeof props.children === "function" ? (
-//           props.children({
-//             zoomIn,
-//             zoomOut,
-//             zoomToFit,
-//           })
-//         ) : (
-//           <>{props.children}</>
-//         )}
-//       </ZoomPaneContext.Provider>
-//     </ZoomPanePrivateContext.Provider>
-//   );
-// };
-
-// export const useZoomPaneContext = () => {
-//   return useContext(ZoomPaneContext);
-// };
-
-// export interface ZoomPaneProps {
-//   transform: Transform;
-//   onTransformChange?: (transform: Transform) => void;
-// }
-
-export const ZoomPane = (
-  props: DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>,
-) => {
+export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { children, className } = props;
 
   const transformRef = useRef<Transform>(IDENTITY_TRANSFORM);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   const applyTransform = useCallback(() => {
     const target = targetRef.current;
@@ -213,22 +114,86 @@ export const ZoomPane = (
     },
     [applyTransform, toLocal],
   );
-  useEvent("wheel", onWheel as (event: Event) => void, ref.current);
+  useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
+
+  const zoomIn = useCallback(() => {
+    const transform = transformRef.current;
+    const z = Math.min(MAX_ZOOM_LEVEL, transform.z * ZOOM_SENSITIVITY);
+    transform.z = z;
+    applyTransform();
+  }, [applyTransform]);
+
+  const zoomOut = useCallback(() => {
+    const transform = transformRef.current;
+    const z = Math.max(MIN_ZOOM_LEVEL, transform.z / ZOOM_SENSITIVITY);
+    transform.z = z;
+    applyTransform();
+  }, [applyTransform]);
+
+  const zoomToFit = useCallback(
+    (viewport?: Viewport) => {
+      const target = targetRef.current;
+      if (!target) {
+        return;
+      }
+      viewport ??= {
+        x: 0,
+        y: 0,
+        width: target.clientWidth,
+        height: target.clientHeight,
+      };
+      const width = target.clientWidth;
+      const height = target.clientHeight;
+      const x0 = viewport.x;
+      const y0 = viewport.y;
+      const x1 = x0 + viewport.width;
+      const y1 = y0 + viewport.height;
+      const scale = Math.min(
+        8,
+        0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
+      );
+      const newTransform = {
+        x: width / 2,
+        y: height / 2,
+        // z: Math.min(1, scale),
+        z: scale,
+      };
+      console.log("zoomToFit", { viewport, newTransform });
+      transformRef.current = newTransform;
+      applyTransform();
+    },
+    [applyTransform],
+  );
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        zoomToFit,
+      };
+    },
+    [zoomToFit],
+  );
 
   return (
     <div
-      ref={ref}
+      ref={containerRef}
       className={classNames(className, "relative overflow-hidden")}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         {children}
       </div>
+
       <div className="relative z-10 flex">
         <div className="grow"></div>
         <div className="relative cursor-grab bg-slate-50/50 dark:bg-slate-500/50 backdrop-blur">
-          <MapControls />
+          <MapControls
+            onZoomIn={zoomIn}
+            onZoomOut={zoomOut}
+            onZoomToFit={zoomToFit}
+          />
         </div>
       </div>
     </div>
   );
-};
+});
