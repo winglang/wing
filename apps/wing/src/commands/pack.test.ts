@@ -192,6 +192,7 @@ describe("wing pack", () => {
 
     expect(Object.keys(tarballContents).sort()).toMatchInlineSnapshot(`
       [
+        "$lib/.manifest",
         "$lib/.wing/inflight.Store-2.js",
         "$lib/.wing/inflight.Store-2.js.map",
         "$lib/.wing/inflight.Util-1.js",
@@ -207,7 +208,6 @@ describe("wing pack", () => {
         "$lib/.wing/preflight.subdir-4.js.map",
         "$lib/.wing/preflight.util-2.js",
         "$lib/.wing/preflight.util-2.js.map",
-        "$lib/.manifest",
         "LICENSE",
         "README.md",
         "enums.w",

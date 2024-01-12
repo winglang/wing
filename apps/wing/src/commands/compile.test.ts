@@ -28,9 +28,9 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toMatchInlineSnapshot(`
         [
+          ".manifest",
           ".wing",
           "connections.json",
-          ".manifest",
           "simulator.json",
           "tree.json",
         ]
@@ -63,9 +63,9 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toMatchInlineSnapshot(`
         [
+          ".manifest",
           ".wing",
           "connections.json",
-          ".manifest",
           "simulator.json",
           "tree.json",
         ]
@@ -136,9 +136,9 @@ describe(
         expect(files.length).toBeGreaterThan(0);
         expect(files).toMatchInlineSnapshot(`
           [
+            ".manifest",
             ".wing",
             "connections.json",
-            ".manifest",
             "simulator.json",
             "tree.json",
           ]
