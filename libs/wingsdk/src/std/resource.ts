@@ -126,16 +126,15 @@ export abstract class Resource extends Construct implements IResource {
   ): void {
     const neededOps = new Map<any, Set<string>>();
     for (const [givenOp, pairs] of Object.entries(matrix)) {
+      if (!ops.includes(givenOp)) {
+        continue;
+      }
       for (const [obj, thenOps] of pairs) {
+        const objOps = neededOps.get(obj) ?? new Set();
         for (const thenOp of thenOps) {
-          if (!ops.includes(givenOp)) {
-            continue;
-          }
-
-          const objOps = neededOps.get(obj) ?? new Set();
           objOps.add(thenOp);
-          neededOps.set(obj, objOps);
         }
+        neededOps.set(obj, objOps);
       }
     }
 

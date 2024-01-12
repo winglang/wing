@@ -190,6 +190,7 @@
         ],
         "environment": {
           "variables": {
+            "BUCKET_NAME_5c35566c": "${aws_s3_bucket.A_cloudBucket_DFCC9367.bucket}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "get_bar0-c860413a",
             "WING_TARGET": "tf-aws"
