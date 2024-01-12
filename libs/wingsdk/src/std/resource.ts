@@ -121,7 +121,30 @@ export abstract class Resource extends Construct implements IResource {
    * Registers a lifting between different resources and a host.
    *
    * Internally, this deduplicates lifting operations so that _onLiftObject() is called
-   * at most once per preflight object.
+   * at most once per preflight object. For example:
+   *
+   * ```
+   * _onLiftMatrix(host, ["method1", "method2"], {
+   *  "method1": [
+   *    [foo, ["other1"]],
+   *    [bar, ["other2"]]
+   *  ],
+   *  "method2": [
+   *    [foo, ["other1"]],
+   *    [bar, ["other3"]]
+   *  ],
+   *  "method3": [
+   *    [foo, ["other4"]],
+   *  ]
+   * })
+   * ```
+   *
+   * will result in
+   *
+   * ```
+   * _onLiftObject(foo, host, ["other1", "other2"]);
+   * _onLiftObject(bar, host, ["other1", "other3"]);
+   * ```
    * @internal
    */
   public static _onLiftMatrix(
