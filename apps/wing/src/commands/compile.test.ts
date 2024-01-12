@@ -30,7 +30,7 @@ describe(
         [
           ".wing",
           "connections.json",
-          "manifest.json",
+          ".manifest",
           "simulator.json",
           "tree.json",
         ]
@@ -65,7 +65,7 @@ describe(
         [
           ".wing",
           "connections.json",
-          "manifest.json",
+          ".manifest",
           "simulator.json",
           "tree.json",
         ]
@@ -138,7 +138,7 @@ describe(
           [
             ".wing",
             "connections.json",
-            "manifest.json",
+            ".manifest",
             "simulator.json",
             "tree.json",
           ]
@@ -176,7 +176,7 @@ describe(
       expectedFiles.forEach((file) => expect(files2).toContain(file));
 
       // check the manifest file to make sure it does not contain "terraform.tfstate"
-      const manifestFile = join(artifactDir2, "manifest.json");
+      const manifestFile = join(artifactDir2, ".manifest");
       const manifest = JSON.parse(await readFile(manifestFile, "utf-8"));
       expect(manifest.generatedFiles).not.toContain("terraform.tfstate");
     });
