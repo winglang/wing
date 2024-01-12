@@ -1783,10 +1783,10 @@ impl<'a> JSifier<'a> {
 			})
 			.collect_vec();
 
-		// // Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		// if lift_qualifications.is_empty() {
-		// 	return bind_method;
-		// }
+		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
+		if lift_qualifications.is_empty() {
+			return bind_method;
+		}
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
 

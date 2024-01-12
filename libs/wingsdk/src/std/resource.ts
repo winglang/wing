@@ -340,7 +340,7 @@ export interface OperationAnnotation {
 }
 
 function isHostedLiftableType(t: any): t is IHostedLiftableType {
-  return typeof t.onLiftType === "function";
+  return t !== undefined && typeof t.onLiftType === "function";
 }
 
 /**
