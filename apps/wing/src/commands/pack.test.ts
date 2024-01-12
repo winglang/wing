@@ -207,6 +207,7 @@ describe("wing pack", () => {
         "$lib/.wing/preflight.subdir-4.js.map",
         "$lib/.wing/preflight.util-2.js",
         "$lib/.wing/preflight.util-2.js.map",
+        "$lib/manifest.json",
         "LICENSE",
         "README.md",
         "enums.w",

@@ -3,7 +3,7 @@ import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
 import * as wingCompiler from "./wingc";
-import { copyDir, normalPath } from "./util";
+import { normalPath } from "./util";
 import { existsSync } from "fs";
 import { BuiltinPlatform } from "./constants";
 import { CompileError, PreflightError } from "./errors";
@@ -17,6 +17,9 @@ Error.stackTraceLimit = 50;
 // const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
+const MANIFEST_FILE = "manifest.json";
+const BACKUP_SUFFIX = ".bak";
+const DOT_WING = ".wing";
 
 const BUILTIN_PLATFORMS = [
   BuiltinPlatform.SIM,
@@ -69,13 +72,7 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(
-  outDir: string,
-  entrypoint: string,
-  target: string,
-  testing: boolean = false,
-  tmp: boolean = false
-) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: string, testing: boolean) {
   const targetDirSuffix = defaultSynthDir(target);
 
   let entrypointName;
@@ -95,9 +92,8 @@ function resolveSynthDir(
     throw new Error("Source file cannot be found");
   }
   const randomPart =
-    tmp || (testing && target !== BuiltinPlatform.SIM) ? `.${Date.now().toString().slice(-6)}` : "";
-  const tmpSuffix = tmp ? ".tmp" : "";
-  const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}${tmpSuffix}`;
+    testing && target !== BuiltinPlatform.SIM ? `.${Date.now().toString().slice(-6)}` : "";
+  const lastPart = `${entrypointName}.${targetDirSuffix}${randomPart}`;
   if (testing) {
     return join(outDir, "test", lastPart);
   } else {
@@ -145,11 +141,10 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   const testing = options.testing ?? false;
   log?.("testing: %s", testing);
   const target = determineTargetFromPlatforms(options.platform);
-  const tmpSynthDir = resolveSynthDir(targetdir, entrypointFile, target, testing, true);
-  log?.("temp synth dir: %s", tmpSynthDir);
   const synthDir = resolveSynthDir(targetdir, entrypointFile, target, testing);
   log?.("synth dir: %s", synthDir);
-  const workDir = resolve(tmpSynthDir, ".wing");
+  const backupSynthDir = synthDir + BACKUP_SUFFIX;
+  const workDir = resolve(synthDir, DOT_WING);
   log?.("work dir: %s", workDir);
 
   const nearestNodeModules = (dir: string): string => {
@@ -169,66 +164,92 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   let wingNodeModules = nearestNodeModules(wingDir);
 
-  await Promise.all([
-    fs.mkdir(workDir, { recursive: true }),
-    fs.mkdir(tmpSynthDir, { recursive: true }),
-  ]);
+  let existingFiles: string[] = [];
 
-  let preflightEntrypoint = await compileForPreflight({
-    entrypointFile,
-    workDir,
-    wingDir,
-    tmpSynthDir,
-    color: options.color,
-    log,
-  });
+  if (existsSync(synthDir)) {
+    await fs.rm(backupSynthDir, { force: true, recursive: true });
+    await fs.rename(synthDir, backupSynthDir);
 
-  if (isEntrypointFile(entrypoint)) {
-    let preflightEnv: Record<string, string | undefined> = {
-      ...process.env,
-      WING_TARGET: target,
-      WING_PLATFORMS: resolvePlatformPaths(options.platform),
-      WING_SYNTH_DIR: tmpSynthDir,
-      WING_SOURCE_DIR: wingDir,
-      WING_IS_TEST: testing.toString(),
-      WING_VALUES: options.value?.length == 0 ? undefined : options.value,
-      WING_VALUES_FILE: options.values,
-      WING_NODE_MODULES: wingNodeModules,
-    };
+    await fs.mkdir(workDir, { recursive: true });
 
-    if (options.rootId) {
-      preflightEnv.WING_ROOT_ID = options.rootId;
-    }
-
-    if (os.platform() === "win32") {
-      // In worker threads on Windows, environment variables are case-sensitive.
-      // Most people probably already assume this is the case everywhere, so
-      // it is sufficient for now to just to normalize common automatic env vars.
-
-      if ("Path" in preflightEnv) {
-        preflightEnv.PATH = preflightEnv.Path;
-        delete preflightEnv.Path;
+    // use previous manifest to copy non-generated files
+    const lastManifestPath = join(backupSynthDir, MANIFEST_FILE);
+    if (existsSync(lastManifestPath)) {
+      const lastManifest = JSON.parse(await fs.readFile(lastManifestPath, "utf-8"));
+      const generatedFiles = lastManifest.generatedFiles;
+      for (const backupDirFile of await fs.readdir(backupSynthDir)) {
+        if (!generatedFiles.includes(backupDirFile)) {
+          await fs.cp(join(backupSynthDir, backupDirFile), join(synthDir, backupDirFile), {
+            recursive: true,
+            force: true,
+          });
+          existingFiles.push(backupDirFile);
+        }
       }
+    } else if (existsSync(backupSynthDir)) {
+      // HACK: Copy commonly known files that are not generated
+      const stuffToCopy = ["terraform.tfstate", ".terraform.lock.hcl", ".terraform"];
+      await Promise.all(
+        stuffToCopy.map(async (f) =>
+          fs.cp(join(backupSynthDir, f), join(synthDir, f), { recursive: true }).catch(() => {})
+        )
+      );
+    }
+  } else {
+    await fs.mkdir(workDir, { recursive: true });
+  }
+
+  try {
+    let preflightEntrypoint = await compileForPreflight({
+      entrypointFile,
+      workDir,
+      wingDir,
+      synthDir,
+      color: options.color,
+      log,
+    });
+
+    if (isEntrypointFile(entrypoint)) {
+      let preflightEnv: Record<string, string | undefined> = {
+        ...process.env,
+        WING_TARGET: target,
+        WING_PLATFORMS: resolvePlatformPaths(options.platform),
+        WING_SYNTH_DIR: synthDir,
+        WING_SOURCE_DIR: wingDir,
+        WING_IS_TEST: testing.toString(),
+        WING_VALUES: options.value?.length == 0 ? undefined : options.value,
+        WING_VALUES_FILE: options.values,
+        WING_NODE_MODULES: wingNodeModules,
+      };
+
+      if (options.rootId) {
+        preflightEnv.WING_ROOT_ID = options.rootId;
+      }
+
+      if (os.platform() === "win32") {
+        // In worker threads on Windows, environment variables are case-sensitive.
+        // Most people probably already assume this is the case everywhere, so
+        // it is sufficient for now to just to normalize common automatic env vars.
+
+        if ("Path" in preflightEnv) {
+          preflightEnv.PATH = preflightEnv.Path;
+          delete preflightEnv.Path;
+        }
+      }
+
+      await runPreflightCodeInWorkerThread(preflightEntrypoint, preflightEnv);
     }
 
-    await runPreflightCodeInWorkerThread(preflightEntrypoint, preflightEnv);
+    return synthDir;
+  } finally {
+    // generate manifest file
+    const newManifestPath = join(synthDir, MANIFEST_FILE);
+    const newManifest = {
+      generatedFiles: (await fs.readdir(synthDir)).filter((f) => !existingFiles.includes(f)),
+    };
+    newManifest.generatedFiles.push(MANIFEST_FILE);
+    await fs.writeFile(newManifestPath, JSON.stringify(newManifest));
   }
-
-  if (os.platform() === "win32") {
-    // Windows doesn't really support fully atomic moves.
-    // So we just copy the directory instead.
-    // Also only using sync methods to avoid possible async fs issues.
-    await fs.rm(synthDir, { recursive: true, force: true });
-    await fs.mkdir(synthDir, { recursive: true });
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  } else {
-    // Move the temporary directory to the final target location in an atomic operation
-    await copyDir(tmpSynthDir, synthDir);
-    await fs.rm(tmpSynthDir, { recursive: true, force: true });
-  }
-
-  return synthDir;
 }
 
 function isEntrypointFile(path: string) {
@@ -246,7 +267,7 @@ async function compileForPreflight(props: {
   entrypointFile: string;
   workDir: string;
   wingDir: string;
-  tmpSynthDir: string;
+  synthDir: string;
   color?: boolean;
   log?: (...args: any[]) => void;
 }) {
@@ -269,7 +290,7 @@ npm i ts4w
   } else {
     let env: Record<string, string> = {
       RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(props.tmpSynthDir),
+      WING_SYNTH_DIR: normalPath(props.synthDir),
     };
     if (props.color !== undefined) {
       env.CLICOLOR = props.color ? "1" : "0";
