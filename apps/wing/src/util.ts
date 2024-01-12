@@ -1,5 +1,5 @@
 import * as cp from "child_process";
-import { copyFileSync, promises as fsPromise } from "fs";
+import * as fs from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
 import { promisify } from "util";
@@ -41,18 +41,6 @@ export async function withSpinner<T>(message: string, fn: () => Promise<T>): Pro
   }
 }
 
-export async function copyDir(src: string, dest: string) {
-  await fsPromise.mkdir(dest, { recursive: true });
-  let entries = await fsPromise.readdir(src, { withFileTypes: true });
-
-  for (let entry of entries) {
-    let srcPath = join(src, entry.name);
-    let destPath = join(dest, entry.name);
-
-    entry.isDirectory() ? await copyDir(srcPath, destPath) : copyFileSync(srcPath, destPath);
-  }
-}
-
 /**
  * Execute a command and return its stdout.
  */
@@ -65,7 +53,7 @@ export async function exec(command: string): Promise<string> {
  * Creates a clean environment for each test by copying the example file to a temporary directory.
  */
 export async function generateTmpDir() {
-  return fsPromise.mkdtemp(join(tmpdir(), "-wing-compile-test"));
+  return fs.mkdtemp(join(tmpdir(), "-wing-compile-test"));
 }
 
 /**

@@ -118,7 +118,12 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
     // add default globs to "files" so that Wing files are included in the tarball
     const pkgJsonFiles: Set<string> = new Set(pkgJson.files ?? []);
 
-    const expectedGlobs = [compilerOutputFolder, ...defaultGlobs];
+    const expectedGlobs = [
+      compilerOutputFolder,
+      // exclude the unnecessary .manifest file
+      "!" + path.join(compilerOutputFolder, ".manifest"),
+      ...defaultGlobs,
+    ];
     for (const pat of expectedGlobs) {
       if (!pkgJsonFiles.has(pat)) {
         pkgJsonFiles.add(pat);
