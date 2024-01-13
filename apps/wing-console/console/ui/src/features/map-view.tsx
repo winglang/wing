@@ -5,7 +5,7 @@ import {
 } from "@wingconsole/design-system";
 import { MapNode } from "@wingconsole/server";
 import classNames from "classnames";
-import { memo, useState } from "react";
+import { memo } from "react";
 
 import { useMap } from "../services/use-map.js";
 import { ContainerNode } from "../ui/elk-map-nodes.js";

@@ -614,7 +614,7 @@ export const ElkMap = <T extends unknown = undefined>({
 
       <ZoomPane
         ref={zoomPaneRef}
-        mapSize={mapSize}
+        boundingBox={mapSize}
         className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
       >

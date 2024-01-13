@@ -45,7 +45,7 @@ const SCALE_SENSITIVITY = 0.01;
 
 export interface ZoomPaneProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  mapSize?: { width: number; height: number };
+  boundingBox?: { width: number; height: number };
 }
 
 export interface ZoomPaneRef {
@@ -53,7 +53,7 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { mapSize, children, className } = props;
+  const { boundingBox: mapSize, children, className } = props;
 
   const transformRef = useRef<Transform>(IDENTITY_TRANSFORM);
 
@@ -143,8 +143,8 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         width: mapSize?.width ?? boundingRect.width,
         height: mapSize?.height ?? boundingRect.height,
       };
-      // const zx = viewport.width / boundingRect.width;
-      // const zy = viewport.height / boundingRect.height;
+
+      // Scale contents to fit.
       const zx = boundingRect.width / viewport.width;
       const zy = boundingRect.height / viewport.height;
       const z = Math.min(zx, zy);
