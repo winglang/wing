@@ -1148,7 +1148,7 @@ importers:
 
   libs/compatibility-spy:
     dependencies:
-      "@winglang/sdk":
+      '@winglang/sdk':
         specifier: workspace:^
         version: link:../wingsdk
       constructs:
@@ -1550,6 +1550,9 @@ importers:
       '@wingconsole/ui':
         specifier: workspace:^
         version: link:../../apps/wing-console/console/ui
+      '@winglang/compatibility-spy':
+        specifier: workspace:^
+        version: link:../../libs/compatibility-spy
       '@winglang/compiler':
         specifier: workspace:^
         version: link:../../libs/wingcompiler
@@ -14585,7 +14588,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231230
+      typescript: 5.4.0-dev.20240114
     dev: true
 
   /dset@3.1.2:
@@ -24124,8 +24127,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231230:
-    resolution: {integrity: sha512-H0/vWwH9SqG9CgKGESiHv+JimN/MjQAmfZDzmnPp8kIjQiwvyaScmIMYqkOkB6nPTblagwfZ+PrTMaZPboIC3A==}
+  /typescript@5.4.0-dev.20240114:
+    resolution: {integrity: sha512-pd52BJdzc2yBS3VQme+n74BQCEFOi2Haj6TBvqn0cp81D3gCfM+sEctWUA+LcP2qfh/D/PfQ30NBLDCJfCAERw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
