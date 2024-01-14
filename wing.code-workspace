@@ -41,6 +41,10 @@
       "path": "./examples/tests/invalid"
     },
     {
+      "name": "Compatibility spy",
+      "path": "./libs/compatibility-spy"
+    },
+    {
       "name": "SDK Tests",
       "path": "./examples/tests/sdk_tests"
     },
