@@ -1271,8 +1271,8 @@ importers:
         specifier: 12.14.0
         version: 12.14.0
       '@google-cloud/datastore':
-        specifier: 8.3.0
-        version: 8.3.0
+        specifier: 8.4.0
+        version: 8.4.0
       '@google-cloud/storage':
         specifier: 6.9.5
         version: 6.9.5
@@ -5612,8 +5612,8 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: true
 
-  /@google-cloud/datastore@8.3.0:
-    resolution: {integrity: sha512-zd535qNbj0LJOEsEY5ovjj5uKqrkYxHnzWsHfuAJJLXIYV9Cfdynvnn7mPpDk0XbWWM6hfbe4IoL4aSUTVhYjg==}
+  /@google-cloud/datastore@8.4.0:
+    resolution: {integrity: sha512-zSU4R4LkVBTPdZJi8pK0QPe+3ZQL5+1mFXI7Yh5mdDcJhtX2Y5VD9wXsEJ0N48kpiA5V6+cxh4g0NB+mAyQbKg==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@google-cloud/promisify': 4.0.0
@@ -14670,7 +14670,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240101
+      typescript: 5.4.0-dev.20240114
     dev: true
 
   /dset@3.1.2:
@@ -24362,8 +24362,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240101:
-    resolution: {integrity: sha512-fIfemSahB5H/1Lc+kv3AEaI1UZc2SDtl0Qjk+SkfKRxyS2EdujUWJp62PzPeVflfCxyhpAuAF2M+WIR1Fo/ByA==}
+  /typescript@5.4.0-dev.20240114:
+    resolution: {integrity: sha512-pd52BJdzc2yBS3VQme+n74BQCEFOi2Haj6TBvqn0cp81D3gCfM+sEctWUA+LcP2qfh/D/PfQ30NBLDCJfCAERw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
