@@ -71,11 +71,9 @@ export function createBundle(
   const sourcemapData = JSON.parse(
     new TextDecoder().decode(esbuild.outputFiles[0].contents)
   );
-  // unrandomize the sourceRoot
-  sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot).replace(
-    /\.\d+\.tmp\/\.wing\//g,
-    "/.wing/"
-  );
+
+  // ensure sourceRoot has posix path separators
+  sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
 
   for (const [idx, source] of Object.entries(sourcemapData.sources)) {
     if ((source as any).endsWith(".w")) {

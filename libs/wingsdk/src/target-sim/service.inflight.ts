@@ -59,8 +59,18 @@ export class Service implements IServiceClient, ISimulatorResourceInstance {
       return;
     }
 
-    this.onStop = await this.sandbox.call("handle");
-    this.running = true;
+    try {
+      this.onStop = await this.sandbox.call("handle");
+      this.running = true;
+    } catch (e: any) {
+      this.context.addTrace({
+        data: { message: `Failed to start service: ${e.message}` },
+        type: TraceType.RESOURCE,
+        sourcePath: this.context.resourcePath,
+        sourceType: SERVICE_FQN,
+        timestamp: new Date().toISOString(),
+      });
+    }
   }
 
   public async stop(): Promise<void> {

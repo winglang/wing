@@ -145,7 +145,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "inflight (key: str, options: BucketSignedUrlOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\ninflight signedUrl: inflight (key: str, options: BucketSignedUrlOptions?): str\n```\n---\nReturns a signed url to the given file.\n### Parameters\n- `key` — `str` — The key to access the cloud object.\n- `...options` — `BucketSignedUrlOptions?` — The signedUrlOptions where you can provide the configurations of the signed url.\n  \n  - `duration?` — `duration?` — The duration for the signed url to expire.\n\n### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
+    value: "```wing\ninflight signedUrl: inflight (key: str, options: BucketSignedUrlOptions?): str\n```\n---\nReturns a signed url to the given file.\n### Parameters\n- `key` — `str` — The key to access the cloud object.\n- `...options` — `BucketSignedUrlOptions?` — The signedUrlOptions where you can provide the configurations of the signed url.\n  \n  - `action?` — `BucketSignedUrlAction?` — The action allowed by the signed URL.\n  - `duration?` — `duration?` — The duration for the signed URL to expire.\n\n### Returns\nA string representing the signed url of the object which can be used to download in any downstream system\n\n*@Throws* *if object does not exist.*"
   sortText: ff|signedUrl
   insertText: signedUrl($1)
   insertTextFormat: 2
