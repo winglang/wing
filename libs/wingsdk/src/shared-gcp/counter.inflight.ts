@@ -2,6 +2,7 @@ import { Datastore } from "@google-cloud/datastore";
 import type { ICounterClient } from "../cloud";
 
 const DEFAULT_COUNTER_KEY = "counter";
+const COUNTER_ENTITY_KIND = "Counter";
 
 export class CounterClient implements ICounterClient {
   private readonly client: Datastore;
@@ -14,29 +15,15 @@ export class CounterClient implements ICounterClient {
   }
 
   public async inc(amount = 1, key = DEFAULT_COUNTER_KEY): Promise<number> {
-    const kind = "Counter";
-    const name = key;
-    const counterKey = this.client.key([kind, name]);
-
-    // Fetch the current counter
-    const [existingCounter] = await this.client.get(counterKey);
-
-    // Determine the current value of the counter or use the initial value
-    const currentValue = existingCounter?.data?.count ?? this.initial;
-
-    // Calculate the new value
+    const currentValue = await this._getCurrentValue(key);
     const newValue = currentValue + amount;
 
-    // Save the updated counter
-    const counter = {
-      key: counterKey,
-      data: {
-        count: newValue,
-      },
+    const counterEntity = {
+      key: this.client.key([COUNTER_ENTITY_KIND, key]),
+      data: { count: newValue },
     };
 
-    await this.client.save(counter);
-    console.log(`Saved ${counter.key.name}: ${counter.data.count}`);
+    await this.client.upsert(counterEntity);
 
     // Return the previous value before the increment
     return currentValue;
@@ -50,22 +37,7 @@ export class CounterClient implements ICounterClient {
   }
 
   public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
-    const kind = "Counter";
-    const counterKey = this.client.key([kind, key]);
-
-    // Fetch the current counter or default to initial value if not found
-    const [existingCounter] = await this.client.get(counterKey);
-    const count = existingCounter?.data?.count ?? this.initial;
-
-    // Create and save the counter if it doesn't exist
-    if (!existingCounter) {
-      await this.client.save({
-        key: counterKey,
-        data: { count },
-      });
-    }
-
-    return count;
+    return this._getCurrentValue(key);
   }
 
   public async set(
@@ -73,5 +45,29 @@ export class CounterClient implements ICounterClient {
     key: string = DEFAULT_COUNTER_KEY
   ): Promise<void> {
     throw new Error(`Method not implemented. ${value} ${key}`);
+  }
+
+  private async _getCurrentValue(key: string): Promise<number> {
+    const counterKey = this.client.key([COUNTER_ENTITY_KIND, key]);
+
+    // Fetch the counter from the datastore
+    const [existingCounter] = await this.client.get(counterKey);
+
+    // If the counter exists, return its current count
+    if (existingCounter) {
+      return existingCounter.count;
+    }
+
+    // If the counter does not exist, initialize it with the initial value
+    await this._initializeCounter(key);
+    return this.initial;
+  }
+
+  private async _initializeCounter(key: string): Promise<void> {
+    const counterEntity = {
+      key: this.client.key([COUNTER_ENTITY_KIND, key]),
+      data: { count: this.initial },
+    };
+    await this.client.insert(counterEntity);
   }
 }
