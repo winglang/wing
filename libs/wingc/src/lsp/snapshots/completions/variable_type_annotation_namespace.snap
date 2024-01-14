@@ -209,7 +209,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketSignedUrlOptions\n```\n---\nOptions for `Bucket.signedUrl()`.\n### Fields\n- `duration?` — `duration?` — The duration for the signed url to expire."
+    value: "```wing\nstruct BucketSignedUrlOptions\n```\n---\nOptions for `Bucket.signedUrl()`.\n### Fields\n- `action?` — `BucketSignedUrlAction?` — The action allowed by the signed URL.\n- `duration?` — `duration?` — The duration for the signed URL to expire."
   sortText: hh|BucketSignedUrlOptions
 - label: CounterProps
   kind: 22
@@ -523,6 +523,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
   sortText: jj|BucketEventType
+- label: BucketSignedUrlAction
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum BucketSignedUrlAction\n```\n---\nSpecifies the action permitted by a presigned URL for a bucket.\n- `DOWNLOAD`\n- `UPLOAD`"
+  sortText: jj|BucketSignedUrlAction
 - label: HttpMethod
   kind: 13
   documentation:
