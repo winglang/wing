@@ -49,11 +49,17 @@ export function calculateBucketPermissions(ops: string[]): string[] {
 export function calculateCounterPermissions(ops: string[]): string[] {
   const permissions: string[] = [];
 
-  if (ops.includes(cloud.CounterInflightMethods.INC)) {
+  if (
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.PEEK)
+  ) {
     permissions.push("datastore.entities.get");
   }
 
-  if (ops.includes(cloud.CounterInflightMethods.INC)) {
+  if (
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.PEEK)
+  ) {
     permissions.push("datastore.entities.create");
   }
 

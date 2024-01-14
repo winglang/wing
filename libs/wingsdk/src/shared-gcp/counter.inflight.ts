@@ -50,7 +50,22 @@ export class CounterClient implements ICounterClient {
   }
 
   public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
-    throw new Error(`Method not implemented. ${key}`);
+    const kind = "Counter";
+    const counterKey = this.client.key([kind, key]);
+
+    // Fetch the current counter or default to initial value if not found
+    const [existingCounter] = await this.client.get(counterKey);
+    const count = existingCounter?.data?.count ?? this.initial;
+
+    // Create and save the counter if it doesn't exist
+    if (!existingCounter) {
+      await this.client.save({
+        key: counterKey,
+        data: { count },
+      });
+    }
+
+    return count;
   }
 
   public async set(
