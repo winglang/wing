@@ -14,7 +14,10 @@ export class CounterClient implements ICounterClient {
     this.client = new Datastore({ databaseId: this.databaseName });
   }
 
-  public async inc(amount = 1, key = DEFAULT_COUNTER_KEY): Promise<number> {
+  public async inc(
+    amount: number = 1,
+    key: string = DEFAULT_COUNTER_KEY
+  ): Promise<number> {
     const currentValue = await this._getCurrentValue(key);
     const newValue = currentValue + amount;
 
@@ -29,7 +32,10 @@ export class CounterClient implements ICounterClient {
     return currentValue;
   }
 
-  public async dec(amount = 1, key = DEFAULT_COUNTER_KEY): Promise<number> {
+  public async dec(
+    amount: number = 1,
+    key: string = DEFAULT_COUNTER_KEY
+  ): Promise<number> {
     const currentValue = await this._getCurrentValue(key);
     const newValue = currentValue - amount;
 
@@ -44,15 +50,20 @@ export class CounterClient implements ICounterClient {
     return currentValue;
   }
 
-  public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
-    return this._getCurrentValue(key);
-  }
-
   public async set(
     value: number,
     key: string = DEFAULT_COUNTER_KEY
   ): Promise<void> {
-    throw new Error(`Method not implemented. ${value} ${key}`);
+    const counterEntity = {
+      key: this.client.key([COUNTER_ENTITY_KIND, key]),
+      data: { count: value },
+    };
+
+    await this.client.upsert(counterEntity);
+  }
+
+  public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
+    return this._getCurrentValue(key);
   }
 
   private async _getCurrentValue(key: string): Promise<number> {
@@ -76,6 +87,7 @@ export class CounterClient implements ICounterClient {
       key: this.client.key([COUNTER_ENTITY_KIND, key]),
       data: { count: this.initial },
     };
+
     await this.client.insert(counterEntity);
   }
 }

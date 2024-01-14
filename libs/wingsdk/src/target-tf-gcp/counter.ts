@@ -56,6 +56,7 @@ export class Counter extends cloud.Counter {
       cloud.CounterInflightMethods.PEEK,
       cloud.CounterInflightMethods.INC,
       cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.SET,
     ];
   }
 
