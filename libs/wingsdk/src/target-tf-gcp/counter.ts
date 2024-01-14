@@ -53,8 +53,9 @@ export class Counter extends cloud.Counter {
   /** @internal */
   public _supportedOps(): string[] {
     return [
-      cloud.CounterInflightMethods.INC,
       cloud.CounterInflightMethods.PEEK,
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
     ];
   }
 

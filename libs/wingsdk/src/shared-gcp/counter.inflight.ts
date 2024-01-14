@@ -29,11 +29,19 @@ export class CounterClient implements ICounterClient {
     return currentValue;
   }
 
-  public async dec(
-    amount = 1,
-    key: string = DEFAULT_COUNTER_KEY
-  ): Promise<number> {
-    throw new Error(`Method not implemented. ${amount} ${key}`);
+  public async dec(amount = 1, key = DEFAULT_COUNTER_KEY): Promise<number> {
+    const currentValue = await this._getCurrentValue(key);
+    const newValue = currentValue - amount;
+
+    const counterEntity = {
+      key: this.client.key([COUNTER_ENTITY_KIND, key]),
+      data: { count: newValue },
+    };
+
+    await this.client.upsert(counterEntity);
+
+    // Return the previous value before the decrement
+    return currentValue;
   }
 
   public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
