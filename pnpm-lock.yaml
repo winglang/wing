@@ -17,6 +17,9 @@ patchedDependencies:
   mime@3.0.0:
     hash: 2he2uszztbibyal6zfzmv2a2oa
     path: patches/mime@3.0.0.patch
+  protobufjs@7.2.5:
+    hash: plkkb5oxv62w7nyvt6cqmvgk4q
+    path: patches/protobufjs@7.2.5.patch
   wasi-js@1.7.3:
     hash: rmwvp46j2ligfusbdx5dzh4a3q
     path: patches/wasi-js@1.7.3.patch
@@ -1318,6 +1321,9 @@ importers:
       nanoid:
         specifier: ^3.3.6
         version: 3.3.6
+      protobufjs:
+        specifier: 7.2.5
+        version: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
@@ -5693,7 +5699,7 @@ packages:
     dependencies:
       lodash.camelcase: 4.3.0
       long: 5.2.3
-      protobufjs: 7.2.5
+      protobufjs: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
       yargs: 17.7.2
     dev: false
 
@@ -14670,7 +14676,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240114
+      typescript: 5.4.0-dev.20240115
     dev: true
 
   /dset@3.1.2:
@@ -16665,7 +16671,7 @@ packages:
       node-fetch: 2.7.0
       object-hash: 3.0.0
       proto3-json-serializer: 2.0.0
-      protobufjs: 7.2.5
+      protobufjs: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
       retry-request: 7.0.1
     transitivePeerDependencies:
       - encoding
@@ -21631,10 +21637,10 @@ packages:
     resolution: {integrity: sha512-FB/YaNrpiPkyQNSNPilpn8qn0KdEfkgmJ9JP93PQyF/U4bAiXY5BiUdDhiDO4S48uSQ6AesklgVlrKiqZPzegw==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      protobufjs: 7.2.5
+      protobufjs: 7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q)
     dev: false
 
-  /protobufjs@7.2.5:
+  /protobufjs@7.2.5(patch_hash=plkkb5oxv62w7nyvt6cqmvgk4q):
     resolution: {integrity: sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==}
     engines: {node: '>=12.0.0'}
     requiresBuild: true
@@ -21652,6 +21658,7 @@ packages:
       '@types/node': 18.18.4
       long: 5.2.3
     dev: false
+    patched: true
 
   /proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -24362,8 +24369,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240114:
-    resolution: {integrity: sha512-pd52BJdzc2yBS3VQme+n74BQCEFOi2Haj6TBvqn0cp81D3gCfM+sEctWUA+LcP2qfh/D/PfQ30NBLDCJfCAERw==}
+  /typescript@5.4.0-dev.20240115:
+    resolution: {integrity: sha512-p3nYa7pku8FHvfLDyiDcplZbKXEQTcZqtvXN6JTBu/u5cNLinBzOiKA3cVfHcgudzCUMtU5ke94dpwFNr+U3qw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

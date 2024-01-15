@@ -90,6 +90,7 @@ const project = new cdk.JsiiProject({
     "@google-cloud/storage@6.9.5",
     "@google-cloud/datastore@8.4.0",
     "google-auth-library",
+    "protobufjs@7.2.5",
     // simulator dependencies
     "express",
     "uuid",

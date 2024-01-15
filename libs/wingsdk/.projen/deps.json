@@ -302,6 +302,11 @@
       "type": "bundled"
     },
     {
+      "name": "protobufjs",
+      "version": "7.2.5",
+      "type": "bundled"
+    },
+    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
