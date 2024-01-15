@@ -26,7 +26,7 @@ export class CounterClient implements ICounterClient {
       data: { count: newValue },
     };
 
-    await this.client.upsert(counterEntity);
+    await this.client.update(counterEntity);
 
     // Return the previous value before the increment
     return currentValue;
@@ -44,7 +44,7 @@ export class CounterClient implements ICounterClient {
       data: { count: newValue },
     };
 
-    await this.client.upsert(counterEntity);
+    await this.client.update(counterEntity);
 
     // Return the previous value before the decrement
     return currentValue;
