@@ -39,6 +39,9 @@ export interface Transform {
 
 export const IDENTITY_TRANSFORM: Transform = { x: 0, y: 0, z: 1 };
 
+/**
+ * Convert a point from global coordinates to local coordinates.
+ */
 const toLocal = (x: number, y: number, transform: Transform) => {
   return {
     x: transform.x + x / transform.z,
@@ -46,6 +49,9 @@ const toLocal = (x: number, y: number, transform: Transform) => {
   };
 };
 
+/**
+ * Whether the bounding boxes overlap.
+ */
 const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
   return (
     a.x < b.x + b.width &&
@@ -54,16 +60,15 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
     a.y + a.height > b.y
   );
 };
+const MIN_ZOOM_LEVEL = 0.125;
+const MAX_ZOOM_LEVEL = 1.5;
+const ZOOM_SENSITIVITY = 1.35;
+const MOVE_SENSITIVITY = 1.5;
+const WHEEL_SENSITIVITY = 0.01;
 
 export interface ZoomPaneProviderProps {
   children: ReactNode | ((value: ZoomPaneContextValue) => ReactNode);
 }
-
-const MIN_ZOOM_LEVEL = 0.125;
-const MAX_ZOOM_LEVEL = 1.5;
-const ZOOM_SENSITIVITY = 1.25;
-const MOVE_SENSITIVITY = 1.5;
-const SCALE_SENSITIVITY = 0.01;
 
 export interface ZoomPaneProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
@@ -109,7 +114,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           MAX_ZOOM_LEVEL,
           Math.max(
             MIN_ZOOM_LEVEL,
-            viewTransform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
+            viewTransform.z * Math.exp(-event.deltaY * WHEEL_SENSITIVITY),
           ),
         );
         const dz = z / viewTransform.z;
