@@ -236,8 +236,10 @@ export abstract class App extends Construct implements IApp {
     const instance = this.tryNew(fqn, scope, id, ...args);
     if (!instance) {
       const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
+      const typeNameParts = typeName.split(".");
       throw new NotImplementedError(
-        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
+        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`,
+        { resource: typeNameParts[typeNameParts.length - 1] }
       );
     }
 

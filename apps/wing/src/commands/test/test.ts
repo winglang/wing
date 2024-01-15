@@ -1,6 +1,6 @@
 import * as cp from "child_process";
-import { readFile, rm, rmSync } from "fs";
-import { basename, resolve, sep } from "path";
+import { existsSync, readFile, readFileSync, rm, rmSync } from "fs";
+import { basename, join, resolve, sep } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
@@ -81,7 +81,9 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
           {
             pass: false,
             unsupported: error.name === "NotImplementedError",
-            path: "",
+            unsupportedResource: (error as any).resource,
+            unsupportedOperation: (error as any).operation,
+            path: "*",
             error: error.message,
             traces: [],
           },
@@ -292,13 +294,18 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const testReport = await renderTestReport(synthDir, results);
   console.log(testReport);
 
+  let args: { methods: Record<string, Record<string, string>> };
+  if (existsSync(join(synthDir, "usage_context.json"))) {
+    args = { methods: JSON.parse(readFileSync(join(synthDir, "usage_context.json")).toString()) };
+  }
+
   if (clean) {
     rmSync(synthDir, { recursive: true, force: true });
   } else {
     noCleanUp(synthDir);
   }
 
-  return results;
+  return results.map((r) => ({ ...r, args }));
 }
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
@@ -340,7 +347,12 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
       console.log("One or more tests failed. Cleaning up resources...");
     }
 
-    return results;
+    let args: { methods: Record<string, Record<string, string>> };
+    if (existsSync(join(synthDir, "usage_context.json"))) {
+      args = { methods: JSON.parse(readFileSync(join(synthDir, "usage_context.json")).toString()) };
+    }
+
+    return results.map((r) => ({ ...r, args }));
   } catch (err) {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
