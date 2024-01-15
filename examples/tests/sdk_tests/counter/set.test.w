@@ -24,14 +24,14 @@ test "set() with custom key" {
   let key = "custom-key";
 
   // set (positive int)
-  counter1.set(42, key);
-  expect.equal(counter1.peek(key), 42);
+  counter2.set(42, key);
+  expect.equal(counter2.peek(key), 42);
 
   // set (negative int)
-  counter1.set(-100, key);
-  expect.equal(counter1.peek(key), -100);
+  counter2.set(-100, key);
+  expect.equal(counter2.peek(key), -100);
 
   // set (0)
-  counter1.set(0, key);
-  expect.equal(counter1.peek(key), 0);
+  counter2.set(0, key);
+  expect.equal(counter2.peek(key), 0);
 }
