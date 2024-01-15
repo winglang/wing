@@ -73,13 +73,13 @@ export class CounterClient implements ICounterClient {
     const [existingCounter] = await this.client.get(counterKey);
 
     // If the counter exists, return its current count
+    // Else, initialize it with the `initial` value
     if (existingCounter) {
       return existingCounter.count;
+    } else {
+      await this._initializeCounter(key);
+      return this.initial;
     }
-
-    // If the counter does not exist, initialize it with the initial value
-    await this._initializeCounter(key);
-    return this.initial;
   }
 
   private async _initializeCounter(key: string): Promise<void> {
