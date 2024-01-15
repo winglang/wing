@@ -5,7 +5,6 @@ import { trpc } from "./trpc.js";
 export interface UseMapOptions {
   showTests: boolean;
 }
-
 export const useMap = ({ showTests }: UseMapOptions) => {
   const map = trpc["app.map"].useQuery({
     showTests: showTests,

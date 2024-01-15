@@ -32,21 +32,17 @@ const durationClass = "duration-500";
 
 // For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const layoutOptions: LayoutOptions = {
-  "elk.algorithm": "org.eclipse.elk.layered",
-
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-
-  "elk.layered.layering.strategy": "INTERACTIVE",
-  "elk.layered.cycleBreaking.strategy": "INTERACTIVE",
-  "elk.layered.spacing.baseValue": "12",
-  "elk.layered.spacing.edgeNodeBetweenLayers": "12",
-  "elk.layered.spacing.nodeNodeBetweenLayers": "12",
-
-  "elk.spacing.edgeNode": "24",
-  "elk.spacing.edgeEdge": "12",
-  "elk.spacing.nodeNode": "24",
-  // "elk.spacing.portPort": "12",
-
+  "elk.direction": "RIGHT",
+  "elk.alignment": "CENTER",
+  "elk.algorithm": "org.eclipse.elk.layered",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
+  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
+  "elk.layered.spacing.baseValue": "32",
+  "elk.edgeRouting": "ORTHOGONAL",
   "elk.padding": "[top=52,left=20,bottom=20,right=20]",
 };
 
@@ -393,8 +389,8 @@ const NodesContainer = memo(
               opacity: 0,
             }}
             onClick={() => onSelectedNodeIdChange?.(node.id)}
-            // onMouseEnter={() => setHighlighted(node.id)}
-            // onMouseLeave={() => setHighlighted(undefined)}
+            onMouseEnter={() => setHighlighted(node.id)}
+            onMouseLeave={() => setHighlighted(undefined)}
           >
             <NodeItem
               node={node.data}
@@ -555,9 +551,6 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  // const zoomPane = useRef<HTMLDivElement>(null);
-  // const rootElement = useRef<HTMLDivElement>(null);
-
   const mapSize = useMemo(() => {
     if (!graph) {
       return;
@@ -572,37 +565,7 @@ export const ElkMap = <T extends unknown = undefined>({
 
   useEffect(() => {
     zoomPaneRef.current?.zoomToFit();
-    // console.log({ selectedNodeId });
-  }, [
-    // selectedNodeId,
-    offsets,
-  ]);
-
-  // useEffect(() => {
-  //   if (!zoomPane.current || !rootElement.current) {
-  //     console.error("No zoom pane or root element");
-  //     return;
-  //   }
-
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       for (const entry of entries) {
-  //         if (!entry.isIntersecting) {
-  //           zoomToFit();
-  //           return;
-  //         }
-  //       }
-  //     },
-  //     {
-  //       root: zoomPane.current,
-  //       rootMargin: "-20px",
-  //     },
-  //   );
-  //   observer.observe(rootElement.current);
-  //   return () => {
-  //     observer.disconnect();
-  //   };
-  // }, [zoomToFit]);
+  }, [offsets]);
 
   return (
     <>
