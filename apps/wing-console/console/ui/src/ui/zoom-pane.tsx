@@ -77,7 +77,7 @@ export interface ZoomPaneRef {
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   const { boundingBox, children, className } = props;
 
-  const [transform, setTransform] = useState(IDENTITY_TRANSFORM);
+  const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -85,45 +85,49 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     if (!target) {
       throw new Error("target is undefined");
     }
-    target.style.transform = `translate(${-transform.x * transform.z}px, ${
-      -transform.y * transform.z
-    }px) scale(${transform.z})`;
-  }, [transform]);
+    target.style.transform = `translate(${
+      -viewTransform.x * viewTransform.z
+    }px, ${-viewTransform.y * viewTransform.z}px) scale(${viewTransform.z})`;
+  }, [viewTransform]);
 
   const onWheel = useCallback((event: WheelEvent) => {
     event.preventDefault();
     const boundingRect = (
       event.currentTarget as HTMLDivElement
     ).getBoundingClientRect();
-    setTransform((transform) => {
+    setViewTransform((viewTransform) => {
       if (event.ctrlKey) {
         const localCursor = toLocal(
           event.x - boundingRect.left,
           event.y - boundingRect.top,
-          transform,
+          viewTransform,
         );
-        const dx = localCursor.x - transform.x;
-        const dy = localCursor.y - transform.y;
+        const dx = localCursor.x - viewTransform.x;
+        const dy = localCursor.y - viewTransform.y;
 
         const z = Math.min(
           MAX_ZOOM_LEVEL,
           Math.max(
             MIN_ZOOM_LEVEL,
-            transform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
+            viewTransform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
           ),
         );
-        const dz = z / transform.z;
+        const dz = z / viewTransform.z;
 
         return {
-          x: transform.x + dx - dx / dz,
-          y: transform.y + dy - dy / dz,
+          x: viewTransform.x + dx - dx / dz,
+          y: viewTransform.y + dy - dy / dz,
           z: z,
         };
       } else {
         return {
-          x: transform.x + (event.deltaX * MOVE_SENSITIVITY) / transform.z,
-          y: transform.y + (event.deltaY * MOVE_SENSITIVITY) / transform.z,
-          z: transform.z,
+          x:
+            viewTransform.x +
+            (event.deltaX * MOVE_SENSITIVITY) / viewTransform.z,
+          y:
+            viewTransform.y +
+            (event.deltaY * MOVE_SENSITIVITY) / viewTransform.z,
+          z: viewTransform.z,
         };
       }
     });
@@ -131,21 +135,56 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
 
   const zoomIn = useCallback(() => {
-    setTransform((transform) => {
-      const z = Math.min(MAX_ZOOM_LEVEL, transform.z * ZOOM_SENSITIVITY);
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+    const boundingRect = container.getBoundingClientRect();
+    setViewTransform((viewTransform) => {
+      const localCursor = toLocal(
+        boundingRect.width / 2,
+        boundingRect.height / 2,
+        viewTransform,
+      );
+      const dx = localCursor.x - viewTransform.x;
+      const dy = localCursor.y - viewTransform.y;
+
+      const z = Math.min(
+        MAX_ZOOM_LEVEL,
+        Math.max(MIN_ZOOM_LEVEL, viewTransform.z * ZOOM_SENSITIVITY),
+      );
+      const dz = z / viewTransform.z;
       return {
-        ...transform,
-        z,
+        x: viewTransform.x + dx - dx / dz,
+        y: viewTransform.y + dy - dy / dz,
+        z: z,
       };
     });
   }, []);
 
   const zoomOut = useCallback(() => {
-    setTransform((transform) => {
-      const z = Math.max(MIN_ZOOM_LEVEL, transform.z / ZOOM_SENSITIVITY);
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+    const boundingRect = container.getBoundingClientRect();
+    setViewTransform((viewTransform) => {
+      const localCursor = toLocal(
+        boundingRect.width / 2,
+        boundingRect.height / 2,
+        viewTransform,
+      );
+      const dx = localCursor.x - viewTransform.x;
+      const dy = localCursor.y - viewTransform.y;
+      const z = Math.min(
+        MAX_ZOOM_LEVEL,
+        Math.max(MIN_ZOOM_LEVEL, viewTransform.z / ZOOM_SENSITIVITY),
+      );
+      const dz = z / viewTransform.z;
       return {
-        ...transform,
-        z,
+        x: viewTransform.x + dx - dx / dz,
+        y: viewTransform.y + dy - dy / dz,
+        z: z,
       };
     });
   }, []);
@@ -157,7 +196,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         return;
       }
       const boundingRect = container.getBoundingClientRect();
-      setTransform(() => {
+      setViewTransform(() => {
         viewport ??= {
           x: 0,
           y: 0,
@@ -207,10 +246,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     }
 
     const viewBoundingBox = {
-      x: transform.x,
-      y: transform.y,
-      width: containerBoundingBox.width / transform.z,
-      height: containerBoundingBox.height / transform.z,
+      x: viewTransform.x,
+      y: viewTransform.y,
+      width: containerBoundingBox.width / viewTransform.z,
+      height: containerBoundingBox.height / viewTransform.z,
     };
 
     return !boundingBoxOverlap(viewBoundingBox, {
@@ -219,7 +258,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
       width: boundingBox.width,
       height: boundingBox.height,
     });
-  }, [transform, boundingBox]);
+  }, [viewTransform, boundingBox]);
 
   const { theme } = useTheme();
 
