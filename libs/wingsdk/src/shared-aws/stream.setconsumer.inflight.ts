@@ -12,9 +12,10 @@ export class StreamSetConsumerHandlerClient implements IStreamSetConsumerHandler
 
   public async handle(event: IStreamData[]) {
     // for each data in event
+    // todo: figure out what to do with metadata from IStreamData
     for (const data of event) {
       // call handler
-      await this.handler.handle(data);
+      await this.handler.handle(data.data);
     }
   }
 }
