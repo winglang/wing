@@ -1,3 +1,4 @@
+import { Button, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import {
   DetailedHTMLProps,
@@ -22,6 +23,8 @@ export interface Viewport {
   height: number;
 }
 
+type BoundingBox = Viewport;
+
 export interface ZoomPaneContextValue {
   zoomIn(): void;
   zoomOut(): void;
@@ -35,6 +38,22 @@ export interface Transform {
 }
 
 export const IDENTITY_TRANSFORM: Transform = { x: 0, y: 0, z: 1 };
+
+const toLocal = (x: number, y: number, transform: Transform) => {
+  return {
+    x: transform.x + x / transform.z,
+    y: transform.y + y / transform.z,
+  };
+};
+
+const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
+};
 
 export interface ZoomPaneProviderProps {
   children: ReactNode | ((value: ZoomPaneContextValue) => ReactNode);
@@ -71,56 +90,44 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     }px) scale(${transform.z})`;
   }, [transform]);
 
-  const toLocal = useCallback(
-    (x: number, y: number) => {
-      return {
-        x: transform.x + x / transform.z,
-        y: transform.y + y / transform.z,
-      };
-    },
-    [transform],
-  );
+  const onWheel = useCallback((event: WheelEvent) => {
+    event.preventDefault();
+    const boundingRect = (
+      event.currentTarget as HTMLDivElement
+    ).getBoundingClientRect();
+    setTransform((transform) => {
+      if (event.ctrlKey) {
+        const localCursor = toLocal(
+          event.x - boundingRect.left,
+          event.y - boundingRect.top,
+          transform,
+        );
+        const dx = localCursor.x - transform.x;
+        const dy = localCursor.y - transform.y;
 
-  const onWheel = useCallback(
-    (event: WheelEvent) => {
-      event.preventDefault();
-      const boundingRect = (
-        event.currentTarget as HTMLDivElement
-      ).getBoundingClientRect();
-      setTransform((transform) => {
-        if (event.ctrlKey) {
-          const localCursor = toLocal(
-            event.x - boundingRect.left,
-            event.y - boundingRect.top,
-          );
-          const dx = localCursor.x - transform.x;
-          const dy = localCursor.y - transform.y;
+        const z = Math.min(
+          MAX_ZOOM_LEVEL,
+          Math.max(
+            MIN_ZOOM_LEVEL,
+            transform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
+          ),
+        );
+        const dz = z / transform.z;
 
-          const z = Math.min(
-            MAX_ZOOM_LEVEL,
-            Math.max(
-              MIN_ZOOM_LEVEL,
-              transform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
-            ),
-          );
-          const dz = z / transform.z;
-
-          return {
-            x: transform.x + dx - dx / dz,
-            y: transform.y + dy - dy / dz,
-            z: z,
-          };
-        } else {
-          return {
-            x: transform.x + (event.deltaX * MOVE_SENSITIVITY) / transform.z,
-            y: transform.y + (event.deltaY * MOVE_SENSITIVITY) / transform.z,
-            z: transform.z,
-          };
-        }
-      });
-    },
-    [toLocal],
-  );
+        return {
+          x: transform.x + dx - dx / dz,
+          y: transform.y + dy - dy / dz,
+          z: z,
+        };
+      } else {
+        return {
+          x: transform.x + (event.deltaX * MOVE_SENSITIVITY) / transform.z,
+          y: transform.y + (event.deltaY * MOVE_SENSITIVITY) / transform.z,
+          z: transform.z,
+        };
+      }
+    });
+  }, []);
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
 
   const zoomIn = useCallback(() => {
@@ -187,6 +194,35 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     [zoomToFit],
   );
 
+  // Whether the bounding box is out of bounds of the transform view.
+  const outOfBounds = useMemo(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return false;
+    }
+    const containerBoundingBox = container.getBoundingClientRect();
+
+    if (!boundingBox) {
+      return false;
+    }
+
+    const viewBoundingBox = {
+      x: transform.x,
+      y: transform.y,
+      width: containerBoundingBox.width / transform.z,
+      height: containerBoundingBox.height / transform.z,
+    };
+
+    return !boundingBoxOverlap(viewBoundingBox, {
+      x: 0,
+      y: 0,
+      width: boundingBox.width,
+      height: boundingBox.height,
+    });
+  }, [transform, boundingBox]);
+
+  const { theme } = useTheme();
+
   return (
     <div
       ref={containerRef}
@@ -207,12 +243,28 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         </div>
       </div>
 
-      {/* <div className="absolute inset-0 z-10 flex justify-around items-center">
-        <div>
-          <span>The map is out of bounds</span>
-          <button onClick={() => zoomToFit()}>Center</button>
+      {outOfBounds && (
+        <div className="absolute inset-0 z-10 flex justify-around items-center">
+          <div
+            className={classNames(
+              "p-4 rounded flex flex-col justify-around gap-2",
+            )}
+          >
+            <p
+              className={classNames(
+                theme.text1,
+                theme.bg4,
+                "px-2 py-0.5 rounded",
+              )}
+            >
+              The map is out of bounds
+            </p>
+            <div className="flex justify-around">
+              <Button onClick={() => zoomToFit()}>Fit map to screen</Button>
+            </div>
+          </div>
         </div>
-      </div> */}
+      )}
     </div>
   );
 });
