@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
-import { RoleType } from "./permissions";
+import { calculateBucketPermissions } from "./permissions";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -74,7 +74,7 @@ export class Bucket extends cloud.Bucket {
       // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
       new StorageBucketIamMember(this, "PublicAccessIamMember", {
         bucket: this.bucket.name,
-        role: RoleType.STORAGE_READ,
+        role: "roles/storage.objectViewer",
         member: "allUsers",
       });
     }
@@ -95,6 +95,8 @@ export class Bucket extends cloud.Bucket {
       cloud.BucketInflightMethods.TRY_GET_JSON,
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.METADATA,
+      cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
 
@@ -166,27 +168,11 @@ export class Bucket extends cloud.Bucket {
     if (!(host instanceof GCPFunction)) {
       throw new Error("buckets can only be bound by tfgcp.Function for now");
     }
-    if (
-      ops.includes(cloud.BucketInflightMethods.GET) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
-      ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.EXISTS) ||
-      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
-      // ops.includes(cloud.BucketInflightMethods.SIGNED_URL) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
-    ) {
-      host.addPermission(this, RoleType.STORAGE_READ);
-    } else if (
-      ops.includes(cloud.BucketInflightMethods.DELETE) ||
-      ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
-      ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
-    ) {
-      host.addPermission(this, RoleType.STORAGE_READ_WRITE);
-    }
-    host.addEnvironment(this.envName(), this.bucket.name);
 
+    const permissions = calculateBucketPermissions(ops);
+    host.addPermissions(permissions);
+
+    host.addEnvironment(this.envName(), this.bucket.name);
     super.onLift(host, ops);
   }
 

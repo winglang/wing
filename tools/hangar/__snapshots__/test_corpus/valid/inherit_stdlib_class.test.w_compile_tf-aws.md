@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -22,6 +23,7 @@ module.exports = function({  }) {
 ## inflight.$Closure2-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $api_url, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
@@ -31,7 +33,7 @@ module.exports = function({ $api_url, $http_Util }) {
     }
     async handle() {
       const response = (await $http_Util.get(String.raw({ raw: ["", "/"] }, $api_url)));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
+      $helpers.assert($helpers.eq(response.status, 200), "response.status == 200");
     }
   }
   return $Closure2;
@@ -42,6 +44,7 @@ module.exports = function({ $api_url, $http_Util }) {
 ## inflight.AnApi-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $cloud_Api }) {
   class AnApi extends $cloud_Api {
     constructor({  }) {
@@ -214,7 +217,7 @@ module.exports = function({ $cloud_Api }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.AnApi_get__0_IamRole_504C11BC.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.AnApi_get__0_S3Object_0A63DC57.key}",
         "timeout": 60,
@@ -275,6 +278,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
@@ -310,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -337,7 +341,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

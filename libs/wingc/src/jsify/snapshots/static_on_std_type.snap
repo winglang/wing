@@ -16,6 +16,7 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $std_Json, $std_String }) {
   class $Closure1 {
     constructor({  }) {
@@ -24,8 +25,8 @@ module.exports = function({ $std_Json, $std_String }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $std_String.fromJson("hello")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(({}))).length,0)))};
+      console.log((await $std_String.fromJson("hello")));
+      $helpers.assert($helpers.eq(Object.values(({})).length, 0), "Json.values(Json {}).length == 0");
     }
   }
   return $Closure1;
@@ -42,6 +43,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -49,7 +51,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `

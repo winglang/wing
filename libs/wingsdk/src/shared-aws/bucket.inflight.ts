@@ -25,6 +25,7 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketSignedUrlAction,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -49,7 +50,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
       return true;
     } catch (error) {
-      if ((error as Error).name === "NotFound") {
+      if (error instanceof NotFound) {
         return false;
       }
       throw error;
@@ -187,12 +188,11 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
-    } catch (e: any) {
-      if (!mustExist && e instanceof NoSuchKey) {
+    } catch (error) {
+      if (!mustExist && error instanceof NoSuchKey) {
         return;
       }
-
-      throw new Error(`Unable to delete "${key}": ${e.message}`);
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 
@@ -245,7 +245,6 @@ export class BucketClient implements IBucketClient {
   /**
    * Copy an object to a new location in the bucket. If the destination object
    * already exists, it will be overwritten.
-   *
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    */
@@ -282,6 +281,25 @@ export class BucketClient implements IBucketClient {
       }
       throw error;
     }
+  }
+
+  /**
+   * Move an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the renaming is finished.
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after renaming.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   * @inflight
+   */
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
   }
 
   /**
@@ -326,37 +344,50 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Returns a signed url to the given file.
-   * @Throws if object does not exist.
+   * Returns a presigned URL for the specified key in the bucket.
+   * @param key The key of the object in the bucket.
+   * @param opts The options including the action and the duration for the signed URL.
+   * @returns The presigned URL string.
    * @inflight
-   * @param key The key to reach
-   *    @param duration Time until expires
    */
-
   public async signedUrl(
     key: string,
-    options?: BucketSignedUrlOptions
+    opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    if (!(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide signed url for a non-existent key (key=${key})`
-      );
+    let command;
+
+    // Set default action to DOWNLOAD if not provided
+    const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
+
+    // Create the AWS S3 command based on the action method
+    switch (action) {
+      case BucketSignedUrlAction.DOWNLOAD:
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
+          );
+        }
+        command = new GetObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        });
+        break;
+      case BucketSignedUrlAction.UPLOAD:
+        command = new PutObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        });
+        break;
+      default:
+        throw new Error(`Invalid action: ${opts?.action}`);
     }
-    const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
-    const command: GetObjectCommand = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
+
+    // Generate the presigned URL
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: opts?.duration?.seconds ?? 900,
     });
-    try {
-      const signedUrl: string = await getSignedUrl(this.s3Client, command, {
-        expiresIn: expiryTimeInSeconds,
-      });
-      return signedUrl;
-    } catch (error) {
-      throw new Error(
-        `Unable to generate signed url for key ${key} : ${error as Error}`
-      );
-    }
+
+    return signedUrl;
   }
 
   /**

@@ -146,6 +146,18 @@
             "uniqueId": "exReactApp_exReactApp-host_Distribution_FE9291B1"
           }
         },
+        "custom_error_response": [
+          {
+            "error_code": 404,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          },
+          {
+            "error_code": 403,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          }
+        ],
         "default_cache_behavior": {
           "allowed_methods": [
             "GET",
@@ -273,7 +285,7 @@
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get__0_IamRole_BA7625E6.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get__0_S3Object_806093F6.key}",
         "timeout": 60,
@@ -340,6 +352,9 @@
           }
         },
         "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
+        "error_document": {
+          "key": "index.html"
+        },
         "index_document": {
           "suffix": "index.html"
         }

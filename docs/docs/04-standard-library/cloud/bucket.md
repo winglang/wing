@@ -171,6 +171,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.rename">rename</a></code> | Move an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
@@ -324,7 +325,7 @@ inflight copy(srcKey: str, dstKey: str): void
 Copy an object to a new location in the bucket.
 
 If the destination object
-already exists, it will be overwritten. Returns once the copying is finished.
+already exists, it will be overwritten.
 
 ###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.copy.parameter.srcKey"></a>
 
@@ -513,6 +514,33 @@ Key of the object.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
+
+---
+
+##### `rename` <a name="rename" id="@winglang/sdk.cloud.IBucketClient.rename"></a>
+
+```wing
+inflight rename(srcKey: str, dstKey: str): void
+```
+
+Move an object to a new location in the bucket.
+
+If the destination object
+already exists, it will be overwritten. Returns once the renaming is finished.
+
+###### `srcKey`<sup>Required</sup> <a name="srcKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.srcKey"></a>
+
+- *Type:* str
+
+The key of the source object you wish to rename.
+
+---
+
+###### `dstKey`<sup>Required</sup> <a name="dstKey" id="@winglang/sdk.cloud.IBucketClient.rename.parameter.dstKey"></a>
+
+- *Type:* str
+
+The key of the destination object after renaming.
 
 ---
 
@@ -827,7 +855,21 @@ let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.action">action</a></code> | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a></code> | The action allowed by the signed URL. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed URL to expire. |
+
+---
+
+##### `action`<sup>Optional</sup> <a name="action" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.action"></a>
+
+```wing
+action: BucketSignedUrlAction;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a>
+- *Default:* BucketSignedUrlAction.DOWNLOAD
+
+The action allowed by the signed URL.
 
 ---
 
@@ -838,8 +880,9 @@ duration: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 15m
 
-The duration for the signed url to expire.
+The duration for the signed URL to expire.
 
 ---
 
@@ -983,6 +1026,33 @@ Delete.
 ##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
 
 Update.
+
+---
+
+
+### BucketSignedUrlAction <a name="BucketSignedUrlAction" id="@winglang/sdk.cloud.BucketSignedUrlAction"></a>
+
+Specifies the action permitted by a presigned URL for a bucket.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD">DOWNLOAD</a></code> | Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD">UPLOAD</a></code> | Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket. |
+
+---
+
+##### `DOWNLOAD` <a name="DOWNLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD"></a>
+
+Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
+
+---
+
+
+##### `UPLOAD` <a name="UPLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD"></a>
+
+Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
 
 ---
 

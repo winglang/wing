@@ -3,6 +3,7 @@
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class $Closure1 {
     constructor({  }) {
@@ -180,7 +181,7 @@ module.exports = function({  }) {
         "memory_size": 1024,
         "publish": true,
         "role": "${aws_iam_role.cloudApi_get_hello_world_0_IamRole_18803888.arn}",
-        "runtime": "nodejs18.x",
+        "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_get_hello_world_0_S3Object_A19D89E0.key}",
         "timeout": 60,
@@ -241,6 +242,7 @@ const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
@@ -249,7 +251,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -273,7 +275,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const preflightClosure = ((nice) => {
-      {console.log(nice)};
+      console.log(nice);
       return true;
     });
     const recursiveClosure = ((nice) => {
@@ -286,10 +288,10 @@ class $Root extends $stdlib.std.Resource {
     const num_array = emptyArray;
     const emptyArray2 = [];
     const clonedArray2 = [...(emptyArray2)];
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [1]);
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [2]);
-    ((obj, args) => { obj.push(...args); })(clonedArray2, [(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1))]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2),3)))};
+    clonedArray2.push(1);
+    clonedArray2.push(2);
+    clonedArray2.push((((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 0) + ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 1)));
+    $helpers.assert($helpers.eq(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2), 3), "clonedArray2.at(2) == 3");
     const emptySet = new Set([((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(clonedArray2, 2)]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
@@ -316,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         const $if_let_value = optionalString;
         if ($if_let_value != undefined) {
           const justString = $if_let_value;
-          {console.log(justString)};
+          console.log(justString);
         }
       }
     });

@@ -253,13 +253,34 @@ export interface BucketDeleteOptions {
 }
 
 /**
+ * Specifies the action permitted by a presigned URL for a bucket.
+ */
+export enum BucketSignedUrlAction {
+  /**
+   * Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
+   */
+  DOWNLOAD = "DOWNLOAD",
+  /**
+   * Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
+   */
+  UPLOAD = "UPLOAD",
+}
+
+/**
  * Options for `Bucket.signedUrl()`.
  */
 export interface BucketSignedUrlOptions {
   /**
-   * The duration for the signed url to expire
+   * The duration for the signed URL to expire.
+   * @default 15m
    */
   readonly duration?: Duration;
+
+  /**
+   * The action allowed by the signed URL.
+   * @default BucketSignedUrlAction.DOWNLOAD
+   */
+  readonly action?: BucketSignedUrlAction;
 }
 
 /**
@@ -375,14 +396,23 @@ export interface IBucketClient {
 
   /**
    * Copy an object to a new location in the bucket. If the destination object
-   * already exists, it will be overwritten. Returns once the copying is finished.
-   *
+   * already exists, it will be overwritten.
    * @param srcKey The key of the source object you wish to copy.
    * @param dstKey The key of the destination object after copying.
    * @throws if `srcKey` object doesn't exist.
    * @inflight
    */
   copy(srcKey: string, dstKey: string): Promise<void>;
+
+  /**
+   * Move an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten. Returns once the renaming is finished.
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after renaming.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   * @inflight
+   */
+  rename(srcKey: string, dstKey: string): Promise<void>;
 }
 
 /**
@@ -491,4 +521,6 @@ export enum BucketInflightMethods {
   METADATA = "metadata",
   /** `Bucket.copy` */
   COPY = "copy",
+  /** `Bucket.rename` */
+  RENAME = "rename",
 }

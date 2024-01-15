@@ -552,6 +552,7 @@ log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | `log`        | logs str                                              |
 | `assert`     | checks a condition and _throws_ if evaluated to false |
 | `unsafeCast` | cast a value into a different type                    |
+| `nodeof`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object |
 
 > ```TS
 > log("Hello {name}");
@@ -2093,7 +2094,7 @@ assert(cat1 != dog); // compile time error (can't compare different types)
 
 ### 6.2 Strings
 
-String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/string).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 

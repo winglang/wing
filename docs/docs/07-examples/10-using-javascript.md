@@ -27,7 +27,7 @@ To call this in preflight code, define the function as an `extern` in a class.
 
 **Note:** Extern functions must be `static.` 
 
-If you want to use the function outside of the calss, be sure to decalre it as `pub`.
+If you want to use the function outside of the class, be sure to declare it as `pub`.
 
 ```ts 
 class JsExample {  

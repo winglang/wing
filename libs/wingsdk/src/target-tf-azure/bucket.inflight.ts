@@ -180,7 +180,7 @@ export class BucketClient implements IBucketClient {
           return;
         }
       }
-      throw Error(`unable to delete "${key}": ${error.details.message}`);
+      throw Error(`Failed to delete object (key=${key}).`);
     }
   }
 
@@ -282,6 +282,19 @@ export class BucketClient implements IBucketClient {
     } catch (error) {
       throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
     }
+  }
+
+  /**
+   * Move object within the container
+   *
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after rename.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   */
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    return Promise.reject(
+      `rename is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
+    );
   }
 
   /**

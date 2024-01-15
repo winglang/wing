@@ -2,10 +2,10 @@ import { Storage, Bucket } from "@google-cloud/storage";
 import mime from "mime-types";
 import {
   BucketDeleteOptions,
-  IBucketClient,
-  ObjectMetadata,
   BucketSignedUrlOptions,
   BucketPutOptions,
+  IBucketClient,
+  ObjectMetadata,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -38,9 +38,30 @@ export class BucketClient implements IBucketClient {
   }
 
   public async copy(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `copy is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    try {
+      const srcFile = this.bucket.file(srcKey);
+      await srcFile.copy(this.bucket.file(dstKey));
+    } catch (error) {
+      throw new Error(`Source object does not exist (srcKey=${srcKey}).`);
+    }
+  }
+
+  /**
+   * Move object within the bucket
+   *
+   * @param srcKey The key of the source object you wish to rename.
+   * @param dstKey The key of the destination object after rename.
+   * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
+   */
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
   }
 
   // check if bucket is public or not from bucket metadata
@@ -142,29 +163,29 @@ export class BucketClient implements IBucketClient {
     key: string,
     opts: BucketDeleteOptions = {}
   ): Promise<void> {
-    const mustExist = opts.mustExist === undefined ? true : opts.mustExist;
+    const mustExist = opts?.mustExist ?? false;
+
+    if (mustExist && !(await this.exists(key))) {
+      throw new Error(`Object does not exist (key=${key}).`);
+    }
+
     try {
-      if (mustExist && !(await this.exists(key))) {
-        throw new Error(
-          `Cannot delete object that does not exist. (key=${key})`
-        );
-      }
       await this.bucket.file(key).delete();
-    } catch (error) {
-      throw new Error(`Failed to delete object. (key=${key})`);
+    } catch (error: any) {
+      if (!mustExist && error.code === 404) {
+        return;
+      }
+      throw new Error(`Failed to delete object (key=${key}).`);
     }
   }
 
   public async tryDelete(key: string): Promise<boolean> {
-    try {
-      if (await this.exists(key)) {
-        await this.delete(key);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      throw new Error(`Failed to tryDelete object. (key=${key})`);
+    if (await this.exists(key)) {
+      await this.delete(key);
+      return true;
     }
+
+    return false;
   }
 
   public async list(prefix?: string): Promise<string[]> {
@@ -177,21 +198,17 @@ export class BucketClient implements IBucketClient {
   }
 
   public async publicUrl(key: string): Promise<string> {
-    try {
-      if (!(await this.exists(key))) {
-        throw new Error(
-          `Cannot provide public URL for a non-existent object. (key=${key})`
-        );
-      }
-      if ((await this.isPublic()) === false) {
-        throw new Error(
-          `Cannot provide public URL for a non-public bucket. (bucket=${this.bucketName})`
-        );
-      }
-      return `https://storage.googleapis.com/${this.bucketName}/${key}`;
-    } catch (error) {
-      throw new Error(`Failed to get public URL. (key=${key})`);
+    if (!(await this.isPublic())) {
+      throw new Error("Cannot provide public url for a non-public bucket");
     }
+
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide public url for a non-existent key (key=${key})`
+      );
+    }
+
+    return `https://storage.googleapis.com/${this.bucketName}/${key}`;
   }
 
   // TODO: implement signedUrl

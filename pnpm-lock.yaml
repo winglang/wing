@@ -914,7 +914,7 @@ importers:
         version: 4.4.11(@types/node@18.18.4)
       vitest:
         specifier: ^0.31.4
-        version: 0.31.4
+        version: 0.31.4(happy-dom@9.20.3)
       webpack:
         specifier: ^5.88.2
         version: 5.88.2(esbuild@0.18.20)
@@ -1121,8 +1121,8 @@ importers:
         specifier: workspace:^
         version: link:../wingsdk
       aws-cdk-lib:
-        specifier: ^2.64.0
-        version: 2.100.0(constructs@10.2.70)
+        specifier: ^2.116.0
+        version: 2.116.0(constructs@10.2.70)
       constructs:
         specifier: ~10.2.69
         version: 10.2.70
@@ -1318,6 +1318,9 @@ importers:
       stacktracey:
         specifier: ^2.1.8
         version: 2.1.8
+      ulid:
+        specifier: ^2.3.0
+        version: 2.3.0
       undici:
         specifier: ^5.25.4
         version: 5.25.4
@@ -1359,11 +1362,11 @@ importers:
         specifier: workspace:^
         version: link:../../apps/jsii-docgen
       aws-sdk-client-mock:
-        specifier: ^2.2.0
-        version: 2.2.0
+        specifier: 3.0.0
+        version: 3.0.0
       aws-sdk-client-mock-jest:
-        specifier: ^2.2.0
-        version: 2.2.0(aws-sdk-client-mock@2.2.0)
+        specifier: 3.0.0
+        version: 3.0.0(aws-sdk-client-mock@3.0.0)
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
@@ -1407,8 +1410,8 @@ importers:
         specifier: ^1.88.0
         version: 1.90.0
       mock-gcs:
-        specifier: ^1.0.0
-        version: 1.1.0
+        specifier: ^1.2.0
+        version: 1.2.0
       npm-check-updates:
         specifier: ^16
         version: 16.14.5
@@ -1603,6 +1606,10 @@ packages:
 
   /@aws-cdk/asset-awscli-v1@2.2.200:
     resolution: {integrity: sha512-Kf5J8DfJK4wZFWT2Myca0lhwke7LwHcHBo+4TvWOGJrFVVKVuuiLCkzPPRBQQVDj0Vtn2NBokZAz8pfMpAqAKg==}
+    dev: false
+
+  /@aws-cdk/asset-awscli-v1@2.2.201:
+    resolution: {integrity: sha512-INZqcwDinNaIdb5CtW3ez5s943nX5stGBQS6VOP2JDlOFP81hM3fds/9NDknipqfUkZM43dx+HgVvkXYXXARCQ==}
     dev: false
 
   /@aws-cdk/asset-kubectl-v20@2.1.2:
@@ -12400,18 +12407,41 @@ packages:
       - table
       - yaml
 
-  /aws-sdk-client-mock-jest@2.2.0(aws-sdk-client-mock@2.2.0):
-    resolution: {integrity: sha512-lpPapmCjTe70qhXYFIjUL9cdA75YmtC0surig3QSr2Y5doaG1e4fuXlgkNeH6V873rlwu9TWCG2MFOr4rHuMfg==}
+  /aws-cdk-lib@2.116.0(constructs@10.2.70):
+    resolution: {integrity: sha512-LOYJGtKLvf/wVt3UMwWQxvxgAM681ZV/BbGGB6aEqc7+4TMfbYFbaA02+zwN0E0zxOxi4l0j1/BNO4GOzVSoPw==}
+    engines: {node: '>= 14.15.0'}
     peerDependencies:
-      aws-sdk-client-mock: 2.2.0
+      constructs: ^10.0.0
+    dependencies:
+      '@aws-cdk/asset-awscli-v1': 2.2.201
+      '@aws-cdk/asset-kubectl-v20': 2.1.2
+      '@aws-cdk/asset-node-proxy-agent-v6': 2.0.1
+      constructs: 10.2.70
+    dev: false
+    bundledDependencies:
+      - '@balena/dockerignore'
+      - case
+      - fs-extra
+      - ignore
+      - jsonschema
+      - minimatch
+      - punycode
+      - semver
+      - table
+      - yaml
+
+  /aws-sdk-client-mock-jest@3.0.0(aws-sdk-client-mock@3.0.0):
+    resolution: {integrity: sha512-oV1rBQZc4UumLbzZAhi8UAehUq+k75hkQYGLrVIP0iJj85Z9xw+EaSsmJke/KQ8Z3vng+Xv1xbounsxpvZpunQ==}
+    peerDependencies:
+      aws-sdk-client-mock: 3.0.0
     dependencies:
       '@types/jest': 28.1.8
-      aws-sdk-client-mock: 2.2.0
+      aws-sdk-client-mock: 3.0.0
       tslib: 2.6.2
     dev: true
 
-  /aws-sdk-client-mock@2.2.0:
-    resolution: {integrity: sha512-Kq2N+6gHRDedbrgTA0NMMfyN1XDWEA5Kbpm9/M/cenSxoNjfvQBOtBawI1lQe5h4UziLl///E7u17K9PBoHEKA==}
+  /aws-sdk-client-mock@3.0.0:
+    resolution: {integrity: sha512-4mBiWhuLYLZe1+K/iB8eYy5SAZyW2se+Keyh5u9QouMt6/qJ5SRZhss68xvUX5g3ApzROJ06QPRziYHP6buuvQ==}
     dependencies:
       '@types/sinon': 10.0.19
       sinon: 14.0.2
@@ -14493,7 +14523,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20231223
+      typescript: 5.4.0-dev.20240115
     dev: true
 
   /dset@3.1.2:
@@ -19915,8 +19945,8 @@ packages:
       obliterator: 1.6.1
     dev: false
 
-  /mock-gcs@1.1.0:
-    resolution: {integrity: sha512-FOr/++36kErcRrJZ72aghbYEdHvHbdw9t8YZEkxnPl6jzXXKz4+aZGOheoLI0sJB7qrOgelQ5d41E7IOTdkKiQ==}
+  /mock-gcs@1.2.0:
+    resolution: {integrity: sha512-/RsqqS9ZsjFnTNTYjOwW7q0y9Y84idZVNMA+S9kVdbWjPVq92jzxNWqBmOIEFY9D2O1JZw+wyGh9gwuMm3TT+g==}
     dependencies:
       stream-buffers: 3.0.2
     dev: true
@@ -22678,6 +22708,7 @@ packages:
 
   /sinon@14.0.2:
     resolution: {integrity: sha512-PDpV0ZI3ZCS3pEqx0vpNp6kzPhHrLx72wA0G+ZLaaJjLIYeE0n8INlgaohKuGy7hP0as5tbUd23QWu5U233t+w==}
+    deprecated: 16.1.1
     dependencies:
       '@sinonjs/commons': 2.0.0
       '@sinonjs/fake-timers': 9.1.2
@@ -24187,8 +24218,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20231223:
-    resolution: {integrity: sha512-KiQgKjVULApZ0PuXCMOuPNNO3Ty4amfJPjGpbcQoh9YlU2qmYgmyyIT7I7zMHkjCtn8R8DkrvM0Eue0fP9hzjw==}
+  /typescript@5.4.0-dev.20240115:
+    resolution: {integrity: sha512-p3nYa7pku8FHvfLDyiDcplZbKXEQTcZqtvXN6JTBu/u5cNLinBzOiKA3cVfHcgudzCUMtU5ke94dpwFNr+U3qw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -24207,6 +24238,11 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /ulid@2.3.0:
+    resolution: {integrity: sha512-keqHubrlpvT6G2wH0OEfSW4mquYRcbe/J8NMmveoQOjUqmo+hXtO+ORCpWhdbZ7k72UtY61BL7haGxW6enBnjw==}
+    hasBin: true
+    dev: false
 
   /unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
@@ -24753,72 +24789,6 @@ packages:
       tinypool: 0.4.0
       vite: 4.4.11(@types/node@18.18.4)
       vite-node: 0.30.1(@types/node@18.18.4)
-      why-is-node-running: 2.2.2
-    transitivePeerDependencies:
-      - less
-      - lightningcss
-      - sass
-      - stylus
-      - sugarss
-      - supports-color
-      - terser
-    dev: true
-
-  /vitest@0.31.4:
-    resolution: {integrity: sha512-GoV0VQPmWrUFOZSg3RpQAPN+LPmHg2/gxlMNJlyxJihkz6qReHDV6b0pPDcqFLNEPya4tWJ1pgwUNP9MLmUfvQ==}
-    engines: {node: '>=v14.18.0'}
-    hasBin: true
-    peerDependencies:
-      '@edge-runtime/vm': '*'
-      '@vitest/browser': '*'
-      '@vitest/ui': '*'
-      happy-dom: '*'
-      jsdom: '*'
-      playwright: '*'
-      safaridriver: '*'
-      webdriverio: '*'
-    peerDependenciesMeta:
-      '@edge-runtime/vm':
-        optional: true
-      '@vitest/browser':
-        optional: true
-      '@vitest/ui':
-        optional: true
-      happy-dom:
-        optional: true
-      jsdom:
-        optional: true
-      playwright:
-        optional: true
-      safaridriver:
-        optional: true
-      webdriverio:
-        optional: true
-    dependencies:
-      '@types/chai': 4.3.6
-      '@types/chai-subset': 1.3.3
-      '@types/node': 18.18.4
-      '@vitest/expect': 0.31.4
-      '@vitest/runner': 0.31.4
-      '@vitest/snapshot': 0.31.4
-      '@vitest/spy': 0.31.4
-      '@vitest/utils': 0.31.4
-      acorn: 8.10.0
-      acorn-walk: 8.2.0
-      cac: 6.7.14
-      chai: 4.3.10
-      concordance: 5.0.4
-      debug: 4.3.4
-      local-pkg: 0.4.3
-      magic-string: 0.30.4
-      pathe: 1.1.1
-      picocolors: 1.0.0
-      std-env: 3.4.3
-      strip-literal: 1.3.0
-      tinybench: 2.5.1
-      tinypool: 0.5.0
-      vite: 4.4.11(@types/node@18.18.4)
-      vite-node: 0.31.4(@types/node@18.18.4)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
