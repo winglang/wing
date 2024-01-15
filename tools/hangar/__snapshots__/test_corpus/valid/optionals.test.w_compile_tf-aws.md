@@ -239,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
       _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
@@ -375,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
         $helpers.assert($helpers.eq(parsedName.first, "BadName"), "parsedName.first == \"BadName\"");
-        if (!$helpers.eq(parsedName.last, "")) {
+        if ($helpers.neq(parsedName.last, "")) {
           $helpers.assert(false, "false");
         }
       }

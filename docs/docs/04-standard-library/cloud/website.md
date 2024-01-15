@@ -292,6 +292,7 @@ let WebsiteOptions = cloud.WebsiteOptions{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteOptions.property.errorDocument">errorDocument</a></code> | <code>str</code> | Name of the error document for the website. |
 
 ---
 
@@ -314,6 +315,26 @@ Local path to the website's static files, relative to the Wing source file or ab
 ```
 
 
+##### `errorDocument`<sup>Optional</sup> <a name="errorDocument" id="@winglang/sdk.cloud.WebsiteOptions.property.errorDocument"></a>
+
+```wing
+errorDocument: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+Name of the error document for the website.
+
+---
+
+*Example*
+
+```wing
+"404.html"
+```
+
+
 ### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
 
 Options for `Website`.
@@ -331,6 +352,7 @@ let WebsiteProps = cloud.WebsiteProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.errorDocument">errorDocument</a></code> | <code>str</code> | Name of the error document for the website. |
 | <code><a href="#@winglang/sdk.cloud.WebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.cloud.Domain">Domain</a></code> | The website's custom domain object. |
 
 ---
@@ -351,6 +373,26 @@ Local path to the website's static files, relative to the Wing source file or ab
 
 ```wing
 "./dist"
+```
+
+
+##### `errorDocument`<sup>Optional</sup> <a name="errorDocument" id="@winglang/sdk.cloud.WebsiteProps.property.errorDocument"></a>
+
+```wing
+errorDocument: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+Name of the error document for the website.
+
+---
+
+*Example*
+
+```wing
+"404.html"
 ```
 
 

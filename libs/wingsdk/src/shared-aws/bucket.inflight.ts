@@ -25,6 +25,7 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketSignedUrlAction,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -343,37 +344,50 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Returns a signed url to the given file.
-   * @Throws if object does not exist.
+   * Returns a presigned URL for the specified key in the bucket.
+   * @param key The key of the object in the bucket.
+   * @param opts The options including the action and the duration for the signed URL.
+   * @returns The presigned URL string.
    * @inflight
-   * @param key The key to reach
-   *    @param duration Time until expires
    */
-
   public async signedUrl(
     key: string,
-    options?: BucketSignedUrlOptions
+    opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    if (!(await this.exists(key))) {
-      throw new Error(
-        `Cannot provide signed url for a non-existent key (key=${key})`
-      );
+    let command;
+
+    // Set default action to DOWNLOAD if not provided
+    const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
+
+    // Create the AWS S3 command based on the action method
+    switch (action) {
+      case BucketSignedUrlAction.DOWNLOAD:
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
+          );
+        }
+        command = new GetObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        });
+        break;
+      case BucketSignedUrlAction.UPLOAD:
+        command = new PutObjectCommand({
+          Bucket: this.bucketName,
+          Key: key,
+        });
+        break;
+      default:
+        throw new Error(`Invalid action: ${opts?.action}`);
     }
-    const expiryTimeInSeconds: number = options?.duration?.seconds || 86400;
-    const command: GetObjectCommand = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
+
+    // Generate the presigned URL
+    const signedUrl = await getSignedUrl(this.s3Client, command, {
+      expiresIn: opts?.duration?.seconds ?? 900,
     });
-    try {
-      const signedUrl: string = await getSignedUrl(this.s3Client, command, {
-        expiresIn: expiryTimeInSeconds,
-      });
-      return signedUrl;
-    } catch (error) {
-      throw new Error(
-        `Unable to generate signed url for key ${key} : ${error as Error}`
-      );
-    }
+
+    return signedUrl;
   }
 
   /**

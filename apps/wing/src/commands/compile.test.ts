@@ -1,4 +1,4 @@
-import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
+import { readdir, stat, writeFile, mkdtemp, readFile } from "fs/promises";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
@@ -26,7 +26,15 @@ describe(
       expect(stats.isDirectory()).toBeTruthy();
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+      expect(files).toMatchInlineSnapshot(`
+        [
+          ".manifest",
+          ".wing",
+          "connections.json",
+          "simulator.json",
+          "tree.json",
+        ]
+      `);
     });
 
     test("should be able to compile the SDK capture test to tf-aws", async () => {
@@ -53,7 +61,15 @@ describe(
       expect(stats.isDirectory()).toBeTruthy();
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+      expect(files).toMatchInlineSnapshot(`
+        [
+          ".manifest",
+          ".wing",
+          "connections.json",
+          "simulator.json",
+          "tree.json",
+        ]
+      `);
     });
 
     test("should be able to compile the only entrypoint file in current directory", async () => {
@@ -118,7 +134,15 @@ describe(
         expect(stats.isDirectory()).toBeTruthy();
         const files = (await readdir(outDir)).sort();
         expect(files.length).toBeGreaterThan(0);
-        expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+        expect(files).toMatchInlineSnapshot(`
+          [
+            ".manifest",
+            ".wing",
+            "connections.json",
+            "simulator.json",
+            "tree.json",
+          ]
+        `);
       } finally {
         process.chdir(oldCwd);
       }
@@ -150,6 +174,11 @@ describe(
       const files2 = await readdir(artifactDir2);
       expect(files2.length).toBeGreaterThan(0);
       expectedFiles.forEach((file) => expect(files2).toContain(file));
+
+      // check the manifest file to make sure it does not contain "terraform.tfstate"
+      const manifestFile = join(artifactDir2, ".manifest");
+      const manifest = JSON.parse(await readFile(manifestFile, "utf-8"));
+      expect(manifest.generatedFiles).not.toContain("terraform.tfstate");
     });
   },
   { timeout: 1000 * 60 * 5 }

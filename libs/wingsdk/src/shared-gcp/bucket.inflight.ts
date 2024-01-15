@@ -54,9 +54,14 @@ export class BucketClient implements IBucketClient {
    * @throws if `srcKey` object doesn't exist or if it matches `dstKey`.
    */
   public async rename(srcKey: string, dstKey: string): Promise<void> {
-    return Promise.reject(
-      `rename is not implemented: (srcKey=${srcKey}, dstKey=${dstKey})`
-    );
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
   }
 
   // check if bucket is public or not from bucket metadata
