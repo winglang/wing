@@ -21,12 +21,7 @@ export class CounterClient implements ICounterClient {
     const currentValue = await this._getCurrentValue(key);
     const newValue = currentValue + amount;
 
-    const counterEntity = {
-      key: this.client.key([COUNTER_ENTITY_KIND, key]),
-      data: { count: newValue },
-    };
-
-    await this.client.update(counterEntity);
+    await this._updateCounter(key, newValue);
 
     // Return the previous value before the increment
     return currentValue;
@@ -39,12 +34,7 @@ export class CounterClient implements ICounterClient {
     const currentValue = await this._getCurrentValue(key);
     const newValue = currentValue - amount;
 
-    const counterEntity = {
-      key: this.client.key([COUNTER_ENTITY_KIND, key]),
-      data: { count: newValue },
-    };
-
-    await this.client.update(counterEntity);
+    await this._updateCounter(key, newValue);
 
     // Return the previous value before the decrement
     return currentValue;
@@ -54,12 +44,7 @@ export class CounterClient implements ICounterClient {
     value: number,
     key: string = DEFAULT_COUNTER_KEY
   ): Promise<void> {
-    const counterEntity = {
-      key: this.client.key([COUNTER_ENTITY_KIND, key]),
-      data: { count: value },
-    };
-
-    await this.client.upsert(counterEntity);
+    await this._updateCounter(key, value);
   }
 
   public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
@@ -89,5 +74,14 @@ export class CounterClient implements ICounterClient {
     };
 
     await this.client.insert(counterEntity);
+  }
+
+  private async _updateCounter(key: string, newValue: number): Promise<void> {
+    const counterEntity = {
+      key: this.client.key([COUNTER_ENTITY_KIND, key]),
+      data: { count: newValue },
+    };
+
+    await this.client.save(counterEntity);
   }
 }
