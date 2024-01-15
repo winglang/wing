@@ -18,7 +18,7 @@ export class CounterClient implements ICounterClient {
     amount: number = 1,
     key: string = DEFAULT_COUNTER_KEY
   ): Promise<number> {
-    const currentValue = await this._getCurrentValue(key);
+    const currentValue = await this._getCounterValue(key);
     const newValue = currentValue + amount;
 
     await this._updateCounter(key, newValue);
@@ -31,7 +31,7 @@ export class CounterClient implements ICounterClient {
     amount: number = 1,
     key: string = DEFAULT_COUNTER_KEY
   ): Promise<number> {
-    const currentValue = await this._getCurrentValue(key);
+    const currentValue = await this._getCounterValue(key);
     const newValue = currentValue - amount;
 
     await this._updateCounter(key, newValue);
@@ -48,10 +48,10 @@ export class CounterClient implements ICounterClient {
   }
 
   public async peek(key: string = DEFAULT_COUNTER_KEY): Promise<number> {
-    return this._getCurrentValue(key);
+    return this._getCounterValue(key);
   }
 
-  private async _getCurrentValue(key: string): Promise<number> {
+  private async _getCounterValue(key: string): Promise<number> {
     const counterKey = this.client.key([COUNTER_ENTITY_KIND, key]);
 
     // Fetch the counter from the datastore
@@ -62,12 +62,12 @@ export class CounterClient implements ICounterClient {
     if (existingCounter) {
       return existingCounter.count;
     } else {
-      await this._initializeCounter(key);
+      await this._initCounter(key);
       return this.initial;
     }
   }
 
-  private async _initializeCounter(key: string): Promise<void> {
+  private async _initCounter(key: string): Promise<void> {
     const counterEntity = {
       key: this.client.key([COUNTER_ENTITY_KIND, key]),
       data: { count: this.initial },
