@@ -4,8 +4,11 @@ import {
   HTMLAttributes,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
+  useState,
 } from "react";
 import { ReactNode } from "react";
 import { useEvent } from "react-use";
@@ -53,82 +56,92 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { boundingBox: mapSize, children, className } = props;
+  const { boundingBox, children, className } = props;
 
-  const transformRef = useRef<Transform>(IDENTITY_TRANSFORM);
-
+  const [transform, setTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
   const targetRef = useRef<HTMLDivElement>(null);
-  const applyTransform = useCallback(() => {
+  useEffect(() => {
     const target = targetRef.current;
     if (!target) {
       throw new Error("target is undefined");
     }
-    const transform = transformRef.current;
     target.style.transform = `translate(${-transform.x * transform.z}px, ${
       -transform.y * transform.z
     }px) scale(${transform.z})`;
-  }, []);
+  }, [transform]);
 
-  const toLocal = useCallback((x: number, y: number) => {
-    const transform = transformRef.current;
-    return {
-      x: transform.x + x / transform.z,
-      y: transform.y + y / transform.z,
-    };
-  }, []);
+  const toLocal = useCallback(
+    (x: number, y: number) => {
+      return {
+        x: transform.x + x / transform.z,
+        y: transform.y + y / transform.z,
+      };
+    },
+    [transform],
+  );
 
   const onWheel = useCallback(
     (event: WheelEvent) => {
       event.preventDefault();
-      const transform = transformRef.current;
-      if (event.ctrlKey) {
-        const boundingRect = (
-          event.currentTarget as HTMLDivElement
-        ).getBoundingClientRect();
+      const boundingRect = (
+        event.currentTarget as HTMLDivElement
+      ).getBoundingClientRect();
+      setTransform((transform) => {
+        if (event.ctrlKey) {
+          const localCursor = toLocal(
+            event.x - boundingRect.left,
+            event.y - boundingRect.top,
+          );
+          const dx = localCursor.x - transform.x;
+          const dy = localCursor.y - transform.y;
 
-        const localCursor = toLocal(
-          event.x - boundingRect.left,
-          event.y - boundingRect.top,
-        );
-        const dx = localCursor.x - transform.x;
-        const dy = localCursor.y - transform.y;
+          const z = Math.min(
+            MAX_ZOOM_LEVEL,
+            Math.max(
+              MIN_ZOOM_LEVEL,
+              transform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
+            ),
+          );
+          const dz = z / transform.z;
 
-        const z = Math.min(
-          MAX_ZOOM_LEVEL,
-          Math.max(
-            MIN_ZOOM_LEVEL,
-            transform.z * Math.exp(-event.deltaY * SCALE_SENSITIVITY),
-          ),
-        );
-        const dz = z / transform.z;
-
-        transform.z = z;
-        transform.x += dx - dx / dz;
-        transform.y += dy - dy / dz;
-      } else {
-        transform.x += (event.deltaX * MOVE_SENSITIVITY) / transform.z;
-        transform.y += (event.deltaY * MOVE_SENSITIVITY) / transform.z;
-      }
-      applyTransform();
+          return {
+            x: transform.x + dx - dx / dz,
+            y: transform.y + dy - dy / dz,
+            z: z,
+          };
+        } else {
+          return {
+            x: transform.x + (event.deltaX * MOVE_SENSITIVITY) / transform.z,
+            y: transform.y + (event.deltaY * MOVE_SENSITIVITY) / transform.z,
+            z: transform.z,
+          };
+        }
+      });
     },
-    [applyTransform, toLocal],
+    [toLocal],
   );
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
 
   const zoomIn = useCallback(() => {
-    const transform = transformRef.current;
-    const z = Math.min(MAX_ZOOM_LEVEL, transform.z * ZOOM_SENSITIVITY);
-    transform.z = z;
-    applyTransform();
-  }, [applyTransform]);
+    setTransform((transform) => {
+      const z = Math.min(MAX_ZOOM_LEVEL, transform.z * ZOOM_SENSITIVITY);
+      return {
+        ...transform,
+        z,
+      };
+    });
+  }, []);
 
   const zoomOut = useCallback(() => {
-    const transform = transformRef.current;
-    const z = Math.max(MIN_ZOOM_LEVEL, transform.z / ZOOM_SENSITIVITY);
-    transform.z = z;
-    applyTransform();
-  }, [applyTransform]);
+    setTransform((transform) => {
+      const z = Math.max(MIN_ZOOM_LEVEL, transform.z / ZOOM_SENSITIVITY);
+      return {
+        ...transform,
+        z,
+      };
+    });
+  }, []);
 
   const zoomToFit = useCallback(
     (viewport?: Viewport) => {
@@ -137,32 +150,31 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         return;
       }
       const boundingRect = container.getBoundingClientRect();
-      viewport ??= {
-        x: 0,
-        y: 0,
-        width: mapSize?.width ?? boundingRect.width,
-        height: mapSize?.height ?? boundingRect.height,
-      };
+      setTransform(() => {
+        viewport ??= {
+          x: 0,
+          y: 0,
+          width: boundingBox?.width ?? boundingRect.width,
+          height: boundingBox?.height ?? boundingRect.height,
+        };
 
-      // Scale contents to fit.
-      const zx = boundingRect.width / viewport.width;
-      const zy = boundingRect.height / viewport.height;
-      const z = Math.min(zx, zy);
+        // Scale contents to fit.
+        const zx = boundingRect.width / viewport.width;
+        const zy = boundingRect.height / viewport.height;
+        const z = Math.min(zx, zy);
 
-      // Center contents.
-      const dx = (boundingRect.width - viewport.width * z) / 2 / z;
-      const dy = (boundingRect.height - viewport.height * z) / 2 / z;
+        // Center contents.
+        const dx = (boundingRect.width - viewport.width * z) / 2 / z;
+        const dy = (boundingRect.height - viewport.height * z) / 2 / z;
 
-      const newTransform = {
-        x: viewport.x - dx,
-        y: viewport.y - dy,
-        z,
-      };
-
-      transformRef.current = newTransform;
-      applyTransform();
+        return {
+          x: viewport.x - dx,
+          y: viewport.y - dy,
+          z,
+        };
+      });
     },
-    [mapSize, applyTransform],
+    [boundingBox],
   );
 
   useImperativeHandle(
@@ -194,6 +206,13 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
           />
         </div>
       </div>
+
+      {/* <div className="absolute inset-0 z-10 flex justify-around items-center">
+        <div>
+          <span>The map is out of bounds</span>
+          <button onClick={() => zoomToFit()}>Center</button>
+        </div>
+      </div> */}
     </div>
   );
 });
