@@ -321,11 +321,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(store, host, ["store"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [store, ["store"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class Triangle extends $stdlib.std.Resource {
@@ -462,11 +464,13 @@ class Store extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [__parent_this_1.b, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
@@ -492,14 +496,16 @@ class Store extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "store", "$inflight_init"];
   }
-  _registerOnLift(host, ops) {
-    if (ops.includes("$inflight_init")) {
-      Store._registerOnLiftObject(this.b, host, []);
-    }
-    if (ops.includes("store")) {
-      Store._registerOnLiftObject(this.b, host, ["put"]);
-    }
-    super._registerOnLift(host, ops);
+  onLift(host, ops) {
+    $stdlib.core.onLiftMatrix(host, ops, {
+      "$inflight_init": [
+        [this.b, []],
+      ],
+      "store": [
+        [this.b, ["put"]],
+      ],
+    });
+    super.onLift(host, ops);
   }
 }
 const Color =

@@ -137,11 +137,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "method", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(initCount, host, ["inc"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [initCount, ["inc"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -170,14 +172,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "callFoo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Bar._registerOnLiftObject(this.foo, host, []);
-        }
-        if (ops.includes("callFoo")) {
-          Bar._registerOnLiftObject(this.foo, host, ["method"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.foo, []],
+          ],
+          "callFoo": [
+            [this.foo, ["method"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -209,13 +213,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(bar, host, ["callFoo"]);
-          $Closure1._registerOnLiftObject(bar.foo, host, ["method"]);
-          $Closure1._registerOnLiftObject(initCount, host, ["peek"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [bar, ["callFoo"]],
+            [bar.foo, ["method"]],
+            [initCount, ["peek"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const initCount = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");

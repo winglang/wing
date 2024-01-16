@@ -150,11 +150,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), host, ["makeKeyInflight"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     new fixture.Store(this, "fixture.Store");
@@ -209,15 +211,17 @@ class Store extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
   }
-  _registerOnLift(host, ops) {
-    if (ops.includes("$inflight_init")) {
-      Store._registerOnLiftObject(this.data, host, []);
-    }
-    if (ops.includes("set")) {
-      Store._registerOnLiftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), host, ["double"]);
-      Store._registerOnLiftObject(this.data, host, ["put"]);
-    }
-    super._registerOnLift(host, ops);
+  onLift(host, ops) {
+    $stdlib.core.onLiftMatrix(host, ops, {
+      "$inflight_init": [
+        [this.data, []],
+      ],
+      "set": [
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [this.data, ["put"]],
+      ],
+    });
+    super.onLift(host, ops);
   }
 }
 module.exports = { Store };
