@@ -1475,7 +1475,7 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-			// emit `onLift` to register bindings (for type & instance binds)
+			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1794,7 +1794,7 @@ impl<'a> JSifier<'a> {
 			// onLiftMatrix is a helper method that takes in information about all
 			// of the preflight objects and their corresponding ops, and
 			// calls the appropriate onLift method once for each object.
-			bind_method.open(format!("{class_name}._onLiftMatrix(host, ops, {{"));
+			bind_method.open(format!("{STDLIB_CORE}.onLiftMatrix(host, ops, {{"));
 
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));

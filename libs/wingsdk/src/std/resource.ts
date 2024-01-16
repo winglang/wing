@@ -1,10 +1,8 @@
 import { Construct, IConstruct } from "constructs";
-import { Duration } from "./duration";
 import { App } from "../core";
 import { NotImplementedError, AbstractMemberError } from "../core/errors";
-import { getTokenResolver } from "../core/tokens";
 import { log } from "../shared/log";
-import { Datetime, JsonSchema, Node } from "../std";
+import { Node } from "../std";
 
 /**
  * A resource that can run inflight code.
@@ -118,150 +116,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * Registers a lifting between different resources and a host.
-   *
-   * Internally, this deduplicates lifting operations so that _onLiftObject() is called
-   * at most once per preflight object. For example:
-   *
-   * ```
-   * _onLiftMatrix(host, ["method1", "method2"], {
-   *  "method1": [
-   *    [foo, ["other1"]],
-   *    [bar, ["other2"]]
-   *  ],
-   *  "method2": [
-   *    [foo, ["other1"]],
-   *    [bar, ["other3"]]
-   *  ],
-   *  "method3": [
-   *    [foo, ["other4"]],
-   *  ]
-   * })
-   * ```
-   *
-   * will result in
-   *
-   * ```
-   * _onLiftObject(foo, host, ["other1", "other2"]);
-   * _onLiftObject(bar, host, ["other1", "other3"]);
-   * ```
-   * @internal
-   */
-  public static _onLiftMatrix(
-    host: IInflightHost,
-    ops: string[],
-    matrix: Record<string, Array<[any, Array<string>]>>
-  ): void {
-    const neededOps = new Map<any, Set<string>>();
-    for (const [givenOp, pairs] of Object.entries(matrix)) {
-      if (!ops.includes(givenOp)) {
-        continue;
-      }
-      for (const [obj, thenOps] of pairs) {
-        const objOps = neededOps.get(obj) ?? new Set();
-        for (const thenOp of thenOps) {
-          objOps.add(thenOp);
-        }
-        neededOps.set(obj, objOps);
-      }
-    }
-
-    for (const [obj, objOps] of neededOps.entries()) {
-      this._onLiftObject(obj, host, Array.from(objOps));
-    }
-  }
-
-  /**
-   * Register a lifting between an object (either data or resource) and a host.
-   *
-   * - Primitives and Duration objects are ignored.
-   * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their onLift() method.
-   *
-   * @param obj The object to lift.
-   * @param host The host to lift to
-   * @param ops The set of operations that may access the object (use "?" to indicate that we don't
-   * know the operation)
-   *
-   * @internal
-   */
-  public static _onLiftObject(
-    obj: any,
-    host: IInflightHost,
-    ops: string[] = []
-  ): void {
-    const tokens = getTokenResolver(obj);
-    if (tokens) {
-      return tokens.onLiftValue(host, obj);
-    }
-
-    switch (typeof obj) {
-      case "string":
-      case "boolean":
-      case "number":
-      case "undefined":
-        return;
-
-      case "object":
-        if (Array.isArray(obj)) {
-          obj.forEach((item) => this._onLiftObject(item, host));
-          return;
-        }
-
-        if (obj instanceof Duration || obj instanceof Datetime) {
-          return;
-        }
-
-        if (obj instanceof JsonSchema) {
-          return;
-        }
-
-        if (obj instanceof Set) {
-          return Array.from(obj).forEach((item) =>
-            this._onLiftObject(item, host)
-          );
-        }
-
-        if (obj instanceof Map) {
-          Array.from(obj.values()).forEach((item) =>
-            this._onLiftObject(item, host)
-          );
-          return;
-        }
-
-        // structs are just plain objects
-        if (obj.constructor.name === "Object") {
-          Object.values(obj).forEach((item) =>
-            this._onLiftObject(item, host, ops)
-          );
-          return;
-        }
-
-        // if the object is a resource, register a lifting between it and the host.
-        if (typeof obj.onLift === "function") {
-          // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
-          // the host can instantiate a client for this resource.
-          obj.onLift(host, [...ops, "$inflight_init"]);
-          return;
-        }
-
-        break;
-
-      case "function":
-        // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-        if (isHostedLiftableType(obj)) {
-          obj.onLiftType(host, ops);
-          return;
-        }
-        break;
-    }
-
-    throw new Error(
-      `unable to serialize immutable data object of type ${obj.constructor?.name}`
-    );
-  }
-
-  /**
    * Create an instance of this resource with the current App factory.
    * This is commonly used in the constructor of a pseudo-abstract resource class before the super() call.
    *
@@ -360,23 +214,4 @@ export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };
-}
-
-function isHostedLiftableType(t: any): t is IHostedLiftableType {
-  return t !== undefined && typeof t.onLiftType === "function";
-}
-
-/**
- * Represents a type with static methods that may have other things to lift.
- */
-export interface IHostedLiftableType {
-  /**
-   * A hook called by the Wing compiler once for each inflight host that needs to
-   * use this type inflight. The list of requested inflight methods
-   * needed by the inflight host are given by `ops`.
-   *
-   * This method is commonly used for adding permissions, environment variables, or
-   * other capabilities to the inflight host.
-   */
-  onLiftType(host: IInflightHost, ops: string[]): void;
 }
