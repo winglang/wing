@@ -99,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "myop", "$inflight_init"];
       }
       static onLiftType(host, ops) {
-        A._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "myop": [
             [b, ["list"]],
           ],
@@ -135,7 +135,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [A, ["myop"]],
           ],

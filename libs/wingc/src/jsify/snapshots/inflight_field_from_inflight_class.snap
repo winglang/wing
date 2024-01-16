@@ -75,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "field", "getField", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
           ],
           "getField": [

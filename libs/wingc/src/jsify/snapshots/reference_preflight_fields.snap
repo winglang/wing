@@ -97,7 +97,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "boom", "bam", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
             [this.s.length, []],

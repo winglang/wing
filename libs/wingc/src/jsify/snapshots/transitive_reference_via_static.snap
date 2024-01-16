@@ -125,7 +125,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "putInBucket", "$inflight_init"];
       }
       static onLiftType(host, ops) {
-        MyType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "putInBucket": [
             [b, ["put"]],
           ],
@@ -159,7 +159,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "putIndirect", "$inflight_init"];
       }
       onLift(host, ops) {
-        YourType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "putIndirect": [
             [MyType, ["putInBucket"]],
           ],
@@ -195,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [t, ["putIndirect"]],
           ],

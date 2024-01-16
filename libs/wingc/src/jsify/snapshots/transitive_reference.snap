@@ -118,7 +118,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "isEmpty", "checkIfEmpty", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
           ],
@@ -159,7 +159,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [t, ["checkIfEmpty"]],
           ],

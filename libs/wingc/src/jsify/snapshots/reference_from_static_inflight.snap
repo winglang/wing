@@ -72,7 +72,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "staticMethod", "$inflight_init"];
       }
       static onLiftType(host, ops) {
-        MyType._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "staticMethod": [
             [s, []],
           ],
