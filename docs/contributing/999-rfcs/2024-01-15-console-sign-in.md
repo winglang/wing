@@ -14,7 +14,7 @@ This document describes the Wing Console Sign In process and rationale.
 
 ## Background
 
-As we seek to find **Sales and Marketing Opportunities**, it has become increasingly important to establish a more direct and meaningful connection with our users.
+As we seek to be able to understand how wing is used, it has become increasingly important to establish a more direct and meaningful connection with our users.
 One of the ways to achieve this is by implementing a sign-in flow within the Wing Console application.
 
 ## Requirements
