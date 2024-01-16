@@ -3,6 +3,12 @@ bring fs;
 bring util;
 bring expect;
 
+let isExpiredTokenError = inflight (output: str) => {
+  let awsError = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
+  let gcpError = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
+  return awsError || gcpError;
+};
+
 let bucket = new cloud.Bucket();
 
 test "signedUrl GET (implicit)" {
@@ -69,7 +75,6 @@ test "signedUrl PUT" {
 }
 
 test "signedUrl duration option is respected" {
-  let ACCESS_DENIED_ERROR = "<Error><Code>AccessDenied</Code><Message>Request has expired</Message>";
   let KEY = "tempfile.txt";
   let VALUE = "Hello, Wing!";
 
@@ -82,5 +87,5 @@ test "signedUrl duration option is respected" {
   // Download file from private bucket using expired GET presigned URL
   let output = util.shell("curl \"{getSignedUrl}\"", { throw: false });
 
-  assert(output.contains(ACCESS_DENIED_ERROR));
+  expect.equal(isExpiredTokenError(output), true);
 }
