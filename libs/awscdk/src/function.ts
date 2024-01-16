@@ -81,8 +81,9 @@ export class Function extends cloud.Function implements IAwsFunction {
     const bundle = createBundle(this.entrypoint);
 
     // copy files from bundle.directory to this.assetPath
-    copyFileSync(join(bundle.directory, "index.js"), join(App.of(this).outdir, this.assetPath, "index.js"));
-    copyFileSync(join(bundle.directory, "index.js.map"), join(App.of(this).outdir, this.assetPath, "index.js.map"));
+    const assetDir = resolve(App.of(this).outdir, this.assetPath);
+    copyFileSync(bundle.outfilePath, join(assetDir, "index.js"));
+    copyFileSync(bundle.sourcemapPath, join(assetDir, "index.js.map"));
   }
 
   /** @internal */
