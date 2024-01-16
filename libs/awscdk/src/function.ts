@@ -7,13 +7,13 @@ import {
   IEventSource,
   Runtime,
 } from "aws-cdk-lib/aws-lambda";
+import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { join, resolve } from "path";
 import { copyFileSync, writeFileSync } from "fs";
-import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { App } from "./app";
 
 /**
@@ -33,9 +33,10 @@ export class Function extends cloud.Function implements IAwsFunction {
   ) {
     super(scope, id, inflight, props);
 
-    // the code in `this.entrypoint` will be replaced during preSynthesize
+    // The code in `this.entrypoint` will be replaced during preSynthesize
     // but we produce an initial version and bundle it so that `lambda.Function`
-    // has something to work with
+    // has something to work with.
+    // This is a workaround for https://github.com/aws/aws-cdk/issues/28732
     const inflightCodeApproximation = this._getCodeLines(inflight).join("\n");
     writeFileSync(this.entrypoint, inflightCodeApproximation);
     const bundle = createBundle(this.entrypoint);
@@ -65,6 +66,8 @@ export class Function extends cloud.Function implements IAwsFunction {
       logRetention: logRetentionDays,
     });
 
+    // hack: accessing private field from aws_lambda.AssetCode
+    // https://github.com/aws/aws-cdk/blob/109b2abe4c713624e731afa1b82c3c1a3ba064c9/packages/aws-cdk-lib/aws-lambda/lib/code.ts#L266
     const asset: Asset = (code as any).asset;
     this.assetPath = asset.assetPath
   }
