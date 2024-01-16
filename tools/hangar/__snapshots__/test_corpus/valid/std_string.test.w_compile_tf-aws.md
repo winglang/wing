@@ -82,13 +82,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), host, []);
-          $Closure1._registerOnLiftObject((s1.concat(s2)), host, []);
-          $Closure1._registerOnLiftObject(s1.indexOf("s"), host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
+            [(s1.concat(s2)), []],
+            [s1.indexOf("s"), []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const s1 = "some string";

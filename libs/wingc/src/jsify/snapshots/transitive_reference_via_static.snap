@@ -124,11 +124,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "putInBucket", "$inflight_init"];
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("putInBucket")) {
-          MyType._registerOnLiftObject(b, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "putInBucket": [
+            [b, ["put"]],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
     class YourType extends $stdlib.std.Resource {
@@ -156,11 +158,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "putIndirect", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("putIndirect")) {
-          YourType._registerOnLiftObject(MyType, host, ["putInBucket"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "putIndirect": [
+            [MyType, ["putInBucket"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -190,11 +194,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(t, host, ["putIndirect"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [t, ["putIndirect"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

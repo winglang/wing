@@ -616,6 +616,41 @@ Key of the object.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Bucket.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Bucket.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Bucket.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Bucket.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -855,7 +890,21 @@ let BucketSignedUrlOptions = cloud.BucketSignedUrlOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed url to expire. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.action">action</a></code> | <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a></code> | The action allowed by the signed URL. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlOptions.property.duration">duration</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The duration for the signed URL to expire. |
+
+---
+
+##### `action`<sup>Optional</sup> <a name="action" id="@winglang/sdk.cloud.BucketSignedUrlOptions.property.action"></a>
+
+```wing
+action: BucketSignedUrlAction;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketSignedUrlAction">BucketSignedUrlAction</a>
+- *Default:* BucketSignedUrlAction.DOWNLOAD
+
+The action allowed by the signed URL.
 
 ---
 
@@ -866,8 +915,9 @@ duration: duration;
 ```
 
 - *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 15m
 
-The duration for the signed url to expire.
+The duration for the signed URL to expire.
 
 ---
 
@@ -1011,6 +1061,33 @@ Delete.
 ##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
 
 Update.
+
+---
+
+
+### BucketSignedUrlAction <a name="BucketSignedUrlAction" id="@winglang/sdk.cloud.BucketSignedUrlAction"></a>
+
+Specifies the action permitted by a presigned URL for a bucket.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD">DOWNLOAD</a></code> | Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD">UPLOAD</a></code> | Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket. |
+
+---
+
+##### `DOWNLOAD` <a name="DOWNLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.DOWNLOAD"></a>
+
+Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
+
+---
+
+
+##### `UPLOAD` <a name="UPLOAD" id="@winglang/sdk.cloud.BucketSignedUrlAction.UPLOAD"></a>
+
+Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
 
 ---
 

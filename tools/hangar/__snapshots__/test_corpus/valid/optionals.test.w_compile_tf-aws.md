@@ -264,13 +264,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(((payloadWithBucket.c) != null), host, []);
-          $Closure1._registerOnLiftObject(((payloadWithoutOptions.b) != null), host, []);
-          $Closure1._registerOnLiftObject(payloadWithBucket.c, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const x = 4;

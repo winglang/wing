@@ -81,12 +81,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(one, host, []);
-          $Closure1._registerOnLiftObject(two, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [one, []],
+            [two, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const SomeEnum =

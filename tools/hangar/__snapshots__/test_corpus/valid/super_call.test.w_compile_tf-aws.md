@@ -472,11 +472,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "do", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("do")) {
-          BaseClass._registerOnLiftObject(b, host, ["get"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "do": [
+            [b, ["get"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class ExtendedClass extends BaseClass {
@@ -505,11 +507,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "do", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("do")) {
-          ExtendedClass._registerOnLiftObject(b, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "do": [
+            [b, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -540,11 +544,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(extended, host, ["do"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [extended, ["do"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const e = new E(this, "E");

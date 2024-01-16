@@ -249,17 +249,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "isValidUrl", "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject(this.api.url, host, []);
-          MyResource._registerOnLiftObject(this.url, host, []);
-        }
-        if (ops.includes("foo")) {
-          MyResource._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
-          MyResource._registerOnLiftObject(this.api.url, host, []);
-          MyResource._registerOnLiftObject(this.url, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.api.url, []],
+            [this.url, []],
+          ],
+          "foo": [
+            [MyResource, ["isValidUrl"]],
+            [this.api.url, []],
+            [this.url, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -289,11 +291,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(r, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [r, ["foo"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -325,13 +329,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
-          $Closure2._registerOnLiftObject(api.url, host, []);
-          $Closure2._registerOnLiftObject(url, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [MyResource, ["isValidUrl"]],
+            [api.url, []],
+            [url, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const r = new MyResource(this, "MyResource");

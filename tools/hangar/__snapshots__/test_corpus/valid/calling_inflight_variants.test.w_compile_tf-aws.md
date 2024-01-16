@@ -167,23 +167,21 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this, host, ["inflight2"]);
-          Foo._registerOnLiftObject(this.inflight1, host, []);
-        }
-        if (ops.includes("callFn")) {
-          Foo._registerOnLiftObject(this, host, ["makeFn"]);
-        }
-        if (ops.includes("callFn2")) {
-          Foo._registerOnLiftObject(this, host, ["inflight2"]);
-          Foo._registerOnLiftObject(this.inflight1, host, ["handle"]);
-        }
-        if (ops.includes("makeFn")) {
-          Foo._registerOnLiftObject(this, host, ["inflight2"]);
-          Foo._registerOnLiftObject(this.inflight1, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.inflight1, []],
+          ],
+          "callFn": [
+          ],
+          "callFn2": [
+            [this.inflight1, ["handle"]],
+          ],
+          "makeFn": [
+            [this.inflight1, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -213,11 +211,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(foo, host, ["callFn", "callFn2"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [foo, ["callFn", "callFn2"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

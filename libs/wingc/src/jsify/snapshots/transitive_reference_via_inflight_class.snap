@@ -99,11 +99,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "putInBucket", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("putInBucket")) {
-          MyInflightClass._registerOnLiftObject(b, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "putInBucket": [
+            [b, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {

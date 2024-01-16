@@ -372,12 +372,12 @@ test("copy non-existing object", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const SRC_KEY = "SRC/KEY";
-
   const mockStorage = new MockStorage();
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME, mockStorage as any);
 
+  // THEN
   await expect(client.copy(SRC_KEY, SRC_KEY)).rejects.toThrowError(
     `Source object does not exist (srcKey=${SRC_KEY})`
   );
@@ -389,14 +389,11 @@ test("copy objects within the bucket", async () => {
   const SRC_KEY = "SRC/KEY";
   const DST_KEY = "DST/KEY";
   const SRC_VALUE = "hello world";
-
   const mockStorage = new MockStorage();
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME, mockStorage as any);
-
   await client.put(SRC_KEY, SRC_VALUE);
-
   const response1 = await client.copy(SRC_KEY, SRC_KEY);
   // THEN
   expect(response1).toEqual(undefined);
@@ -408,6 +405,56 @@ test("copy objects within the bucket", async () => {
   // THEN
   expect(response2).toEqual(undefined);
   expect(await client.get(DST_KEY)).toBe(SRC_VALUE);
+});
+
+test("rename valid object in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const SRC_VALUE = "hello world";
+  const DST_KEY = "DST/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  await client.put(SRC_KEY, SRC_VALUE);
+  const response = await client.rename(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response).toEqual(undefined);
+  expect(await client.get(DST_KEY)).toBe(SRC_VALUE);
+  expect(await client.exists(SRC_KEY)).toBe(false);
+});
+
+test("renaming an object to its current name should throw an error", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
 });
 
 // TODO: implement signedUrl related tests

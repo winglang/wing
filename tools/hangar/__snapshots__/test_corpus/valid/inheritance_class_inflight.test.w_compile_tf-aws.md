@@ -174,11 +174,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(foo, host, ["bang", "bug", "over_inflight"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [foo, ["bang", "bug", "over_inflight"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

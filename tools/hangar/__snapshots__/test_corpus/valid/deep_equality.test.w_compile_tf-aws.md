@@ -315,14 +315,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(numA, host, []);
-          $Closure1._registerOnLiftObject(numB, host, []);
-          $Closure1._registerOnLiftObject(strA, host, []);
-          $Closure1._registerOnLiftObject(strB, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [numA, []],
+            [numB, []],
+            [strA, []],
+            [strB, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -355,14 +357,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(numA, host, []);
-          $Closure2._registerOnLiftObject(numC, host, []);
-          $Closure2._registerOnLiftObject(strA, host, []);
-          $Closure2._registerOnLiftObject(strC, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [numA, []],
+            [numC, []],
+            [strA, []],
+            [strC, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -393,12 +397,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(jsonA, host, []);
-          $Closure3._registerOnLiftObject(jsonB, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [jsonA, []],
+            [jsonB, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -430,13 +436,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure4._registerOnLiftObject(jsonA, host, []);
-          $Closure4._registerOnLiftObject(jsonB, host, []);
-          $Closure4._registerOnLiftObject(jsonC, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [jsonA, []],
+            [jsonB, []],
+            [jsonC, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -467,12 +475,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure5._registerOnLiftObject(setA, host, []);
-          $Closure5._registerOnLiftObject(setB, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [setA, []],
+            [setB, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
@@ -504,13 +514,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure6._registerOnLiftObject(setA, host, []);
-          $Closure6._registerOnLiftObject(setB, host, []);
-          $Closure6._registerOnLiftObject(setC, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [setA, []],
+            [setB, []],
+            [setC, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure7 extends $stdlib.std.Resource {
@@ -541,12 +553,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure7._registerOnLiftObject(mapA, host, []);
-          $Closure7._registerOnLiftObject(mapB, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [mapA, []],
+            [mapB, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
@@ -578,13 +592,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure8._registerOnLiftObject(mapA, host, []);
-          $Closure8._registerOnLiftObject(mapB, host, []);
-          $Closure8._registerOnLiftObject(mapC, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [mapA, []],
+            [mapB, []],
+            [mapC, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure9 extends $stdlib.std.Resource {
@@ -615,12 +631,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure9._registerOnLiftObject(arrayA, host, []);
-          $Closure9._registerOnLiftObject(arrayB, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [arrayA, []],
+            [arrayB, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure10 extends $stdlib.std.Resource {
@@ -652,13 +670,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure10._registerOnLiftObject(arrayA, host, []);
-          $Closure10._registerOnLiftObject(arrayB, host, []);
-          $Closure10._registerOnLiftObject(arrayC, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [arrayA, []],
+            [arrayB, []],
+            [arrayC, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure11 extends $stdlib.std.Resource {
@@ -689,12 +709,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure11._registerOnLiftObject(cat1, host, []);
-          $Closure11._registerOnLiftObject(cat2, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [cat1, []],
+            [cat2, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure12 extends $stdlib.std.Resource {
@@ -726,13 +748,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure12._registerOnLiftObject(cat1, host, []);
-          $Closure12._registerOnLiftObject(cat2, host, []);
-          $Closure12._registerOnLiftObject(cat3, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [cat1, []],
+            [cat2, []],
+            [cat3, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const numA = 1;

@@ -374,14 +374,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "callInner", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          D._registerOnLiftObject(this.inner, host, []);
-        }
-        if (ops.includes("callInner")) {
-          D._registerOnLiftObject(this.inner, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.inner, []],
+          ],
+          "callInner": [
+            [this.inner, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -415,14 +417,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(a, host, ["goo"]);
-          $Closure3._registerOnLiftObject(d, host, ["callInner"]);
-          $Closure3._registerOnLiftObject(fn, host, ["handle"]);
-          $Closure3._registerOnLiftObject(innerD, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [a, ["goo"]],
+            [d, ["callInner"]],
+            [fn, ["handle"]],
+            [innerD, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const a = new A(this, "A");

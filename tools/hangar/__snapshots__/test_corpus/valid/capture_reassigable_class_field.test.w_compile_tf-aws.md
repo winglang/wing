@@ -217,19 +217,21 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "get", "set", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, []);
-          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, []);
-        }
-        if (ops.includes("get")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, ["getJson"]);
-          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, ["handle"]);
-        }
-        if (ops.includes("set")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, ["putJson"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.bucket, []],
+            [this.onUpdateCallback, []],
+          ],
+          "get": [
+            [this.bucket, ["getJson"]],
+            [this.onUpdateCallback, ["handle"]],
+          ],
+          "set": [
+            [this.bucket, ["putJson"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -259,11 +261,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(counter, host, ["inc"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [counter, ["inc"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -295,12 +299,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(counter, host, ["peek"]);
-          $Closure3._registerOnLiftObject(kv, host, ["get", "set"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [counter, ["peek"]],
+            [kv, ["get", "set"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const kv = new KeyValueStore(this, "KeyValueStore");
