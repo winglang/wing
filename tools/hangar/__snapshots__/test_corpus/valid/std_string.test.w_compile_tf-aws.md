@@ -83,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
             [(s1.concat(s2)), []],

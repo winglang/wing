@@ -219,7 +219,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [j, []],
           ],
@@ -284,7 +284,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure3._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [jStudent1, []],
           ],
@@ -324,7 +324,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure4._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [(schema.asStr()), []],
             [expectedSchema, []],

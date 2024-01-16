@@ -283,7 +283,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "invoke", "$inflight_init"];
       }
       onLift(host, ops) {
-        Doubler._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.func, []],
           ],
@@ -357,7 +357,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            $Closure2._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [handler, ["handle"]],
               ],
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure4._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [f, ["invoke"]],
           ],

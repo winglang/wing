@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "foo", "bar", "callThis", "$inflight_init"];
       }
       onLift(host, ops) {
-        Foo._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "callThis": [
             [Foo, ["bar"]],
           ],
@@ -135,7 +135,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
       static onLiftType(host, ops) {
-        Foo._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "bar": [
             [Foo, ["foo"]],
           ],
@@ -198,7 +198,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [Foo, ["foo"]],
             [foo, ["callThis"]],

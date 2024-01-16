@@ -8,8 +8,8 @@ It might not be implemented yet.
   | 
   | let bucket = new cloud.Bucket();
   | 
-7 | test "signedUrl" {
-  |                  ^
+8 | test "signedUrl GET (implicit)" {
+  |                                 ^
 at onLift (<ABSOLUTE>:LINE:COL)
  
  

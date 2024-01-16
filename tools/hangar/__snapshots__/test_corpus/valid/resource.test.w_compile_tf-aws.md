@@ -732,7 +732,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
       onLift(host, ops) {
-        Foo._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.c, ["dec", "inc"]],
           ],
@@ -780,7 +780,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
       onLift(host, ops) {
-        Bar._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
             [this.e, []],
@@ -830,7 +830,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [bucket, ["list"]],
             [res, ["myMethod", "testTypeAccess"]],
@@ -876,7 +876,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            $Closure2._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_2.b, ["put"]],
               ],
@@ -914,7 +914,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            $Closure3._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_3.b, ["put"]],
               ],
@@ -952,7 +952,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            $Closure4._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_4.q, ["push"]],
               ],
@@ -987,7 +987,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "publish", "getObjectCount", "$inflight_init"];
       }
       onLift(host, ops) {
-        BigPublisher._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
             [this.b2, []],
@@ -1034,7 +1034,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure5._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [bigOlPublisher, ["getObjectCount", "publish"]],
           ],

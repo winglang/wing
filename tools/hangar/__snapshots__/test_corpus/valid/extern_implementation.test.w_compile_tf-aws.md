@@ -132,7 +132,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
       onLift(host, ops) {
-        Foo._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "call": [
             [Foo, ["getData", "getUuid", "regexInflight"]],
           ],
@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [f, ["call"]],
           ],
@@ -204,7 +204,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure2._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [Foo, ["print"]],
           ],

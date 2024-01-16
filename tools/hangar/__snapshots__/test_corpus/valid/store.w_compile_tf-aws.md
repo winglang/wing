@@ -129,7 +129,7 @@ class Store extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [__parent_this_1.b, ["put"]],
           ],
@@ -161,7 +161,7 @@ class Store extends $stdlib.std.Resource {
     return [...super._supportedOps(), "store", "$inflight_init"];
   }
   onLift(host, ops) {
-    Store._onLiftMatrix(host, ops, {
+    $stdlib.core.onLiftMatrix(host, ops, {
       "$inflight_init": [
         [this.b, []],
       ],
