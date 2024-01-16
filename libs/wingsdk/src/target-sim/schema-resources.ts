@@ -25,6 +25,7 @@ import {
   REDIS_FQN,
   TABLE_FQN,
 } from "../ex";
+import { GlobalSecondaryIndex as DynamodbTableGlobalSecondaryIndex } from "../ex/dynamodb-table";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -314,6 +315,10 @@ export interface DynamodbTableSchema extends BaseResourceSchema {
      * Range key for this table.
      */
     readonly rangeKey?: string;
+    /**
+     * The GSI for the table.
+     */
+    readonly globalSecondaryIndex?: DynamodbTableGlobalSecondaryIndex[];
   };
 }
 

@@ -2,11 +2,11 @@
 
 ## stdout.log
 ```log
-runtime error: Resource root/env0/testBucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl/Handler).
+runtime error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl GET (implicit)/Handler).
 It might not be implemented yet.
-  --> signed_url.test.w:7:18
+  --> signed_url.test.w:8:33
   | 
-  | let testBucket = new cloud.Bucket(public: true) as "testBucket";
+  | let bucket = new cloud.Bucket();
   | 
 7 | test "signedUrl" {
   |                  ^

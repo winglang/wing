@@ -24,6 +24,52 @@ test("default dynamodb table behavior", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
+test("table with global secondary index", () => {
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  new ex.DynamodbTable(app, "Table1", {
+    name: "blog1",
+    attributeDefinitions: {
+      type: "S",
+      id: "S",
+      createdAt: "N",
+    } as any,
+    hashKey: "type",
+    rangeKey: "id",
+    globalSecondaryIndex: [
+      {
+        name: "CreatedAtIndex",
+        hashKey: "type",
+        rangeKey: "createdAt",
+        projectionType: "ALL",
+      },
+    ],
+  });
+
+  new ex.DynamodbTable(app, "Table2", {
+    name: "blog2",
+    attributeDefinitions: {
+      type: "S",
+      id: "S",
+      createdAt: "N",
+    } as any,
+    hashKey: "type",
+    rangeKey: "createAt",
+    globalSecondaryIndex: [
+      {
+        name: "idIndex",
+        hashKey: "id",
+        projectionType: "INCLUDE",
+        writeCapacity: 5,
+        readCapacity: 5,
+        nonKeyAttributes: ["title"],
+      },
+    ],
+  });
+  const output = app.synth();
+
+  expect(tfSanitize(output)).toMatchSnapshot();
+});
+
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const table = new ex.DynamodbTable(app, "Table", {
