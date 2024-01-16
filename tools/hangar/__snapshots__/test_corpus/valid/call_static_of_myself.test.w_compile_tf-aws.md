@@ -126,17 +126,21 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "foo", "bar", "callThis", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("callThis")) {
-          Foo._registerOnLiftObject(Foo, host, ["bar"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "callThis": [
+            [Foo, ["bar"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("bar")) {
-          Foo._registerOnLiftObject(Foo, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "bar": [
+            [Foo, ["foo"]],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -193,12 +197,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(Foo, host, ["foo"]);
-          $Closure1._registerOnLiftObject(foo, host, ["callThis"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [Foo, ["foo"]],
+            [foo, ["callThis"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

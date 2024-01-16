@@ -127,11 +127,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(A, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [A, ["foo"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));

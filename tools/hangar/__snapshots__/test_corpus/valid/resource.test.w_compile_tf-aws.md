@@ -731,17 +731,19 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerOnLiftObject(this.c, host, ["dec", "inc"]);
-        }
-        if (ops.includes("fooGet")) {
-          Foo._registerOnLiftObject(this.c, host, ["peek"]);
-        }
-        if (ops.includes("fooInc")) {
-          Foo._registerOnLiftObject(this.c, host, ["inc"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.c, ["dec", "inc"]],
+          ],
+          "fooGet": [
+            [this.c, ["peek"]],
+          ],
+          "fooInc": [
+            [this.c, ["inc"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -777,23 +779,25 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Bar._registerOnLiftObject(this.b, host, []);
-          Bar._registerOnLiftObject(this.e, host, []);
-          Bar._registerOnLiftObject(this.foo, host, []);
-        }
-        if (ops.includes("myMethod")) {
-          Bar._registerOnLiftObject(Foo, host, ["fooStatic"]);
-          Bar._registerOnLiftObject(this.b, host, ["get", "put"]);
-          Bar._registerOnLiftObject(this.foo, host, ["fooGet", "fooInc"]);
-        }
-        if (ops.includes("testTypeAccess")) {
-          Bar._registerOnLiftObject(Bar, host, ["barStatic"]);
-          Bar._registerOnLiftObject(Foo, host, ["fooStatic"]);
-          Bar._registerOnLiftObject(this.e, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.b, []],
+            [this.e, []],
+            [this.foo, []],
+          ],
+          "myMethod": [
+            [Foo, ["fooStatic"]],
+            [this.b, ["get", "put"]],
+            [this.foo, ["fooGet", "fooInc"]],
+          ],
+          "testTypeAccess": [
+            [Bar, ["barStatic"]],
+            [Foo, ["fooStatic"]],
+            [this.e, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -825,13 +829,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(bucket, host, ["list"]);
-          $Closure1._registerOnLiftObject(res, host, ["myMethod", "testTypeAccess"]);
-          $Closure1._registerOnLiftObject(res.foo, host, ["inflightField"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [bucket, ["list"]],
+            [res, ["myMethod", "testTypeAccess"]],
+            [res.foo, ["inflightField"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -869,11 +875,13 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure2._registerOnLiftObject(__parent_this_2.b, host, ["put"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [__parent_this_2.b, ["put"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         (this.t.onMessage(new $Closure2(this, "$Closure2")));
@@ -905,11 +913,13 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure3._registerOnLiftObject(__parent_this_3.b, host, ["put"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [__parent_this_3.b, ["put"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         (this.q.setConsumer(new $Closure3(this, "$Closure3")));
@@ -941,11 +951,13 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure4._registerOnLiftObject(__parent_this_4.q, host, ["push"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [__parent_this_4.q, ["push"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         (this.b2.onCreate(new $Closure4(this, "$Closure4")));
@@ -974,22 +986,24 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "publish", "getObjectCount", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BigPublisher._registerOnLiftObject(this.b, host, []);
-          BigPublisher._registerOnLiftObject(this.b2, host, []);
-          BigPublisher._registerOnLiftObject(this.q, host, []);
-          BigPublisher._registerOnLiftObject(this.t, host, []);
-        }
-        if (ops.includes("getObjectCount")) {
-          BigPublisher._registerOnLiftObject(this.b, host, ["list"]);
-        }
-        if (ops.includes("publish")) {
-          BigPublisher._registerOnLiftObject(this.b2, host, ["put"]);
-          BigPublisher._registerOnLiftObject(this.q, host, ["push"]);
-          BigPublisher._registerOnLiftObject(this.t, host, ["publish"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.b, []],
+            [this.b2, []],
+            [this.q, []],
+            [this.t, []],
+          ],
+          "getObjectCount": [
+            [this.b, ["list"]],
+          ],
+          "publish": [
+            [this.b2, ["put"]],
+            [this.q, ["push"]],
+            [this.t, ["publish"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -1019,11 +1033,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure5._registerOnLiftObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [bigOlPublisher, ["getObjectCount", "publish"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class Dummy extends $stdlib.std.Resource {

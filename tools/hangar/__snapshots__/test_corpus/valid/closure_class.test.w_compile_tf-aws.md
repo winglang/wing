@@ -128,11 +128,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(fn, host, ["another", "handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [fn, ["another", "handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const fn = new MyClosure(this, "MyClosure");

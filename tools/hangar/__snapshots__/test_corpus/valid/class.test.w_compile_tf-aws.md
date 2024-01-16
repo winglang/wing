@@ -525,11 +525,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(c5, host, ["set", "x", "y"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [c5, ["set", "x", "y"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class Person extends $stdlib.std.Resource {
@@ -641,13 +643,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(student.hrlyWage, host, []);
-          $Closure2._registerOnLiftObject(student.major, host, []);
-          $Closure2._registerOnLiftObject(student.name, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [student.hrlyWage, []],
+            [student.major, []],
+            [student.name, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class TeacherAid extends PaidStudent {
@@ -704,11 +708,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(ta.hrlyWage, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [ta.hrlyWage, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -735,11 +741,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "sound", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          A._registerOnLiftObject(this, host, ["sound"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class B extends A {

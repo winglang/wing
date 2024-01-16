@@ -98,14 +98,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "lhs", "rhs", "add", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        if (ops.includes("add")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+          ],
+          "add": [
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {

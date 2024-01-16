@@ -167,11 +167,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(getBar, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [getBar, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const getBar = new $Closure1(this, "$Closure1");

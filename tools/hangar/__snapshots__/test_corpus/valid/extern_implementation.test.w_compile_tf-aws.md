@@ -131,11 +131,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "regexInflight", "getUuid", "getData", "print", "call", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("call")) {
-          Foo._registerOnLiftObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "call": [
+            [Foo, ["getData", "getUuid", "regexInflight"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -165,11 +167,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(f, host, ["call"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [f, ["call"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -199,11 +203,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(Foo, host, ["print"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [Foo, ["print"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");

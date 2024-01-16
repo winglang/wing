@@ -115,14 +115,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyClosure._registerOnLiftObject(this.q, host, []);
-        }
-        if (ops.includes("handle")) {
-          MyClosure._registerOnLiftObject(this.q, host, ["push"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.q, []],
+          ],
+          "handle": [
+            [this.q, ["push"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -152,11 +154,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(fn, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [fn, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const fn = new MyClosure(this, "MyClosure");
