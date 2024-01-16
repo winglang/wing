@@ -179,7 +179,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      _hash = $stdlib.core.closureId();
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
       }
@@ -205,7 +205,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = $stdlib.core.closureId();
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;

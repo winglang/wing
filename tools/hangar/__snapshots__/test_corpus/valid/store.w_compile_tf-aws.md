@@ -102,7 +102,7 @@ class Store extends $stdlib.std.Resource {
     this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const __parent_this_1 = this;
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = $stdlib.core.closureId();
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
