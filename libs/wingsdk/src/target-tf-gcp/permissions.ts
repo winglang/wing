@@ -13,7 +13,8 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.METADATA) ||
     ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
     ops.includes(cloud.BucketInflightMethods.COPY) ||
-    ops.includes(cloud.BucketInflightMethods.RENAME)
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
   ) {
     permissions.push("storage.objects.get");
   }
@@ -22,7 +23,8 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
     ops.includes(cloud.BucketInflightMethods.COPY) ||
-    ops.includes(cloud.BucketInflightMethods.RENAME)
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
   ) {
     permissions.push("storage.objects.create");
   }
@@ -33,17 +35,25 @@ export function calculateBucketPermissions(ops: string[]): string[] {
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
     ops.includes(cloud.BucketInflightMethods.COPY) ||
-    ops.includes(cloud.BucketInflightMethods.RENAME)
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
   ) {
     permissions.push("storage.objects.delete");
   }
 
-  if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+  if (
+    ops.includes(cloud.BucketInflightMethods.LIST) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+  ) {
     permissions.push("storage.objects.list");
   }
 
   if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
     permissions.push("storage.buckets.get");
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
+    permissions.push("iam.serviceAccounts.signBlob");
   }
 
   return permissions;

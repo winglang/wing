@@ -354,12 +354,12 @@ export class BucketClient implements IBucketClient {
     key: string,
     opts?: BucketSignedUrlOptions
   ): Promise<string> {
-    let command;
+    let s3Command: GetObjectCommand | PutObjectCommand;
 
     // Set default action to DOWNLOAD if not provided
     const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
 
-    // Create the AWS S3 command based on the action method
+    // Set the S3 command
     switch (action) {
       case BucketSignedUrlAction.DOWNLOAD:
         if (!(await this.exists(key))) {
@@ -367,13 +367,13 @@ export class BucketClient implements IBucketClient {
             `Cannot provide signed url for a non-existent key (key=${key})`
           );
         }
-        command = new GetObjectCommand({
+        s3Command = new GetObjectCommand({
           Bucket: this.bucketName,
           Key: key,
         });
         break;
       case BucketSignedUrlAction.UPLOAD:
-        command = new PutObjectCommand({
+        s3Command = new PutObjectCommand({
           Bucket: this.bucketName,
           Key: key,
         });
@@ -383,7 +383,7 @@ export class BucketClient implements IBucketClient {
     }
 
     // Generate the presigned URL
-    const signedUrl = await getSignedUrl(this.s3Client, command, {
+    const signedUrl = await getSignedUrl(this.s3Client, s3Command, {
       expiresIn: opts?.duration?.seconds ?? 900,
     });
 
