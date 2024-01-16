@@ -1791,13 +1791,16 @@ impl<'a> JSifier<'a> {
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
 
 		if !lift_qualifications.is_empty() {
+			// onLiftMatrix is a helper method that takes in information about all
+			// of the preflight objects and their corresponding ops, and
+			// calls the appropriate onLift method once for each object.
 			bind_method.open(format!("{class_name}._onLiftMatrix(host, ops, {{"));
 
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
 					// skip any objects named "this" since lifting oneself is redundant
-					// TODO: is this a bug? not sure if these need to be lifted
+					// TODO: is the fact that lift_qualifications includes "this" a bug? not sure if these need to be lifted
 					if code == "this" {
 						continue;
 					}
