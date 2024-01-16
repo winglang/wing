@@ -2664,7 +2664,14 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"num?\\" instead
+"error: Expected function return type
+   --> ../../../examples/tests/invalid/optionals.test.w:98:36
+   |
+98 | let optionalFunctionWithNoRetType: ()? = () => {};
+   |                                    ^^ Expected function return type
+
+
+error: Expected type to be \\"num\\", but got \\"num?\\" instead
    --> ../../../examples/tests/invalid/optionals.test.w:11:3
    |
 11 | f(x);
