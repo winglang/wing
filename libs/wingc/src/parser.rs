@@ -1758,7 +1758,7 @@ impl<'s> Parser<'s> {
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self.build_type_annotation(type_node.named_child(0), phase).unwrap();
+				let inner_type = self.build_type_annotation(type_node.named_child(0), phase)?;
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
 					span,
