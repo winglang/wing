@@ -31,6 +31,12 @@ New users that will `wing it` will see a sign in dialog blocking the Wing Consol
 
 Once users will be signed in with their GitHub account they will be able to use Wing Console.
 
+### EULA (End User License Agreement) for new users
+
+The license agreement should be added to the bottom of the sign in screen:
+
+"By using the Wing Console you agree to these [terms and conditions](#)"
+
 ### Singed In Users
 
 Signed in users to Wing Console will not need to sign in again. They will be able to use Wing Console as usual.
