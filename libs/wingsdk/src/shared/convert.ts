@@ -15,7 +15,7 @@ export function convertBetweenHandlers(
 ): IInflight {
   const newHandler = {
     ...baseHandler,
-    _hash: baseHandler._hash,
+    _id: baseHandler._id,
     _toInflight() {
       const handlerClient = baseHandler._toInflight();
       const newCode = `\

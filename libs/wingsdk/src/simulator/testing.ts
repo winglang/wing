@@ -1,5 +1,4 @@
-import { createHash } from "crypto";
-import { InflightBindings, liftObject, onLiftObject } from "../core";
+import { InflightBindings, closureId, liftObject, onLiftObject } from "../core";
 import { IInflight, IInflightHost } from "../std";
 
 /**
@@ -23,7 +22,7 @@ export class Testing {
     bindings: InflightBindings = {}
   ): IInflight {
     return {
-      _hash: createHash("md5").update(code).digest("hex"),
+      _id: closureId(),
       _toInflight: () => {
         const clients: Record<string, string> = {};
 

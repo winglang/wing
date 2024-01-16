@@ -1458,7 +1458,7 @@ impl<'a> JSifier<'a> {
 
 			// TODO Hack to make sure closures match the IInflight contract from wingsdk
 			if class_type.is_closure() {
-				code.line(format!("_hash = {STDLIB_CORE}.closureId();"))
+				code.line(format!("_id = {STDLIB_CORE}.closureId();"))
 			}
 
 			// emit the preflight constructor
