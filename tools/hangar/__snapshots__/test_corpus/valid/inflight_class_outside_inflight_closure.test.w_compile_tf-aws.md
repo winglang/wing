@@ -99,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "lhs", "rhs", "add", "$inflight_init"];
       }
       onLift(host, ops) {
-        BinaryOperation._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
           ],
           "add": [

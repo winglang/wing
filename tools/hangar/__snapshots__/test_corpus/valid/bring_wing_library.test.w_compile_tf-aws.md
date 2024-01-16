@@ -151,7 +151,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
@@ -212,7 +212,7 @@ class Store extends $stdlib.std.Resource {
     return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
   }
   onLift(host, ops) {
-    Store._onLiftMatrix(host, ops, {
+    $stdlib.core.onLiftMatrix(host, ops, {
       "$inflight_init": [
         [this.data, []],
       ],

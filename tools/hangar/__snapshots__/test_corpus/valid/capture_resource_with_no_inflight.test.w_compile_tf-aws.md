@@ -122,7 +122,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "incCounter", "bar", "$inflight_init"];
       }
       onLift(host, ops) {
-        A._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.counter, []],
           ],
@@ -162,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [a, ["bar"]],
             [a.field, []],

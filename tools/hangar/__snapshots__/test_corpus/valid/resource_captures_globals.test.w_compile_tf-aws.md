@@ -416,7 +416,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "myMethod", "myStaticMethod", "$inflight_init"];
       }
       onLift(host, ops) {
-        Another._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [globalCounter, ["peek"]],
           ],
@@ -427,7 +427,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
       static onLiftType(host, ops) {
-        Another._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "myStaticMethod": [
             [globalCounter, ["peek"]],
           ],
@@ -469,7 +469,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            R._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [$parentThis.localCounter, ["inc"]],
                 [globalCounter, ["inc"]],
@@ -513,7 +513,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "myPut", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyResource._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.localTopic, []],
           ],
@@ -563,7 +563,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [res, ["myPut"]],
           ],
@@ -599,7 +599,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure2._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [Another, ["myStaticMethod"]],
           ],

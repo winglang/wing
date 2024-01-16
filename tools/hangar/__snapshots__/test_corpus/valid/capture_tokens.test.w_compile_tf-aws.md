@@ -250,7 +250,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "isValidUrl", "foo", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyResource._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.api.url, []],
             [this.url, []],
@@ -292,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [r, ["foo"]],
           ],
@@ -330,7 +330,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure2._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [MyResource, ["isValidUrl"]],
             [api.url, []],

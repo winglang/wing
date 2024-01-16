@@ -375,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "callInner", "$inflight_init"];
       }
       onLift(host, ops) {
-        D._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.inner, []],
           ],
@@ -418,7 +418,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure3._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [a, ["goo"]],
             [d, ["callInner"]],

@@ -218,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "get", "set", "$inflight_init"];
       }
       onLift(host, ops) {
-        KeyValueStore._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.bucket, []],
             [this.onUpdateCallback, []],
@@ -262,7 +262,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure2._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [counter, ["inc"]],
           ],
@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure3._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [counter, ["peek"]],
             [kv, ["get", "set"]],

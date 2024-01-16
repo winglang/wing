@@ -298,7 +298,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure1._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [globalBucket, ["put"]],
           ],
@@ -334,7 +334,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure2._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [storeInBucket, ["handle"]],
           ],
@@ -371,7 +371,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure3._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [func1, ["invoke"]],
             [globalBucket, ["get"]],
@@ -412,7 +412,7 @@ class $Root extends $stdlib.std.Resource {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
           onLift(host, ops) {
-            $Closure4._onLiftMatrix(host, ops, {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [globalBucket, ["list"]],
               ],
@@ -444,7 +444,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
       onLift(host, ops) {
-        MyResource._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.closure, []],
           ],
@@ -483,7 +483,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
       onLift(host, ops) {
-        $Closure5._onLiftMatrix(host, ops, {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [x, ["foo"]],
           ],
