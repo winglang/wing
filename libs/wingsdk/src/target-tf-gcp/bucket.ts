@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function as GCPFunction } from "./function";
 import { calculateBucketPermissions } from "./permissions";
+import { ProjectService } from "../.gen/providers/google/project-service";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
 import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
@@ -61,6 +62,18 @@ export class Bucket extends cloud.Bucket {
 
     const isTestEnvironment = App.of(scope).isTestEnvironment;
 
+    // Enable `IAM Service Account Credentials API` for the project
+    // This is disabled by default, but required for generating presigned URLs
+    const iamServiceAccountCredentialsApi = new ProjectService(
+      this,
+      "IamServiceAccountCredentialsApi",
+      {
+        service: "iamcredentials.googleapis.com",
+        disableDependentServices: false,
+        disableOnDestroy: false,
+      }
+    );
+
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
       location: (App.of(this) as App).region,
@@ -68,6 +81,7 @@ export class Bucket extends cloud.Bucket {
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
       forceDestroy: !!isTestEnvironment,
+      dependsOn: [iamServiceAccountCredentialsApi],
     });
 
     if (props.public) {
