@@ -3,7 +3,8 @@ import {
   Stream as KinesisStream,
   StreamMode as KinesisStreamMode,
 } from "aws-cdk-lib/aws-kinesis";
-
+import { App } from "./app";
+import { Function } from "./function";
 import { Construct } from "constructs";
 import * as cloud from "@winglang/sdk/src/cloud";
 import * as core from "@winglang/sdk/src/core";
@@ -37,16 +38,24 @@ export class Stream extends cloud.Stream {
       cloud.StreamInflightMethods.GET,
     ];
   }
-  public setConsumer(inflight: cloud.IStreamSetConsumerHandlerClient, props?: any = {}): cloud.Function {
-
+  public setConsumer(inflight: cloud.IStreamSetConsumerHandler, props: any = {}): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
-        __dirname.replace("target-awscdk", "shared-aws"),
+        __dirname,
         "stream.setconsumer.inflight.js"
       ),
       "StreamSetConsumerHandler"
     );
+
+    const fn = new Function(
+      this.node.scope!,
+      App.of(this).makeId(this, `${this.node.id}-SetConsumer`),
+      functionHandler,
+      {
+        ...props,
+      }
+    )
 
     throw new Error("Method not implemented.");
   }

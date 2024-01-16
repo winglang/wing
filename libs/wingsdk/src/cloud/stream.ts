@@ -76,7 +76,7 @@ export abstract class Stream extends Resource {
    * Create a function to consume messages from this stream
    */
   public abstract setConsumer(
-    handler: IStreamSetConsumerHandlerClient,
+    handler: IStreamSetConsumerHandler,
     props?: StreamSetConsumerOptions
   ): Function;
 }
