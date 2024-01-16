@@ -41,9 +41,3 @@ export function range(start: number, end: number, inclusive: boolean) {
 export function nodeof(construct: Construct): Node {
   return Node.of(construct);
 }
-
-let closureCount = 0;
-
-export function closureId(): number {
-  return closureCount++;
-}

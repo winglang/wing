@@ -164,7 +164,7 @@ class $Root extends $stdlib.std.Resource {
         this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
-          _hash = $helpers.closureId();
+          _hash = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
             $helpers.nodeof(this).hidden = true;
@@ -235,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      _hash = $helpers.closureId();
+      _hash = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -271,7 +271,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      _hash = $helpers.closureId();
+      _hash = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
