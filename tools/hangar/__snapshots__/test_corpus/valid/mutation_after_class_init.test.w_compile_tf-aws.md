@@ -1,4 +1,4 @@
-# [mutation_after_lift.test.w](../../../../../examples/tests/valid/mutation_after_lift.test.w) | compile | tf-aws
+# [mutation_after_class_init.test.w](../../../../../examples/tests/valid/mutation_after_class_init.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
@@ -534,7 +534,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "mutation_after_lift.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "mutation_after_class_init.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```
