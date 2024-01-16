@@ -14,7 +14,6 @@ import { ElkMap } from "../ui/elk-map.js";
 export interface MapViewProps {
   selectedNodeId?: string;
   showTests?: boolean;
-  showMapControls?: boolean;
   onSelectedNodeIdChange?: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string | undefined) => void;
@@ -56,7 +55,6 @@ const Node = memo(
 
 export const MapView = memo(
   ({
-    showMapControls = true,
     showTests,
     selectedNodeId,
     onSelectedNodeIdChange,
