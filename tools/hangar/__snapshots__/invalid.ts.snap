@@ -3659,21 +3659,7 @@ Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.test.w 1`] = `
-"error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:5
-   |
-15 | let b += a;
-   |     ^ Unexpected 'identifier'
-
-
-error: Unexpected 'identifier'
-   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:10
-   |
-15 | let b += a;
-   |          ^ Unexpected 'identifier'
-
-
-error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:1:10
   |
 1 | let e1 = 2 + \\"2\\";
@@ -3692,6 +3678,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 10 | let e3 = \\"{strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:6
+   |
+15 | a += b;
+   |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
