@@ -442,15 +442,17 @@ module.exports = grammar({
         )
       ),
 
-    _type: ($) =>
-      choice(
-        $.custom_type,
-        $.builtin_type,
-        $._builtin_container_type,
-        $.json_container_type,
-        $.function_type,
-        $.optional
-      ),
+    _type: ($) => choice(
+      $.custom_type,
+      $.builtin_type,
+      $._builtin_container_type,
+      $.json_container_type,
+      $.function_type,
+      $.optional,
+      $._parenthesized_type,
+    ),
+
+    _parenthesized_type: ($) => seq("(", $._type, ")"),
 
     optional: ($) => seq($._type, "?"),
 
@@ -459,7 +461,7 @@ module.exports = grammar({
         seq(
           optional(field("inflight", $.inflight_specifier)),
           field("parameter_types", $.parameter_type_list),
-          optional(seq(":", field("return_type", $._type)))
+          seq(":", field("return_type", $._type))
         )
       ),
 
