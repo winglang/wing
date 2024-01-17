@@ -455,6 +455,34 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     }
+    let fn = (() => {
+      return (() => {
+        return 1337;
+      });
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert($helpers.eq((f()), 1337), "f() == 1337");
+      }
+      else {
+        $helpers.assert(false, "false");
+      }
+    }
+    fn = (() => {
+      return undefined;
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert(false, "false");
+      }
+      else {
+        $helpers.assert(true, "true");
+      }
+    }
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -2552,23 +2552,11 @@ impl<'s> Parser<'s> {
 	}
 }
 
-/// Get actual child by field name when multiple childs exist because of extra nodes.
+/// Get actual child by field name when multiple children exist because of extra nodes.
 /// It should be safe to use this instead of `node.get_child_by_field_name`
 /// in cases where there's doubt.
 fn get_actual_child_by_field_name<'a>(node: Node<'a>, field_name: &str) -> Option<Node<'a>> {
-	let mut cursor = node.walk();
-
-	for child_node in node.children_by_field_name(field_name, &mut cursor) {
-		if child_node.is_extra() {
-			continue;
-		}
-		if !child_node.is_named() {
-			continue;
-		}
-
-		return Some(child_node);
-	}
-	None
+	get_actual_children_by_field_name(node, field_name).into_iter().next()
 }
 
 /// Get actual children by field name when the children might contain extra nodes.
@@ -2585,9 +2573,7 @@ fn get_actual_children_by_field_name<'a>(node: Node<'a>, field_name: &str) -> Ve
 		if !child_node.is_named() {
 			continue;
 		}
-		if let Some(child_node) = get_actual_child_by_field_name(child_node, field_name) {
-			children.push(child_node);
-		}
+		children.push(child_node);
 	}
 	children
 }
