@@ -276,7 +276,6 @@ pub fn compile(
 	// Wing files, then move on to files that depend on those, and repeat)
 	for file in &topo_sorted_files {
 		let mut scope = asts.remove(file).expect("matching AST not found");
-
 		type_check(
 			&mut scope,
 			&mut types,

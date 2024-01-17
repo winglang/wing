@@ -10,7 +10,7 @@ let numExample = 2;
 let e3 = "{strExample}!" * numExample;
 // ERR   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot multiply a string with a number
 
-let a = 2;
+let var a = 2;
 let b = "2";
-let b += a;
+a += b;
 // ERR   ^^^^^ Cannot add a number to a string
