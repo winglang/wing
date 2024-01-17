@@ -68,8 +68,6 @@ export class Function extends Resource implements IInflightHost {
 
     super(scope, id);
 
-    this.handler = handler;
-
     Node.of(this).title = "Function";
     Node.of(this).description = "A cloud function (FaaS)";
 
