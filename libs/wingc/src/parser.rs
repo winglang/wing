@@ -1802,7 +1802,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 			"mutable_container_type" | "immutable_container_type" => {
-				let container_type = self.node_text(&get_actual_child_by_field_name(*type_node, "collection_type").unwrap());
+				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = get_actual_child_by_field_name(*type_node, "type_parameter");
 				match container_type {
 					"Map" => Ok(TypeAnnotation {
