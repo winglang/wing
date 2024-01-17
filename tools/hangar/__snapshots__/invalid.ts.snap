@@ -3659,7 +3659,21 @@ Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.test.w 1`] = `
-"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+"error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:5
+   |
+15 | let b += a;
+   |     ^ Unexpected 'identifier'
+
+
+error: Unexpected 'identifier'
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:10
+   |
+15 | let b += a;
+   |          ^ Unexpected 'identifier'
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:1:10
   |
 1 | let e1 = 2 + \\"2\\";
