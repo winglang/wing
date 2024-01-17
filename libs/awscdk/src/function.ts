@@ -69,6 +69,9 @@ export class Function extends cloud.Function implements IAwsFunction {
     // hack: accessing private field from aws_lambda.AssetCode
     // https://github.com/aws/aws-cdk/blob/109b2abe4c713624e731afa1b82c3c1a3ba064c9/packages/aws-cdk-lib/aws-lambda/lib/code.ts#L266
     const asset: Asset = (code as any).asset;
+    if (!asset.assetPath) {
+      throw new Error("AWS CDK 'Asset' class no longer has an 'assetPath' property");
+    }
     this.assetPath = asset.assetPath
   }
 
