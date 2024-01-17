@@ -111,6 +111,9 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq("Some String".toLocaleUpperCase(), "SOME STRING"), "\"Some String\".uppercase() == \"SOME STRING\"");
     $helpers.assert($helpers.eq(("hello" + " world"), "hello world"), "\"hello\" + \" world\" == \"hello world\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["hello ", "\n world"] }, "funky"), "hello funky\n world"), "\n\"hello {\"funky\"}\n world\" == \"hello funky\\n world\"");
+    let initial = "hey, ";
+    initial += "you";
+    $helpers.assert($helpers.eq(initial, "hey, you"), "initial == \"hey, you\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:string", new $Closure1(this, "$Closure1"));
   }
 }
