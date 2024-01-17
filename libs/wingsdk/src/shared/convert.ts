@@ -1,4 +1,5 @@
 import { normalPath } from "./misc";
+import { closureId } from "../core";
 import { IInflight } from "../std";
 
 /**
@@ -15,7 +16,7 @@ export function convertBetweenHandlers(
 ): IInflight {
   const newHandler = {
     ...baseHandler,
-    _id: baseHandler._id,
+    _id: closureId(),
     _toInflight() {
       const handlerClient = baseHandler._toInflight();
       const newCode = `\
