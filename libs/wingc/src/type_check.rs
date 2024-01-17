@@ -4248,27 +4248,22 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
 
-		// since we now support strings we need to validate for both string and number
-		if matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
-			match var.type_ {
-				_ if var.type_.is_subtype_of(&self.types.string()) => {
-					self.validate_type(exp_type, self.types.string(), value);
-					self.validate_type(var.type_, self.types.string(), variable);
-				}
-				_ if var.type_.is_subtype_of(&self.types.number()) => {
-					self.validate_type(exp_type, self.types.number(), value);
-					self.validate_type(var.type_, self.types.number(), variable);
-				}
-				_ => {
-					self.spanned_error(
-						variable,
-						format!("Cannot use \"{:?}\" assignment on \"{}\"", kind, var.type_),
-					);
-				}
+		// validate in case of increment/decrement reference assignament (e.g. `a+=1`)
+		match var.type_ {
+			_ if var.type_.is_subtype_of(&self.types.string()) && matches!(kind, AssignmentKind::AssignIncr) => {
+				self.validate_type(exp_type, self.types.string(), value);
+				self.validate_type(var.type_, self.types.string(), variable);
+			}
+			_ if var.type_.is_subtype_of(&self.types.number())
+				&& matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) =>
+			{
+				self.validate_type(exp_type, self.types.number(), value);
+				self.validate_type(var.type_, self.types.number(), variable);
+			}
+			_ => {
+				self.validate_type(exp_type, var.type_, value);
 			}
 		}
-
-		self.validate_type(exp_type, var.type_, value);
 	}
 
 	fn type_check_if(
