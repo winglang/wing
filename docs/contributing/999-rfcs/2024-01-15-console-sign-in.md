@@ -70,7 +70,21 @@ In order to make sure a signed in user won't need to sign in again, we will save
 
 Upon opening Wing Console, the user will be redirected to the Wing Cloud sign in page (in OAuth fashion). The redirection URL will include the anonymous analytics ID that is stored in the Wing Console App package.
 
-After signing in to Wing Cloud, the user will be redirected back to the Wing Console. The redirection will not include any information at all, so the user's data will be safe. The Wing Cloud server will link the anonymous analytics ID with the user's ID and email.
+After signing in to Wing Cloud, the user will be redirected back to the Wing Console. The redirection will not include any information at all, so the user's data will be safe. The Wing Cloud server will link the anonymous analytics ID with the user's ID and email, using the following code snippet:
+
+```js
+import { Analytics } from "@segment/analytics-node";
+analytics.identify({
+  // The Wing Console App anonymous ID.
+  anonymousId: "48d213bb-95c3-4f8d-af97-86b2b404dcfe",
+  // The Wing Cloud user data.
+  userId: "user_123",
+  traits: {
+    github: "johndoe",
+    email: "johndoe@gmail.com",
+  },
+});
+```
 
 ## Possible Next Steps
 
