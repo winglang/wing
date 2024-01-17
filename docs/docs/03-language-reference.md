@@ -1526,7 +1526,7 @@ class Foo {
 ```
 
 Preflight objects all have a scope and a unique ID. Compiler provides an implicit scope
-and ID ach object.
+and ID for each object.
 
 The default for scope is `this`, which means the scope in which the object was
 defined (instantiated). The implicit ID is the type name of the class iff the type
