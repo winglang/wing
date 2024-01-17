@@ -37,6 +37,7 @@ The license agreement should be added to the bottom of the sign in screen:
 
 "By using the Wing Console you agree to these [terms and conditions](#)"
 
+The current EULA should be updated since we would like to contact our users via email
 ### Signed In Users
 
 Signed in users to Wing Console will not need to sign in again. They will be able to use Wing Console as usual.
