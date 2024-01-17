@@ -1924,6 +1924,7 @@ impl<'s> Parser<'s> {
 	fn build_reference(&self, reference_node: &Node, phase: Phase) -> DiagnosticResult<Expr> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		let actual_node_span = self.node_span(&actual_node);
+
 		match actual_node.kind() {
 			"reference_identifier" => Ok(Expr::new(
 				ExprKind::Reference(Reference::Identifier(self.node_symbol(&actual_node)?)),
@@ -1983,6 +1984,7 @@ impl<'s> Parser<'s> {
 		let expression_span = self.node_span(exp_node);
 		CompilationContext::set(CompilationPhase::Parsing, &expression_span);
 		let expression_node = &self.check_error(*exp_node, "expression")?;
+
 		match expression_node.kind() {
 			"new_expression" => {
 				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
