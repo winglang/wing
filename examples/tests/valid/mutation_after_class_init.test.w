@@ -32,7 +32,9 @@ q.setConsumer(inflight (m: str) => {
 
 test "hi" {
   q.push("message1");
-  util.sleep(5s);
+  util.waitUntil(inflight () => {
+    return c.peek() > 0;
+  });
   assert(c.peek() > 0);
 }
 
