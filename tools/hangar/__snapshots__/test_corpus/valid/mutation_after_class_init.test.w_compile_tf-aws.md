@@ -65,7 +65,7 @@ module.exports = function({ $c }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $c, $q, $std_Duration, $util_Util }) {
+module.exports = function({ $c, $q, $util_Util }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -74,7 +74,9 @@ module.exports = function({ $c, $q, $std_Duration, $util_Util }) {
     }
     async handle() {
       (await $q.push("message1"));
-      (await $util_Util.sleep((await $std_Duration.fromSeconds(5))));
+      (await $util_Util.waitUntil(async () => {
+        return ((await $c.peek()) > 0);
+      }));
       $helpers.assert(((await $c.peek()) > 0), "c.peek() > 0");
     }
   }
@@ -498,7 +500,6 @@ class $Root extends $stdlib.std.Resource {
           require("./inflight.$Closure4-1.js")({
             $c: ${$stdlib.core.liftObject(c)},
             $q: ${$stdlib.core.liftObject(q)},
-            $std_Duration: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Duration, "@winglang/sdk/std", "Duration"))},
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
