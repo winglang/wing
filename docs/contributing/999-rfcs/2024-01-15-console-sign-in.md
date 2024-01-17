@@ -37,7 +37,7 @@ The license agreement should be added to the bottom of the sign in screen:
 
 "By using the Wing Console you agree to these [terms and conditions](#)"
 
-### Singed In Users
+### Signed In Users
 
 Signed in users to Wing Console will not need to sign in again. They will be able to use Wing Console as usual.
 
@@ -62,14 +62,22 @@ However, when a user signs in to Wing Console, the unique identifier associated 
 ## Technical details
 
 Since we would like to have a single user entity in Wing, the process of signing in to Wing Console will use the same authentication mechanism as Wing Cloud.
-In fact, the user will actually be singing in to Wing Cloud and be redirected back to Wing Console without noticing.
+In fact, the user will actually be signing in to Wing Cloud and be redirected back to Wing Console without noticing.
 
-In order to make sure a sign in user won't need to sign in again, we will save a `signedIn` boolean somewhere in the user's machine. We don't need to store more information than that because the analytics engine will save the user ID and the user's email.
+In order to make sure a signed in user won't need to sign in again, we will save a `signedIn` boolean somewhere in the user's machine. We don't need to store more information than that because the analytics engine will save the user ID and the user's email.
+
+### In depth technical details: sign in flow
+
+Upon opening Wing Console, the user will be redirected to the Wing Cloud sign in page (in OAuth fashion). The redirection URL will include the anonymous analytics ID that is stored in the Wing Console App package.
+
+After signing in to Wing Cloud, the user will be redirected back to the Wing Console. The redirection will not include any information at all, so the user's data will be safe. The Wing Cloud server will link the anonymous analytics ID with the user's ID and email.
 
 ## Possible Next Steps
 
 Add value for the user in exchange for signin up. Things which could be considered:
-- Deploy to wing.cloud directly from the console. This could upload the working directory to a Bucket from which wing.cloud could deploy. The deployment status and the url would be shown in the local console.
-- Offer a solution similar to ngrok, to make the locally running instance available for remote services (e.g. webhooks) or users (e.g. demo purposes)
 
-Support additional sign in providers (like google, etc.)
+- Deploy to wing.cloud directly from the console. This could upload the working directory to a Bucket from which wing.cloud could deploy. The deployment status and the url would be shown in the local console
+- Offer a solution similar to ngrok, to make the locally running instance available for remote services (e.g. webhooks) or users (e.g. demo purposes)
+- Host the Console in Wing Cloud. While doing so, we could provide the ngrok-like functionality out of the box
+
+Support additional sign in providers (like google, etc.).
