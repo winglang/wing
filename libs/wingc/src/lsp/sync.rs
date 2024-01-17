@@ -14,7 +14,7 @@ use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftVisitor;
-use crate::parser::{normalize_path, parse_wing_project};
+use crate::parser::{normalize_path, parse_wing_project, topo_sort_files};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check::type_reference_transform::TypeReferenceTransformer;
@@ -130,7 +130,7 @@ fn partial_compile(
 	let source_path = Utf8Path::from_path(source_path).expect("invalid unicode path");
 	let source_path = normalize_path(source_path, None);
 
-	let topo_sorted_files = parse_wing_project(
+	parse_wing_project(
 		&source_path,
 		Some(source_text),
 		&mut project_data.files,
@@ -138,6 +138,10 @@ fn partial_compile(
 		&mut project_data.trees,
 		&mut project_data.asts,
 	);
+
+	// get a topological sort of the files so files are type checked in the right order
+	// this will raise a diagnostic and return an arbitrary order if there are cycles
+	let topo_sorted_files = topo_sort_files(&source_path, &project_data.files, &project_data.file_graph);
 
 	// -- DESUGARING PHASE --
 
@@ -167,6 +171,7 @@ fn partial_compile(
 			&project_data.file_graph,
 			jsii_types,
 			&mut jsii_imports,
+			&Utf8Path::new("../../libs/wingcompiler/sdk"), // FIXME
 		);
 
 		// Make sure all type reference are no longer considered references

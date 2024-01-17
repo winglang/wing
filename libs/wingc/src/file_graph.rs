@@ -19,7 +19,7 @@ impl FileGraph {
 	/// For example, if the current graph has file A depending on B, and
 	/// `update_file(pathA, &[pathC])` was called, then this function will remove the edge
 	/// from A to B, and add an edge from A to C.
-	pub fn update_file<'a, I: IntoIterator<Item = &'a Utf8PathBuf>>(&mut self, from_path: &Utf8Path, to_paths: I) {
+	pub fn set_file_deps<'a, I: IntoIterator<Item = &'a Utf8PathBuf>>(&mut self, from_path: &Utf8Path, to_paths: I) {
 		let from_node_index = self.get_or_insert_node_index(from_path);
 
 		// remove all current outcoming edges from this node
@@ -37,6 +37,13 @@ impl FileGraph {
 			let to_node_index = self.get_or_insert_node_index(to_path);
 			self.graph.add_edge(from_node_index, to_node_index, ());
 		}
+	}
+
+	/// Adds a file dependency to the graph.
+	pub fn add_file_dep(&mut self, from_path: &Utf8Path, to_path: &Utf8Path) {
+		let from_node_index = self.get_or_insert_node_index(from_path);
+		let to_node_index = self.get_or_insert_node_index(to_path);
+		self.graph.add_edge(from_node_index, to_node_index, ());
 	}
 
 	/// Returns true if the given file is in the graph
@@ -117,8 +124,8 @@ mod tests {
 	fn toposort_simple() {
 		// graph with two nodes, A and B, where A depends on B
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into()]);
-		graph.update_file("b".into(), &[]);
+		graph.set_file_deps("a".into(), &["b".into()]);
+		graph.set_file_deps("b".into(), &[]);
 		assert_eq!(graph.toposort().unwrap(), make_paths(&["b", "a"]));
 	}
 
@@ -126,20 +133,20 @@ mod tests {
 	fn toposort_complex() {
 		// graph with 5 nodes, A, B, C, D, and E, where A depends on B and C, B depends on C and D, C depends on D, and D depends on E
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into(), "c".into()]);
-		graph.update_file("b".into(), &["c".into(), "d".into()]);
-		graph.update_file("c".into(), &["d".into()]);
-		graph.update_file("d".into(), &["e".into()]);
-		graph.update_file("e".into(), &[]);
+		graph.set_file_deps("a".into(), &["b".into(), "c".into()]);
+		graph.set_file_deps("b".into(), &["c".into(), "d".into()]);
+		graph.set_file_deps("c".into(), &["d".into()]);
+		graph.set_file_deps("d".into(), &["e".into()]);
+		graph.set_file_deps("e".into(), &[]);
 		assert_eq!(graph.toposort().unwrap(), make_paths(&["e", "d", "c", "b", "a"]));
 
 		// create the same graph in a different order as a sanity check
 		let mut graph = FileGraph::default();
-		graph.update_file("e".into(), &[]);
-		graph.update_file("d".into(), &["e".into()]);
-		graph.update_file("c".into(), &["d".into()]);
-		graph.update_file("b".into(), &["c".into(), "d".into()]);
-		graph.update_file("a".into(), &["b".into(), "c".into()]);
+		graph.set_file_deps("e".into(), &[]);
+		graph.set_file_deps("d".into(), &["e".into()]);
+		graph.set_file_deps("c".into(), &["d".into()]);
+		graph.set_file_deps("b".into(), &["c".into(), "d".into()]);
+		graph.set_file_deps("a".into(), &["b".into(), "c".into()]);
 		assert_eq!(graph.toposort().unwrap(), make_paths(&["e", "d", "c", "b", "a"]));
 	}
 
@@ -147,9 +154,9 @@ mod tests {
 	fn toposort_cycle() {
 		// graph with 3 nodes, A, B, and C, where A depends on B, B depends on C, and C depends on A
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into()]);
-		graph.update_file("b".into(), &["c".into()]);
-		graph.update_file("c".into(), &["a".into()]);
+		graph.set_file_deps("a".into(), &["b".into()]);
+		graph.set_file_deps("b".into(), &["c".into()]);
+		graph.set_file_deps("c".into(), &["a".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
@@ -160,11 +167,11 @@ mod tests {
 	fn toposort_two_cycles_with_shared_node() {
 		// graph where A is part of two cycles, {A,B,C} and {A,X,Y}
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into(), "x".into()]);
-		graph.update_file("b".into(), &["c".into()]);
-		graph.update_file("c".into(), &["a".into()]);
-		graph.update_file("x".into(), &["y".into()]);
-		graph.update_file("y".into(), &["a".into()]);
+		graph.set_file_deps("a".into(), &["b".into(), "x".into()]);
+		graph.set_file_deps("b".into(), &["c".into()]);
+		graph.set_file_deps("c".into(), &["a".into()]);
+		graph.set_file_deps("x".into(), &["y".into()]);
+		graph.set_file_deps("y".into(), &["a".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
@@ -175,12 +182,12 @@ mod tests {
 	fn toposort_two_distinct_cycles() {
 		// graph with six nodes, where {A,B,C} form a cycle and {D,E,F} form a cycle
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into()]);
-		graph.update_file("b".into(), &["c".into()]);
-		graph.update_file("c".into(), &["a".into()]);
-		graph.update_file("d".into(), &["e".into()]);
-		graph.update_file("e".into(), &["f".into()]);
-		graph.update_file("f".into(), &["d".into()]);
+		graph.set_file_deps("a".into(), &["b".into()]);
+		graph.set_file_deps("b".into(), &["c".into()]);
+		graph.set_file_deps("c".into(), &["a".into()]);
+		graph.set_file_deps("d".into(), &["e".into()]);
+		graph.set_file_deps("e".into(), &["f".into()]);
+		graph.set_file_deps("f".into(), &["d".into()]);
 
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
@@ -193,11 +200,11 @@ mod tests {
 	fn toposort_cycle_and_unrelated_component() {
 		// graph with 5 nodes, where A depends on B, and {C,D,E} form a cycle
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into()]);
-		graph.update_file("b".into(), &[]);
-		graph.update_file("c".into(), &["d".into()]);
-		graph.update_file("d".into(), &["e".into()]);
-		graph.update_file("e".into(), &["c".into()]);
+		graph.set_file_deps("a".into(), &["b".into()]);
+		graph.set_file_deps("b".into(), &[]);
+		graph.set_file_deps("c".into(), &["d".into()]);
+		graph.set_file_deps("d".into(), &["e".into()]);
+		graph.set_file_deps("e".into(), &["c".into()]);
 
 		// we don't care about where the cycle starts, so we sort the list
 		let mut err = graph.toposort().unwrap_err();
@@ -209,14 +216,14 @@ mod tests {
 	fn toposort_update_edges() {
 		// graph with 3 nodes, A, B, and C, where A depends on B and C, and B depends on C
 		let mut graph = FileGraph::default();
-		graph.update_file("a".into(), &["b".into(), "c".into()]);
-		graph.update_file("b".into(), &["c".into()]);
-		graph.update_file("c".into(), &[]);
+		graph.set_file_deps("a".into(), &["b".into(), "c".into()]);
+		graph.set_file_deps("b".into(), &["c".into()]);
+		graph.set_file_deps("c".into(), &[]);
 		assert_eq!(graph.toposort().unwrap(), ["c", "b", "a"]);
 
 		// update the edges so that A depends on C and B depends on A
-		graph.update_file("a".into(), &["c".into()]);
-		graph.update_file("b".into(), &["a".into()]);
+		graph.set_file_deps("a".into(), &["c".into()]);
+		graph.set_file_deps("b".into(), &["a".into()]);
 		assert_eq!(graph.toposort().unwrap(), make_paths(&["c", "a", "b"]));
 	}
 

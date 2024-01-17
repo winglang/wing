@@ -90,6 +90,11 @@ impl Files {
 		}
 		Ok(())
 	}
+
+	/// Get an iterator over all files.
+	pub fn keys(&self) -> impl Iterator<Item = &Utf8PathBuf> {
+		self.data.keys()
+	}
 }
 
 #[cfg(test)]
