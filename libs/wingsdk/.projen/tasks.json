@@ -554,7 +554,7 @@
       "description": "Prepare the project for compilation",
       "steps": [
         {
-          "exec": "cdktf get"
+          "exec": "cdktf get --force"
         }
       ]
     },
