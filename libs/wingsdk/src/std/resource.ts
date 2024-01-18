@@ -29,10 +29,32 @@ export interface IInflightHost extends IResource {
  */
 export interface IInflight extends IHostedLiftable {
   /**
-   * Tracks the content hash
+   * An opaque identifier for this inflight code. This can be used for determining
+   * whether two inflight closures are same by identity, but should not be used
+   * for any other purpose since it may not be stable across compilations.
+   *
+   * Comparing inflight closures for value equality (i.e. whether they will bundle
+   * into the same JavaScript code) isn't possible since the exact code is only
+   * resolved after all preflight code has finished running and preflight values that
+   * are referenced by the inflight closure have settled on their values.
+   *
+   * Consider e.g.
+   *
+   * ```
+   * let arr = MutArray<str>["hello"];
+   *
+   * new cloud.Function(inflight () => {
+   *   for x in arr {
+   *     log(x);
+   *   }
+   * });
+   *
+   * arr.push("world");
+   * ```
+   *
    * @internal
    */
-  _hash: string;
+  _id: number;
 }
 
 /**
