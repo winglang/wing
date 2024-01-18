@@ -73,7 +73,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${__dirname}/inflight.$Closure1-1.js")({
             $s1: ${$stdlib.core.liftObject(s1)},
             $s2: ${$stdlib.core.liftObject(s2)},
           })
@@ -82,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

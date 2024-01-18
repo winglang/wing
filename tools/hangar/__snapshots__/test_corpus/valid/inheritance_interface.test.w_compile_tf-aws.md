@@ -58,14 +58,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Baz-1.js")({
+          require("${__dirname}/inflight.Baz-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const BazClient = ${Baz._toInflightType(this)};
+            const BazClient = ${Baz._toInflightType()};
             const client = new BazClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

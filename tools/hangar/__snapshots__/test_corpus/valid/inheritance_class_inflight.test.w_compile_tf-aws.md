@@ -101,14 +101,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.FooBase-1.js")({
+          require("${__dirname}/inflight.FooBase-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FooBaseClient = ${FooBase._toInflightType(this)};
+            const FooBaseClient = ${FooBase._toInflightType()};
             const client = new FooBaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -126,7 +126,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${__dirname}/inflight.Foo-1.js")({
             $FooBase: ${$stdlib.core.liftObject(FooBase)},
           })
         `;
@@ -134,7 +134,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${__dirname}/inflight.$Closure1-1.js")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $foo: ${$stdlib.core.liftObject(foo)},
           })
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

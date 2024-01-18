@@ -73,14 +73,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.FooBase-1.js")({
+          require("${__dirname}/inflight.FooBase-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FooBaseClient = ${FooBase._toInflightType(this)};
+            const FooBaseClient = ${FooBase._toInflightType()};
             const client = new FooBaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -104,7 +104,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${__dirname}/inflight.Foo-1.js")({
             $FooBase: ${$stdlib.core.liftObject(FooBase)},
           })
         `;
@@ -112,7 +112,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

@@ -118,7 +118,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${__dirname}/inflight.Foo-1.js")({
             $initCount: ${$stdlib.core.liftObject(initCount)},
           })
         `;
@@ -126,7 +126,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -153,14 +153,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Bar-1.js")({
+          require("${__dirname}/inflight.Bar-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const BarClient = ${Bar._toInflightType(this)};
+            const BarClient = ${Bar._toInflightType()};
             const client = new BarClient({
               $this_foo: ${$stdlib.core.liftObject(this.foo)},
             });
@@ -192,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${__dirname}/inflight.$Closure1-1.js")({
             $bar: ${$stdlib.core.liftObject(bar)},
             $bar_foo: ${$stdlib.core.liftObject(bar.foo)},
             $initCount: ${$stdlib.core.liftObject(initCount)},
@@ -202,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

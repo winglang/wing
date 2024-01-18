@@ -52,14 +52,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyClass-1.js")({
+          require("${__dirname}/inflight.MyClass-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyClassClient = ${MyClass._toInflightType(this)};
+            const MyClassClient = ${MyClass._toInflightType()};
             const client = new MyClassClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

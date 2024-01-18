@@ -57,14 +57,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.R-1.js")({
+          require("${__dirname}/inflight.R-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this)};
+            const RClient = ${R._toInflightType()};
             const client = new RClient({
               $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
             });
