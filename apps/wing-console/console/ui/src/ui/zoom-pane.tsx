@@ -270,6 +270,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   return (
     <div
       ref={containerRef}
+      {...props}
       className={classNames(className, "relative overflow-hidden")}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
