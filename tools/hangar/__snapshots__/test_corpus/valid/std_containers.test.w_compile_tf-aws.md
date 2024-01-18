@@ -81,14 +81,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Animal-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Animal-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const AnimalClient = ${Animal._toInflightType(this)};
+            const AnimalClient = ${Animal._toInflightType()};
             const client = new AnimalClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Cat-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Cat-1.js")({
             $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
@@ -114,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const CatClient = ${Cat._toInflightType(this)};
+            const CatClient = ${Cat._toInflightType()};
             const client = new CatClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -132,7 +132,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Dog-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Dog-1.js")({
             $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
@@ -140,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const DogClient = ${Dog._toInflightType(this)};
+            const DogClient = ${Dog._toInflightType()};
             const client = new DogClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

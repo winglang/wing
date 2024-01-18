@@ -94,3 +94,6 @@ let val: str = baz?.bar?.foo?.val;
 let optionalFunction = Json.tryParse("")?.asStr;
 optionalFunction();
 //^ Cannot call optional function (unless it's part of a reference)
+
+let optionalFunctionWithNoRetType: ()? = () => {};
+//                                 ^^ Expected function return type

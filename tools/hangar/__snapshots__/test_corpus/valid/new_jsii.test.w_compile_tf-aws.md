@@ -67,14 +67,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.CustomScope-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.CustomScope-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const CustomScopeClient = ${CustomScope._toInflightType(this)};
+            const CustomScopeClient = ${CustomScope._toInflightType()};
             const client = new CustomScopeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
