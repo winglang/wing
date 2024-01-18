@@ -236,7 +236,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
@@ -455,6 +455,34 @@ class $Root extends $stdlib.std.Resource {
           const s2 = $elif_let_value0;
           $helpers.assert(true, "true");
         }
+      }
+    }
+    let fn = (() => {
+      return (() => {
+        return 1337;
+      });
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert($helpers.eq((f()), 1337), "f() == 1337");
+      }
+      else {
+        $helpers.assert(false, "false");
+      }
+    }
+    fn = (() => {
+      return undefined;
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert(false, "false");
+      }
+      else {
+        $helpers.assert(true, "true");
       }
     }
   }
