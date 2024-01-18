@@ -256,14 +256,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this)};
+            const FirstClient = ${First._toInflightType()};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -283,14 +283,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this)};
+            const AnotherClient = ${Another._toInflightType()};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -324,14 +324,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
               $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
               $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0))},
@@ -435,7 +435,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

@@ -3680,6 +3680,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:6
+   |
+15 | a += b;
+   |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
  
  
 Tests 1 failed (1)

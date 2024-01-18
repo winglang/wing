@@ -77,14 +77,14 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const UtilClient = ${Util._toInflightType(this)};
+        const UtilClient = ${Util._toInflightType()};
         const client = new UtilClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
@@ -109,7 +109,7 @@ class Store extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
@@ -117,7 +117,7 @@ class Store extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -141,14 +141,14 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Store-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const StoreClient = ${Store._toInflightType(this)};
+        const StoreClient = ${Store._toInflightType()};
         const client = new StoreClient({
           $this_b: ${$stdlib.core.liftObject(this.b)},
         });

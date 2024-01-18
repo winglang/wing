@@ -41,3 +41,7 @@ export function range(start: number, end: number, inclusive: boolean) {
 export function nodeof(construct: Construct): Node {
   return Node.of(construct);
 }
+
+export function normalPath(path: string): string {
+  return path.replace(/\\+/g, "/");
+}
