@@ -70,9 +70,16 @@ test "signedUrl PUT" {
 
 test "signedUrl duration option is respected" {
   let isExpiredTokenError = (output: str) => {
-    let awsError = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
-    let gcpError = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
-    return awsError || gcpError;
+    let target = util.env("WING_TARGET");
+    let var result = false;
+
+    if target == "tf-aws" {
+      result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
+    } elif target == "tf-gcp" {
+      result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
+    }
+    
+    return result;
   };
 
   let KEY = "tempfile.txt";
