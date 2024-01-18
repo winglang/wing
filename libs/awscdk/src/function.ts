@@ -13,7 +13,7 @@ import { cloud, std, core } from "@winglang/sdk";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
-import { renameSync, writeFileSync } from "fs";
+import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
 
 /**
@@ -85,6 +85,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // copy files from bundle.directory to this.assetPath
     const assetDir = resolve(App.of(this).outdir, this.assetPath);
+    rmSync(assetDir, { recursive: true, force: true })
     renameSync(bundle.directory, assetDir);
   }
 
