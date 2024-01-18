@@ -146,7 +146,6 @@ export class PlatformManager {
    * Collect all the callback hooks from the platform instances
    */
   private collectCallBacks() {
-    // TODO: Create a single property called callbackHooks maybe and reset it each time
     this.platformInstances.forEach((instance) => {
       if (instance.preSynth) {
         this.hooks.preSynth.push(instance.preSynth.bind(instance));
