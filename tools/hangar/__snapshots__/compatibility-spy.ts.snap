@@ -64,7 +64,6 @@ exports[`set.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"inc\\",
     \\"peek\\",
     \\"set\\"
   ]
