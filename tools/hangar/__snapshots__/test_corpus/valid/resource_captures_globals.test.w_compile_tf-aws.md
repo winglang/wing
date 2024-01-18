@@ -369,14 +369,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this)};
+            const FirstClient = ${First._toInflightType()};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -396,7 +396,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
@@ -404,7 +404,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this)};
+            const AnotherClient = ${Another._toInflightType()};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -448,7 +448,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.R-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
                 $_parentThis_localCounter: ${$stdlib.core.liftObject($parentThis.localCounter)},
                 $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
               })
@@ -457,7 +457,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const RClient = ${R._toInflightType(this)};
+                const RClient = ${R._toInflightType()};
                 const client = new RClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -482,7 +482,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
             $Another: ${$stdlib.core.liftObject(Another)},
             $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______globalArrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0))},
             $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______globalMapOfNum___a__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"))},
@@ -500,7 +500,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
               $this_localTopic: ${$stdlib.core.liftObject(this.localTopic)},
             });
@@ -543,7 +543,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $res: ${$stdlib.core.liftObject(res)},
           })
         `;
@@ -551,7 +551,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -579,7 +579,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
@@ -587,7 +587,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

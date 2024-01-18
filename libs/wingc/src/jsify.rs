@@ -613,7 +613,7 @@ impl<'a> JSifier<'a> {
 			},
 			ExprKind::Range { start, inclusive, end } => new_code!(
 				expr_span,
-				"$helpers.range(",
+				format!("{HELPERS_VAR}.range("),
 				self.jsify_expression(start, ctx),
 				",",
 				self.jsify_expression(end, ctx),
@@ -719,8 +719,8 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
-					BinaryOperator::NotEqual => return new_code!(expr_span, "$helpers.neq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::Equal => return new_code!(expr_span, HELPERS_VAR, ".eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, HELPERS_VAR, ".neq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -1548,7 +1548,9 @@ impl<'a> JSifier<'a> {
 
 		code.open("return `");
 
-		code.open(format!("require(\"./{client_path}\")({{"));
+		code.open(format!(
+			"require(\"${{{HELPERS_VAR}.normalPath(__dirname)}}/{client_path}\")({{"
+		));
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
@@ -1575,7 +1577,7 @@ impl<'a> JSifier<'a> {
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this)}};",
+			"const {}Client = ${{{}._toInflightType()}};",
 			resource_name.name, resource_name.name,
 		));
 
@@ -1660,7 +1662,7 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
-		code.line("const $helpers = require(\"@winglang/sdk/lib/helpers\");");
+		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/lib/helpers\");"));
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
