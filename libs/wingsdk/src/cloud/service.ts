@@ -44,6 +44,7 @@ export class Service extends Resource implements IInflightHost {
   protected readonly entrypoint!: string;
 
   private readonly _env: Record<string, string> = {};
+  private readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,
@@ -63,10 +64,6 @@ export class Service extends Resource implements IInflightHost {
 
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
-
-    // indicates that we are calling the inflight constructor and the
-    // inflight "handle" method on the handler resource.
-    handler._registerOnLift(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
@@ -98,6 +95,17 @@ export class Service extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+
+    this.handler = handler;
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    this.handler.onLift(this, ["handle", "$inflight_init"]);
   }
 
   /**

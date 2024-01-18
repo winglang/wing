@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
-import { InflightBindings, liftObject } from "../core";
-import { IInflight, IInflightHost, Resource } from "../std";
+import { InflightBindings, liftObject, onLiftObject } from "../core";
+import { IInflight, IInflightHost } from "../std";
 
 /**
  * Test utilities.
@@ -47,12 +47,11 @@ ${Object.entries(clients)
     return {
       _hash: createHash("md5").update(inflightCode).digest("hex"),
       _toInflight: () => inflightCode,
-      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
+      onLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
-          Resource._registerOnLiftObject(v.obj, host, v.ops);
+          onLiftObject(v.obj, host, v.ops);
         }
       },
-      onLift: () => {},
       _supportedOps: () => [],
     };
   }

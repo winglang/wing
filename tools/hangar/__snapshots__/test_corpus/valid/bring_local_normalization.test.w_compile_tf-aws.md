@@ -76,14 +76,14 @@ class Bar extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Bar-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const BarClient = ${Bar._toInflightType(this)};
+        const BarClient = ${Bar._toInflightType()};
         const client = new BarClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
@@ -114,14 +114,14 @@ class Baz extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Baz-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Baz-2.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const BazClient = ${Baz._toInflightType(this)};
+        const BazClient = ${Baz._toInflightType()};
         const client = new BazClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
@@ -160,14 +160,14 @@ class Foo extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Foo-3.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const FooClient = ${Foo._toInflightType(this)};
+        const FooClient = ${Foo._toInflightType()};
         const client = new FooClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }

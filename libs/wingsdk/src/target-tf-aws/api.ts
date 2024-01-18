@@ -233,7 +233,7 @@ export class Api extends cloud.Api implements IAwsApi {
             ?.defaultResponse,
         }
       );
-      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
+      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
