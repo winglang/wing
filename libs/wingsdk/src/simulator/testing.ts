@@ -24,12 +24,6 @@ export class Testing {
     return {
       _id: closureId(),
       _toInflight: () => {
-        const clients: Record<string, string> = {};
-
-        for (const [k, v] of Object.entries(bindings)) {
-          clients[k] = liftObject(v.obj);
-        }
-
         const inflightCode = `\
 new ((function(){
 return class Handler {
@@ -41,8 +35,8 @@ return class Handler {
   ${code}
 };
 })())({
-${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client}`)
+${Object.entries(bindings)
+  .map(([name, obj]) => `${name}: ${liftObject(obj)}`)
   .join(",\n")}
 })`;
 

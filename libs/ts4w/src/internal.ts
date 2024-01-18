@@ -1,4 +1,4 @@
-import { join } from "path";
+import { dirname, join } from "path";
 
 export interface CompileOptions {
   workDir: string;
@@ -11,8 +11,8 @@ export async function compile(options: CompileOptions) {
 
   const program = ts.createProgram([options.entrypoint], {
     target: ts.ScriptTarget.ES2022,
-    module: ts.ModuleKind.CommonJS,
-    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+    module: ts.ModuleKind.Node16,
+    moduleResolution: ts.ModuleResolutionKind.Node16,
     alwaysStrict: true,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,
@@ -21,7 +21,11 @@ export async function compile(options: CompileOptions) {
     outDir,
     noEmitOnError: true,
     listEmittedFiles: true,
-  })
+    baseUrl: dirname(options.entrypoint),
+    paths: {
+      "@winglang/sdk/*": [dirname(require.resolve("@winglang/sdk")) + "/*"],
+    },
+  });
   const results = program.emit();
 
   for (const diagnostic of results.diagnostics) {
@@ -36,8 +40,10 @@ export async function compile(options: CompileOptions) {
   const emittedFile = emittedFiles?.[emittedFiles.length - 1];
 
   if (!emittedFile) {
-    throw new Error(`TS compilation failed: Could not find emitted file in ${outDir}`);
+    throw new Error(
+      `TS compilation failed: Could not find emitted file in ${outDir}`
+    );
   }
-  
+
   return emittedFile;
 }

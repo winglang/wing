@@ -106,12 +106,6 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
       }
     }
 
-    // TODO Remove once we are generating .d.ts files
-    await fs.writeFile(
-      path.join(compilerOutputDir, dotWingDir, "preflight.d.ts"),
-      `declare module '${pkgJson.name}';`
-    );
-
     // move compiler output
     await fs.rename(compilerOutputDir, path.join(workdir, compilerOutputFolder));
 
@@ -142,6 +136,11 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
 
     // add "wing" top-level field
     pkgJson.wing = true;
+
+    if (!pkgJson.peerDependencies) {
+      pkgJson.peerDependencies = {};
+    }
+    pkgJson.peerDependencies["@winglang/sdk"] = "*";
 
     // write package.json
     await fs.writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");

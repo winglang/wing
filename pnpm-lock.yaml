@@ -1106,6 +1106,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../wing-fixture
       ts4w:
         specifier: workspace:^
         version: link:../../libs/ts4w
@@ -1113,7 +1116,14 @@ importers:
         specifier: workspace:^
         version: link:../../apps/wing
 
-  examples/wing-fixture: {}
+  examples/wing-fixture:
+    devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../libs/wingsdk
+      winglang:
+        specifier: workspace:^
+        version: link:../../apps/wing
 
   libs/awscdk:
     dependencies:
@@ -1199,6 +1209,9 @@ importers:
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(typescript@5.3.3)
+      vitest:
+        specifier: ^0.32.4
+        version: 0.32.4
 
   libs/wingc:
     devDependencies:
@@ -1574,9 +1587,6 @@ importers:
       octokit:
         specifier: ^3.1.0
         version: 3.1.1
-      ts4w:
-        specifier: workspace:^
-        version: link:../../libs/ts4w
       tsx:
         specifier: ^3.12.8
         version: 3.13.0
@@ -19335,6 +19345,7 @@ packages:
 
   /loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
+    deprecated: Please upgrade to 2.3.7 which fixes GHSA-4q6p-r6v2-jvc5
     dependencies:
       get-func-name: 2.0.2
     dev: true
