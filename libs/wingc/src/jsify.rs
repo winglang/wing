@@ -1548,7 +1548,7 @@ impl<'a> JSifier<'a> {
 
 		code.open("return `");
 
-		code.open(format!("require(\"./{client_path}\")({{"));
+		code.open(format!("require(\"${{__dirname}}/{client_path}\")({{"));
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
