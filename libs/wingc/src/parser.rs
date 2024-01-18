@@ -2698,6 +2698,28 @@ mod tests {
 	use super::*;
 
 	#[test]
+	fn filter_unnamed_nodes() {
+		// Test get_actual_children_by_field_name
+		let language = tree_sitter_wing::language();
+		let mut tree_sitter_parser = tree_sitter::Parser::new();
+		tree_sitter_parser.set_language(language).unwrap();
+
+		let tree_sitter_tree = tree_sitter_parser
+			.parse("let x: ((num)) = 1;".as_bytes(), None)
+			.unwrap();
+		let stmt_node = tree_sitter_tree.root_node().named_child(0).expect("a statement node");
+
+		// We expect 5 sibling nodes because of the parentheses nodes
+		let mut cursor = stmt_node.walk();
+		let unnamed_type_nodes = stmt_node.children_by_field_name("type", &mut cursor);
+		assert!(unnamed_type_nodes.count() == 5);
+
+		// get_actual_children_by_field_name should filter out the unnamed nodes leaving us with the actual type node
+		let type_node = get_actual_children_by_field_name(stmt_node, "type");
+		assert!(type_node.len() == 1);
+	}
+
+	#[test]
 	fn normalize_path_relative_to_nothing() {
 		let file_path = Utf8Path::new("/a/b/c/d/e.f");
 		assert_eq!(normalize_path(file_path, None), file_path);
