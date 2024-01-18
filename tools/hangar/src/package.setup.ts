@@ -19,12 +19,12 @@ const shellEnv = {
 };
 
 const getInstallArgs = async () => {
-  if(process.env.HANGAR_WINGLANG_PACKAGE) {
+  if (process.env.HANGAR_WINGLANG_PACKAGE) {
     return [
       "install",
       "--no-package-lock",
       "--install-links=false",
-      process.env.HANGAR_WINGLANG_PACKAGE!
+      process.env.HANGAR_WINGLANG_PACKAGE!,
     ];
   }
 
@@ -48,6 +48,7 @@ const getInstallArgs = async () => {
     "file:../../../apps/wing",
     "file:../../../libs/wingsdk",
     "file:../../../libs/awscdk",
+    "file:../../../libs/compatibility-spy",
     "file:../../../libs/ts4w",
   ];
 };
