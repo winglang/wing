@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { IPlatform } from "@winglang/sdk/lib/platform";
 import { Construct } from "constructs";
 import { App } from "@winglang/sdk/lib/core";
+import { std } from "@winglang/sdk";
 
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
@@ -29,6 +30,14 @@ export class Platform implements IPlatform {
 
     return new Proxy(new type(scope, id, ...args), {
       get: (target, prop: string | Symbol) => {
+        // capturing the lifted ops
+        if (prop === "onLift") {
+          return (host: std.IInflightHost, ops: string[]) => {
+            ops.forEach((op: string) => this._addToUsageContext(target, op));
+            return target[prop](host, ops);
+          };
+        }
+
         if (
           typeof prop === "string" &&
           !prop.startsWith("_") &&
@@ -51,13 +60,6 @@ export class Platform implements IPlatform {
   }
 
   preSynth(app: Construct) {
-    for (const c of app.node.findAll()) {
-      if ((c as any).onLiftMap?.size) {
-        (c as any).onLiftMap.forEach((ops: Set<string>) => {
-          ops.forEach((op: string) => this._addToUsageContext(c, op));
-        });
-      }
-    }
     this._writeAppUsage(app as App);
   }
 

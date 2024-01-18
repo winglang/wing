@@ -11,6 +11,7 @@ import {
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -20,7 +21,12 @@ import { Node } from "../shared/Node.js";
 
 import { EdgeItem } from "./edge-item.js";
 import { useNodeStaticData } from "./use-node-static-data.js";
-import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
+import {
+  IDENTITY_TRANSFORM,
+  Transform,
+  ZoomPane,
+  ZoomPaneRef,
+} from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
@@ -534,29 +540,6 @@ export const ElkMap = <T extends unknown = undefined>({
     });
   }, [graph, nodeRecord, offsets, edges, setNodeList]);
 
-  const { zoomToFit } = useZoomPaneContext();
-
-  // Zoom to fit when map changes
-  const previousNodeList = useRef<NodeData[]>();
-  useEffect(() => {
-    // Skip animation if there was no previous node list (eg, first render)
-    const skipAnimation =
-      !previousNodeList.current || previousNodeList.current.length === 0;
-
-    zoomToFit(
-      {
-        x: 0,
-        y: 0,
-        width: graph?.width ?? 0,
-        height: graph?.height ?? 0,
-      },
-      skipAnimation,
-    );
-
-    previousNodeList.current = nodeList;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [graph, nodeList]);
-
   const hasHighlightedEdge = useCallback(
     (node: NodeData) => {
       return node.edges.some(
@@ -568,33 +551,21 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  const zoomPane = useRef<HTMLDivElement>(null);
-  const rootElement = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!zoomPane.current || !rootElement.current) {
-      console.error("No zoom pane or root element");
+  const mapSize = useMemo(() => {
+    if (!graph) {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) {
-            zoomToFit();
-            return;
-          }
-        }
-      },
-      {
-        root: zoomPane.current,
-        rootMargin: "-20px",
-      },
-    );
-    observer.observe(rootElement.current);
-    return () => {
-      observer.disconnect();
+    return {
+      width: graph.width!,
+      height: graph.height!,
     };
-  }, [zoomToFit]);
+  }, [graph]);
+  const zoomPaneRef = useRef<ZoomPaneRef>(null);
+
+  useEffect(() => {
+    zoomPaneRef.current?.zoomToFit();
+  }, [offsets]);
 
   return (
     <>
@@ -605,26 +576,25 @@ export const ElkMap = <T extends unknown = undefined>({
       />
 
       <ZoomPane
-        ref={zoomPane}
+        ref={zoomPaneRef}
+        boundingBox={mapSize}
         className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
       >
-        <div ref={rootElement}>
-          {graph && (
-            <Graph
-              graph={graph}
-              node={node}
-              nodeList={nodeList}
-              offsets={offsets!}
-              selectedNodeId={selectedNodeId}
-              onSelectedNodeIdChange={onSelectedNodeIdChange}
-              onSelectedEdgeIdChange={onSelectedEdgeIdChange}
-              isHighlighted={isHighlighted}
-              hasHighlightedEdge={hasHighlightedEdge}
-              setHighlighted={setHighlighted}
-            />
-          )}
-        </div>
+        {graph && (
+          <Graph
+            graph={graph}
+            node={node}
+            nodeList={nodeList}
+            offsets={offsets!}
+            selectedNodeId={selectedNodeId}
+            onSelectedNodeIdChange={onSelectedNodeIdChange}
+            onSelectedEdgeIdChange={onSelectedEdgeIdChange}
+            isHighlighted={isHighlighted}
+            hasHighlightedEdge={hasHighlightedEdge}
+            setHighlighted={setHighlighted}
+          />
+        )}
       </ZoomPane>
     </>
   );

@@ -38,8 +38,6 @@
     "@trpc/server": "^10.38.1",
     "@wingconsole/design-system": "workspace:^",
     "classnames": "^2.3.2",
-    "d3-selection": "^3.0.0",
-    "d3-zoom": "^3.0.0",
     "elkjs": "^0.8.2",
     "framer-motion": "^10.16.2",
     "jszip": "^3.10.1",
@@ -50,6 +48,7 @@
     "lodash.uniqby": "^4.7.0",
     "nanoid": "^4.0.2",
     "react-markdown": "^9.0.1",
+    "react-use": "^17.4.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
