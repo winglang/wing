@@ -875,7 +875,13 @@ impl Display for Type {
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
 			Type::Inferred(_) => write!(f, "unknown"),
-			Type::Optional(v) => write!(f, "{}?", v),
+			Type::Optional(v) => {
+				if v.is_closure() {
+					write!(f, "({})?", v)
+				} else {
+					write!(f, "{}?", v)
+				}
+			}
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class),
 
@@ -2731,6 +2737,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}(exp, env);
+
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		self.curr_expr_info.pop();
@@ -4254,7 +4261,10 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
 
-		if matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+		if matches!(kind, AssignmentKind::AssignIncr) {
+			self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
+			self.validate_type_in(var.type_, &[self.types.number(), self.types.string()], value);
+		} else if matches!(kind, AssignmentKind::AssignDecr) {
 			self.validate_type(exp_type, self.types.number(), value);
 			self.validate_type(var.type_, self.types.number(), variable);
 		}

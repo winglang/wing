@@ -96,7 +96,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
             $globalCounter: ${$stdlib.core.liftObject(globalCounter)},
           })
         `;
@@ -104,7 +104,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this)};
+            const AnotherClient = ${Another._toInflightType()};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -115,22 +115,24 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "myStaticMethod", "$inflight_init"];
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("myStaticMethod")) {
-          Another._registerOnLiftObject(globalCounter, host, ["peek"]);
-        }
-        super._registerOnLift(host, ops);
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "myStaticMethod": [
+            [globalCounter, ["peek"]],
+          ],
+        });
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $Another: ${$stdlib.core.liftObject(Another)},
           })
         `;
@@ -138,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -149,11 +151,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(Another, host, ["myStaticMethod"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [Another, ["myStaticMethod"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");

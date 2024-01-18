@@ -532,3 +532,58 @@ test("batch write item", async () => {
 
   await s.stop();
 });
+
+test("query with GSI", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const t = new ex.DynamodbTable(app, "query_table", {
+    name: "query_table",
+    attributeDefinitions: { id: "S", age: "N", table: "S" } as any,
+    hashKey: "table",
+    rangeKey: "id",
+    globalSecondaryIndex: [
+      {
+        name: "AgeIndex",
+        hashKey: "table",
+        rangeKey: "age",
+        projectionType: "ALL",
+      },
+    ],
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/query_table") as ex.IDynamodbTableClient;
+
+  await client.putItem({ item: { id: "1", age: 20, table: "users" } as any });
+  await client.putItem({ item: { id: "2", age: 13, table: "users" } as any });
+  await client.putItem({ item: { id: "3", age: 39, table: "users" } as any });
+  await client.putItem({ item: { id: "4", age: 18, table: "users" } as any });
+  {
+    const result = await client.query({
+      keyConditionExpression: "#table = :table",
+      expressionAttributeValues: { ":table": "users" } as any,
+      expressionAttributeNames: { "#table": "table" } as any,
+    });
+    expect(result.items).toEqual([
+      { id: "1", age: 20, table: "users" },
+      { id: "2", age: 13, table: "users" },
+      { id: "3", age: 39, table: "users" },
+      { id: "4", age: 18, table: "users" },
+    ]);
+  }
+  {
+    const result = await client.query({
+      indexName: "AgeIndex",
+      keyConditionExpression: "#table = :table",
+      expressionAttributeValues: { ":table": "users" } as any,
+      expressionAttributeNames: { "#table": "table" } as any,
+    });
+    expect(result.items).toEqual([
+      { id: "2", age: 13, table: "users" },
+      { id: "4", age: 18, table: "users" },
+      { id: "1", age: 20, table: "users" },
+      { id: "3", age: 39, table: "users" },
+    ]);
+  }
+
+  await s.stop();
+});

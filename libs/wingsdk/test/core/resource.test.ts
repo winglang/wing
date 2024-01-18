@@ -3,7 +3,7 @@ import { describe, test, expect } from "vitest";
 import { Resource } from "../../src/std";
 import { SimApp } from "../sim-app";
 
-describe("resource _addOnLift", () => {
+describe("resource onLift", () => {
   const inflightOps = ["op1", "op2"];
   class Example extends Resource {
     public _supportedOps() {
@@ -11,6 +11,9 @@ describe("resource _addOnLift", () => {
     }
     public _toInflight() {
       return "inflight";
+    }
+    public addEnvironment() {
+      // noop
     }
   }
   class ExampleAbstract extends Resource {
@@ -24,10 +27,7 @@ describe("resource _addOnLift", () => {
   test("adding supported ops to host should succeed", () => {
     const app = new SimApp();
     const example = new Example(app, "example");
-    expect(
-      // @ts-expect-error - accessing private method
-      example._addOnLift(new Example(app, "host"), ["op1"])
-    ).toBeUndefined();
+    expect(example.onLift(new Example(app, "host"), ["op1"])).toBeUndefined();
   });
 
   test("adding non supported op to host should cause an error", () => {
@@ -35,8 +35,7 @@ describe("resource _addOnLift", () => {
     const example = new Example(app, "example");
 
     expect(() =>
-      // @ts-expect-error - accessing private method
-      example._addOnLift(new Example(app, "host"), ["nonExistentOp"])
+      example.onLift(new Example(app, "host"), ["nonExistentOp"])
     ).toThrow(
       `Resource root/example does not support inflight operation nonExistentOp (requested by root/host).\nIt might not be implemented yet.`
     );

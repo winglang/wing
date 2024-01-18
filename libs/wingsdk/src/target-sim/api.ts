@@ -44,7 +44,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    let handler = this.handlers[inflight._hash];
+    let handler = this.handlers[inflight._id];
 
     if (handler) {
       const routes = (handler.mapping.eventProps.subscriptionProps as any)
@@ -83,7 +83,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
         },
       }
     );
-    this.handlers[inflight._hash] = {
+    this.handlers[inflight._id] = {
       func: fn,
       mapping: eventMapping,
     };

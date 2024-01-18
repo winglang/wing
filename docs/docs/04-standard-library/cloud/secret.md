@@ -148,6 +148,41 @@ Retrieve the Json value of the secret.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Secret.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Secret.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Secret.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Secret.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Secret.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

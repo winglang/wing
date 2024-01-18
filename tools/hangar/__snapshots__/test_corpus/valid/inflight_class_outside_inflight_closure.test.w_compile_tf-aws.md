@@ -80,14 +80,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.BinaryOperation-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.BinaryOperation-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const BinaryOperationClient = ${BinaryOperation._toInflightType(this)};
+            const BinaryOperationClient = ${BinaryOperation._toInflightType()};
             const client = new BinaryOperationClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -98,25 +98,25 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "lhs", "rhs", "add", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        if (ops.includes("add")) {
-          BinaryOperation._registerOnLiftObject(this, host, ["lhs", "rhs"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+          ],
+          "add": [
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $BinaryOperation: ${$stdlib.core.liftObject(BinaryOperation)},
           })
         `;
@@ -124,7 +124,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

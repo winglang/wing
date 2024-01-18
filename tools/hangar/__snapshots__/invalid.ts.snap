@@ -1467,25 +1467,11 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.test.w 1`] = `
-"error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:2:26
+"error: Optional parameters must always be after all non-optional parameters.
+  --> ../../../examples/tests/invalid/function_type.test.w:9:25
   |
-2 | let my_func = (callback: (num)) => {  };
-  |                          ^^^^^ Expected function return type
-
-
-error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:4:28
-  |
-4 | let my_func2 = (callback: ((num)): (str)) => {  };
-  |                            ^^^^^ Expected function return type
-
-
-error: Optional parameters must always be after all non-optional parameters.
-   --> ../../../examples/tests/invalid/function_type.test.w:16:25
-   |
-16 | let my_func3 = (a: num, b: str?, c: bool) => {};
-   |                         ^ Optional parameters must always be after all non-optional parameters.
+9 | let my_func3 = (a: num, b: str?, c: bool) => {};
+  |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
  
@@ -2657,7 +2643,14 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"num?\\" instead
+"error: Unexpected 'parameter_type_list'
+   --> ../../../examples/tests/invalid/optionals.test.w:98:36
+   |
+98 | let optionalFunctionWithNoRetType: ()? = () => {};
+   |                                    ^^ Unexpected 'parameter_type_list'
+
+
+error: Expected type to be \\"num\\", but got \\"num?\\" instead
    --> ../../../examples/tests/invalid/optionals.test.w:11:3
    |
 11 | f(x);
@@ -2739,6 +2732,20 @@ error: Cannot call an optional function
    |
 95 | optionalFunction();
    | ^^^^^^^^^^^^^^^^ Cannot call an optional function
+
+
+error: Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
+    --> ../../../examples/tests/invalid/optionals.test.w:102:53
+    |
+102 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+    |                                                     ^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
+
+
+error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+    --> ../../../examples/tests/invalid/optionals.test.w:104:49
+    |
+104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
 
 
 error: Variable is not reassignable
@@ -3664,6 +3671,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 10 | let e3 = \\"{strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:6
+   |
+15 | a += b;
+   |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  

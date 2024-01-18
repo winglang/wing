@@ -45,6 +45,11 @@ bucket: (function() {
   "connections.json": {
     "connections": [
       {
+        "name": "setConsumer()",
+        "source": "root/HelloWorld/Queue",
+        "target": "root/HelloWorld/Queue/SetConsumer0",
+      },
+      {
         "name": "inc()",
         "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Counter",
@@ -63,11 +68,6 @@ bucket: (function() {
         "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
-      },
-      {
-        "name": "setConsumer()",
-        "source": "root/HelloWorld/Queue",
-        "target": "root/HelloWorld/Queue/SetConsumer0",
       },
     ],
     "version": "connections-0.1",
