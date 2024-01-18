@@ -81,7 +81,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Animal-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Animal-1.js")({
           })
         `;
       }
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Cat-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Cat-1.js")({
             $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;
@@ -132,7 +132,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Dog-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Dog-1.js")({
             $Animal: ${$stdlib.core.liftObject(Animal)},
           })
         `;

@@ -235,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.A-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.A-1.js")({
           })
         `;
       }
@@ -263,7 +263,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.B-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.B-1.js")({
             $A: ${$stdlib.core.liftObject(A)},
           })
         `;
@@ -292,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.C-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C-1.js")({
             $B: ${$stdlib.core.liftObject(B)},
           })
         `;
@@ -318,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.D-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.D-1.js")({
             $C: ${$stdlib.core.liftObject(C)},
           })
         `;
@@ -347,7 +347,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.E-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.E-1.js")({
             $D: ${$stdlib.core.liftObject(D)},
           })
         `;
@@ -373,7 +373,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.InflightA-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.InflightA-1.js")({
           })
         `;
       }
@@ -398,7 +398,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.InflightB-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.InflightB-1.js")({
             $InflightA: ${$stdlib.core.liftObject(InflightA)},
           })
         `;
@@ -426,7 +426,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $InflightB: ${$stdlib.core.liftObject(InflightB)},
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
           })
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.BaseClass-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.BaseClass-1.js")({
             $b: ${$stdlib.core.liftObject(b)},
           })
         `;
@@ -487,7 +487,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.ExtendedClass-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.ExtendedClass-1.js")({
             $BaseClass: ${$stdlib.core.liftObject(BaseClass)},
             $b: ${$stdlib.core.liftObject(b)},
           })
@@ -524,7 +524,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $extended: ${$stdlib.core.liftObject(extended)},
           })

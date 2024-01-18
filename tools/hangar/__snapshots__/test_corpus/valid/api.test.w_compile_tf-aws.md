@@ -478,7 +478,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $counter: ${$stdlib.core.liftObject(counter)},
             $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
           })
@@ -515,7 +515,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $api_url: ${$stdlib.core.liftObject(api.url)},
           })
         `;
@@ -556,7 +556,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${__dirname}/inflight.$Closure3-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
                 $__parent_this_3_api_url: ${$stdlib.core.liftObject(__parent_this_3.api.url)},
               })
             `;
@@ -588,7 +588,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.A-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.A-1.js")({
           })
         `;
       }

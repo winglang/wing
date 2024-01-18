@@ -101,7 +101,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.FooBase-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.FooBase-1.js")({
           })
         `;
       }
@@ -126,7 +126,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
             $FooBase: ${$stdlib.core.liftObject(FooBase)},
           })
         `;
@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $foo: ${$stdlib.core.liftObject(foo)},
           })

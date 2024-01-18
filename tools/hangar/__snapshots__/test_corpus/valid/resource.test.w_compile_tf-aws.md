@@ -712,7 +712,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
           })
         `;
       }
@@ -756,7 +756,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Bar-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
             $Foo: ${$stdlib.core.liftObject(Foo)},
             $MyEnum: ${$stdlib.core.liftObject(MyEnum)},
           })
@@ -808,7 +808,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $bucket: ${$stdlib.core.liftObject(bucket)},
             $res: ${$stdlib.core.liftObject(res)},
             $res_foo: ${$stdlib.core.liftObject(res.foo)},
@@ -856,7 +856,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${__dirname}/inflight.$Closure2-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
                 $__parent_this_2_b: ${$stdlib.core.liftObject(__parent_this_2.b)},
               })
             `;
@@ -894,7 +894,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${__dirname}/inflight.$Closure3-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
                 $__parent_this_3_b: ${$stdlib.core.liftObject(__parent_this_3.b)},
               })
             `;
@@ -932,7 +932,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${__dirname}/inflight.$Closure4-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
                 $__parent_this_4_q: ${$stdlib.core.liftObject(__parent_this_4.q)},
               })
             `;
@@ -964,7 +964,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.BigPublisher-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.BigPublisher-1.js")({
           })
         `;
       }
@@ -1014,7 +1014,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure5-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
             $bigOlPublisher: ${$stdlib.core.liftObject(bigOlPublisher)},
           })
         `;
@@ -1051,7 +1051,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Dummy-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Dummy-1.js")({
           })
         `;
       }
@@ -1087,7 +1087,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.ScopeAndIdTestClass-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.ScopeAndIdTestClass-1.js")({
           })
         `;
       }

@@ -131,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.js")({
             $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
@@ -191,7 +191,7 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Store-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-2.js")({
         $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
       })
     `;
@@ -266,7 +266,7 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
       })
     `;
   }

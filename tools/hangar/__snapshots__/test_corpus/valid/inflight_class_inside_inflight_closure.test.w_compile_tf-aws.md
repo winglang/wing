@@ -258,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("${__dirname}/inflight.$Closure1-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
                 $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
               })
             `;
@@ -291,7 +291,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.PreflightClass-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.PreflightClass-1.js")({
           })
         `;
       }
@@ -318,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $f: ${$stdlib.core.liftObject(f)},
           })
         `;
@@ -354,7 +354,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
           })
         `;
       }

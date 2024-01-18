@@ -60,7 +60,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $SomeEnum: ${$stdlib.core.liftObject(SomeEnum)},
             $one: ${$stdlib.core.liftObject(one)},
             $two: ${$stdlib.core.liftObject(two)},

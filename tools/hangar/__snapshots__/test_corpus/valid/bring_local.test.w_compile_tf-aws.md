@@ -302,7 +302,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.js")({
             $store: ${$stdlib.core.liftObject(store)},
           })
         `;
@@ -339,7 +339,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Triangle-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Triangle-3.js")({
           })
         `;
       }
@@ -364,7 +364,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Util-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Util-3.js")({
           })
         `;
       }
@@ -413,7 +413,7 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
       })
     `;
   }
@@ -445,7 +445,7 @@ class Store extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
@@ -477,7 +477,7 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Store-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.js")({
       })
     `;
   }
@@ -533,7 +533,7 @@ class Q extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Q-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Q-2.js")({
       })
     `;
   }

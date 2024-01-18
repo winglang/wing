@@ -78,7 +78,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Base-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Base-1.js")({
           })
         `;
       }
@@ -103,7 +103,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.Derived-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Derived-1.js")({
             $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;

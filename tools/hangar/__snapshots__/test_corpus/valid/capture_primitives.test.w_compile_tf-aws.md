@@ -180,7 +180,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $myBool: ${$stdlib.core.liftObject(myBool)},
             $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
             $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},

@@ -53,7 +53,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.CdkDockerImageFunction-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.CdkDockerImageFunction-1.js")({
           })
         `;
       }

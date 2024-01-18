@@ -29,7 +29,7 @@ class Baz extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Baz-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.js")({
       })
     `;
   }

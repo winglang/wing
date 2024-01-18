@@ -96,7 +96,7 @@ class Foo extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Foo-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-2.js")({
       })
     `;
   }
@@ -136,7 +136,7 @@ class Bar extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Bar-3.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Bar-3.js")({
       })
     `;
   }
@@ -161,7 +161,7 @@ class Foo extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Foo-3.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Foo-3.js")({
       })
     `;
   }
@@ -259,7 +259,7 @@ class Widget extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("${__dirname}/inflight.Widget-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Widget-1.js")({
       })
     `;
   }

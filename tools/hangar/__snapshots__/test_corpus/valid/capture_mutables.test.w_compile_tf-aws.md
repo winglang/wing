@@ -82,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $Object_keys_m__length: ${$stdlib.core.liftObject(Object.keys(m).length)},
             $aCloned_length: ${$stdlib.core.liftObject(aCloned.length)},
             $a_length: ${$stdlib.core.liftObject(a.length)},
@@ -124,7 +124,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("${__dirname}/inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $handler: ${$stdlib.core.liftObject(handler)},
           })
         `;
