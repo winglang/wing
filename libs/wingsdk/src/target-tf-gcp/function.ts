@@ -1,5 +1,5 @@
 import { writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { join } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -40,6 +40,8 @@ export class Function extends cloud.Function {
     "cloudfunctions.functions.get",
   ]);
 
+  private assetPath: string | undefined; // posix path
+
   constructor(
     scope: Construct,
     id: string,
@@ -50,35 +52,6 @@ export class Function extends cloud.Function {
 
     // app is a property of the `cloud.Function` class
     const app = App.of(this) as App;
-
-    // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint, [
-      "@google-cloud/functions-framework",
-      "@google-cloud/datastore",
-    ]);
-
-    const packageJson = join(bundle.directory, "package.json");
-
-    writeFileSync(
-      packageJson,
-      JSON.stringify(
-        {
-          main: "index.js",
-          dependencies: {
-            "@google-cloud/functions-framework": "^3.0.0",
-            "@google-cloud/datastore": "8.4.0",
-          },
-        },
-        null,
-        2
-      )
-    );
-
-    // Create Cloud Function executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: resolve(bundle.directory),
-      type: AssetType.ARCHIVE,
-    });
 
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
@@ -107,7 +80,14 @@ export class Function extends cloud.Function {
       {
         name: "objects",
         bucket: FunctionBucket.bucket.name,
-        source: asset.path,
+        source: Lazy.stringValue({
+          produce: () => {
+            if (!this.assetPath) {
+              throw new Error("assetPath was not set");
+            }
+            return this.assetPath;
+          },
+        }),
       }
     );
 
@@ -191,6 +171,41 @@ export class Function extends cloud.Function {
     lines.push("}});");
 
     return lines;
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // bundled code is guaranteed to be in a fresh directory
+    const bundle = createBundle(this.entrypoint, [
+      "@google-cloud/functions-framework",
+      "@google-cloud/datastore",
+    ]);
+
+    const packageJson = join(bundle.directory, "package.json");
+
+    writeFileSync(
+      packageJson,
+      JSON.stringify(
+        {
+          main: "index.js",
+          dependencies: {
+            "@google-cloud/functions-framework": "^3.0.0",
+            "@google-cloud/datastore": "8.4.0",
+          },
+        },
+        null,
+        2
+      )
+    );
+
+    const asset = new TerraformAsset(this, "Asset", {
+      path: bundle.directory,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.assetPath = asset.path;
   }
 
   public get functionName(): string {
