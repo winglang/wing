@@ -363,6 +363,7 @@ export class Util {
     opts: ShellOptions = {}
   ): NodeExecSyncOptions & NodeExecOptions {
     return {
+      windowsHide: true,
       cwd: opts.cwd,
       env:
         opts.inheritEnv === true
