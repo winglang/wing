@@ -1575,7 +1575,7 @@ impl<'a> JSifier<'a> {
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this)}};",
+			"const {}Client = ${{{}._toInflightType()}};",
 			resource_name.name, resource_name.name,
 		));
 
