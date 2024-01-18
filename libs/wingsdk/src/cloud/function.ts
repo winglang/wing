@@ -49,6 +49,7 @@ export interface FunctionProps {
  */
 export class Function extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
+  private readonly handler!: IFunctionHandler;
 
   /**
    * The path to the entrypoint source code of the function.
@@ -74,10 +75,7 @@ export class Function extends Resource implements IInflightHost {
       this.addEnvironment(key, value);
     }
 
-    // indicates that we are calling the inflight constructor and the
-    // inflight "handle" method on the handler resource.
-    handler._registerOnLift(this, ["handle", "$inflight_init"]);
-
+    this.handler = handler;
     const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
@@ -98,6 +96,15 @@ export class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    this.handler.onLift(this, ["handle", "$inflight_init"]);
   }
 
   /**

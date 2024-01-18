@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import type { IResource } from "../std/resource";
+import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -159,6 +159,12 @@ export abstract class App extends Construct implements IApp {
    */
   public _testRunner: TestRunner | undefined;
 
+  /**
+   * SynthHooks hooks of dependent platforms
+   * @internal
+   */
+  protected _synthHooks?: SynthHooks;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -172,6 +178,7 @@ export abstract class App extends Construct implements IApp {
 
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
@@ -283,6 +290,7 @@ export abstract class App extends Construct implements IApp {
     if (!type) {
       return undefined;
     }
+
     return new type(scope, id, ...args);
   }
 }

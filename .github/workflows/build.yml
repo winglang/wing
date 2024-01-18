@@ -243,8 +243,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
-          pnpm run compile --filter jsii-fixture
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid --filter @winglang/compatibility-spy
+          pnpm run compile --filter jsii-fixture --filter @winglang/compatibility-spy
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
@@ -385,7 +385,7 @@ jobs:
             set -o pipefail
 
             cd dist
-            PACKAGES=("@winglang/sdk" "ts4w" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk")
+            PACKAGES=("@winglang/sdk" "ts4w" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
               VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)

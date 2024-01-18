@@ -67,14 +67,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.WingResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.WingResource-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const WingResourceClient = ${WingResource._toInflightType(this)};
+            const WingResourceClient = ${WingResource._toInflightType()};
             const client = new WingResourceClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

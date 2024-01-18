@@ -613,7 +613,7 @@ impl<'a> JSifier<'a> {
 			},
 			ExprKind::Range { start, inclusive, end } => new_code!(
 				expr_span,
-				"$helpers.range(",
+				format!("{HELPERS_VAR}.range("),
 				self.jsify_expression(start, ctx),
 				",",
 				self.jsify_expression(end, ctx),
@@ -719,8 +719,8 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
-					BinaryOperator::NotEqual => return new_code!(expr_span, "$helpers.neq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::Equal => return new_code!(expr_span, HELPERS_VAR, ".eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, HELPERS_VAR, ".neq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -1475,7 +1475,7 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-			// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
+			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1548,7 +1548,9 @@ impl<'a> JSifier<'a> {
 
 		code.open("return `");
 
-		code.open(format!("require(\"./{client_path}\")({{"));
+		code.open(format!(
+			"require(\"${{{HELPERS_VAR}.normalPath(__dirname)}}/{client_path}\")({{"
+		));
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
@@ -1575,7 +1577,7 @@ impl<'a> JSifier<'a> {
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this)}};",
+			"const {}Client = ${{{}._toInflightType()}};",
 			resource_name.name, resource_name.name,
 		));
 
@@ -1660,7 +1662,7 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
-		code.line("const $helpers = require(\"@winglang/sdk/lib/helpers\");");
+		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/lib/helpers\");"));
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
@@ -1757,8 +1759,8 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerOnLift"),
-			BindMethod::Instance => ("", "_registerOnLift"),
+			BindMethod::Type => ("static ", "onLiftType"),
+			BindMethod::Instance => ("", "onLift"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1789,17 +1791,31 @@ impl<'a> JSifier<'a> {
 		}
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
-		for (method_name, method_qual) in lift_qualifications {
-			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (code, method_lift_qual) in method_qual {
-				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 
-				bind_method.line(format!(
-					"{class_name}._registerOnLiftObject({code}, host, [{ops_strings}]);",
-				));
+		if !lift_qualifications.is_empty() {
+			// onLiftMatrix is a helper method that takes in information about all
+			// of the preflight objects and their corresponding ops, and
+			// calls the appropriate onLift method once for each object.
+			bind_method.open(format!("{STDLIB_CORE}.onLiftMatrix(host, ops, {{"));
+
+			for (method_name, method_qual) in lift_qualifications {
+				bind_method.open(format!("\"{method_name}\": [",));
+				for (code, method_lift_qual) in method_qual {
+					// skip any objects named "this" since lifting oneself is redundant
+					// TODO: is the fact that lift_qualifications includes "this" a bug? not sure if these need to be lifted
+					if code == "this" {
+						continue;
+					}
+
+					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+					bind_method.line(format!("[{code}, [{ops_strings}]],",));
+				}
+				bind_method.close("],");
 			}
-			bind_method.close("}");
+
+			bind_method.close("});");
 		}
+
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method

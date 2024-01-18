@@ -1149,6 +1149,28 @@ importers:
         specifier: ^0.32.4
         version: 0.32.4
 
+  libs/compatibility-spy:
+    dependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
+      constructs:
+        specifier: ~10.2.69
+        version: 10.2.70
+    devDependencies:
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../tools/bump-pack
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@4.9.5)
+      typescript:
+        specifier: ^4.9.5
+        version: 4.9.5
+      vitest:
+        specifier: ^0.32.4
+        version: 0.32.4
+
   libs/tree-sitter-wing:
     dependencies:
       nan:
@@ -1537,6 +1559,9 @@ importers:
       '@wingconsole/ui':
         specifier: workspace:^
         version: link:../../apps/wing-console/console/ui
+      '@winglang/compatibility-spy':
+        specifier: workspace:^
+        version: link:../../libs/compatibility-spy
       '@winglang/compiler':
         specifier: workspace:^
         version: link:../../libs/wingcompiler

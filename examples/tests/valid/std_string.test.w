@@ -18,6 +18,10 @@ assert("hello" + " world" == "hello world");
 assert(
 "hello {"funky"}
  world" == "hello funky\n world");
+
+let var initial = "hey, ";
+initial += "you";
+assert(initial == "hey, you");
   
 // For debugging the test
 test "string" {
