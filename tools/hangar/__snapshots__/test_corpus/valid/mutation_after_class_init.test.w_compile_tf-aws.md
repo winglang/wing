@@ -358,14 +358,14 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure1-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
               })
             `;
           }
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this)};
+                const $Closure1Client = ${$Closure1._toInflightType()};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -387,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
                 $__parent_this_2_consumer: ${$stdlib.core.liftObject(__parent_this_2.consumer)},
               })
             `;
@@ -395,7 +395,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure2Client = ${$Closure2._toInflightType(this)};
+                const $Closure2Client = ${$Closure2._toInflightType()};
                 const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -422,14 +422,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Queue-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Queue-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const QueueClient = ${Queue._toInflightType(this)};
+            const QueueClient = ${Queue._toInflightType()};
             const client = new QueueClient({
               $this_data: ${$stdlib.core.liftObject(this.data)},
             });
@@ -461,7 +461,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
             $c: ${$stdlib.core.liftObject(c)},
           })
         `;
@@ -469,7 +469,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -497,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
             $c: ${$stdlib.core.liftObject(c)},
             $q: ${$stdlib.core.liftObject(q)},
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
@@ -507,7 +507,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this)};
+            const $Closure4Client = ${$Closure4._toInflightType()};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
