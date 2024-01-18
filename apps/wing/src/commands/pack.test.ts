@@ -215,6 +215,7 @@ describe("wing pack", () => {
         "README.md",
         "enums.w",
         "package.json",
+        "store.test.w",
         "store.w",
         "subdir/util.w",
         "util.js",
