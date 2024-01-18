@@ -186,7 +186,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure1-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
                 $__parent_this_1: ${$stdlib.core.liftObject(__parent_this_1)},
               })
             `;
@@ -194,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this)};
+                const $Closure1Client = ${$Closure1._toInflightType()};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -205,25 +205,27 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure1._registerOnLiftObject(__parent_this_1, host, ["bar"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [__parent_this_1, ["bar"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }

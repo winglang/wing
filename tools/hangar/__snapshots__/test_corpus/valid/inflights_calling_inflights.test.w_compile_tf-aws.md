@@ -278,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
           })
         `;
@@ -286,7 +286,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -297,11 +297,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(globalBucket, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [globalBucket, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -312,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $storeInBucket: ${$stdlib.core.liftObject(storeInBucket)},
           })
         `;
@@ -320,7 +322,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -331,11 +333,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(storeInBucket, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [storeInBucket, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -346,7 +350,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
             $func1: ${$stdlib.core.liftObject(func1)},
             $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
           })
@@ -355,7 +359,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -366,12 +370,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(func1, host, ["invoke"]);
-          $Closure3._registerOnLiftObject(globalBucket, host, ["get"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [func1, ["invoke"]],
+            [globalBucket, ["get"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -386,7 +392,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure4-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
                 $globalBucket: ${$stdlib.core.liftObject(globalBucket)},
               })
             `;
@@ -394,7 +400,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure4Client = ${$Closure4._toInflightType(this)};
+                const $Closure4Client = ${$Closure4._toInflightType()};
                 const client = new $Closure4Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -405,25 +411,27 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure4._registerOnLiftObject(globalBucket, host, ["list"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [globalBucket, ["list"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         this.closure = new $Closure4(this, "$Closure4");
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
               $this_closure: ${$stdlib.core.liftObject(this.closure)},
             });
@@ -435,14 +443,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject(this.closure, host, []);
-        }
-        if (ops.includes("foo")) {
-          MyResource._registerOnLiftObject(this.closure, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.closure, []],
+          ],
+          "foo": [
+            [this.closure, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -453,7 +463,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure5-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
             $x: ${$stdlib.core.liftObject(x)},
           })
         `;
@@ -461,7 +471,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this)};
+            const $Closure5Client = ${$Closure5._toInflightType()};
             const client = new $Closure5Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -472,11 +482,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure5._registerOnLiftObject(x, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [x, ["foo"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

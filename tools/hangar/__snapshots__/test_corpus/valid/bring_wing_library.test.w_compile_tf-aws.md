@@ -131,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-3.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-3.js")({
             $fixture_Store: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"))},
           })
         `;
@@ -139,7 +139,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -150,11 +150,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject($stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), host, ["makeKeyInflight"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     new fixture.Store(this, "fixture.Store");
@@ -189,7 +191,7 @@ class Store extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Store-2.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-2.js")({
         $myutil_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"))},
       })
     `;
@@ -197,7 +199,7 @@ class Store extends $stdlib.std.Resource {
   _toInflight() {
     return `
       (await (async () => {
-        const StoreClient = ${Store._toInflightType(this)};
+        const StoreClient = ${Store._toInflightType()};
         const client = new StoreClient({
           $this_data: ${$stdlib.core.liftObject(this.data)},
         });
@@ -209,15 +211,17 @@ class Store extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
   }
-  _registerOnLift(host, ops) {
-    if (ops.includes("$inflight_init")) {
-      Store._registerOnLiftObject(this.data, host, []);
-    }
-    if (ops.includes("set")) {
-      Store._registerOnLiftObject($stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), host, ["double"]);
-      Store._registerOnLiftObject(this.data, host, ["put"]);
-    }
-    super._registerOnLift(host, ops);
+  onLift(host, ops) {
+    $stdlib.core.onLiftMatrix(host, ops, {
+      "$inflight_init": [
+        [this.data, []],
+      ],
+      "set": [
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
+        [this.data, ["put"]],
+      ],
+    });
+    super.onLift(host, ops);
   }
 }
 module.exports = { Store };
@@ -262,14 +266,14 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const UtilClient = ${Util._toInflightType(this)};
+        const UtilClient = ${Util._toInflightType()};
         const client = new UtilClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }

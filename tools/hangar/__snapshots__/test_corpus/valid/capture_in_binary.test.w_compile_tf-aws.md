@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $b: ${$stdlib.core.liftObject(b)},
             $x: ${$stdlib.core.liftObject(x)},
           })
@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -96,12 +96,14 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(b, host, ["get", "put"]);
-          $Closure1._registerOnLiftObject(x, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [b, ["get", "put"]],
+            [x, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
