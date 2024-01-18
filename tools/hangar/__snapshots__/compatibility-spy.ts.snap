@@ -3,6 +3,10 @@
 exports[`aws-counter.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/aws-counter.test.w": {
       "validates the AWS counter name": {
@@ -39,6 +43,10 @@ exports[`aws-counter.test.w 1`] = `
 exports[`dec.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/dec.test.w": {
       "dec": {
@@ -213,6 +221,10 @@ exports[`dec.test.w 1`] = `
 exports[`inc.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/inc.test.w": {
       "inc": {
@@ -453,6 +465,10 @@ exports[`inc.test.w 1`] = `
 exports[`initial.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/initial.test.w": {
       "initial:default": {
@@ -574,6 +590,10 @@ exports[`initial.test.w 1`] = `
 exports[`peek.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/peek.test.w": {
       "key peek": {
@@ -726,6 +746,10 @@ exports[`peek.test.w 1`] = `
 exports[`set.test.w 1`] = `
 {
   "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "../../../libs/compatibility-spy/lib",
+  ],
   "results": {
     "counter/set.test.w": {
       "key set": {
