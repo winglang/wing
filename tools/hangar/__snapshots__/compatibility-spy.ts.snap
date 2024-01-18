@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`aws-counter.test.w 1`] = `
+"{
+  \\"Counter\\": [
+    \\"dynamoTableArn\\"
+  ],
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ]
+}"
+`;
+
+exports[`dec.test.w 1`] = `
+"{
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ],
+  \\"Counter\\": [
+    \\"onLift\\"
+  ]
+}"
+`;
+
+exports[`inc.test.w 1`] = `
+"{
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ],
+  \\"Counter\\": [
+    \\"onLift\\"
+  ]
+}"
+`;
+
+exports[`initial.test.w 1`] = `
+"{
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ],
+  \\"Counter\\": [
+    \\"onLift\\"
+  ]
+}"
+`;
+
+exports[`peek.test.w 1`] = `
+"{
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ],
+  \\"Counter\\": [
+    \\"onLift\\"
+  ]
+}"
+`;
+
+exports[`set.test.w 1`] = `
+"{
+  \\"TestRunner\\": [
+    \\"findTests\\"
+  ],
+  \\"Counter\\": [
+    \\"onLift\\"
+  ]
+}"
+`;
