@@ -17,8 +17,7 @@ exports[`dec.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"dec\\",
-    \\"peek\\"
+    \\"onLift\\"
   ]
 }"
 `;
@@ -29,8 +28,7 @@ exports[`inc.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\"
+    \\"onLift\\"
   ]
 }"
 `;
@@ -41,7 +39,7 @@ exports[`initial.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"peek\\"
+    \\"onLift\\"
   ]
 }"
 `;
@@ -52,8 +50,7 @@ exports[`peek.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\"
+    \\"onLift\\"
   ]
 }"
 `;
@@ -64,9 +61,7 @@ exports[`set.test.w 1`] = `
     \\"findTests\\"
   ],
   \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\",
-    \\"set\\"
+    \\"onLift\\"
   ]
 }"
 `;
