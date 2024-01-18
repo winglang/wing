@@ -10,6 +10,8 @@ export interface Bundle {
   entrypointPath: string;
   directory: string;
   hash: string;
+  outfilePath: string;
+  sourcemapPath: string;
 }
 
 /**
@@ -95,5 +97,7 @@ export function createBundle(
     entrypointPath: outfile,
     directory: outdir,
     hash: codeHash,
+    outfilePath: outfile,
+    sourcemapPath: outfileMap,
   };
 }
