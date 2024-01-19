@@ -49,6 +49,7 @@ mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod dtsify;
 mod file_graph;
 mod files;
 pub mod fold;
@@ -346,11 +347,24 @@ pub fn compile(
 		let scope = asts.get_mut(file).expect("matching AST not found");
 		jsifier.jsify(file, &scope);
 	}
-
-	let files = jsifier.output_files.borrow_mut();
-	match files.emit_files(out_dir) {
+	match jsifier.output_files.borrow().emit_files(out_dir) {
 		Ok(()) => {}
 		Err(err) => report_diagnostic(err.into()),
+	}
+
+	// -- DTSIFICATION PHASE --
+	if source_path.is_dir() {
+		let preflight_file_map = jsifier.preflight_file_map.borrow();
+		let dtsifier = dtsify::DTSifier::new(&mut types, &preflight_file_map, &mut file_graph);
+		for file in &topo_sorted_files {
+			let scope = asts.get_mut(file).expect("matching AST not found");
+			dtsifier.dtsify(file, &scope);
+		}
+		let output_files = dtsifier.output_files.borrow();
+		match output_files.emit_files(out_dir) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
 	}
 
 	if found_errors() {

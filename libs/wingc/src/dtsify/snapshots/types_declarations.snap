@@ -1,5 +1,5 @@
 ---
-source: libs/wingc/src/jsify/tests.rs
+source: libs/wingc/src/dtsify/mod.rs
 ---
 ## Code
 
@@ -76,8 +76,6 @@ module.exports = function({  }) {
 ## preflight.d.ts
 
 ```js
-import * as $internal from "@winglang/sdk/lib/core/types"
-import { std } from "@winglang/sdk"
 export * from "./preflight.lib-1.js"
 ```
 
@@ -99,6 +97,27 @@ module.exports = {
 ```js
 import * as $internal from "@winglang/sdk/lib/core/types"
 import { std } from "@winglang/sdk"
+export interface Struct {
+  readonly n: number;
+  readonly d: (readonly (std.Duration)[]);
+  readonly j: Readonly<$internal.Json>;
+}
+export interface Interface
+{
+  readonly method: (s: Struct) => string;
+}
+export interface Interface$Inflight
+{
+  readonly inflightMethod: () => Promise<string>;
+}
+export interface ClassInterface
+{
+  readonly addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
+}
+export interface ClassInterface$Inflight
+{
+  readonly bar: () => Promise<void>;
+}
 export class ParentClass extends std.Resource implements ClassInterface
 {
   constructor(scope: $internal.Construct, id: string);
@@ -121,27 +140,6 @@ export class Child extends ParentClass implements ClassInterface
 export class Child$Inflight extends ParentClass$Inflight implements ClassInterface$Inflight
 {
   constructor();
-}
-export interface Struct {
-  readonly n: number;
-  readonly d: Readonly<(std.Duration)[]>;
-  readonly j: Readonly<$internal.Json>;
-}
-export interface Interface
-{
-  readonly method: (s: Struct) => string;
-}
-export interface Interface$Inflight
-{
-  readonly inflightMethod: () => Promise<string>;
-}
-export interface ClassInterface
-{
-  readonly addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
-}
-export interface ClassInterface$Inflight
-{
-  readonly bar: () => Promise<void>;
 }
 ```
 

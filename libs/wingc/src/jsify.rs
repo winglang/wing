@@ -12,9 +12,8 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 use crate::{
 	ast::{
 		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
-		InterpolatedStringPart, Literal, New, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
+		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -53,9 +52,6 @@ const JS_CONSTRUCTOR: &str = "constructor";
 const NODE_MODULES_DIR: &str = "node_modules";
 const NODE_MODULES_SCOPE_SPECIFIER: &str = "@";
 
-const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
-const TYPE_INTERNAL_NAMESPACE: &str = "$internal";
-
 const SUPER_CLASS_INFLIGHT_INIT_NAME: &str = formatcp!("super_{CLASS_INFLIGHT_INIT_NAME}");
 
 pub struct JSifyContext<'a> {
@@ -80,7 +76,7 @@ pub struct JSifier<'a> {
 
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
-	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
+	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
@@ -128,8 +124,6 @@ impl<'a> JSifier<'a> {
 
 	pub fn jsify(&mut self, source_path: &Utf8Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
-		let is_entrypoint = is_entrypoint_file(source_path);
-		let should_write_types = self.compilation_init_path.is_dir() && !is_entrypoint;
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -140,15 +134,6 @@ impl<'a> JSifier<'a> {
 			source_path: Some(source_path),
 		};
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
-
-		let mut dts: CodeMaker = CodeMaker::default();
-		if should_write_types {
-			dts.line(format!(
-				"import * as {TYPE_INTERNAL_NAMESPACE} from \"@winglang/sdk/lib/core/types\""
-			));
-			dts.line("import { std } from \"@winglang/sdk\"");
-		}
-
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
@@ -157,9 +142,6 @@ impl<'a> JSifier<'a> {
 			_ => Ordering::Equal,
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);
-			if should_write_types {
-				dts.add_code(self.dtsify_statement(statement));
-			}
 			let s = self.jsify_statement(&scope_env, statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
@@ -175,6 +157,7 @@ impl<'a> JSifier<'a> {
 		let mut output = CodeMaker::default();
 
 		let is_compilation_init = source_path == self.compilation_init_path;
+		let is_entrypoint = is_entrypoint_file(source_path);
 		let is_directory = source_path.is_dir();
 
 		output.line("\"use strict\";");
@@ -238,16 +221,10 @@ impl<'a> JSifier<'a> {
 				let preflight_file_name = preflight_file_map.get(file).expect("no emitted JS file found");
 				if file.is_dir() {
 					let directory_name = file.file_stem().unwrap();
-					if should_write_types {
-						dts.line(format!("export * as {directory_name} from \"./{preflight_file_name}\""));
-					}
 					output.line(format!(
 						"get {directory_name}() {{ return require(\"./{preflight_file_name}\") }},"
 					));
 				} else {
-					if should_write_types {
-						dts.line(format!("export * from \"./{preflight_file_name}\""));
-					}
 					output.line(format!("...require(\"./{preflight_file_name}\"),"));
 				}
 			}
@@ -310,352 +287,6 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
-
-		if should_write_types {
-			match self
-				.output_files
-				.borrow_mut()
-				.add_file(preflight_file_name.replace(".js", ".d.ts"), dts.to_string())
-			{
-				Ok(()) => {}
-				Err(err) => report_diagnostic(err.into()),
-			}
-		}
-	}
-
-	fn dtsify_type_annotation(&self, typ: &TypeAnnotation, ignore_phase: bool) -> String {
-		match &typ.kind {
-			TypeAnnotationKind::Inferred => panic!("Should not have any inferred types"),
-			TypeAnnotationKind::Number => "number".to_string(),
-			TypeAnnotationKind::String => "string".to_string(),
-			TypeAnnotationKind::Bool => "boolean".to_string(),
-			TypeAnnotationKind::Void => "void".to_string(),
-			TypeAnnotationKind::Json => format!("Readonly<{TYPE_INTERNAL_NAMESPACE}.Json>"),
-			TypeAnnotationKind::MutJson => format!("{TYPE_INTERNAL_NAMESPACE}.Json"),
-			TypeAnnotationKind::Duration => "std.Duration".to_string(),
-			TypeAnnotationKind::Optional(t) => format!("({}) | undefined", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::Array(t) => format!("Readonly<({})[]>", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::MutArray(t) => format!("({})[]", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::Map(t) => format!(
-				"Readonly<Record<string, {}>>",
-				self.dtsify_type_annotation(&t, ignore_phase)
-			),
-			TypeAnnotationKind::MutMap(t) => format!("Record<string, {}>", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::Set(t) => format!("Readonly<Set<{}>>", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::MutSet(t) => format!("Set<{}>", self.dtsify_type_annotation(&t, ignore_phase)),
-			TypeAnnotationKind::Function(f) => self.dtsify_function_signature(f, ignore_phase),
-			TypeAnnotationKind::UserDefined(udt) => udt.to_string(),
-		}
-	}
-
-	fn dtsify_function_signature(&self, f: &FunctionSignature, as_inflight: bool) -> String {
-		let mut args = vec![];
-
-		let is_inflight = matches!(f.phase, Phase::Inflight);
-
-		for (i, arg) in f.parameters.iter().enumerate() {
-			let arg_name = if arg.name.name.is_empty() {
-				// function type annotations don't always have names
-				format!("arg{}", i)
-			} else {
-				arg.name.name.clone()
-			};
-			args.push(format!(
-				"{arg_name}: {}",
-				self.dtsify_type_annotation(&arg.type_annotation, as_inflight)
-			));
-		}
-
-		let return_type = self.dtsify_type_annotation(&f.return_type, as_inflight);
-		let return_type = if is_inflight {
-			format!("Promise<{return_type}>")
-		} else {
-			return_type
-		};
-
-		let func = format!("({}) => {return_type}", args.join(", "),);
-
-		if is_inflight && !as_inflight {
-			// this is the preflight side of an inflight function
-			format!("{TYPE_INTERNAL_NAMESPACE}.Inflight<{func}>")
-		} else {
-			func
-		}
-	}
-
-	fn dtsify_interface(&self, interface: &Interface, as_inflight: bool) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		let interface_name = if as_inflight {
-			format!("{}{TYPE_INFLIGHT_POSTFIX}", &interface.name.name)
-		} else {
-			interface.name.name.to_string()
-		};
-
-		code.line(format!("export interface {interface_name}"));
-
-		if !interface.extends.is_empty() {
-			code.append(" extends ");
-			code.append(
-				&interface
-					.extends
-					.iter()
-					.map(|udt| {
-						if as_inflight {
-							format!("{udt}{TYPE_INFLIGHT_POSTFIX}")
-						} else {
-							udt.to_string()
-						}
-					})
-					.join(", "),
-			);
-		}
-
-		code.open("{");
-
-		for method in &interface.methods {
-			if (as_inflight && matches!(method.1.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(method.1.phase, Phase::Inflight))
-			{
-				continue;
-			}
-			code.line(format!(
-				"readonly {}: {};",
-				method.0.name,
-				self.dtsify_function_signature(&method.1, as_inflight)
-			));
-		}
-
-		code.close("}");
-
-		code
-	}
-
-	fn dtsify_class(&self, class: &AstClass, as_inflight: bool) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		let class_name = if as_inflight {
-			format!("{}{TYPE_INFLIGHT_POSTFIX}", class.name)
-		} else {
-			class.name.name.to_string()
-		};
-
-		code.line("export class ");
-
-		code.append(&class_name);
-		if let Some(parent) = &class.parent {
-			code.append(" extends ");
-			if as_inflight {
-				code.append(format!("{parent}{TYPE_INFLIGHT_POSTFIX}"));
-			} else {
-				code.append(parent.to_string());
-			}
-		} else if !as_inflight && matches!(class.phase, Phase::Preflight) {
-			code.append(" extends std.Resource");
-		}
-
-		if !class.implements.is_empty() {
-			code.append(" implements ");
-			if as_inflight {
-				code.append(
-					&class
-						.implements
-						.iter()
-						.map(|udt| format!("{udt}{TYPE_INFLIGHT_POSTFIX}"))
-						.join(", "),
-				);
-			} else {
-				code.append(&class.implements.iter().map(|udt| udt.to_string()).join(", "));
-			}
-		}
-
-		code.open("{");
-
-		let constructor_params = self.dtsify_parameters(&class.initializer.signature.parameters);
-		if matches!(class.phase, Phase::Preflight) {
-			if as_inflight {
-				code.line(format!("constructor({constructor_params});"));
-			} else {
-				// add implicit scope and id
-				code.line(format!(
-					"constructor(scope: {TYPE_INTERNAL_NAMESPACE}.Construct, id: string"
-				));
-
-				if constructor_params.is_empty() {
-					code.append(");");
-				} else {
-					code.append(format!(", {constructor_params});"));
-				}
-			}
-		} else {
-			code.line(format!("constructor({constructor_params});"));
-		}
-
-		if !as_inflight && matches!(class.phase, Phase::Preflight) {
-			// Emit special preflight marks to tie the inflight side together
-			let inflight_class_name = format!("{class_name}{TYPE_INFLIGHT_POSTFIX}");
-			code.line(format!(
-				"[{TYPE_INTERNAL_NAMESPACE}.INFLIGHT_SYMBOL]?: {inflight_class_name};"
-			));
-			code.line(format!(
-				"_supportedOps(): {TYPE_INTERNAL_NAMESPACE}.OperationsOf<{inflight_class_name}>;"
-			));
-		}
-
-		for field in class
-			.fields
-			.iter()
-			.filter(|f| matches!(f.access, AccessModifier::Public))
-		{
-			if (as_inflight && matches!(field.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(field.phase, Phase::Inflight))
-			{
-				continue;
-			}
-
-			code.line(format!(
-				"{}: {};",
-				field.name,
-				self.dtsify_type_annotation(&field.member_type, true)
-			));
-		}
-		for method in class
-			.methods
-			.iter()
-			.filter(|f| matches!(f.1.access, AccessModifier::Public))
-		{
-			if (as_inflight && matches!(method.1.signature.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(method.1.signature.phase, Phase::Inflight))
-			{
-				continue;
-			}
-
-			code.line(format!(
-				"{}{}: {};",
-				if method.1.is_static { "static " } else { "" },
-				method.0.name,
-				self.dtsify_function_signature(&method.1.signature, as_inflight)
-			));
-		}
-
-		code.close("}");
-		code
-	}
-
-	fn dtsify_statement(&self, stmt: &Stmt) -> CodeMaker {
-		let mut code = CodeMaker::default();
-		match &stmt.kind {
-			StmtKind::Interface(interface) => {
-				code.line(self.dtsify_interface(interface, false));
-				code.line(self.dtsify_interface(interface, true));
-			}
-			StmtKind::Struct {
-				name,
-				extends,
-				fields,
-				access: _,
-			} => {
-				if !extends.is_empty() {
-					code.open(format!(
-						"export interface {} extends {} {{",
-						name.name,
-						extends.iter().map(|udt| udt.to_string()).join(", ")
-					));
-				} else {
-					code.open(format!("export interface {} {{", name.name));
-				}
-
-				for field in fields {
-					let is_optional = matches!(field.member_type.kind, TypeAnnotationKind::Optional(_));
-
-					code.line(format!(
-						"readonly {}{}: {};",
-						field.name,
-						if is_optional { "?" } else { "" },
-						self.dtsify_type_annotation(&field.member_type, false)
-					));
-				}
-				code.close("}");
-			}
-			StmtKind::Enum {
-				name,
-				values,
-				access: _,
-			} => {
-				code.open(format!("export enum {} {{", name.name));
-				for value in values {
-					code.line(format!("{},", value.name));
-				}
-				code.close("}");
-			}
-			StmtKind::Bring { source, identifier } => {
-				let identifier = identifier.as_ref().map(|i| i.name.clone()).unwrap_or("".to_string());
-
-				match source {
-					BringSource::BuiltinModule(sym) => {
-						code.line(format!("import {{{}}} from \"{}\"", sym.name, WINGSDK_ASSEMBLY_NAME))
-					}
-					BringSource::TrustedModule(sym, path) => {
-						code.line(format!("import * as {} from \"{}\"", sym.name, path.as_str()))
-					}
-					BringSource::WingLibrary(sym, path) => {
-						code.line(format!("import * as {} from \"{}\"", sym.name, path.as_str()))
-					}
-					BringSource::JsiiModule(sym) => code.line(format!("import * as {identifier} from '{}'", sym.name)),
-					BringSource::WingFile(sym) => {
-						let preflight_file_map = self.preflight_file_map.borrow();
-						let preflight_file_name = preflight_file_map
-							.get(Utf8Path::new(&sym.name))
-							.unwrap()
-							.replace(".js", "");
-						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
-					}
-					BringSource::Directory(sym) => {
-						let preflight_file_map = self.preflight_file_map.borrow();
-						let preflight_file_name = preflight_file_map
-							.get(Utf8Path::new(&sym.name))
-							.unwrap()
-							.replace(".js", "");
-						code.line(format!("import * as {identifier} from \"./{preflight_file_name}\";"))
-					}
-				}
-			}
-			StmtKind::Class(class) => {
-				code.line(self.dtsify_class(class, false));
-				if class.phase == Phase::Preflight {
-					code.line(self.dtsify_class(class, true));
-				}
-			}
-
-			// No need to emit anything for these
-			StmtKind::SuperConstructor { .. }
-			| StmtKind::Let { .. }
-			| StmtKind::ForLoop { .. }
-			| StmtKind::While { .. }
-			| StmtKind::IfLet(_)
-			| StmtKind::If { .. }
-			| StmtKind::Break
-			| StmtKind::Continue
-			| StmtKind::Return(_)
-			| StmtKind::Throw(_)
-			| StmtKind::Expression(_)
-			| StmtKind::Assignment { .. }
-			| StmtKind::Scope(_)
-			| StmtKind::TryCatch { .. }
-			| StmtKind::CompilerDebugEnv => {}
-		}
-
-		code
-	}
-
-	fn dtsify_parameters(&self, arg_list: &Vec<FunctionParameter>) -> String {
-		let mut args = vec![];
-		for arg in arg_list {
-			args.push(format!(
-				"{}: {}",
-				arg.name,
-				self.dtsify_type_annotation(&arg.type_annotation, false)
-			));
-		}
-		args.join(", ")
 	}
 
 	fn jsify_struct_schemas(&self) -> CodeMaker {
