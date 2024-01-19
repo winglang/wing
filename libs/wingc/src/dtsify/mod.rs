@@ -5,36 +5,19 @@ use indexmap::IndexMap;
 use itertools::Itertools;
 
 use crate::{
-	ast::*,
-	diagnostic::report_diagnostic,
-	file_graph::FileGraph,
-	files::Files,
-	jsify::codemaker::CodeMaker,
-	type_check::Types,
-	visit_context::{VisitContext, VisitorWithContext},
-	WINGSDK_ASSEMBLY_NAME,
+	ast::*, diagnostic::report_diagnostic, file_graph::FileGraph, files::Files, jsify::codemaker::CodeMaker,
+	type_check::Types, WINGSDK_ASSEMBLY_NAME,
 };
 
 const TYPE_INFLIGHT_POSTFIX: &str = "$Inflight";
 const TYPE_INTERNAL_NAMESPACE: &str = "$internal";
 const TYPE_STD: &str = "std";
 
-pub struct DTSifyContext<'a> {
-	pub visit_ctx: &'a mut VisitContext,
-	pub source_path: Option<&'a Utf8Path>,
-}
-
 pub struct DTSifier<'a> {
 	preflight_file_map: &'a IndexMap<Utf8PathBuf, String>,
 	source_file_graph: &'a FileGraph,
 	pub types: &'a mut Types,
 	pub output_files: RefCell<Files>,
-}
-
-impl VisitorWithContext for DTSifyContext<'_> {
-	fn ctx(&mut self) -> &mut VisitContext {
-		&mut self.visit_ctx
-	}
 }
 
 impl<'a> DTSifier<'a> {
@@ -52,13 +35,6 @@ impl<'a> DTSifier<'a> {
 	}
 
 	pub fn dtsify(&self, source_path: &Utf8Path, scope: &Scope) {
-		let visit_ctx = &mut VisitContext::new();
-		let mut dtsify_ctx = DTSifyContext {
-			visit_ctx,
-			source_path: Some(source_path),
-		};
-		dtsify_ctx.visit_ctx.push_env(self.types.get_scope_env(&scope));
-
 		let mut dts = CodeMaker::default();
 
 		if source_path.is_dir() {
@@ -81,7 +57,7 @@ impl<'a> DTSifier<'a> {
 		}
 
 		for statement in &scope.statements {
-			dts.add_code(self.dtsify_statement(&mut dtsify_ctx, statement));
+			dts.add_code(self.dtsify_statement(statement));
 		}
 
 		let mut dts_file_name = self.preflight_file_map.get(source_path).unwrap().clone();
@@ -95,7 +71,7 @@ impl<'a> DTSifier<'a> {
 		}
 	}
 
-	fn dtsify_function_signature(&self, ctx: &mut DTSifyContext, f: &FunctionSignature, as_inflight: bool) -> String {
+	fn dtsify_function_signature(&self, f: &FunctionSignature, as_inflight: bool) -> String {
 		let mut args = vec![];
 
 		let is_inflight = matches!(f.phase, Phase::Inflight);
@@ -109,11 +85,11 @@ impl<'a> DTSifier<'a> {
 			};
 			args.push(format!(
 				"{arg_name}: {}",
-				self.dtsify_type_annotation(ctx, &arg.type_annotation, as_inflight)
+				self.dtsify_type_annotation(&arg.type_annotation, as_inflight)
 			));
 		}
 
-		let return_type = self.dtsify_type_annotation(ctx, &f.return_type, as_inflight);
+		let return_type = self.dtsify_type_annotation(&f.return_type, as_inflight);
 		let return_type = if is_inflight {
 			format!("Promise<{return_type}>")
 		} else {
@@ -130,7 +106,7 @@ impl<'a> DTSifier<'a> {
 		}
 	}
 
-	fn dtsify_interface(&self, ctx: &mut DTSifyContext, interface: &Interface, as_inflight: bool) -> CodeMaker {
+	fn dtsify_interface(&self, interface: &Interface, as_inflight: bool) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		let interface_name = if as_inflight {
 			format!("{}{TYPE_INFLIGHT_POSTFIX}", &interface.name.name)
@@ -168,7 +144,7 @@ impl<'a> DTSifier<'a> {
 			code.line(format!(
 				"readonly {}: {};",
 				method.0.name,
-				self.dtsify_function_signature(ctx, &method.1, as_inflight)
+				self.dtsify_function_signature(&method.1, as_inflight)
 			));
 		}
 
@@ -177,7 +153,7 @@ impl<'a> DTSifier<'a> {
 		code
 	}
 
-	fn dtsify_class(&self, ctx: &mut DTSifyContext, class: &Class, as_inflight: bool) -> CodeMaker {
+	fn dtsify_class(&self, class: &Class, as_inflight: bool) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		let class_name = if as_inflight {
 			format!("{}{TYPE_INFLIGHT_POSTFIX}", class.name)
@@ -216,7 +192,7 @@ impl<'a> DTSifier<'a> {
 
 		code.open("{");
 
-		let constructor_params = self.dtsify_parameters(ctx, &class.initializer.signature.parameters);
+		let constructor_params = self.dtsify_parameters(&class.initializer.signature.parameters);
 		if matches!(class.phase, Phase::Preflight) {
 			if as_inflight {
 				code.line(format!("constructor({constructor_params});"));
@@ -261,7 +237,7 @@ impl<'a> DTSifier<'a> {
 			code.line(format!(
 				"{}: {};",
 				field.name,
-				self.dtsify_type_annotation(ctx, &field.member_type, true)
+				self.dtsify_type_annotation(&field.member_type, true)
 			));
 		}
 		for method in class
@@ -279,7 +255,7 @@ impl<'a> DTSifier<'a> {
 				"{}{}: {};",
 				if method.1.is_static { "static " } else { "" },
 				method.0.name,
-				self.dtsify_function_signature(ctx, &method.1.signature, as_inflight)
+				self.dtsify_function_signature(&method.1.signature, as_inflight)
 			));
 		}
 
@@ -287,12 +263,12 @@ impl<'a> DTSifier<'a> {
 		code
 	}
 
-	fn dtsify_statement(&self, ctx: &mut DTSifyContext, stmt: &Stmt) -> CodeMaker {
+	fn dtsify_statement(&self, stmt: &Stmt) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		match &stmt.kind {
 			StmtKind::Interface(interface) => {
-				code.line(self.dtsify_interface(ctx, interface, false));
-				code.line(self.dtsify_interface(ctx, interface, true));
+				code.line(self.dtsify_interface(interface, false));
+				code.line(self.dtsify_interface(interface, true));
 			}
 			StmtKind::Struct {
 				name,
@@ -317,7 +293,7 @@ impl<'a> DTSifier<'a> {
 						"readonly {}{}: {};",
 						field.name,
 						if is_optional { "?" } else { "" },
-						self.dtsify_type_annotation(ctx, &field.member_type, false)
+						self.dtsify_type_annotation(&field.member_type, false)
 					));
 				}
 				code.close("}");
@@ -360,9 +336,9 @@ impl<'a> DTSifier<'a> {
 				}
 			}
 			StmtKind::Class(class) => {
-				code.line(self.dtsify_class(ctx, class, false));
+				code.line(self.dtsify_class(class, false));
 				if class.phase == Phase::Preflight {
-					code.line(self.dtsify_class(ctx, class, true));
+					code.line(self.dtsify_class(class, true));
 				}
 			}
 
@@ -387,19 +363,19 @@ impl<'a> DTSifier<'a> {
 		code
 	}
 
-	fn dtsify_parameters(&self, ctx: &mut DTSifyContext, arg_list: &Vec<FunctionParameter>) -> String {
+	fn dtsify_parameters(&self, arg_list: &Vec<FunctionParameter>) -> String {
 		let mut args = vec![];
 		for arg in arg_list {
 			args.push(format!(
 				"{}: {}",
 				arg.name,
-				self.dtsify_type_annotation(ctx, &arg.type_annotation, false)
+				self.dtsify_type_annotation(&arg.type_annotation, false)
 			));
 		}
 		args.join(", ")
 	}
 
-	fn dtsify_type_annotation(&self, ctx: &mut DTSifyContext, typ: &TypeAnnotation, ignore_phase: bool) -> String {
+	fn dtsify_type_annotation(&self, typ: &TypeAnnotation, ignore_phase: bool) -> String {
 		match &typ.kind {
 			TypeAnnotationKind::Inferred => panic!("Should not have any inferred types"),
 			TypeAnnotationKind::Number => "number".to_string(),
@@ -410,27 +386,27 @@ impl<'a> DTSifier<'a> {
 			TypeAnnotationKind::MutJson => format!("{TYPE_INTERNAL_NAMESPACE}.Json"),
 			TypeAnnotationKind::Duration => format!("{TYPE_STD}.Duration"),
 			TypeAnnotationKind::Optional(t) => {
-				format!("({}) | undefined", self.dtsify_type_annotation(ctx, &t, ignore_phase))
+				format!("({}) | undefined", self.dtsify_type_annotation(&t, ignore_phase))
 			}
-			TypeAnnotationKind::Array(t) => format!("(readonly ({})[])", self.dtsify_type_annotation(ctx, &t, ignore_phase)),
-			TypeAnnotationKind::MutArray(t) => format!("({})[]", self.dtsify_type_annotation(ctx, &t, ignore_phase)),
+			TypeAnnotationKind::Array(t) => format!("(readonly ({})[])", self.dtsify_type_annotation(&t, ignore_phase)),
+			TypeAnnotationKind::MutArray(t) => format!("({})[]", self.dtsify_type_annotation(&t, ignore_phase)),
 			TypeAnnotationKind::Map(t) => format!(
 				"Readonly<Record<string, {}>>",
-				self.dtsify_type_annotation(ctx, &t, ignore_phase)
+				self.dtsify_type_annotation(&t, ignore_phase)
 			),
 			TypeAnnotationKind::MutMap(t) => {
-				format!("Record<string, {}>", self.dtsify_type_annotation(ctx, &t, ignore_phase))
+				format!("Record<string, {}>", self.dtsify_type_annotation(&t, ignore_phase))
 			}
-			TypeAnnotationKind::Set(t) => format!("Readonly<Set<{}>>", self.dtsify_type_annotation(ctx, &t, ignore_phase)),
-			TypeAnnotationKind::MutSet(t) => format!("Set<{}>", self.dtsify_type_annotation(ctx, &t, ignore_phase)),
-			TypeAnnotationKind::Function(f) => self.dtsify_function_signature(ctx, f, ignore_phase),
+			TypeAnnotationKind::Set(t) => format!("Readonly<Set<{}>>", self.dtsify_type_annotation(&t, ignore_phase)),
+			TypeAnnotationKind::MutSet(t) => format!("Set<{}>", self.dtsify_type_annotation(&t, ignore_phase)),
+			TypeAnnotationKind::Function(f) => self.dtsify_function_signature(f, ignore_phase),
 			TypeAnnotationKind::UserDefined(udt) => udt.to_string(),
 		}
 	}
 }
 
 #[test]
-fn types_declarations() {
+fn declarations() {
 	assert_compile_dir!(
 		r#"
     pub struct Struct {
