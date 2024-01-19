@@ -99,7 +99,7 @@ module.exports = {
 ```js
 import * as $internal from "@winglang/sdk/lib/core/types"
 import { std } from "@winglang/sdk"
-export class ParentClass extends $internal.Resource implements ClassInterface
+export class ParentClass extends std.Resource implements ClassInterface
 {
   constructor(scope: $internal.Construct, id: string);
   [$internal.INFLIGHT_SYMBOL]?: ParentClass$Inflight;
