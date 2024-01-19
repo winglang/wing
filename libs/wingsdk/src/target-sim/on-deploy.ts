@@ -4,7 +4,7 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { BaseResourceSchema } from "../simulator";
-import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 export class OnDeploy extends cloud.OnDeploy {
   private readonly fn: cloud.Function;
@@ -16,7 +16,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    this.fn = new cloud.Function(this, "Function", handler, props);
+    this.fn = new cloud.Function(this, "Function", handler as IInflight, props);
     Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);

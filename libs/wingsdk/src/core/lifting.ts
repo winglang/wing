@@ -1,6 +1,11 @@
 import { getTokenResolver } from "./tokens";
-import { Datetime, Duration, JsonSchema } from "../std";
-import { IInflightHost, ILiftable } from "../std/resource";
+import {
+  Datetime,
+  Duration,
+  JsonSchema,
+  IInflightHost,
+  ILiftable,
+} from "../std";
 
 /**
  * Creates a liftable type from a class or enum

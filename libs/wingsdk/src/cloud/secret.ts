@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -30,6 +31,9 @@ export interface SecretProps {
  * @abstract
  */
 export class Secret extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ISecretClient;
+
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     if (new.target === Secret) {
       return Resource._newFromFactory(SECRET_FQN, scope, id, props);

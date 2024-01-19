@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
 /**
@@ -14,6 +15,9 @@ export const REDIS_FQN = fqnForType("ex.Redis");
  * @abstract
  */
 export class Redis extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IRedisClient;
+
   constructor(scope: Construct, id: string) {
     if (new.target === Redis) {
       return Resource._newFromFactory(REDIS_FQN, scope, id);
