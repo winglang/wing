@@ -2031,3 +2031,39 @@ fn lift_self_reference() {
     "#
 	);
 }
+
+#[test]
+fn types_declarations() {
+	assert_compile_dir!(
+		r#"
+    pub struct Struct {
+      n: num;
+      d: Array<duration>;
+      j: Json;
+    }
+    
+    pub interface Interface {
+      method(s: Struct): str;
+      inflight inflightMethod(): str;
+    }
+    
+    pub interface ClassInterface {
+      addHandler(handler: inflight (str): str);
+      inflight bar();
+    }
+    
+    pub class ParentClass impl ClassInterface {
+      pub static inflight static_method() {}
+    
+      inflight foo() {}
+      pub inflight bar() {}
+    
+      pub addHandler(handler: inflight (str): str) {}
+    }
+    
+    pub class Child extends ParentClass impl ClassInterface {
+      
+    }
+    "#
+	);
+}
