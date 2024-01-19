@@ -3,7 +3,7 @@
 exports[`create a bucket 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler0 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -46,6 +46,7 @@ return class Handler {
         "path": "root/my_function",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler0",
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,

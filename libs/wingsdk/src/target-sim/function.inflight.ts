@@ -13,6 +13,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
+  private readonly handlerName: string;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
@@ -22,6 +23,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
+    this.handlerName = props.handlerName;
   }
 
   public async init(): Promise<FunctionAttributes> {
@@ -58,7 +60,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const sb = this.createSandbox();
-        return sb.call("handler", JSON.stringify(payload)) ?? "";
+        return sb.call(this.handlerName, JSON.stringify(payload)) ?? "";
       },
     });
   }
@@ -69,7 +71,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       activity: async () => {
         const sb = this.createSandbox();
         process.nextTick(() => {
-          void sb.call("handler", JSON.stringify(payload));
+          void sb.call(this.handlerName, JSON.stringify(payload));
         });
       },
     });

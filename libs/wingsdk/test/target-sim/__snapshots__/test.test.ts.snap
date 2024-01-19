@@ -2,8 +2,8 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c86fc180.js": "\\"use strict\\";
-exports.handler = async function(event) {
+  ".wing/handler.js": "\\"use strict\\";
+exports.handler0 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -32,7 +32,8 @@ async handle(event) {
         "path": "root/env0/test:my_test/Handler",
         "props": {
           "environmentVariables": {},
-          "sourceCodeFile": ".wing/handler_c86fc180.js",
+          "handlerName": "handler0",
+          "sourceCodeFile": ".wing/handler.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },

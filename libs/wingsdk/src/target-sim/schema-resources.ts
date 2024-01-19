@@ -74,6 +74,8 @@ export interface FunctionSchema extends BaseResourceSchema {
     readonly sourceCodeLanguage: string;
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
+    /** The name of the exported handler function. */
+    readonly handlerName: string;
     /** The maximum amount of time the function can run, in milliseconds. */
     readonly timeout: number;
   };

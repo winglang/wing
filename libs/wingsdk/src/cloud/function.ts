@@ -1,9 +1,7 @@
-import { mkdirSync, writeFileSync } from "fs";
-import { join } from "path";
+import { mkdirSync } from "fs";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
-import { CaseConventions, ResourceNames } from "../shared/resource-names";
+import { App, Bundler } from "../core";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
 /**
@@ -52,9 +50,9 @@ export class Function extends Resource implements IInflightHost {
   private readonly handler!: IFunctionHandler;
 
   /**
-   * The path where the entrypoint of the function source code will be eventually written to.
+   * The name of the exported JavaScript handler function. This is usually "handler" followed by a number.
    */
-  protected readonly entrypoint!: string;
+  public readonly handlerName!: string;
 
   constructor(
     scope: Construct,
@@ -76,17 +74,14 @@ export class Function extends Resource implements IInflightHost {
     }
 
     this.handler = handler;
-    const assetName = ResourceNames.generateName(this, {
-      // Avoid characters that may cause path issues
-      disallowedRegex: /[><:"/\\|?*\s]/g,
-      case: CaseConventions.LOWERCASE,
-      sep: "_",
-    });
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
-    this.entrypoint = entrypoint;
+    this.handlerName = `handler${handler._id}`;
+
+    // Add a "thunk" that will produce this function's code to the app-wide bundler.
+    // This will allow the bundler to produce a single bundle for all functions in the app.
+    Bundler.of(this).addCode({ lines: () => this._getCodeLines(handler) });
 
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
@@ -96,11 +91,6 @@ export class Function extends Resource implements IInflightHost {
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
-
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
-    const lines = this._getCodeLines(this.handler);
-    writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
@@ -117,7 +107,7 @@ export class Function extends Resource implements IInflightHost {
     const lines = new Array<string>();
 
     lines.push('"use strict";');
-    lines.push("exports.handler = async function(event) {");
+    lines.push(`exports.${this.handlerName} = async function(event) {`);
     lines.push(`  return await (${inflightClient}).handle(event);`);
     lines.push("};");
 

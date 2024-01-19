@@ -10,7 +10,6 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { createBundle } from "../shared/bundling";
 import { DEFAULT_MEMORY_SIZE } from "../shared/function";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Effect, IAwsFunction, PolicyStatement } from "../shared-aws";
@@ -190,7 +189,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       functionName: name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
-      handler: "index.handler",
+      handler: `index.${this.handlerName}`,
       runtime: "nodejs20.x",
       role: this.role.arn,
       publish: true,
@@ -236,10 +235,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
-
-    const bundle = createBundle(this.entrypoint);
+    const bundle = core.Bundler.of(this).bundle;
 
     // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
     // the "path" argument isn't supported

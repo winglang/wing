@@ -3,7 +3,7 @@
 exports[`create an OnDeploy 1`] = `
 {
   ".wing/function_c83fbf14.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler0 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -29,6 +29,7 @@ return class Handler {
         "path": "root/my_on_deploy/Function",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler0",
           "sourceCodeFile": ".wing/function_c83fbf14.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,

@@ -1,9 +1,6 @@
-import { mkdtemp, readFile } from "fs/promises";
-import { tmpdir } from "os";
-import * as path from "path";
+import { readFile } from "fs/promises";
 import * as util from "util";
 import * as vm from "vm";
-import { createBundle } from "./bundling";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
@@ -97,10 +94,6 @@ export class Sandbox {
     if (this.loaded) {
       return;
     }
-
-    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
-    const bundle = createBundle(this.entrypoint, [], workdir);
-    this.entrypoint = bundle.entrypointPath;
 
     const code = await readFile(this.entrypoint, "utf-8");
 

@@ -1,10 +1,9 @@
-import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { App } from "../core";
+import { Bundler } from "../core";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
@@ -21,6 +20,8 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  */
 export class Function extends cloud.Function implements ISimulatorResource {
   private readonly timeout: Duration;
+  private bundledEntrypoint: string | undefined;
+
   constructor(
     scope: Construct,
     id: string,
@@ -34,20 +35,29 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   public toSimulator(): BaseResourceSchema {
-    const outdir = App.of(this).outdir;
+    if (!this.bundledEntrypoint) {
+      throw new Error("bundledir is undefined");
+    }
+
     const schema: FunctionSchema = {
       type: cloud.FUNCTION_FQN,
       path: this.node.path,
       addr: this.node.addr,
       props: {
-        sourceCodeFile: relative(outdir, this.entrypoint),
+        sourceCodeFile: this.bundledEntrypoint,
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
+        handlerName: this.handlerName,
         timeout: this.timeout.seconds * 1000,
       },
       attrs: {} as any,
     };
     return schema;
+  }
+
+  public _preSynthesize(): void {
+    super._preSynthesize();
+    this.bundledEntrypoint = Bundler.of(this).bundle.entrypointPath;
   }
 
   /** @internal */

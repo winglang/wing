@@ -3,7 +3,7 @@
 exports[`api allows duplicates routes with different methods 1`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler5 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -51,6 +51,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler5",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -289,7 +290,7 @@ exports[`api handler can read the request params 1`] = `
 exports[`api handler can read the request params 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler17 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -332,6 +333,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler17",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -556,7 +558,7 @@ exports[`api handler can read the request path 1`] = `
 exports[`api handler can read the request path 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler16 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -599,6 +601,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler16",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -823,7 +826,7 @@ exports[`api handler can set response headers 1`] = `
 exports[`api handler can set response headers 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler18 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -866,6 +869,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler18",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1090,7 +1094,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
 exports[`api response returns Content-Type header from inflight 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler20 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1133,6 +1137,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler20",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1357,7 +1362,7 @@ exports[`api response returns default Content-Type header 1`] = `
 exports[`api response returns default Content-Type header 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler21 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1400,6 +1405,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler21",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1642,7 +1648,7 @@ exports[`api supports every method type 1`] = `
 exports[`api supports every method type 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler10 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1715,6 +1721,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler10",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2023,7 +2030,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
 exports[`api with 'name' & 'age' parameter 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler3 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2066,6 +2073,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler3",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2307,7 +2315,7 @@ exports[`api with 'name' parameter 1`] = `
 exports[`api with 'name' parameter 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler2 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2350,6 +2358,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler2",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2564,7 +2573,7 @@ return class Handler {
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler9 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2607,6 +2616,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler9",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2854,7 +2864,7 @@ exports[`api with multiple methods on same route 1`] = `
 exports[`api with multiple methods on same route 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler11 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2869,7 +2879,7 @@ return class Handler {
 })).handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler12 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2917,6 +2927,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler11",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2982,6 +2993,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler1",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler12",
           "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -3213,7 +3225,7 @@ exports[`api with multiple routes 1`] = `
 exports[`api with multiple routes 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler13 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -3228,7 +3240,7 @@ return class Handler {
 })).handle(event);
 };",
   ".wing/onrequesthandler1_c84819d7.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler14 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -3276,6 +3288,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler13",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -3343,6 +3356,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler1",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler14",
           "sourceCodeFile": ".wing/onrequesthandler1_c84819d7.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -3567,7 +3581,7 @@ exports[`api with one GET route 1`] = `
 exports[`api with one GET route 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler0 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -3610,6 +3624,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler0",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -3834,7 +3849,7 @@ exports[`api with one GET route with request params 1`] = `
 exports[`api with one GET route with request params 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler1 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -3877,6 +3892,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler1",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -4110,7 +4126,7 @@ exports[`api with one POST route, with body 1`] = `
 exports[`api with one POST route, with body 2`] = `
 {
   ".wing/onrequesthandler0_c82d41b2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler15 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -4153,6 +4169,7 @@ return class Handler {
         "path": "root/my_api/OnRequestHandler0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler15",
           "sourceCodeFile": ".wing/onrequesthandler0_c82d41b2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,

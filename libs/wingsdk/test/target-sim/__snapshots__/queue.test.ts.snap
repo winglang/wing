@@ -149,7 +149,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler8 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -186,6 +186,7 @@ async handle(message) {
         "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler8",
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -373,7 +374,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler6 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -410,6 +411,7 @@ async handle(message) {
         "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler6",
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -863,7 +865,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
   ".wing/function_c8ab799f.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler4 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -895,7 +897,7 @@ queue: (function() {
 })).handle(event);
 };",
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler3 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -942,6 +944,7 @@ async handle(message) {
         "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler3",
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -979,6 +982,7 @@ async handle(message) {
           "environmentVariables": {
             "QUEUE_HANDLE_54fcf4cd": "\${wsim#root/my_queue#attrs.handle}",
           },
+          "handlerName": "handler4",
           "sourceCodeFile": ".wing/function_c8ab799f.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1163,7 +1167,7 @@ async handle(message) {
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler1 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1200,6 +1204,7 @@ async handle(message) {
         "path": "root/my_queue/SetConsumer0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler1",
           "sourceCodeFile": ".wing/setconsumer0_c8e33b9b.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,

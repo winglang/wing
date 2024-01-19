@@ -1,5 +1,6 @@
 export * from "./app";
 export * from "./attributes";
+export * from "./bundler";
 export * from "./connections";
 export * from "./dependency";
 export * from "./inflight";

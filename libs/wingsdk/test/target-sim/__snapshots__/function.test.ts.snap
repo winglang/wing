@@ -1,168 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`create a function 1`] = `
-{
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
-  return await (new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  
-async handle(event) {
-  event = JSON.parse(event);
-  let msg;
-  if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
-  }
-  if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
-  } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
-  }
-  return JSON.stringify({ msg });
-}
-};
-})())({
-
-})).handle(event);
-};",
-  "connections.json": {
-    "connections": [],
-    "version": "connections-0.1",
-  },
-  "simulator.json": {
-    "resources": [
-      {
-        "addr": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
-        "attrs": {},
-        "path": "root/my_function",
-        "props": {
-          "environmentVariables": {
-            "ENV_VAR1": "true",
-          },
-          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
-          "sourceCodeLanguage": "javascript",
-          "timeout": 60000,
-        },
-        "type": "@winglang/sdk.cloud.Function",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-    "types": {
-      "@winglang/sdk.cloud.Api": {
-        "className": "Api",
-        "sourcePath": "<ABSOLUTE PATH>/api.inflight.js",
-      },
-      "@winglang/sdk.cloud.Bucket": {
-        "className": "Bucket",
-        "sourcePath": "<ABSOLUTE PATH>/bucket.inflight.js",
-      },
-      "@winglang/sdk.cloud.Counter": {
-        "className": "Counter",
-        "sourcePath": "<ABSOLUTE PATH>/counter.inflight.js",
-      },
-      "@winglang/sdk.cloud.Domain": {
-        "className": "Domain",
-        "sourcePath": "<ABSOLUTE PATH>/domain.inflight.js",
-      },
-      "@winglang/sdk.cloud.Endpoint": {
-        "className": "Endpoint",
-        "sourcePath": "<ABSOLUTE PATH>/endpoint.inflight.js",
-      },
-      "@winglang/sdk.cloud.Function": {
-        "className": "Function",
-        "sourcePath": "<ABSOLUTE PATH>/function.inflight.js",
-      },
-      "@winglang/sdk.cloud.OnDeploy": {
-        "className": "OnDeploy",
-        "sourcePath": "<ABSOLUTE PATH>/on-deploy.inflight.js",
-      },
-      "@winglang/sdk.cloud.Queue": {
-        "className": "Queue",
-        "sourcePath": "<ABSOLUTE PATH>/queue.inflight.js",
-      },
-      "@winglang/sdk.cloud.Schedule": {
-        "className": "Schedule",
-        "sourcePath": "<ABSOLUTE PATH>/schedule.inflight.js",
-      },
-      "@winglang/sdk.cloud.Secret": {
-        "className": "Secret",
-        "sourcePath": "<ABSOLUTE PATH>/secret.inflight.js",
-      },
-      "@winglang/sdk.cloud.Service": {
-        "className": "Service",
-        "sourcePath": "<ABSOLUTE PATH>/service.inflight.js",
-      },
-      "@winglang/sdk.cloud.Topic": {
-        "className": "Topic",
-        "sourcePath": "<ABSOLUTE PATH>/topic.inflight.js",
-      },
-      "@winglang/sdk.cloud.Website": {
-        "className": "Website",
-        "sourcePath": "<ABSOLUTE PATH>/website.inflight.js",
-      },
-      "@winglang/sdk.ex.DynamodbTable": {
-        "className": "DynamodbTable",
-        "sourcePath": "<ABSOLUTE PATH>/dynamodb-table.inflight.js",
-      },
-      "@winglang/sdk.ex.ReactApp": {
-        "className": "ReactApp",
-        "sourcePath": "<ABSOLUTE PATH>/react-app.inflight.js",
-      },
-      "@winglang/sdk.ex.Redis": {
-        "className": "Redis",
-        "sourcePath": "<ABSOLUTE PATH>/redis.inflight.js",
-      },
-      "@winglang/sdk.ex.Table": {
-        "className": "Table",
-        "sourcePath": "<ABSOLUTE PATH>/table.inflight.js",
-      },
-      "@winglang/sdk.sim.EventMapping": {
-        "className": "EventMapping",
-        "sourcePath": "<ABSOLUTE PATH>/event-mapping.inflight.js",
-      },
-      "@winglang/sdk.sim.State": {
-        "className": "State",
-        "sourcePath": "<ABSOLUTE PATH>/state.inflight.js",
-      },
-      "@winglang/sdk.std.TestRunner": {
-        "className": "TestRunner",
-        "sourcePath": "<ABSOLUTE PATH>/test-runner.inflight.js",
-      },
-    },
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "my_function": {
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.2.70",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_function",
-          "path": "root/my_function",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.2.70",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
 exports[`invoke function fails 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
@@ -174,7 +11,7 @@ exports[`invoke function fails 1`] = `
 exports[`invoke function fails 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler3 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -213,6 +50,7 @@ async handle(event) {
         "path": "root/my_function",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler3",
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -343,7 +181,7 @@ exports[`invoke function succeeds 1`] = `
 exports[`invoke function succeeds 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler1 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -382,6 +220,7 @@ async handle(event) {
         "path": "root/my_function",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler1",
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -512,7 +351,7 @@ exports[`invoke function with environment variables 1`] = `
 exports[`invoke function with environment variables 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler2 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -553,6 +392,7 @@ async handle(event) {
           "environmentVariables": {
             "PIG_LATIN": "true",
           },
+          "handlerName": "handler2",
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -683,7 +523,7 @@ exports[`invoke function with process.exit(1) 1`] = `
 exports[`invoke function with process.exit(1) 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler6 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -712,6 +552,7 @@ async handle() {
         "path": "root/my_function",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler6",
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -834,7 +675,7 @@ async handle() {
 exports[`runtime environment tests 1`] = `
 {
   ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler7 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -855,7 +696,7 @@ return class Handler {
 })).handle(event);
 };",
   ".wing/function.1_c89ed254.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler8 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -874,7 +715,7 @@ return class Handler {
 })).handle(event);
 };",
   ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler9 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -894,7 +735,7 @@ return class Handler {
 })).handle(event);
 };",
   ".wing/function.3_c8badafa.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler10 = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -925,6 +766,7 @@ return class Handler {
         "path": "root/Function.0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler7",
           "sourceCodeFile": ".wing/function.0_c8d5fca2.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -937,6 +779,7 @@ return class Handler {
         "path": "root/Function.1",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler8",
           "sourceCodeFile": ".wing/function.1_c89ed254.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -949,6 +792,7 @@ return class Handler {
         "path": "root/Function.2",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler9",
           "sourceCodeFile": ".wing/function.2_c8cd6c39.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -961,6 +805,7 @@ return class Handler {
         "path": "root/Function.3",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler10",
           "sourceCodeFile": ".wing/function.3_c8badafa.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,

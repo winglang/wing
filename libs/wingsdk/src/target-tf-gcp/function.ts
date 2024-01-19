@@ -178,9 +178,7 @@ export class Function extends cloud.Function {
     super._preSynthesize();
 
     // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint, [
-      "@google-cloud/functions-framework",
-    ]);
+    const bundle = createBundle("TODO", ["@google-cloud/functions-framework"]);
 
     const packageJson = join(bundle.directory, "package.json");
 

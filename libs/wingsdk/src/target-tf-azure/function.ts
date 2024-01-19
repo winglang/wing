@@ -170,7 +170,7 @@ export class Function extends cloud.Function {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle("TODO");
     const codeDir = bundle.directory;
 
     // Package up code in azure expected format

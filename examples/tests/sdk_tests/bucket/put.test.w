@@ -23,3 +23,7 @@ test "put" {
   let third = b.get("test2.txt");
   assert(third == "Baz");
 }
+
+test "put2" {
+  b.put("test1.txt", "Foo");
+}

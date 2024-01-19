@@ -50,6 +50,7 @@ test("create a function", async () => {
         ENV_VAR1: "true",
       },
       timeout: 60000,
+      handlerName: "handler0",
     },
     type: cloud.FUNCTION_FQN,
   });

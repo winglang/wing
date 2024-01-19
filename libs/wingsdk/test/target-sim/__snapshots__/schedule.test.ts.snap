@@ -133,7 +133,7 @@ exports[`create a schedule 1`] = `
 exports[`schedule with one task using rate of 3h 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler5 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -168,6 +168,7 @@ console.log(\\"Hello from schedule!\\");
         "path": "root/my_schedule/OnTick0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler5",
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -336,7 +337,7 @@ console.log(\\"Hello from schedule!\\");
 exports[`schedule with one task using rate of 10m 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler3 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -371,6 +372,7 @@ console.log(\\"Hello from schedule!\\");
         "path": "root/my_schedule/OnTick0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler3",
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -539,7 +541,7 @@ console.log(\\"Hello from schedule!\\");
 exports[`schedule with one task with cron 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-exports.handler = async function(event) {
+exports.handler1 = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -574,6 +576,7 @@ console.log(\\"Hello from schedule!\\");
         "path": "root/my_schedule/OnTick0",
         "props": {
           "environmentVariables": {},
+          "handlerName": "handler1",
           "sourceCodeFile": ".wing/ontick0_c83eddbe.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
