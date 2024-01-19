@@ -135,12 +135,11 @@ impl<'a> DTSifier<'a> {
 
 		code.open("{");
 
-		for method in &interface.methods {
-			if (as_inflight && matches!(method.1.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(method.1.phase, Phase::Inflight))
-			{
-				continue;
-			}
+		for method in interface
+			.methods
+			.iter()
+			.filter(|m| !ignore_member_phase(m.1.phase, as_inflight))
+		{
 			code.line(format!(
 				"readonly {}: {};",
 				method.0.name,
@@ -227,13 +226,8 @@ impl<'a> DTSifier<'a> {
 			.fields
 			.iter()
 			.filter(|f| matches!(f.access, AccessModifier::Public))
+			.filter(|f| !ignore_member_phase(f.phase, as_inflight))
 		{
-			if (as_inflight && matches!(field.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(field.phase, Phase::Inflight))
-			{
-				continue;
-			}
-
 			code.line(format!(
 				"{}: {};",
 				field.name,
@@ -244,13 +238,8 @@ impl<'a> DTSifier<'a> {
 			.methods
 			.iter()
 			.filter(|f| matches!(f.1.access, AccessModifier::Public))
+			.filter(|f| !ignore_member_phase(f.1.signature.phase, as_inflight))
 		{
-			if (as_inflight && matches!(method.1.signature.phase, Phase::Preflight))
-				|| (!as_inflight && matches!(method.1.signature.phase, Phase::Inflight))
-			{
-				continue;
-			}
-
 			code.line(format!(
 				"{}{}: {};",
 				if method.1.is_static { "static " } else { "" },
@@ -409,34 +398,40 @@ impl<'a> DTSifier<'a> {
 fn declarations() {
 	assert_compile_dir!(
 		r#"
-    pub struct Struct {
-      n: num;
-      d: Array<duration>;
-      j: Json;
-    }
-    
-    pub interface Interface {
-      method(s: Struct): str;
-      inflight inflightMethod(): str;
-    }
-    
-    pub interface ClassInterface {
-      addHandler(handler: inflight (str): str);
-      inflight bar();
-    }
-    
-    pub class ParentClass impl ClassInterface {
-      pub static inflight static_method() {}
-    
-      inflight foo() {}
-      pub inflight bar() {}
-    
-      pub addHandler(handler: inflight (str): str) {}
-    }
-    
-    pub class Child extends ParentClass impl ClassInterface {
-      
-    }
-    "#
+pub struct Struct {
+	n: num;
+	d: Array<duration>;
+	j: Json;
+}
+
+pub interface Interface {
+	method(s: Struct): str;
+	inflight inflightMethod(): str;
+}
+
+pub interface ClassInterface {
+	addHandler(handler: inflight (str): str);
+	inflight bar();
+}
+
+pub class ParentClass impl ClassInterface {
+	pub static inflight static_method() {}
+
+	inflight foo() {}
+	pub inflight bar() {}
+
+	pub addHandler(handler: inflight (str): str) {}
+}
+
+pub class Child extends ParentClass impl ClassInterface {
+	
+}"#
 	);
+}
+
+fn ignore_member_phase(phase: Phase, is_inflight_client: bool) -> bool {
+	// If we're an inflight client, we want to ignore preflight members
+	// Or
+	// If we're a preflight client, we want to ignore inflight members
+	(is_inflight_client && matches!(phase, Phase::Preflight)) || (!is_inflight_client && matches!(phase, Phase::Inflight))
 }
