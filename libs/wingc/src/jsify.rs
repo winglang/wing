@@ -449,7 +449,7 @@ impl<'a> JSifier<'a> {
 				code.append(parent.to_string());
 			}
 		} else if !as_inflight && matches!(class.phase, Phase::Preflight) {
-			code.append(format!(" extends {TYPE_INTERNAL_NAMESPACE}.Resource"));
+			code.append(" extends std.Resource");
 		}
 
 		if !class.implements.is_empty() {
