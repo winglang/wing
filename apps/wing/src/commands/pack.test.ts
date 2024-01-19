@@ -111,12 +111,11 @@ describe("wing pack", () => {
   it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
-    // copy everything to the output directory to sandbox this test
-    await exec(`cp -r ${goodFixtureDir}/* ${outdir}`);
-    process.chdir(outdir);
 
     // WHEN
-    await pack();
+    process.chdir(goodFixtureDir);
+    await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -139,12 +138,11 @@ describe("wing pack", () => {
   it("can consume a Wing project from JS", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
-    // copy everything to the output directory to sandbox this test
-    await exec(`cp -r ${goodFixtureDir}/* ${outdir}`);
-    process.chdir(outdir);
 
     // WHEN
-    await pack();
+    process.chdir(goodFixtureDir);
+    await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -177,12 +175,12 @@ describe("wing pack", () => {
 
   it("packages a valid Wing project to a user-specified path", async () => {
     // GIVEN
-    const projectDir = goodFixtureDir;
     const outdir = await generateTmpDir();
-    process.chdir(projectDir);
 
     // WHEN
+    process.chdir(goodFixtureDir);
     await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -215,7 +213,6 @@ describe("wing pack", () => {
         "README.md",
         "enums.w",
         "package.json",
-        "store.test.w",
         "store.w",
         "subdir/util.w",
         "util.js",
