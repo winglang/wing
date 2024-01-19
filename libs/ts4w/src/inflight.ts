@@ -1,6 +1,7 @@
 import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility_types";
 import { liftObject, onLiftObject, closureId } from "@winglang/sdk/lib/core";
 import {
+  AsyncFunction,
   INFLIGHT_SYMBOL,
   Inflight,
   OperationsOf,
@@ -48,7 +49,7 @@ export function lift<TToLift extends LiftableMap>(
  *
  * Built-in NodeJS globals are available, such as `console` and `process`.
  */
-export function inflight<TFunction extends (...args: any[]) => any>(
+export function inflight<TFunction extends AsyncFunction>(
   fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
 ) {
   return new Lifter().inflight(fn);
@@ -146,7 +147,7 @@ class Lifter<
    *
    * Built-in NodeJS globals are available, such as `console` and `process`.
    */
-  public inflight<TFunction extends (...args: any[]) => Promise<any>>(
+  public inflight<TFunction extends AsyncFunction>(
     fn: (
       ctx: Omit<TLifted, keyof TOperations> & {
         [K in keyof TOperations &
