@@ -303,8 +303,14 @@ impl<'a> DTSifier<'a> {
 
 				match source {
 					BringSource::BuiltinModule(sym) => code.line(format!("import {{ {sym} }} from \"{WINGSDK_ASSEMBLY_NAME}\"")),
-					BringSource::TrustedModule(sym, path) => code.line(format!("import * as {sym} from \"{path}\"")),
-					BringSource::WingLibrary(sym, path) => code.line(format!("import * as {sym} from \"{path}\"")),
+					BringSource::TrustedModule(sym, path) => {
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
+					}
+					BringSource::WingLibrary(sym, path) => {
+						let preflight_file_name = self.preflight_file_map.get(path).unwrap().replace(".js", "");
+						code.line(format!("import * as {sym} from \"./{preflight_file_name}\";"))
+					}
 					BringSource::JsiiModule(sym) => code.line(format!("import * as {identifier} from \"{sym}\"")),
 					BringSource::WingFile(sym) => {
 						let preflight_file_name = self
