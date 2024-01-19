@@ -48,6 +48,7 @@ export interface TestOptions extends CompileOptions {
 }
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
+  console.log(new Date().toISOString(), "test called");
   let patterns;
 
   if (options.outputFile) {
@@ -105,10 +106,13 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
     }
   }
 
+  console.log(new Date().toISOString(), "test finished");
+
   return 0;
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
+  console.log(new Date().toISOString(), "testOne called");
   const target = process.env.WING_TARGET; // TODO: try to just call method
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${target}...`,
@@ -119,6 +123,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
         testing: true,
       })
   );
+  console.log(new Date().toISOString(), "compile finished");
 
   switch (target) {
     case BuiltinPlatform.SIM:
@@ -277,17 +282,25 @@ async function runTestsWithRetry(
 }
 
 async function testSimulator(synthDir: string, options: TestOptions) {
+  console.log(new Date().toISOString(), "testSimulator called");
   const s = new simulator.Simulator({ simfile: synthDir });
+  console.log(new Date().toISOString(), "simulator created");
   const { clean, testFilter, retry } = options;
   await s.start();
+  console.log(new Date().toISOString(), "simulator started");
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
+  console.log(new Date().toISOString(), "listTests finished");
   const filteredTests = filterTests(tests, testFilter);
 
   const results = await runTestsWithRetry(testRunner, filteredTests, retry ?? 0);
 
+  console.log(new Date().toISOString(), "tests executed");
+
   await s.stop();
+
+  console.log(new Date().toISOString(), "simulator stopped");
 
   const testReport = await renderTestReport(synthDir, results);
   console.log(testReport);

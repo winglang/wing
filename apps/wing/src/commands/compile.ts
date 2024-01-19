@@ -62,6 +62,7 @@ export interface CompileOptions {
  * @returns the output directory
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
+  console.log(new Date().toISOString(), "compile called");
   if (!entrypoint) {
     const wingFiles = (await glob("{main,*.main}.w")).sort();
     if (wingFiles.length === 0) {
@@ -79,14 +80,18 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
     entrypoint = wingFiles[0];
   }
 
+  console.log(new Date().toISOString(), "globbing finished");
+
   const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
-    return await wingCompiler.compile(entrypoint, {
+    const res = await wingCompiler.compile(entrypoint, {
       ...options,
       log,
       color: coloring,
       platform: options?.platform ?? ["sim"],
     });
+    console.log(new Date().toISOString(), "compiling finished");
+    return res;
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.

@@ -166,6 +166,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
 
   let existingFiles: string[] = [];
 
+  console.log(new Date().toISOString(), "setting up synthesis dir");
+
   if (existsSync(synthDir)) {
     await fs.rm(backupSynthDir, { force: true, recursive: true });
     await fs.rename(synthDir, backupSynthDir);
@@ -198,6 +200,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } else {
     await fs.mkdir(workDir, { recursive: true });
   }
+
+  console.log(new Date().toISOString(), "finished setting up synthesis dir");
 
   try {
     let preflightEntrypoint = await compileForPreflight({
@@ -237,7 +241,11 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         }
       }
 
+      console.log(new Date().toISOString(), "running preflight code in worker thread");
+
       await runPreflightCodeInWorkerThread(preflightEntrypoint, preflightEnv);
+
+      console.log(new Date().toISOString(), "done preflight code in worker thread");
     }
 
     return synthDir;
@@ -296,6 +304,8 @@ npm i ts4w
       env.CLICOLOR = props.color ? "1" : "0";
     }
 
+    console.log(new Date().toISOString(), "loading wingc");
+
     const wingc = await wingCompiler.load({
       env,
       imports: {
@@ -323,7 +333,9 @@ npm i ts4w
     props.log?.(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
     let compileSuccess: boolean;
     try {
+      console.log(new Date().toISOString(), "invoking wingc");
       compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
+      console.log(new Date().toISOString(), "done invoking wingc");
     } catch (error) {
       // This is a bug in the compiler, indicate a compilation failure.
       // The bug details should be part of the diagnostics handling below.

@@ -98,16 +98,22 @@ export class Sandbox {
       return;
     }
 
+    console.log(new Date().toISOString(), "creating tmpdir");
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
+    console.log(new Date().toISOString(), "bundling entrypoint");
     const bundle = createBundle(this.entrypoint, [], workdir);
+    console.log(new Date().toISOString(), "bundling done");
     this.entrypoint = bundle.entrypointPath;
 
+    console.log(new Date().toISOString(), "reading bundle");
     const code = await readFile(this.entrypoint, "utf-8");
 
     if (process.env.DEBUG) {
       const bundleSize = Buffer.byteLength(code, "utf-8");
-      this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+      this.options.log?.(true, "log", `Unbundled code (${bundleSize} bytes).`);
     }
+
+    console.log(new Date().toISOString(), "running code in VM");
 
     // this will add stuff to the "exports" object within our context
     vm.runInContext(code, this.context, {
@@ -136,6 +142,7 @@ export class Sandbox {
         $reject(reason);
       };
 
+      console.log(new Date().toISOString(), "calling function in VM");
       const code = `exports.${fn}(${args.join(
         ","
       )}).then($resolve).catch($reject);`;

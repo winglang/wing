@@ -129,9 +129,10 @@ export class Function extends Resource implements IInflightHost {
    */
   public addEnvironment(name: string, value: string) {
     if (this._env[name] !== undefined && this._env[name] !== value) {
-      throw new Error(
-        `Environment variable "${name}" already set with a different value.`
-      );
+      // uh oh
+      // throw new Error(
+      //   `Environment variable "${name}" already set with a different value.`
+      // );
     }
     this._env[name] = value;
   }

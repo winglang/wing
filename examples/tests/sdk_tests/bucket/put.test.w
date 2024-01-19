@@ -2,6 +2,8 @@ bring cloud;
 
 let b = new cloud.Bucket();
 
+// note: for case 2, I changed this to cloud.Function
+// otherwise the test is pruned out
 test "put" {
   b.put("test1.txt", "Foo");
   b.put("test2.txt", "Bar");

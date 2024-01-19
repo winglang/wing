@@ -36,6 +36,8 @@ export function createBundle(
   const outfile = join(outdir, outfileName);
   const outfileMap = join(outdir, soucemapFilename);
 
+  console.log(new Date().toISOString(), "running esbuild");
+
   let esbuild = buildSync({
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],
@@ -59,6 +61,8 @@ export function createBundle(
     external,
     write: false,
   });
+
+  console.log(new Date().toISOString(), "esbuild finished");
 
   if (esbuild.errors.length > 0) {
     const errors = esbuild.errors.map((e) => e.text).join("\n");
@@ -92,6 +96,8 @@ export function createBundle(
 
   // calculate a md5 hash of the contents of asset.path
   const codeHash = crypto.createHash("md5").update(fileContents).digest("hex");
+
+  console.log(new Date().toISOString(), "createBundle finished");
 
   return {
     entrypointPath: outfile,

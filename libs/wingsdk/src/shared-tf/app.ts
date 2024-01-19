@@ -97,7 +97,10 @@ export abstract class CdktfApp extends App {
       return this.synthedOutput!;
     }
 
+    console.log(new Date().toISOString(), "synth called");
+
     // call preSynthesize() on every construct in the tree
+    console.log(new Date().toISOString(), "presynthesizing and lifting");
     preSynthesizeAllConstructs(this);
 
     if (this._synthHooks?.preSynthesize) {
@@ -105,7 +108,10 @@ export abstract class CdktfApp extends App {
     }
 
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
+    console.log(new Date().toISOString(), "calling cdktfApp.synth()");
     this.cdktfApp.synth();
+
+    console.log(new Date().toISOString(), "moving output files");
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
     this.moveCdktfArtifactsToOutdir();
@@ -120,13 +126,18 @@ export abstract class CdktfApp extends App {
     rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
     // write `outdir/tree.json`
+    console.log(new Date().toISOString(), "writing tree.json file");
     synthesizeTree(this, this.outdir);
 
     // write `outdir/connections.json`
+    console.log(new Date().toISOString(), "writing connections.json file");
     Connections.of(this).synth(this.outdir);
 
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
+    console.log(new Date().toISOString(), "obtaining terraform config");
     const tfConfig = this.cdktfStack.toTerraform();
+
+    console.log(new Date().toISOString(), "cleaning terraform config");
     const cleaned = cleanTerraformConfig(tfConfig);
 
     if (this._synthHooks?.postSynthesize) {
@@ -142,8 +153,12 @@ export abstract class CdktfApp extends App {
       this._synthHooks.validate.forEach((hook) => hook(tfConfig));
     }
 
+    console.log(new Date().toISOString(), "stringifying terraform file");
+
     this.synthed = true;
     this.synthedOutput = stringify(cleaned, null, 2) ?? "";
+
+    console.log(new Date().toISOString(), "synth finished");
 
     return this.synthedOutput;
   }

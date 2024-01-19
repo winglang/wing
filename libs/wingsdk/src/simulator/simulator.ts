@@ -490,6 +490,10 @@ export class Simulator {
       req.on("end", () => {
         const request: SimulatorServerRequest = deserialize(body);
         const { handle, method, args } = request;
+        console.log(
+          new Date().toISOString(),
+          "server received request to " + method
+        );
         const resource = this._handles.tryFind(handle);
 
         // If we weren't able to find a resource with the given handle, it could actually
@@ -537,9 +541,14 @@ export class Simulator {
           return;
         }
 
+        console.log(new Date().toISOString(), "calling method");
         (resource as any)
           [method](...args)
           .then((result: any) => {
+            console.log(
+              new Date().toISOString(),
+              "server sending response to " + method
+            );
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(serialize({ result }), "utf-8");
           })
@@ -559,11 +568,18 @@ export class Simulator {
       });
     };
 
+    console.log(new Date().toISOString(), "starting server");
+
     // only import "http" when this method is called to reduce the time it takes to load Wing SDK
     const http = await import("http");
 
+    console.log(new Date().toISOString(), "http imported");
+
     // start the server, and wait for it to be listening
     const server = http.createServer(requestListener);
+
+    console.log(new Date().toISOString(), "server initialized");
+
     await new Promise<void>((resolve) => {
       server!.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = server.address();
@@ -574,6 +590,11 @@ export class Simulator {
         resolve();
       });
     });
+
+    console.log(
+      new Date().toISOString(),
+      "server address available, ready to go"
+    );
   }
 
   /**

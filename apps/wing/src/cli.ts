@@ -27,7 +27,11 @@ function runSubCommand(subCommand: string, path: string = subCommand) {
   return async (...args: any[]) => {
     try {
       // paths other than the root path aren't working unless specified in the path arg
-      const exitCode = await import(`./commands/${path}`).then((m) => m[subCommand](...args));
+      console.log(new Date().toISOString(), "importing command");
+      const exitCode = await import(`./commands/${path}`).then((m) => {
+        console.log(new Date().toISOString(), "calling imported command");
+        return m[subCommand](...args);
+      });
       if (exitCode === 1) {
         await exportAnalyticsHook();
         process.exitCode = 1;
@@ -231,6 +235,8 @@ function checkNodeVersion() {
     );
   }
 }
+
+console.log(new Date().toISOString(), "main called");
 
 main().catch((err) => {
   console.error(err);

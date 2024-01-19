@@ -57,6 +57,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
+        console.log(new Date().toISOString(), "invoke called");
         const sb = this.createSandbox();
         return sb.call("handler", JSON.stringify(payload)) ?? "";
       },
