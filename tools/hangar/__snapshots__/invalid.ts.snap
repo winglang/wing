@@ -2427,6 +2427,98 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`map_entries.test.w 1`] = `
+"error: Unexpected 'ERROR'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:13
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |             ^ Unexpected 'ERROR'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:15
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |               ^^^^^^^^ Unexpected 'reference'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:24
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                        ^^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:29
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                             ^^ Unexpected 'reference'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:32
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                ^^ Unexpected 'identifier'
+
+
+error: Unexpected 'string'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:35
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                   ^^^^^ Unexpected 'string'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:42
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                          ^^^ Unexpected 'reference'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:46
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                              ^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'string'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:50
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                  ^^^^^ Unexpected 'string'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:56
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                        ^^^^^^^ Unexpected 'identifier'
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/map_entries.test.w:1:13
+  |
+1 | let map = { 1 => \\"foo\\", 2 => \\"bar\\" };
+  |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/map_entries.test.w:1:25
+  |
+1 | let map = { 1 => \\"foo\\", 2 => \\"bar\\" };
+  |                         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`missing_return.test.w 1`] = `
 "error: A function whose return type is \\"str\\" must return a value.
   --> ../../../examples/tests/invalid/missing_return.test.w:1:40
