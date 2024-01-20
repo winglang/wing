@@ -132,8 +132,8 @@ test("api with multiple GET route and one lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 2 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 3);
+  // 1 inflight lambdas and 1 lambda for log retention
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
