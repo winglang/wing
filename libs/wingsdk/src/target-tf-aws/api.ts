@@ -219,7 +219,7 @@ export class Api extends cloud.Api implements IAwsApi {
     method: string,
     path: string
   ): Function {
-    let handler = this.handlers[inflight._hash];
+    let handler = this.handlers[inflight._id];
     if (!handler) {
       const newInflight = convertBetweenHandlers(
         inflight,
@@ -233,14 +233,14 @@ export class Api extends cloud.Api implements IAwsApi {
             ?.defaultResponse,
         }
       );
-      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}_}`;
+      const prefix = `${method.toLowerCase()}${path.replace(/\//g, "_")}`;
       handler = new Function(
         this,
         App.of(this).makeId(this, prefix),
         newInflight
       );
       Node.of(handler).hidden = true;
-      this.handlers[inflight._hash] = handler;
+      this.handlers[inflight._id] = handler;
     }
 
     return handler;

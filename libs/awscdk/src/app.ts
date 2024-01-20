@@ -66,7 +66,6 @@ export class App extends core.App {
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private synthHooks?: core.SynthHooks;
 
   constructor(props: CdkAppProps) {
     let stackName = props.stackName ?? process.env.CDK_STACK_NAME;
@@ -107,8 +106,6 @@ export class App extends core.App {
       ...args: any[]
     ) => this.newAbstract(fqn, scope, id, ...args);
 
-    this.synthHooks = props.synthHooks;
-
     this.outdir = outdir;
     this.cdkApp = cdkApp;
     this.cdkStack = cdkStack;
@@ -133,8 +130,8 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     core.preSynthesizeAllConstructs(this);
 
-    if (this.synthHooks?.preSynthesize) {
-      this.synthHooks.preSynthesize.forEach((hook) => hook(this));
+    if (this._synthHooks?.preSynthesize) {
+      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
     }
 
     // synthesize cdk.Stack files in `outdir/cdk.out`

@@ -57,14 +57,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.R-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this)};
+            const RClient = ${R._toInflightType()};
             const client = new RClient({
               $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
             });
@@ -76,14 +76,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
-        }
-        if (ops.includes("foo")) {
-          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [(this.s1.concat(" world")), []],
+          ],
+          "foo": [
+            [(this.s1.concat(" world")), []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const r = new R(this, "R");

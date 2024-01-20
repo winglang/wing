@@ -39,11 +39,12 @@ export interface ServiceProps {
  */
 export class Service extends Resource implements IInflightHost {
   /**
-   * The entrypoint of the service.
+   * The path where the entrypoint of the service source code will be eventually written to.
    */
   protected readonly entrypoint!: string;
 
   private readonly _env: Record<string, string> = {};
+  private readonly handler!: IServiceHandler;
 
   constructor(
     scope: Construct,
@@ -64,11 +65,29 @@ export class Service extends Resource implements IInflightHost {
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
 
-    // indicates that we are calling the inflight constructor and the
-    // inflight "handle" method on the handler resource.
-    handler._registerOnLift(this, ["handle", "$inflight_init"]);
+    const assetName = ResourceNames.generateName(this, {
+      disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
+      case: CaseConventions.LOWERCASE,
+      sep: "_",
+    });
 
-    const inflightClient = handler._toInflight();
+    const workdir = App.of(this).workdir;
+    mkdirSync(workdir, { recursive: true });
+    const entrypoint = join(workdir, `${assetName}.js`);
+    this.entrypoint = entrypoint;
+
+    if (process.env.WING_TARGET) {
+      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
+    }
+
+    this.handler = handler;
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const inflightClient = this.handler._toInflight();
     const lines = new Array<string>();
 
     lines.push('"use strict";');
@@ -82,22 +101,11 @@ export class Service extends Resource implements IInflightHost {
     lines.push("exports.handle = async function() {");
     lines.push("  return (await $initOnce()).handle();");
     lines.push("};");
+    writeFileSync(this.entrypoint, lines.join("\n"));
 
-    const assetName = ResourceNames.generateName(this, {
-      disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
-      case: CaseConventions.LOWERCASE,
-      sep: "_",
-    });
-
-    const workdir = App.of(this).workdir;
-    mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
-    writeFileSync(entrypoint, lines.join("\n"));
-    this.entrypoint = entrypoint;
-
-    if (process.env.WING_TARGET) {
-      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
-    }
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    this.handler.onLift(this, ["handle", "$inflight_init"]);
   }
 
   /**

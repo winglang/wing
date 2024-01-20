@@ -235,6 +235,11 @@
       "type": "bundled"
     },
     {
+      "name": "@google-cloud/datastore",
+      "version": "8.4.0",
+      "type": "bundled"
+    },
+    {
       "name": "@google-cloud/storage",
       "version": "6.9.5",
       "type": "bundled"
@@ -294,6 +299,11 @@
     {
       "name": "nanoid",
       "version": "^3.3.6",
+      "type": "bundled"
+    },
+    {
+      "name": "protobufjs",
+      "version": "7.2.5",
       "type": "bundled"
     },
     {
