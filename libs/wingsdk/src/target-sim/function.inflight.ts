@@ -13,6 +13,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
+  private sandbox: Sandbox | undefined;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
@@ -32,32 +33,45 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
-  public async save(): Promise<void> {}
+  public async save(): Promise<void> { }
 
-  private createSandbox(): Sandbox {
-    return new Sandbox(this.filename, {
-      env: {
-        ...this.env,
-        WING_SIMULATOR_URL: this.context.serverUrl,
-      },
-      timeout: this.timeout,
-      log: (internal, _level, message) => {
-        this.context.addTrace({
-          data: { message },
-          type: internal ? TraceType.RESOURCE : TraceType.LOG,
-          sourcePath: this.context.resourcePath,
-          sourceType: FUNCTION_FQN,
-          timestamp: new Date().toISOString(),
-        });
-      },
-    });
+  /**
+   * Creates a single instance of the function sandbox and returns it.
+   * 
+   * Subsequent calls will return the same instance to mimick the behavior
+   * in the cloud where a function container may be reused across multiple
+   * invocations.
+   * 
+   * @returns The simulator sandbox instance.
+   */
+  private getCreateSandbox(): Sandbox {
+    if (!this.sandbox) {
+      this.sandbox = new Sandbox(this.filename, {
+        env: {
+          ...this.env,
+          WING_SIMULATOR_URL: this.context.serverUrl,
+        },
+        timeout: this.timeout,
+        log: (internal, _level, message) => {
+          this.context.addTrace({
+            data: { message },
+            type: internal ? TraceType.RESOURCE : TraceType.LOG,
+            sourcePath: this.context.resourcePath,
+            sourceType: FUNCTION_FQN,
+            timestamp: new Date().toISOString(),
+          });
+        },
+      });
+    }
+
+    return this.sandbox;
   }
 
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = this.createSandbox();
+        const sb = this.getCreateSandbox();
         return sb.call("handler", JSON.stringify(payload)) ?? "";
       },
     });
@@ -67,7 +81,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     await this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = this.createSandbox();
+        const sb = this.getCreateSandbox();
         process.nextTick(() => {
           void sb.call("handler", JSON.stringify(payload));
         });
