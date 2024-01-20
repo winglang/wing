@@ -115,12 +115,13 @@ export class Function extends Resource implements IInflightHost {
   protected _getCodeLines(handler: IFunctionHandler): string[] {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
+    const client = "$handler";
 
     lines.push('"use strict";');
-    lines.push("var $wing$handler = undefined;");
+    lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  $wing$handler = $wing$handler ?? (${inflightClient});`);
-    lines.push("  return await $wing$handler.handle(event);");
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(`  return await ${client}.handle(event);`);
     lines.push("};");
 
     return lines;
