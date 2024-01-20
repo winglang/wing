@@ -133,9 +133,9 @@ exports[`create a schedule 1`] = `
 exports[`schedule with one task using rate of 3h 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -150,7 +150,7 @@ console.log(\\"Hello from schedule!\\");
 })())({
 
 }), args: {} }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -338,9 +338,9 @@ console.log(\\"Hello from schedule!\\");
 exports[`schedule with one task using rate of 10m 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -355,7 +355,7 @@ console.log(\\"Hello from schedule!\\");
 })())({
 
 }), args: {} }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -543,9 +543,9 @@ console.log(\\"Hello from schedule!\\");
 exports[`schedule with one task with cron 1`] = `
 {
   ".wing/ontick0_c83eddbe.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/schedule.ontick.inflight.js\\")).ScheduleOnTickHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -560,7 +560,7 @@ console.log(\\"Hello from schedule!\\");
 })())({
 
 }), args: {} }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [

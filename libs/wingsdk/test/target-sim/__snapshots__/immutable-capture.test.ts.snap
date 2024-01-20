@@ -3,9 +3,9 @@
 exports[`array 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -22,7 +22,7 @@ if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: 
 })())({
 my_capture: [\\"hello\\",\\"dude\\"]
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -158,9 +158,9 @@ my_capture: [\\"hello\\",\\"dude\\"]
 exports[`array of buckets 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -200,7 +200,7 @@ my_buckets: [(function() {
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -396,9 +396,9 @@ my_buckets: [(function() {
 exports[`array of durations 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -415,7 +415,7 @@ if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\
 })())({
 my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -551,9 +551,9 @@ my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)
 exports[`array of maps 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -569,7 +569,7 @@ if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: 
 })())({
 my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -705,9 +705,9 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
 exports[`boolean 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -722,7 +722,7 @@ if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.
 })())({
 my_capture: false
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -858,9 +858,9 @@ my_capture: false
 exports[`duration 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -877,7 +877,7 @@ if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"thi
 })())({
 my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(7200))
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1013,9 +1013,9 @@ my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration
 exports[`map 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1034,7 +1034,7 @@ if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion fai
 })())({
 my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1170,9 +1170,9 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 exports[`map of arrays 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1193,7 +1193,7 @@ if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed
 })())({
 my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1329,9 +1329,9 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 exports[`map of arrays of durations 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1349,7 +1349,7 @@ if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assert
 })())({
 my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))]],[\\"bar\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1800)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(2400))]]])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1485,9 +1485,9 @@ my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duratio
 exports[`map of buckets 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1524,7 +1524,7 @@ my_map: new Map([[\\"foo\\",(function() {
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()]])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1720,9 +1720,9 @@ my_map: new Map([[\\"foo\\",(function() {
 exports[`number 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1737,7 +1737,7 @@ if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"th
 })())({
 my_capture: 123
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1873,9 +1873,9 @@ my_capture: 123
 exports[`set 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1893,7 +1893,7 @@ if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this
 })())({
 my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2029,9 +2029,9 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 exports[`set of durations 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2048,7 +2048,7 @@ if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertio
 })())({
 my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(600)),(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)(1200))])
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2184,9 +2184,9 @@ my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Dur
 exports[`string 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2202,7 +2202,7 @@ if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion fail
 })())({
 my_capture: \\"bam bam bam\\"
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2338,9 +2338,9 @@ my_capture: \\"bam bam bam\\"
 exports[`struct 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2358,7 +2358,7 @@ if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion 
 })())({
 my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\",}
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2494,9 +2494,9 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
 exports[`struct of maps 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2514,7 +2514,7 @@ if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed
 })())({
 my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -2650,9 +2650,9 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
 exports[`struct with resources 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
-var $wing$handler = undefined;
+var $handler = undefined;
 exports.handler = async function(event) {
-  $wing$handler = $wing$handler ?? (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -2724,7 +2724,7 @@ my_struct: {\\"bucky\\": (function() {
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()],},}
 }));
-  return await $wing$handler.handle(event);
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
