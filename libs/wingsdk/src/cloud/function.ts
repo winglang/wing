@@ -117,6 +117,7 @@ export class Function extends Resource implements IInflightHost {
     const lines = new Array<string>();
 
     lines.push('"use strict";');
+    lines.push("var $wing_handler = undefined;");
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient}).handle(event);`);
     lines.push("};");
