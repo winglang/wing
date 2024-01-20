@@ -3,8 +3,9 @@
 exports[`create a bucket 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $wing$handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $wing$handler = $wing$handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -15,7 +16,8 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $wing$handler.handle(event);
 };",
   "connections.json": {
     "connections": [
