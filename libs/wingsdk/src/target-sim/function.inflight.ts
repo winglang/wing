@@ -33,15 +33,15 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   /**
    * Creates a single instance of the function sandbox and returns it.
-   * 
+   *
    * Subsequent calls will return the same instance to mimick the behavior
    * in the cloud where a function container may be reused across multiple
    * invocations.
-   * 
+   *
    * @returns The simulator sandbox instance.
    */
   private getCreateSandbox(): Sandbox {
