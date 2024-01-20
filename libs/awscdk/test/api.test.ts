@@ -91,8 +91,8 @@ test("api with GET routes with common prefix", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  // 2 inflight lambdas and 1 lambda for log retention
+  template.resourceCountIs("AWS::Lambda::Function", 3);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -112,8 +112,8 @@ test("api with GET routes with different prefix", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  // 2 inflight lambdas and 1 lambda for log retention
+  template.resourceCountIs("AWS::Lambda::Function", 3);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -132,8 +132,8 @@ test("api with multiple GET route and one lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  // 2 inflight lambdas and 1 lambda for log retention
+  template.resourceCountIs("AWS::Lambda::Function", 3);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -153,8 +153,8 @@ test("api with multiple methods and multiple lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  // 2 inflight lambdas and 1 lambda for log retention
+  template.resourceCountIs("AWS::Lambda::Function", 3);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
