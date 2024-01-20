@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 37c744ff87811320ade6218fe7e45646b95f2015..69248daedf8196e02596725a4c00c5b7999aa6f4 100644
+--- a/package.json
++++ b/package.json
+@@ -40,7 +40,6 @@
+     "lint:types": "tslint \"**/*.d.ts\" -e \"**/node_modules/**\" -t stylish -c config/tslint.json",
+     "pages": "node scripts/pages",
+     "prepublish": "cd cli && npm install && cd .. && npm run build",
+-    "postinstall": "node scripts/postinstall",
+     "prof": "node bench/prof",
+     "test": "npm run test:sources && npm run test:types",
+     "test:sources": "tape -r ./lib/tape-adapter tests/*.js tests/node/*.js",

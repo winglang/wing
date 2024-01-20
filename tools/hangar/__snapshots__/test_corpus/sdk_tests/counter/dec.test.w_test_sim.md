@@ -2,8 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ dec.test.wsim » root/env0/test:dec    
-pass ─ dec.test.wsim » root/env1/test:key dec
+pass ─ dec.test.wsim » root/env0/test:dec()                
+pass ─ dec.test.wsim » root/env1/test:dec() with custom key
  
  
 Tests 2 passed (2)
