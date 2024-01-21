@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -72,6 +71,9 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** Permissions  */
   public permissions!: LambdaPermission;
 
+  private assetPath: string | undefined; // posix path
+  private bundleHash: string | undefined;
+
   constructor(
     scope: Construct,
     id: string,
@@ -79,15 +81,6 @@ export class Function extends cloud.Function implements IAwsFunction {
     props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
-
-    // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint);
-
-    // Create Lambda executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: resolve(bundle.directory),
-      type: AssetType.ARCHIVE,
-    });
 
     // Create unique S3 bucket for hosting Lambda code
     const app = App.of(this) as App;
@@ -97,13 +90,28 @@ export class Function extends cloud.Function implements IAwsFunction {
     // - whenever code changes, the object name changes
     // - even if two functions have the same code, they get different names
     //   (separation of concerns)
-    const objectKey = `asset.${this.node.addr}.${bundle.hash}.zip`;
+    let bundleHashToken = Lazy.stringValue({
+      produce: () => {
+        if (!this.bundleHash) {
+          throw new Error("bundleHash was not set");
+        }
+        return this.bundleHash;
+      },
+    });
+    const objectKey = `asset.${this.node.addr}.${bundleHashToken}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new S3Object(this, "S3Object", {
       bucket: bucket.bucket,
       key: objectKey,
-      source: asset.path, // returns a posix path
+      source: Lazy.stringValue({
+        produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
+          return this.assetPath;
+        },
+      }),
     });
 
     // Create Lambda role
@@ -222,6 +230,26 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
+
+    const bundle = createBundle(this.entrypoint);
+
+    // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
+    // the "path" argument isn't supported
+    const asset = new TerraformAsset(this, "Asset", {
+      path: bundle.directory,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.bundleHash = bundle.hash;
+    this.assetPath = asset.path;
   }
 
   /** @internal */

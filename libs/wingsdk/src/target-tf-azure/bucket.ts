@@ -151,7 +151,7 @@ export class Bucket extends cloud.Bucket {
       {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
-        operation: "onCreate",
+        operation: cloud.BucketEventType.CREATE,
       }
     );
   }
@@ -167,7 +167,7 @@ export class Bucket extends cloud.Bucket {
       {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
-        operation: "onDelete",
+        operation: cloud.BucketEventType.DELETE,
       }
     );
   }
@@ -183,7 +183,7 @@ export class Bucket extends cloud.Bucket {
       {
         issue: "https://github.com/winglang/wing/issues/1954",
         resource: this.constructor.name,
-        operation: "onUpdate",
+        operation: cloud.BucketEventType.UPDATE,
       }
     );
   }

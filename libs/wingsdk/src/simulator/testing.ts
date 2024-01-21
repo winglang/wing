@@ -1,5 +1,4 @@
-import { createHash } from "crypto";
-import { InflightBindings, liftObject, onLiftObject } from "../core";
+import { InflightBindings, closureId, liftObject, onLiftObject } from "../core";
 import { IInflight, IInflightHost } from "../std";
 
 /**
@@ -22,13 +21,16 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IInflight {
-    const clients: Record<string, string> = {};
+    return {
+      _id: closureId(),
+      _toInflight: () => {
+        const clients: Record<string, string> = {};
 
-    for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = liftObject(v.obj);
-    }
+        for (const [k, v] of Object.entries(bindings)) {
+          clients[k] = liftObject(v.obj);
+        }
 
-    const inflightCode = `\
+        const inflightCode = `\
 new ((function(){
 return class Handler {
   constructor(clients) {
@@ -44,9 +46,8 @@ ${Object.entries(clients)
   .join(",\n")}
 })`;
 
-    return {
-      _hash: createHash("md5").update(inflightCode).digest("hex"),
-      _toInflight: () => inflightCode,
+        return inflightCode;
+      },
       onLift: (host: IInflightHost, _ops: string[]) => {
         for (const v of Object.values(bindings)) {
           onLiftObject(v.obj, host, v.ops);
