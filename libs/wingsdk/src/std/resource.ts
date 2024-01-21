@@ -223,6 +223,21 @@ export abstract class Resource extends Construct implements IResource {
 }
 
 /**
+ * A resource that has an automatically generated id.
+ * Used by the Wing compiler to generate unique ids for auto generated resources
+ * from inflight function closures.
+ */
+export abstract class AutoIdResource extends Resource {
+  private static id: number = 0;
+
+  constructor(scope: Construct, id: string) {
+    // Treat the passed id as a prefix or just used the auto-id if none was passed
+    const actual_id = id ? `${id}-${AutoIdResource.id++}` : `${AutoIdResource.id++}`;
+    super(scope, actual_id);
+  }
+}
+
+/**
  * Annotations about what resources an inflight operation may access.
  *
  * The following example says that the operation may call "put" on a resource
