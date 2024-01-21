@@ -33,3 +33,4 @@ test "string" {
 let s3 = "hello
 world";
 let s4 = "hello\nworld";
+assert(s3 == s4);
