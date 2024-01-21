@@ -38,6 +38,18 @@ import { setOutput } from "@actions/core";
 import { minimatch } from "minimatch";
 import { fileURLToPath } from "node:url";
 
+type TurboTaskOutput = {
+  package: string;
+  taskId: string;
+  directory: string;
+  cache: {
+    status: "HIT" | "MISS";
+  };
+  dependencies: string[];
+  inputs: { [key: string]: any };
+};
+type TaskChangeMap = { [key: string]: { cached: boolean; changes: boolean } };
+
 const currentFile = fileURLToPath(import.meta.url);
 const rootDir = join(currentFile, "..", "..", "..", "..");
 function betterExec(command: string) {
@@ -79,7 +91,7 @@ const absoluteChangedFiles = relativeChangedFiles.map((file) =>
   join(rootDir, file)
 );
 
-console.log(absoluteChangedFiles)
+console.log(absoluteChangedFiles);
 
 const turboArgs = [
   "pnpm",
@@ -95,24 +107,26 @@ const turboArgs = [
 
 const turboOutput = JSON.parse(betterExec(turboArgs.join(" ")));
 
-const taskData: { [key: string]: { cached: boolean; changes: boolean } } = {};
+const rawTasks: TurboTaskOutput[] = turboOutput.tasks;
+const taskData: TaskChangeMap = {};
 
-for (const task of turboOutput.tasks) {
+// create change map based on task data
+for (const task of rawTasks) {
   // double check that all the changes files based on git are actually included in all these tasks
   const absoluteTaskRoot = join(rootDir, task.directory);
   const changesRelativeToTask = absoluteChangedFiles
     .map((file) => file.replace(absoluteTaskRoot + "/", ""))
     .filter((file) => !file.startsWith("/"));
 
-  const anyChanges = changesRelativeToTask.some((file) =>
-    Object.keys(task.inputs).includes(file)
-  );
   taskData[task.taskId] = {
     cached: task.cache.status === "HIT",
-    changes: anyChanges,
+    changes: changesRelativeToTask.some((file) =>
+      Object.keys(task.inputs).includes(file)
+    ),
   };
 }
 
+// check if any global deps changed
 const globalDeps = Object.keys(turboOutput.globalCacheInputs.files);
 const globalPattern = `{${globalDeps.join(",")}}`;
 for (const changedFile of relativeChangedFiles) {
@@ -124,11 +138,25 @@ for (const changedFile of relativeChangedFiles) {
   }
 }
 
-for (const task of turboOutput.tasks) {
+for (const task of rawTasks) {
+  updateChanges(task);
+}
+
+console.log(taskData);
+if (process.env.GITHUB_ACTIONS) {
+  setOutput("data", taskData);
+}
+
+/**
+ * Recursively update the "changes" field if any dependencies changed
+ * @returns true if changes were found
+ */
+function updateChanges(task: TurboTaskOutput): boolean {
   const dataEntry = taskData[task.taskId];
   if (dataEntry.changes) {
-    continue;
+    return true;
   }
+
   let dependencies = task.dependencies;
   if (task.package === "hangar") {
     /*
@@ -138,16 +166,22 @@ for (const task of turboOutput.tasks) {
     There is no way to denote this in turbo configuration so we have to do it manually here.
     */
     dependencies = dependencies.filter(
-      (dependency: string) => !dependency.startsWith("@wingconsole")
+      (dep) => !dep.startsWith("@wingconsole")
     );
   }
+
   for (const dependency of dependencies) {
-    dataEntry.changes = dataEntry.changes || taskData[dependency].changes;
+    const depTask = rawTasks.find((task) => task.taskId === dependency);
+    if (!depTask) {
+      throw new Error(
+        `Could not find dependency ${dependency} for task ${task.taskId}`
+      );
+    }
+    if (updateChanges(depTask)) {
+      dataEntry.changes = true;
+      break;
+    }
   }
-}
 
-console.log(taskData);
-
-if (process.env.GITHUB_ACTIONS) {
-  setOutput("data", taskData);
+  return dataEntry.changes;
 }
