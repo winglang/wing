@@ -204,3 +204,18 @@ if let s1 = str1 {
 } elif let s2 = str2 {
   assert(true);
 }
+
+// Optional function return type
+let var fn: (): ((): num)? = () => { return () => { return 1337; }; };
+if let f = fn() {
+  assert(f() == 1337);
+} else {
+  assert(false);
+}
+fn = () => { return nil; };
+if let f = fn() {
+  assert(false);
+} else {
+  assert(true);
+}
+

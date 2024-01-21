@@ -873,7 +873,13 @@ impl Display for Type {
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
 			Type::Inferred(_) => write!(f, "unknown"),
-			Type::Optional(v) => write!(f, "{}?", v),
+			Type::Optional(v) => {
+				if v.is_closure() {
+					write!(f, "({})?", v)
+				} else {
+					write!(f, "{}?", v)
+				}
+			}
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class),
 

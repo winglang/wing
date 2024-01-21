@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
@@ -8,10 +7,14 @@ import {
   IEventSource,
   Runtime,
 } from "aws-cdk-lib/aws-lambda";
+import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
 import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
+import { resolve } from "path";
+import { renameSync, rmSync, writeFileSync } from "fs";
+import { App } from "./app";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -20,6 +23,7 @@ import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
  */
 export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
+  private readonly assetPath: string;
 
   constructor(
     scope: Construct,
@@ -29,7 +33,12 @@ export class Function extends cloud.Function implements IAwsFunction {
   ) {
     super(scope, id, inflight, props);
 
-    // bundled code is guaranteed to be in a fresh directory
+    // The code in `this.entrypoint` will be replaced during preSynthesize
+    // but we produce an initial version and bundle it so that `lambda.Function`
+    // has something to work with.
+    // This is a workaround for https://github.com/aws/aws-cdk/issues/28732
+    const inflightCodeApproximation = this._getCodeLines(inflight).join("\n");
+    writeFileSync(this.entrypoint, inflightCodeApproximation);
     const bundle = createBundle(this.entrypoint);
 
     const logRetentionDays =
@@ -39,9 +48,11 @@ export class Function extends cloud.Function implements IAwsFunction {
           ? undefined // Negative value means Infinite retention
           : props.logRetentionDays;
 
+    const code = Code.fromAsset(resolve(bundle.directory));
+
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
-      code: Code.fromAsset(resolve(bundle.directory)),
+      code,
       runtime: Runtime.NODEJS_20_X,
       environment: {
         NODE_OPTIONS: "--enable-source-maps",
@@ -54,6 +65,28 @@ export class Function extends cloud.Function implements IAwsFunction {
       architecture: Architecture.ARM_64,
       logRetention: logRetentionDays,
     });
+
+    // hack: accessing private field from aws_lambda.AssetCode
+    // https://github.com/aws/aws-cdk/blob/109b2abe4c713624e731afa1b82c3c1a3ba064c9/packages/aws-cdk-lib/aws-lambda/lib/code.ts#L266
+    const asset: Asset = (code as any).asset;
+    if (!asset.assetPath) {
+      throw new Error("AWS CDK 'Asset' class no longer has an 'assetPath' property");
+    }
+    this.assetPath = asset.assetPath
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // produce an inflight code bundle using the latest information, including all
+    // changes made to captured variables/resources after the constructor
+    const bundle = createBundle(this.entrypoint);
+
+    // copy files from bundle.directory to this.assetPath
+    const assetDir = resolve(App.of(this).outdir, this.assetPath);
+    rmSync(assetDir, { recursive: true, force: true })
+    renameSync(bundle.directory, assetDir);
   }
 
   /** @internal */
