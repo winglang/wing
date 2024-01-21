@@ -99,15 +99,17 @@ export function printResults(
 
 interface TestResultsJson {
   duration: number;
+  platforms: string[];
   results: Record<string, Record<string, std.TestResult>>;
 }
 
 export async function writeResultsToFile(
   testResults: { testName: string; results: std.TestResult[] }[],
   duration: number,
-  filePath: string
+  filePath: string,
+  platforms: string[]
 ) {
-  const output: TestResultsJson = { duration, results: {} };
+  const output: TestResultsJson = { duration, platforms, results: {} };
   for (const result of testResults) {
     output.results[result.testName] = result.results.reduce(
       (acc, item) => ({ ...acc, [item.path.replace(/[\w+\/\\.-]+test:/, "")]: item }),
