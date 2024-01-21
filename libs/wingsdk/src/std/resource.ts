@@ -195,7 +195,8 @@ export abstract class Resource extends Construct implements IResource {
       // For each operation, check if the host supports it
       if (!supportedOps.includes(op)) {
         throw new NotImplementedError(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`,
+          { resource: this.constructor.name, operation: op }
         );
       }
 
