@@ -147,17 +147,37 @@ if (process.env.GITHUB_ACTIONS) {
   setOutput("data", taskData);
 }
 
+function getDependencies(taskId: string): string[] {
+  const task = rawTasks.find((task) => task.taskId === taskId);
+  if (!task) {
+    throw new Error(`Could not find task ${taskId}`);
+  }
+
+  let dependencies = task.dependencies;
+  
+  // get all transitive dependencies
+  for (const dependency of dependencies) {
+    dependencies = dependencies.concat(getDependencies(dependency));
+  }
+
+  // dedupe
+  dependencies = [...new Set(dependencies)];
+
+  return dependencies;
+}
+
 /**
- * Recursively update the "changes" field if any dependencies changed
+ * Check if any of the dependencies of the given task have changes.
  * @returns true if changes were found
  */
-function updateChanges(task: TurboTaskOutput): boolean {
+function updateChanges(task: TurboTaskOutput) {
   const dataEntry = taskData[task.taskId];
   if (dataEntry.changes) {
     return true;
   }
 
-  let dependencies = task.dependencies;
+  let dependencies = getDependencies(task.taskId)
+
   if (task.package === "hangar") {
     /*
     The wing console is a transitive dependency of hangar (hangar->winglang->@console/*).
@@ -177,11 +197,9 @@ function updateChanges(task: TurboTaskOutput): boolean {
         `Could not find dependency ${dependency} for task ${task.taskId}`
       );
     }
-    if (updateChanges(depTask)) {
+    if (taskData[dependency].changes) {
       dataEntry.changes = true;
       break;
     }
   }
-
-  return dataEntry.changes;
 }
