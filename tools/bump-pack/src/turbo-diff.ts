@@ -176,7 +176,7 @@ function getDependencies(taskId: string): string[] {
 function updateChanges(task: TurboTaskOutput) {
   const dataEntry = taskData[task.taskId];
   if (dataEntry.changes) {
-    return true;
+    return;
   }
 
   let dependencies = getDependencies(task.taskId);
@@ -194,12 +194,6 @@ function updateChanges(task: TurboTaskOutput) {
   }
 
   for (const dependency of dependencies) {
-    const depTask = rawTasks.find((task) => task.taskId === dependency);
-    if (!depTask) {
-      throw new Error(
-        `Could not find dependency ${dependency} for task ${task.taskId}`
-      );
-    }
     if (taskData[dependency].changes) {
       dataEntry.changes = true;
       break;
