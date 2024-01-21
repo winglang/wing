@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -320,7 +320,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -386,7 +386,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
