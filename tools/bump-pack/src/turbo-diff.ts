@@ -147,6 +147,9 @@ if (process.env.GITHUB_ACTIONS) {
   setOutput("data", taskData);
 }
 
+/**
+ * Get all the dependencies (including transitive) of the given task
+ */
 function getDependencies(taskId: string): string[] {
   const task = rawTasks.find((task) => task.taskId === taskId);
   if (!task) {
@@ -154,7 +157,7 @@ function getDependencies(taskId: string): string[] {
   }
 
   let dependencies = task.dependencies;
-  
+
   // get all transitive dependencies
   for (const dependency of dependencies) {
     dependencies = dependencies.concat(getDependencies(dependency));
@@ -176,7 +179,7 @@ function updateChanges(task: TurboTaskOutput) {
     return true;
   }
 
-  let dependencies = getDependencies(task.taskId)
+  let dependencies = getDependencies(task.taskId);
 
   if (task.package === "hangar") {
     /*
