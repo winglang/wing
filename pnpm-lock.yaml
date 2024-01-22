@@ -1473,9 +1473,6 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
-      commander:
-        specifier: ^10.0.1
-        version: 10.0.1
       winglang:
         specifier: workspace:^
         version: link:../../apps/wing
@@ -14689,7 +14686,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240121
+      typescript: 5.4.0-dev.20240122
     dev: true
 
   /dset@3.1.2:
@@ -24538,8 +24535,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240121:
-    resolution: {integrity: sha512-mRsxgYHpW6gRWM72xK9BqjCOiAAady4aJJg3JjQW1/ZkIlT+AGgJobFJYDHvQ2eexz7uaGA3zVftM4UNC5KkRw==}
+  /typescript@5.4.0-dev.20240122:
+    resolution: {integrity: sha512-AlqDACgFZ2OGGSqJcWcQQOkbiznU+fXn2vhdcZttnOe5qr1E1oXf1lcHXEz3wTmEouLQwN6fVp2/76/JOsf9rQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
