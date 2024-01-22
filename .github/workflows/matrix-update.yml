@@ -1,0 +1,45 @@
+name: Competibility matrix update
+on:
+  workflow_call: {}
+
+env:
+  NODE_VERSION: "18.16.0"
+  PNPM_VERSION: "8.6.3"
+
+jobs:
+  updateMatrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js v18
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        run: pnpm install --frozen-lockfile --filter ./scripts/compatibility-matrix-automation
+
+      - name: Download Output Files
+        uses: actions/download-artifact@v3
+        with:
+          name: out
+          path: out
+
+      - name: Run Update Script
+        run: |
+          cd scripts/compatibility-matrix-automation
+          OUT_FILE=../../out pnpm start
+          rmdir -r ../../out
+
+      - name: Create a PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "chore(docs): competability matrix update"
+          draft: true # remove it soon!
