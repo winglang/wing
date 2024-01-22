@@ -42,9 +42,39 @@ The following table contains some use cases and is by no means exhaustive.
 
 ## Configuring and Managing Inputs
 
-The following Wing application contains several inputs, in this section of the RFC we will see how inputs can be managed
+### The Wing Configuration File
 
-(draft sketch)
+Inputs are defined via a Wing configuration file. These configuration files are called `wing.toml` and support other file formats such as `json` and `yaml`. 
+
+For instance in order to create a single input that will be used to determine how many buckets are created in our preflight code, we can do the following:
+
+```toml
+# wing.toml
+bucketCount = 3
+```
+
+```js
+// main.w
+bring cloud;
+let bucketCount = cloud.Input("bucketCount");
+
+let buckets = MutArray<cloud.Bucket>[];
+
+for i in 0..buckets.asNum() {
+  buckets.push(new cloud.Bucket() as "bucket_${i}");
+}
+```
+
+
+Additionally lets imagine we wanted to create resources based on feature flags provided at compile time.
+
+```toml
+email-list = "one@email.com, two@gmail.com"
+
+[ features ]
+notifications = false
+```
+
 ```js
 let enableNotifications = cloud.Input("/features/notifications");
 let emailList = cloud.Input("/email-list"); // comma separated string
@@ -62,30 +92,56 @@ if enableNotifications.asBool() {
 }
 ```
 
-In order for the above code to run there are 2 required inputs `enableNotifications` and `emailList` either one of these inputs can be used inflight or preflight. 
+### Inputs via CLI Flags
 
-To manage these inputs we will create a `inputs.json` file within our project's folder.
-```json
-{
-	"features": {
-		"notifications": "true"
-	},
-	"email-list": "one@email.com,two@email.com"
+As an alternative to creating a `wing.toml` file, non-secure inputs can be defined via the cli.
+
+```bash
+wing compile main.w --input /feature/notifications=true --input /email-list=stuff
+```
+
+### Target Platform Specific Inputs
+
+### Platform specific inputs
+
+In some cases input values need to vary based on the target Platform. We can imagine we may have a input required for a Platform names: "TerraformS3Backend" which requires 2 inputs at minimum, `tf-s3-backend/bucket` and `tf-s3-backend/state-file-name` the non app providing Platforms are able to add inputs during the `preSynth` hook.
+
+```js
+export class TerraformS3Backend implements IPlatform {
+  preSynth(app: App): void {
+    const rootKey = "/tf-s3-backend";
+	app.addInput("S3BackendBucket", {name: `${rootKey}/bucket`});
+	app.addInput("S3BackendStateFile", {name: `${rootKey}/state-file`});
+  }
 }
+```
+
+Compiling the following platform with missing inputs will result in an error message like such:
+```
+Missing required inputs:
+/tf-s3-backend/bucket
+/tf-s3-backend/state-file-name
+```
+
+To satisfy the required inputs we would need to create a `wing.toml` with those required values
+```toml
+[ tf-s3-backend ]
+bucket = "my-wing-bucket"
+state-file = "my state file"
 ```
 
 ### Creating inputs in preflight
 
 Sometimes we may just want to provide an input defined within our Wing application. Take for instance the following 
 ```js
-let testEmail = new cloud.Input(name: "/test/email", value: "test@fake.com");
+let testEmail = new cloud.Input(name: "/test/email", defaultValue: "test@fake.com");
 
 new cloud.Function(inflight() => {
 	// some code that uses the testEmail
 });
 ```
 
-While more adhoc than creating an `inputs.json` file, this should be fine in most non-secure cases.
+While more adhoc than creating an `wing.toml` file, this should be fine in most non-secure cases.
 ### Secure Inputs
 
 Some inputs contain sensitive data and thus should be treated with enhanced scrutiny. I.E. Inputs with sensitive data should not be created by preflight code in order to keep any trace of them from state files. 
@@ -101,7 +157,7 @@ Cannot create secure Inputs in Preflight
 ... followed by some Platform specific text on how secure inputs are expected to be created
 ```
 
-### Creating the inputs Interactively
+### Creating the inputs Interactively (P2)
 
 Additionally inputs can be created through an interactive process by running `wing compile -i app.main.w` 
 
@@ -122,30 +178,9 @@ Please enter an input value for /email-list (one@email.com,two@email.com): ""
 ```
 By default, not entering in a new value will keep the existing version.
 
-### Platform specific inputs
+### List Application Inputs
 
-In some cases input values need to vary based on the target Platform. We can imagine we may have a input required for a Platform names: "TerraformS3Backend" which requires 2 inputs at minimum, `tf-s3-backend/bucket` and `tf-s3-backend/state-file-name` the non app providing Platforms are able to add inputs during the `preSynth` hook.
-```js
-export class TerraformS3Backend implements IPlatform {
-	preSynth(app: App): void {
-		const rootKey = "/tf-s3-backend";
-		app.addInput("S3BackendBucket", {name: `${rootKey}/bucket`});
-		app.addInput("S3BackendStateFile", {name: `${rootKey}/state-file`});
-	}
-}
-```
-
-Compiling the following platform with missing inputs will result in an error message like such:
-```
-Missing inputs:
-/tf-s3-backend/bucket
-/tf-s3-backend/state-file-name
-Please run with "--interactive" flag to configure missing inputs.
-```
-
-### Viewing Required Inputs
-
-Its also possible to view a list of the required inputs for a given application and target platforms. This can be achieved by using the `wing inputs --list` command 
+Its also possible to view a list of the inputs for a given application and target platforms. This can be achieved by using the `wing inputs --list` command 
 
 For example using the below application code
 
@@ -161,7 +196,7 @@ wing inputs --list -t tf-aws -t @tf-s3-backend
 
 will produce an output like this:
 ```
-Required inputs:
+Application inputs:
 /features/notifications
 /email-list
 /tf-s3-backend/bucket
