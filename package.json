@@ -30,7 +30,8 @@
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
       "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch",
       "mime@3.0.0": "patches/mime@3.0.0.patch",
-      "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch"
+      "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch",
+      "jsii@5.3.11": "patches/jsii@5.3.11.patch"
     }
   }
 }
