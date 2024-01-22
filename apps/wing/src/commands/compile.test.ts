@@ -6,6 +6,7 @@ import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
 
 const exampleDir = resolve("../../examples/tests/valid");
+const exampleErrorDir = resolve("../../examples/tests/error");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
 
@@ -93,6 +94,23 @@ describe(
       return expect(
         compile("non-existent-file.w", { platform: [BuiltinPlatform.SIM] })
       ).rejects.toThrowError(/Source file cannot be found/);
+    });
+
+    test("should create verbose stacktrace with DEBUG env set", async () => {
+      const exampleErrorFile = join(exampleErrorDir, "bool_from_json.test.w");
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.not.toThrowError(/wingsdk/);
+
+      const prevDebug = process.env.DEBUG;
+      process.env.DEBUG = "true";
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.toThrowError(/wingsdk/);
+
+      process.env.DEBUG = prevDebug;
     });
 
     test("should be able to compile a directory", async () => {
