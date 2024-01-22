@@ -37,14 +37,13 @@ export const Modal = ({
         >
           <div
             className={classNames(
-              "fixed inset-0 bg-opacity-40 dark:bg-opacity-70 transition-opacity",
-              theme.bg1,
+              "fixed inset-0 transition-all backdrop-blur-sm",
             )}
           />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full justify-center text-center items-center p-0">
+          <div className="flex justify-center text-center pt-24">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

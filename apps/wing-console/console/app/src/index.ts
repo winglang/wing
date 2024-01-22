@@ -60,6 +60,10 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
 
   const server = await createConsoleServer({
     ...options,
+    analyticsAnonymousId: analyticsStorage.getAnonymousId(),
+    requireSignIn() {
+      return analyticsStorage.getRequireSignIn();
+    },
     onExpressCreated(app) {
       app.use(express.static(staticDir));
       options.onExpressCreated?.(app);

@@ -97,6 +97,8 @@ export interface RouterContext {
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
+  analyticsAnonymousId: string;
+  requireSignIn: () => boolean | Promise<boolean>;
 }
 
 const t = initTRPC.context<RouterContext>().create();

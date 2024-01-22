@@ -616,6 +616,13 @@ export const createAppRouter = () => {
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
 
+    "app.analytics": createProcedure.query(async ({ ctx }) => {
+      return {
+        anonymousId: ctx.analyticsAnonymousId,
+        requireSignIn: await ctx.requireSignIn(),
+      };
+    }),
+
     /**
      * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
      * provided by the "app.openFileInEditor" procedure.

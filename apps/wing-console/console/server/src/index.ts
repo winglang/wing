@@ -71,6 +71,8 @@ export interface CreateConsoleServerOptions {
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
+  analyticsAnonymousId: string;
+  requireSignIn: () => boolean;
 }
 
 export const createConsoleServer = async ({
@@ -87,6 +89,8 @@ export const createConsoleServer = async ({
   layoutConfig,
   platform,
   stateDir,
+  analyticsAnonymousId,
+  requireSignIn,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -270,6 +274,8 @@ export const createConsoleServer = async ({
       selectedNode = node;
     },
     testsStateManager,
+    analyticsAnonymousId,
+    requireSignIn,
   });
 
   const close = async (callback?: () => void) => {
