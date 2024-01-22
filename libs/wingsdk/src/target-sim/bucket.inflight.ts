@@ -13,6 +13,7 @@ import {
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
+  BucketGetOptions,
 } from "../cloud";
 import { deserialize, serialize } from "../simulator/serialization";
 import {
@@ -136,14 +137,30 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         try {
-          return await fs.promises.readFile(filename, "utf8");
+          const file = await fs.promises.open(filename, "r");
+          const stat = await file.stat();
+
+          let start = 0;
+          if (options?.start !== undefined) {
+            start = options.start;
+          }
+
+          let length = stat.size;
+          if (options?.end !== undefined) {
+            length = options.end + 1;
+          }
+
+          const buffer = Buffer.alloc(length - start);
+          await file.read(buffer, 0, length - start, start);
+          await file.close();
+          return buffer.toString("utf8");
         } catch (e) {
           throw new Error(
             `Object does not exist (key=${key}): ${(e as Error).stack}`
@@ -153,9 +170,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketGetOptions
+  ): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return this.get(key, options);
     }
 
     return undefined;

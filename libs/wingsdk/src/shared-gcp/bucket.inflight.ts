@@ -6,6 +6,7 @@ import {
   BucketPutOptions,
   IBucketClient,
   ObjectMetadata,
+  BucketGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -115,19 +116,24 @@ export class BucketClient implements IBucketClient {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     try {
-      const body = await this.bucket.file(key).download();
+      const body = await this.bucket
+        .file(key)
+        .download({ start: options?.start, end: options?.end });
       return body.toString();
     } catch (error) {
       throw new Error(`Failed to get object. (key=${key})`);
     }
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketGetOptions
+  ): Promise<string | undefined> {
     try {
       if (await this.exists(key)) {
-        return await this.get(key);
+        return await this.get(key, options);
       }
       return undefined;
     } catch (error) {

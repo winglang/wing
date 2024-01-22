@@ -46,10 +46,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: get
   kind: 2
-  detail: "inflight (key: str): str"
+  detail: "inflight (key: str, options: BucketGetOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\ninflight get: inflight (key: str): str\n```\n---\nRetrieve an object from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
+    value: "```wing\ninflight get: inflight (key: str, options: BucketGetOptions?): str\n```\n---\nRetrieve an object from the bucket.\n### Parameters\n- `key` — `str` — Key of the object.\n- `...options` — `BucketGetOptions?` — Additional get options.\n  \n  - `end?` — `num?` — The end location to read up to (including).\n  - `start?` — `num?` — The start location to read from.\n\n*@Returns* *the object's body.*\n*@Throws* *if no object with the given key exists.*"
   sortText: ff|get
   insertText: get($1)
   insertTextFormat: 2
@@ -166,10 +166,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: tryGet
   kind: 2
-  detail: "inflight (key: str): str?"
+  detail: "inflight (key: str, options: BucketGetOptions?): str?"
   documentation:
     kind: markdown
-    value: "```wing\ninflight tryGet: inflight (key: str): str?\n```\n---\nGet an object from the bucket if it exists.\n### Parameters\n- `key` — `str` — Key of the object.\n\n### Returns\nthe contents of the object as a string if it exists, nil otherwise"
+    value: "```wing\ninflight tryGet: inflight (key: str, options: BucketGetOptions?): str?\n```\n---\nGet an object from the bucket if it exists.\n### Parameters\n- `key` — `str` — Key of the object.\n- `...options` — `BucketGetOptions?` — Additional get options.\n  \n  - `end?` — `num?` — The end location to read up to (including).\n  - `start?` — `num?` — The start location to read from.\n\n### Returns\nthe contents of the object as a string if it exists, nil otherwise"
   sortText: ff|tryGet
   insertText: tryGet($1)
   insertTextFormat: 2

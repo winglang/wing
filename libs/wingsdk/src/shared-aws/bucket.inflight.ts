@@ -26,6 +26,7 @@ import {
   BucketDeleteOptions,
   BucketSignedUrlOptions,
   BucketSignedUrlAction,
+  BucketGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -93,10 +94,16 @@ export class BucketClient implements IBucketClient {
   /**
    * See https://github.com/aws/aws-sdk-js-v3/issues/1877
    */
-  private async getObjectContent(key: string): Promise<string | undefined> {
+  private async getObjectContent(
+    key: string,
+    options?: BucketGetOptions
+  ): Promise<string | undefined> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: key,
+      Range: `bytes=${options?.start !== undefined ? options.start : 0}-${
+        options?.end !== undefined ? options.end : ""
+      }`,
     });
 
     try {
@@ -125,8 +132,8 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns content of the object
    */
-  public async get(key: string): Promise<string> {
-    const objectContent = await this.getObjectContent(key);
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
+    const objectContent = await this.getObjectContent(key, options);
     if (objectContent !== undefined) {
       return objectContent;
     }
@@ -139,8 +146,11 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns content of the object
    */
-  public async tryGet(key: string): Promise<string | undefined> {
-    return this.getObjectContent(key);
+  public async tryGet(
+    key: string,
+    options?: BucketGetOptions
+  ): Promise<string | undefined> {
+    return this.getObjectContent(key, options);
   }
 
   /**

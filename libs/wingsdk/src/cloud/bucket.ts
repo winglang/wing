@@ -229,6 +229,23 @@ export interface ObjectMetadata {
 }
 
 /**
+ * Options for `Bucket.get()`.
+ */
+export interface BucketGetOptions {
+  /**
+   * The start location to read from.
+   * @default - undefined
+   */
+  readonly start?: number;
+
+  /**
+   * The end location to read up to (including).
+   * @default - undefined
+   */
+  readonly end?: number;
+}
+
+/**
  * Options for `Bucket.put()`.
  */
 export interface BucketPutOptions {
@@ -314,19 +331,21 @@ export interface IBucketClient {
   /**
    * Retrieve an object from the bucket.
    * @param key Key of the object.
+   * @param options Additional get options
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string, options?: BucketGetOptions): Promise<string>;
 
   /**
    * Get an object from the bucket if it exists
    * @param key Key of the object.
+   * @param options Additional get options
    * @returns the contents of the object as a string if it exists, nil otherwise
    * @inflight
    */
-  tryGet(key: string): Promise<string | undefined>;
+  tryGet(key: string, options?: BucketGetOptions): Promise<string | undefined>;
 
   /**
    * Retrieve a Json object from the bucket.

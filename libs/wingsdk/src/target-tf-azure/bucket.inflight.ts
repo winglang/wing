@@ -11,6 +11,7 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -89,7 +90,13 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns string content of the object as string
    */
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
+    if (options?.start !== undefined || options?.end !== undefined) {
+      throw new Error(
+        `Range requests are not supported yet for this target (key=${key})`
+      );
+    }
+
     const blobClient = this.containerClient.getBlobClient(key);
 
     let downloadResponse: BlobDownloadResponseParsed;
@@ -123,9 +130,12 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns string content of the object as string
    */
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketGetOptions
+  ): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return this.get(key, options);
     }
 
     return undefined;

@@ -386,7 +386,7 @@ Key of the object.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
 
 ```wing
-inflight get(key: str): str
+inflight get(key: str, options?: BucketGetOptions): str
 ```
 
 Retrieve an object from the bucket.
@@ -396,6 +396,14 @@ Retrieve an object from the bucket.
 - *Type:* str
 
 Key of the object.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.get.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketGetOptions">BucketGetOptions</a>
+
+Additional get options.
 
 ---
 
@@ -587,7 +595,7 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str): str
+inflight tryGet(key: str, options?: BucketGetOptions): str
 ```
 
 Get an object from the bucket if it exists.
@@ -597,6 +605,14 @@ Get an object from the bucket if it exists.
 - *Type:* str
 
 Key of the object.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketGetOptions">BucketGetOptions</a>
+
+Additional get options.
 
 ---
 
@@ -751,6 +767,53 @@ type: BucketEventType;
 - *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
 
 Type of event.
+
+---
+
+### BucketGetOptions <a name="BucketGetOptions" id="@winglang/sdk.cloud.BucketGetOptions"></a>
+
+Options for `Bucket.get()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketGetOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketGetOptions = cloud.BucketGetOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.end">end</a></code> | <code>num</code> | The end location to read up to (including). |
+| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.start">start</a></code> | <code>num</code> | The start location to read from. |
+
+---
+
+##### `end`<sup>Optional</sup> <a name="end" id="@winglang/sdk.cloud.BucketGetOptions.property.end"></a>
+
+```wing
+end: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The end location to read up to (including).
+
+---
+
+##### `start`<sup>Optional</sup> <a name="start" id="@winglang/sdk.cloud.BucketGetOptions.property.start"></a>
+
+```wing
+start: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The start location to read from.
 
 ---
 
