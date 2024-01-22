@@ -80,8 +80,7 @@
       "json",
       "lcov",
       "clover",
-      "cobertura",
-      "text"
+      "cobertura"
     ],
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [

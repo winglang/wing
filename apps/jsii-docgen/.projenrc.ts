@@ -37,6 +37,9 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
+  jestOptions: {
+    coverageText: false,
+  },
 });
 
 const libraryFixtures = ["construct-library"];
