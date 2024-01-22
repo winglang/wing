@@ -56,7 +56,7 @@ new cloud.Function(inflight () => {
 
 ## Function container reuse
 
-Most cloud providers will opportunistically reuse the function's container in subsequent invocations. It is possible
+Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
 to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
 
 The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
