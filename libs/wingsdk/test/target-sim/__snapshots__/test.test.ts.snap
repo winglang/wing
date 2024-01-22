@@ -3,8 +3,9 @@
 exports[`create a test 1`] = `
 {
   ".wing/handler_c86fc180.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -18,7 +19,8 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],

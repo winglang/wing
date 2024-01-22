@@ -3,8 +3,9 @@
 exports[`create an OnDeploy 1`] = `
 {
   ".wing/function_c83fbf14.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -15,7 +16,8 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
