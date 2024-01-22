@@ -100,8 +100,6 @@ As an alternative to creating a `wing.toml` file, non-secure inputs can be defin
 wing compile main.w --input /feature/notifications=true --input /email-list=stuff
 ```
 
-### Target Platform Specific Inputs
-
 ### Platform specific inputs
 
 In some cases input values need to vary based on the target Platform. We can imagine we may have a input required for a Platform names: "TerraformS3Backend" which requires 2 inputs at minimum, `tf-s3-backend/bucket` and `tf-s3-backend/state-file-name` the non app providing Platforms are able to add inputs during the `preSynth` hook.
