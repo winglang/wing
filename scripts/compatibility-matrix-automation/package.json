@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "compile": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node lib/index"
+    "test": "vitest run --passWithNoTests --update",
+    "start": "tsc && node lib/src/index"
   },
   "bin": {
     "matrix": "bin/matrix"
@@ -18,8 +18,7 @@
   },
   "dependencies": {
     "@winglang/sdk": "workspace:^",
-    "winglang": "workspace:^",
-    "commander": "^10.0.1"
+    "winglang": "workspace:^"
   },
   "devDependencies": {
     "bump-pack": "workspace:^",
