@@ -62,7 +62,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-sort-exports": "^0.8.0",
     "fs-extra": "^10.1.0",
-    "jsii": "5.3.11",
+    "jsii": "~5.3.11",
     "jsii-diff": "^1.94.0",
     "jsii-pacmak": "^1.94.0",
     "mock-gcs": "^1.2.0",

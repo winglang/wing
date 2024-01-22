@@ -1429,7 +1429,7 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0
       jsii:
-        specifier: 5.3.11
+        specifier: ~5.3.11
         version: 5.3.11
       jsii-diff:
         specifier: ^1.94.0
