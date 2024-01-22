@@ -8,4 +8,5 @@ packages:
   - "apps/wing-console/tools/*"
   - "examples/tests/*"
   - "examples/*"
+  - "scripts/compatibility-matrix-automation"
   - "apps/jsii-docgen/test/__fixtures__/**"
