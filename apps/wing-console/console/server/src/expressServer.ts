@@ -46,7 +46,7 @@ export interface CreateExpressServerOptions {
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
-  analyticsAnonymousId: string;
+  analyticsAnonymousId?: string;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
 }

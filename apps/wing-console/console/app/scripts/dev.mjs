@@ -40,12 +40,6 @@ const consoleServer = await createConsoleServer({
   },
   requireAcceptTerms: true,
   analyticsAnonymousId: undefined,
-  async requireSignIn() {
-    return false;
-  },
-  async notifySignedIn() {
-    // Do nothing.
-  },
 });
 
 const vite = await createViteServer({

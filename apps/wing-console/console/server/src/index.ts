@@ -72,7 +72,7 @@ export interface CreateConsoleServerOptions {
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
-  analyticsAnonymousId: string;
+  analyticsAnonymousId?: string;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
 }
