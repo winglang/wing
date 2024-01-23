@@ -1,25 +1,23 @@
 import { Button, Link, Modal, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParam } from "react-use";
 
+import { AppContext } from "../AppContext.js";
 import { trpc } from "../services/trpc.js";
 
 export interface SignInModalProps {}
 
 export const SignInModal = (props: SignInModalProps) => {
+  const { wingCloudSignInUrl } = useContext(AppContext);
   const { theme } = useTheme();
   const analytics = trpc["app.analytics"].useQuery();
   const signIn = useCallback(() => {
-    const GITHUB_APP_CLIENT_ID = "Iv1.29ba054d6e919d9c";
-    const url = new URL("https://github.com/login/oauth/authorize");
-    url.searchParams.append("client_id", GITHUB_APP_CLIENT_ID);
-    url.searchParams.append(
-      "redirect_uri",
-      `http://localhost:3900/wrpc/github.callback?port=${location.port}&anonymousId=${analytics.data?.anonymousId}`,
-    );
+    const url = new URL(wingCloudSignInUrl!);
+    url.searchParams.append("port", location.port);
+    url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
     location.href = url.toString();
-  }, [analytics.data?.anonymousId]);
+  }, [wingCloudSignInUrl, analytics.data?.anonymousId]);
   const signedInParameter = useSearchParam("signedIn");
   const [requireSignIn, setRequireSignIn] = useState(false);
   useEffect(() => {
@@ -30,17 +28,15 @@ export const SignInModal = (props: SignInModalProps) => {
     }
   }, [analytics.data?.requireSignIn, signedInParameter]);
 
-  const notifySignedIn = trpc["app.analytics.notifySignedIn"].useMutation({
-    onSuccess() {
-      const url = new URL(location.href);
-      url.searchParams.delete("signedIn");
-      history.replaceState({}, document.title, url);
-    },
-  });
+  const { mutate: notifySignedIn } =
+    trpc["app.analytics.notifySignedIn"].useMutation();
 
   useEffect(() => {
     if (signedInParameter !== null) {
-      notifySignedIn.mutate();
+      notifySignedIn();
+      const url = new URL(location.href);
+      url.searchParams.delete("signedIn");
+      history.replaceState({}, document.title, url);
     }
   }, [signedInParameter, notifySignedIn]);
 
