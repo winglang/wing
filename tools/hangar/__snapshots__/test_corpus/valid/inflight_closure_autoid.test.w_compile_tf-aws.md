@@ -1,10 +1,10 @@
-# [capture_reassignable.test.w](../../../../../examples/tests/valid/capture_reassignable.test.w) | compile | tf-aws
+# [inflight_closure_autoid.test.w](../../../../../examples/tests/valid/inflight_closure_autoid.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $x }) {
+module.exports = function({ $i }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,7 +12,7 @@ module.exports = function({ $x }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq($x, 5), "x == 5");
+      return $i;
     }
   }
   return $Closure1;
@@ -24,7 +24,7 @@ module.exports = function({ $x }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $handler }) {
+module.exports = function({ $inflights }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,7 +32,9 @@ module.exports = function({ $handler }) {
       return $obj;
     }
     async handle() {
-      (await $handler());
+      for (const i of $helpers.range(0,5,false)) {
+        $helpers.assert($helpers.eq((await ((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })($inflights, i)()), i), "inflights.at(i)() == i");
+      }
     }
   }
   return $Closure2;
@@ -68,46 +70,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.AutoIdResource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $x: ${$stdlib.core.liftObject(x)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType()};
-            const client = new $Closure1Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "handle": [
-            [x, []],
-          ],
-        });
-        super.onLift(host, ops);
-      }
-    }
     class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -117,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
-            $handler: ${$stdlib.core.liftObject(handler)},
+            $inflights: ${$stdlib.core.liftObject(inflights)},
           })
         `;
       }
@@ -138,19 +103,57 @@ class $Root extends $stdlib.std.Resource {
       onLift(host, ops) {
         $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
-            [handler, ["handle"]],
+            [inflights, ["at"]],
           ],
         });
         super.onLift(host, ops);
       }
     }
-    let x = 5;
-    const handler = new $Closure1(this, "$Closure1");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:main", new $Closure2(this, "$Closure2"));
+    let inflights = [];
+    for (const i of $helpers.range(0,5,false)) {
+      class $Closure1 extends $stdlib.std.AutoIdResource {
+        _id = $stdlib.core.closureId();
+        constructor($scope, $id, ) {
+          super($scope, $id);
+          $helpers.nodeof(this).hidden = true;
+        }
+        static _toInflightType() {
+          return `
+            require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+              $i: ${$stdlib.core.liftObject(i)},
+            })
+          `;
+        }
+        _toInflight() {
+          return `
+            (await (async () => {
+              const $Closure1Client = ${$Closure1._toInflightType()};
+              const client = new $Closure1Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `;
+        }
+        _supportedOps() {
+          return [...super._supportedOps(), "handle", "$inflight_init"];
+        }
+        onLift(host, ops) {
+          $stdlib.core.onLiftMatrix(host, ops, {
+            "handle": [
+              [i, []],
+            ],
+          });
+          super.onLift(host, ops);
+        }
+      }
+      inflights.push(new $Closure1(this, "$Closure1"));
+    }
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight closure auto id", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "capture_reassignable.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_closure_autoid.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```

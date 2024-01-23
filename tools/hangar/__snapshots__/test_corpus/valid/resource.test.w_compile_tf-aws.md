@@ -800,7 +800,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -848,7 +848,7 @@ class $Root extends $stdlib.std.Resource {
         this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
         this.t = this.node.root.new("@winglang/sdk.cloud.Topic", cloud.Topic, this, "cloud.Topic");
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -886,7 +886,7 @@ class $Root extends $stdlib.std.Resource {
         }
         (this.t.onMessage(new $Closure2(this, "$Closure2")));
         const __parent_this_3 = this;
-        class $Closure3 extends $stdlib.std.Resource {
+        class $Closure3 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -924,7 +924,7 @@ class $Root extends $stdlib.std.Resource {
         }
         (this.q.setConsumer(new $Closure3(this, "$Closure3")));
         const __parent_this_4 = this;
-        class $Closure4 extends $stdlib.std.Resource {
+        class $Closure4 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -1006,7 +1006,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
+    class $Closure5 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

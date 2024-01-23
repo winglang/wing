@@ -133,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
         const s = "inResource";
         $helpers.assert($helpers.eq(s, "inResource"), "s == \"inResource\"");
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -192,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "$inflight_init"];
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -228,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -259,7 +259,7 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       const s = "inner";
       $helpers.assert($helpers.eq(s, "inner"), "s == \"inner\"");
-      class $Closure1 extends $stdlib.std.Resource {
+      class $Closure1 extends $stdlib.std.AutoIdResource {
         _id = $stdlib.core.closureId();
         constructor($scope, $id, ) {
           super($scope, $id);
