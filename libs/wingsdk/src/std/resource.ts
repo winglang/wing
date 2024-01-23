@@ -131,7 +131,8 @@ export abstract class Resource extends Construct implements IResource {
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
     log(
-      `onLiftType called on a resource type (${this.constructor.name
+      `onLiftType called on a resource type (${
+        this.constructor.name
       }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
     );
   }
@@ -228,7 +229,10 @@ export abstract class Resource extends Construct implements IResource {
  */
 export abstract class AutoIdResource extends Resource {
   constructor(scope: Construct, id_prefix: string = "") {
-    const actual_id = App.of(scope).makeId(scope, id_prefix ? `${id_prefix}_` : "");
+    const actual_id = App.of(scope).makeId(
+      scope,
+      id_prefix ? `${id_prefix}_` : ""
+    );
     super(scope, actual_id);
   }
 }
