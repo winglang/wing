@@ -49,8 +49,6 @@ if [ ! -f $BINARYEN_BINARIES ]; then
         echo "Error extracting Binaryen. Exiting."
         exit 1
     fi
-else
-    echo "Binaryen $BINARYEN_VERSION already installed."
 fi
 
 # Download wasi-sdk
