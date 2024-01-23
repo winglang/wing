@@ -47,8 +47,8 @@ export interface CreateExpressServerOptions {
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
   analyticsAnonymousId: string;
-  requireSignIn: () => Promise<boolean>;
-  notifySignedIn: () => Promise<void>;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
 }
 
 export const createExpressServer = async ({

@@ -619,13 +619,13 @@ export const createAppRouter = () => {
     "app.analytics": createProcedure.query(async ({ ctx }) => {
       return {
         anonymousId: ctx.analyticsAnonymousId,
-        requireSignIn: await ctx.requireSignIn(),
+        requireSignIn: (await ctx.requireSignIn?.()) ?? false,
       };
     }),
 
     "app.analytics.notifySignedIn": createProcedure.mutation(
       async ({ ctx }) => {
-        await ctx.notifySignedIn();
+        await ctx.notifySignedIn?.();
       },
     ),
 

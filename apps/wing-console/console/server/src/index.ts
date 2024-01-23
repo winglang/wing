@@ -73,8 +73,8 @@ export interface CreateConsoleServerOptions {
   platform?: string[];
   stateDir?: string;
   analyticsAnonymousId: string;
-  requireSignIn: () => Promise<boolean>;
-  notifySignedIn: () => Promise<void>;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
 }
 
 export const createConsoleServer = async ({
