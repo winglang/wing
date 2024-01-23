@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -38,6 +39,9 @@ export interface ServiceProps {
  * @abstract
  */
 export class Service extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IServiceClient;
+
   /**
    * The path where the entrypoint of the service source code will be eventually written to.
    */
@@ -161,7 +165,10 @@ export interface IServiceClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
-export interface IServiceHandler extends IInflight {}
+export interface IServiceHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceHandler`.
@@ -198,7 +205,10 @@ export interface IServiceHandlerClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
  */
-export interface IServiceStopHandler extends IInflight {}
+export interface IServiceStopHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceStopHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceStopHandler`.
