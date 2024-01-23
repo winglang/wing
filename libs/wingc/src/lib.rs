@@ -109,6 +109,7 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
+const WINGSDK_AUTOID_RESOURCE: &'static str = "std.AutoIdResource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 const WINGSDK_NODE: &'static str = "std.Node";
