@@ -7,7 +7,7 @@ env:
   PNPM_VERSION: "8.6.3"
 
 jobs:
-  updateMatrix:
+  update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
