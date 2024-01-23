@@ -21,6 +21,11 @@ export const SignInModal = (props: SignInModalProps) => {
   const signedInParameter = useSearchParam("signedIn");
   const [requireSignIn, setRequireSignIn] = useState(false);
   useEffect(() => {
+    // Skip if offline.
+    if (navigator.onLine === false) {
+      return;
+    }
+
     if (analytics.data?.requireSignIn && signedInParameter === null) {
       setRequireSignIn(true);
     } else {

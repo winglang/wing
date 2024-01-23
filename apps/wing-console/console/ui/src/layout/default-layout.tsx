@@ -208,8 +208,6 @@ export const DefaultLayout = ({
     [expand, setSelectedItems],
   );
 
-  const themeMode = trpc["config.getThemeMode"].useQuery();
-
   return (
     <>
       <SignInModal />
