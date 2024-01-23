@@ -228,12 +228,9 @@ export abstract class Resource extends Construct implements IResource {
  * from inflight function closures.
  */
 export abstract class AutoIdResource extends Resource {
-  constructor(scope: Construct, id_prefix: string = "") {
-    const actual_id = App.of(scope).makeId(
-      scope,
-      id_prefix ? `${id_prefix}_` : ""
-    );
-    super(scope, actual_id);
+  constructor(scope: Construct, idPrefix: string = "") {
+    const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
+    super(scope, id);
   }
 }
 
