@@ -1,13 +1,16 @@
 /*\
 skip: true
 \*/
-// doesn't work on sim: #2732
 
 bring cloud;
+bring util;
 
 new cloud.Schedule( rate: 5m ) as "s0";
 
-// Those are testing the many errors in intalization of a cloud.Schedule
+// doesn't work on sim: https://github.com/winglang/wing/issues/2732
+if (util.env("WING_TARGET") != "sim") {
+
+// Those are testing the many errors in initialization of a cloud.Schedule
 let var error = "";
 try {
     new cloud.Schedule( rate: nil, cron: nil ) as "s1";
@@ -46,3 +49,4 @@ try {
 }
 assert(error == "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other");
 
+}

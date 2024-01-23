@@ -7,6 +7,7 @@ import { ISimulatorResource } from "./resource";
 import { QueueSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { NotImplementedError } from "../core/errors";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator/simulator";
 import { Duration, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
@@ -21,6 +22,17 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly retentionPeriod: Duration;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
+
+    if (props.timeout) {
+      throw new NotImplementedError(
+        "Queue.timeout is not supported on the sim platform yet.",
+        {
+          issue: "https://github.com/winglang/wing/issues/1980",
+          resource: this.constructor.name,
+          operation: "timeout",
+        }
+      );
+    }
 
     this.timeout = props.timeout ?? Duration.fromSeconds(30);
     this.retentionPeriod = props.retentionPeriod ?? Duration.fromHours(1);
