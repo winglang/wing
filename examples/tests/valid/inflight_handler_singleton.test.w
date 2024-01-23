@@ -31,6 +31,7 @@ let sim = util.env("WING_TARGET") == "sim";
 test "single instance of Foo" {
   let x = fn.invoke("");
   let y = fn.invoke("");
+  let z = fn2.invoke("");
 
   let z = fn2.invoke("");
 
@@ -41,6 +42,7 @@ test "single instance of Foo" {
   // but we can't trust that this will always happen on the cloud
   if sim {
     expect.equal(y, "101");
+    expect.equal(z, "100-fn2"); // fn2 should have a separate instance
     log("client has been reused");
   }
 }
