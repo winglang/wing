@@ -34,7 +34,7 @@ module.exports = function({ $foo }) {
     }
     async handle() {
       const n = (await $foo.inc());
-      return String.raw({ raw: ["", ""] }, n);
+      return String.raw({ raw: ["", "-fn2"] }, n);
     }
   }
   return $Closure2;
@@ -46,7 +46,7 @@ module.exports = function({ $foo }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $expect_Util, $fn, $fooInitCounter, $sim }) {
+module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -56,10 +56,12 @@ module.exports = function({ $expect_Util, $fn, $fooInitCounter, $sim }) {
     async handle() {
       const x = (await $fn.invoke(""));
       const y = (await $fn.invoke(""));
+      const z = (await $fn2.invoke(""));
+      (await $expect_Util.equal(x, "100"));
+      (await $expect_Util.equal(z, "100-fn2"));
       if ($sim) {
-        (await $expect_Util.equal(x, "100"));
         (await $expect_Util.equal(y, "101"));
-        (await $expect_Util.equal((await $fooInitCounter.peek()), 1));
+        (await $expect_Util.equal(z, "100-fn2"));
         console.log("client has been reused");
       }
     }
@@ -69,37 +71,11 @@ module.exports = function({ $expect_Util, $fn, $fooInitCounter, $sim }) {
 //# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
-## inflight.$Closure4-1.js
-```js
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $expect_Util, $fn, $fn2, $fooInitCounter }) {
-  class $Closure4 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      (await $expect_Util.equal((await $fooInitCounter.peek()), 0));
-      const x = (await $fn.invoke(""));
-      const y = (await $fn2.invoke(""));
-      (await $expect_Util.equal(x, "100"));
-      (await $expect_Util.equal(y, "100"));
-      (await $expect_Util.equal((await $fooInitCounter.peek()), 2));
-      console.log("client has not been reused");
-    }
-  }
-  return $Closure4;
-}
-//# sourceMappingURL=inflight.$Closure4-1.js.map
-```
-
 ## inflight.Foo-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $fooInitCounter }) {
+module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
@@ -109,7 +85,6 @@ module.exports = function({ $fooInitCounter }) {
     }
     async $inflight_init() {
       this.n = 99;
-      (await $fooInitCounter.inc());
     }
   }
   return Foo;
@@ -135,16 +110,6 @@ module.exports = function({ $fooInitCounter }) {
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "cloudFunction2_CloudwatchLogGroup_594B23C8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Function2/CloudwatchLogGroup",
-            "uniqueId": "cloudFunction2_CloudwatchLogGroup_594B23C8"
-          }
-        },
-        "name": "/aws/lambda/cloud-Function2-c86388d1",
-        "retention_in_days": 30
-      },
       "cloudFunction_CloudwatchLogGroup_7399B890": {
         "//": {
           "metadata": {
@@ -154,37 +119,19 @@ module.exports = function({ $fooInitCounter }) {
         },
         "name": "/aws/lambda/cloud-Function-c8d2eca1",
         "retention_in_days": 30
-      }
-    },
-    "aws_dynamodb_table": {
-      "cloudCounter": {
+      },
+      "fn2_CloudwatchLogGroup_CEBA055E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/fn2/CloudwatchLogGroup",
+            "uniqueId": "fn2_CloudwatchLogGroup_CEBA055E"
           }
         },
-        "attribute": [
-          {
-            "name": "id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "/aws/lambda/fn2-c892a4c6",
+        "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "cloudFunction2_IamRole_82CD8D56": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Function2/IamRole",
-            "uniqueId": "cloudFunction2_IamRole_82CD8D56"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
       "cloudFunction_IamRole_5A4430DC": {
         "//": {
           "metadata": {
@@ -193,19 +140,18 @@ module.exports = function({ $fooInitCounter }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "fn2_IamRole_DE8D96D2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn2/IamRole",
+            "uniqueId": "fn2_IamRole_DE8D96D2"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudFunction2_IamRolePolicy_CCD2D213": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Function2/IamRolePolicy",
-            "uniqueId": "cloudFunction2_IamRolePolicy_CCD2D213"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudFunction2_IamRole_82CD8D56.name}"
-      },
       "cloudFunction_IamRolePolicy_618BF987": {
         "//": {
           "metadata": {
@@ -213,21 +159,21 @@ module.exports = function({ $fooInitCounter }) {
             "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+      },
+      "fn2_IamRolePolicy_3FE5A930": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn2/IamRolePolicy",
+            "uniqueId": "fn2_IamRolePolicy_3FE5A930"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudFunction2_IamRolePolicyAttachment_1B1741AB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Function2/IamRolePolicyAttachment",
-            "uniqueId": "cloudFunction2_IamRolePolicyAttachment_1B1741AB"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudFunction2_IamRole_82CD8D56.name}"
-      },
       "cloudFunction_IamRolePolicyAttachment_288B9653": {
         "//": {
           "metadata": {
@@ -237,6 +183,16 @@ module.exports = function({ $fooInitCounter }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+      },
+      "fn2_IamRolePolicyAttachment_FC7F59A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/fn2/IamRolePolicyAttachment",
+            "uniqueId": "fn2_IamRolePolicyAttachment_FC7F59A6"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.name}"
       }
     },
     "aws_lambda_function": {
@@ -252,7 +208,6 @@ module.exports = function({ $fooInitCounter }) {
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
@@ -272,11 +227,11 @@ module.exports = function({ $fooInitCounter }) {
           "subnet_ids": []
         }
       },
-      "cloudFunction2": {
+      "fn2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function2/Default",
-            "uniqueId": "cloudFunction2"
+            "path": "root/Default/Default/fn2/Default",
+            "uniqueId": "fn2"
           }
         },
         "architectures": [
@@ -284,20 +239,19 @@ module.exports = function({ $fooInitCounter }) {
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Function2-c86388d1",
+            "WING_FUNCTION_NAME": "fn2-c892a4c6",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Function2-c86388d1",
+        "function_name": "fn2-c892a4c6",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudFunction2_IamRole_82CD8D56.arn}",
+        "role": "${aws_iam_role.fn2_IamRole_DE8D96D2.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudFunction2_S3Object_1779A237.key}",
+        "s3_key": "${aws_s3_object.fn2_S3Object_FA91A9FB.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -317,22 +271,22 @@ module.exports = function({ $fooInitCounter }) {
       }
     },
     "aws_s3_object": {
-      "cloudFunction2_S3Object_1779A237": {
+      "cloudFunction_S3Object_71908BAD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function2/S3Object",
-            "uniqueId": "cloudFunction2_S3Object_1779A237"
+            "path": "root/Default/Default/cloud.Function/S3Object",
+            "uniqueId": "cloudFunction_S3Object_71908BAD"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "cloudFunction_S3Object_71908BAD": {
+      "fn2_S3Object_FA91A9FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/S3Object",
-            "uniqueId": "cloudFunction_S3Object_71908BAD"
+            "path": "root/Default/Default/fn2/S3Object",
+            "uniqueId": "fn2_S3Object_FA91A9FB"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -366,7 +320,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
-            $fooInitCounter: ${$stdlib.core.liftObject(fooInitCounter)},
           })
         `;
       }
@@ -383,14 +336,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _supportedOps() {
         return [...super._supportedOps(), "n", "inc", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [fooInitCounter, ["inc"]],
-          ],
-        });
-        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -465,7 +410,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -476,7 +421,7 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
             $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $fn: ${$stdlib.core.liftObject(fn)},
-            $fooInitCounter: ${$stdlib.core.liftObject(fooInitCounter)},
+            $fn2: ${$stdlib.core.liftObject(fn2)},
             $sim: ${$stdlib.core.liftObject(sim)},
           })
         `;
@@ -499,61 +444,18 @@ class $Root extends $stdlib.std.Resource {
         $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [fn, ["invoke"]],
-            [fooInitCounter, ["peek"]],
+            [fn2, ["invoke"]],
             [sim, []],
           ],
         });
         super.onLift(host, ops);
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
-            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
-            $fn: ${$stdlib.core.liftObject(fn)},
-            $fn2: ${$stdlib.core.liftObject(fn2)},
-            $fooInitCounter: ${$stdlib.core.liftObject(fooInitCounter)},
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType()};
-            const client = new $Closure4Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "handle": [
-            [fn, ["invoke"]],
-            [fn2, ["invoke"]],
-            [fooInitCounter, ["peek"]],
-          ],
-        });
-        super.onLift(host, ops);
-      }
-    }
-    const fooInitCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
     const foo = new Foo(this, "Foo");
     const fn = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
-    const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function2", new $Closure2(this, "$Closure2"));
+    const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
     const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:separate instances of Foo", new $Closure4(this, "$Closure4"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
