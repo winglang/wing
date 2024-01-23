@@ -232,7 +232,9 @@ export abstract class AutoIdResource extends Resource {
 
   constructor(scope: Construct, id: string) {
     // Treat the passed id as a prefix or just used the auto-id if none was passed
-    const actual_id = id ? `${id}-${AutoIdResource.id++}` : `${AutoIdResource.id++}`;
+    const actual_id = id
+      ? `${id}-${AutoIdResource.id++}`
+      : `${AutoIdResource.id++}`;
     super(scope, actual_id);
   }
 }
