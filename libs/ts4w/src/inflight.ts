@@ -1,4 +1,4 @@
-import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility_types";
+import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
 import { liftObject, onLiftObject, closureId } from "@winglang/sdk/lib/core";
 import {
   AsyncFunction,
@@ -21,7 +21,7 @@ import type {
  * const number = 5;
  *
  * lift({ bucket, number })
- * .inflight(({ bucket, number }) => { ... }))
+ *   .inflight(({ bucket, number }) => { ... }))
  * ```
  *
  * However, the name is not required to match the variable in the current scope.
@@ -32,7 +32,7 @@ import type {
  * const bucket = new cloud.Bucket(app, "Bucket");
  *
  * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
- * .inflight(({ bkt, sum, field }) => { ... }))
+ *   .inflight(({ bkt, sum, field }) => { ... }))
  * ```
  */
 export function lift<TToLift extends LiftableMap>(
@@ -78,7 +78,7 @@ class Lifter<
    * const number = 5;
    *
    * lift({ bucket, number })
-   * .inflight(({ bucket, number }) => { ... }))
+   *   .inflight(({ bucket, number }) => { ... }))
    * ```
    *
    * However, the name is not required to match the variable in the current scope.
@@ -89,7 +89,7 @@ class Lifter<
    * const bucket = new cloud.Bucket(app, "Bucket");
    *
    * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
-   * .inflight(({ bkt, sum, field }) => { ... }))
+   *   .inflight(({ bkt, sum, field }) => { ... }))
    * ```
    */
   public lift<TWillLift extends LiftableMap>(captures: TWillLift) {
@@ -115,11 +115,11 @@ class Lifter<
    * const bucket = new cloud.Bucket(app, "Bucket");
    *
    * lift({ bucket })
-   * .grant({ bucket: ["get"] })
-   * .inflight(({ bucket }) => {
-   *   await bucket.get("key");
-   *   await bucket.set("key", "value"); // Error: set is not granted
-   * });
+   *   .grant({ bucket: ["get"] })
+   *   .inflight(({ bucket }) => {
+   *     await bucket.get("key");
+   *     await bucket.set("key", "value"); // Error: set is not granted
+   *   });
    * ```
    *
    * fields are always accessible, even if not granted.
@@ -149,7 +149,10 @@ class Lifter<
    */
   public inflight<TFunction extends AsyncFunction>(
     fn: (
-      ctx: Omit<TLifted, keyof TOperations> & {
+      /** All lifted data available in this inflight */
+      ctx: // Get all the lifted types which were not explicitly granted
+      Omit<TLifted, keyof TOperations> & {
+        // For each of the granted types, get the lifted type with only the granted operations available (and any fields as well)
         [K in keyof TOperations &
           keyof TLifted]: TOperations[K] extends (infer TGrantedOps extends keyof TLifted[K])[]
           ? PickNonFunctions<TLifted[K]> & Pick<TLifted[K], TGrantedOps>
@@ -171,12 +174,12 @@ class Lifter<
   ${Object.entries(this.lifts)
     .map(([name, liftable]) => `${name}: ${liftObject(liftable)}`)
     .join(",\n")}
-  }
+  };
   let newFunction = async (...args) => {
     return $func($ctx, ...args);
-  }
-  newFunction.handle = newFunction
-  return newFunction
+  };
+  newFunction.handle = newFunction;
+  return newFunction;
 }
 )())`;
       },
@@ -194,7 +197,7 @@ class Lifter<
         }
       },
       _supportedOps: () => [],
-      // @ts-expect-error
+      // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {
         throw new Error(
           "This is a inflight function and can only be invoked while inflight"

@@ -83,7 +83,7 @@ fn compile_code(code: &str, as_dir: bool) -> String {
 	let code = code.replace("\t", "  ");
 
 	let result = if as_dir {
-		// write lib.w to the project dir
+		// Write lib.w to the project dir because compiling a directory requires an actual file to exist
 		std::fs::write(project_dir.join("lib.w"), &code).unwrap();
 
 		compile(project_dir, &project_dir, None, &out_dir)
