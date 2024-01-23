@@ -35,6 +35,7 @@ jobs:
       - name: Run Update Script
         run: |
           cd scripts/compatibility-matrix-automation
+          pnpm compile
           OUT_FILE=../../out pnpm start
           rmdir -r ../../out
 
