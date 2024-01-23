@@ -174,7 +174,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.rename">rename</a></code> | Move an object to a new location in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.signedUrl">signedUrl</a></code> | Returns a signed url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
@@ -391,6 +391,8 @@ inflight get(key: str, options?: BucketGetOptions): str
 
 Retrieve an object from the bucket.
 
+If the bytes returned are not a valid UTF-8 string, an error is thrown.
+
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* str
@@ -595,10 +597,10 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-inflight tryGet(key: str, options?: BucketGetOptions): str
+inflight tryGet(key: str, options?: BucketTryGetOptions): str
 ```
 
-Get an object from the bucket if it exists.
+Get an object from the bucket if it exists If the bytes returned are not a valid UTF-8 string, an error is thrown.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
 
@@ -610,7 +612,7 @@ Key of the object.
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.options"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.BucketGetOptions">BucketGetOptions</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketTryGetOptions">BucketTryGetOptions</a>
 
 Additional get options.
 
@@ -786,34 +788,34 @@ let BucketGetOptions = cloud.BucketGetOptions{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.end">end</a></code> | <code>num</code> | The end location to read up to (including). |
-| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.start">start</a></code> | <code>num</code> | The start location to read from. |
+| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.endByte">endByte</a></code> | <code>num</code> | The ending byte to read up to (including). |
+| <code><a href="#@winglang/sdk.cloud.BucketGetOptions.property.startByte">startByte</a></code> | <code>num</code> | The starting byte to read from. |
 
 ---
 
-##### `end`<sup>Optional</sup> <a name="end" id="@winglang/sdk.cloud.BucketGetOptions.property.end"></a>
+##### `endByte`<sup>Optional</sup> <a name="endByte" id="@winglang/sdk.cloud.BucketGetOptions.property.endByte"></a>
 
 ```wing
-end: num;
+endByte: num;
 ```
 
 - *Type:* num
 - *Default:* undefined
 
-The end location to read up to (including).
+The ending byte to read up to (including).
 
 ---
 
-##### `start`<sup>Optional</sup> <a name="start" id="@winglang/sdk.cloud.BucketGetOptions.property.start"></a>
+##### `startByte`<sup>Optional</sup> <a name="startByte" id="@winglang/sdk.cloud.BucketGetOptions.property.startByte"></a>
 
 ```wing
-start: num;
+startByte: num;
 ```
 
 - *Type:* num
 - *Default:* undefined
 
-The start location to read from.
+The starting byte to read from.
 
 ---
 
@@ -981,6 +983,53 @@ duration: duration;
 - *Default:* 15m
 
 The duration for the signed URL to expire.
+
+---
+
+### BucketTryGetOptions <a name="BucketTryGetOptions" id="@winglang/sdk.cloud.BucketTryGetOptions"></a>
+
+Options for `Bucket.tryGet()`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketTryGetOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let BucketTryGetOptions = cloud.BucketTryGetOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketTryGetOptions.property.endByte">endByte</a></code> | <code>num</code> | The ending byte to read up to (including). |
+| <code><a href="#@winglang/sdk.cloud.BucketTryGetOptions.property.startByte">startByte</a></code> | <code>num</code> | The starting byte to read from. |
+
+---
+
+##### `endByte`<sup>Optional</sup> <a name="endByte" id="@winglang/sdk.cloud.BucketTryGetOptions.property.endByte"></a>
+
+```wing
+endByte: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The ending byte to read up to (including).
+
+---
+
+##### `startByte`<sup>Optional</sup> <a name="startByte" id="@winglang/sdk.cloud.BucketTryGetOptions.property.startByte"></a>
+
+```wing
+startByte: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+The starting byte to read from.
 
 ---
 

@@ -27,6 +27,7 @@ import {
   BucketSignedUrlOptions,
   BucketSignedUrlAction,
   BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -101,16 +102,18 @@ export class BucketClient implements IBucketClient {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: key,
-      Range: `bytes=${options?.start !== undefined ? options.start : 0}-${
-        options?.end !== undefined ? options.end : ""
-      }`,
+      Range: `bytes=${
+        options?.startByte !== undefined ? options.startByte : 0
+      }-${options?.endByte !== undefined ? options.endByte : ""}`,
     });
 
     try {
       const resp: GetObjectOutput = await this.s3Client.send(command);
       const objectContent = resp.Body as Readable;
       try {
-        return await consumers.text(objectContent);
+        return new TextDecoder("utf8", { fatal: true }).decode(
+          await consumers.buffer(objectContent)
+        );
       } catch (e) {
         throw new Error(
           `Object content could not be read as text (key=${key}): ${
@@ -148,7 +151,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryGet(
     key: string,
-    options?: BucketGetOptions
+    options?: BucketTryGetOptions
   ): Promise<string | undefined> {
     return this.getObjectContent(key, options);
   }

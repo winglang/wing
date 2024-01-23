@@ -12,6 +12,7 @@ import {
   BucketDeleteOptions,
   BucketSignedUrlOptions,
   BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -91,17 +92,14 @@ export class BucketClient implements IBucketClient {
    * @returns string content of the object as string
    */
   public async get(key: string, options?: BucketGetOptions): Promise<string> {
-    if (options?.start !== undefined || options?.end !== undefined) {
-      throw new Error(
-        `Range requests are not supported yet for this target (key=${key})`
-      );
-    }
-
     const blobClient = this.containerClient.getBlobClient(key);
 
     let downloadResponse: BlobDownloadResponseParsed;
     try {
-      downloadResponse = await blobClient.download();
+      const start = options?.startByte !== undefined ? options.startByte : 0;
+      const length =
+        options?.endByte !== undefined ? options.endByte - start : undefined;
+      downloadResponse = await blobClient.download(start, length);
     } catch (e) {
       throw new Error(
         `Object does not exist (key=${key}): ${(e as Error).stack}`
@@ -112,9 +110,9 @@ export class BucketClient implements IBucketClient {
     }
 
     try {
-      return (
+      return new TextDecoder("utf8", { fatal: true }).decode(
         await this.streamToBuffer(downloadResponse.readableStreamBody)
-      ).toString();
+      );
     } catch (e) {
       throw new Error(
         `Object contents could not be read as text (key=${key}): ${
@@ -132,7 +130,7 @@ export class BucketClient implements IBucketClient {
    */
   public async tryGet(
     key: string,
-    options?: BucketGetOptions
+    options?: BucketTryGetOptions
   ): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key, options);

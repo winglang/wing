@@ -14,6 +14,7 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { deserialize, serialize } from "../simulator/serialization";
 import {
@@ -148,19 +149,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           const stat = await file.stat();
 
           let start = 0;
-          if (options?.start !== undefined) {
-            start = options.start;
+          if (options?.startByte !== undefined) {
+            start = options.startByte;
           }
 
           let length = stat.size;
-          if (options?.end !== undefined) {
-            length = options.end + 1;
+          if (options?.endByte !== undefined) {
+            length = options.endByte + 1;
           }
 
           const buffer = Buffer.alloc(length - start);
           await file.read(buffer, 0, length - start, start);
           await file.close();
-          return buffer.toString("utf8");
+          return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
           throw new Error(
             `Object does not exist (key=${key}): ${(e as Error).stack}`
@@ -172,7 +173,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async tryGet(
     key: string,
-    options?: BucketGetOptions
+    options?: BucketTryGetOptions
   ): Promise<string | undefined> {
     if (await this.exists(key)) {
       return this.get(key, options);
