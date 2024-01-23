@@ -1,5 +1,5 @@
 diff --git a/lib/assembler.js b/lib/assembler.js
-index c1fa48219b514c312d5894c9cbf557ac3d8eeed7..9cf0ce22901558d6219fed5a303ae76954561744 100644
+index 75fbc9583eb98336f94f3245cc656ba786021472..aee348079ebcffa71d12a412fe32766af97ed9c1 100644
 --- a/lib/assembler.js
 +++ b/lib/assembler.js
 @@ -1572,7 +1572,12 @@ class Assembler {
@@ -30,10 +30,10 @@ index c1fa48219b514c312d5894c9cbf557ac3d8eeed7..9cf0ce22901558d6219fed5a303ae769
          const fqn = this._getFQN(type, declaration, purpose, isThisType);
          if (fqn == null) {
 diff --git a/lib/compiler.js b/lib/compiler.js
-index cb5587e1aa778be23eaba65ceeab8b2d99ce90b1..867d4c5b330a34bdcbe491e816f7b63c941eeb69 100644
+index 242bb9f2049ee58814e641109afa3e0942ae5fe2..447237ff4ca734a95b62e260ec8cfdfc8b10a37a 100644
 --- a/lib/compiler.js
 +++ b/lib/compiler.js
-@@ -17,7 +17,8 @@ const BASE_COMPILER_OPTIONS = {
+@@ -18,7 +18,8 @@ const BASE_COMPILER_OPTIONS = {
      declaration: true,
      experimentalDecorators: true,
      incremental: true,

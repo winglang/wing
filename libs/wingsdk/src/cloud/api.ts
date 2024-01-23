@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, Duration, IInflight } from "../std";
 
 /**
@@ -227,6 +228,9 @@ export class Api extends Resource {
    * CORS options for api
    */
   protected corsOptions?: ApiCorsOptions;
+
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IApiClient;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     if (new.target === Api) {
@@ -712,7 +716,10 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IInflight {}
+export interface IApiEndpointHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IApiEndpointHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IApiEndpointHandler`.

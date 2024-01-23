@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
@@ -36,6 +37,9 @@ export interface ScheduleProps {
  * @abstract
  */
 export class Schedule extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IScheduleClient;
+
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     if (new.target === Schedule) {
       return Resource._newFromFactory(SCHEDULE_FQN, scope, id, props);
@@ -95,7 +99,10 @@ export interface ScheduleOnTickOptions extends FunctionProps {}
  *
  * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`
  */
-export interface IScheduleOnTickHandler extends IInflight {}
+export interface IScheduleOnTickHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IScheduleOnTickHandlerClient["handle"];
+}
 
 /**
  * Inflight interface for `Schedule`.
