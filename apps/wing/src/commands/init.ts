@@ -107,7 +107,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
   // Copy the template
   await copyFiles(templatePath, process.cwd());
 
-  console.log(`Created a new ${chalk.bold(template)} project! 🎉`);
+  console.log(`Created a new ${chalk.bold(template)} project in the current directory! 🎉`);
   console.log();
   console.log("Not sure where to get started? Try running:");
   console.log();
