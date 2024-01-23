@@ -1,6 +1,8 @@
 import { existsSync, readdirSync } from "fs";
 import { copyFile, mkdir, readdir } from "fs/promises";
 import { join, relative } from "path";
+import chalk from "chalk";
+import inquirer from "inquirer";
 import { exists } from "./pack";
 
 const INIT_TEMPLATES_DIR = join(__dirname, "..", "..", "init-templates");
@@ -20,21 +22,41 @@ export interface InitOptions {
  * @param options Compile options.
  * @returns the output directory
  */
-export async function init(template: string | undefined, options: InitOptions = {}): Promise<void> {
+export async function init(template: string, options: InitOptions = {}): Promise<void> {
   const templates = initTemplateNames();
+  let language = options.language ?? "wing";
 
-  // If no template is specified, list available templates
+  // If no template is specified, ask the user to specify one
   if (!template) {
-    let lines = [];
-    lines.push("Usage: wing new [template]\n\nPlease select from one of the available choices:");
-    for (const t of templates) {
-      lines.push(`  - ${t}`);
+    console.log("Usage: wing new <template> [--language <language>]");
+    console.log();
+    try {
+      const responses = await inquirer.prompt([
+        {
+          type: "list",
+          name: "template",
+          message: "Please select a template:",
+          choices: templates,
+        },
+        {
+          type: "list",
+          name: "language",
+          message: "Please select a language:",
+          choices: ["wing", "typescript"],
+        },
+      ]);
+      template = responses.template;
+      language = responses.language;
+      console.log();
+    } catch (err) {
+      if ((err as any).isTtyError) {
+        throw new Error(
+          `Please select from one of the available choices:\n  ${templates.join(
+            "\n  "
+          )}\n\nHave an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!`
+        );
+      }
     }
-    lines.push();
-    lines.push(
-      "Have an idea for a new template? Let us know at https://github.com/winglang/wing/issues/!"
-    );
-    throw new Error(lines.join("\n"));
   }
 
   if (!templates.includes(template)) {
@@ -46,7 +68,6 @@ export async function init(template: string | undefined, options: InitOptions = 
   }
 
   // Parse the language selected
-  let language = options.language ?? "wing";
   switch (language) {
     case "ts":
     case "typescript":
@@ -85,6 +106,16 @@ export async function init(template: string | undefined, options: InitOptions = 
 
   // Copy the template
   await copyFiles(templatePath, process.cwd());
+
+  console.log(`Created a new ${chalk.bold(template)} project! 🎉`);
+  console.log();
+  console.log("Not sure where to get started? Try running:");
+  console.log();
+  console.log("  wing compile - build your project");
+  console.log("  wing it - simulate your app in the Wing Console");
+  console.log("  wing test - run all tests");
+  console.log();
+  console.log("Visit the docs for examples and tutorials: https://winglang.io/docs");
 }
 
 /**

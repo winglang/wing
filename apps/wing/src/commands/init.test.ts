@@ -1,8 +1,11 @@
 import { readdir, writeFile } from "fs/promises";
 import { join } from "path";
-import { describe, it, expect, test } from "vitest";
+import inquirer from "inquirer";
+import { describe, it, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
 import { init, initTemplateNames } from "../commands/init";
 import { generateTmpDir } from "src/util";
+
+vitest.mock("inquirer");
 
 describe("initTemplateNames", () => {
   it("should list init templates", () => {
@@ -11,13 +14,14 @@ describe("initTemplateNames", () => {
 });
 
 describe("init", () => {
-  test("wing new", async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
 
-    await expect(init(undefined as any)).rejects.toThrow(
-      /Please select from one of the available choices/
-    );
+  afterEach(() => {
+    console.log = log;
   });
 
   test("wing new invalid-template", async () => {
@@ -64,6 +68,21 @@ describe("init", () => {
     await init("http-api", { language: "wing" });
 
     const files = await readdir(workdir);
-    expect(files).toMatchSnapshot();
+    expect(files).toEqual(["main.w"]);
+  });
+
+  test("wing new with interactive prompt", async () => {
+    const workdir = await generateTmpDir();
+    process.chdir(workdir);
+
+    (inquirer.prompt as any) = vitest.fn().mockResolvedValue({
+      template: "http-api",
+      language: "wing",
+    });
+
+    await init(undefined as any);
+
+    const files = await readdir(workdir);
+    expect(files).toEqual(["main.w"]);
   });
 });
