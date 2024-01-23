@@ -52,8 +52,9 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   };
 }
 
-function sanitizeOutput(output: string) {
-  return output
+export function sanitizeOutput(output: string) {
+  return (
+    output
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // Normalize windows slashes
@@ -66,7 +67,7 @@ function sanitizeOutput(output: string) {
       .replace(/(?<=[\s"])(\/|\w:)\S+\/(\S+)/g, "<ABSOLUTE>/$2")
       // Remove duration from test results
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
-  ;
+  );
 }
 
 export function sanitize_json_paths(path: string) {

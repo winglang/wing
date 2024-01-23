@@ -170,6 +170,21 @@ export interface TestResult {
   readonly unsupported?: boolean;
 
   /**
+   * Unsupported resource tested
+   */
+  readonly unsupportedResource?: string;
+
+  /**
+   * Unsupported method used in test
+   */
+  readonly unsupportedOperation?: string;
+
+  /**
+   * Place for extra test runner arguments that can be added through platforms
+   */
+  readonly args?: Record<string, unknown>;
+
+  /**
    * The error message if the test failed.
    */
   readonly error?: string;

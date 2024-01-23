@@ -242,6 +242,7 @@ where
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
 		access: node.access,
+		auto_id: node.auto_id,
 	}
 }
 

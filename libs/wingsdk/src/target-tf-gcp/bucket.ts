@@ -118,7 +118,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onCreate method isn't implemented yet on the current target."
+      "onCreate method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.CREATE,
+      }
     );
   }
 
@@ -132,7 +136,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onDelete method isn't implemented yet on the current target."
+      "onDelete method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.DELETE,
+      }
     );
   }
 
@@ -146,7 +154,11 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onUpdate method isn't implemented yet on the current target."
+      "onUpdate method isn't implemented yet on the current target.",
+      {
+        resource: this.constructor.name,
+        operation: cloud.BucketEventType.UPDATE,
+      }
     );
   }
 
@@ -160,7 +172,8 @@ export class Bucket extends cloud.Bucket {
     fn;
     opts;
     throw new NotImplementedError(
-      "onEvent method isn't implemented yet on the current target."
+      "onEvent method isn't implemented yet on the current target.",
+      { resource: this.constructor.name, operation: "onEvent" }
     );
   }
 
