@@ -361,6 +361,7 @@ pub struct Class {
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
 	pub access: AccessModifier,
+	pub auto_id: bool,
 }
 
 impl Class {

@@ -470,7 +470,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -507,7 +507,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -548,7 +548,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
         const __parent_this_3 = this;
-        class $Closure3 extends $stdlib.std.Resource {
+        class $Closure3 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
