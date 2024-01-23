@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc",
     "test": "vitest run --passWithNoTests --update",
-    "start": "node lib/src/index"
+    "start": "tsc && node lib/src/index"
   },
   "bin": {
     "matrix": "bin/matrix"
