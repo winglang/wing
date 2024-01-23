@@ -212,6 +212,14 @@ async function main() {
     .action(runSubCommand("pack"));
 
   program
+    .command("new")
+    .description("Create a new Wing project")
+    .argument("[template]", "Template name")
+    .addOption(new Option("-l --language [language]", "Language"))
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("init"));
+
+  program
     .command("docs")
     .description("Open the Wing documentation")
     .hook("preAction", collectAnalyticsHook)

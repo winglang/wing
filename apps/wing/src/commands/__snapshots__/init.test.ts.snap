@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`init > wing new http-api --language wing 1`] = `
+[
+  "main.w",
+]
+`;
+
+exports[`initTemplateNames > should list init templates 1`] = `
+[
+  "http-api",
+]
+`;
