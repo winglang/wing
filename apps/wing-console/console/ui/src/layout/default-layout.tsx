@@ -15,12 +15,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
+import { trpc } from "../services/trpc.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 import { LogsWidget } from "../widgets/logs.js";
 
+import { SignInModal } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -206,15 +208,17 @@ export const DefaultLayout = ({
     [expand, setSelectedItems],
   );
 
+  const themeMode = trpc["config.getThemeMode"].useQuery();
+
   return (
     <>
-      {showTerms && (
-        <TermsAndConditionsModal
-          visible={true}
-          onAccept={() => acceptTerms()}
-          license={termsConfig.data?.license ?? ""}
-        />
-      )}
+      <SignInModal />
+
+      <TermsAndConditionsModal
+        visible={showTerms ?? false}
+        onAccept={() => acceptTerms()}
+        license={termsConfig.data?.license ?? ""}
+      />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
         <div

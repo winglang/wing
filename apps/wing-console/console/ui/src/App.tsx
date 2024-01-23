@@ -9,7 +9,6 @@ import type { Trace } from "@wingconsole/server";
 import { LayoutProvider, LayoutType } from "./layout/layout-provider.js";
 import { trpc } from "./services/trpc.js";
 import { TestsContextProvider } from "./tests-context.js";
-import { SignInModal } from "./widgets/sign-in.js";
 
 export interface AppProps {
   layout?: LayoutType;
@@ -43,7 +42,6 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
   const themeMode = trpc["config.getThemeMode"].useQuery();
-  const analytics = trpc["app.analytics"].useQuery();
 
   return (
     <ThemeProvider
@@ -60,8 +58,6 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
               layoutConfig: layoutConfig.data?.config,
             }}
           />
-
-          <SignInModal visible={analytics.data?.requireSignIn ?? false} />
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>

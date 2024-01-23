@@ -17,6 +17,7 @@ import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import { createCompiler } from "./utils/compiler.js";
 import {
+  FileLink,
   LayoutConfig,
   TestItem,
   TestsStateManager,
@@ -72,7 +73,8 @@ export interface CreateConsoleServerOptions {
   platform?: string[];
   stateDir?: string;
   analyticsAnonymousId: string;
-  requireSignIn: () => boolean;
+  requireSignIn: () => Promise<boolean>;
+  notifySignedIn: () => Promise<void>;
 }
 
 export const createConsoleServer = async ({
@@ -91,10 +93,12 @@ export const createConsoleServer = async ({
   stateDir,
   analyticsAnonymousId,
   requireSignIn,
+  notifySignedIn,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>();
 
   const invalidateQuery = async (query: RouteNames) => {
@@ -253,6 +257,7 @@ export const createConsoleServer = async ({
     emitter: emitter as Emittery<{
       invalidateQuery: string | undefined;
       trace: Trace;
+      openFileInEditor: FileLink;
     }>,
     log,
     updater,
@@ -276,6 +281,7 @@ export const createConsoleServer = async ({
     testsStateManager,
     analyticsAnonymousId,
     requireSignIn,
+    notifySignedIn,
   });
 
   const close = async (callback?: () => void) => {

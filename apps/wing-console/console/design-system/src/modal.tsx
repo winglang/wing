@@ -6,7 +6,7 @@ import { useTheme } from "./theme-provider.js";
 
 export interface ModalProps {
   visible: boolean;
-  setVisible: (visible: boolean) => void;
+  setVisible?: (visible: boolean) => void;
   className?: string;
   children?: ReactNode;
 }
@@ -24,7 +24,7 @@ export const Modal = ({
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={() => setVisible(false)}
+        onClose={() => setVisible?.(false)}
       >
         <Transition.Child
           as={Fragment}

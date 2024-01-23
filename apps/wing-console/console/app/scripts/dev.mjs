@@ -39,9 +39,12 @@ const consoleServer = await createConsoleServer({
     },
   },
   requireAcceptTerms: true,
-  analyticsAnonymousId: "an_123",
-  requireSignIn() {
-    return true;
+  analyticsAnonymousId: undefined,
+  async requireSignIn() {
+    return false;
+  },
+  async notifySignedIn() {
+    // Do nothing.
   },
 });
 

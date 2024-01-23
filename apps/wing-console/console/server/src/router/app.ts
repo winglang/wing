@@ -623,6 +623,12 @@ export const createAppRouter = () => {
       };
     }),
 
+    "app.analytics.notifySignedIn": createProcedure.mutation(
+      async ({ ctx }) => {
+        await ctx.notifySignedIn();
+      },
+    ),
+
     /**
      * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor
      * provided by the "app.openFileInEditor" procedure.
