@@ -149,8 +149,9 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
 exports[`messages are not requeued if the function fails before timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -166,7 +167,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -373,8 +375,9 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -390,7 +393,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -863,8 +867,9 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 exports[`queue with one subscriber, batch size of 5 1`] = `
 {
   ".wing/function_c8ab799f.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -892,11 +897,13 @@ queue: (function() {
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -912,7 +919,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -1163,8 +1171,9 @@ async handle(message) {
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 {
   ".wing/setconsumer0_c8e33b9b.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1180,7 +1189,8 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [

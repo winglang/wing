@@ -131,8 +131,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public static onLiftType(host: IInflightHost, ops: string[]): void {
     log(
-      `onLiftType called on a resource type (${
-        this.constructor.name
+      `onLiftType called on a resource type (${this.constructor.name
       }) with a host (${host.node.path}) and ops: ${JSON.stringify(ops)}`
     );
   }

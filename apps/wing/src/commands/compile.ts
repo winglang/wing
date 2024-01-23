@@ -168,7 +168,7 @@ export async function compile(entrypoint?: string, options?: CompileOptions): Pr
       if (process.env.DEBUG) {
         output +=
           "\n--------------------------------- ORIGINAL STACK TRACE ---------------------------------\n" +
-          (error.stack ?? "(no stacktrace available)");
+          (error.causedBy.stack ?? "(no stacktrace available)");
       }
 
       error.causedBy.message = output;
