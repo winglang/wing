@@ -45,13 +45,11 @@ test("try to create a queue with invalid retention period", async () => {
   // GIVEN
   const app = new SimApp();
   const retentionPeriod = Duration.fromSeconds(5);
-  const timeout = Duration.fromSeconds(10);
 
   // THEN
   expect(() => {
     new cloud.Queue(app, "my_queue", {
       retentionPeriod,
-      timeout,
     });
   }).toThrowError("Retention period must be greater than or equal to timeout");
 });
@@ -161,46 +159,47 @@ async handle() {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("messages are requeued if the function fails after timeout", async () => {
-  // GIVEN
-  const app = new SimApp();
-  const handler = Testing.makeHandler(INFLIGHT_CODE);
-  const queue = new cloud.Queue(app, "my_queue", {
-    timeout: Duration.fromSeconds(1),
-  });
-  queue.setConsumer(handler);
-  const s = await app.startSimulator();
+// waiting for this: https://github.com/winglang/wing/issues/1980 to be resolved
+// test("messages are requeued if the function fails after timeout", async () => {
+//   // GIVEN
+//   const app = new SimApp();
+//   const handler = Testing.makeHandler(INFLIGHT_CODE);
+//   const queue = new cloud.Queue(app, "my_queue", {
+//     timeout: Duration.fromSeconds(1),
+//   });
+//   queue.setConsumer(handler);
+//   const s = await app.startSimulator();
 
-  // WHEN
-  const REQUEUE_MSG =
-    "1 messages pushed back to queue after visibility timeout.";
-  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  void queueClient.push("BAD MESSAGE");
-  await waitUntilTrace(s, (trace) => trace.data.message.startsWith("Invoke"));
-  // stopping early to avoid the next queue message from being processed
-  await s.stop();
+//   // WHEN
+//   const REQUEUE_MSG =
+//     "1 messages pushed back to queue after visibility timeout.";
+//   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+//   void queueClient.push("BAD MESSAGE");
+//   await waitUntilTrace(s, (trace) => trace.data.message.startsWith("Invoke"));
+//   // stopping early to avoid the next queue message from being processed
+//   await s.stop();
 
-  // THEN
-  await waitUntilTrace(s, (trace) =>
-    trace.data.message.startsWith(REQUEUE_MSG)
-  );
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
+//   // THEN
+//   await waitUntilTrace(s, (trace) =>
+//     trace.data.message.startsWith(REQUEUE_MSG)
+//   );
+// expect(listMessages(s)).toMatchSnapshot();
+// expect(app.snapshot()).toMatchSnapshot();
 
-  expect(
-    s
-      .listTraces()
-      .filter((v) => v.sourceType == cloud.QUEUE_FQN)
-      .map((trace) => trace.data.message)
-  ).toContain(REQUEUE_MSG);
-});
+// expect(
+//   s
+//     .listTraces()
+//     .filter((v) => v.sourceType == cloud.QUEUE_FQN)
+//     .map((trace) => trace.data.message)
+// ).toContain(REQUEUE_MSG);
+// });
 
 test("messages are not requeued if the function fails before timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue", {
-    timeout: Duration.fromSeconds(30),
+    // timeout: Duration.fromSeconds(30),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
