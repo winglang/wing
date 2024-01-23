@@ -1192,9 +1192,6 @@ importers:
 
   libs/ts4w:
     dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
       constructs:
         specifier: ~10.2.69
         version: 10.2.70
@@ -1205,6 +1202,9 @@ importers:
       '@types/node':
         specifier: ^18.17.13
         version: 18.18.4
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
@@ -15474,7 +15474,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240122
+      typescript: 5.4.0-dev.20240123
     dev: true
 
   /dset@3.1.2:
@@ -25347,8 +25347,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240122:
-    resolution: {integrity: sha512-AlqDACgFZ2OGGSqJcWcQQOkbiznU+fXn2vhdcZttnOe5qr1E1oXf1lcHXEz3wTmEouLQwN6fVp2/76/JOsf9rQ==}
+  /typescript@5.4.0-dev.20240123:
+    resolution: {integrity: sha512-CXf3I7gkmbVHhSuQdZn+/Xe+k3yBtYR8BwrYLOT44eUKuWH9lEuOzcR4zQcJP54dxekMIQPXxvCX3/VIG8zSKA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

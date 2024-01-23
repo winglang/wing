@@ -24,13 +24,14 @@
     "tag": "latest"
   },
   "dependencies": {
-    "@winglang/sdk": "workspace:^",
     "constructs": "~10.2.69"
   },
   "peerDependencies": {
+    "@winglang/sdk": "*",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@winglang/sdk": "workspace:^",
     "@types/node": "^18.17.13",
     "tsup": "^8.0.1",
     "bump-pack": "workspace:^",
