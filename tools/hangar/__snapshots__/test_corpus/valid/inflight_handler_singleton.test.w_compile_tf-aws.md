@@ -1,87 +1,84 @@
 # [inflight_handler_singleton.test.w](../../../../../examples/tests/valid/inflight_handler_singleton.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
-
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function ({ $foo }) {
+module.exports = function({ $foo }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      const n = await $foo.inc();
+      const n = (await $foo.inc());
       return String.raw({ raw: ["", ""] }, n);
     }
   }
   return $Closure1;
-};
+}
 //# sourceMappingURL=inflight.$Closure1-1.js.map
 ```
 
 ## inflight.$Closure2-1.js
-
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function ({ $foo }) {
+module.exports = function({ $foo }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      const n = await $foo.inc();
+      const n = (await $foo.inc());
       return String.raw({ raw: ["", "-fn2"] }, n);
     }
   }
   return $Closure2;
-};
+}
 //# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
 ## inflight.$Closure3-1.js
-
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function ({ $expect_Util, $fn, $fn2, $sim }) {
+module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      const x = await $fn.invoke("");
-      const y = await $fn.invoke("");
-      const z = await $fn2.invoke("");
-      await $expect_Util.equal(x, "100");
-      await $expect_Util.equal(z, "100-fn2");
+      const x = (await $fn.invoke(""));
+      const y = (await $fn.invoke(""));
+      const z = (await $fn2.invoke(""));
+      (await $expect_Util.equal(x, "100"));
+      (await $expect_Util.equal(z, "100-fn2"));
       if ($sim) {
-        await $expect_Util.equal(y, "101");
-        await $expect_Util.equal(z, "100-fn2");
+        (await $expect_Util.equal(y, "101"));
+        (await $expect_Util.equal(z, "100-fn2"));
         console.log("client has been reused");
       }
     }
   }
   return $Closure3;
-};
+}
 //# sourceMappingURL=inflight.$Closure3-1.js.map
 ```
 
 ## inflight.Foo-1.js
-
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function ({}) {
+module.exports = function({  }) {
   class Foo {
-    constructor({}) {}
+    constructor({  }) {
+    }
     async inc() {
       this.n += 1;
       return this.n;
@@ -91,12 +88,11 @@ module.exports = function ({}) {
     }
   }
   return Foo;
-};
+}
 //# sourceMappingURL=inflight.Foo-1.js.map
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -108,7 +104,9 @@ module.exports = function ({}) {
     "outputs": {}
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_cloudwatch_log_group": {
@@ -205,7 +203,9 @@ module.exports = function ({}) {
             "uniqueId": "cloudFunction"
           }
         },
-        "architectures": ["arm64"],
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
@@ -234,7 +234,9 @@ module.exports = function ({}) {
             "uniqueId": "fn2"
           }
         },
-        "architectures": ["arm64"],
+        "architectures": [
+          "arm64"
+        ],
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
@@ -297,13 +299,10 @@ module.exports = function ({}) {
 ```
 
 ## preflight.js
-
 ```js
 "use strict";
-const $stdlib = require("@winglang/sdk");
-const $platforms = ((s) => (!s ? [] : s.split(";")))(
-  process.env.WING_PLATFORMS
-);
+const $stdlib = require('@winglang/sdk');
+const $platforms = ((s) => !s ? [] : s.split(';'))(process.env.WING_PLATFORMS);
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -315,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class Foo extends $stdlib.std.Resource {
-      constructor($scope, $id) {
+      constructor($scope, $id, ) {
         super($scope, $id);
       }
       static _toInflightType() {
@@ -341,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
-      constructor($scope, $id) {
+      constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
       }
@@ -368,14 +367,16 @@ class $Root extends $stdlib.std.Resource {
       }
       onLift(host, ops) {
         $stdlib.core.onLiftMatrix(host, ops, {
-          handle: [[foo, ["inc"]]],
+          "handle": [
+            [foo, ["inc"]],
+          ],
         });
         super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
-      constructor($scope, $id) {
+      constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
       }
@@ -402,27 +403,23 @@ class $Root extends $stdlib.std.Resource {
       }
       onLift(host, ops) {
         $stdlib.core.onLiftMatrix(host, ops, {
-          handle: [[foo, ["inc"]]],
+          "handle": [
+            [foo, ["inc"]],
+          ],
         });
         super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
-      constructor($scope, $id) {
+      constructor($scope, $id, ) {
         super($scope, $id);
         $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
-            $expect_Util: ${$stdlib.core.liftObject(
-              $stdlib.core.toLiftableModuleType(
-                expect.Util,
-                "@winglang/sdk/expect",
-                "Util"
-              )
-            )},
+            $expect_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"))},
             $fn: ${$stdlib.core.liftObject(fn)},
             $fn2: ${$stdlib.core.liftObject(fn2)},
             $sim: ${$stdlib.core.liftObject(sim)},
@@ -445,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
       }
       onLift(host, ops) {
         $stdlib.core.onLiftMatrix(host, ops, {
-          handle: [
+          "handle": [
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
             [sim, []],
@@ -455,41 +452,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this, "Foo");
-    const fn = this.node.root.new(
-      "@winglang/sdk.cloud.Function",
-      cloud.Function,
-      this,
-      "cloud.Function",
-      new $Closure1(this, "$Closure1")
-    );
-    const fn2 = this.node.root.new(
-      "@winglang/sdk.cloud.Function",
-      cloud.Function,
-      this,
-      "fn2",
-      new $Closure2(this, "$Closure2")
-    );
-    const sim = $helpers.eq(util.Util.env("WING_TARGET"), "sim");
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:single instance of Foo",
-      new $Closure3(this, "$Closure3")
-    );
+    const fn = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
+    const fn2 = this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "fn2", new $Closure2(this, "$Closure2"));
+    const sim = $helpers.eq((util.Util.env("WING_TARGET")), "sim");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:single instance of Foo", new $Closure3(this, "$Closure3"));
   }
 }
-const $PlatformManager = new $stdlib.platform.PlatformManager({
-  platformPaths: $platforms,
-});
-const $APP = $PlatformManager.createApp({
-  outdir: $outdir,
-  name: "inflight_handler_singleton.test",
-  rootConstruct: $Root,
-  isTestEnvironment: $wing_is_test,
-  entrypointDir: process.env["WING_SOURCE_DIR"],
-  rootId: process.env["WING_ROOT_ID"],
-});
+const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "inflight_handler_singleton.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```
+
