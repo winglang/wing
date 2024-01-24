@@ -22,7 +22,11 @@ test("create a bucket", () => {
   const output = app.synth();
 
   // THEN
-  expect(tfResourcesOf(output)).toEqual(["google_storage_bucket", "random_id"]);
+  expect(tfResourcesOf(output)).toEqual([
+    "google_project_service",
+    "google_storage_bucket",
+    "random_id",
+  ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -35,6 +39,7 @@ test("bucket is public", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "google_project_service",
     "google_storage_bucket",
     "google_storage_bucket_iam_member",
     "random_id",
@@ -51,7 +56,12 @@ test("two buckets", () => {
   const output = app.synth();
 
   // THEN
-  expect(tfResourcesOf(output)).toEqual(["google_storage_bucket", "random_id"]);
+  expect(tfResourcesOf(output)).toEqual([
+    "google_project_service",
+    "google_storage_bucket",
+    "random_id",
+  ]);
+  expect(tfResourcesOfCount(output, "google_project_service")).toEqual(2);
   expect(tfResourcesOfCount(output, "google_storage_bucket")).toEqual(2);
   expect(tfResourcesOfCount(output, "random_id")).toEqual(2);
   expect(tfSanitize(output)).toMatchSnapshot();
@@ -68,6 +78,7 @@ test("bucket with two preflight objects", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "google_project_service",
     "google_storage_bucket",
     "google_storage_bucket_object",
     "random_id",
@@ -87,6 +98,7 @@ test("bucket with two preflight files", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "google_project_service",
     "google_storage_bucket",
     "google_storage_bucket_object",
     "random_id",
