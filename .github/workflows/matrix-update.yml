@@ -41,8 +41,8 @@ jobs:
           cd scripts/compatibility-matrix-automation
           echo "lib:"
           ls lib
-          OUT_FILE=../../../out pnpm start
-          rmdir -r ../../../out
+          OUT_FOLDER=../../out pnpm start
+          rmdir -r ../../out
 
       - name: Create a PR
         uses: peter-evans/create-pull-request@v5
