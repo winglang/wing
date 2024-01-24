@@ -69,7 +69,19 @@ test "signedUrl PUT" {
 }
 
 test "signedUrl duration option is respected" {
-  let ACCESS_DENIED_ERROR = "<Error><Code>AccessDenied</Code><Message>Request has expired</Message>";
+  let isExpiredTokenError = (output: str) => {
+    let target = util.env("WING_TARGET");
+    let var result = false;
+
+    if target == "tf-aws" {
+      result = output.contains("<Code>AccessDenied</Code><Message>Request has expired</Message>");
+    } elif target == "tf-gcp" {
+      result = output.contains("<Code>ExpiredToken</Code><Message>Invalid argument.</Message>");
+    }
+    
+    return result;
+  };
+
   let KEY = "tempfile.txt";
   let VALUE = "Hello, Wing!";
 
@@ -82,5 +94,5 @@ test "signedUrl duration option is respected" {
   // Download file from private bucket using expired GET presigned URL
   let output = util.shell("curl \"{getSignedUrl}\"", { throw: false });
 
-  assert(output.contains(ACCESS_DENIED_ERROR));
+  expect.equal(isExpiredTokenError(output), true);
 }

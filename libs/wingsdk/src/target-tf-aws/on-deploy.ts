@@ -4,6 +4,7 @@ import { Function as AwsFunction } from "./function";
 import { DataAwsLambdaInvocation } from "../.gen/providers/aws/data-aws-lambda-invocation";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflight } from "../std";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
@@ -19,7 +20,7 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    let fn = new cloud.Function(this, "Function", handler, props);
+    let fn = new cloud.Function(this, "Function", handler as IInflight, props);
     const awsFn = fn as AwsFunction;
 
     // add all of the children of the construct to the dependencies

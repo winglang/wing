@@ -139,6 +139,52 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   }, []);
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
 
+  const [isDragging, setDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  useEvent(
+    "mousedown",
+    useCallback((event: MouseEvent) => {
+      setDragging(true);
+      dragStart.current = { x: event.x, y: event.y };
+    }, []) as (event: Event) => void,
+    containerRef.current,
+  );
+
+  useEvent(
+    "mousemove",
+    useCallback(
+      (event: MouseEvent) => {
+        if (!isDragging) {
+          return;
+        }
+
+        const diff = {
+          x: dragStart.current.x - event.x,
+          y: dragStart.current.y - event.y,
+        };
+        dragStart.current = { x: event.x, y: event.y };
+
+        setViewTransform((viewTransform) => {
+          return {
+            x: viewTransform.x + diff.x / viewTransform.z,
+            y: viewTransform.y + diff.y / viewTransform.z,
+            z: viewTransform.z,
+          };
+        });
+      },
+      [isDragging, dragStart],
+    ) as (event: Event) => void,
+    containerRef.current,
+  );
+
+  useEvent(
+    "mouseup",
+    useCallback((event: MouseEvent) => {
+      setDragging(false);
+    }, []) as (event: Event) => void,
+    containerRef.current,
+  );
+
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
     if (!container) {
@@ -271,7 +317,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     <div
       ref={containerRef}
       {...props}
-      className={classNames(className, "relative overflow-hidden")}
+      className={classNames(className, "relative overflow-hidden", {
+        "cursor-grab": !isDragging,
+        "cursor-grabbing": isDragging,
+      })}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         {children}

@@ -77,7 +77,7 @@ pub struct JSifier<'a> {
 
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
-	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
+	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
