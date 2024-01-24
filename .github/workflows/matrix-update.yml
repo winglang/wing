@@ -37,10 +37,7 @@ jobs:
 
       - name: Run Update Script
         run: |
-          ls
           cd scripts/compatibility-matrix-automation
-          echo "lib:"
-          ls lib
           OUT_FOLDER=../../out pnpm start
           rmdir -r ../../out
 
