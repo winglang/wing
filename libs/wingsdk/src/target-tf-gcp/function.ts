@@ -180,6 +180,7 @@ export class Function extends cloud.Function {
     // bundled code is guaranteed to be in a fresh directory
     const bundle = createBundle(this.entrypoint, [
       "@google-cloud/functions-framework",
+      "@google-cloud/datastore",
     ]);
 
     const packageJson = join(bundle.directory, "package.json");
@@ -191,6 +192,7 @@ export class Function extends cloud.Function {
           main: "index.js",
           dependencies: {
             "@google-cloud/functions-framework": "^3.0.0",
+            "@google-cloud/datastore": "8.4.0",
           },
         },
         null,

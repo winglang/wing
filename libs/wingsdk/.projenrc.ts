@@ -88,7 +88,9 @@ const project = new cdk.JsiiProject({
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
+    "@google-cloud/datastore@8.4.0",
     "google-auth-library",
+    "protobufjs@7.2.5",
     // simulator dependencies
     "express",
     "uuid",
@@ -136,7 +138,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "5.0.11",
+  jsiiVersion: "~5.3.11",
 });
 
 project.eslint?.addPlugins("sort-exports");

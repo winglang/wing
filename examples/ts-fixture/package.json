@@ -8,7 +8,8 @@
   "dependencies": {
     "ts4w": "workspace:^",
     "@winglang/sdk": "workspace:^",
-    "winglang": "workspace:^"
+    "winglang": "workspace:^",
+    "@winglibs/testfixture": "workspace:^"
   },
   "volta": {
     "extends": "../../package.json"

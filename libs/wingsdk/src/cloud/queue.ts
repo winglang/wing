@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Duration, IInflight, Node, Resource } from "../std";
 
 /**
@@ -33,6 +34,9 @@ export interface QueueProps {
  * @abstract
  */
 export class Queue extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IQueueClient;
+
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     if (new.target === Queue) {
       return Resource._newFromFactory(QUEUE_FQN, scope, id, props);
@@ -108,7 +112,10 @@ export interface IQueueClient {
  *
  * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`
  */
-export interface IQueueSetConsumerHandler extends IInflight {}
+export interface IQueueSetConsumerHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IQueueSetConsumerHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IQueueSetConsumerHandler`.

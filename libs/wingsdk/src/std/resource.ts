@@ -195,7 +195,8 @@ export abstract class Resource extends Construct implements IResource {
       // For each operation, check if the host supports it
       if (!supportedOps.includes(op)) {
         throw new NotImplementedError(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`,
+          { resource: this.constructor.name, operation: op }
         );
       }
 
@@ -218,6 +219,18 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _preSynthesize(): void {
     // do nothing by default
+  }
+}
+
+/**
+ * A resource that has an automatically generated id.
+ * Used by the Wing compiler to generate unique ids for auto generated resources
+ * from inflight function closures.
+ */
+export abstract class AutoIdResource extends Resource {
+  constructor(scope: Construct, idPrefix: string = "") {
+    const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
+    super(scope, id);
   }
 }
 

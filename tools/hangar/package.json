@@ -19,7 +19,6 @@
     "@winglang/sdk": "workspace:^",
     "@winglang/platform-awscdk": "workspace:^",
     "@winglang/compatibility-spy": "workspace:^",
-    "ts4w": "workspace:^",
     "cdktf": "^0.17.3",
     "execa": "^7.2.0",
     "fflate": "^0.8.1",
