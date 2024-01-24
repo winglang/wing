@@ -15,7 +15,11 @@ type TurboTaskOutput = {
 };
 
 type FileChanges = { relativeChanges: string[]; absoluteChanges: string[] };
-export type TurboOutput = { absoluteRoot: string, globalInputFiles: string[]; tasks: TurboTaskOutput[] };
+export type TurboOutput = {
+  absoluteRoot: string;
+  globalInputFiles: string[];
+  tasks: TurboTaskOutput[];
+};
 type TaskChangeMap = { [key: string]: { cached: boolean; changes: boolean } };
 
 const currentFile = fileURLToPath(import.meta.url);
@@ -80,10 +84,13 @@ export function getChanges(
   turbo: TurboOutput,
   fileChanges: FileChanges
 ): TaskChangeMap {
-  const baseChangeData: TaskChangeMap = {};
-  const fullChangeData: TaskChangeMap = {};
+  // based only on the changes within the project itself and global deps
+  const immediateChanges: TaskChangeMap = {};
 
-  // create change map based on task data
+  // includes transitive deps
+  const fullChanges: TaskChangeMap = {};
+
+  // create initial change map based on task data
   for (const task of turbo.tasks) {
     // double check that all the changes files based on git are actually included in all these tasks
     const absoluteTaskRoot = join(turbo.absoluteRoot, task.directory);
@@ -91,7 +98,7 @@ export function getChanges(
       .map((file) => file.replace(absoluteTaskRoot + "/", ""))
       .filter((file) => !file.startsWith("/"));
 
-    baseChangeData[task.taskId] = {
+    immediateChanges[task.taskId] = {
       cached: task.cache.status === "HIT",
       changes: changesRelativeToTask.some((file) =>
         Object.keys(task.inputs).includes(file)
@@ -103,10 +110,12 @@ export function getChanges(
   const globalPattern = `{${turbo.globalInputFiles.join(",")}}`;
   for (const changedFile of fileChanges.relativeChanges) {
     if (minimatch(changedFile, globalPattern)) {
-      for (const taskId in baseChangeData) {
-        baseChangeData[taskId].changes = true;
+      for (const taskId in immediateChanges) {
+        immediateChanges[taskId].changes = true;
       }
-      break;
+
+      // early return because we know all tasks have changes
+      return immediateChanges;
     }
   }
 
@@ -114,8 +123,8 @@ export function getChanges(
    * Check if any of the dependencies of the given task have changes.
    * @returns true if changes were found
    */
-  function checkChanges(turbo: TurboOutput, task: TurboTaskOutput) {
-    const dataEntry = baseChangeData[task.taskId];
+  function checkTransitiveChanges(turbo: TurboOutput, task: TurboTaskOutput) {
+    const dataEntry = immediateChanges[task.taskId];
     if (dataEntry.changes) {
       return dataEntry;
     }
@@ -135,11 +144,11 @@ export function getChanges(
     }
 
     for (const dependency of dependencies) {
-      if (baseChangeData[dependency].changes) {
+      if (immediateChanges[dependency].changes) {
         return {
           ...dataEntry,
           changes: true,
-        }
+        };
       }
     }
 
@@ -147,10 +156,10 @@ export function getChanges(
   }
 
   for (const task of turbo.tasks) {
-    fullChangeData[task.taskId] = checkChanges(turbo, task);
+    fullChanges[task.taskId] = checkTransitiveChanges(turbo, task);
   }
 
-  return fullChangeData;
+  return fullChanges;
 }
 
 /**
