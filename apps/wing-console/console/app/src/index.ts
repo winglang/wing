@@ -62,6 +62,11 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     ...options,
     analyticsAnonymousId: analyticsStorage.getAnonymousId(),
     async requireSignIn() {
+      // The VSCode extension for Wing will use this to determine whether to show the sign in prompt.
+      const noSignIn = process.env.NO_SIGN_IN === "true";
+      if (noSignIn) {
+        return false;
+      }
       return analyticsStorage.getRequireSignIn();
     },
     async notifySignedIn() {
