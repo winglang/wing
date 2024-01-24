@@ -239,7 +239,7 @@ export const createAppRouter = () => {
         if (!node) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Node was not found.",
+            message: `Node was not found for path ${path}`,
           });
         }
 
@@ -251,32 +251,7 @@ export const createAppRouter = () => {
         const connections = uniqby(simulator.connections(), (connection) => {
           return `${connection.source}-${connection.target}`;
         }).filter((connection) => {
-          const sourceNode = nodeMap.get(connection.source);
-          if (!sourceNode) {
-            throw new Error(
-              `Could not find node for resource ${connection.source}`,
-            );
-          }
-
-          const targetNode = nodeMap.get(connection.target);
-          if (!targetNode) {
-            throw new Error(
-              `Could not find node for resource ${connection.target}`,
-            );
-          }
-
-          if (targetNode.display?.hidden) {
-            return false;
-          }
-
-          if (
-            !showTests &&
-            (matchTest(sourceNode.path) || matchTest(targetNode.path))
-          ) {
-            return false;
-          }
-
-          return true;
+          return connectionsBasicFilter(connection, nodeMap, !!showTests);
         });
 
         const config = simulator.tryGetResourceConfig(node.path);
@@ -292,14 +267,7 @@ export const createAppRouter = () => {
           },
           inbound: connections
             .filter(({ target }) => {
-              const possiblePaths = [
-                node.path,
-                ...node.children.map((c) => {
-                  const child = nodeMap.get(c);
-                  return (child?.display?.hidden && child?.path) ?? "";
-                }),
-              ];
-              return possiblePaths.includes(target);
+              return isFoundInPath(node, nodeMap, target, true);
             })
             .map((connection) => {
               const node = nodeMap.get(connection.source)!;
@@ -316,14 +284,7 @@ export const createAppRouter = () => {
             }),
           outbound: connections
             .filter(({ source }) => {
-              const possiblePaths = [
-                node.path,
-                ...node.children.map((c) => {
-                  const child = nodeMap.get(c);
-                  return (child?.display?.hidden && child?.path) ?? "";
-                }),
-              ];
-              return possiblePaths.includes(source);
+              return isFoundInPath(node, nodeMap, source, true);
             })
             .map((connection) => {
               const node = nodeMap.get(connection.target)!;
@@ -361,42 +322,29 @@ export const createAppRouter = () => {
         if (!sourceNode) {
           throw new TRPCError({
             code: "NOT_FOUND",
-            message: "Node was not found.",
+            message: `Could not find node for resource ${sourcePath}`,
+          });
+        }
+
+        const targetNode = nodeMap.get(targetPath);
+        if (!targetNode) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: `Could not find node for resource ${targetPath}`,
           });
         }
 
         const connections = simulator.connections();
 
-        const targetNode = nodeMap.get(targetPath);
-
-        if (!targetNode) {
-          throw new Error(`Could not find node for resource ${targetPath}`);
-        }
-
         const inflights = sourceNode.display?.hidden
           ? []
           : connections
               ?.filter(({ source, target, name }) => {
-                const possibleSourcePaths = [
-                  sourcePath,
-                  ...sourceNode.children.map((c) => {
-                    const child = nodeMap.get(c);
-                    return (child?.display?.hidden && child?.path) ?? "";
-                  }),
-                ];
-                if (!possibleSourcePaths.includes(source)) {
+                if (!isFoundInPath(sourceNode, nodeMap, source, true)) {
                   return false;
                 }
 
-                const possibleTargetPaths = [
-                  targetPath,
-                  ...targetNode.children.map((c) => {
-                    const child = nodeMap.get(c);
-                    return (child?.display?.hidden && child?.path) ?? "";
-                  }),
-                ];
-
-                if (!possibleTargetPaths.includes(target)) {
+                if (!isFoundInPath(targetNode, nodeMap, target, true)) {
                   return false;
                 }
 
@@ -631,37 +579,10 @@ function createMapEdgesFromConnectionData(
 ): MapEdge[] {
   return [
     ...connections
-      .filter(({ source, target }) => {
-        const sourceNode = nodeMap.get(source);
-        if (!sourceNode) {
-          throw new Error(`Could not find node for resource ${source}`);
-        }
-        const targetNode = nodeMap.get(target);
-        if (!targetNode) {
-          throw new Error(`Could not find node for resource ${target}`);
-        }
-
-        // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
-        if (targetNode.parent === sourceNode.path) {
-          return false;
-        }
-
-        // Hide connections that go from a node to a parent.
-        if (sourceNode.path.startsWith(`${targetNode.path}/`)) {
-          return false;
-        }
-
-        if (targetNode.display?.hidden) {
-          return false;
-        }
-
-        if (
-          !showTests &&
-          (matchTest(sourceNode.path) || matchTest(targetNode.path))
-        ) {
-          return false;
-        }
-
+      .filter((connection) => {
+        return connectionsBasicFilter(connection, nodeMap, showTests);
+      })
+      ?.filter(({ source, target }) => {
         // Remove redundant connections to a parent resource if there's already a connection to a child resource.
         if (
           connections.some((connection) => {
@@ -679,14 +600,12 @@ function createMapEdgesFromConnectionData(
         return true;
       })
       ?.map((connection: NodeConnection) => {
-        const sourceNode = nodeMap.get(connection.source);
-        const attachToParent = sourceNode?.display?.hidden;
-        const source = attachToParent ? sourceNode?.parent! : connection.source;
-
+        const source = getVisualNodePath(connection.source, nodeMap);
+        const target = getVisualNodePath(connection.target, nodeMap);
         return {
-          id: `${source} -> ${connection.target}`,
+          id: `${source} -> ${target}`,
           source,
-          target: connection.target,
+          target,
         };
       }),
   ].flat();
@@ -707,3 +626,75 @@ function getResourceType(
     "constructs.Construct"
   );
 }
+
+const connectionsBasicFilter = (
+  connection: NodeConnection,
+  nodeMap: ConstructTreeNodeMap,
+  showTests: boolean,
+) => {
+  const sourceNode = nodeMap.get(connection.source);
+  if (!sourceNode) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Could not find node for resource ${connection.source}`,
+    });
+  }
+
+  const targetNode = nodeMap.get(connection.target);
+  if (!targetNode) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Could not find node for resource ${connection.target}`,
+    });
+  }
+
+  // Hide connections that go from a parent to its direct child (eg, API to an endpoint, queue to a consumer).
+  if (targetNode.parent === sourceNode.path) {
+    return false;
+  }
+
+  // Hide connections that go from a node to a parent.
+  if (sourceNode.path.startsWith(`${targetNode.path}/`)) {
+    return false;
+  }
+
+  if (targetNode.display?.hidden && targetNode.parent === "root") {
+    return false;
+  }
+
+  if (
+    !showTests &&
+    (matchTest(sourceNode.path) || matchTest(targetNode.path))
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+const isFoundInPath = (
+  node: Node,
+  nodeMap: ConstructTreeNodeMap,
+  pathToFind: string,
+  tryHiddenChildren = true,
+) => {
+  const possiblePaths = [
+    node.path,
+    ...(tryHiddenChildren
+      ? node.children.map((c) => {
+          const child = nodeMap.get(c);
+          return (child?.display?.hidden && child?.path) ?? "";
+        })
+      : []),
+  ];
+  return possiblePaths.includes(pathToFind);
+};
+
+const getVisualNodePath = (
+  originalNodePath: string,
+  nodeMap: ConstructTreeNodeMap,
+): string => {
+  const originalNode = nodeMap.get(originalNodePath);
+  const attachToParent = originalNode?.display?.hidden && originalNode.parent;
+  return attachToParent ? originalNode.parent! : originalNodePath;
+};
