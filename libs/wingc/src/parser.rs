@@ -1541,15 +1541,24 @@ impl<'s> Parser<'s> {
 	) -> DiagnosticResult<(Symbol, FunctionSignature)> {
 		let name = interface_element.child_by_field_name("name").unwrap();
 		let method_name = self.node_symbol(&name)?;
-		let func_sig = self.build_function_signature(&interface_element, phase)?;
+		let (func_sig, ret_type_inferred) = self.build_function_signature(&interface_element, phase)?;
+		if ret_type_inferred {
+			self.add_error("Expected function return type", &interface_element);
+		}
 		Ok((method_name, func_sig))
 	}
 
-	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
+	fn build_function_signature(
+		&self,
+		func_sig_node: &Node,
+		phase: Phase,
+	) -> DiagnosticResult<(FunctionSignature, bool)> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
+		let mut ret_typed_inferred = false;
 		let return_type = if let Some(rt) = get_actual_child_by_field_name(*func_sig_node, "type") {
 			self.build_type_annotation(Some(rt), phase)?
 		} else {
+			ret_typed_inferred = true;
 			let func_sig_kind = func_sig_node.kind();
 			if func_sig_kind == "closure" {
 				TypeAnnotation {
@@ -1564,11 +1573,14 @@ impl<'s> Parser<'s> {
 			}
 		};
 
-		Ok(FunctionSignature {
-			parameters,
-			return_type: Box::new(return_type),
-			phase,
-		})
+		Ok((
+			FunctionSignature {
+				parameters,
+				return_type: Box::new(return_type),
+				phase,
+			},
+			ret_typed_inferred,
+		))
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
@@ -1590,7 +1602,7 @@ impl<'s> Parser<'s> {
 
 		let is_static = self.get_modifier("static", &modifiers)?.is_some();
 
-		let signature = self.build_function_signature(func_def_node, phase)?;
+		let (signature, ret_type_inferred) = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = self.get_modifier("extern_modifier", &modifiers)? {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let file_path = Utf8Path::new(&node_text[1..node_text.len() - 1]);
@@ -1605,6 +1617,10 @@ impl<'s> Parser<'s> {
 					.build_error("Extern functions cannot have a body", &external)
 					.with_annotation("Body defined here", self.node_span(body))
 					.report();
+			}
+
+			if ret_type_inferred {
+				self.add_error("Expected function return type", &func_def_node);
 			}
 
 			FunctionBody::External(file_path.to_string())
