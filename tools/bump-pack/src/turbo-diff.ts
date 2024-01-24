@@ -80,7 +80,8 @@ export function getChanges(
   turbo: TurboOutput,
   fileChanges: FileChanges
 ): TaskChangeMap {
-  const taskData: TaskChangeMap = {};
+  const baseChangeData: TaskChangeMap = {};
+  const fullChangeData: TaskChangeMap = {};
 
   // create change map based on task data
   for (const task of turbo.tasks) {
@@ -90,7 +91,7 @@ export function getChanges(
       .map((file) => file.replace(absoluteTaskRoot + "/", ""))
       .filter((file) => !file.startsWith("/"));
 
-    taskData[task.taskId] = {
+    baseChangeData[task.taskId] = {
       cached: task.cache.status === "HIT",
       changes: changesRelativeToTask.some((file) =>
         Object.keys(task.inputs).includes(file)
@@ -102,8 +103,8 @@ export function getChanges(
   const globalPattern = `{${turbo.globalInputFiles.join(",")}}`;
   for (const changedFile of fileChanges.relativeChanges) {
     if (minimatch(changedFile, globalPattern)) {
-      for (const taskId in taskData) {
-        taskData[taskId].changes = true;
+      for (const taskId in baseChangeData) {
+        baseChangeData[taskId].changes = true;
       }
       break;
     }
@@ -113,10 +114,10 @@ export function getChanges(
    * Check if any of the dependencies of the given task have changes.
    * @returns true if changes were found
    */
-  function updateChanges(turbo: TurboOutput, task: TurboTaskOutput) {
-    const dataEntry = taskData[task.taskId];
+  function checkChanges(turbo: TurboOutput, task: TurboTaskOutput) {
+    const dataEntry = baseChangeData[task.taskId];
     if (dataEntry.changes) {
-      return;
+      return dataEntry;
     }
 
     let dependencies = getDependencies(turbo, task.taskId);
@@ -134,18 +135,22 @@ export function getChanges(
     }
 
     for (const dependency of dependencies) {
-      if (taskData[dependency].changes) {
-        dataEntry.changes = true;
-        break;
+      if (baseChangeData[dependency].changes) {
+        return {
+          ...dataEntry,
+          changes: true,
+        }
       }
     }
+
+    return dataEntry;
   }
 
   for (const task of turbo.tasks) {
-    updateChanges(turbo, task);
+    fullChangeData[task.taskId] = checkChanges(turbo, task);
   }
 
-  return taskData;
+  return fullChangeData;
 }
 
 /**
