@@ -144,6 +144,7 @@ export function getChanges(
     }
 
     for (const dependency of dependencies) {
+      console.log(dependency, immediateChanges[dependency].changes);
       if (immediateChanges[dependency].changes) {
         return {
           ...dataEntry,

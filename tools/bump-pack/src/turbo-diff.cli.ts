@@ -31,9 +31,9 @@ Options:
   --end-ref <ref>    The end ref to use for the git diff (default: "", current working tree)
 */
 
-import {parseArgs} from 'node:util';
-import {setOutput} from '@actions/core';
-import { getChangedFiles, getChanges, getTurboTaskData } from './turbo-diff';
+import { parseArgs } from "node:util";
+import { setOutput } from "@actions/core";
+import { getChangedFiles, getChanges, getTurboTaskData } from "./turbo-diff";
 
 const args = parseArgs({
   options: {
