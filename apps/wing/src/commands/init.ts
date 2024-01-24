@@ -26,7 +26,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
   const templates = initTemplateNames();
   let language = options.language ?? "wing";
 
-  // If no template is specified, ask the user to specify one
+  // If no template is specified, let them interactively select one
   if (!template) {
     console.log("Usage: wing new <template> [--language <language>]");
     console.log();

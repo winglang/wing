@@ -1,8 +1,9 @@
-import { Command, Option } from "commander";
+import { Argument, Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
+import { initTemplateNames } from "./commands/init";
 import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
 
@@ -214,8 +215,14 @@ async function main() {
   program
     .command("new")
     .description("Create a new Wing project")
-    .argument("[template]", "Template name")
-    .addOption(new Option("-l --language [language]", "Language"))
+    .addArgument(
+      new Argument("<template>", "Template name").choices(initTemplateNames()).argOptional()
+    )
+    .addOption(
+      new Option("-l --language [language]", "Language")
+        .choices(["wing", "typescript"])
+        .argParser((value) => value ?? "wing")
+    )
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("init"));
 
