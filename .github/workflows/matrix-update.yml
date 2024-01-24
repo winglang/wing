@@ -39,7 +39,7 @@ jobs:
         run: |
           cd scripts/compatibility-matrix-automation
           OUT_FOLDER=../../out pnpm start
-          rmdir -r ../../out
+        # rmdir -r ../../out
 
       - name: Create a PR
         uses: peter-evans/create-pull-request@v5
