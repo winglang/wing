@@ -1,5 +1,10 @@
 {
     "$schema": "https://turborepo.org/schema.json",
     "extends": ["//"],
-    "pipeline": {}
+    "pipeline": {
+      "compile": {
+        "dependsOn": ["^compile"],
+        "inputs": ["**/*.w", "**/*.js", "**/*.ts"]
+      }
+    }
   }

@@ -57,8 +57,9 @@ module.exports = function({ $expect_Util, $fn, $fn2, $sim }) {
       const x = (await $fn.invoke(""));
       const y = (await $fn.invoke(""));
       const z = (await $fn2.invoke(""));
+      (await $expect_Util.equal(x, "100"));
+      (await $expect_Util.equal(z, "100-fn2"));
       if ($sim) {
-        (await $expect_Util.equal(x, "100"));
         (await $expect_Util.equal(y, "101"));
         (await $expect_Util.equal(z, "100-fn2"));
         console.log("client has been reused");
