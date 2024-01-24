@@ -28,9 +28,9 @@ export const TermsAndConditionsModal = ({
 
   return (
     <Modal visible={visible}>
-      <div className={classNames(theme.textInput)}>
+      <div className="flex flex-col gap-4">
         <h1 className="text-lg font-bold">Terms and Conditions</h1>
-        <div className="text-sm max-w-[40rem] max-h-[30rem] overflow-auto py-4">
+        <div className="text-sm max-w-[40rem] max-h-[30rem] overflow-auto py-4 rounded bg-slate-200 dark:bg-slate-600 p-2">
           <div className="prose-sm dark:prose-invert-sm">
             <ReactMarkdown
               // eslint-disable-next-line react/no-children-prop
@@ -39,7 +39,7 @@ export const TermsAndConditionsModal = ({
           </div>
         </div>
 
-        <div className="pt-2">
+        <div>
           <div className="space-x-2 items-center flex">
             <Checkbox
               id={id}

@@ -22,7 +22,7 @@ import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 import { LogsWidget } from "../widgets/logs.js";
 
-import { SignInModal } from "./sign-in.js";
+import { SignInModal, useRequireSignIn } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -115,8 +115,13 @@ export const DefaultLayout = ({
     if (!termsConfig.data) {
       return false;
     }
-    return termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted;
+    return (
+      (termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted) ??
+      false
+    );
   }, [termsConfig.data]);
+
+  const { signInRequired, signIn } = useRequireSignIn();
 
   const layout: LayoutConfig = useMemo(() => {
     return {
@@ -210,13 +215,17 @@ export const DefaultLayout = ({
 
   return (
     <>
-      <SignInModal />
-
       <TermsAndConditionsModal
-        visible={showTerms ?? false}
+        visible={showTerms}
         onAccept={() => acceptTerms()}
         license={termsConfig.data?.license ?? ""}
       />
+
+      {/**
+       * Since both Terms and Sign In are modals, let's make sure that only
+       * one of them is visible at a time.
+       */}
+      <SignInModal visible={!showTerms && signInRequired} onSignIn={signIn} />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
         <div

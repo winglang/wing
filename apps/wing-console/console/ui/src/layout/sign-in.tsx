@@ -6,11 +6,8 @@ import { useSearchParam } from "react-use";
 import { AppContext } from "../AppContext.js";
 import { trpc } from "../services/trpc.js";
 
-export interface SignInModalProps {}
-
-export const SignInModal = (props: SignInModalProps) => {
+export const useRequireSignIn = () => {
   const { wingCloudSignInUrl } = useContext(AppContext);
-  const { theme } = useTheme();
   const analytics = trpc["app.analytics"].useQuery();
   const signIn = useCallback(() => {
     const url = new URL(wingCloudSignInUrl!);
@@ -19,7 +16,7 @@ export const SignInModal = (props: SignInModalProps) => {
     location.href = url.toString();
   }, [wingCloudSignInUrl, analytics.data?.anonymousId]);
   const signedInParameter = useSearchParam("signedIn");
-  const [requireSignIn, setRequireSignIn] = useState(false);
+  const [signInRequired, setSignInRequired] = useState(false);
   useEffect(() => {
     // Skip if offline.
     if (navigator.onLine === false) {
@@ -27,15 +24,13 @@ export const SignInModal = (props: SignInModalProps) => {
     }
 
     if (analytics.data?.requireSignIn && signedInParameter === null) {
-      setRequireSignIn(true);
+      setSignInRequired(true);
     } else {
-      setRequireSignIn(false);
+      setSignInRequired(false);
     }
   }, [analytics.data?.requireSignIn, signedInParameter]);
-
   const { mutate: notifySignedIn } =
     trpc["app.analytics.notifySignedIn"].useMutation();
-
   useEffect(() => {
     if (signedInParameter !== null) {
       notifySignedIn();
@@ -44,9 +39,19 @@ export const SignInModal = (props: SignInModalProps) => {
       history.replaceState({}, document.title, url);
     }
   }, [signedInParameter, notifySignedIn]);
+  return { signInRequired, signIn };
+};
+
+export interface SignInModalProps {
+  visible: boolean;
+  onSignIn: () => void;
+}
+
+export const SignInModal = (props: SignInModalProps) => {
+  const { theme } = useTheme();
 
   return (
-    <Modal visible={requireSignIn} setVisible={() => {}}>
+    <Modal visible={props.visible}>
       <div className="flex flex-col gap-4 max-w-md">
         <h3
           className={classNames(
@@ -69,7 +74,7 @@ export const SignInModal = (props: SignInModalProps) => {
         </p>
 
         <div className="flex gap-2">
-          <Button onClick={signIn}>Sign In to Wing Cloud</Button>
+          <Button onClick={props.onSignIn}>Sign In to Wing Cloud</Button>
         </div>
       </div>
     </Modal>
