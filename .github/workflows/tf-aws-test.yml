@@ -184,7 +184,7 @@ jobs:
               WING_CLI=$(realpath localwing/node_modules/.bin/wing)
             fi
             cd ${{ matrix.test.directory }}
-            $WING_CLI test -t ${{ matrix.target }} *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+            $WING_CLI test -t ${{ matrix.target }} -t ../../../../libs/compatibility-spy/lib *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         # TODO: add a condition here

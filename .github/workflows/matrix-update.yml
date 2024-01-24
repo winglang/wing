@@ -39,7 +39,7 @@ jobs:
         run: |
           cd scripts/compatibility-matrix-automation
           OUT_FOLDER=../../out pnpm start
-        # rmdir -r ../../out
+          rm -r ../../out
 
       - name: Create a PR
         uses: peter-evans/create-pull-request@v5
@@ -47,5 +47,5 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): competability matrix update"
           base: main
-          branch: "auto/updating-matrix/${{ github.ref }}"
+          branch: "auto/updating-matrix"
           draft: true # remove it soon!
