@@ -1,0 +1,42 @@
+{
+  "duration": 2511,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "url.test.w": {
+      "parseUrl()": {
+        "path": "root/env0/test:parseUrl()",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:parseUrl()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:25.988Z"
+          }
+        ]
+      },
+      "formatUrl()": {
+        "path": "root/env1/test:formatUrl()",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:formatUrl()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:26.007Z"
+          }
+        ]
+      }
+    }
+  }
+}

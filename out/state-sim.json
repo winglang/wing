@@ -1,0 +1,69 @@
+{
+  "duration": 4959,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "set.test.w": {
+      "token resolved at runtime": {
+        "path": "root/env0/test:token resolved at runtime",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "2023-10-16T20:47:39.511Z"
+            },
+            "type": "log",
+            "sourcePath": "root/env0/test:token resolved at runtime/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:26.390Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:token resolved at runtime/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:26.390Z"
+          }
+        ]
+      }
+    },
+    "get.test.w": {
+      "state.get() returns the runtime value": {
+        "path": "root/env0/test:state.get() returns the runtime value",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:state.get() returns the runtime value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:27.524Z"
+          }
+        ]
+      },
+      "state.tryGet() return nil if there is no value": {
+        "path": "root/env1/test:state.tryGet() return nil if there is no value",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:state.tryGet() return nil if there is no value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:27.559Z"
+          }
+        ]
+      }
+    }
+  }
+}

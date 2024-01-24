@@ -1,0 +1,373 @@
+{
+  "duration": 7034,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "timeout.test.w": {
+      "*": {
+        "pass": false,
+        "unsupported": true,
+        "unsupportedResource": "Queue",
+        "unsupportedOperation": "timeout",
+        "path": "*",
+        "error": "runtime error: Queue.timeout is not supported on the sim platform yet.\nFor more information see: https://github.com/winglang/wing/issues/1980.\nContributions welcome ❤️\n   --> timeout.test.w:16:9\n   | }\n   | \n   | \n16 | let q = new cloud.Queue(cloud.QueueProps{timeout: timeout});\n   |         ^\nat (/home/runner/work/wing/wing/examples/tests/sdk_tests/queue/timeout.test.w:16:9)",
+        "traces": []
+      }
+    },
+    "pop.test.w": {
+      "*": {
+        "pass": false,
+        "unsupported": true,
+        "unsupportedResource": "Queue",
+        "unsupportedOperation": "timeout",
+        "path": "*",
+        "error": "runtime error: Queue.timeout is not supported on the sim platform yet.\nFor more information see: https://github.com/winglang/wing/issues/1980.\nContributions welcome ❤️\n  --> pop.test.w:5:9\n  | bring util;\n  | \n  | let timeout = 3s;\n5 | let q = new cloud.Queue(timeout: timeout);\n  |         ^\nat (/home/runner/work/wing/wing/examples/tests/sdk_tests/queue/pop.test.w:5:9)",
+        "traces": []
+      }
+    },
+    "aws-queue.test.w": {
+      "validates the AWS queue name": {
+        "path": "root/env0/test:validates the AWS queue name",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:validates the AWS queue name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:50.731Z"
+          }
+        ]
+      }
+    },
+    "purge.test.w": {
+      "purge": {
+        "path": "root/env0/test:purge",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Push (messages=foo).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:49.873Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=bar).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:50.732Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=baz).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.264Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "3"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.275Z"
+          },
+          {
+            "data": {
+              "message": "Purge ().",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.322Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.331Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:purge/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:51.333Z"
+          }
+        ]
+      }
+    },
+    "push.test.w": {
+      "root/env0/push": {
+        "path": "root/env0/push",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Push (messages=).",
+              "status": "failure",
+              "error": {}
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.254Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=Foo,).",
+              "status": "failure",
+              "error": {}
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.272Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=Foo).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.318Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.329Z"
+          },
+          {
+            "data": {
+              "message": "Pop ().",
+              "status": "success",
+              "result": "\"Foo\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.338Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=Bar,Baz).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.340Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "2"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.342Z"
+          },
+          {
+            "data": {
+              "message": "Purge ().",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.344Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.348Z"
+          },
+          {
+            "data": {
+              "message": "Push (messages=123,\r,{\"k1\":1,\"k2\":\"hello\",\"k3\":true,\"k4\":{\"k1\":[1,\"a\",true,{}]}}).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.351Z"
+          },
+          {
+            "data": {
+              "message": "ApproxSize ().",
+              "status": "success",
+              "result": "3"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.353Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/push/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:51.354Z"
+          }
+        ]
+      }
+    },
+    "set_consumer.test.w": {
+      "setConsumer": {
+        "path": "root/env0/test:setConsumer",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Push (messages=hello,world).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.322Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:00:51.332Z"
+          },
+          {
+            "type": "resource",
+            "data": {
+              "message": "Sending messages (messages=[\"hello\"], subscriber=sim-4)."
+            },
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.361Z"
+          },
+          {
+            "type": "resource",
+            "data": {
+              "message": "Sending messages (messages=[\"world\"], subscriber=sim-4)."
+            },
+            "sourcePath": "root/env0/cloud.Queue",
+            "sourceType": "@winglang/sdk.cloud.Queue",
+            "timestamp": "2024-01-24T15:00:51.361Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:00:51.400Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:00:51.400Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"{\\\"messages\\\":[\\\"hello\\\"]}\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue/SetConsumer0",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:51.403Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"{\\\"messages\\\":[\\\"world\\\"]}\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Queue/SetConsumer0",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:51.404Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=2).",
+              "status": "success",
+              "result": "2"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:00:52.338Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:setConsumer/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:52.339Z"
+          }
+        ]
+      }
+    }
+  }
+}

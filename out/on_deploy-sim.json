@@ -1,0 +1,37 @@
+{
+  "duration": 3547,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "execute_after.test.w": {
+      "counter": {
+        "path": "root/env0/test:counter",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=11).",
+              "status": "success",
+              "result": "11"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:09.354Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:counter/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:09.357Z"
+          }
+        ]
+      }
+    }
+  }
+}

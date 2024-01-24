@@ -1,0 +1,634 @@
+{
+  "duration": 17853,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "hypot.test.w": {
+      "inflight hypot": {
+        "path": "root/env0/test:inflight hypot",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight hypot/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.608Z"
+          }
+        ]
+      }
+    },
+    "acos.test.w": {
+      "inflight arc cosine": {
+        "path": "root/env0/test:inflight arc cosine",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc cosine/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.619Z"
+          }
+        ]
+      }
+    },
+    "acsc.test.w": {
+      "inflight arc cosecant": {
+        "path": "root/env0/test:inflight arc cosecant",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc cosecant/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.630Z"
+          }
+        ]
+      }
+    },
+    "acot.test.w": {
+      "inflight arc cotgent": {
+        "path": "root/env0/test:inflight arc cotgent",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc cotgent/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.641Z"
+          }
+        ]
+      }
+    },
+    "asin.test.w": {
+      "inflight arc sine": {
+        "path": "root/env0/test:inflight arc sine",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc sine/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.652Z"
+          }
+        ]
+      }
+    },
+    "angular_conversion.test.w": {
+      "inflight angular conversions": {
+        "path": "root/env0/test:inflight angular conversions",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight angular conversions/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.957Z"
+          }
+        ]
+      }
+    },
+    "cot.test.w": {
+      "inflight cotangent": {
+        "path": "root/env0/test:inflight cotangent",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight cotangent/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.968Z"
+          }
+        ]
+      }
+    },
+    "atan.test.w": {
+      "inflight arc tangent": {
+        "path": "root/env0/test:inflight arc tangent",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc tangent/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:02.979Z"
+          }
+        ]
+      }
+    },
+    "combinations.test.w": {
+      "inflight combinations": {
+        "path": "root/env0/test:inflight combinations",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight combinations/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.031Z"
+          }
+        ]
+      }
+    },
+    "asec.test.w": {
+      "inflight arc cosecant": {
+        "path": "root/env0/test:inflight arc cosecant",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc cosecant/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.042Z"
+          }
+        ]
+      }
+    },
+    "cos.test.w": {
+      "inflight cosine": {
+        "path": "root/env0/test:inflight cosine",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight cosine/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.053Z"
+          }
+        ]
+      }
+    },
+    "csc.test.w": {
+      "inflight cosecant": {
+        "path": "root/env0/test:inflight cosecant",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight cosecant/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.064Z"
+          }
+        ]
+      }
+    },
+    "fibonacci.test.w": {
+      "inflight fibonacci": {
+        "path": "root/env0/test:inflight fibonacci",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight fibonacci/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.087Z"
+          }
+        ]
+      }
+    },
+    "atan2.test.w": {
+      "inflight arc tangent 2": {
+        "path": "root/env0/test:inflight arc tangent 2",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight arc tangent 2/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.098Z"
+          }
+        ]
+      }
+    },
+    "floor_ceil_round.test.w": {
+      "inflight floor--ceil--round": {
+        "path": "root/env0/test:inflight floor--ceil--round",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight floor--ceil--round/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.110Z"
+          }
+        ]
+      }
+    },
+    "abs.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.120Z"
+          }
+        ]
+      }
+    },
+    "sin.test.w": {
+      "inflight sine": {
+        "path": "root/env0/test:inflight sine",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight sine/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.131Z"
+          }
+        ]
+      }
+    },
+    "factorial.test.w": {
+      "inflight factorial": {
+        "path": "root/env0/test:inflight factorial",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight factorial/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.142Z"
+          }
+        ]
+      }
+    },
+    "pi.test.w": {
+      "PI": {
+        "path": "root/env0/test:PI",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:PI/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.153Z"
+          }
+        ]
+      }
+    },
+    "random.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.163Z"
+          }
+        ]
+      }
+    },
+    "euler.test.w": {
+      "EULER": {
+        "path": "root/env0/test:EULER",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:EULER/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.174Z"
+          }
+        ]
+      }
+    },
+    "min_max.test.w": {
+      "inflight min--max": {
+        "path": "root/env0/test:inflight min--max",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight min--max/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.185Z"
+          }
+        ]
+      }
+    },
+    "log.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.196Z"
+          }
+        ]
+      }
+    },
+    "sign.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.207Z"
+          }
+        ]
+      }
+    },
+    "log2.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.218Z"
+          }
+        ]
+      }
+    },
+    "log10.test.w": {
+      "inflight absolute": {
+        "path": "root/env0/test:inflight absolute",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight absolute/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.228Z"
+          }
+        ]
+      }
+    },
+    "tau.test.w": {
+      "TAU": {
+        "path": "root/env0/test:TAU",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:TAU/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.239Z"
+          }
+        ]
+      }
+    },
+    "sqrt.test.w": {
+      "inflight square root": {
+        "path": "root/env0/test:inflight square root",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight square root/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.250Z"
+          }
+        ]
+      }
+    },
+    "toradix.test.w": {
+      "inflight base": {
+        "path": "root/env0/test:inflight base",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight base/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.261Z"
+          }
+        ]
+      }
+    },
+    "sec.test.w": {
+      "inflight secant": {
+        "path": "root/env0/test:inflight secant",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight secant/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.272Z"
+          }
+        ]
+      }
+    },
+    "prime.test.w": {
+      "inflight prime numbers": {
+        "path": "root/env0/test:inflight prime numbers",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight prime numbers/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.283Z"
+          }
+        ]
+      }
+    },
+    "tan.test.w": {
+      "inflight tangent": {
+        "path": "root/env0/test:inflight tangent",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight tangent/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.293Z"
+          }
+        ]
+      }
+    },
+    "median_mode_mean.test.w": {
+      "inflight median": {
+        "path": "root/env0/test:inflight median",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight median/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.353Z"
+          }
+        ]
+      },
+      "inflight mode": {
+        "path": "root/env1/test:inflight mode",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:inflight mode/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.366Z"
+          }
+        ]
+      },
+      "inflight mean": {
+        "path": "root/env2/test:inflight mean",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:inflight mean/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:03.378Z"
+          }
+        ]
+      }
+    }
+  }
+}

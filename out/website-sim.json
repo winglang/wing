@@ -1,0 +1,114 @@
+{
+  "duration": 4355,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "aws-react-app.test.w": {
+      "validates the AWS bucket name": {
+        "path": "root/env0/test:validates the AWS bucket name",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:validates the AWS bucket name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:09.881Z"
+          }
+        ]
+      }
+    },
+    "aws-website.test.w": {
+      "validates the AWS bucket name": {
+        "path": "root/env0/test:validates the AWS bucket name",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:validates the AWS bucket name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:09.884Z"
+          }
+        ]
+      }
+    },
+    "two_websites.test.w": {
+      "deploying two websites": {
+        "path": "root/env0/test:deploying two websites",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:deploying two websites/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:10.214Z"
+          }
+        ]
+      }
+    },
+    "react-app.test.w": {
+      "website is working": {
+        "path": "root/env0/test:website is working",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:website is working/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:10.259Z"
+          }
+        ]
+      }
+    },
+    "website.test.w": {
+      "access files on the website": {
+        "path": "root/env0/test:access files on the website",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:access files on the website/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:10.239Z"
+          }
+        ]
+      },
+      "page not found": {
+        "path": "root/env1/test:page not found",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:page not found/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:10.267Z"
+          }
+        ]
+      }
+    }
+  }
+}

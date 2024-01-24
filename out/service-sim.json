@@ -1,0 +1,423 @@
+{
+  "duration": 18171,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "minimal.test.w": {
+      "start and stop": {
+        "path": "root/env0/test:start and stop",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "stopping!"
+            },
+            "type": "log",
+            "sourcePath": "root/env0/cloud.Service",
+            "sourceType": "@winglang/sdk.cloud.Service",
+            "timestamp": "2024-01-24T15:01:36.731Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:start and stop/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:36.796Z"
+          }
+        ]
+      }
+    },
+    "tokens.test.w": {
+      "will bind and use tokens": {
+        "path": "root/env0/test:will bind and use tokens",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Exists (key=service.txt).",
+              "status": "success",
+              "result": "true"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.692Z"
+          },
+          {
+            "data": {
+              "message": "Get (key=service.txt).",
+              "status": "success",
+              "result": "\"api test\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.819Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:will bind and use tokens/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:40.821Z"
+          }
+        ]
+      }
+    },
+    "stateful.test.w": {
+      "service is ready only after onStart finishes": {
+        "path": "root/env0/test:service is ready only after onStart finishes",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Get (key=ready).",
+              "status": "success",
+              "result": "\"true\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/MyService/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.853Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:service is ready only after onStart finishes/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:40.887Z"
+          }
+        ]
+      }
+    },
+    "callbacks.test.w": {
+      "does not start automatically if autoStart is false": {
+        "path": "root/env0/test:does not start automatically if autoStart is false",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Exists (key=status).",
+              "status": "success",
+              "result": "false"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.810Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:does not start automatically if autoStart is false/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:40.814Z"
+          }
+        ]
+      },
+      "start() calls onStart() idempotently": {
+        "path": "root/env1/test:start() calls onStart() idempotently",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Put (key=status).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.914Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:40.959Z"
+          },
+          {
+            "data": {
+              "message": "Exists (key=status).",
+              "status": "success",
+              "result": "true"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.965Z"
+          },
+          {
+            "data": {
+              "message": "Get (key=status).",
+              "status": "success",
+              "result": "\"started\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.970Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:40.976Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.022Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:start() calls onStart() idempotently/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:41.023Z"
+          }
+        ]
+      },
+      "stop() calls onStop()": {
+        "path": "root/env2/test:stop() calls onStop()",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.070Z"
+          },
+          {
+            "data": {
+              "message": "Exists (key=status).",
+              "status": "success",
+              "result": "false"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:41.083Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.086Z"
+          },
+          {
+            "data": {
+              "message": "Put (key=status).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:41.135Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.140Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.143Z"
+          },
+          {
+            "data": {
+              "message": "Put (key=status).",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:41.147Z"
+          },
+          {
+            "data": {
+              "message": "Dec (amount=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.149Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:41.152Z"
+          },
+          {
+            "data": {
+              "message": "Get (key=status).",
+              "status": "success",
+              "result": "\"stopped\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:41.154Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:stop() calls onStop()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:41.155Z"
+          }
+        ]
+      }
+    },
+    "http-server.test.w": {
+      "http server is started with the service": {
+        "path": "root/env0/test:http server is started with the service",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Get (key=port).",
+              "status": "success",
+              "result": "\"37449\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/MyService/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:40.964Z"
+          },
+          {
+            "data": {
+              "message": "bang bang!"
+            },
+            "type": "log",
+            "sourcePath": "root/env0/test:http server is started with the service/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:40.971Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:http server is started with the service/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:40.972Z"
+          }
+        ]
+      },
+      "service.stop() closes the http server": {
+        "path": "root/env1/test:service.stop() closes the http server",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Get (key=port).",
+              "status": "success",
+              "result": "\"35249\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/MyService/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:41.069Z"
+          },
+          {
+            "data": {
+              "message": "closing server..."
+            },
+            "type": "log",
+            "sourcePath": "root/env1/MyService/cloud.Service",
+            "sourceType": "@winglang/sdk.cloud.Service",
+            "timestamp": "2024-01-24T15:01:41.085Z"
+          },
+          {
+            "data": {
+              "message": "Get (key=port).",
+              "status": "success",
+              "result": "\"35249\""
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/MyService/cloud.Bucket",
+            "sourceType": "@winglang/sdk.cloud.Bucket",
+            "timestamp": "2024-01-24T15:01:45.975Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:service.stop() closes the http server/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:45.977Z"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "duration": 3029,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "section.test.w": {
+      "": {
+        "pass": true,
+        "path": "",
+        "traces": []
+      }
+    }
+  }
+}

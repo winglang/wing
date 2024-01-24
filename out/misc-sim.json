@@ -1,0 +1,26 @@
+{
+  "duration": 3092,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "empty-actions.test.w": {
+      "main": {
+        "path": "root/env0/test:main",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:main/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:00:43.152Z"
+          }
+        ]
+      }
+    }
+  }
+}

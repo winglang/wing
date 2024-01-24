@@ -1,0 +1,553 @@
+{
+  "duration": 22902,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "env.test.w": {
+      "use util from inflight": {
+        "path": "root/env0/test:use util from inflight",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:use util from inflight/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:10.165Z"
+          }
+        ]
+      }
+    },
+    "sha256.test.w": {
+      "inflight sha256": {
+        "path": "root/env0/test:inflight sha256",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight sha256/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.275Z"
+          }
+        ]
+      }
+    },
+    "nanoid.test.w": {
+      "inflight nanoid": {
+        "path": "root/env0/test:inflight nanoid",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight nanoid/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.292Z"
+          }
+        ]
+      }
+    },
+    "uuidv4.test.w": {
+      "inflight uuidv4": {
+        "path": "root/env0/test:inflight uuidv4",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight uuidv4/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.307Z"
+          }
+        ]
+      }
+    },
+    "base64.test.w": {
+      "inflight base64": {
+        "path": "root/env0/test:inflight base64",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight base64/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.334Z"
+          }
+        ]
+      }
+    },
+    "sleep.test.w": {
+      "sleep 100 mili seconds": {
+        "path": "root/env0/test:sleep 100 mili seconds",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:sleep 100 mili seconds/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.666Z"
+          }
+        ]
+      }
+    },
+    "exec.test.w": {
+      "exec() with valid program": {
+        "path": "root/env0/test:exec() with valid program",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:exec() with valid program/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:14.492Z"
+          }
+        ]
+      },
+      "exec() with invalid program": {
+        "path": "root/env1/test:exec() with invalid program",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:exec() with invalid program/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:15.390Z"
+          }
+        ]
+      },
+      "exec() with explicit non-zero exit status": {
+        "path": "root/env2/test:exec() with explicit non-zero exit status",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:exec() with explicit non-zero exit status/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.188Z"
+          }
+        ]
+      },
+      "exec() with env option": {
+        "path": "root/env3/test:exec() with env option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/test:exec() with env option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.280Z"
+          }
+        ]
+      },
+      "exec() with inheritEnv option": {
+        "path": "root/env4/test:exec() with inheritEnv option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/test:exec() with inheritEnv option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.360Z"
+          }
+        ]
+      },
+      "exec() with cwd option": {
+        "path": "root/env5/test:exec() with cwd option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env5/test:exec() with cwd option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.446Z"
+          }
+        ]
+      }
+    },
+    "shell.test.w": {
+      "shell() with valid command": {
+        "path": "root/env0/test:shell() with valid command",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:shell() with valid command/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:14.496Z"
+          }
+        ]
+      },
+      "shell() with invalid command": {
+        "path": "root/env1/test:shell() with invalid command",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:shell() with invalid command/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:15.450Z"
+          }
+        ]
+      },
+      "shell() with explicit non-zero exit status": {
+        "path": "root/env2/test:shell() with explicit non-zero exit status",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:shell() with explicit non-zero exit status/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.224Z"
+          }
+        ]
+      },
+      "shell() with env option": {
+        "path": "root/env3/test:shell() with env option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/test:shell() with env option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.282Z"
+          }
+        ]
+      },
+      "shell() with inheritEnv option": {
+        "path": "root/env4/test:shell() with inheritEnv option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/test:shell() with inheritEnv option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.362Z"
+          }
+        ]
+      },
+      "shell() with cwd option": {
+        "path": "root/env5/test:shell() with cwd option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env5/test:shell() with cwd option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.460Z"
+          }
+        ]
+      },
+      "shell() with throw option": {
+        "path": "root/env6/test:shell() with throw option",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env6/test:shell() with throw option/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.499Z"
+          }
+        ]
+      }
+    },
+    "wait-until.test.w": {
+      "returns true immediately": {
+        "path": "root/env0/test:returns true immediately",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:returns true immediately/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:16.414Z"
+          }
+        ]
+      },
+      "returns false goes to timeout": {
+        "path": "root/env1/test:returns false goes to timeout",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:returns false goes to timeout/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:17.578Z"
+          }
+        ]
+      },
+      "returns after some time waiting": {
+        "path": "root/env2/test:returns after some time waiting",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:17.623Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:18.629Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "2"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:19.633Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "3"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:20.636Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=4).",
+              "status": "success",
+              "result": "4"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:20.638Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:returns after some time waiting/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:20.639Z"
+          }
+        ]
+      },
+      "setting props": {
+        "path": "root/env3/test:setting props",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:20.681Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:21.685Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "2"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:22.689Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "3"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:23.692Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "4"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:24.695Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=5).",
+              "status": "success",
+              "result": "5"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:25.698Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/test:setting props/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:25.699Z"
+          }
+        ]
+      },
+      "throwing exception from predicate should throw immediately": {
+        "path": "root/env4/test:throwing exception from predicate should throw immediately",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:25.741Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:25.745Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/test:throwing exception from predicate should throw immediately/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:25.746Z"
+          }
+        ]
+      }
+    }
+  }
+}

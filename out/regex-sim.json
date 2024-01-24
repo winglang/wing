@@ -1,0 +1,26 @@
+{
+  "duration": 2326,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "match.test.w": {
+      "inflight match": {
+        "path": "root/env0/test:inflight match",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:inflight match/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:03.641Z"
+          }
+        ]
+      }
+    }
+  }
+}

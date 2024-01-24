@@ -1,0 +1,154 @@
+{
+  "duration": 4828,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "assert.test.w": {
+      "equal num": {
+        "path": "root/env0/test:equal num",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:equal num/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.593Z"
+          }
+        ]
+      },
+      "equal str": {
+        "path": "root/env1/test:equal str",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env1/test:equal str/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.613Z"
+          }
+        ]
+      },
+      "equal bool": {
+        "path": "root/env2/test:equal bool",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env2/test:equal bool/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.634Z"
+          }
+        ]
+      },
+      "equal array of strings": {
+        "path": "root/env3/test:equal array of strings",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env3/test:equal array of strings/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.655Z"
+          }
+        ]
+      },
+      "equal array of numbers": {
+        "path": "root/env4/test:equal array of numbers",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env4/test:equal array of numbers/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.672Z"
+          }
+        ]
+      },
+      "equal objects": {
+        "path": "root/env5/test:equal objects",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env5/test:equal objects/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.685Z"
+          }
+        ]
+      },
+      "equal maps": {
+        "path": "root/env6/test:equal maps",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env6/test:equal maps/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.698Z"
+          }
+        ]
+      },
+      "equal sets": {
+        "path": "root/env7/test:equal sets",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env7/test:equal sets/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.712Z"
+          }
+        ]
+      },
+      "equal durations": {
+        "path": "root/env8/test:equal durations",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env8/test:equal durations/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:47.725Z"
+          }
+        ]
+      }
+    }
+  }
+}

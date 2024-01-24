@@ -1,0 +1,384 @@
+{
+  "duration": 5928,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "aws-table.test.w": {
+      "validates the AWS topic name": {
+        "path": "root/env0/test:validates the AWS topic name",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:validates the AWS topic name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:24.998Z"
+          }
+        ]
+      }
+    },
+    "try_get.test.w": {
+      "tryGet": {
+        "path": "root/env0/test:tryGet",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "insert row foo into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.132Z"
+          },
+          {
+            "data": {
+              "message": "get row foo from table users.",
+              "status": "success",
+              "result": "{\"name\":\"foo\",\"gender\":\"male\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.153Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:tryGet/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:25.167Z"
+          }
+        ]
+      }
+    },
+    "list.test.w": {
+      "list": {
+        "path": "root/env0/test:list",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "insert row eyal into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.132Z"
+          },
+          {
+            "data": {
+              "message": "insert row revital into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.153Z"
+          },
+          {
+            "data": {
+              "message": "list all rows from table users.",
+              "status": "success",
+              "result": "[{\"name\":\"eyal\",\"gender\":\"male\"},{\"name\":\"revital\",\"gender\":\"female\"}]"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.164Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:list/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:25.170Z"
+          }
+        ]
+      }
+    },
+    "add_row.test.w": {
+      "addRow": {
+        "path": "root/env0/test:addRow",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "get row mario from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"male\",\"role\":\"plumber\",\"name\":\"mario\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:24.974Z"
+          },
+          {
+            "data": {
+              "message": "get row mario from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"male\",\"role\":\"plumber\",\"name\":\"mario\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.118Z"
+          },
+          {
+            "data": {
+              "message": "get row mario from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"male\",\"role\":\"plumber\",\"name\":\"mario\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.148Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"female\",\"role\":\"princess\",\"name\":\"peach\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.160Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"female\",\"role\":\"princess\",\"name\":\"peach\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.172Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"gender\":\"female\",\"role\":\"princess\",\"name\":\"peach\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.188Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:addRow/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:25.189Z"
+          }
+        ]
+      }
+    },
+    "get.test.w": {
+      "get": {
+        "path": "root/env0/test:get",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "insert row foo into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.132Z"
+          },
+          {
+            "data": {
+              "message": "get row foo from table users.",
+              "status": "success",
+              "result": "{\"name\":\"foo\",\"gender\":\"male\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.153Z"
+          },
+          {
+            "data": {
+              "message": "get row bar from table users.",
+              "status": "failure",
+              "error": {}
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.164Z"
+          },
+          {
+            "data": {
+              "message": "get row foo from table users.",
+              "status": "success",
+              "result": "{\"name\":\"foo\",\"gender\":\"male\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.184Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:get/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:25.197Z"
+          }
+        ]
+      }
+    },
+    "upsert.test.w": {
+      "upsert": {
+        "path": "root/env0/test:upsert",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "upsert row mario into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.131Z"
+          },
+          {
+            "data": {
+              "message": "upsert row luigi into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.152Z"
+          },
+          {
+            "data": {
+              "message": "upsert row peach into the table users.",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.164Z"
+          },
+          {
+            "data": {
+              "message": "get row mario from table users.",
+              "status": "success",
+              "result": "{\"name\":\"mario\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.184Z"
+          },
+          {
+            "data": {
+              "message": "get row mario from table users.",
+              "status": "success",
+              "result": "{\"name\":\"mario\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.192Z"
+          },
+          {
+            "data": {
+              "message": "get row luigi from table users.",
+              "status": "success",
+              "result": "{\"name\":\"luigi\",\"role\":\"ghostbuster\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.203Z"
+          },
+          {
+            "data": {
+              "message": "get row luigi from table users.",
+              "status": "success",
+              "result": "{\"name\":\"luigi\",\"role\":\"ghostbuster\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.206Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"name\":\"peach\",\"gender\":\"female\",\"role\":\"princess\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.208Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"name\":\"peach\",\"gender\":\"female\",\"role\":\"princess\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.210Z"
+          },
+          {
+            "data": {
+              "message": "get row peach from table users.",
+              "status": "success",
+              "result": "{\"name\":\"peach\",\"gender\":\"female\",\"role\":\"princess\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/ex.Table",
+            "sourceType": "@winglang/sdk.ex.Table",
+            "timestamp": "2024-01-24T15:01:25.212Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:upsert/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:01:25.213Z"
+          }
+        ]
+      }
+    }
+  }
+}

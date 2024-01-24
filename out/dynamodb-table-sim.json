@@ -1,0 +1,80 @@
+{
+  "duration": 21837,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "aws-dynamodb.test.w": {
+      "validates the AWS DynamodbTable": {
+        "path": "root/env0/test:validates the AWS DynamodbTable",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:validates the AWS DynamodbTable/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:55.148Z"
+          }
+        ]
+      }
+    },
+    "query.test.w": {
+      "query": {
+        "path": "root/env0/test:query",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:query/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:55.871Z"
+          }
+        ]
+      }
+    },
+    "transaction.test.w": {
+      "transactWriteItems": {
+        "path": "root/env0/test:transactWriteItems",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:transactWriteItems/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:56.207Z"
+          }
+        ]
+      }
+    },
+    "global-secondary-index.test.w": {
+      "Global secondary index": {
+        "path": "root/env0/test:Global secondary index",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:Global secondary index/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:57.427Z"
+          }
+        ]
+      }
+    }
+  }
+}

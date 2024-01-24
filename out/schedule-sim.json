@@ -1,0 +1,137 @@
+{
+  "duration": 69991,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "init.test.w": {
+      "": {
+        "pass": true,
+        "path": "",
+        "traces": []
+      }
+    },
+    "on_tick.test.w": {
+      "root/env0/on tick is called both for rate and cron schedules": {
+        "path": "root/env0/on tick is called both for rate and cron schedules",
+        "pass": true,
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:07.320Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:01:07.326Z"
+          },
+          {
+            "type": "resource",
+            "data": {
+              "message": "Running task with function handle: sim-4."
+            },
+            "sourcePath": "root/env0/from_cron",
+            "sourceType": "@winglang/sdk.cloud.Schedule",
+            "timestamp": "2024-01-24T15:02:00.001Z"
+          },
+          {
+            "type": "resource",
+            "data": {
+              "message": "Running task with function handle: sim-7."
+            },
+            "sourcePath": "root/env0/from_rate",
+            "sourceType": "@winglang/sdk.cloud.Schedule",
+            "timestamp": "2024-01-24T15:02:00.034Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:00.070Z"
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "status": "success",
+              "result": "0"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:00.070Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/from_cron/OnTick0",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:00.074Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/from_rate/OnTick0",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:00.077Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:13.332Z"
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "status": "success",
+              "result": "1"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/c2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "2024-01-24T15:02:13.335Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/on tick is called both for rate and cron schedules/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T15:02:13.336Z"
+          }
+        ]
+      }
+    }
+  }
+}

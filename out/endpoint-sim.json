@@ -1,0 +1,55 @@
+{
+  "duration": 2220,
+  "platforms": [
+    "sim"
+  ],
+  "results": {
+    "url.test.w": {
+      "access endpoint url": {
+        "path": "root/env0/test:access endpoint url",
+        "pass": true,
+        "traces": [
+          {
+            "type": "resource",
+            "data": {
+              "message": "Processing \"GET /\" params={})."
+            },
+            "sourcePath": "root/env0/cloud.Api",
+            "sourceType": "@winglang/sdk.cloud.Api",
+            "timestamp": "2024-01-24T14:59:34.575Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload={\"headers\":{\"host\":\"127.0.0.1:39499\",\"connection\":\"keep-alive\",\"accept\":\"*/*\",\"accept-language\":\"*\",\"sec-fetch-mode\":\"cors\",\"user-agent\":\"undici\",\"accept-encoding\":\"gzip, deflate\"},\"body\":\"\",\"method\":\"GET\",\"path\":\"/\",\"query\":{},\"vars\":{}}).",
+              "status": "success",
+              "result": "{\"status\":200,\"body\":\"OK\"}"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/cloud.Api/OnRequestHandler0",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:34.577Z"
+          },
+          {
+            "type": "resource",
+            "data": {
+              "message": "GET / - 200."
+            },
+            "sourcePath": "root/env0/cloud.Api",
+            "sourceType": "@winglang/sdk.cloud.Api",
+            "timestamp": "2024-01-24T14:59:34.579Z"
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=\"\").",
+              "status": "success"
+            },
+            "type": "resource",
+            "sourcePath": "root/env0/test:access endpoint url/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "2024-01-24T14:59:34.585Z"
+          }
+        ]
+      }
+    }
+  }
+}
