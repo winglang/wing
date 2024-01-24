@@ -36,6 +36,7 @@ export interface CreateConsoleAppOptions {
   expressApp?: express.Express;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
   requireAcceptTerms?: boolean;
+  requireSignIn?: boolean;
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
@@ -62,6 +63,10 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
     ...options,
     analyticsAnonymousId: analyticsStorage.getAnonymousId(),
     async requireSignIn() {
+      if (options.requireSignIn === false) {
+        return false;
+      }
+
       // The VSCode extension for Wing will use this to determine whether to show the sign in prompt.
       const noSignIn = process.env.NO_SIGN_IN === "true";
       if (noSignIn) {
