@@ -49,14 +49,13 @@ const args = parseArgs({
 });
 
 const changes = getChangedFiles(args.values.startRef, args.values.endRef);
-// console.log(changes.absoluteChanges);
+console.log(changes.absoluteChanges);
 
 const turboOutput = getTurboTaskData();
-// console.log(turboOutput)
 
 const taskData = getChanges(turboOutput, changes);
 
-// console.log(taskData);
+console.log(taskData);
 if (process.env.GITHUB_ACTIONS) {
   setOutput("data", taskData);
 }

@@ -68,8 +68,6 @@ export function getTurboTaskData(): TurboOutput {
   ];
 
   const turboOutput = JSON.parse(betterExec(turboArgs.join(" ")));
-  console.log(Object.keys(turboOutput))
-  console.log(turboOutput["monorepo"])
 
   return {
     absoluteRoot: rootDir,
