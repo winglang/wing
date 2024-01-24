@@ -46,6 +46,5 @@ jobs:
         with:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): competability matrix update"
-          base: main
           branch: "auto/updating-matrix/${{ github.ref }}"
           draft: true # remove it soon!
