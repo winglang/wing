@@ -44,5 +44,8 @@ jobs:
       - name: Create a PR
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: "chore(docs): competability matrix update"
+          base: main
+          branch: "auto/updating-matrix/${{ github.ref }}"
           draft: true # remove it soon!
