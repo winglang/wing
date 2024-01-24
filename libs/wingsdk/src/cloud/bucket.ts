@@ -5,6 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
@@ -33,6 +34,8 @@ export interface BucketProps {
 export class Bucket extends Resource {
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IBucketClient;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {

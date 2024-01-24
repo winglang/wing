@@ -33,10 +33,12 @@ test "single instance of Foo" {
   let y = fn.invoke("");
   let z = fn2.invoke("");
 
+  expect.equal(x, "100");
+  expect.equal(z, "100-fn2"); // fn2 should have a separate instance
+
   // the simulator intentionally reuses the sandbox across invocations
   // but we can't trust that this will always happen on the cloud
   if sim {
-    expect.equal(x, "100");
     expect.equal(y, "101");
     expect.equal(z, "100-fn2"); // fn2 should have a separate instance
     log("client has been reused");

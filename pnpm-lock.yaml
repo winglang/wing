@@ -1108,6 +1108,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
+      '@winglibs/testfixture':
+        specifier: workspace:^
+        version: link:../wing-fixture
       ts4w:
         specifier: workspace:^
         version: link:../../libs/ts4w
@@ -1115,7 +1118,14 @@ importers:
         specifier: workspace:^
         version: link:../../apps/wing
 
-  examples/wing-fixture: {}
+  examples/wing-fixture:
+    devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../libs/wingsdk
+      winglang:
+        specifier: workspace:^
+        version: link:../../apps/wing
 
   libs/awscdk:
     dependencies:
@@ -1182,9 +1192,6 @@ importers:
 
   libs/ts4w:
     dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
       constructs:
         specifier: ~10.2.69
         version: 10.2.70
@@ -1195,12 +1202,18 @@ importers:
       '@types/node':
         specifier: ^18.17.13
         version: 18.18.4
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^8.0.1
         version: 8.0.1(typescript@5.3.3)
+      vitest:
+        specifier: ^0.32.4
+        version: 0.32.4
 
   libs/wingc:
     devDependencies:
@@ -1607,9 +1620,6 @@ importers:
       octokit:
         specifier: ^3.1.0
         version: 3.1.1
-      ts4w:
-        specifier: workspace:^
-        version: link:../../libs/ts4w
       tsx:
         specifier: ^3.12.8
         version: 3.13.0
@@ -15489,7 +15499,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240122
+      typescript: 5.4.0-dev.20240123
     dev: true
 
   /dset@3.1.2:
@@ -20380,6 +20390,7 @@ packages:
 
   /loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
+    deprecated: Please upgrade to 2.3.7 which fixes GHSA-4q6p-r6v2-jvc5
     dependencies:
       get-func-name: 2.0.2
     dev: true
@@ -25361,8 +25372,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240122:
-    resolution: {integrity: sha512-AlqDACgFZ2OGGSqJcWcQQOkbiznU+fXn2vhdcZttnOe5qr1E1oXf1lcHXEz3wTmEouLQwN6fVp2/76/JOsf9rQ==}
+  /typescript@5.4.0-dev.20240123:
+    resolution: {integrity: sha512-CXf3I7gkmbVHhSuQdZn+/Xe+k3yBtYR8BwrYLOT44eUKuWH9lEuOzcR4zQcJP54dxekMIQPXxvCX3/VIG8zSKA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

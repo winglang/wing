@@ -1,6 +1,11 @@
 import { getTokenResolver } from "./tokens";
-import { Datetime, Duration, JsonSchema } from "../std";
-import { IInflightHost, ILiftable } from "../std/resource";
+import {
+  Datetime,
+  Duration,
+  JsonSchema,
+  IInflightHost,
+  ILiftable,
+} from "../std";
 
 /**
  * Creates a liftable type from a class or enum
@@ -118,6 +123,14 @@ export function onLiftObject(
       return;
 
     case "object":
+      // if the object is a resource, register a lifting between it and the host.
+      if (typeof obj.onLift === "function") {
+        // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
+        // the host can instantiate a client for this resource.
+        obj.onLift(host, [...ops, "$inflight_init"]);
+        return;
+      }
+
       if (Array.isArray(obj)) {
         obj.forEach((item) => onLiftObject(item, host));
         return;
@@ -143,14 +156,6 @@ export function onLiftObject(
       // structs are just plain objects
       if (obj.constructor.name === "Object") {
         Object.values(obj).forEach((item) => onLiftObject(item, host, ops));
-        return;
-      }
-
-      // if the object is a resource, register a lifting between it and the host.
-      if (typeof obj.onLift === "function") {
-        // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
-        // the host can instantiate a client for this resource.
-        obj.onLift(host, [...ops, "$inflight_init"]);
         return;
       }
 
