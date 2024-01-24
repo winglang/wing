@@ -36,9 +36,7 @@ export const Modal = ({
           leaveTo="opacity-0"
         >
           <div
-            className={classNames(
-              "fixed inset-0 transition-all backdrop-blur-sm",
-            )}
+            className={classNames("fixed inset-0 transition-all backdrop-blur")}
           />
         </Transition.Child>
 
