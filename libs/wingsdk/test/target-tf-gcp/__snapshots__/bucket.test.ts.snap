@@ -3,8 +3,18 @@
 exports[`bucket is public 1`] = `
 {
   "resource": {
+    "google_project_service": {
+      "my_bucket_IamServiceAccountCredentialsApi_0618BD85": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_storage_bucket": {
       "my_bucket": {
+        "depends_on": [
+          "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
@@ -53,6 +63,14 @@ exports[`bucket is public 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket/IamServiceAccountCredentialsApi",
                   },
                   "Id": {
                     "constructInfo": {
@@ -129,8 +147,18 @@ exports[`bucket is public 2`] = `
 exports[`bucket with two preflight files 1`] = `
 {
   "resource": {
+    "google_project_service": {
+      "my_bucket_IamServiceAccountCredentialsApi_0618BD85": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_storage_bucket": {
       "my_bucket": {
+        "depends_on": [
+          "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
@@ -184,6 +212,14 @@ exports[`bucket with two preflight files 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket/IamServiceAccountCredentialsApi",
                   },
                   "Id": {
                     "constructInfo": {
@@ -268,8 +304,18 @@ exports[`bucket with two preflight files 2`] = `
 exports[`bucket with two preflight objects 1`] = `
 {
   "resource": {
+    "google_project_service": {
+      "my_bucket_IamServiceAccountCredentialsApi_0618BD85": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_storage_bucket": {
       "my_bucket": {
+        "depends_on": [
+          "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
@@ -323,6 +369,14 @@ exports[`bucket with two preflight objects 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket/IamServiceAccountCredentialsApi",
                   },
                   "Id": {
                     "constructInfo": {
@@ -407,8 +461,18 @@ exports[`bucket with two preflight objects 2`] = `
 exports[`create a bucket 1`] = `
 {
   "resource": {
+    "google_project_service": {
+      "my_bucket_IamServiceAccountCredentialsApi_0618BD85": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_storage_bucket": {
       "my_bucket": {
+        "depends_on": [
+          "google_project_service.my_bucket_IamServiceAccountCredentialsApi_0618BD85",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket-\${random_id.my_bucket_Id_50F73A6B.hex}",
@@ -450,6 +514,14 @@ exports[`create a bucket 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket/IamServiceAccountCredentialsApi",
                   },
                   "Id": {
                     "constructInfo": {
@@ -518,8 +590,23 @@ exports[`create a bucket 2`] = `
 exports[`two buckets 1`] = `
 {
   "resource": {
+    "google_project_service": {
+      "my_bucket1_IamServiceAccountCredentialsApi_5EA21318": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+      "my_bucket2_IamServiceAccountCredentialsApi_4C3E6B90": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_storage_bucket": {
       "my_bucket1": {
+        "depends_on": [
+          "google_project_service.my_bucket1_IamServiceAccountCredentialsApi_5EA21318",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket1-\${random_id.my_bucket1_Id_D79FE240.hex}",
@@ -527,6 +614,9 @@ exports[`two buckets 1`] = `
         "uniform_bucket_level_access": true,
       },
       "my_bucket2": {
+        "depends_on": [
+          "google_project_service.my_bucket2_IamServiceAccountCredentialsApi_4C3E6B90",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "my_bucket2-\${random_id.my_bucket2_Id_0AB96F49.hex}",
@@ -572,6 +662,14 @@ exports[`two buckets 2`] = `
                     "id": "Default",
                     "path": "root/Default/my_bucket1/Default",
                   },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket1/IamServiceAccountCredentialsApi",
+                  },
                   "Id": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -601,6 +699,14 @@ exports[`two buckets 2`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket2/Default",
+                  },
+                  "IamServiceAccountCredentialsApi": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "IamServiceAccountCredentialsApi",
+                    "path": "root/Default/my_bucket2/IamServiceAccountCredentialsApi",
                   },
                   "Id": {
                     "constructInfo": {

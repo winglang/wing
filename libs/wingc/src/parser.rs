@@ -1415,6 +1415,7 @@ impl<'s> Parser<'s> {
 			phase: class_phase,
 			inflight_initializer,
 			access,
+			auto_id: false,
 		}))
 	}
 

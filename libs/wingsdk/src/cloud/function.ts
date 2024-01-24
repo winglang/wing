@@ -3,6 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -48,6 +49,8 @@ export interface FunctionProps {
  * @abstract
  */
 export class Function extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
   private readonly handler!: IFunctionHandler;
 
@@ -115,10 +118,13 @@ export class Function extends Resource implements IInflightHost {
   protected _getCodeLines(handler: IFunctionHandler): string[] {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
+    const client = "$handler";
 
     lines.push('"use strict";');
+    lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(`  return await ${client}.handle(event);`);
     lines.push("};");
 
     return lines;
@@ -167,7 +173,10 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IInflight {}
+export interface IFunctionHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFunctionHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IFunctionHandler`.
