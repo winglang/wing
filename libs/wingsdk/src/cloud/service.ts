@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -38,8 +39,11 @@ export interface ServiceProps {
  * @abstract
  */
 export class Service extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IServiceClient;
+
   /**
-   * The entrypoint of the service.
+   * The path where the entrypoint of the service source code will be eventually written to.
    */
   protected readonly entrypoint!: string;
 
@@ -65,7 +69,29 @@ export class Service extends Resource implements IInflightHost {
     Node.of(this).title = "Service";
     Node.of(this).description = "A cloud service";
 
-    const inflightClient = handler._toInflight();
+    const assetName = ResourceNames.generateName(this, {
+      disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
+      case: CaseConventions.LOWERCASE,
+      sep: "_",
+    });
+
+    const workdir = App.of(this).workdir;
+    mkdirSync(workdir, { recursive: true });
+    const entrypoint = join(workdir, `${assetName}.js`);
+    this.entrypoint = entrypoint;
+
+    if (process.env.WING_TARGET) {
+      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
+    }
+
+    this.handler = handler;
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const inflightClient = this.handler._toInflight();
     const lines = new Array<string>();
 
     lines.push('"use strict";');
@@ -79,29 +105,7 @@ export class Service extends Resource implements IInflightHost {
     lines.push("exports.handle = async function() {");
     lines.push("  return (await $initOnce()).handle();");
     lines.push("};");
-
-    const assetName = ResourceNames.generateName(this, {
-      disallowedRegex: /[><:"/\\|?*\s]/g, // avoid characters that may cause path issues
-      case: CaseConventions.LOWERCASE,
-      sep: "_",
-    });
-
-    const workdir = App.of(this).workdir;
-    mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
-    writeFileSync(entrypoint, lines.join("\n"));
-    this.entrypoint = entrypoint;
-
-    if (process.env.WING_TARGET) {
-      this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
-    }
-
-    this.handler = handler;
-  }
-
-  /** @internal */
-  public _preSynthesize(): void {
-    super._preSynthesize();
+    writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
@@ -161,7 +165,10 @@ export interface IServiceClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceHandlerClient`
  */
-export interface IServiceHandler extends IInflight {}
+export interface IServiceHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceHandler`.
@@ -198,7 +205,10 @@ export interface IServiceHandlerClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceStopHandlerClient`
  */
-export interface IServiceStopHandler extends IInflight {}
+export interface IServiceStopHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IServiceStopHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IServiceStopHandler`.

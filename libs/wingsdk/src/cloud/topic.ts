@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, IInflight } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
@@ -18,6 +19,9 @@ export interface TopicProps {}
  * @abstract
  */
 export class Topic extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ITopicClient;
+
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     if (new.target === Topic) {
       return Resource._newFromFactory(TOPIC_FQN, scope, id, props);
@@ -68,7 +72,10 @@ export interface ITopicClient {
  *
  * @inflight `@winglang/sdk.cloud.ITopicOnMessageHandlerClient`
  */
-export interface ITopicOnMessageHandler extends IInflight {}
+export interface ITopicOnMessageHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: ITopicOnMessageHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `ITopicOnMessageHandler`.

@@ -29,10 +29,32 @@ export interface IInflightHost extends IResource {
  */
 export interface IInflight extends IHostedLiftable {
   /**
-   * Tracks the content hash
+   * An opaque identifier for this inflight code. This can be used for determining
+   * whether two inflight closures are same by identity, but should not be used
+   * for any other purpose since it may not be stable across compilations.
+   *
+   * Comparing inflight closures for value equality (i.e. whether they will bundle
+   * into the same JavaScript code) isn't possible since the exact code is only
+   * resolved after all preflight code has finished running and preflight values that
+   * are referenced by the inflight closure have settled on their values.
+   *
+   * Consider e.g.
+   *
+   * ```
+   * let arr = MutArray<str>["hello"];
+   *
+   * new cloud.Function(inflight () => {
+   *   for x in arr {
+   *     log(x);
+   *   }
+   * });
+   *
+   * arr.push("world");
+   * ```
+   *
    * @internal
    */
-  _hash: string;
+  _id: number;
 }
 
 /**
@@ -173,7 +195,8 @@ export abstract class Resource extends Construct implements IResource {
       // For each operation, check if the host supports it
       if (!supportedOps.includes(op)) {
         throw new NotImplementedError(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
+          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`,
+          { resource: this.constructor.name, operation: op }
         );
       }
 
@@ -196,6 +219,18 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _preSynthesize(): void {
     // do nothing by default
+  }
+}
+
+/**
+ * A resource that has an automatically generated id.
+ * Used by the Wing compiler to generate unique ids for auto generated resources
+ * from inflight function closures.
+ */
+export abstract class AutoIdResource extends Resource {
+  constructor(scope: Construct, idPrefix: string = "") {
+    const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
+    super(scope, id);
   }
 }
 

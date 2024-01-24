@@ -29,8 +29,8 @@ use crate::{
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
-	WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
+	WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
@@ -40,6 +40,7 @@ const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
+const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_AUTOID_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -76,7 +77,7 @@ pub struct JSifier<'a> {
 
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
-	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
+	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
@@ -1450,7 +1451,15 @@ impl<'a> JSifier<'a> {
 				}
 			} else {
 				// default base class for preflight classes is `core.Resource`
-				code.append(new_code!(&class.name.span, " extends ", STDLIB_CORE_RESOURCE));
+				code.append(new_code!(
+					&class.name.span,
+					" extends ",
+					if class.auto_id {
+						STDLIB_CORE_AUTOID_RESOURCE
+					} else {
+						STDLIB_CORE_RESOURCE
+					}
+				));
 			};
 
 			code.append(" {");
@@ -1458,7 +1467,7 @@ impl<'a> JSifier<'a> {
 
 			// TODO Hack to make sure closures match the IInflight contract from wingsdk
 			if class_type.is_closure() {
-				code.line("_hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');")
+				code.line(format!("_id = {STDLIB_CORE}.closureId();"))
 			}
 
 			// emit the preflight constructor

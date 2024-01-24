@@ -3,6 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -48,11 +49,13 @@ export interface FunctionProps {
  * @abstract
  */
 export class Function extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
   private readonly handler!: IFunctionHandler;
 
   /**
-   * The path to the entrypoint source code of the function.
+   * The path where the entrypoint of the function source code will be eventually written to.
    */
   protected readonly entrypoint!: string;
 
@@ -76,7 +79,6 @@ export class Function extends Resource implements IInflightHost {
     }
 
     this.handler = handler;
-    const lines = this._getCodeLines(handler);
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
       disallowedRegex: /[><:"/\\|?*\s]/g,
@@ -84,13 +86,9 @@ export class Function extends Resource implements IInflightHost {
       sep: "_",
     });
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
-
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
     const entrypoint = join(workdir, `${assetName}.js`);
-    writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
 
     if (process.env.WING_TARGET) {
@@ -101,6 +99,11 @@ export class Function extends Resource implements IInflightHost {
   /** @internal */
   public _preSynthesize(): void {
     super._preSynthesize();
+
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
+    const lines = this._getCodeLines(this.handler);
+    writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
@@ -115,10 +118,13 @@ export class Function extends Resource implements IInflightHost {
   protected _getCodeLines(handler: IFunctionHandler): string[] {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
+    const client = "$handler";
 
     lines.push('"use strict";');
+    lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(`  return await ${client}.handle(event);`);
     lines.push("};");
 
     return lines;
@@ -167,7 +173,10 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IInflight {}
+export interface IFunctionHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFunctionHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IFunctionHandler`.

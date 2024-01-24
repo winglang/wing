@@ -3,7 +3,8 @@
     "extends": ["//"],
     "pipeline": {
       "compile": {
-        "outputs": ["src/target/**"]
+        "outputs": ["src/target/**"],
+        "inputs": []
       },
       "test": {}
     }

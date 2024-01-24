@@ -96,4 +96,10 @@ optionalFunction();
 //^ Cannot call optional function (unless it's part of a reference)
 
 let optionalFunctionWithNoRetType: ()? = () => {};
-//                                 ^^ Expected function return type
+//                                 ^^ Unexpected syntax
+
+// Pass incorrect optional function type to a function
+let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+//                                                  ^^^^^^^^^^^^^^^^^^^ Expected type to be "(preflight (num): void)?", but got "preflight (x: str): void" instead
+let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
+//                                              ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "(preflight (): num)?", but got "preflight (): str" instead

@@ -68,7 +68,7 @@ test("api with GET routes with common prefix", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 
@@ -87,7 +87,7 @@ test("api with GET routes with different prefix", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 
@@ -125,7 +125,7 @@ test("api with multiple methods and multiple lambda", () => {
 
   // THEN
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
-  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
 

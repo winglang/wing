@@ -3,8 +3,9 @@
 exports[`can create sequential files in a bucket 1`] = `
 {
   ".wing/setconsumer0_c8e82e9f.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -40,7 +41,8 @@ bucket: (function() {
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
