@@ -5,7 +5,8 @@
   "files": [
     "wingc.wasm",
     "bin/wing",
-    "dist/"
+    "dist/",
+    "project-templates/"
   ],
   "license": "MIT",
   "engines": {
