@@ -159,139 +159,6 @@ export const createAppRouter = () => {
     "app.selectedNode": createProcedure.query(async ({ ctx }) => {
       return ctx.getSelectedNode();
     }),
-    "app.childRelationships": createProcedure
-      .input(
-        z.object({
-          path: z.string().optional(),
-          showTests: z.boolean().optional(),
-        }),
-      )
-      .query(async ({ ctx, input }) => {
-        const simulator = await ctx.simulator();
-        const { tree } = simulator.tree().rawData();
-        const connections = simulator.connections();
-        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
-
-        const node = nodeMap.get(input.path);
-        const children = nodeMap.getAll(node?.children ?? []);
-
-        return children
-          .filter((node) => {
-            if (node.display?.hidden) {
-              return false;
-            }
-
-            if (!input.showTests && matchTest(node.path)) {
-              return false;
-            }
-
-            return true;
-          })
-          .map((node) => ({
-            node: {
-              id: node.id,
-              path: node.path,
-              type: getResourceType(node, simulator),
-              display: node.display,
-            },
-            inbound:
-              connections
-                ?.filter(({ source, target }) => {
-                  if (target !== node.path) {
-                    return false;
-                  }
-
-                  const sourceNode = nodeMap.get(source);
-                  if (!sourceNode) {
-                    throw new Error(
-                      `Could not find node for resource ${source}`,
-                    );
-                  }
-
-                  const targetNode = nodeMap.get(target);
-                  if (!targetNode) {
-                    throw new Error(
-                      `Could not find node for resource ${target}`,
-                    );
-                  }
-
-                  if (
-                    sourceNode.display?.hidden ||
-                    targetNode.display?.hidden
-                  ) {
-                    return false;
-                  }
-
-                  if (
-                    !input.showTests &&
-                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
-                  ) {
-                    return false;
-                  }
-
-                  return true;
-                })
-                .map((connection) => {
-                  const node = nodeMap.get(connection.source)!;
-                  return {
-                    relationshipType: connection.name,
-                    node: {
-                      id: node.id,
-                      path: node.path,
-                      type: getResourceType(node, simulator),
-                    },
-                  };
-                }) ?? [],
-            outbound:
-              connections
-                ?.filter(({ source, target }) => {
-                  if (source !== node.path) {
-                    return false;
-                  }
-
-                  const sourceNode = nodeMap.get(source);
-                  if (!sourceNode) {
-                    throw new Error(
-                      `Could not find node for resource ${source}`,
-                    );
-                  }
-
-                  const targetNode = nodeMap.get(target);
-                  if (!targetNode) {
-                    throw new Error(
-                      `Could not find node for resource ${target}`,
-                    );
-                  }
-
-                  if (
-                    sourceNode.display?.hidden ||
-                    targetNode.display?.hidden
-                  ) {
-                    return false;
-                  }
-
-                  if (
-                    !input.showTests &&
-                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
-                  ) {
-                    return false;
-                  }
-
-                  return true;
-                })
-                .map((connection) => {
-                  const node = nodeMap.get(connection.target)!;
-                  return {
-                    relationshipType: connection.name,
-                    node: {
-                      id: node.id,
-                      path: node.path,
-                      type: getResourceType(node, simulator),
-                    },
-                  };
-                }) ?? [],
-          }));
-      }),
     "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
@@ -398,7 +265,7 @@ export const createAppRouter = () => {
             );
           }
 
-          if (sourceNode.display?.hidden || targetNode.display?.hidden) {
+          if (targetNode.display?.hidden) {
             return false;
           }
 
@@ -425,26 +292,50 @@ export const createAppRouter = () => {
           },
           inbound: connections
             .filter(({ target }) => {
-              return target === node.path;
+              const possiblePaths = [
+                node.path,
+                ...node.children.map((c) => {
+                  const child = nodeMap.get(c);
+                  return (child?.display?.hidden && child?.path) ?? "";
+                }),
+              ];
+              return possiblePaths.includes(target);
             })
             .map((connection) => {
               const node = nodeMap.get(connection.source)!;
+              const attachToParent = node?.display?.hidden && node?.parent;
+              const sourceNode = attachToParent
+                ? nodeMap.get(node.parent)!
+                : node;
+
               return {
-                id: node.id,
-                path: node.path,
-                type: getResourceType(node, simulator),
+                id: sourceNode.id,
+                path: sourceNode.path,
+                type: getResourceType(sourceNode, simulator),
               };
             }),
           outbound: connections
             .filter(({ source }) => {
-              return source === node.path;
+              const possiblePaths = [
+                node.path,
+                ...node.children.map((c) => {
+                  const child = nodeMap.get(c);
+                  return (child?.display?.hidden && child?.path) ?? "";
+                }),
+              ];
+              return possiblePaths.includes(source);
             })
             .map((connection) => {
               const node = nodeMap.get(connection.target)!;
+              const attachToParent = node?.display?.hidden && node?.parent;
+              const targetNode = attachToParent
+                ? nodeMap.get(node.parent)!
+                : node;
+
               return {
-                id: node.id,
-                path: node.path,
-                type: getResourceType(node, simulator),
+                id: targetNode.id,
+                path: targetNode.path,
+                type: getResourceType(targetNode, simulator),
               };
             }),
         };
@@ -465,6 +356,7 @@ export const createAppRouter = () => {
 
         const sourcePath = edgeId.split("->")[0]?.trim();
         const targetPath = edgeId.split("->")[1]?.trim();
+
         const sourceNode = nodeMap.get(sourcePath);
         if (!sourceNode) {
           throw new TRPCError({
@@ -472,29 +364,39 @@ export const createAppRouter = () => {
             message: "Node was not found.",
           });
         }
+
         const connections = simulator.connections();
 
-        const connection = connections?.find(
-          (connection) =>
-            sourceNode.path === connection.source &&
-            connection.target === targetPath,
-        );
-        const targetNode = nodeMap.get(connection?.target);
+        const targetNode = nodeMap.get(targetPath);
+
         if (!targetNode) {
-          throw new Error(
-            `Could not find node for resource ${connection?.target}`,
-          );
+          throw new Error(`Could not find node for resource ${targetPath}`);
         }
 
         const inflights = sourceNode.display?.hidden
           ? []
           : connections
               ?.filter(({ source, target, name }) => {
-                if (source !== sourcePath) {
+                const possibleSourcePaths = [
+                  sourcePath,
+                  ...sourceNode.children.map((c) => {
+                    const child = nodeMap.get(c);
+                    return (child?.display?.hidden && child?.path) ?? "";
+                  }),
+                ];
+                if (!possibleSourcePaths.includes(source)) {
                   return false;
                 }
 
-                if (target !== targetPath) {
+                const possibleTargetPaths = [
+                  targetPath,
+                  ...targetNode.children.map((c) => {
+                    const child = nodeMap.get(c);
+                    return (child?.display?.hidden && child?.path) ?? "";
+                  }),
+                ];
+
+                if (!possibleTargetPaths.includes(target)) {
                   return false;
                 }
 
@@ -734,7 +636,6 @@ function createMapEdgesFromConnectionData(
         if (!sourceNode) {
           throw new Error(`Could not find node for resource ${source}`);
         }
-
         const targetNode = nodeMap.get(target);
         if (!targetNode) {
           throw new Error(`Could not find node for resource ${target}`);
@@ -750,7 +651,7 @@ function createMapEdgesFromConnectionData(
           return false;
         }
 
-        if (sourceNode.display?.hidden || targetNode.display?.hidden) {
+        if (targetNode.display?.hidden) {
           return false;
         }
 
@@ -778,9 +679,13 @@ function createMapEdgesFromConnectionData(
         return true;
       })
       ?.map((connection: NodeConnection) => {
+        const sourceNode = nodeMap.get(connection.source);
+        const attachToParent = sourceNode?.display?.hidden;
+        const source = attachToParent ? sourceNode?.parent! : connection.source;
+
         return {
-          id: `${connection.source} -> ${connection.target}`,
-          source: connection.source,
+          id: `${source} -> ${connection.target}`,
+          source,
           target: connection.target,
         };
       }),
