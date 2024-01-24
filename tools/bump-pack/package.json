@@ -18,7 +18,8 @@
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.17.13",
     "@types/semver": "^7.5.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
