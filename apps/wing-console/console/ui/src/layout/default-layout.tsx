@@ -2,7 +2,6 @@ import {
   SpinnerLoader,
   LeftResizableWidget,
   RightResizableWidget,
-  ScrollableArea,
   TopResizableWidget,
   USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
@@ -10,21 +9,19 @@ import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import { useLoading } from "@wingconsole/use-loading";
 import { PersistentStateProvider } from "@wingconsole/use-persistent-state";
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { EndpointsTreeView } from "../features/endpoints-tree-view.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
-import { trpc } from "../services/trpc.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 import { LogsWidget } from "../widgets/logs.js";
 
-import { SignInModal, useRequireSignIn } from "./sign-in.js";
+import { SignInModal } from "./sign-in.js";
 import { StatusBar } from "./status-bar.js";
-import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
 
 export interface LayoutProps {
@@ -92,8 +89,6 @@ export const DefaultLayout = ({
     showTests,
     onResourceClick,
     title,
-    termsConfig,
-    acceptTerms,
   } = useLayout({
     cloudAppState,
   });
@@ -110,18 +105,6 @@ export const DefaultLayout = ({
   useEffect(() => {
     setDeferredLoading(loading);
   }, [loading, setDeferredLoading]);
-
-  const showTerms = useMemo(() => {
-    if (!termsConfig.data) {
-      return false;
-    }
-    return (
-      (termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted) ??
-      false
-    );
-  }, [termsConfig.data]);
-
-  const { signInRequired, signIn } = useRequireSignIn();
 
   const layout: LayoutConfig = useMemo(() => {
     return {
@@ -215,17 +198,7 @@ export const DefaultLayout = ({
 
   return (
     <>
-      <TermsAndConditionsModal
-        visible={showTerms}
-        onAccept={() => acceptTerms()}
-        license={termsConfig.data?.license ?? ""}
-      />
-
-      {/**
-       * Since both Terms and Sign In are modals, let's make sure that only
-       * one of them is visible at a time.
-       */}
-      <SignInModal visible={!showTerms && signInRequired} onSignIn={signIn} />
+      <SignInModal />
 
       <div className={classNames("w-full h-full", theme.bg1)}>
         <div
@@ -233,7 +206,6 @@ export const DefaultLayout = ({
           className={classNames(
             "w-full h-full flex flex-col select-none",
             theme.text2,
-            showTerms && "blur-sm",
             "gap-0.5",
             layout?.panels?.rounded && "pt-1",
           )}

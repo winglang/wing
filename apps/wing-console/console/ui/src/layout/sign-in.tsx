@@ -6,7 +6,12 @@ import { useSearchParam } from "react-use";
 import { AppContext } from "../AppContext.js";
 import { trpc } from "../services/trpc.js";
 
-export const useRequireSignIn = () => {
+import { GithubIcon } from "./github-icon.js";
+
+export interface SignInModalProps {}
+
+export const SignInModal = (props: SignInModalProps) => {
+  const { theme } = useTheme();
   const { wingCloudSignInUrl } = useContext(AppContext);
   const analytics = trpc["app.analytics"].useQuery();
   const signIn = useCallback(() => {
@@ -39,42 +44,41 @@ export const useRequireSignIn = () => {
       history.replaceState({}, document.title, url);
     }
   }, [signedInParameter, notifySignedIn]);
-  return { signInRequired, signIn };
-};
-
-export interface SignInModalProps {
-  visible: boolean;
-  onSignIn: () => void;
-}
-
-export const SignInModal = (props: SignInModalProps) => {
-  const { theme } = useTheme();
 
   return (
-    <Modal visible={props.visible}>
-      <div className="flex flex-col gap-4 max-w-md">
+    <Modal visible={signInRequired}>
+      <div className="flex flex-col gap-4 max-w-lg items-center">
         <h3
           className={classNames(
             theme.text1,
             "text-base font-semibold leading-6",
           )}
         >
-          Sign In Required
+          Wing Console
         </h3>
 
         <p className={classNames(theme.text2, "text-sm")}>
-          In order to use the Wing Console, you are required to sign in to Wing
-          Cloud. This will help us to provide you with a better experience in
-          the future.
+          Help us to provide you with a better experience.
         </p>
 
-        <p className={classNames(theme.text2, "text-sm")}>
-          Your code will <strong className={theme.text1}>not</strong> be sent to
-          Wing Cloud.
-        </p>
+        <div className="flex justify-around gap-2">
+          <Button onClick={signIn}>
+            <GithubIcon className="w-4 h-4" />
+            <span className="text-sm">Sign In</span>
+          </Button>
+        </div>
 
-        <div className="flex gap-2">
-          <Button onClick={props.onSignIn}>Sign In to Wing Cloud</Button>
+        <div className="flex justify-around">
+          <p className={classNames(theme.text2, "text-xs")}>
+            You acknowledge that you read, and agree to our{" "}
+            <Link
+              href="https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md"
+              target="_blank"
+            >
+              Terms and Conditions
+            </Link>
+            .
+          </p>
         </div>
       </div>
     </Modal>

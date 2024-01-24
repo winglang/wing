@@ -17,11 +17,7 @@ import {
   createProcedure,
   createRouter,
 } from "../utils/createRouter.js";
-import {
-  isTermsAccepted,
-  acceptTerms,
-  getLicense,
-} from "../utils/terms-and-conditions.js";
+import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -56,6 +52,7 @@ export const createAppRouter = () => {
     "app.wingfile": createProcedure.query(({ ctx }) => {
       return ctx.wingfile.split("/").pop();
     }),
+    /** @deprecated */
     "app.termsConfig": createProcedure.query(({ ctx }) => {
       return {
         requireAcceptTerms: ctx.requireAcceptTerms,
@@ -63,9 +60,8 @@ export const createAppRouter = () => {
         license: getLicense(),
       };
     }),
-    "app.acceptTerms": createProcedure.mutation(() => {
-      acceptTerms(true);
-    }),
+    /** @deprecated */
+    "app.acceptTerms": createProcedure.mutation(() => {}),
     "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
       return {
         config: ctx.layoutConfig,
