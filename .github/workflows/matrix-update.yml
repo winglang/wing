@@ -38,8 +38,6 @@ jobs:
       - name: Run Update Script
         run: |
           cd scripts/compatibility-matrix-automation
-          echo "lib/src:"          
-          ls lib/src
           echo "lib:"
           ls lib
           OUT_FILE=../../out pnpm start
