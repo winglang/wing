@@ -1,11 +1,17 @@
+// This file and the main function are named "init" instead of "new"
+// to avoid a conflict with the "new" keyword in JavaScript
+import { exec } from "child_process";
 import { existsSync, readdirSync } from "fs";
 import { copyFile, mkdir, readdir } from "fs/promises";
 import { join, relative } from "path";
+import { promisify } from "util";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { exists } from "./pack";
 
-const INIT_TEMPLATES_DIR = join(__dirname, "..", "..", "init-templates");
+const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "..", "project-templates");
+
+const execPromise = promisify(exec);
 
 /**
  * Options for the `new` command.
@@ -23,7 +29,7 @@ export interface InitOptions {
  * @returns the output directory
  */
 export async function init(template: string, options: InitOptions = {}): Promise<void> {
-  const templates = initTemplateNames();
+  const templates = projectTemplateNames();
   let language = options.language ?? "wing";
 
   // If no template is specified, let them interactively select one
@@ -84,7 +90,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
   }
 
   // Check if the template exists for the selected language
-  const templatePath = join(INIT_TEMPLATES_DIR, language, template);
+  const templatePath = join(PROJECT_TEMPLATES_DIR, language, template);
   const templateExists = await exists(templatePath);
   if (!templateExists) {
     throw new Error(
@@ -107,7 +113,36 @@ export async function init(template: string, options: InitOptions = {}): Promise
   // Copy the template
   await copyFiles(templatePath, process.cwd());
 
-  console.log(`Created a new ${chalk.bold(template)} project in the current directory! 🎉`);
+  // Run npm install
+  console.log("Installing dependencies...");
+  console.log();
+
+  // Check if npm is installed
+  const npmExists = await execPromise("npm --version")
+    .then(() => true)
+    .catch(() => false);
+  if (!npmExists) {
+    console.log(
+      `${chalk.yellow(
+        "warning:"
+      )} npm is not installed. Please install npm and run "npm install" to finish setting up any project dependencies.`
+    );
+  }
+
+  // Install dependencies (in the current directory)
+  try {
+    await execPromise("npm install");
+  } catch (err) {
+    console.log(
+      `${chalk.yellow(
+        "warning:"
+      )} npm install failed. Please let us know there's an issue with this template by opening an issue at at https://github.com/winglang/wing/issues/.`
+    );
+    console.log();
+    console.error((err as any).stderr);
+  }
+
+  console.log(`Created a new ${chalk.cyan(template)} project in the current directory! 🎉`);
   console.log();
   console.log("Not sure where to get started? Try running:");
   console.log();
@@ -156,10 +191,10 @@ async function getFilesHelper(basedir: string, dir: string): Promise<string[]> {
   return Array.prototype.concat(...files);
 }
 
-export function initTemplateNames(): string[] {
+export function projectTemplateNames(): string[] {
   const templateNames: string[] = [];
-  readdirSync(join(INIT_TEMPLATES_DIR)).forEach((language) => {
-    readdirSync(join(INIT_TEMPLATES_DIR, language)).forEach((template) => {
+  readdirSync(join(PROJECT_TEMPLATES_DIR)).forEach((language) => {
+    readdirSync(join(PROJECT_TEMPLATES_DIR, language)).forEach((template) => {
       templateNames.push(template);
     });
   });

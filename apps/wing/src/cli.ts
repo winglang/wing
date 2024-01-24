@@ -3,7 +3,7 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
-import { initTemplateNames } from "./commands/init";
+import { projectTemplateNames } from "./commands/init";
 import { loadEnvVariables } from "./env";
 import { currentPackage } from "./util";
 
@@ -216,7 +216,7 @@ async function main() {
     .command("new")
     .description("Create a new Wing project")
     .addArgument(
-      new Argument("<template>", "Template name").choices(initTemplateNames()).argOptional()
+      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional()
     )
     .addOption(
       new Option("-l --language [language]", "Language")

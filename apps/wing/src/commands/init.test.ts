@@ -2,18 +2,18 @@ import { readdir, writeFile } from "fs/promises";
 import { join } from "path";
 import inquirer from "inquirer";
 import { describe, it, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
-import { init, initTemplateNames } from "../commands/init";
+import { init, projectTemplateNames } from "../commands/init";
 import { generateTmpDir } from "src/util";
 
 vitest.mock("inquirer");
 
-describe("initTemplateNames", () => {
-  it("should list init templates", () => {
-    expect(initTemplateNames()).toMatchSnapshot();
+describe("projectTemplateNames", () => {
+  it("should list project templates", () => {
+    expect(projectTemplateNames()).toMatchSnapshot();
   });
 });
 
-describe("init", () => {
+describe("new", () => {
   let log: any;
   beforeEach(() => {
     log = console.log;
@@ -68,7 +68,7 @@ describe("init", () => {
     await init("http-api", { language: "wing" });
 
     const files = await readdir(workdir);
-    expect(files).toEqual(["main.w"]);
+    expect(files).toEqual(["main.w", "package-lock.json", "package.json"]);
   });
 
   test("wing new with interactive prompt", async () => {
@@ -83,6 +83,6 @@ describe("init", () => {
     await init(undefined as any);
 
     const files = await readdir(workdir);
-    expect(files).toEqual(["main.w"]);
+    expect(files).toEqual(["main.w", "package-lock.json", "package.json"]);
   });
 });

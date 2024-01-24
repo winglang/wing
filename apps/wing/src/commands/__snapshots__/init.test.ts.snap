@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`initTemplateNames > should list init templates 1`] = `
+exports[`projectTemplateNames > should list project templates 1`] = `
 [
   "http-api",
 ]
