@@ -272,8 +272,7 @@ jobs:
   aws-sdk-spec-test:
     needs:
       - build
-    # TODO: add this condition
-    # if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
+    if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
     uses: ./.github/workflows/tf-aws-test.yml
     secrets: inherit
 

@@ -48,7 +48,7 @@ jobs:
           title: "chore(docs): competability matrix update"
           base: main
           branch: "github-actions/updating-matrix"
-          draft: true # remove it soon!
+          draft: true #TODO: remove it soon!
           commit-message: |-
             chore(docs): update competability matrix
 

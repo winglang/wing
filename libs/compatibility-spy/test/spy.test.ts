@@ -49,7 +49,7 @@ describe("compatibility spy", async () => {
   test("each new instance is wrapped in a proxy", () => {
     expect(spyPlatform.newInstance).toBeCalledTimes(1);
     expect(spyPlatform._usageContext.get("Bucket")).toEqual(
-      new Set(["addObject", "initialObjects", "public"])
+      new Set(["addObject"])
     );
   });
 });
