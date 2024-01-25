@@ -84,7 +84,7 @@ export const currentPackage: {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require("../package.json");
 
-export const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "..", "project-templates");
+export const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "project-templates");
 
 export function projectTemplateNames(): string[] {
   const templateNames: string[] = [];
