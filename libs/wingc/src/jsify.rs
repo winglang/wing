@@ -577,6 +577,8 @@ impl<'a> JSifier<'a> {
 				Literal::String(s) => {
 					// Unescape our string interpolation braces because in JS they don't need escaping
 					let s = s.replace("\\{", "{");
+					// escape newlines
+					let s = s.replace("\r", "\\r").replace("\n", "\\n");
 					new_code!(expr_span, s)
 				}
 				Literal::InterpolatedString(s) => {
