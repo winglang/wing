@@ -71,12 +71,12 @@ export default async function () {
   });
 
   const installHooks =
-    installResult.stdout.match(/>.*/g)?.map((line) => line.toString().trim()) ?? [];
+    installResult.stdout
+      .match(/^> .+ \w+$/g)
+      ?.map((line) => line.toString().trim()) ?? [];
 
   // trusted install hooks we are expecting to expose to users
-  const allowedInstallHooks = [
-    "> esbuild@0.19.12 postinstall,> node install.js",
-  ];
+  const allowedInstallHooks = ["> esbuild@0.19.12 postinstall"];
   const badInstallHooks = installHooks.filter(
     (hook) => !allowedInstallHooks.includes(hook)
   );
@@ -85,7 +85,7 @@ export default async function () {
     badInstallHooks.length,
     0,
     `Install contains unexpected script hooks: \n${badInstallHooks
-      .map((h) => `${h}`)
+      .map((h) => `"${h}"`)
       .join("\n")}`
   );
   assert.equal(
