@@ -1,9 +1,7 @@
-import { writeFileSync } from "fs";
-import { resolve } from "path";
-import { IPlatform } from "@winglang/sdk/lib/platform";
+import { writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { Construct } from "constructs";
-import { App } from "@winglang/sdk/lib/core";
-import { std } from "@winglang/sdk";
+import { platform, core, std } from "@winglang/sdk";
 
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
@@ -12,7 +10,7 @@ const PARENT_PROPERTIES: Set<string> = new Set([
   ...Object.getOwnPropertyNames(Construct.prototype),
 ]);
 
-export class Platform implements IPlatform {
+export class Platform implements platform.IPlatform {
   public readonly target = "*";
   /**
    * A summary of methods and property usage for each resource time
@@ -22,7 +20,7 @@ export class Platform implements IPlatform {
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
     //@ts-expect-error - accessing protected method
-    const type = App.of(scope).typeForFqn(fqn);
+    const type = core.App.of(scope).typeForFqn(fqn);
 
     if (!type) {
       return undefined;
@@ -45,14 +43,13 @@ export class Platform implements IPlatform {
         ) {
           this._addToUsageContext(target, prop);
         }
-        //@ts-ignore
-        return target[prop];
+        return target[prop as string];
       },
       set: (target, prop, newValue) => {
         if (typeof prop === "string" && !prop.startsWith("_")) {
           this._addToUsageContext(target, prop);
         }
-        //@ts-ignore
+
         target[prop] = newValue;
         return true;
       },
@@ -60,7 +57,7 @@ export class Platform implements IPlatform {
   }
 
   preSynth(app: Construct) {
-    this._writeAppUsage(app as App);
+    this._writeAppUsage(app as core.App);
   }
 
   /**
@@ -86,7 +83,7 @@ export class Platform implements IPlatform {
    * Write the usage context into a file in the out dir
    * @internal
    */
-  private _writeAppUsage(app: App): void {
+  private _writeAppUsage(app: core.App): void {
     const context: Record<string, string[]> = {};
     for (const key of this._usageContext.keys()) {
       context[key] = Array.from(this._usageContext.get(key) ?? []);
