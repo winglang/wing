@@ -1,8 +1,6 @@
 import * as crypto from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { buildSync } from "esbuild";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
@@ -37,7 +35,10 @@ export function createBundle(
   const outfile = join(outdir, outfileName);
   const outfileMap = join(outdir, soucemapFilename);
 
-  let esbuild = buildSync({
+  // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
+  const esbuilder: typeof import("esbuild") = require("esbuild");
+
+  let esbuild = esbuilder.buildSync({
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],
     outdir: originalEntrypointDir,
