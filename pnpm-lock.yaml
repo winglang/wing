@@ -366,9 +366,6 @@ importers:
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
-      esbuild:
-        specifier: ^0.17.19
-        version: 0.17.19
       eslint:
         specifier: ^8.50.0
         version: 8.51.0
