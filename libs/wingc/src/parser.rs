@@ -612,7 +612,7 @@ impl<'s> Parser<'s> {
 			"return_statement" => self.build_return_statement(statement_node, phase)?,
 			"throw_statement" => self.build_throw_statement(statement_node, phase)?,
 			"class_definition" => self.build_class_statement(statement_node, phase)?,
-			"interface_definition" => self.build_interface_statement(statement_node)?,
+			"interface_definition" => self.build_interface_statement(statement_node, phase)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node, phase)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node, phase)?,
@@ -1444,7 +1444,7 @@ impl<'s> Parser<'s> {
 		})
 	}
 
-	fn build_interface_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+	fn build_interface_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let mut cursor = statement_node.walk();
 		let mut extends = vec![];
 		let mut methods = vec![];
