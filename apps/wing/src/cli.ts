@@ -222,6 +222,7 @@ async function main() {
         .choices(["wing", "typescript"])
         .argParser((value) => value ?? "wing")
     )
+    .addOption(new Option("--list-templates", "List available templates"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("init"));
 
