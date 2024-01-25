@@ -1,6 +1,6 @@
 import { test, describe, expect, vi } from "vitest";
 import { join } from "node:path";
-import { Platform } from "../src/index.js";
+import { Platform } from "../src";
 import { cloud, platform } from "@winglang/sdk";
 import { App as SimApp } from "@winglang/sdk/lib/target-sim/app";
 
@@ -12,7 +12,7 @@ describe("compatibility spy", async () => {
   vi.spyOn(spyPlatform, "newInstance");
 
   const manager = new platform.PlatformManager({
-    platformPaths: ["sim", join(__dirname, "../src")],
+    platformPaths: ["sim", join(__dirname, "../lib")],
   });
 
   //@ts-expect-error- accessing private method
