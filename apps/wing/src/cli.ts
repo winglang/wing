@@ -1,10 +1,10 @@
-import { Command, Option } from "commander";
+import { Argument, Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { loadEnvVariables } from "./env";
-import { currentPackage } from "./util";
+import { currentPackage, projectTemplateNames } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
@@ -210,6 +210,20 @@ async function main() {
     .addOption(new Option("-o --out-file <filename>", "Output filename"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
+
+  program
+    .command("new")
+    .description("Create a new Wing project")
+    .addArgument(
+      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional()
+    )
+    .addOption(
+      new Option("-l --language [language]", "Language")
+        .choices(["wing", "typescript"])
+        .argParser((value) => value ?? "wing")
+    )
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("init"));
 
   program
     .command("docs")
