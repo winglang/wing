@@ -60,7 +60,7 @@ const boundingBoxOverlap = (a: BoundingBox, b: BoundingBox) => {
     a.y + a.height > b.y
   );
 };
-const MIN_ZOOM_LEVEL = 0.125;
+const MIN_ZOOM_LEVEL = 0.25;
 const MAX_ZOOM_LEVEL = 1.5;
 const ZOOM_SENSITIVITY = 1.35;
 const MOVE_SENSITIVITY = 1.5;
@@ -258,7 +258,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         // Scale contents to fit.
         const zx = boundingRect.width / viewport.width;
         const zy = boundingRect.height / viewport.height;
-        const z = Math.min(zx, zy);
+        const z = Math.min(
+          MAX_ZOOM_LEVEL,
+          Math.max(MIN_ZOOM_LEVEL, Math.min(zx, zy)),
+        );
 
         // Center contents.
         const dx = (boundingRect.width - viewport.width * z) / 2 / z;
