@@ -91,8 +91,7 @@ test("api with GET routes with common prefix", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 2 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 3);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -112,8 +111,7 @@ test("api with GET routes with different prefix", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 2 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 3);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -132,8 +130,7 @@ test("api with multiple GET route and one lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -153,8 +150,7 @@ test("api with multiple methods and multiple lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 2 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 3);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -173,8 +169,7 @@ test("api with multiple methods and one lambda", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -192,8 +187,7 @@ test("api with path parameter", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -211,8 +205,7 @@ test("api with 'name' parameter", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -230,8 +223,7 @@ test("api with 'name' & 'age' parameter", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -249,8 +241,7 @@ test("api with POST route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -282,8 +273,7 @@ test("api with PUT route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -315,8 +305,7 @@ test("api with PATCH route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -348,8 +337,7 @@ test("api with DELETE route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -381,8 +369,7 @@ test("api with OPTIONS route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -414,8 +401,7 @@ test("api with HEAD route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -447,8 +433,7 @@ test("api with CONNECT route", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
@@ -482,8 +467,7 @@ test("api url can be used as environment variable", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::Lambda::Function",
     Match.objectLike({
@@ -509,8 +493,7 @@ test("api configured for cors", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::ApiGateway::RestApi", 1);
-  // 1 inflight lambdas and 1 lambda for log retention
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.hasResourceProperties(
     "AWS::ApiGateway::RestApi",
     Match.objectLike({
