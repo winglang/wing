@@ -6,13 +6,8 @@ import { rmSync, readFileSync } from "fs";
 
 compatibilityTestFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const platforms = [
-      "sim",
-      relative(
-        tmpDir,
-        require.resolve("@winglang/compatibility-spy").replaceAll("\\", "/")
-      ),
-    ];
+    // "@winglang/compatibility-spy" will be installed in the tmpDir
+    const platforms = ["sim", "node_modules/@winglang/compatibility-spy/lib"];
     const args = ["test", "-o", "out.json"];
 
     const absoluteWingFile = join(compatibilityTestsDir, wingFile);
