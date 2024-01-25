@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { buildSync } from "esbuild";
 import { normalPath } from "./misc";
 
