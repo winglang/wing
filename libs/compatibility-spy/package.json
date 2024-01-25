@@ -30,9 +30,9 @@
     "vitest": "^0.34.6"
   },
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsup",
     "package": "bump-pack -b",
-    "test": "vitest run --passWithNoTests --update"
+    "test": "vitest run --update"
   },
   "files": [
     "lib"
