@@ -61,7 +61,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "esbuild",
     "safe-stable-stringify",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
@@ -147,6 +146,10 @@ project.eslint?.addOverride({
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
+});
+
+project.package.addField("optionalDependencies", {
+  esbuild: "^0.19.12",
 });
 
 // use fork of jsii-docgen with wing-ish support
