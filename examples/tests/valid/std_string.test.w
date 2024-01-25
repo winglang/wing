@@ -29,3 +29,8 @@ test "string" {
   log(s1.split(" ").at(1));
   log(s1.concat(s2));
 }
+
+let s3 = "hello
+world";
+let s4 = "hello\nworld";
+assert(s3 == s4);

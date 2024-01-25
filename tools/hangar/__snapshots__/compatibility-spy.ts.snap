@@ -12,9 +12,6 @@ exports[`aws-counter.test.w 1`] = `
       "validates the AWS counter name": {
         "args": {
           "methods": {
-            "Counter": [
-              "dynamoTableArn",
-            ],
             "TestRunner": [
               "findTests",
             ],

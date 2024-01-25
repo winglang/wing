@@ -115,6 +115,9 @@ class $Root extends $stdlib.std.Resource {
     initial += "you";
     $helpers.assert($helpers.eq(initial, "hey, you"), "initial == \"hey, you\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:string", new $Closure1(this, "$Closure1"));
+    const s3 = "hello\nworld";
+    const s4 = "hello\nworld";
+    $helpers.assert($helpers.eq(s3, s4), "s3 == s4");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
