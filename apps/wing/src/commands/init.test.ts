@@ -1,15 +1,36 @@
 import { readdir, writeFile } from "fs/promises";
 import { join } from "path";
 import inquirer from "inquirer";
-import { describe, it, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
+import { describe, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
+import { test as cliTest } from "./test/test";
 import { init } from "../commands/init";
 import { generateTmpDir, projectTemplateNames } from "../util";
 
 vitest.mock("inquirer");
 
-describe("projectTemplateNames", () => {
-  it("should list project templates", () => {
-    expect(projectTemplateNames()).toMatchSnapshot();
+const templates = projectTemplateNames();
+
+describe.each(templates)("new %s --language=wing", (template) => {
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
+
+  afterEach(() => {
+    console.log = log;
+  });
+
+  test(`wing new ${template} && wing test main.w`, async () => {
+    const workdir = await generateTmpDir();
+    process.chdir(workdir);
+
+    await init(template, { language: "wing" });
+
+    await cliTest(["main.w"], {
+      platform: ["sim"],
+      clean: false,
+    });
   });
 });
 
@@ -33,6 +54,7 @@ describe("new", () => {
     );
   });
 
+  // test an invalid language
   test("wing new http-api --language=python", async () => {
     const workdir = await generateTmpDir();
     process.chdir(workdir);
@@ -40,6 +62,7 @@ describe("new", () => {
     await expect(init("http-api", { language: "python" })).rejects.toThrow(/Unknown language/);
   });
 
+  // test an unavailable language
   test("wing new http-api --language=typescript", async () => {
     const workdir = await generateTmpDir();
     process.chdir(workdir);
@@ -59,16 +82,6 @@ describe("new", () => {
     await expect(init("http-api", { language: "wing" })).rejects.toThrow(
       /The following files already exist in the current directory and will be overwritten/
     );
-  });
-
-  test("wing new http-api --language wing", async () => {
-    const workdir = await generateTmpDir();
-    process.chdir(workdir);
-
-    await init("http-api", { language: "wing" });
-
-    const files = await readdir(workdir);
-    expect(files).toEqual(["main.w", "package-lock.json", "package.json"]);
   });
 
   test("wing new with interactive prompt", async () => {
