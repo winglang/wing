@@ -70,22 +70,25 @@ export default async function () {
     cwd: tmpDir,
   });
 
-  // trusted install hooks we are expecting to expose to users
-  const allowedInstallHooks: RegExp[] = [
-    /> esbuild@0.19.12 postinstall,> node install.js/
-  ];
-
   const installHooks =
-    installResult.stdout.match(/>.*/g)?.filter((hook) => {
-      return !allowedInstallHooks.some((allowedHook) => {
-        return allowedHook.test(hook);
-      });
+    installResult.stdout.match(/>.*/g)?.map((line) => {
+      return line.trim();
     }) ?? [];
 
+  // trusted install hooks we are expecting to expose to users
+  const allowedInstallHookPrefixes = [
+    "> esbuild@0.19.12 postinstall,> node install.js",
+  ];
+  const badInstallHooks = installHooks.filter((hook) => {
+    return !allowedInstallHookPrefixes.some((allowedHook) => {
+      return hook.startsWith(allowedHook);
+    });
+  });
+
   assert.equal(
-    installHooks.length,
+    badInstallHooks.length,
     0,
-    `Install contains unexpected script hooks: \n${installHooks}`
+    `Install contains unexpected script hooks: \n${badInstallHooks}`
   );
   assert.equal(
     installResult.exitCode,
