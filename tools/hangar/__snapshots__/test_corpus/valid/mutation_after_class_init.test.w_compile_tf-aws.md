@@ -74,9 +74,9 @@ module.exports = function({ $c, $q, $util_Util }) {
     }
     async handle() {
       (await $q.push("message1"));
-      (await $util_Util.waitUntil(async () => {
+      (await $util_Util.waitUntil((async () => {
         return ((await $c.peek()) > 0);
-      }));
+      })));
       $helpers.assert(((await $c.peek()) > 0), "c.peek() > 0");
     }
   }
