@@ -94,12 +94,12 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
     ];
   }
 
-  protected eventHandlerLocation(): string {
+  protected _eventHandlerLocation(): string {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
 
-  protected createTopic(actionType: cloud.BucketEventType): cloud.Topic {
-    const handler = super.createTopic(actionType);
+  protected _createTopic(actionType: cloud.BucketEventType): cloud.Topic {
+    const handler = super._createTopic(actionType);
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(handler instanceof AWSTopic)) {

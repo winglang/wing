@@ -1,14 +1,28 @@
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Construct } from "constructs";
-import { platform, core, std } from "@winglang/sdk";
+import { platform, core, std, cloud, ex } from "@winglang/sdk";
 
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
   "onLiftMap",
   ...Object.getOwnPropertyNames(Construct),
-  ...Object.getOwnPropertyNames(Construct.prototype),
 ]);
+
+function isCloudProp(resourceName: string, opName: string): boolean {
+  if (!!(cloud as any)[resourceName]) {
+    return new Set(
+      Object.getOwnPropertyNames((cloud as any)[resourceName].prototype)
+    ).has(opName);
+  }
+  if (!!(ex as any)[resourceName]) {
+    return new Set(
+      Object.getOwnPropertyNames((ex as any)[resourceName].prototype)
+    ).has(opName);
+  }
+
+  return true;
+}
 
 export class Platform implements platform.IPlatform {
   public readonly target = "*";
@@ -39,7 +53,8 @@ export class Platform implements platform.IPlatform {
         if (
           typeof prop === "string" &&
           !prop.startsWith("_") &&
-          !PARENT_PROPERTIES.has(prop)
+          !PARENT_PROPERTIES.has(prop) &&
+          isCloudProp(target.constructor.name, prop)
         ) {
           this._addToUsageContext(target, prop);
         }

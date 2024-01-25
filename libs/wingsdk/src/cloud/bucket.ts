@@ -87,9 +87,10 @@ export class Bucket extends Resource {
   /**
    * Creates a topic for subscribing to notification events
    * @param actionType
-   * @returns the created topi
+   * @returns the created topic
+   * @internal
    */
-  protected createTopic(actionType: BucketEventType): Topic {
+  protected _createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
 
     this.node.addDependency(topic);
@@ -106,19 +107,20 @@ export class Bucket extends Resource {
   /**
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
-   * @returns
+   * @internal
    */
-  private getTopic(actionType: BucketEventType): Topic {
+  private _getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
-      this._topics.set(actionType, this.createTopic(actionType));
+      this._topics.set(actionType, this._createTopic(actionType));
     }
     return this._topics.get(actionType) as Topic;
   }
 
   /**
    * Resolves the path to the bucket.onevent.inflight file
+   * @internal
    */
-  protected eventHandlerLocation(): string {
+  protected _eventHandlerLocation(): string {
     throw new Error(
       "please specify under the target file (to get the right relative path)"
     );
@@ -128,16 +130,16 @@ export class Bucket extends Resource {
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
-   * @returns
+   * @internal
    */
-  private createInflightHandler(
+  private _createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
   ): IInflight {
     return convertBetweenHandlers(
       inflight,
       // since uses __dirname should be specified under the target directory
-      this.eventHandlerLocation(),
+      this._eventHandlerLocation(),
       "BucketEventHandlerClient",
       { eventType }
     );
@@ -148,26 +150,27 @@ export class Bucket extends Resource {
    * @param eventNames the events to subscribe the inflight function to
    * @param inflight the code to run upon event
    * @param opts
+   * @internal
    */
-  private createBucketEvent(
+  private _createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
     opts?: BucketOnCreateOptions
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this.getTopic(BucketEventType.CREATE).onMessage(
-        this.createInflightHandler(BucketEventType.CREATE, inflight)
+      this._getTopic(BucketEventType.CREATE).onMessage(
+        this._createInflightHandler(BucketEventType.CREATE, inflight)
       );
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this.getTopic(BucketEventType.UPDATE).onMessage(
-        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+      this._getTopic(BucketEventType.UPDATE).onMessage(
+        this._createInflightHandler(BucketEventType.UPDATE, inflight)
       );
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this.getTopic(BucketEventType.DELETE).onMessage(
-        this.createInflightHandler(BucketEventType.DELETE, inflight)
+      this._getTopic(BucketEventType.DELETE).onMessage(
+        this._createInflightHandler(BucketEventType.DELETE, inflight)
       );
     }
   }
@@ -179,7 +182,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onCreate does not support options yet");
     }
-    this.createBucketEvent([BucketEventType.CREATE], fn, opts);
+    this._createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
 
   /**
@@ -189,7 +192,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onDelete does not support options yet");
     }
-    this.createBucketEvent([BucketEventType.DELETE], fn, opts);
+    this._createBucketEvent([BucketEventType.DELETE], fn, opts);
   }
 
   /**
@@ -199,7 +202,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onUpdate does not support options yet");
     }
-    this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
+    this._createBucketEvent([BucketEventType.UPDATE], fn, opts);
   }
 
   /**
@@ -209,7 +212,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onEvent does not support options yet");
     }
-    this.createBucketEvent(
+    this._createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
       fn,
       opts

@@ -59,7 +59,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.initialObjects[key] = body;
   }
 
-  protected eventHandlerLocation(): string {
+  protected _eventHandlerLocation(): string {
     return join(__dirname, "bucket.onevent.inflight.js");
   }
 

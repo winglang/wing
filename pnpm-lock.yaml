@@ -28,6 +28,9 @@ importers:
 
   .:
     devDependencies:
+      '@winglang/compatibility-spy':
+        specifier: workspace:^
+        version: link:libs/compatibility-spy
       bump-pack:
         specifier: workspace:^
         version: link:tools/bump-pack
