@@ -70,7 +70,10 @@ export default async function () {
     cwd: tmpDir,
   });
 
-  const allowedInstallHooks: RegExp[] = []; // Leaving this mechanism in place in case we need it in the future
+  // trusted install hooks we are expecting to expose to users
+  const allowedInstallHooks: RegExp[] = [
+    /> esbuild@0.19.12 postinstall,> node install.js/
+  ];
 
   const installHooks =
     installResult.stdout.match(/>.*/g)?.filter((hook) => {
