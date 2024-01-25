@@ -90,7 +90,7 @@ jobs:
       tests: ${{ steps.setdirs.outputs.dirs }}
       targets: ${{ steps.settargets.outputs.targets }}
 
-  test-tf-aws:
+  test:
     needs: setup
     runs-on: ubuntu-latest
     strategy:
@@ -200,7 +200,8 @@ jobs:
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log
 
-  matrix-update:
+  update-matrix:
+    needs: test
     if: ${{ github.event_name == 'release' || github.workflow == 'build' }}
     uses: ./.github/workflows/matrix-update.yml
     secrets: inherit
