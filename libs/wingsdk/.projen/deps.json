@@ -268,10 +268,6 @@
       "type": "bundled"
     },
     {
-      "name": "esbuild-wasm",
-      "type": "bundled"
-    },
-    {
       "name": "express",
       "type": "bundled"
     },

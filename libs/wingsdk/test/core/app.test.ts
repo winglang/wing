@@ -36,22 +36,6 @@ test("newAbstract() throws if there is no implementation", () => {
   );
 });
 
-describe("appForTarget", () => {
-  const map = {
-    sim: SimApp,
-    "tf-aws": TfAwsApp,
-    "tf-azure": TfAzureApp,
-    "tf-gcp": TfGcpApp,
-  };
-
-  for (const [target, app] of Object.entries(map)) {
-    test(`returns the app for the target "${target}"`, () => {
-      const appActual = App.for(target);
-      expect(appActual.constructor).equal(app.constructor);
-    });
-  }
-});
-
 class MyApp extends App {
   public outdir: string = "outdir";
   public isTestEnvironment: boolean = true;

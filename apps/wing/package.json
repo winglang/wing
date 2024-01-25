@@ -69,7 +69,6 @@
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "bump-pack": "workspace:^",
-    "esbuild": "^0.17.19",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-node": "^0.3.9",
