@@ -377,8 +377,7 @@
         "issue": 4635
       },
       "tf-gcp": {
-        "implemented": false,
-        "issue": 4599
+        "implemented": true
       },
       "awscdk": {
         "implemented": true
