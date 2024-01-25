@@ -47,5 +47,26 @@ jobs:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): competability matrix update"
           base: main
-          branch: "auto/updating-matrix"
+          branch: "github-actions/updating-matrix"
           draft: true # remove it soon!
+          commit-message: |-
+            chore(docs): update competability matrix
+
+            [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ------
+
+            *Automatically created via the "matrix-update" workflow*
+          body: |-
+            chore(docs): update competability matrix
+
+            [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ------
+
+            *Automatically created via the "matrix-update" workflow*
+          author: monabot <monabot@monada.co>
+          committer: monabot <monabot@monada.co>
+          signoff: true
+          labels: documentation
+          delete-branch: true
