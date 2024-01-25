@@ -34,6 +34,7 @@ jobs:
         run: |
           ${{ matrix.install_command }}
       - name: Create and test each quickstart app
+        shell: bash
         run: |
           templates=$(wing new --list-templates)
           for template in $templates; do
