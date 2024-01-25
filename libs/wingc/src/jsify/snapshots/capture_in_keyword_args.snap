@@ -28,9 +28,9 @@ module.exports = function({ $util_Util, $x }) {
       return $obj;
     }
     async handle() {
-      (await $util_Util.waitUntil(async () => {
+      (await $util_Util.waitUntil((async () => {
         return true;
-      }, { interval: $x }));
+      }), { interval: $x }));
     }
   }
   return $Closure1;
