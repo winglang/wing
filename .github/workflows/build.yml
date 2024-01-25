@@ -243,8 +243,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid --filter @winglang/compatibility-spy
-          pnpm run compile --filter jsii-fixture --filter @winglang/compatibility-spy
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar

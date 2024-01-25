@@ -3,7 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "outputs": ["dist/**", "lib/**"]
+      "outputs": ["lib/**"]
     },
     "test": {
       "dependsOn": ["compile"]
