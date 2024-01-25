@@ -68,5 +68,5 @@ jobs:
           author: monabot <monabot@monada.co>
           committer: monabot <monabot@monada.co>
           signoff: true
-          labels: documentation
+          labels: 📚 documentation
           delete-branch: true
