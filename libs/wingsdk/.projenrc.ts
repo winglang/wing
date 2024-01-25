@@ -138,7 +138,7 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "5.0.11",
+  jsiiVersion: "~5.3.11",
 });
 
 project.eslint?.addPlugins("sort-exports");
@@ -413,7 +413,7 @@ new JsonFile(project, "cdktf.json", {
 });
 project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get --force");
+project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 

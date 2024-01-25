@@ -119,7 +119,7 @@
     },
     {
       "name": "jsii",
-      "version": "5.0.11",
+      "version": "~5.3.11",
       "type": "build"
     },
     {
