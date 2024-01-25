@@ -1460,7 +1460,7 @@ impl<'s> Parser<'s> {
 			}
 			match interface_element.kind() {
 				"method_signature" => {
-					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, Phase::Preflight) {
+					if let Ok((method_name, func_sig)) = self.build_interface_method(interface_element, phase) {
 						methods.push((method_name, func_sig))
 					}
 				}
