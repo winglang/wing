@@ -277,14 +277,6 @@ jobs:
     uses: ./.github/workflows/tf-aws-test.yml
     secrets: inherit
 
-  matrix-update:
-    needs:
-      - aws-sdk-spec-test
-      # TODO: add this condition
-      # if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
-    uses: ./.github/workflows/matrix-update.yml
-    secrets: inherit
-
   console-preview:
     name: "Console Preview"
     runs-on: ubuntu-latest
