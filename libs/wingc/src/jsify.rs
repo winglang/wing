@@ -778,7 +778,7 @@ impl<'a> JSifier<'a> {
 				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
-			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx),
+			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, true, ctx),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -1286,6 +1286,7 @@ impl<'a> JSifier<'a> {
 		&self,
 		class: Option<&AstClass>,
 		func_def: &FunctionDefinition,
+		is_closure: bool,
 		ctx: &mut JSifyContext,
 	) -> CodeMaker {
 		let parameters = jsify_function_parameters(func_def);
@@ -1384,8 +1385,8 @@ impl<'a> JSifier<'a> {
 		code.add_code(body);
 		code.close("}");
 
-		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
-		if prefix.is_empty() {
+		// if the function is a closure, we need to wrap it in `(`, `)`
+		if is_closure {
 			new_code!(&func_def.span, "(", code, ")")
 		} else {
 			code
@@ -1477,7 +1478,7 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
-				code.line(self.jsify_function(Some(class), m, ctx));
+				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
@@ -1635,7 +1636,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for def in class.inflight_methods(false) {
-			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
+			class_code.line(self.jsify_function(Some(class), def, false, ctx));
 		}
 
 		// emit the $inflight_init function (if it has a body).
