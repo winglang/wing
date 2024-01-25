@@ -2,8 +2,8 @@ import { readdir, writeFile } from "fs/promises";
 import { join } from "path";
 import inquirer from "inquirer";
 import { describe, it, expect, test, vitest, beforeEach, afterEach, vi } from "vitest";
-import { init, projectTemplateNames } from "../commands/init";
-import { generateTmpDir } from "src/util";
+import { init } from "../commands/init";
+import { generateTmpDir, projectTemplateNames } from "../util";
 
 vitest.mock("inquirer");
 
