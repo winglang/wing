@@ -6,7 +6,7 @@ import { rmSync, readFileSync } from "fs";
 
 compatibilityTestFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const platforms = ["sim", relative(tmpDir, require.resolve("@winglang/compatibility-spy"))];
+    const platforms = ["sim", relative(tmpDir, require.resolve("@winglang/compatibility-spy").replaceAll("\\", "/"))];
     const args = ["test", "-o", "out.json"];
 
     const absoluteWingFile = join(compatibilityTestsDir, wingFile);
