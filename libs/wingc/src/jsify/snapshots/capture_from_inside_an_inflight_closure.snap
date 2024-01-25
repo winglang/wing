@@ -27,9 +27,9 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      const r = async () => {
+      const r = (async () => {
         return $foo;
-      };
+      });
     }
   }
   return $Closure1;
