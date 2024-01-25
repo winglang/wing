@@ -8,19 +8,74 @@ import { trpc } from "../services/trpc.js";
 
 import { GithubIcon } from "./github-icon.js";
 
-export interface SignInModalProps {}
+/**
+ * The name of the query parameter that is passed from
+ * Wing Cloud after to the Console after signing in.
+ */
+const SIGNED_IN_QUERY_PARAMETER = "signedIn";
 
-export const SignInModal = (props: SignInModalProps) => {
-  const { theme } = useTheme();
+/**
+ * The URL to the Console Terms and Conditions file.
+ */
+const TERMS_AND_CONDITIONS_URL =
+  "https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md";
+
+/**
+ * Returns true if the Console should dismiss the sign in modal.
+ *
+ * It checks for the existence of the `signedIn` query parameter in the URL,
+ * which is what we get after the user signs in with GitHub in Wing Cloud.
+ */
+const useShouldNotifySignedIn = () => {
+  const signedIn = useSearchParam(SIGNED_IN_QUERY_PARAMETER);
+  return useMemo(() => {
+    return signedIn !== null;
+  }, [signedIn]);
+};
+
+/**
+ * Notifies the Wing Console after the user signs in with GitHub.
+ *
+ * Also, removes the query param from the URL for a neater experience.
+ */
+const useNotifyAfterSigningIn = () => {
+  const { mutate: notify } = trpc["app.analytics.notifySignedIn"].useMutation();
+  const shouldNotifySignedIn = useShouldNotifySignedIn();
+  useEffect(() => {
+    if (!shouldNotifySignedIn) {
+      return;
+    }
+
+    // Trigger the notify call.
+    notify();
+
+    // Remove the `signedIn` query parameter from the URL.
+    const url = new URL(location.href);
+    url.searchParams.delete(SIGNED_IN_QUERY_PARAMETER);
+    history.replaceState({}, document.title, url);
+  }, [shouldNotifySignedIn, notify]);
+};
+
+/**
+ * Returns a function that can be used to sign in the user.
+ */
+const useSignIn = () => {
   const { wingCloudSignInUrl } = useContext(AppContext);
   const analytics = trpc["app.analytics"].useQuery();
-  const signIn = useCallback(() => {
+  return useCallback(() => {
     const url = new URL(wingCloudSignInUrl!);
     url.searchParams.append("port", location.port);
     url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
     location.href = url.toString();
   }, [wingCloudSignInUrl, analytics.data?.anonymousId]);
-  const signedInParameter = useSearchParam("signedIn");
+};
+
+/**
+ * Returns true if the user should be required to sign in.
+ */
+const useSignInRequired = () => {
+  const shouldNotifySignedIn = useShouldNotifySignedIn();
+  const analytics = trpc["app.analytics"].useQuery();
   const [signInRequired, setSignInRequired] = useState(false);
   useEffect(() => {
     // Skip if offline.
@@ -28,22 +83,22 @@ export const SignInModal = (props: SignInModalProps) => {
       return;
     }
 
-    if (analytics.data?.requireSignIn && signedInParameter === null) {
+    if (analytics.data?.requireSignIn && !shouldNotifySignedIn) {
       setSignInRequired(true);
     } else {
       setSignInRequired(false);
     }
-  }, [analytics.data?.requireSignIn, signedInParameter]);
-  const { mutate: notifySignedIn } =
-    trpc["app.analytics.notifySignedIn"].useMutation();
-  useEffect(() => {
-    if (signedInParameter !== null) {
-      notifySignedIn();
-      const url = new URL(location.href);
-      url.searchParams.delete("signedIn");
-      history.replaceState({}, document.title, url);
-    }
-  }, [signedInParameter, notifySignedIn]);
+  }, [analytics.data?.requireSignIn, shouldNotifySignedIn]);
+  return signInRequired;
+};
+
+export interface SignInModalProps {}
+
+export const SignInModal = (props: SignInModalProps) => {
+  const { theme } = useTheme();
+  const signIn = useSignIn();
+  const signInRequired = useSignInRequired();
+  useNotifyAfterSigningIn();
 
   return (
     <Modal visible={signInRequired}>
@@ -71,10 +126,7 @@ export const SignInModal = (props: SignInModalProps) => {
         <div className="flex justify-around">
           <p className={classNames(theme.text2, "text-xs")}>
             You acknowledge that you read, and agree to our{" "}
-            <Link
-              href="https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md"
-              target="_blank"
-            >
+            <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
               Terms and Conditions
             </Link>
             .
