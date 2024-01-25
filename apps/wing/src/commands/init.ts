@@ -1,15 +1,14 @@
 // This file and the main function are named "init" instead of "new"
 // to avoid a conflict with the "new" keyword in JavaScript
 import { exec } from "child_process";
-import { existsSync, readdirSync } from "fs";
+import { existsSync } from "fs";
 import { copyFile, mkdir, readdir } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { exists } from "./pack";
-
-const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "..", "project-templates");
+import { projectTemplateNames, PROJECT_TEMPLATES_DIR } from "../util";
 
 const execPromise = promisify(exec);
 
@@ -189,14 +188,4 @@ async function getFilesHelper(basedir: string, dir: string): Promise<string[]> {
     })
   );
   return Array.prototype.concat(...files);
-}
-
-export function projectTemplateNames(): string[] {
-  const templateNames: string[] = [];
-  readdirSync(join(PROJECT_TEMPLATES_DIR)).forEach((language) => {
-    readdirSync(join(PROJECT_TEMPLATES_DIR, language)).forEach((template) => {
-      templateNames.push(template);
-    });
-  });
-  return templateNames;
 }

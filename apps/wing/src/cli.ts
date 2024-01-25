@@ -3,9 +3,8 @@ import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
-import { projectTemplateNames } from "./commands/init";
 import { loadEnvVariables } from "./env";
-import { currentPackage } from "./util";
+import { currentPackage, projectTemplateNames } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
