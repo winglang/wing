@@ -67,3 +67,18 @@ class Terrier extends Dog {
 }
 
 let w: IAnimal = new Terrier();
+
+// interface inheriting the phase from the function it's inside
+// does it make sense to support this?
+let f = inflight () => {
+  interface IDog {
+    bark(): void;
+  } // All methods should be implicitly inflight
+  class MyDog impl IDog {
+    pub bark(): void {
+      log("woof");
+    }
+  } // Because MyIf can only be used inflight
+  let dog = new MyDog();
+  dog.bark();
+};

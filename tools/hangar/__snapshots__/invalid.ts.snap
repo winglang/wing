@@ -1474,7 +1474,21 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.test.w 1`] = `
-"error: Optional parameters must always be after all non-optional parameters.
+"error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.test.w:3:3
+  |
+3 |   my_method(x: num);
+  |   ^^^^^^^^^^^^^^^^^^ Expected function return type
+
+
+error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.test.w:5:3
+  |
+5 |   inflight my_method2(x: num);
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected function return type
+
+
+error: Optional parameters must always be after all non-optional parameters.
   --> ../../../examples/tests/invalid/function_type.test.w:9:25
   |
 9 | let my_func3 = (a: num, b: str?, c: bool) => {};
