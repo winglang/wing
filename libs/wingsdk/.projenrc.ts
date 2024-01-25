@@ -61,7 +61,7 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "esbuild-wasm",
+    "esbuild",
     "safe-stable-stringify",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will

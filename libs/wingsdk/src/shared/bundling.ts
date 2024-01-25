@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
-import { buildSync } from "esbuild-wasm";
+import { buildSync } from "esbuild";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
