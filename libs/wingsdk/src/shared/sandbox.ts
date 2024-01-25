@@ -2,7 +2,7 @@ import { mkdtemp, readFile } from "fs/promises";
 import { tmpdir } from "os";
 import * as path from "path";
 import * as util from "util";
-import * as vm from "vm";
+import { Worker } from "worker_threads";
 import { createBundle } from "./bundling";
 
 export interface SandboxOptions {
@@ -13,86 +13,22 @@ export interface SandboxOptions {
 }
 
 export class Sandbox {
-  private loaded = false; // "true" after first run (module is loaded into context)
   private createBundlePromise: Promise<void>;
   private entrypoint: string;
   private code: string | undefined;
+  private readonly timeouts: NodeJS.Timeout[] = [];
   private readonly options: SandboxOptions;
-  private readonly context: any = {};
 
   constructor(entrypoint: string, options: SandboxOptions = {}) {
     this.entrypoint = entrypoint;
     this.options = options;
-    this.context = this.createContext();
-    this.createBundlePromise = this.createBundle();
+    this.createBundlePromise = this.createBundle(); // start bundle creation
   }
 
-  private createContext() {
-    const sandboxProcess = {
-      ...process,
-
-      // override process.exit to throw an exception instead of exiting the process
-      exit: (exitCode: number) => {
-        throw new Error("process.exit() was called with exit code " + exitCode);
-      },
-
-      env: this.options.env,
-    };
-
-    const sandboxConsole: any = {};
-    const levels = ["debug", "info", "log", "warn", "error"];
-    for (const level of levels) {
-      sandboxConsole[level] = (...args: any[]) => {
-        const message = util.format(...args);
-        this.options.log?.(false, level, message);
-        // also log to stderr if DEBUG is set
-        if (process.env.DEBUG) {
-          console.error(message);
-        }
-      };
+  public async stop(): Promise<void> {
+    for (const timeout of this.timeouts) {
+      clearTimeout(timeout);
     }
-
-    const ctx: any = {};
-
-    // create a copy of all the globals from our current context.
-    for (const k of Object.getOwnPropertyNames(global)) {
-      try {
-        ctx[k] = (global as any)[k];
-      } catch {
-        // ignore unresolvable globals (see https://github.com/winglang/wing/pull/1923)
-      }
-    }
-
-    // append the user's context
-    for (const [k, v] of Object.entries(this.options.context ?? {})) {
-      ctx[k] = v;
-    }
-
-    const context = vm.createContext({
-      ...ctx,
-      process: sandboxProcess,
-      console: sandboxConsole,
-      exports: {},
-      require, // to support requiring node.js sdk modules (others will be bundled)
-    });
-
-    // emit an explicit error when trying to access `__dirname` and `__filename` because we cannot
-    // resolve these when bundling (this is true both for simulator and the cloud since we are
-    // bundling there as well).
-    const forbidGlobal = (name: string) => {
-      Object.defineProperty(context, name, {
-        get: () => {
-          throw new Error(
-            `${name} cannot be used within bundled cloud functions`
-          );
-        },
-      });
-    };
-
-    forbidGlobal("__dirname");
-    forbidGlobal("__filename");
-
-    return context;
   }
 
   private async createBundle() {
@@ -109,55 +45,121 @@ export class Sandbox {
     }
   }
 
-  private loadBundleOnce() {
-    if (this.loaded) {
-      return;
-    }
-
-    if (!this.code) {
-      throw new Error("Bundle not created yet - please report this as a bug");
-    }
-
-    // this will add stuff to the "exports" object within our context
-    vm.runInContext(this.code!, this.context, {
-      filename: this.entrypoint,
-    });
-
-    this.loaded = true;
-  }
-
   public async call(fn: string, ...args: any[]): Promise<any> {
     // wait for the bundle to finish creation
     await this.createBundlePromise;
 
-    // load the bundle into context on the first run
-    // we don't do this earlier because bundled code may have side effects
-    // and we want to simulate that a function is "cold" on the first run
-    this.loadBundleOnce();
+    // emit an explicit error when trying to access __dirname and __filename because we cannot
+    // resolve these when bundling (this is true both for simulator and the cloud since we are
+    // bundling there as well).
+    const shim = `
+const { parentPort: $parent } = require('worker_threads');
+const $resolve = (value) => $parent.postMessage({ type: 'resolve', value });
+const $reject = (reason) => $parent.postMessage({ type: 'reject', reason });
+console.log = (...args) => $parent.postMessage({ type: 'log', args });
+console.debug = (...args) => $parent.postMessage({ type: 'debug', args });
+console.info = (...args) => $parent.postMessage({ type: 'info', args });
+console.warn = (...args) => $parent.postMessage({ type: 'warn', args });
+console.error = (...args) => $parent.postMessage({ type: 'error', args });
+process.exit = (exitCode) => $parent.postMessage({ type: 'exit', exitCode });
+Object.defineProperty(globalThis, "__dirname", {
+  get: () => { throw new Error("__dirname cannot be used within bundled cloud functions"); },
+});
+Object.defineProperty(globalThis, "__filename", {
+  get: () => { throw new Error("__filename cannot be used within bundled cloud functions"); },
+});
+${this.code}
+$parent.on('message', async (message) => {
+  try {
+    const result = await exports[message.fn](...message.payload);
+    $resolve(result);
+  } catch (error) {
+    $reject(error);
+  }
+});
+      `;
+    console.error(shim);
 
-    return new Promise(($resolve, $reject) => {
-      const cleanup = () => {
-        delete this.context.$resolve;
-        delete this.context.$reject;
-      };
+    // currently, a fresh worker is used for every invocation
+    // it could be better to keep the worker alive and reuse it
+    // but this requires additional work to make sure logs between invocations
+    // are not mixed up, and timeouts are handled correctly
+    const worker = new Worker(shim, {
+      env: this.options.env,
+      eval: true,
+    });
 
-      this.context.$resolve = (value: any) => {
-        cleanup();
-        $resolve(value);
-      };
+    let cleanupStarted = false;
+    const cleanupWorker = async () => {
+      cleanupStarted = true;
+      try {
+        await worker.terminate();
+      } catch (err) {
+        console.error("worker terminate error:", err);
+      }
+    };
 
-      this.context.$reject = (reason?: any) => {
-        cleanup();
-        $reject(reason);
-      };
-
-      const code = `exports.${fn}(${args.join(
-        ","
-      )}).then($resolve).catch($reject);`;
-      vm.runInContext(code, this.context, {
-        filename: this.entrypoint,
-        timeout: this.options.timeout,
+    return new Promise((resolve, reject) => {
+      worker.postMessage({ type: "invoke", fn, payload: args });
+      worker.on("message", (message) => {
+        switch (message.type) {
+          case "resolve":
+            void cleanupWorker().then(() => resolve(message.value));
+            break;
+          case "reject":
+            console.error("rejecting", message);
+            void cleanupWorker().then(() => reject(message.reason));
+            break;
+          case "log":
+          case "debug":
+          case "info":
+          case "warn":
+          case "error":
+            this.options.log?.(
+              false,
+              message.type,
+              util.format(...message.args)
+            );
+            if (process.env.DEBUG) {
+              console.error(message);
+            }
+            break;
+          case "exit":
+            void cleanupWorker().then(() =>
+              reject(
+                new Error(
+                  `process.exit() was called with exit code ${message.exitCode}`
+                )
+              )
+            );
+            break;
+          default:
+            console.error("Unknown message type", message);
+        }
       });
+      worker.on("error", (error) => {
+        void cleanupWorker().then(() => reject(error));
+      });
+      worker.on("exit", (code) => {
+        if (cleanupStarted) {
+          // worker was terminated by us, so we don't need to reject
+        } else {
+          reject(new Error(`Worker stopped with exit code ${code}`));
+        }
+      });
+
+      if (this.options.timeout) {
+        const timeout = setTimeout(() => {
+          void cleanupWorker().then(() => {
+            reject(
+              new Error(
+                `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+              )
+            );
+          });
+        }, this.options.timeout);
+        this.timeouts.push(timeout);
+      }
     });
   }
 }

@@ -92,14 +92,9 @@ exports[`run single test > happy path 1`] = `
 exports[`run single test > test failure 1`] = `
 {
   "error": "Error: test failed
-<sanitized>
-<sanitized>
-<sanitized>
-    at Script.runInContext (node:vm:<sanitized>)
-    at Object.runInContext (node:vm:<sanitized>)
-<sanitized>
-    at new Promise (<anonymous>)
-<sanitized>
+    at Handler.handle ([worker eval]:<sanitized>)
+    at exports.handler ([worker eval]:<sanitized>)
+    at MessagePort.<anonymous> ([worker eval]:<sanitized>)
 <sanitized>
 <sanitized>",
   "pass": false,
