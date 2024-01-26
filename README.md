@@ -1,5 +1,13 @@
+
+
+ 
+<div align="center">
+<img width="800"  alt="notification-center-912bb96e009fb3a69bafec23bcde00b0" src="https://github.com/winglang/wing/assets/66887028/6023ceab-060e-4b48-be98-00a546e8c724" alt-text="GIF of Wing's Clouds">
+</div>
+
 <h1 align="center">Welcome to the Wing Language! :wave:</h1>
 <p align="center">
+
   <a href="https://www.winglang.io/learn/">Take a Tour</a>
   ▪︎
   <a href="https://www.winglang.io/docs/">Getting Started</a>
@@ -28,9 +36,9 @@ Developing for the cloud today requires mastering various layers of the cloud st
 Winglang addresses these pains by letting you work at a higher level of abstraction and allowing you to focus on business logic instead of cloud mechanics, only surfacing low-level details when it's needed.
 We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
-<p align="center">
-  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="360px">
-</p>
+<div align="center">
+  <img src="./apps/wing/logo/demo.gif" alt="Wing Demo" height="400px">
+</div>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
