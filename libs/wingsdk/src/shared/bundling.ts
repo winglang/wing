@@ -71,7 +71,10 @@ export function createBundle(
   const sourcemapData = JSON.parse(
     new TextDecoder().decode(esbuild.outputFiles[0].contents)
   );
-  sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
+  if (sourcemapData.sourceRoot) {
+    sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
+  }
+
   for (const [idx, source] of Object.entries(
     sourcemapData.sources as string[]
   )) {
