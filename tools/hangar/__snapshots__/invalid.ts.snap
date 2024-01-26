@@ -1257,21 +1257,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`extern_above.test.w 1`] = `
-"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
-  --> ../../../examples/tests/invalid/extern_above.test.w:2:3
-  |
-2 |   extern \\"../valid/external_js.js\\" static getGreeting(name: str): str;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.test.w:2:45
@@ -2235,6 +2220,18 @@ error: Symbol \\"foo\\" already defined in this scope
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
+`;
+
+exports[`invalid compile directory 1`] = `""`;
+
+exports[`invalid compile directory 2`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+  --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
+  |
+2 |   extern \\"../../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+
+"
 `;
 
 exports[`issue_2767.test.w 1`] = `

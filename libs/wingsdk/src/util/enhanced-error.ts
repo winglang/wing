@@ -2,6 +2,10 @@ import { stat } from "node:fs/promises";
 import { relative, resolve, sep, join } from "node:path";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
+import { normalPath } from "../shared/misc";
+
+/** Resolved sources we want to remove from the pretty stack */
+const KNOWN_SOURCES_TO_STRIP = ["wingsdk/src/helpers.ts"];
 
 export interface PrettyPrintErrorOptions {
   /**
@@ -67,13 +71,23 @@ export async function prettyPrintError(
 
   st = await st.clean().withSourcesAsync();
 
-  let traceWithSources = st.items.filter((item) => !item.native);
+  let traceWithSources = st.items
+    .filter((item) => !item.native)
+    // strip node internals
+    .filter((item) => !item.file.startsWith("node:internal/"))
+    .filter(
+      (item) =>
+        !KNOWN_SOURCES_TO_STRIP.some((source) =>
+          normalPath(item.file).endsWith(source)
+        )
+    );
 
   if (traceWithSources.length === 0) {
     return message;
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+
   if (
     interestingRoot !== undefined &&
     (await stat(interestingRoot)
