@@ -1,9 +1,11 @@
-import { mkdtemp, readFile } from "fs/promises";
+import * as cp from "child_process";
+import { mkdtemp, readFile, writeFile, stat } from "fs/promises";
 import { tmpdir } from "os";
 import * as path from "path";
 import * as util from "util";
 import * as vm from "vm";
 import { createBundle } from "./bundling";
+import { processStream } from "./stream-processor";
 
 export interface SandboxOptions {
   readonly env?: { [key: string]: string };
@@ -12,8 +14,119 @@ export interface SandboxOptions {
   readonly log?: (internal: boolean, level: string, message: string) => void;
 }
 
+type ProcessRequest = {
+  fn: string;
+  args: any[];
+};
+
+type ProcessResponse =
+  | {
+      type: "resolve";
+      value: any;
+    }
+  | {
+      type: "reject";
+      reason: Error;
+    };
+
 export class Sandbox {
-  private loaded = false; // "true" after first run (module is loaded into context)
+  private createBundlePromise: Promise<void>;
+  private entrypoint: string;
+  private readonly options: SandboxOptions;
+
+  constructor(entrypoint: string, options: SandboxOptions = {}) {
+    this.entrypoint = entrypoint;
+    this.options = options;
+    this.createBundlePromise = this.createBundle();
+  }
+
+  private async createBundle() {
+    const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
+
+    // wrap contents with a shim that handles the communication with the parent process
+    // we insert this shim before bundling to ensure source maps will work correctly
+    let contents = (await readFile(this.entrypoint)).toString();
+
+    // log a warning if contents includes __dirname or __filename
+    if (contents.includes("__dirname") || contents.includes("__filename")) {
+      this.options.log?.(
+        false,
+        "warn",
+        `Warning: __dirname and __filename cannot be used within bundled cloud functions. There may be unexpected behavior.`
+      );
+    }
+
+    contents = `
+"use strict";
+${contents}
+process.on("message", async (message) => {
+  const { fn, args } = message;
+  try {
+    const value = await exports[fn](...args);
+    process.send({ type: "resolve", value });
+  } catch (err) {
+    process.send({ type: "reject", reason: err });
+  }
+});
+`;
+    const wrappedPath = this.entrypoint.replace(/\.js$/, ".sandbox.js");
+    await writeFile(wrappedPath, contents);
+    const bundle = createBundle(wrappedPath, [], workdir);
+    this.entrypoint = bundle.entrypointPath;
+
+    if (process.env.DEBUG) {
+      const bundleSize = (await stat(bundle.entrypointPath)).size;
+      this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    }
+  }
+
+  public async call(fn: string, ...args: any[]): Promise<any> {
+    // wait for the bundle to finish creation
+    await this.createBundlePromise;
+
+    // start a Node.js process that runs the bundled code
+    const child = cp.fork(this.entrypoint, [], {
+      env: this.options.env,
+      stdio: "pipe",
+      execArgv: ["--enable-source-maps"],
+      serialization: "advanced",
+    });
+
+    const log = (message: string) => this.options.log?.(false, "log", message);
+    const logError = (message: string) =>
+      this.options.log?.(false, "error", message);
+
+    if (child.stdout) {
+      processStream(child.stdout, log);
+    }
+    if (child.stderr) {
+      processStream(child.stderr, logError);
+    }
+
+    return new Promise((resolve, reject) => {
+      child.send({ fn, args } as ProcessRequest);
+      child.on("message", (message: ProcessResponse) => {
+        if (message.type === "resolve") {
+          child.kill();
+          resolve(message.value);
+        } else if (message.type === "reject") {
+          child.kill();
+          reject(message.reason);
+        }
+      });
+      child.on("error", (error) => {
+        child.kill();
+        reject(error);
+      });
+      child.on("exit", (code, _signal) => {
+        child.kill();
+        reject(new Error(`Process exited with code ${code}`));
+      });
+    });
+  }
+}
+
+export class LegacySandbox {
   private createBundlePromise: Promise<void>;
   private entrypoint: string;
   private code: string | undefined;
@@ -109,10 +222,9 @@ export class Sandbox {
     }
   }
 
-  private loadBundleOnce() {
-    if (this.loaded) {
-      return;
-    }
+  public async call(fn: string, ...args: any[]): Promise<any> {
+    // wait for the bundle to finish creation
+    await this.createBundlePromise;
 
     if (!this.code) {
       throw new Error("Bundle not created yet - please report this as a bug");
@@ -122,18 +234,6 @@ export class Sandbox {
     vm.runInContext(this.code!, this.context, {
       filename: this.entrypoint,
     });
-
-    this.loaded = true;
-  }
-
-  public async call(fn: string, ...args: any[]): Promise<any> {
-    // wait for the bundle to finish creation
-    await this.createBundlePromise;
-
-    // load the bundle into context on the first run
-    // we don't do this earlier because bundled code may have side effects
-    // and we want to simulate that a function is "cold" on the first run
-    this.loadBundleOnce();
 
     return new Promise(($resolve, $reject) => {
       const cleanup = () => {
@@ -151,9 +251,9 @@ export class Sandbox {
         $reject(reason);
       };
 
-      const code = `exports.${fn}(${args.join(
-        ","
-      )}).then($resolve).catch($reject);`;
+      const code = `exports.${fn}(${args
+        .map((arg) => JSON.stringify(arg))
+        .join(",")}).then($resolve).catch($reject);`;
       vm.runInContext(code, this.context, {
         filename: this.entrypoint,
         timeout: this.options.timeout,
