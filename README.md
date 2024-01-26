@@ -2,7 +2,7 @@
 
  
 <div align="center">
-<img width="800"  alt="notification-center-912bb96e009fb3a69bafec23bcde00b0" src="https://github.com/winglang/wing/assets/66887028/6023ceab-060e-4b48-be98-00a546e8c724" alt-text="GIF of Wing's Clouds">
+<img width="800" src="https://github.com/winglang/wing/assets/66887028/6023ceab-060e-4b48-be98-00a546e8c724" alt="GIF of Wing's Clouds">
 </div>
 
 <h1 align="center">Welcome to the Wing Language! :wave:</h1>
