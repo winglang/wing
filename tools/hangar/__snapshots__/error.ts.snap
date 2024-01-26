@@ -9,7 +9,7 @@ exports[`bool_from_json.test.w 1`] = `
   | 
 5 | let a: bool = bool.fromJson(j.get(\\"a\\"));
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/bool_from_json.test.w:5:15
  
  
 Tests 1 failed (1)
@@ -24,7 +24,7 @@ exports[`num_from_str.test.w 1`] = `
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
 3 | let a: num = num.fromStr(\\"123a\\");
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/num_from_str.test.w:3:14
  
  
 Tests 1 failed (1)
@@ -41,7 +41,7 @@ exports[`number_from_json.test.w 1`] = `
   | 
 5 | let a: num = num.fromJson(j.get(\\"a\\"));
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/number_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
@@ -63,7 +63,7 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   | let bucket1 = new cloud.Bucket();
 4 | let bucket2 = new cloud.Bucket();
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/repeat_construct_id.test.w:4:15
  
  
 Tests 1 failed (1)
@@ -85,7 +85,7 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   | let bucket1 = new cloud.Bucket() as \\"{make_name()}\\";
 8 | let bucket2 = new cloud.Bucket() as \\"{make_name()}\\";
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
  
  
 Tests 1 failed (1)
@@ -102,7 +102,7 @@ exports[`string_from_json.test.w 1`] = `
   | 
 5 | let a: str = str.fromJson(j.get(\\"a\\"));
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/string_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
@@ -119,7 +119,7 @@ exports[`struct_from_json_1.test.w 1`] = `
    | 
 11 | Person.fromJson(j);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_1.test.w:11:1
  
  
 Tests 1 failed (1)
@@ -137,7 +137,7 @@ exports[`struct_from_json_2.test.w 1`] = `
    | 
 22 | Student.fromJson(missingAdvisor);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_2.test.w:22:1
  
  
 Tests 1 failed (1)
@@ -155,7 +155,7 @@ exports[`struct_from_json_3.test.w 1`] = `
    | 
 26 | Student.fromJson(invalidAdvisorInArray);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_3.test.w:26:1
  
  
 Tests 1 failed (1)
@@ -172,7 +172,7 @@ exports[`struct_from_json_4.test.w 1`] = `
    | 
 27 | Student.fromJson(invalidAdvisorInArray);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_4.test.w:27:1
  
  
 Tests 1 failed (1)
@@ -189,7 +189,7 @@ exports[`struct_from_json_5.test.w 1`] = `
    | 
 16 | Foo.fromJson(jFoo);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_5.test.w:16:1
  
  
 Tests 1 failed (1)
@@ -202,7 +202,7 @@ exports[`utilities.test.w 1`] = `
   --> ../../../examples/tests/error/utilities.test.w:1:1
 1 | assert(false);
   | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/utilities.test.w:1:1
  
  
 Tests 1 failed (1)
