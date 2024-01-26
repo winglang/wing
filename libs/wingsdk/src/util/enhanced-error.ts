@@ -196,10 +196,16 @@ function printItem(item: StackTracey.Entry) {
     calleeShort = "";
   }
 
+  if (item.fileName.endsWith(".w") && calleeShort.startsWith("async ")) {
+    // In userland wing traces, async = inflight and is currently redundant to mention
+    calleeShort = calleeShort.replace("async ", "");
+  }
+
   const file = item.file;
   const line = item.line;
   const column = item.column;
-  return `at ${calleeShort}(${file}:${line}:${column})`;
+
+  return `at ${calleeShort}${file}:${line}:${column}`;
 }
 
 export function rewriteCommonError(error: Error): Error {
