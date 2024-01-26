@@ -74,7 +74,7 @@ export async function prettyPrintError(
     // strip wingsdk
     .filter(
       (item) =>
-        !normalPath(item.file).includes("/libs/wingsdk/") &&
+        !normalPath(item.file).includes("/libs/wingsdk/src/") &&
         !normalPath(item.file).includes("/@winglang/sdk/")
     )
     // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
@@ -82,8 +82,6 @@ export async function prettyPrintError(
     .withSourcesAsync();
 
   let traceWithSources = st.items;
-
-  // special handling: If the bottom of the stack is a js file
 
   if (traceWithSources.length === 0) {
     return message;
