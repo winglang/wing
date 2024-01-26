@@ -4,9 +4,6 @@ import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
 import { normalPath } from "../shared/misc";
 
-/** Resolved sources we want to remove from the pretty stack */
-const KNOWN_SOURCES_TO_STRIP = ["wingsdk/src/helpers.ts"];
-
 export interface PrettyPrintErrorOptions {
   /**
    * The source entrypoint. If provided, the stack trace will only show source files that are in the same directory or its subdirectories.
@@ -69,18 +66,22 @@ export async function prettyPrintError(
 
   const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
 
-  st = await st.clean().withSourcesAsync();
+  console.log(st.asTable());
 
-  let traceWithSources = st.items
+  st = await st
+    .clean()
     .filter((item) => !item.native)
     // strip node internals
-    .filter((item) => !item.file.startsWith("node:internal/"))
-    .filter(
-      (item) =>
-        !KNOWN_SOURCES_TO_STRIP.some((source) =>
-          normalPath(item.file).endsWith(source)
-        )
-    );
+    .filter((item) => !item.file.startsWith("node:"))
+    // strip wingsdk
+    .filter((item) => !normalPath(item.file).includes("/libs/wingsdk/src/"))
+    // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
+    .filter((item) => !normalPath(item.file).match(/\.wing\/handler_\w+\.js$/))
+    .withSourcesAsync();
+
+  let traceWithSources = st.items;
+
+  // special handling: If the bottom of the stack is a js file
 
   if (traceWithSources.length === 0) {
     return message;
@@ -189,6 +190,11 @@ function printItem(item: StackTracey.Entry) {
     item.calleeShort === "new $Root" ||
     item.calleeShort.includes("<anonymous>")
   ) {
+    calleeShort = "";
+  }
+
+  if (item.callee.match(/\$Closure\d+\.handle$/)) {
+    // inflight closures use "handle" as a way to represent calling the inflight itself
     calleeShort = "";
   }
 
