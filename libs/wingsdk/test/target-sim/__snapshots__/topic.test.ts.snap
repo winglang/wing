@@ -157,6 +157,7 @@ exports[`topic publishes messages to multiple subscribers 1`] = `
   "Publish (message=Alpha).",
   "Sending message (message=Alpha, subscriber=sim-0).",
   "InvokeAsync (payload=\\"Alpha\\").",
+  "Received Alpha",
   "Sending message (message=Alpha, subscriber=sim-3).",
   "InvokeAsync (payload=\\"Alpha\\").",
   "@winglang/sdk.sim.EventMapping deleted.",
