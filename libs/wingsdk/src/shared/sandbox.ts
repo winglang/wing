@@ -32,12 +32,19 @@ type ProcessResponse =
 export class Sandbox {
   private createBundlePromise: Promise<void>;
   private entrypoint: string;
+  private readonly timeouts: NodeJS.Timeout[] = [];
   private readonly options: SandboxOptions;
 
   constructor(entrypoint: string, options: SandboxOptions = {}) {
     this.entrypoint = entrypoint;
     this.options = options;
     this.createBundlePromise = this.createBundle();
+  }
+
+  public async cleanup() {
+    for (const timeout of this.timeouts) {
+      clearTimeout(timeout);
+    }
   }
 
   private async createBundle() {
@@ -122,6 +129,18 @@ process.on("message", async (message) => {
         child.kill();
         reject(new Error(`Process exited with code ${code}`));
       });
+
+      if (this.options.timeout) {
+        const timeout = setTimeout(() => {
+          child.kill();
+          reject(
+            new Error(
+              `Function timed out (it was configured to only run for ${this.options.timeout}ms)`
+            )
+          );
+        }, this.options.timeout);
+        this.timeouts.push(timeout);
+      }
     });
   }
 }

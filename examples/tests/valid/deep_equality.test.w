@@ -39,6 +39,11 @@ test "Json with different values" {
   assert(!(jsonA != jsonB));
 }
 
+test "Json.values equality" {
+  let j = Json { hello: 123, world: [1, 2, 3] };
+  assert(Json.values(j) == [Json 123, Json [1, 2, 3]]);
+}
+
 //-----------------------------------------------------------------------------
 // Set
 //-----------------------------------------------------------------------------

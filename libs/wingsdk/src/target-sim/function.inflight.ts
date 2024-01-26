@@ -46,7 +46,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    return;
+    await this.sandbox.cleanup();
   }
 
   public async save(): Promise<void> {}
