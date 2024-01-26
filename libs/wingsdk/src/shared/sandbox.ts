@@ -13,7 +13,6 @@ export interface SandboxOptions {
 }
 
 export class Sandbox {
-  private loaded = false; // "true" after first run (module is loaded into context)
   private createBundlePromise: Promise<void>;
   private entrypoint: string;
   private code: string | undefined;
@@ -109,10 +108,9 @@ export class Sandbox {
     }
   }
 
-  private loadBundleOnce() {
-    if (this.loaded) {
-      return;
-    }
+  public async call(fn: string, ...args: any[]): Promise<any> {
+    // wait for the bundle to finish creation
+    await this.createBundlePromise;
 
     if (!this.code) {
       throw new Error("Bundle not created yet - please report this as a bug");
@@ -122,18 +120,6 @@ export class Sandbox {
     vm.runInContext(this.code!, this.context, {
       filename: this.entrypoint,
     });
-
-    this.loaded = true;
-  }
-
-  public async call(fn: string, ...args: any[]): Promise<any> {
-    // wait for the bundle to finish creation
-    await this.createBundlePromise;
-
-    // load the bundle into context on the first run
-    // we don't do this earlier because bundled code may have side effects
-    // and we want to simulate that a function is "cold" on the first run
-    this.loadBundleOnce();
 
     return new Promise(($resolve, $reject) => {
       const cleanup = () => {
