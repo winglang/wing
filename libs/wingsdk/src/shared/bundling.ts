@@ -52,7 +52,7 @@ export function createBundle(
       "@winglang/sdk": SDK_PATH,
     },
     minify: false,
-    sourcemap: "external",
+    sourcemap: "linked",
     platform: "node",
     target: "node18",
     external,
@@ -64,8 +64,7 @@ export function createBundle(
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 
-  const output = esbuild.outputFiles[1];
-  let fileContents = new TextDecoder().decode(output.contents);
+  const bundleOutput = esbuild.outputFiles[1];
 
   // ensure source paths have posix path separators
   const sourcemapData = JSON.parse(
@@ -81,13 +80,14 @@ export function createBundle(
     sourcemapData.sources[idx] = normalPath(source);
   }
 
-  fileContents += `//# sourceMappingURL=${soucemapFilename}`;
-
-  writeFileSync(outfile, fileContents);
+  writeFileSync(outfile, bundleOutput.contents);
   writeFileSync(outfileMap, JSON.stringify(sourcemapData));
 
   // calculate a md5 hash of the contents of asset.path
-  const codeHash = crypto.createHash("md5").update(fileContents).digest("hex");
+  const codeHash = crypto
+    .createHash("md5")
+    .update(bundleOutput.contents)
+    .digest("hex");
 
   return {
     entrypointPath: outfile,
