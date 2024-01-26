@@ -66,8 +66,6 @@ export async function prettyPrintError(
 
   const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
 
-  console.log(st.asTable());
-
   st = await st
     .clean()
     .filter((item) => !item.native)
