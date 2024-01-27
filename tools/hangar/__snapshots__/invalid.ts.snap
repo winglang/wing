@@ -418,7 +418,7 @@ exports[`ambiguous_api_paths.test.w 1`] = `
    | api.get(\\"<ABSOLUTE>/path\\", handler);
 12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
  
  
 Tests 1 failed (1)
@@ -1248,21 +1248,6 @@ exports[`extern.test.w 1`] = `
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
   |   ^^^^^^^^^^^^^^^^^ File not found: \\"./sad.js\\"
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`extern_above.test.w 1`] = `
-"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
-  --> ../../../examples/tests/invalid/extern_above.test.w:2:3
-  |
-2 |   extern \\"../valid/external_js.js\\" static getGreeting(name: str): str;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
 
 
  
@@ -2235,6 +2220,16 @@ error: Symbol \\"foo\\" already defined in this scope
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
+`;
+
+exports[`invalid compile directory 1`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+  --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
+  |
+2 |   extern \\"../../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+
+"
 `;
 
 exports[`issue_2767.test.w 1`] = `

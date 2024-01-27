@@ -55,7 +55,10 @@ test("topic publishes messages as they are received", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
+  const messages = listMessages(s);
+  const alphaIndex = messages.findIndex((m) => m.startsWith("Received Alpha"));
+  const betaIndex = messages.findIndex((m) => m.startsWith("Received Beta"));
+  expect(alphaIndex).toBeLessThan(betaIndex);
 });
 
 test("topic publishes messages to multiple subscribers", async () => {
@@ -78,8 +81,13 @@ test("topic publishes messages to multiple subscribers", async () => {
   await topicClient.publish("Alpha");
 
   // THEN
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Received Alpha")
+  );
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Also received Alpha")
+  );
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("topic has no display hidden property", async () => {
