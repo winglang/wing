@@ -3296,11 +3296,11 @@ impl<'a> TypeChecker<'a> {
 				self.update_known_inferences(&mut return_type, &scope.span);
 			}
 
-            // iterate over the statements in the scope and check if there are any statements
-            // we care about
-            let mut has_stmt_visitor = HasStatementVisitor::default();
-            has_stmt_visitor.visit(&scope.statements);
-        
+			// iterate over the statements in the scope and check if there are any statements
+			// we care about
+			let mut has_stmt_visitor = HasStatementVisitor::default();
+			has_stmt_visitor.visit(&scope.statements);
+
 			// If the scope doesn't contain any return statements and the return type isn't void or T? or
 			// the scope itself does not have a throw error, throw an error to the user
 			if (!has_stmt_visitor.seen_throw && is_init)
