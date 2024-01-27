@@ -704,6 +704,14 @@ impl<'a> JSifier<'a> {
 						// We use the abstract inequality operator here because we want to check for null or undefined
 						new_code!(expr_span, "((", js_exp, ") != null)")
 					}
+					UnaryOperator::OptionalUnwrap => {
+						new_code!(
+							expr_span,
+							"(",
+							js_exp,
+							"??(()=>{throw new Error(\"Unexpected nil\");})())"
+						)
+					}
 				}
 			}
 			ExprKind::Binary { op, left, right } => {
