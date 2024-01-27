@@ -1,5 +1,5 @@
 mod class_fields_init;
-mod has_return_stmt;
+mod has_type_stmt;
 mod inference_visitor;
 pub(crate) mod jsii_importer;
 pub mod lifts;
@@ -19,7 +19,7 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::file_graph::FileGraph;
-use crate::type_check::has_return_stmt::HasReturnStatementVisitor;
+use crate::type_check::has_type_stmt::HasStatementVisitor;
 use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
@@ -3296,11 +3296,19 @@ impl<'a> TypeChecker<'a> {
 				self.update_known_inferences(&mut return_type, &scope.span);
 			}
 
-			let mut has_return_stmt_visitor = HasReturnStatementVisitor::default();
-			has_return_stmt_visitor.visit(&scope.statements);
-
-			// If the scope doesn't contain any return statements and the return type isn't void or T?, throw an error
-			if !has_return_stmt_visitor.seen_return && !return_type.is_void() && !return_type.is_option() && !is_init {
+            // iterate over the statements in the scope and check if there are any statements
+            // we care about
+            let mut has_stmt_visitor = HasStatementVisitor::default();
+            has_stmt_visitor.visit(&scope.statements);
+        
+			// If the scope doesn't contain any return statements and the return type isn't void or T? or
+			// the scope itself does not have a throw error, throw an error to the user
+			if (!has_stmt_visitor.seen_throw && is_init)
+				&& !has_stmt_visitor.seen_return
+				&& !return_type.is_void()
+				&& !return_type.is_option()
+				&& !is_init
+			{
 				self.spanned_error(
 					scope,
 					format!(
