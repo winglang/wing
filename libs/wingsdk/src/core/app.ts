@@ -4,6 +4,7 @@ import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
+import { ParameterRegistrar } from "../platform";
 
 /**
  * Props for all `App` classes.
@@ -59,6 +60,11 @@ export interface AppProps {
    * @default - []
    */
   readonly newInstanceOverrides?: any[];
+
+  /**
+   * ParameterRegistrar of composed platforms
+   */
+  readonly platformParameterRegistrar?: ParameterRegistrar;
 }
 
 /**
@@ -144,6 +150,12 @@ export abstract class App extends Construct implements IApp {
    */
   protected _synthHooks?: SynthHooks;
 
+  /**
+   * InputRegistrar of composed platforms
+   * @internal
+   */
+  protected _platformParameterRegistrar?: ParameterRegistrar;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -159,7 +171,8 @@ export abstract class App extends Construct implements IApp {
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-  }
+    this._platformParameterRegistrar = props.platformParameterRegistrar;
+  } 
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
@@ -169,6 +182,23 @@ export abstract class App extends Construct implements IApp {
   public get workdir() {
     return `${this.outdir}/.wing`;
   }
+
+  /**
+   * The input registrar for the app, can be used to find input values that were provided to the 
+   * wing application.
+   */
+  public get inputRegistrar() {
+    // Should never be undefined, unless someone creates an app directly
+    // rather than using the `PlatformManager.createApp` method.
+    // in which case we just create an empty InputRegistrar
+    if (!this._platformParameterRegistrar) {
+      this._platformParameterRegistrar = new ParameterRegistrar("AppInputs");
+      this._platformParameterRegistrar.synth();
+    }
+
+    return this._platformParameterRegistrar!;
+  }
+
 
   /**
    * Synthesize the app into an artifact.

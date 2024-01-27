@@ -103,6 +103,7 @@ const project = new cdk.JsiiProject({
     "jsonschema",
     // fs module dependency
     "yaml",
+    "toml",
     // enhanced diagnostics
     "stacktracey",
     "ulid",

@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { Construct } from "constructs";
-import { parse } from "yaml";
+import * as yaml from "yaml";
 
 /**
  * @param path the node path of the resource
@@ -57,7 +57,7 @@ export const getPlatformSpecificValues = (
   return result;
 };
 
-const getPlatformSpecificValue = (
+export const getPlatformSpecificValue = (
   path: string,
   argument: string,
   wingValues: string
@@ -80,9 +80,9 @@ const getPlatformSpecificValue = (
   return;
 };
 
-const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
+export const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
   const data = readFileSync(file);
-  const yamlObj = parse(data.toString());
+  const yamlObj = yaml.parse(data.toString());
   return yamlObj[`${path}`];
 };
 

@@ -13,6 +13,11 @@ export interface IPlatform {
   readonly target: string;
 
   /**
+   * Provide a list of inputs that the platform will accept or require
+   */
+  registerParameters?(inputRegistrar: Construct): void;
+
+  /**
    * Hooks for overriding newInstance calls
    *
    * @param type string fqn of the resource type

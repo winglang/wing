@@ -13,6 +13,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
@@ -24,7 +25,7 @@ export class Redis extends ex.Redis {
   private readonly clusterId: string;
   private readonly clusterArn: string;
   private readonly securityGroup: SecurityGroup;
-  private readonly subnet: Subnet;
+  private readonly subnet: Subnet | DataAwsSubnet;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
