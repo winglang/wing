@@ -107,12 +107,12 @@ let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
 // Unwrap non-optional type
 
 let nonOptional: num = 10;
-let unwrapValue = nonOptional!
+let unwrapValue = nonOptional!;
 //                ^^^^^^^^^^^ Expected optional type, found "num"
 
 let nonOptionalFn = (): num => {
   return 10;
-}
-let unwrapValueFn = nonOptionalFn()!
+};
+let unwrapValueFn = nonOptionalFn()!;
 //                  ^^^^^^^^^^^^^^^ Expected optional type, found "num"
 
