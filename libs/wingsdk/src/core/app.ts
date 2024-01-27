@@ -63,6 +63,7 @@ export interface AppProps {
 
   /**
    * ParameterRegistrar of composed platforms
+   * @default - undefined
    */
   readonly platformParameterRegistrar?: ParameterRegistrar;
 }

@@ -86,6 +86,9 @@ export class PlatformParameter extends Construct {
     return this.resolveValueFromPath(parameters[pathParts[0]], nextPath);
   }
 
+  /**
+   * Set whether the parameter is required
+   */
   public set required(r: boolean) {
     this._required = r;
   }
