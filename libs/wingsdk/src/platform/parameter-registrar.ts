@@ -9,7 +9,7 @@ import { Construct } from "constructs";
  */
 export class ParameterRegistrar extends Construct {
   private synthed: boolean = false;
-  private inputValueByPath: { [key: string]: any } = {};
+  private parameterValueByPath: { [key: string]: any } = {};
   private invalidInputMessages: string[] = [];
 
   /** @internal */
@@ -20,16 +20,27 @@ export class ParameterRegistrar extends Construct {
     this._rawParameters = loadPlatformSpecificValues();
   }
 
+  /**
+   * Registers an invalid input message
+   * 
+   * @param message the message to register
+   */
   public registerInvalidInputMessage(message: string) {
     this.invalidInputMessages.push(message);
   }
 
+  /**
+   * Reads a parameter value from the registrar
+   * 
+   * @param path the path of the parameter
+   * @returns the value of the parameter
+   */
   public readParameterValue(path: string): any {
     if (!this.synthed) {
       throw new Error("Cannot get parameter value before synthing registrar");
     }
     
-    return this.inputValueByPath[path];
+    return this.parameterValueByPath[path];
   }
 
   /**
@@ -42,11 +53,14 @@ export class ParameterRegistrar extends Construct {
     
     const isParameter = (node: Construct) => node instanceof PlatformParameter;
 
-    const inputs: PlatformParameter[] = this.node.findAll().filter(isParameter) as PlatformParameter[];
+    const parameters: PlatformParameter[] = this.node.findAll().filter(isParameter) as PlatformParameter[];
 
-    for (let input of inputs) {
-      input.reportValidationErrorsToRegistrar(this);
-      this.inputValueByPath[input.path] = input.value;
+    for (let param of parameters) {
+      const validationErrors = param.collectValidationErrors();
+      if (validationErrors.length > 0) {
+        this.invalidInputMessages.push(...validationErrors);
+      }
+      this.parameterValueByPath[param.path] = param.value;
     }
 
     // If any invalid input messages were registered, then throw an error

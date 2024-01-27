@@ -13,29 +13,29 @@ export class Platform implements IPlatform {
   }
 
   public registerParameters?(inputRegistrar: ParameterRegistrar) {
-    const vpcInput = new PlatformParameter(inputRegistrar, "VPC", {
+    const vpcParameter = new PlatformParameter(inputRegistrar, "VPC", {
       path: `${this.target}/vpc`,
       description: "Determine whether to create a VPC or use an existing one (if needed)",
       choices: ["new", "existing"],
     });
 
-    const existingVPCIdInput = new PlatformParameter(inputRegistrar, "ExistingVPCID", {
+    const existingVPCIdParameter = new PlatformParameter(inputRegistrar, "ExistingVPCID", {
       path: `${this.target}/vpc_id`,
       description: "The ID of the existing VPC to use",
     });
 
-    const existingPrivateSubnetIdsInput = new PlatformParameter(inputRegistrar, "ExistingPrivateSubnetIDs", {
+    const existingPrivateSubnetIdsParameter = new PlatformParameter(inputRegistrar, "ExistingPrivateSubnetIDs", {
       path: `${this.target}/private_subnet_id`,
       description: "The IDs of the existing private subnets to use",
     });
 
-    const existingPublicSubnetIdsInput = new PlatformParameter(inputRegistrar, "ExistingPublicSubnetIDs", {
+    const existingPublicSubnetIdsParameter = new PlatformParameter(inputRegistrar, "ExistingPublicSubnetIDs", {
       path: `${this.target}/public_subnet_id`,
       description: "The IDs of the existing public subnets to use",
     });
 
-    vpcInput.addDependentInput(existingVPCIdInput, "existing");
-    vpcInput.addDependentInput(existingPrivateSubnetIdsInput, "existing");
-    vpcInput.addDependentInput(existingPublicSubnetIdsInput, "existing");
+    vpcParameter.addDependentParameter(existingVPCIdParameter, "existing");
+    vpcParameter.addDependentParameter(existingPrivateSubnetIdsParameter, "existing");
+    vpcParameter.addDependentParameter(existingPublicSubnetIdsParameter, "existing");
   }
 }

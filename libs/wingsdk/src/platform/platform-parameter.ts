@@ -7,11 +7,20 @@ import { ParameterRegistrar } from "./parameter-registrar";
 export interface PlatformParameterProps {
   /** The path the parameter will be read from */
   readonly path: string;
-  /** The description of the parameter */
+  /** 
+   * The description of the parameter 
+   * @default - no description
+  */
   readonly description?: string;
-  /** Whether the parameter is required */
+  /** 
+   * Whether the parameter is required 
+   * @default - false
+  */
   readonly required?: boolean;
-  /** Restrict choices for the parameter */
+  /** 
+   * Restrict choices for the parameter 
+   * @default - no choices
+  */
   readonly choices?: any[];
 }
 
@@ -46,12 +55,19 @@ export class PlatformParameter extends Construct {
     this.value = this.resolveValueFromPath(scope._rawParameters, this.path);
   }
 
-  public addDependentInput(input: PlatformParameter, onChoice: string = "*") {
+  /**
+   * Specify a parameter that is dependent on this parameter
+   * The dependent parameter will be required if the choice is selected
+   * 
+   * @param parameter the parameter that is dependent on this parameter
+   * @param onChoice - default: * optionally specify a choice that the dependent parameter is dependent on
+   */
+  public addDependentParameter(parameter: PlatformParameter, onChoice: string = "*") {
     let choiceDependents = this.dependentInputsByChoice[onChoice] ?? [];
-    choiceDependents.push(input);
+    choiceDependents.push(parameter);
     this.dependentInputsByChoice[onChoice] = choiceDependents;
 
-    input.node.addDependency(this);
+    parameter.node.addDependency(this);
   }
 
   private resolveValueFromPath(parameters: { [key: string]: any }, path: string): any {
@@ -75,22 +91,28 @@ export class PlatformParameter extends Construct {
   }
 
 
-  reportValidationErrorsToRegistrar(registrar: ParameterRegistrar): any {
+  /**
+   * Returns a list of validation errors with the parameter
+   * 
+   * @returns a list of validation errors
+   */
+  collectValidationErrors(): string[] {
+    let errors: string[] = [];
     // If the value was required and not provided then we have an issue
     if (this._required && !this.value) {
-      registrar.registerInvalidInputMessage(`Input: "${this.path}" is required`);
+      errors.push(`Parameters: "${this.path}" is required`);
     }
 
     // if the value was not required, and not provided, then we are done
     if (!this._required && !this.value) {
-      return;
+      return errors;
     }
 
     // If the value was provided, and we have limited choices, then we need to check
     // that the value is one of the choices
     if (this.choices && this.choices.length > 0) {
       if (!this.choices.includes(this.value)) {
-        registrar.registerInvalidInputMessage(`Input: "${this.path}", expects a value from the following choices: [ ${this.choices.join(", ")} ]`);
+        errors.push(`Parameters: "${this.path}", expects a value from the following choices: [ ${this.choices.join(", ")} ]`);
       }
     }
 
@@ -105,5 +127,7 @@ export class PlatformParameter extends Construct {
         dependent.required = true;
       }
     }
+
+    return errors;
   }
 }
