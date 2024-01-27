@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import path, { extname } from "path";
 import * as yaml from "yaml";
 import * as toml from "toml";
@@ -69,22 +69,25 @@ export function loadPlatformSpecificValues() {
   const cliValues = createValuesObjectFromString(process.env.WING_VALUES ?? "");
   
   const file = path.join(process.cwd(), process.env.WING_VALUES_FILE ?? "");
-  const data = readFileSync(file, "utf-8");
+  if (existsSync(file) === false) {
+    const data = readFileSync(file, "utf-8");
+  
+    const fileExtension = extname(file);
+    const fileValues = (() => {
+      switch (fileExtension) {
+        case ".yaml":
+        case ".yml":
+          return yaml.parse(data);
+        case ".json":
+          return JSON.parse(data);
+        case ".toml":
+          return toml.parse(data);
+        default:
+          throw new Error(`Unsupported file extension: ${fileExtension}`);
+      }
+    })();
+    return { ...fileValues, ...cliValues };
+  };
 
-  const fileExtension = extname(file);
-  const fileValues = (() => {
-    switch (fileExtension) {
-      case ".yaml":
-      case ".yml":
-        return yaml.parse(data);
-      case ".json":
-        return JSON.parse(data);
-      case ".toml":
-        return toml.parse(data);
-      default:
-        throw new Error(`Unsupported file extension: ${fileExtension}`);
-    }
-  })();
-
-  return { ...fileValues, ...cliValues };
+  return cliValues;
 };

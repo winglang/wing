@@ -2,25 +2,36 @@ import { Construct } from "constructs";
 import { ParameterRegistrar } from "./parameter-registrar";
 
 /**
+ * Platform Parameter Props
+ */
+export interface PlatformParameterProps {
+  /** The path the parameter will be read from */
+  readonly path: string;
+  /** The description of the parameter */
+  readonly description?: string;
+  /** Whether the parameter is required */
+  readonly required?: boolean;
+  /** Restrict choices for the parameter */
+  readonly choices?: any[];
+}
+
+/**
  * Platform Parameter
  * 
  * This construct is used to register and validate platform parameters.
  * 
  * Note: Parameters cannot be registered after app.synth() is called.
 */
-export interface PlatformParameterProps {
-  readonly path: string;
-  readonly description?: string;
-  readonly required?: boolean;
-  readonly choices?: any[];
-}
-
 export class PlatformParameter extends Construct {
+  /** parameter path */
   public readonly path: string;
+  /** parameter description */
   public readonly description?: string;
+  /** parameter value */
+  public readonly value?: any;
+
   private _required?: boolean;
   private choices?: any[];
-  public value?: any;
 
   private dependentInputsByChoice: { [key: string]: PlatformParameter[] } = {};
 

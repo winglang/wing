@@ -28,10 +28,6 @@ export class ParameterRegistrar extends Construct {
     if (!this.synthed) {
       throw new Error("Cannot get parameter value before synthing registrar");
     }
-
-    if (!this.inputValueByPath[path]) {
-      console.warn(`Parameter: ${path}, was not registered. Please ensure that it is registered in a platform's registerParameters method to ensure that it is available.`);
-    }
     
     return this.inputValueByPath[path];
   }

@@ -68,7 +68,6 @@ export class App extends CdktfApp {
     new AwsProvider(this, "aws", {});
 
     this.subnets = {};
-    this.vpc;
 
     TestRunner._createTree(this, props.rootConstruct);
   }
