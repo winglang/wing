@@ -2,9 +2,9 @@ import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
+import { ParameterRegistrar } from "./parameter-registrar";
 import { IPlatform } from "./platform";
 import { App, AppProps, SynthHooks } from "../core";
-import { ParameterRegistrar } from "./parameter-registrar";
 
 interface PlatformManagerOptions {
   /**
@@ -81,7 +81,7 @@ export class PlatformManager {
       validate: [],
     };
 
-    let newInstanceOverrides: any[] = [];   
+    let newInstanceOverrides: any[] = [];
 
     let registerParameterHooks: any[] = [];
 
@@ -106,9 +106,9 @@ export class PlatformManager {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
     });
-    
+
     const registrar = new ParameterRegistrar("PlatformParametersRegistrar");
-    
+
     registerParameterHooks.forEach((hook) => {
       hook(registrar);
     });
@@ -116,8 +116,13 @@ export class PlatformManager {
     // synth the registrar before returning the app, this way
     // the inputs are registered before the app is synthesized
     registrar.synth();
-    
-    const app = appCall!({ ...appProps, synthHooks, newInstanceOverrides, platformParameterRegistrar: registrar }) as App;
+
+    const app = appCall!({
+      ...appProps,
+      synthHooks,
+      newInstanceOverrides,
+      platformParameterRegistrar: registrar,
+    }) as App;
     return app;
   }
 }

@@ -16,12 +16,12 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
+import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
 import { AwsProvider } from "../.gen/providers/aws/provider";
-import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
-import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { RouteTable } from "../.gen/providers/aws/route-table";
 import { RouteTableAssociation } from "../.gen/providers/aws/route-table-association";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
@@ -171,15 +171,23 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.platformParameterRegistrar.readParameterValue(`${this._target}/vpc`) === "existing" ?
-      this.importExistingVpc() :
-      this.createDefaultVpc();
+    return this.platformParameterRegistrar.readParameterValue(
+      `${this._target}/vpc`
+    ) === "existing"
+      ? this.importExistingVpc()
+      : this.createDefaultVpc();
   }
 
   private importExistingVpc(): DataAwsVpc {
-    const vpcId = this.platformParameterRegistrar.readParameterValue(`${this._target}/vpc_id`);
-    const privateSubnetId = this.platformParameterRegistrar.readParameterValue(`${this._target}/private_subnet_id`);
-    const publicSubnetId = this.platformParameterRegistrar.readParameterValue(`${this._target}/public_subnet_id`);
+    const vpcId = this.platformParameterRegistrar.readParameterValue(
+      `${this._target}/vpc_id`
+    );
+    const privateSubnetId = this.platformParameterRegistrar.readParameterValue(
+      `${this._target}/private_subnet_id`
+    );
+    const publicSubnetId = this.platformParameterRegistrar.readParameterValue(
+      `${this._target}/public_subnet_id`
+    );
 
     this._vpc = new DataAwsVpc(this, "ExistingVpc", {
       id: vpcId,
@@ -205,8 +213,7 @@ export class App extends CdktfApp {
     const VPC_NAME_OPTS: NameOptions = {
       maxLen: 32,
       disallowedRegex: /[^a-zA-Z0-9-]/,
-    
-    }
+    };
     const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS);
 
     // create the app wide VPC

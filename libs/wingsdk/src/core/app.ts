@@ -1,10 +1,10 @@
 import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
+import { ParameterRegistrar } from "../platform";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
 import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
-import { ParameterRegistrar } from "../platform";
 
 /**
  * Props for all `App` classes.
@@ -173,7 +173,7 @@ export abstract class App extends Construct implements IApp {
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._platformParameterRegistrar = props.platformParameterRegistrar;
-  } 
+  }
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
@@ -185,7 +185,7 @@ export abstract class App extends Construct implements IApp {
   }
 
   /**
-   * The input registrar for the app, can be used to find input values that were provided to the 
+   * The input registrar for the app, can be used to find input values that were provided to the
    * wing application.
    */
   public get platformParameterRegistrar() {
@@ -193,13 +193,14 @@ export abstract class App extends Construct implements IApp {
     // rather than using the `PlatformManager.createApp` method.
     // in which case we just create an empty InputRegistrar
     if (!this._platformParameterRegistrar) {
-      this._platformParameterRegistrar = new ParameterRegistrar("ParameterInputs");
+      this._platformParameterRegistrar = new ParameterRegistrar(
+        "ParameterInputs"
+      );
       this._platformParameterRegistrar.synth();
     }
 
     return this._platformParameterRegistrar!;
   }
-
 
   /**
    * Synthesize the app into an artifact.

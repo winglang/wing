@@ -80,7 +80,10 @@ export const getPlatformSpecificValue = (
   return;
 };
 
-export const getPlatformSpecificValuesFromFile = (path: string, file: string) => {
+export const getPlatformSpecificValuesFromFile = (
+  path: string,
+  file: string
+) => {
   const data = readFileSync(file);
   const yamlObj = yaml.parse(data.toString());
   return yamlObj[`${path}`];

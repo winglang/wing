@@ -7,36 +7,36 @@ import { ParameterRegistrar } from "./parameter-registrar";
 export interface PlatformParameterProps {
   /** The path the parameter will be read from */
   readonly path: string;
-  /** 
-   * The description of the parameter 
+  /**
+   * The description of the parameter
    * @default - no description
-  */
+   */
   readonly description?: string;
-  /** 
-   * Whether the parameter is required 
+  /**
+   * Whether the parameter is required
    * @default - false
-  */
+   */
   readonly required?: boolean;
-  /** 
-   * Restrict choices for the parameter 
+  /**
+   * Restrict choices for the parameter
    * @default - no choices
-  */
+   */
   readonly choices?: any[];
 }
 
 /**
  * Platform Parameter
- * 
+ *
  * This construct is used to register and validate platform parameters.
- * 
+ *
  * Note: Parameters cannot be registered after app.synth() is called.
-*/
+ */
 export class PlatformParameter extends Construct {
-  /** parameter path */
+  /** Parameter path */
   public readonly path: string;
-  /** parameter description */
+  /** Parameter description */
   public readonly description?: string;
-  /** parameter value */
+  /** Parameter value */
   public readonly value?: any;
 
   private _required?: boolean;
@@ -44,13 +44,16 @@ export class PlatformParameter extends Construct {
 
   private dependentInputsByChoice: { [key: string]: PlatformParameter[] } = {};
 
-  constructor(scope: ParameterRegistrar, id: string, props: PlatformParameterProps) {
+  constructor(
+    scope: ParameterRegistrar,
+    id: string,
+    props: PlatformParameterProps
+  ) {
     super(scope, id);
     this.path = props.path;
     this.description = props.description;
     this._required = props.required;
     this.choices = props.choices;
-
 
     this.value = this.resolveValueFromPath(scope._rawParameters, this.path);
   }
@@ -58,11 +61,14 @@ export class PlatformParameter extends Construct {
   /**
    * Specify a parameter that is dependent on this parameter
    * The dependent parameter will be required if the choice is selected
-   * 
+   *
    * @param parameter the parameter that is dependent on this parameter
    * @param onChoice - default: * optionally specify a choice that the dependent parameter is dependent on
    */
-  public addDependentParameter(parameter: PlatformParameter, onChoice: string = "*") {
+  public addDependentParameter(
+    parameter: PlatformParameter,
+    onChoice: string = "*"
+  ) {
     let choiceDependents = this.dependentInputsByChoice[onChoice] ?? [];
     choiceDependents.push(parameter);
     this.dependentInputsByChoice[onChoice] = choiceDependents;
@@ -70,13 +76,16 @@ export class PlatformParameter extends Construct {
     parameter.node.addDependency(this);
   }
 
-  private resolveValueFromPath(parameters: { [key: string]: any }, path: string): any {
+  private resolveValueFromPath(
+    parameters: { [key: string]: any },
+    path: string
+  ): any {
     if (!parameters) {
       return undefined;
     }
 
     const pathParts = path.split("/");
-    
+
     if (pathParts.length === 1) {
       return parameters[pathParts[0]];
     }
@@ -93,13 +102,12 @@ export class PlatformParameter extends Construct {
     this._required = r;
   }
 
-
   /**
    * Returns a list of validation errors with the parameter
-   * 
+   *
    * @returns a list of validation errors
    */
-  collectValidationErrors(): string[] {
+  public collectValidationErrors(): string[] {
     let errors: string[] = [];
     // If the value was required and not provided then we have an issue
     if (this._required && !this.value) {
@@ -115,7 +123,13 @@ export class PlatformParameter extends Construct {
     // that the value is one of the choices
     if (this.choices && this.choices.length > 0) {
       if (!this.choices.includes(this.value)) {
-        errors.push(`Parameters: "${this.path}", expects a value from the following choices: [ ${this.choices.join(", ")} ]`);
+        errors.push(
+          `Parameters: "${
+            this.path
+          }", expects a value from the following choices: [ ${this.choices.join(
+            ", "
+          )} ]`
+        );
       }
     }
 

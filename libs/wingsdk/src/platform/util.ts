@@ -1,21 +1,21 @@
 import { existsSync, readFileSync } from "fs";
-import path, { extname } from "path";
-import * as yaml from "yaml";
+import * as path from "path";
 import * as toml from "toml";
+import * as yaml from "yaml";
 
 /**
  * Creates a JSON object from a comma-separated list of values.
  * Where the key is the path and the value is the value.
- * 
+ *
  * I.E. "foo/bar=123,foo/baz=456" would result in:
  * {
  * "foo": {
  *  "bar": "123",
  *  "baz": "456"
  *  }
- * } 
- * 
- * @param values a comma-separated list of values 
+ * }
+ *
+ * @param values a comma-separated list of values
  * @returns a JSON object with all values
  */
 export function createValuesObjectFromString(values: string) {
@@ -23,8 +23,8 @@ export function createValuesObjectFromString(values: string) {
 
   const valuesList = values.split(",");
   valuesList.forEach((v) => {
-    const [path, value] = v.split("=");
-    const pathParts = path.split("/");
+    const [paramPath, value] = v.split("=");
+    const pathParts = paramPath.split("/");
     let tempObject = result; // Start with the result object
 
     pathParts.forEach((part, index) => {
@@ -40,21 +40,21 @@ export function createValuesObjectFromString(values: string) {
   });
 
   return result;
-};
+}
 
 /**
  * Loads platform-specific values that were passed in via CLI arguments and
  * from a values file. CLI arguments take precedence over values file.
- * 
+ *
  * I.E. if the cli provided values such as --value "foo/bar=123" and the values file
  * contained:
- * 
+ *
  * ```yaml
  * foo:
  *  bar: 456
  *  baz: 789
  * ```
- * 
+ *
  * The resulting values object would be:
  * {
  *  "foo": {
@@ -62,17 +62,17 @@ export function createValuesObjectFromString(values: string) {
  *    "baz": "789"
  *  }
  * }
- * 
+ *
  * @returns a JSON object with all platform-specific values
  */
 export function loadPlatformSpecificValues() {
   const cliValues = createValuesObjectFromString(process.env.WING_VALUES ?? "");
-  
+
   const file = path.join(process.cwd(), process.env.WING_VALUES_FILE ?? "");
   if (existsSync(file) === false) {
     const data = readFileSync(file, "utf-8");
-  
-    const fileExtension = extname(file);
+
+    const fileExtension = path.extname(file);
     const fileValues = (() => {
       switch (fileExtension) {
         case ".yaml":
@@ -87,7 +87,7 @@ export function loadPlatformSpecificValues() {
       }
     })();
     return { ...fileValues, ...cliValues };
-  };
+  }
 
   return cliValues;
-};
+}

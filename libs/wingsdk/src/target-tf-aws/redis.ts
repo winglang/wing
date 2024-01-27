@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
@@ -13,7 +14,6 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IInflightHost } from "../std";
-import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,

@@ -1,10 +1,10 @@
+import { Construct } from "constructs";
 import { PlatformParameter } from "./platform-parameter";
 import { loadPlatformSpecificValues } from "./util";
-import { Construct } from "constructs";
 
 /**
  * Parameter Registrar
- * 
+ *
  * This construct is used to register and validate platform parameters.
  */
 export class ParameterRegistrar extends Construct {
@@ -22,7 +22,7 @@ export class ParameterRegistrar extends Construct {
 
   /**
    * Registers an invalid input message
-   * 
+   *
    * @param message the message to register
    */
   public registerInvalidInputMessage(message: string) {
@@ -31,7 +31,7 @@ export class ParameterRegistrar extends Construct {
 
   /**
    * Reads a parameter value from the registrar
-   * 
+   *
    * @param path the path of the parameter
    * @returns the value of the parameter
    */
@@ -39,7 +39,7 @@ export class ParameterRegistrar extends Construct {
     if (!this.synthed) {
       throw new Error("Cannot get parameter value before synthing registrar");
     }
-    
+
     return this.parameterValueByPath[path];
   }
 
@@ -50,10 +50,12 @@ export class ParameterRegistrar extends Construct {
     if (this.synthed) {
       return;
     }
-    
+
     const isParameter = (node: Construct) => node instanceof PlatformParameter;
 
-    const parameters: PlatformParameter[] = this.node.findAll().filter(isParameter) as PlatformParameter[];
+    const parameters: PlatformParameter[] = this.node
+      .findAll()
+      .filter(isParameter) as PlatformParameter[];
 
     for (let param of parameters) {
       const validationErrors = param.collectValidationErrors();
@@ -65,7 +67,8 @@ export class ParameterRegistrar extends Construct {
 
     // If any invalid input messages were registered, then throw an error
     if (this.invalidInputMessages.length > 0) {
-      let message = "Invalid input values were provided the following errors were recorded:\n\t- ";
+      let message =
+        "Invalid input values were provided the following errors were recorded:\n\t- ";
       throw new Error(message + this.invalidInputMessages.join("\n\t- "));
     }
     this.synthed = true;
