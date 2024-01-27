@@ -1,6 +1,13 @@
 import { Construct } from "constructs";
 import { ParameterRegistrar } from "./parameter-registrar";
 
+/**
+ * Platform Parameter
+ * 
+ * This construct is used to register and validate platform parameters.
+ * 
+ * Note: Parameters cannot be registered after app.synth() is called.
+*/
 export interface PlatformParameterProps {
   readonly path: string;
   readonly description?: string;

@@ -187,12 +187,12 @@ export abstract class App extends Construct implements IApp {
    * The input registrar for the app, can be used to find input values that were provided to the 
    * wing application.
    */
-  public get inputRegistrar() {
+  public get platformParameterRegistrar() {
     // Should never be undefined, unless someone creates an app directly
     // rather than using the `PlatformManager.createApp` method.
     // in which case we just create an empty InputRegistrar
     if (!this._platformParameterRegistrar) {
-      this._platformParameterRegistrar = new ParameterRegistrar("AppInputs");
+      this._platformParameterRegistrar = new ParameterRegistrar("ParameterInputs");
       this._platformParameterRegistrar.synth();
     }
 

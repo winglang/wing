@@ -24,7 +24,7 @@ export class ParameterRegistrar extends Construct {
     this.invalidInputMessages.push(message);
   }
 
-  public getInputValue(path: string): any {
+  public readParameterValue(path: string): any {
     if (!this.synthed) {
       throw new Error("Cannot get parameter value before synthing registrar");
     }

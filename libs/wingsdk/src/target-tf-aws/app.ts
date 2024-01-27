@@ -172,15 +172,15 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.inputRegistrar.getInputValue(`${this._target}/vpc`) === "existing" ?
+    return this.platformParameterRegistrar.readParameterValue(`${this._target}/vpc`) === "existing" ?
       this.importExistingVpc() :
       this.createDefaultVpc();
   }
 
   private importExistingVpc(): DataAwsVpc {
-    const vpcId = this.inputRegistrar.getInputValue(`${this._target}/vpc_id`);
-    const privateSubnetId = this.inputRegistrar.getInputValue(`${this._target}/private_subnet_id`);
-    const publicSubnetId = this.inputRegistrar.getInputValue(`${this._target}/public_subnet_id`);
+    const vpcId = this.platformParameterRegistrar.readParameterValue(`${this._target}/vpc_id`);
+    const privateSubnetId = this.platformParameterRegistrar.readParameterValue(`${this._target}/private_subnet_id`);
+    const publicSubnetId = this.platformParameterRegistrar.readParameterValue(`${this._target}/public_subnet_id`);
 
     this._vpc = new DataAwsVpc(this, "ExistingVpc", {
       id: vpcId,
