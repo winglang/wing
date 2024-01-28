@@ -15,7 +15,7 @@ pub struct FunctionContext {
 #[derive(Clone)]
 pub struct VisitExprInfo {
 	pub expr: ExprId,
-	pub is_callee: bool,
+	pub is_callee: bool, // TODO: chuck this, never used?? or use it in type_check
 }
 
 #[derive(Clone)]
