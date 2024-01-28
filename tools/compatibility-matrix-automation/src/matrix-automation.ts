@@ -30,7 +30,7 @@ export function updateMatrix(outFolderPath: string, matrixPath = MATRIX_PATH) {
   for (const file of files) {
     try {
       const outFile = JSON.parse(
-        readFileSync(join(file.path, file.name)).toString()
+        readFileSync(join(file.path, file.name), "utf8")
       ) as TestResultsJson;
 
       updateMatrixFromFile(outFile, matrix);
