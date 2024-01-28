@@ -188,9 +188,7 @@ class Lifter<
     .map(([name, liftable]) => `${name}: ${liftObject(liftable)}`)
     .join(",\n")}
   };
-  let newFunction = async (...args) => {
-    return $func.call($ctx, ...args);
-  };
+  let newFunction = $func.bind($ctx);
   newFunction.handle = newFunction;
   return newFunction;
 }
