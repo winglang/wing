@@ -724,8 +724,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -742,8 +741,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -760,8 +758,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -778,8 +775,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -796,8 +792,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
