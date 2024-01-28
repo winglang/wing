@@ -1,8 +1,22 @@
 import { readFileSync, readdirSync, writeFileSync } from "fs";
 import { join, extname } from "path";
 import { TestResultsJson } from "winglang/dist/commands/test/results";
-import { MATRIX_PATH, PLATFORMS, SKIPPED_RESOURCES } from "./constants";
 import { CompatibilityMatrix, CompatibilitySets } from "./types";
+
+export const SKIPPED_RESOURCES = ["TestRunner"];
+export const MATRIX_PATH = join(
+  __dirname,
+  "../../../docs/docs/04-standard-library/compatibility/compatibility.json"
+);
+export const OUT_PATH = join(__dirname, "../../../out.json");
+
+export const PLATFORMS = {
+  "tf-aws": "tf-aws",
+  "tf-gcp": "tf-gcp",
+  "tf-azure": "tf-azure",
+  awscdk: "awscdk", // in the future we plan to move awscdk to its own compatibility matrix https://github.com/winglang/wing/issues/5560
+  sim: "sim",
+};
 
 export function updateMatrix(outFolderPath: string, matrixPath = MATRIX_PATH) {
   const files = readdirSync(join(outFolderPath), {
@@ -101,7 +115,7 @@ export function writeOpImplementationStatus(
   op: string,
   implemented: boolean
 ) {
-	if (!matrix[resource]) {
+  if (!matrix[resource]) {
     matrix[resource] = {};
   }
   if (!matrix[resource][op]) {

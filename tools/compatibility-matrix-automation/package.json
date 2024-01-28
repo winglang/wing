@@ -3,32 +3,36 @@
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
-  "scripts": {
-    "compile": "tsc",
-    "test": "vitest run --passWithNoTests --update",
-    "start": "node lib/src/index"
-  },
   "bin": {
-    "matrix": "bin/matrix"
+    "update-matrix": "./bin/update-matrix.cjs"
+  },
+  "scripts": {
+    "test": "vitest run --passWithNoTests --update"
   },
   "author": {
     "name": "Wing Cloud",
     "email": "ping@wing.cloud",
     "organization": true
   },
+  "private": true,
+  "exports": null,
+  "sideEffects": false,
   "dependencies": {
     "@winglang/sdk": "workspace:^",
     "winglang": "workspace:^"
   },
   "devDependencies": {
-    "bump-pack": "workspace:^",
     "typescript": "^4.9.5",
-    "tsup": "^6.7.0",
     "vitest": "^0.32.4",
-    "@types/node": "^18.17.13"
+    "@types/node": "^18.17.13",
+    "npm-which": "^3.0.1",
+    "tsx": "^3.12.8"
   },
   "files": [
-    "lib"
+    "dist"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "volta": {
+    "extends": "../../package.json"
+  }
 }
