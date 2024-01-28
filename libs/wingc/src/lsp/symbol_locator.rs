@@ -289,12 +289,12 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		self.ctx.pop_stmt();
 	}
 
-	fn visit_expr(&mut self, node: &'a Expr, is_callee: bool) {
+	fn visit_expr(&mut self, node: &'a Expr) {
 		if self.is_found() {
 			return;
 		}
 
-		self.ctx.push_expr(&node, is_callee);
+		self.ctx.push_expr(&node);
 
 		match &node.kind {
 			ExprKind::New(new_expr) => {
@@ -391,7 +391,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 			_ => {}
 		}
 
-		crate::visit::visit_expr(self, node, is_callee);
+		crate::visit::visit_expr(self, node);
 
 		self.ctx.pop_expr();
 	}
@@ -443,7 +443,7 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 		match node {
 			Reference::Identifier(sym) => self.visit_symbol(sym),
 			Reference::InstanceMember { object, property, .. } => {
-				self.visit_expr(object, false);
+				self.visit_expr(object);
 
 				if property.span.contains_location(&self.location) {
 					self.set_result(SymbolLocatorResult::ObjectPropertyReference {

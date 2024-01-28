@@ -1740,10 +1740,6 @@ pub struct TypeChecker<'a> {
 
 	is_in_mut_json: bool,
 
-	// Stack of extra information we need to keep track of while visiting nested
-	// expressions during type checking.
-	curr_expr_info: Vec<ExprVisitInfo>,
-
 	ctx: VisitContext,
 }
 
@@ -1774,7 +1770,6 @@ impl<'a> TypeChecker<'a> {
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
-			curr_expr_info: vec![],
 		}
 	}
 
@@ -2009,8 +2004,6 @@ impl<'a> TypeChecker<'a> {
 	) -> (TypeRef, Phase) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &exp.span);
 
-		self.curr_expr_info.push(expr_visit_info);
-
 		let (mut t, phase) = |exp: &Expr, env: &mut SymbolEnv| -> (TypeRef, Phase) {
 			match &exp.kind {
 				ExprKind::Literal(lit) => match lit {
@@ -2130,7 +2123,11 @@ impl<'a> TypeChecker<'a> {
 					(self.types.add_type(Type::Array(stype)), stype_phase)
 				}
 				ExprKind::Reference(_ref) => {
-					let (vi, phase) = self.resolve_reference(_ref, env, self.curr_expr_is_callee_with_inflight_args());
+					let (vi, phase) = self.resolve_reference(
+						_ref,
+						env,
+						matches!(expr_visit_info, ExprVisitInfo::Callee { inflight_args: true }),
+					);
 					(vi.type_, phase)
 				}
 				ExprKind::New(new_expr) => {
@@ -2734,8 +2731,6 @@ impl<'a> TypeChecker<'a> {
 		}(exp, env);
 
 		self.types.assign_type_to_expr(exp, t, phase);
-
-		self.curr_expr_info.pop();
 
 		// In case any type inferences were updated during this check, ensure all related inferences are updated
 		self.update_known_inferences(&mut t, &exp.span);
@@ -5708,22 +5703,6 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(parent, format!("Expected \"{}\" to be a class", parent));
 			(None, None)
 		}
-	}
-
-	fn curr_expr_is_callee_with_inflight_args(&self) -> bool {
-		self
-			.curr_expr_info
-			.last()
-			.map(|e| {
-				matches!(
-					e,
-					ExprVisitInfo::Callee {
-						inflight_args: true,
-						..
-					}
-				)
-			})
-			.unwrap_or(false)
 	}
 }
 

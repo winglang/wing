@@ -24,7 +24,7 @@ impl<'a> TypeCheckAssert<'a> {
 }
 
 impl<'a> Visit<'_> for TypeCheckAssert<'a> {
-	fn visit_expr(&mut self, expr: &Expr, is_callee: bool) {
+	fn visit_expr(&mut self, expr: &Expr) {
 		if let Some(t) = self.types.try_get_expr_type(expr.id) {
 			assert!(
 				self.tc_found_errors || !t.is_unresolved(),
@@ -34,6 +34,6 @@ impl<'a> Visit<'_> for TypeCheckAssert<'a> {
 		} else {
 			panic!("Expr was not type checked: {:?}", expr)
 		}
-		visit::visit_expr(self, expr, is_callee);
+		visit::visit_expr(self, expr);
 	}
 }

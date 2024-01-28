@@ -13,12 +13,6 @@ pub struct FunctionContext {
 }
 
 #[derive(Clone)]
-pub struct VisitExprInfo {
-	pub expr: ExprId,
-	pub is_callee: bool, // TODO: chuck this, never used?? or use it in type_check
-}
-
-#[derive(Clone)]
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
@@ -29,7 +23,7 @@ pub struct VisitContext {
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
 	in_type_annotation: Vec<bool>,
-	expression: Vec<VisitExprInfo>,
+	expression: Vec<ExprId>,
 }
 
 impl VisitContext {
@@ -78,11 +72,8 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_expr(&mut self, expr: &Expr, is_callee: bool) {
-		self.expression.push(VisitExprInfo {
-			expr: expr.id,
-			is_callee,
-		});
+	pub fn push_expr(&mut self, expr: &Expr) {
+		self.expression.push(expr.id);
 	}
 
 	pub fn pop_expr(&mut self) {
@@ -90,11 +81,7 @@ impl VisitContext {
 	}
 
 	pub fn current_expr(&self) -> Option<ExprId> {
-		self.expression.last().map(|id| id.expr)
-	}
-
-	pub fn current_expr_is_callee(&self) -> bool {
-		self.expression.last().map(|id| id.is_callee).unwrap_or(false)
+		self.expression.last().map(|id| *id)
 	}
 
 	// --
@@ -231,8 +218,8 @@ impl VisitContext {
 pub trait VisitorWithContext {
 	fn ctx(&mut self) -> &mut VisitContext;
 
-	fn with_expr(&mut self, expr: &Expr, is_callee: bool, f: impl FnOnce(&mut Self)) {
-		self.ctx().push_expr(expr, is_callee);
+	fn with_expr(&mut self, expr: &Expr, f: impl FnOnce(&mut Self)) {
+		self.ctx().push_expr(expr);
 		f(self);
 		self.ctx().pop_expr();
 	}
