@@ -8,7 +8,7 @@ pub(crate) mod type_reference_transform;
 
 use crate::ast::{
 	self, AccessModifier, AssignmentKind, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, IfLet, New,
-	TypeAnnotationKind,
+	TypeAnnotationKind, UtilityFunctions,
 };
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
@@ -26,7 +26,7 @@ use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME,
 	WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
-	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE,
 	WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use camino::{Utf8Path, Utf8PathBuf};
@@ -873,7 +873,13 @@ impl Display for Type {
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
 			Type::Inferred(_) => write!(f, "unknown"),
-			Type::Optional(v) => write!(f, "{}?", v),
+			Type::Optional(v) => {
+				if v.is_closure() {
+					write!(f, "({})?", v)
+				} else {
+					write!(f, "{}?", v)
+				}
+			}
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class),
 
@@ -1895,6 +1901,100 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	pub fn add_builtins(&mut self, scope: &mut Scope) {
+		self.add_builtin(
+			UtilityFunctions::Log.to_string().as_str(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![FunctionParameter {
+					name: "message".into(),
+					typeref: self.types.string(),
+					docs: Docs::with_summary("The message to log"),
+					variadic: false,
+				}],
+				return_type: self.types.void(),
+				phase: Phase::Independent,
+				js_override: Some("console.log($args$)".to_string()),
+				docs: Docs::with_summary("Logs a message"),
+			}),
+			scope,
+		);
+		self.add_builtin(
+			UtilityFunctions::Assert.to_string().as_str(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![FunctionParameter {
+					name: "condition".into(),
+					typeref: self.types.bool(),
+					docs: Docs::with_summary("The condition to assert"),
+					variadic: false,
+				}],
+				return_type: self.types.void(),
+				phase: Phase::Independent,
+				js_override: Some("$helpers.assert($args$, \"$args_text$\")".to_string()),
+				docs: Docs::with_summary("Asserts that a condition is true"),
+			}),
+			scope,
+		);
+		self.add_builtin(
+			UtilityFunctions::UnsafeCast.to_string().as_str(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![FunctionParameter {
+					name: "value".into(),
+					typeref: self.types.anything(),
+					docs: Docs::with_summary("The value to cast into a different type"),
+					variadic: false,
+				}],
+				return_type: self.types.anything(),
+				phase: Phase::Independent,
+				js_override: Some("$args$".to_string()),
+				docs: Docs::with_summary("Casts a value into a different type. This is unsafe and can cause runtime errors"),
+			}),
+			scope,
+		);
+
+		let std_node_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_NODE);
+		let std_node = self
+			.types
+			.libraries
+			.lookup_nested_str(&std_node_fqn, None)
+			.expect("std.Node not found in type system")
+			.0
+			.as_type()
+			.expect("std.Node was found but it's not a type");
+		self.add_builtin(
+			UtilityFunctions::Nodeof.to_string().as_str(),
+			Type::Function(FunctionSignature {
+				this_type: None,
+				parameters: vec![FunctionParameter {
+					name: "construct".into(),
+					typeref: self.types.construct_interface(),
+					docs: Docs::with_summary("The construct to obtain the tree node of"),
+					variadic: false,
+				}],
+				return_type: std_node,
+				phase: Phase::Preflight,
+				js_override: Some("$helpers.nodeof($args$)".to_string()),
+				docs: Docs::with_summary("Obtain the tree node of a preflight resource."),
+			}),
+			scope,
+		);
+	}
+
+	pub fn add_builtin(&mut self, name: &str, typ: Type, scope: &mut Scope) {
+		let sym = Symbol::global(name);
+		let mut scope_env = self.types.get_scope_env(&scope);
+		scope_env
+			.define(
+				&sym,
+				SymbolKind::make_free_variable(sym.clone(), self.types.add_type(typ), false, Phase::Independent),
+				AccessModifier::Private,
+				StatementIdx::Top,
+			)
+			.expect("Failed to add builtin");
+	}
+
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &mut SymbolEnv) -> (TypeRef, Phase) {
 		self.type_check_exp_ext(exp, env, ExprVisitInfo::NoInfo)
@@ -2631,6 +2731,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}(exp, env);
+
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		self.curr_expr_info.pop();
@@ -4153,7 +4254,10 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(variable, "Variable cannot be reassigned from inflight".to_string());
 		}
 
-		if matches!(kind, AssignmentKind::AssignIncr | AssignmentKind::AssignDecr) {
+		if matches!(kind, AssignmentKind::AssignIncr) {
+			self.validate_type_in(exp_type, &[self.types.number(), self.types.string()], value);
+			self.validate_type_in(var.type_, &[self.types.number(), self.types.string()], value);
+		} else if matches!(kind, AssignmentKind::AssignDecr) {
 			self.validate_type(exp_type, self.types.number(), value);
 			self.validate_type(var.type_, self.types.number(), variable);
 		}

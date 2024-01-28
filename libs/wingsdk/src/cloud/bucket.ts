@@ -5,6 +5,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, Node, Resource, Datetime, Duration, IInflight } from "../std";
 
@@ -33,6 +34,8 @@ export interface BucketProps {
 export class Bucket extends Resource {
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IBucketClient;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     if (new.target === Bucket) {
@@ -253,13 +256,34 @@ export interface BucketDeleteOptions {
 }
 
 /**
+ * Specifies the action permitted by a presigned URL for a bucket.
+ */
+export enum BucketSignedUrlAction {
+  /**
+   * Represents a HTTP GET request for a presigned URL, allowing read access for an object in the bucket.
+   */
+  DOWNLOAD = "DOWNLOAD",
+  /**
+   * Represents a HTTP PUT request for a presigned URL, allowing write access for an object in the bucket.
+   */
+  UPLOAD = "UPLOAD",
+}
+
+/**
  * Options for `Bucket.signedUrl()`.
  */
 export interface BucketSignedUrlOptions {
   /**
-   * The duration for the signed url to expire
+   * The duration for the signed URL to expire.
+   * @default 15m
    */
   readonly duration?: Duration;
+
+  /**
+   * The action allowed by the signed URL.
+   * @default BucketSignedUrlAction.DOWNLOAD
+   */
+  readonly action?: BucketSignedUrlAction;
 }
 
 /**

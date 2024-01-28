@@ -263,14 +263,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Doubler-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Doubler-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const DoublerClient = ${Doubler._toInflightType(this)};
+            const DoublerClient = ${Doubler._toInflightType()};
             const client = new DoublerClient({
               $this_func: ${$stdlib.core.liftObject(this.func)},
             });
@@ -282,32 +282,34 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "invoke", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Doubler._registerOnLiftObject(this.func, host, []);
-        }
-        if (ops.includes("invoke")) {
-          Doubler._registerOnLiftObject(this.func, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.func, []],
+          ],
+          "invoke": [
+            [this.func, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -325,15 +327,15 @@ class $Root extends $stdlib.std.Resource {
       }
       makeFunc(handler) {
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+        class $Closure2 extends $stdlib.std.AutoIdResource {
+          _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
-            (std.Node.of(this)).hidden = true;
+            $helpers.nodeof(this).hidden = true;
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
                 $handler: ${$stdlib.core.liftObject(handler)},
                 $std_Json: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"))},
                 $std_Number: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(std.Number, "@winglang/sdk/std", "Number"))},
@@ -343,7 +345,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure2Client = ${$Closure2._toInflightType(this)};
+                const $Closure2Client = ${$Closure2._toInflightType()};
                 const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -354,25 +356,27 @@ class $Root extends $stdlib.std.Resource {
           _supportedOps() {
             return [...super._supportedOps(), "handle", "$inflight_init"];
           }
-          _registerOnLift(host, ops) {
-            if (ops.includes("handle")) {
-              $Closure2._registerOnLiftObject(handler, host, ["handle"]);
-            }
-            super._registerOnLift(host, ops);
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
+              "handle": [
+                [handler, ["handle"]],
+              ],
+            });
+            super.onLift(host, ops);
           }
         }
         return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
       }
       static _toInflightType() {
         return `
-          require("./inflight.Doubler2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Doubler2-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const Doubler2Client = ${Doubler2._toInflightType(this)};
+            const Doubler2Client = ${Doubler2._toInflightType()};
             const client = new Doubler2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -384,22 +388,22 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "$inflight_init"];
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -411,15 +415,15 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure4 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure4-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure4-1.js")({
             $f: ${$stdlib.core.liftObject(f)},
           })
         `;
@@ -427,7 +431,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this)};
+            const $Closure4Client = ${$Closure4._toInflightType()};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -438,11 +442,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure4._registerOnLiftObject(f, host, ["invoke"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [f, ["invoke"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));

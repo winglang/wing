@@ -34,9 +34,9 @@ test("topic with subscriber function", () => {
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SNS::Topic", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
   template.resourceCountIs("AWS::Lambda::Permission", 1);
-  template.resourceCountIs("AWS::IAM::Role", 2);
+  template.resourceCountIs("AWS::IAM::Role", 1);
   template.resourceCountIs("AWS::SNS::Subscription", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
@@ -64,9 +64,9 @@ test("topic with multiple subscribers", () => {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SNS::Topic", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 3);
+  template.resourceCountIs("AWS::Lambda::Function", 2);
   template.resourceCountIs("AWS::Lambda::Permission", 2);
-  template.resourceCountIs("AWS::IAM::Role", 3);
+  template.resourceCountIs("AWS::IAM::Role", 2);
   template.resourceCountIs("AWS::SNS::Subscription", 2);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

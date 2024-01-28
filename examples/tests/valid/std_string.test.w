@@ -18,6 +18,10 @@ assert("hello" + " world" == "hello world");
 assert(
 "hello {"funky"}
  world" == "hello funky\n world");
+
+let var initial = "hey, ";
+initial += "you";
+assert(initial == "hey, you");
   
 // For debugging the test
 test "string" {
@@ -25,3 +29,8 @@ test "string" {
   log(s1.split(" ").at(1));
   log(s1.concat(s2));
 }
+
+let s3 = "hello
+world";
+let s4 = "hello\nworld";
+assert(s3 == s4);

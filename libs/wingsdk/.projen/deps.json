@@ -119,12 +119,12 @@
     },
     {
       "name": "jsii",
-      "version": "5.0.11",
+      "version": "~5.3.11",
       "type": "build"
     },
     {
       "name": "mock-gcs",
-      "version": "^1.0.0",
+      "version": "^1.2.0",
       "type": "build"
     },
     {
@@ -240,6 +240,11 @@
       "type": "bundled"
     },
     {
+      "name": "@google-cloud/datastore",
+      "version": "8.4.0",
+      "type": "bundled"
+    },
+    {
       "name": "@google-cloud/storage",
       "version": "6.9.5",
       "type": "bundled"
@@ -265,10 +270,6 @@
     },
     {
       "name": "cron-parser",
-      "type": "bundled"
-    },
-    {
-      "name": "esbuild-wasm",
       "type": "bundled"
     },
     {
@@ -299,6 +300,11 @@
     {
       "name": "nanoid",
       "version": "^3.3.6",
+      "type": "bundled"
+    },
+    {
+      "name": "protobufjs",
+      "version": "7.2.5",
       "type": "bundled"
     },
     {

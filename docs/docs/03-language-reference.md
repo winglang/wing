@@ -552,6 +552,7 @@ log("UTC: {t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 | `log`        | logs str                                              |
 | `assert`     | checks a condition and _throws_ if evaluated to false |
 | `unsafeCast` | cast a value into a different type                    |
+| `nodeof`     | obtain the [tree node](./02-concepts/02-application-tree.md) of a preflight object |
 
 > ```TS
 > log("Hello {name}");
@@ -812,6 +813,11 @@ Here's a quick summary of how optionality works in Wing:
 * The `x ?? y` notation will return the value in `x` if there is one, `y` otherwise.
 * The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
+* A type annotation in Wing can always be enclosed in parentheses: `num` and `(num)` are the same type.
+  This is useful when you want to denote an optional function type. For example `((str):num)?` means
+  an **optional function** receiving a `str` and returning a `num`, while the similarly written 
+  `(str):num?` means a function receiving a `str` and returning an **optional `num`**.
+
 
 #### 1.7.1 Declaration
 

@@ -6,6 +6,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
+use parcel_sourcemap::utils::make_relative_path;
 
 use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
 
@@ -29,8 +30,8 @@ use crate::{
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
-	WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
+	WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
@@ -40,6 +41,7 @@ const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE: &str = formatcp!("{STDLIB}.core");
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
+const STDLIB_CORE_AUTOID_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_AUTOID_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -76,7 +78,7 @@ pub struct JSifier<'a> {
 
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
-	preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
+	pub preflight_file_map: RefCell<IndexMap<Utf8PathBuf, String>>,
 	source_files: &'a Files,
 	source_file_graph: &'a FileGraph,
 	/// The path that compilation started at (file or directory)
@@ -268,7 +270,11 @@ impl<'a> JSifier<'a> {
 		let source_content = self.source_files.get_file(source_path.as_str()).unwrap();
 
 		let output_base = output.to_string();
-		let output_sourcemap = output.generate_sourcemap(source_path.as_str(), source_content, &preflight_file_name);
+		let output_sourcemap = output.generate_sourcemap(
+			&make_relative_path(self.out_dir.as_str(), source_path.as_str()),
+			source_content,
+			&preflight_file_name,
+		);
 
 		// Emit the file
 		match self
@@ -576,6 +582,8 @@ impl<'a> JSifier<'a> {
 				Literal::String(s) => {
 					// Unescape our string interpolation braces because in JS they don't need escaping
 					let s = s.replace("\\{", "{");
+					// escape newlines
+					let s = s.replace("\r", "\\r").replace("\n", "\\n");
 					new_code!(expr_span, s)
 				}
 				Literal::InterpolatedString(s) => {
@@ -613,7 +621,7 @@ impl<'a> JSifier<'a> {
 			},
 			ExprKind::Range { start, inclusive, end } => new_code!(
 				expr_span,
-				"$helpers.range(",
+				format!("{HELPERS_VAR}.range("),
 				self.jsify_expression(start, ctx),
 				",",
 				self.jsify_expression(end, ctx),
@@ -719,8 +727,8 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => return new_code!(expr_span, "$helpers.eq(", js_left, ", ", js_right, ")"),
-					BinaryOperator::NotEqual => return new_code!(expr_span, "!$helpers.eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::Equal => return new_code!(expr_span, HELPERS_VAR, ".eq(", js_left, ", ", js_right, ")"),
+					BinaryOperator::NotEqual => return new_code!(expr_span, HELPERS_VAR, ".neq(", js_left, ", ", js_right, ")"),
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -775,7 +783,7 @@ impl<'a> JSifier<'a> {
 				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
-			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx),
+			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, true, ctx),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -1283,6 +1291,7 @@ impl<'a> JSifier<'a> {
 		&self,
 		class: Option<&AstClass>,
 		func_def: &FunctionDefinition,
+		is_closure: bool,
 		ctx: &mut JSifyContext,
 	) -> CodeMaker {
 		let parameters = jsify_function_parameters(func_def);
@@ -1296,22 +1305,30 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
 			FunctionBody::External(extern_path) => {
 				let extern_path = Utf8Path::new(extern_path);
-				let entrypoint_dir = if self.compilation_init_path.is_file() {
+				let entrypoint_is_file = self.compilation_init_path.is_file();
+				let entrypoint_dir = if entrypoint_is_file {
 					self.compilation_init_path.parent().unwrap()
 				} else {
 					self.compilation_init_path
 				};
 
-				// extern_path should always be a sub directory of entrypoint_dir
-				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
-					report_diagnostic(Diagnostic {
-						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
-						annotations: vec![],
-						hints: vec![],
-						span: Some(func_def.span.clone()),
-					});
-					return CodeMaker::default();
-				};
+				if !entrypoint_is_file {
+					// We are possibly compiling a package, so we need to make sure all externs
+					// are actually contained in this directory to make sure it gets packaged
+
+					if !extern_path.starts_with(entrypoint_dir) {
+						report_diagnostic(Diagnostic {
+							message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+							annotations: vec![],
+							hints: vec![],
+							span: Some(func_def.span.clone()),
+						});
+						return CodeMaker::default();
+					}
+				}
+
+				let rel_path = make_relative_path(entrypoint_dir.as_str(), extern_path.as_str());
+				let rel_path = Utf8PathBuf::from(rel_path);
 
 				let mut path_components = rel_path.components();
 
@@ -1381,8 +1398,8 @@ impl<'a> JSifier<'a> {
 		code.add_code(body);
 		code.close("}");
 
-		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
-		if prefix.is_empty() {
+		// if the function is a closure, we need to wrap it in `(`, `)`
+		if is_closure {
 			new_code!(&func_def.span, "(", code, ")")
 		} else {
 			code
@@ -1450,7 +1467,15 @@ impl<'a> JSifier<'a> {
 				}
 			} else {
 				// default base class for preflight classes is `core.Resource`
-				code.append(new_code!(&class.name.span, " extends ", STDLIB_CORE_RESOURCE));
+				code.append(new_code!(
+					&class.name.span,
+					" extends ",
+					if class.auto_id {
+						STDLIB_CORE_AUTOID_RESOURCE
+					} else {
+						STDLIB_CORE_RESOURCE
+					}
+				));
 			};
 
 			code.append(" {");
@@ -1458,7 +1483,7 @@ impl<'a> JSifier<'a> {
 
 			// TODO Hack to make sure closures match the IInflight contract from wingsdk
 			if class_type.is_closure() {
-				code.line("_hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');")
+				code.line(format!("_id = {STDLIB_CORE}.closureId();"))
 			}
 
 			// emit the preflight constructor
@@ -1466,7 +1491,7 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
-				code.line(self.jsify_function(Some(class), m, ctx));
+				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
@@ -1475,7 +1500,7 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
-			// emit `_registerOnLiftObject` to register bindings (for type & instance binds)
+			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
@@ -1548,7 +1573,9 @@ impl<'a> JSifier<'a> {
 
 		code.open("return `");
 
-		code.open(format!("require(\"./{client_path}\")({{"));
+		code.open(format!(
+			"require(\"${{{HELPERS_VAR}.normalPath(__dirname)}}/{client_path}\")({{"
+		));
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
@@ -1575,7 +1602,7 @@ impl<'a> JSifier<'a> {
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this)}};",
+			"const {}Client = ${{{}._toInflightType()}};",
 			resource_name.name, resource_name.name,
 		));
 
@@ -1622,7 +1649,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for def in class.inflight_methods(false) {
-			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
+			class_code.line(self.jsify_function(Some(class), def, false, ctx));
 		}
 
 		// emit the $inflight_init function (if it has a body).
@@ -1660,7 +1687,7 @@ impl<'a> JSifier<'a> {
 		let sourcemap_file = format!("{}.map", filename);
 
 		code.line("\"use strict\";");
-		code.line("const $helpers = require(\"@winglang/sdk/lib/helpers\");");
+		code.line(format!("const {HELPERS_VAR} = require(\"@winglang/sdk/lib/helpers\");"));
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
@@ -1678,10 +1705,11 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+
 		match self.output_files.borrow_mut().add_file(
 			sourcemap_file,
 			code.generate_sourcemap(
-				root_source.as_str(),
+				&make_relative_path(self.out_dir.as_str(), &root_source),
 				self.source_files.get_file(root_source.as_str()).unwrap(),
 				filename.as_str(),
 			),
@@ -1757,8 +1785,8 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_registerOnLift"),
-			BindMethod::Instance => ("", "_registerOnLift"),
+			BindMethod::Type => ("static ", "onLiftType"),
+			BindMethod::Instance => ("", "onLift"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1789,17 +1817,31 @@ impl<'a> JSifier<'a> {
 		}
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
-		for (method_name, method_qual) in lift_qualifications {
-			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (code, method_lift_qual) in method_qual {
-				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 
-				bind_method.line(format!(
-					"{class_name}._registerOnLiftObject({code}, host, [{ops_strings}]);",
-				));
+		if !lift_qualifications.is_empty() {
+			// onLiftMatrix is a helper method that takes in information about all
+			// of the preflight objects and their corresponding ops, and
+			// calls the appropriate onLift method once for each object.
+			bind_method.open(format!("{STDLIB_CORE}.onLiftMatrix(host, ops, {{"));
+
+			for (method_name, method_qual) in lift_qualifications {
+				bind_method.open(format!("\"{method_name}\": [",));
+				for (code, method_lift_qual) in method_qual {
+					// skip any objects named "this" since lifting oneself is redundant
+					// TODO: is the fact that lift_qualifications includes "this" a bug? not sure if these need to be lifted
+					if code == "this" {
+						continue;
+					}
+
+					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+					bind_method.line(format!("[{code}, [{ops_strings}]],",));
+				}
+				bind_method.close("],");
 			}
-			bind_method.close("}");
+
+			bind_method.close("});");
 		}
+
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method

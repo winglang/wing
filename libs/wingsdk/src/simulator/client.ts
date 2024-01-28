@@ -59,8 +59,13 @@ export function makeSimulatorClient(url: string, handle: string) {
 
         let err = new Error();
         err.message = parsed.error?.message;
-        err.stack = parsed.error?.stack;
         err.name = parsed.error?.name;
+
+        if (parsed.error?.stack) {
+          // combine the stack trace from the server with the stack trace from the client
+          err.stack = `${parsed.error.stack}\n${err.stack}`;
+        }
+
         throw err;
       }
 

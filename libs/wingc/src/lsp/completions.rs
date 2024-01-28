@@ -195,7 +195,24 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				node_to_complete_kind,
 				"." | "?." | "member_identifier" | "type_identifier"
 			) {
+				// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
+				if preceding_text.ends_with("..")
+					|| preceding_text.ends_with(".?.?")
+					|| preceding_text.ends_with("..")
+					|| preceding_text.ends_with(".?.")
+					|| preceding_text.ends_with("..?")
+				{
+					return vec![];
+				}
+
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
+
+				// If the parent is an accessor node (the container of the "." or ".?" nodes) then move up one more level
+				let parent = if parent.kind() == "accessor" {
+					parent.parent().expect("An accessor must have a parent")
+				} else {
+					parent
+				};
 
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
 					let mut nearest_expr_type = types.get_expr_type(nearest_expr);
@@ -207,11 +224,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 					// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 					if !nearest_expr_type.is_unresolved() {
-						// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
-						if preceding_text.ends_with("..") || preceding_text.ends_with(".?.?") {
-							return vec![];
-						}
-
 						let access_context = if let ExprKind::Reference(Reference::Identifier(ident)) = &nearest_expr.kind {
 							match ident.name.as_str() {
 								"this" => ObjectAccessContext::This,
@@ -739,7 +751,7 @@ fn nearest_non_reference_ancestor<'a>(start_node: &'a tree_sitter::Node<'a>) -> 
 		|| !nearest_non_reference.is_named()
 		|| matches!(
 			nearest_non_reference.kind(),
-			"identifier" | "reference" | "reference_identifier" | "expression_statement"
+			"identifier" | "reference" | "reference_identifier" | "expression_statement" | "accessor"
 		) {
 		let parent = nearest_non_reference.parent();
 		if let Some(parent) = parent {

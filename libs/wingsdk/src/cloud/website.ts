@@ -4,6 +4,7 @@ import { cloud } from "..";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -25,6 +26,13 @@ export interface WebsiteOptions {
    * @example "./dist"
    */
   readonly path: string;
+
+  /**
+   * Name of the error document for the website.
+   * @example "404.html"
+   * @default - undefined
+   */
+  readonly errorDocument?: string;
 }
 
 /**
@@ -45,6 +53,9 @@ export interface WebsiteDomainOptions {
  * @abstract
  */
 export class Website extends Resource implements IWebsite {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IWebsiteClient;
+
   /** @internal */
   private readonly _path!: string;
 

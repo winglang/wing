@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource } from "../std";
 
 /**
@@ -24,6 +25,9 @@ export interface CounterProps {
  * @abstract
  */
 export class Counter extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ICounterClient;
+
   /**
    * The initial value of the counter.
    */

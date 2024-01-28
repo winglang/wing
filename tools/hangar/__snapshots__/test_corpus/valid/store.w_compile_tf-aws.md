@@ -77,14 +77,14 @@ class Util extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Util-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Util-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const UtilClient = ${Util._toInflightType(this)};
+        const UtilClient = ${Util._toInflightType()};
         const client = new UtilClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
@@ -101,15 +101,15 @@ class Store extends $stdlib.std.Resource {
     super($scope, $id);
     this.b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const __parent_this_1 = this;
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $__parent_this_1_b: ${$stdlib.core.liftObject(__parent_this_1.b)},
           })
         `;
@@ -117,7 +117,7 @@ class Store extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -128,25 +128,27 @@ class Store extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(__parent_this_1.b, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [__parent_this_1.b, ["put"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
   }
   static _toInflightType() {
     return `
-      require("./inflight.Store-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Store-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const StoreClient = ${Store._toInflightType(this)};
+        const StoreClient = ${Store._toInflightType()};
         const client = new StoreClient({
           $this_b: ${$stdlib.core.liftObject(this.b)},
         });
@@ -158,14 +160,16 @@ class Store extends $stdlib.std.Resource {
   _supportedOps() {
     return [...super._supportedOps(), "store", "$inflight_init"];
   }
-  _registerOnLift(host, ops) {
-    if (ops.includes("$inflight_init")) {
-      Store._registerOnLiftObject(this.b, host, []);
-    }
-    if (ops.includes("store")) {
-      Store._registerOnLiftObject(this.b, host, ["put"]);
-    }
-    super._registerOnLift(host, ops);
+  onLift(host, ops) {
+    $stdlib.core.onLiftMatrix(host, ops, {
+      "$inflight_init": [
+        [this.b, []],
+      ],
+      "store": [
+        [this.b, ["put"]],
+      ],
+    });
+    super.onLift(host, ops);
   }
 }
 const Color =

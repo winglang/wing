@@ -18,27 +18,27 @@ exports[`tree.json for an app with many resources 1`] = `
               },
               "Default": {
                 "children": {
-                  "$Closure1": {
+                  "$Closure1_0": {
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
+                      "fqn": "@winglang/sdk.std.AutoIdResource",
                       "version": "0.0.0",
                     },
                     "display": {
                       "hidden": true,
                     },
-                    "id": "$Closure1",
-                    "path": "root/Default/Default/$Closure1",
+                    "id": "$Closure1_0",
+                    "path": "root/Default/Default/$Closure1_0",
                   },
-                  "$Closure5": {
+                  "$Closure5_0": {
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
+                      "fqn": "@winglang/sdk.std.AutoIdResource",
                       "version": "0.0.0",
                     },
                     "display": {
                       "hidden": true,
                     },
-                    "id": "$Closure5",
-                    "path": "root/Default/Default/$Closure5",
+                    "id": "$Closure5_0",
+                    "path": "root/Default/Default/$Closure5_0",
                   },
                   "Bar": {
                     "children": {
@@ -86,38 +86,38 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                   "BigPublisher": {
                     "children": {
-                      "$Closure2": {
+                      "$Closure2_0": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
+                          "fqn": "@winglang/sdk.std.AutoIdResource",
                           "version": "0.0.0",
                         },
                         "display": {
                           "hidden": true,
                         },
-                        "id": "$Closure2",
-                        "path": "root/Default/Default/BigPublisher/$Closure2",
+                        "id": "$Closure2_0",
+                        "path": "root/Default/Default/BigPublisher/$Closure2_0",
                       },
-                      "$Closure3": {
+                      "$Closure3_0": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
+                          "fqn": "@winglang/sdk.std.AutoIdResource",
                           "version": "0.0.0",
                         },
                         "display": {
                           "hidden": true,
                         },
-                        "id": "$Closure3",
-                        "path": "root/Default/Default/BigPublisher/$Closure3",
+                        "id": "$Closure3_0",
+                        "path": "root/Default/Default/BigPublisher/$Closure3_0",
                       },
-                      "$Closure4": {
+                      "$Closure4_0": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
+                          "fqn": "@winglang/sdk.std.AutoIdResource",
                           "version": "0.0.0",
                         },
                         "display": {
                           "hidden": true,
                         },
-                        "id": "$Closure4",
-                        "path": "root/Default/Default/BigPublisher/$Closure4",
+                        "id": "$Closure4_0",
+                        "path": "root/Default/Default/BigPublisher/$Closure4_0",
                       },
                       "b2": {
                         "children": {

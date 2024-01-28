@@ -56,14 +56,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.C-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.C-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const CClient = ${C._toInflightType(this)};
+            const CClient = ${C._toInflightType()};
             const client = new CClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -74,11 +74,12 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "field", "method", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          C._registerOnLiftObject(this, host, ["field"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
   }
