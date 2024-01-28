@@ -1060,10 +1060,11 @@ impl TypeRef {
 
 	/// Returns whether type represents a closure (either a function or a closure class).
 	pub fn is_closure(&self) -> bool {
-		if self.as_function_sig().is_some() {
-			return true;
-		}
+		self.as_function_sig().is_some() || self.is_closure_class()
+	}
 
+	/// Returns whether type represents a preflight class representing and inflight closure.
+	pub fn is_closure_class(&self) -> bool {
 		if let Some(ref class) = self.as_preflight_class() {
 			return class.get_closure_method().is_some();
 		}

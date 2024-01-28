@@ -45,8 +45,8 @@ pub trait Visit<'ast> {
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
 	}
-	fn visit_expr(&mut self, node: &'ast Expr) {
-		visit_expr(self, node);
+	fn visit_expr(&mut self, node: &'ast Expr, is_callee: bool) {
+		visit_expr(self, node, is_callee);
 	}
 	fn visit_new_expr(&mut self, node: &'ast New) {
 		visit_new_expr(self, node);
@@ -118,7 +118,7 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			v.visit_expr(initial_value);
+			v.visit_expr(initial_value, false);
 		}
 		StmtKind::ForLoop {
 			iterator,
@@ -126,11 +126,11 @@ where
 			statements,
 		} => {
 			v.visit_symbol(iterator);
-			v.visit_expr(iterable);
+			v.visit_expr(iterable, false);
 			v.visit_scope(statements);
 		}
 		StmtKind::While { condition, statements } => {
-			v.visit_expr(condition);
+			v.visit_expr(condition, false);
 			v.visit_scope(statements);
 		}
 		StmtKind::Break | StmtKind::Continue => {}
@@ -143,17 +143,17 @@ where
 			else_statements,
 		}) => {
 			v.visit_symbol(var_name);
-			v.visit_expr(value);
+			v.visit_expr(value, false);
 			v.visit_scope(statements);
 			for elif in elif_statements {
 				match elif {
 					Elifs::ElifBlock(elif_block) => {
-						v.visit_expr(&elif_block.condition);
+						v.visit_expr(&elif_block.condition, false);
 						v.visit_scope(&elif_block.statements);
 					}
 					Elifs::ElifLetBlock(elif_let_block) => {
 						v.visit_symbol(&elif_let_block.var_name);
-						v.visit_expr(&elif_let_block.value);
+						v.visit_expr(&elif_let_block.value, false);
 						v.visit_scope(&elif_let_block.statements);
 					}
 				}
@@ -168,10 +168,10 @@ where
 			elif_statements,
 			else_statements,
 		} => {
-			v.visit_expr(condition);
+			v.visit_expr(condition, false);
 			v.visit_scope(statements);
 			for elif in elif_statements {
-				v.visit_expr(&elif.condition);
+				v.visit_expr(&elif.condition, false);
 				v.visit_scope(&elif.statements);
 			}
 			if let Some(statements) = else_statements {
@@ -179,7 +179,7 @@ where
 			}
 		}
 		StmtKind::Expression(expr) => {
-			v.visit_expr(&expr);
+			v.visit_expr(&expr, false);
 		}
 		StmtKind::Assignment {
 			kind: _,
@@ -187,15 +187,15 @@ where
 			value,
 		} => {
 			v.visit_reference(variable);
-			v.visit_expr(value);
+			v.visit_expr(value, false);
 		}
 		StmtKind::Return(expr) => {
 			if let Some(expr) = expr {
-				v.visit_expr(expr);
+				v.visit_expr(expr, false);
 			}
 		}
 		StmtKind::Throw(expr) => {
-			v.visit_expr(expr);
+			v.visit_expr(expr, false);
 		}
 		StmtKind::Scope(scope) => {
 			v.visit_scope(scope);
@@ -302,14 +302,14 @@ where
 	v.visit_user_defined_type(&node.class);
 	v.visit_args(&node.arg_list);
 	if let Some(id) = &node.obj_id {
-		v.visit_expr(&id);
+		v.visit_expr(&id, false);
 	}
 	if let Some(scope) = &node.obj_scope {
-		v.visit_expr(&scope);
+		v.visit_expr(&scope, false);
 	}
 }
 
-pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr)
+pub fn visit_expr<'ast, V>(v: &mut V, node: &'ast Expr, _is_callee: bool)
 where
 	V: Visit<'ast> + ?Sized,
 {
@@ -325,48 +325,48 @@ where
 			inclusive: _,
 			end,
 		} => {
-			v.visit_expr(start);
-			v.visit_expr(end);
+			v.visit_expr(start, false);
+			v.visit_expr(end, false);
 		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
-				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::Expr(expr) => v.visit_expr(expr, true),
 				CalleeKind::SuperCall(method) => v.visit_symbol(method),
 			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {
-			v.visit_expr(exp);
+			v.visit_expr(exp, false);
 		}
 		ExprKind::Binary { op: _, left, right } => {
-			v.visit_expr(left);
-			v.visit_expr(right);
+			v.visit_expr(left, false);
+			v.visit_expr(right, false);
 		}
 		ExprKind::ArrayLiteral { type_, items } => {
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
 			for item in items {
-				v.visit_expr(item);
+				v.visit_expr(item, false);
 			}
 		}
 		ExprKind::JsonLiteral { element, .. } => {
-			v.visit_expr(element);
+			v.visit_expr(element, false);
 		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
 			for (sym, val) in fields.iter() {
 				v.visit_symbol(sym);
-				v.visit_expr(val);
+				v.visit_expr(val, false);
 			}
 		}
 		ExprKind::JsonMapLiteral { fields } => {
 			for (name, val) in fields.iter() {
 				v.visit_symbol(name);
-				v.visit_expr(val);
+				v.visit_expr(val, false);
 			}
 		}
 		ExprKind::MapLiteral { type_, fields } => {
@@ -374,8 +374,8 @@ where
 				v.visit_type_annotation(type_);
 			}
 			for (key, val) in fields.iter() {
-				v.visit_expr(key);
-				v.visit_expr(val);
+				v.visit_expr(key, false);
+				v.visit_expr(val, false);
 			}
 		}
 		ExprKind::SetLiteral { type_, items } => {
@@ -383,7 +383,7 @@ where
 				v.visit_type_annotation(type_);
 			}
 			for item in items {
-				v.visit_expr(item);
+				v.visit_expr(item, false);
 			}
 		}
 		ExprKind::FunctionClosure(def) => {
@@ -404,7 +404,7 @@ where
 		Literal::InterpolatedString(interpolated_str) => {
 			for part in &interpolated_str.parts {
 				if let InterpolatedStringPart::Expr(exp) = part {
-					v.visit_expr(exp);
+					v.visit_expr(exp, false);
 				}
 			}
 		}
@@ -428,7 +428,7 @@ where
 			object,
 			optional_accessor: _,
 		} => {
-			v.visit_expr(object);
+			v.visit_expr(object, false);
 			v.visit_symbol(property);
 		}
 		Reference::TypeMember { type_name, property } => {
@@ -472,11 +472,11 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	for arg in &node.pos_args {
-		v.visit_expr(&arg);
+		v.visit_expr(&arg, false);
 	}
 	for arg in &node.named_args {
 		v.visit_symbol(&arg.0);
-		v.visit_expr(&arg.1);
+		v.visit_expr(&arg.1, false);
 	}
 }
 

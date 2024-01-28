@@ -1145,7 +1145,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		}
 	}
 
-	fn visit_expr(&mut self, node: &'a Expr) {
+	fn visit_expr(&mut self, node: &'a Expr, is_callee: bool) {
 		let mut set_node = false;
 
 		// if the span is exactly the same, we want to set the node
@@ -1187,10 +1187,10 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				node.kind,
 				ExprKind::JsonLiteral { .. } | ExprKind::JsonMapLiteral { .. }
 			) {
-				visit_expr(self, node);
+				visit_expr(self, node, is_callee);
 			}
 		} else {
-			visit_expr(self, node);
+			visit_expr(self, node, is_callee);
 		}
 	}
 

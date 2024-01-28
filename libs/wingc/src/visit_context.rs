@@ -1,7 +1,7 @@
 use itertools::Itertools;
 
 use crate::{
-	ast::{Class, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
+	ast::{Class, Expr, ExprId, FunctionSignature, Phase, Symbol, UserDefinedType},
 	type_check::symbol_env::SymbolEnvRef,
 };
 
@@ -10,6 +10,12 @@ pub struct FunctionContext {
 	pub name: Option<Symbol>,
 	pub sig: FunctionSignature,
 	pub is_static: bool,
+}
+
+#[derive(Clone)]
+pub struct VisitExprInfo {
+	pub expr: ExprId,
+	pub is_callee: bool,
 }
 
 #[derive(Clone)]
@@ -23,7 +29,7 @@ pub struct VisitContext {
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
 	in_type_annotation: Vec<bool>,
-	expression: Vec<ExprId>,
+	expression: Vec<VisitExprInfo>,
 }
 
 impl VisitContext {
@@ -72,8 +78,11 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_expr(&mut self, expr: ExprId) {
-		self.expression.push(expr);
+	pub fn push_expr(&mut self, expr: &Expr, is_callee: bool) {
+		self.expression.push(VisitExprInfo {
+			expr: expr.id,
+			is_callee,
+		});
 	}
 
 	pub fn pop_expr(&mut self) {
@@ -81,7 +90,11 @@ impl VisitContext {
 	}
 
 	pub fn current_expr(&self) -> Option<ExprId> {
-		self.expression.last().map(|id| *id)
+		self.expression.last().map(|id| id.expr)
+	}
+
+	pub fn current_expr_is_callee(&self) -> bool {
+		self.expression.last().map(|id| id.is_callee).unwrap_or(false)
 	}
 
 	// --
@@ -218,8 +231,8 @@ impl VisitContext {
 pub trait VisitorWithContext {
 	fn ctx(&mut self) -> &mut VisitContext;
 
-	fn with_expr(&mut self, expr: ExprId, f: impl FnOnce(&mut Self)) {
-		self.ctx().push_expr(expr);
+	fn with_expr(&mut self, expr: &Expr, is_callee: bool, f: impl FnOnce(&mut Self)) {
+		self.ctx().push_expr(expr, is_callee);
 		f(self);
 		self.ctx().pop_expr();
 	}

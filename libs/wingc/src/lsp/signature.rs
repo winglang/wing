@@ -196,8 +196,8 @@ impl<'a> ScopeVisitor<'a> {
 }
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
-	fn visit_expr(&mut self, node: &'a Expr) {
-		visit_expr(self, node);
+	fn visit_expr(&mut self, node: &'a Expr, is_callee: bool) {
+		visit_expr(self, node, is_callee);
 
 		if self.call_expr.is_some() {
 			return;
