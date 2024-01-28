@@ -3,6 +3,7 @@ import { App } from "./app";
 import { Function } from "./function";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
 import { StorageTable } from "../.gen/providers/azurerm/storage-table";
+
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -63,7 +64,12 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _supportedOps(): string[] {
-    return [cloud.CounterInflightMethods.INC];
+    return [
+      cloud.CounterInflightMethods.INC,
+      cloud.CounterInflightMethods.DEC,
+      cloud.CounterInflightMethods.SET,
+      cloud.CounterInflightMethods.PEEK,
+    ];
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -88,6 +94,10 @@ export class Counter extends cloud.Counter {
       });
     }
 
+    host.addEnvironment(
+      this.envAccountKeyName(),
+      this.storageAccount.primaryAccessKey
+    );
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.envStorageTableName(), this.storageTable.name);
     super.onLift(host, ops);
@@ -102,6 +112,7 @@ export class Counter extends cloud.Counter {
       [
         `process.env["${this.envStorageAccountName()}"]`,
         `process.env["${this.envStorageTableName()}"]`,
+        `"${this.envAccountKeyName()}"`,
         `${this.initial}`,
       ]
     );
@@ -109,6 +120,10 @@ export class Counter extends cloud.Counter {
 
   private envStorageAccountName(): string {
     return `STORAGE_ACCOUNT_${this.storageTable.node.addr.slice(-8)}`;
+  }
+
+  private envAccountKeyName(): string {
+    return `STORAGE_ACCOUNT_KEY_${this.storageTable.node.addr.slice(-8)}`;
   }
 
   private envStorageTableName(): string {

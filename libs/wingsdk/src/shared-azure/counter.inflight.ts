@@ -1,7 +1,8 @@
-import { TableClient } from "@azure/data-tables";
+import { TableClient, AzureNamedKeyCredential } from "@azure/data-tables";
 import type { ICounterClient } from "../cloud";
 
 const COUNTER_ID = "counter";
+const PARTITION_KEY = "partitionKey";
 
 export class CounterClient implements ICounterClient {
   private client: TableClient;
@@ -9,11 +10,22 @@ export class CounterClient implements ICounterClient {
   constructor(
     private readonly storageAccountName: string,
     private readonly storageTableName: string,
+    private readonly accountKeyVariable: string,
     private readonly initial: number = 0
   ) {
+    if (!process.env[this.accountKeyVariable]) {
+      throw new Error("missing storage account key");
+    }
+
+    const credentials = new AzureNamedKeyCredential(
+      this.storageAccountName,
+      process.env[this.accountKeyVariable] as string
+    );
+
     this.client = new TableClient(
       `https://${this.storageAccountName}.table.core.windows.net`,
-      this.storageTableName
+      this.storageTableName,
+      credentials
     );
   }
 
@@ -22,26 +34,30 @@ export class CounterClient implements ICounterClient {
     key: string = COUNTER_ID
   ): Promise<number> {
     const entity = await this._getEntity(key);
-    const newValue = (entity?.counterValue || this.initial) + amount;
+    const currentValue = (entity?.counterValue as number) ?? this.initial;
+    const newValue = currentValue + amount;
     await this._upsertEntity(key, newValue);
-    return newValue;
+    return currentValue;
   }
 
   public async dec(amount = 1, key: string = COUNTER_ID): Promise<number> {
-    throw new Error(`Method not implemented. ${amount} ${key}`);
+    return this.inc(-1 * amount, key);
   }
 
   public async peek(key: string = COUNTER_ID): Promise<number> {
-    throw new Error(`Method not implemented. ${key}`);
+    const entity = await this._getEntity(key);
+    return (entity?.counterValue as number) ?? this.initial;
   }
 
   public async set(value: number, key: string = COUNTER_ID): Promise<void> {
-    throw new Error(`Method not implemented. ${value} ${key}`);
+    await this._upsertEntity(key, value);
   }
 
-  private async _getEntity(key: string): Promise<any> {
+  private async _getEntity(
+    key: string
+  ): Promise<Record<string, unknown> | undefined> {
     try {
-      return await this.client.getEntity("partitionKey", key);
+      return await this.client.getEntity(PARTITION_KEY, key);
     } catch (error) {
       return undefined;
     }
@@ -49,7 +65,7 @@ export class CounterClient implements ICounterClient {
 
   private async _upsertEntity(key: string, value: number): Promise<void> {
     const entity = {
-      partitionKey: "partitionKey",
+      partitionKey: PARTITION_KEY,
       rowKey: key,
       counterValue: value,
     };
