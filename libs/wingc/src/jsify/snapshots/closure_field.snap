@@ -178,7 +178,7 @@ class $Root extends $stdlib.std.Resource {
             [this.closure, []],
           ],
           "foo": [
-            [this.closure, ["handle"]],
+            [this.closure, []],
           ],
         });
         super.onLift(host, ops);

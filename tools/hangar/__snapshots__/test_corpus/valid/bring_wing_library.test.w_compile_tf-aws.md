@@ -53,6 +53,9 @@ module.exports = function({  }) {
   class Util {
     constructor({  }) {
     }
+    static async makeKeyInflight(name) {
+      return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
+    }
     static async double(msg) {
       return String.raw({ raw: ["", "", ""] }, msg, msg);
     }
@@ -293,7 +296,7 @@ class Util extends $stdlib.std.Resource {
     `;
   }
   _supportedOps() {
-    return [...super._supportedOps(), "double", "$inflight_init"];
+    return [...super._supportedOps(), "makeKeyInflight", "double", "$inflight_init"];
   }
 }
 module.exports = { Util };

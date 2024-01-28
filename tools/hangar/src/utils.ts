@@ -65,6 +65,8 @@ export function sanitizeOutput(output: string) {
       .replace(/\(\/.+:\d+:\d+\)/g, "(<ABSOLUTE>:LINE:COL)")
       // Remove absolute paths
       .replace(/(?<=[\s"])(\/|\w:)\S+\/(\S+)/g, "<ABSOLUTE>/$2")
+      // remove references to random state files
+      .replace(/\/.state\/[^ '"]+/g, "/.state/<STATE_FILE>")
       // Remove duration from test results
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
   );

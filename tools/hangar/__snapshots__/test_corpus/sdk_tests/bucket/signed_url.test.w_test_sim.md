@@ -10,7 +10,7 @@ It might not be implemented yet.
   | 
 8 | test "signedUrl GET (implicit)" {
   |                                 ^
-at onLift (<ABSOLUTE>:LINE:COL)
+at onLift <ABSOLUTE>/signed_url.test.w:8:33
  
  
 Tests 1 unsupported (1)

@@ -32,3 +32,19 @@ invalidWingFiles.forEach((wingFile) => {
     }
   });
 });
+
+const invalidLibDir = path.join(invalidTestDir, "lib");
+test("invalid compile directory", async ({ expect }) => {
+  const platforms = ["sim"];
+  const args = ["compile"];
+
+  const out = await runWingCommand({
+    cwd: tmpDir,
+    wingFile: invalidLibDir,
+    platforms,
+    args,
+    expectFailure: true,
+  });
+
+  expect(out.stderr).toMatchSnapshot();
+})
