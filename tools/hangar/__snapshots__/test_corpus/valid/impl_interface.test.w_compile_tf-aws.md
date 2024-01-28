@@ -40,6 +40,32 @@ module.exports = function({ $i3 }) {
 //# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
+## inflight.$Closure3-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      class MyDog {
+        async bark() {
+          console.log("woof");
+        }
+      }
+      const dog = (await (async () => {const o = new MyDog(); await o.$inflight_init?.(); return o; })());
+      (await dog.bark());
+    }
+  }
+  return $Closure3;
+}
+//# sourceMappingURL=inflight.$Closure3-1.js.map
+```
+
 ## inflight.A-1.js
 ```js
 "use strict";
@@ -170,7 +196,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -237,7 +263,7 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "method2", "$inflight_init"];
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -324,6 +350,33 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "eat", "$inflight_init"];
       }
     }
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
+      constructor($scope, $id, ) {
+        super($scope, $id);
+        $helpers.nodeof(this).hidden = true;
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const $Closure3Client = ${$Closure3._toInflightType()};
+            const client = new $Closure3Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+    }
     const x = new A(this, "A");
     const y = new $Closure1(this, "$Closure1");
     const i3 = ((() => {
@@ -334,6 +387,7 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((i3.method3([1, 2, 3])), [1, 2, 3]), "i3.method3([1, 2, 3]) == [1, 2, 3]");
     const z = new Dog(this, "Dog");
     const w = new Terrier(this, "Terrier");
+    const f = new $Closure3(this, "$Closure3");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -56,12 +56,12 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k")), 2);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k2")), 1);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
     }
   }
   return $Closure3;
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -270,7 +270,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

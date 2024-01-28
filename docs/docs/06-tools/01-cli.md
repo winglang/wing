@@ -23,6 +23,18 @@ Usage:
 $ wing [command] [options]
 ```
 
+## New project: `wing new`
+
+The `wing new` command can be used to create a new Wing project from a template in your current directory.
+
+Usage:
+
+```sh
+$ wing new <template>
+```
+
+Run `wing new` without any arguments to view the available templates.
+
 ## Run: `wing run|it`
 
 You can use the `run` command (or `it`) when you want to interact with your Wing program in the

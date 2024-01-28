@@ -5,6 +5,7 @@ import { IWebsite, WebsiteDomainOptions } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Resource, Node } from "../std";
 
 const DEFAULT_BUILD_FOLDER = "/build";
@@ -73,6 +74,9 @@ export interface ReactAppOptions {
  * @abstract
  */
 export class ReactApp extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IReactAppClient;
+
   /**
    * @internal
    */

@@ -377,8 +377,7 @@
         "issue": 4635
       },
       "tf-gcp": {
-        "implemented": false,
-        "issue": 4599
+        "implemented": true
       },
       "awscdk": {
         "implemented": true
@@ -1064,7 +1063,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "post": {
@@ -1083,7 +1082,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "put": {
@@ -1102,7 +1101,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "delete": {
@@ -1121,7 +1120,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "patch": {
@@ -1140,7 +1139,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "any": {

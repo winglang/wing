@@ -5,7 +5,7 @@ exports[`aws-counter.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/aws-counter.test.w": {
@@ -45,7 +45,7 @@ exports[`dec.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/dec.test.w": {
@@ -267,7 +267,7 @@ exports[`inc.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/inc.test.w": {
@@ -489,7 +489,7 @@ exports[`initial.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/initial.test.w": {
@@ -614,7 +614,7 @@ exports[`peek.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/peek.test.w": {
@@ -770,7 +770,7 @@ exports[`set.test.w 1`] = `
   "duration": "<DURATION>",
   "platforms": [
     "sim",
-    "../../../libs/compatibility-spy/lib",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
   "results": {
     "counter/set.test.w": {

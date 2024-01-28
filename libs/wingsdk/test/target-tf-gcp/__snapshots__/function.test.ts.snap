@@ -36,6 +36,13 @@ exports[`basic function 1`] = `
         "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
       },
     },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
       "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
@@ -44,6 +51,9 @@ exports[`basic function 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -110,6 +120,14 @@ exports[`basic function 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -258,6 +276,13 @@ exports[`basic function with environment variables 1`] = `
         "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
       },
     },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
       "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
@@ -266,6 +291,9 @@ exports[`basic function with environment variables 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -332,6 +360,14 @@ exports[`basic function with environment variables 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -479,6 +515,13 @@ exports[`basic function with memory size specified 1`] = `
         "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
       },
     },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
       "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
@@ -487,6 +530,9 @@ exports[`basic function with memory size specified 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -553,6 +599,14 @@ exports[`basic function with memory size specified 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -700,6 +754,13 @@ exports[`basic function with timeout explicitly set 1`] = `
         "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
       },
     },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
       "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
@@ -708,6 +769,9 @@ exports[`basic function with timeout explicitly set 1`] = `
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -774,6 +838,14 @@ exports[`basic function with timeout explicitly set 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {

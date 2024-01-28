@@ -36,9 +36,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       const value2 = (await $r2.get("wing"));
       $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
-      (await $util_Util.waitUntil(async () => {
+      (await $util_Util.waitUntil((async () => {
         return $helpers.neq((await $r.get("hello")), undefined);
-      }));
+      })));
       $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
   }
@@ -545,7 +545,7 @@ const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -581,7 +581,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

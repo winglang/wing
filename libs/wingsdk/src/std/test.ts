@@ -1,9 +1,8 @@
 import { Construct } from "constructs";
-import { Resource } from "./resource";
 import { Function, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Node, IInflight } from "../std";
+import { Node, IInflight, Resource } from "../std";
 
 /**
  * Global identifier for `Test`.
