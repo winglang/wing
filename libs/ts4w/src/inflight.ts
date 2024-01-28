@@ -14,14 +14,16 @@ import type {
 /**
  * Prepares preflight objects for use in inflight functions.
  *
- * Conventionally, this is used by passing in a `const` object to bind it with the same name
+ * Conventionally, this is used by passing in a `const` object to bind it with the same name.
  *
  * ```ts
  * const bucket = new cloud.Bucket(app, "Bucket");
  * const number = 5;
  *
  * lift({ bucket, number })
- *   .inflight(({ bucket, number }) => { ... }))
+ *   .inflight(async function() => {
+ *     await this.bucket.put(this.number);
+ * }))
  * ```
  *
  * However, the name is not required to match the variable in the current scope.
@@ -32,7 +34,11 @@ import type {
  * const bucket = new cloud.Bucket(app, "Bucket");
  *
  * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
- *   .inflight(({ bkt, sum, field }) => { ... }))
+ *   .inflight(async function () => {
+ *     console.log(this.bkt.field);
+ *     console.log(this.sum);
+ *     console.log(this.field);
+ * }))
  * ```
  */
 export function lift<TToLift extends LiftableMap>(
@@ -50,7 +56,7 @@ export function lift<TToLift extends LiftableMap>(
  * Built-in NodeJS globals are available, such as `console` and `process`.
  */
 export function inflight<TFunction extends AsyncFunction>(
-  fn: (ctx: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
+  fn: (this: {}, ...args: Parameters<TFunction>) => ReturnType<TFunction>
 ) {
   return new Lifter().inflight(fn);
 }
@@ -78,7 +84,9 @@ class Lifter<
    * const number = 5;
    *
    * lift({ bucket, number })
-   *   .inflight(({ bucket, number }) => { ... }))
+   *   .inflight(async function() => {
+   *     this.bucket.put(this.number);
+   * }))
    * ```
    *
    * However, the name is not required to match the variable in the current scope.
@@ -89,7 +97,11 @@ class Lifter<
    * const bucket = new cloud.Bucket(app, "Bucket");
    *
    * lift({ bkt: bucket, sum: 2 + 2, field: bucket.field })
-   *   .inflight(({ bkt, sum, field }) => { ... }))
+   *   .inflight(async function () => {
+   *     console.log(this.bkt.field);
+   *     console.log(this.sum);
+   *     console.log(this.field);
+   * }))
    * ```
    */
   public lift<TWillLift extends LiftableMap>(captures: TWillLift) {
@@ -116,9 +128,9 @@ class Lifter<
    *
    * lift({ bucket })
    *   .grant({ bucket: ["get"] })
-   *   .inflight(({ bucket }) => {
-   *     await bucket.get("key");
-   *     await bucket.set("key", "value"); // Error: set is not granted
+   *   .inflight(async function() => {
+   *     await this.bucket.get("key");
+   *     await this.bucket.set("key", "value"); // Error: set is not granted
    *   });
    * ```
    *
@@ -143,14 +155,15 @@ class Lifter<
    *
    * This function must not reference any variables outside of its scope.
    * If needed, use `lift` again to bind variables to the scope of the function.
-   * Bound variables will be available as properties on the `ctx` object passed as the first argument to the function.
+   * Bound variables will be available as properties on `this`. 
+   * To get correct types, make sure to use the `function` keyword and not an arrow function.
    *
    * Built-in NodeJS globals are available, such as `console` and `process`.
    */
   public inflight<TFunction extends AsyncFunction>(
     fn: (
       /** All lifted data available in this inflight */
-      ctx: // Get all the lifted types which were not explicitly granted
+      this: // Get all the lifted types which were not explicitly granted
       Omit<TLifted, keyof TOperations> & {
         // For each of the granted types, get the lifted type with only the granted operations available (and any fields as well)
         [K in keyof TOperations &
@@ -176,7 +189,7 @@ class Lifter<
     .join(",\n")}
   };
   let newFunction = async (...args) => {
-    return $func($ctx, ...args);
+    return $func.call($ctx, ...args);
   };
   newFunction.handle = newFunction;
   return newFunction;

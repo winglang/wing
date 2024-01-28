@@ -8,8 +8,8 @@ main((app) => {
     "F1",
     lift({ bucket })
       .grant({ bucket: ["put"] })
-      .inflight(async ({ bucket }) => {
-        await bucket.put("hi", "stuff");
+      .inflight(async function () {
+        await this.bucket.put("hi", "stuff");
         console.log("hi from function");
         return "hi";
       })
@@ -17,12 +17,12 @@ main((app) => {
 
   const store = new winglib.Store(app, "Store");
 
-  let inf = inflight<() => Promise<void>>(async ({}) => {
+  let inf = inflight<() => Promise<void>>(async () => {
     console.log("hi from loose inflight");
   });
 
   store.onSet(
-    inflight(async ({}, message) => {
+    inflight(async (message) => {
       console.log(`Set("${message}")`);
     })
   );
@@ -32,11 +32,11 @@ main((app) => {
     "Test",
     lift({ store, inf, f })
       .grant({ store: ["set"] })
-      .inflight(async ({ store, inf, f }) => {
+      .inflight(async function () {
         console.log("hi from test");
-        await inf();
-        await f.invoke("me");
-        await store.set("wing");
+        await this.inf();
+        await this.f.invoke("me");
+        await this.store.set("wing");
       })
   );
 });

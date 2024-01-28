@@ -1,6 +1,5 @@
-import { std } from "@winglang/sdk";
 import { test, expect, expectTypeOf, vi } from "vitest";
-import { lift } from "../src";
+import { lift, std } from "../src";
 import { INFLIGHT_SYMBOL } from "@winglang/sdk/lib/core/types";
 
 interface FakeBucketClient {
@@ -18,10 +17,10 @@ test("can lift bucket", async () => {
   const bucket = new FakeBucket();
   const inflightSpy = vi.spyOn(bucket, "_toInflight");
 
-  let x = lift({ bucket }).inflight(async ({ bucket }) => {
-    expectTypeOf(bucket.hi).toEqualTypeOf<() => Promise<void>>();
-    expectTypeOf(bucket.field).toEqualTypeOf<string>();
-    expectTypeOf(bucket).toEqualTypeOf<FakeBucketClient>();
+  let x = lift({ bucket }).inflight(async function () {
+    expectTypeOf(this.bucket.hi).toEqualTypeOf<() => Promise<void>>();
+    expectTypeOf(this.bucket.field).toEqualTypeOf<string>();
+    expectTypeOf(this.bucket).toEqualTypeOf<FakeBucketClient>();
   });
 
   x._toInflight();
@@ -35,10 +34,10 @@ test("can lift bucket with grant", async () => {
 
   let x = lift({ bucket })
     .grant({ bucket: [] })
-    .inflight(async ({ bucket }) => {
-      expectTypeOf(bucket).not.toEqualTypeOf<FakeBucketClient>();
-      expectTypeOf(bucket.field).toEqualTypeOf<string>();
-      expectTypeOf(bucket).not.toHaveProperty("hi");
+    .inflight(async function () {
+      expectTypeOf(this.bucket).not.toEqualTypeOf<FakeBucketClient>();
+      expectTypeOf(this.bucket.field).toEqualTypeOf<string>();
+      expectTypeOf(this.bucket).not.toHaveProperty("hi");
     });
 
   x._toInflight();

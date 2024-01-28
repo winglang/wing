@@ -2,12 +2,19 @@
 
 ```ts
 // main.ts
-import { main } from "ts4w";
-import { cloud } from "@winglang/sdk";
+import { main, cloud, std, lift } from "ts4w";
 
 main((app) => {
-  new cloud.Bucket(app, "Bucket");
-})
+  const bucket = new cloud.Bucket(app, "Bucket");
+
+  new std.Test(
+    app,
+    "put stuff into bucket",
+    lift({ bucket }).inflight(async function () {
+      await this.bucket.put("hello.txt", "hello world");
+    })
+  );
+});
 ```
 
 ```shell
