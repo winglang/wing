@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import * as path from "path";
 import * as toml from "toml";
 import * as yaml from "yaml";
@@ -75,7 +75,10 @@ export function loadPlatformSpecificValues() {
     return cliValues;
   }
 
-  const file = path.join(process.cwd(), process.env.WING_VALUES_FILE);
+  const file = path.isAbsolute(process.env.WING_VALUES_FILE) ? process.env.WING_VALUES_FILE : path.join(process.cwd(), process.env.WING_VALUES_FILE);
+  if (!existsSync(file)) {
+    return cliValues;
+  }
   const data = readFileSync(file, "utf-8");
 
   const fileExtension = path.extname(file);

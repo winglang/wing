@@ -33,12 +33,18 @@ export class ParameterRegistrar extends Construct {
   private parameterValueByPath: { [key: string]: any } = {};
   private invalidInputMessages: string[] = [];
 
+  // These are "OR" relationships, i.e. if we need to require either 
+  // parameter A or B or C
+  private orDependencies: Array<Array<PlatformParameter>> = [];
+
   /** @internal */
   public readonly _rawParameters: { [key: string]: any } =
     loadPlatformSpecificValues();
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
+
+    this._rawParameters = loadPlatformSpecificValues();
   }
 
   /**
@@ -60,6 +66,25 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
+   * Define an "OR" relationship between parameters
+   * 
+   * @param parameters the parameters that compose the "OR" relationship
+   */
+  public addOrDependency(parameters: PlatformParameter[]) {
+    this.orDependencies.push(parameters);
+  }
+
+  private validateOrDependencies() {
+    for (const group of this.orDependencies) {
+      if (!group.some(param => this.parameterValueByPath[param.path] !== undefined)) {
+        // Construct a list of parameter paths for the error message
+        const paramPaths = group.map(param => `"${param.path}"`).join(' or ');
+        this.invalidInputMessages.push(`At least one of the parameters ${paramPaths} must be provided.`);
+      }
+    }
+  }
+
+  /**
    * Synth the registrar
    * @internal
    */
@@ -74,6 +99,9 @@ export class ParameterRegistrar extends Construct {
       }
       this.parameterValueByPath[param.path] = param.value;
     }
+
+    // Once we validate all individual parameters, we need to validate the "OR" relationships
+    this.validateOrDependencies();
 
     // If any invalid input messages were registered, then throw an error
     if (this.invalidInputMessages.length > 0) {

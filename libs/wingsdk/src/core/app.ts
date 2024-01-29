@@ -172,10 +172,6 @@ export abstract class App extends Construct implements IApp {
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
     this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
-    this._platformParameterRegistrar = new ParameterRegistrar(
-      this,
-      "ParameterRegistrar"
-    );
   }
 
   /**
@@ -192,8 +188,12 @@ export abstract class App extends Construct implements IApp {
    * wing application.
    */
   public get platformParameterRegistrar() {
-    // print the whole construct tree:
-
+    if (!this._platformParameterRegistrar) {
+      this._platformParameterRegistrar = new ParameterRegistrar(
+        this,
+        "ParameterRegistrar"
+      );
+    }
     return this._platformParameterRegistrar!;
   }
 

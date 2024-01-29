@@ -192,6 +192,40 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "id": "Domain",
                 "path": "root/Default/Domain",
               },
+              "ParameterRegistrar": {
+                "children": {
+                  "174469c4ACMCertificateArn": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4ACMCertificateArn",
+                    "path": "root/Default/ParameterRegistrar/174469c4ACMCertificateArn",
+                  },
+                  "174469c4HostedZoneId": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4HostedZoneId",
+                    "path": "root/Default/ParameterRegistrar/174469c4HostedZoneId",
+                  },
+                  "174469c4IAMCertificate": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4IAMCertificate",
+                    "path": "root/Default/ParameterRegistrar/174469c4IAMCertificate",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Website": {
                 "children": {
                   "Website-host": {
@@ -551,6 +585,40 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 "id": "Domain",
                 "path": "root/Default/Domain",
               },
+              "ParameterRegistrar": {
+                "children": {
+                  "174469c4ACMCertificateArn": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4ACMCertificateArn",
+                    "path": "root/Default/ParameterRegistrar/174469c4ACMCertificateArn",
+                  },
+                  "174469c4HostedZoneId": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4HostedZoneId",
+                    "path": "root/Default/ParameterRegistrar/174469c4HostedZoneId",
+                  },
+                  "174469c4IAMCertificate": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4IAMCertificate",
+                    "path": "root/Default/ParameterRegistrar/174469c4IAMCertificate",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Website": {
                 "children": {
                   "Website-host": {
@@ -905,6 +973,40 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                 "id": "Domain",
                 "path": "root/Default/Domain",
               },
+              "ParameterRegistrar": {
+                "children": {
+                  "174469c4ACMCertificateArn": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4ACMCertificateArn",
+                    "path": "root/Default/ParameterRegistrar/174469c4ACMCertificateArn",
+                  },
+                  "174469c4HostedZoneId": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4HostedZoneId",
+                    "path": "root/Default/ParameterRegistrar/174469c4HostedZoneId",
+                  },
+                  "174469c4IAMCertificate": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4IAMCertificate",
+                    "path": "root/Default/ParameterRegistrar/174469c4IAMCertificate",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Website": {
                 "children": {
                   "AllowDistributionReadOnly": {
@@ -1252,6 +1354,40 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                 },
                 "id": "Domain",
                 "path": "root/Default/Domain",
+              },
+              "ParameterRegistrar": {
+                "children": {
+                  "174469c4ACMCertificateArn": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4ACMCertificateArn",
+                    "path": "root/Default/ParameterRegistrar/174469c4ACMCertificateArn",
+                  },
+                  "174469c4HostedZoneId": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4HostedZoneId",
+                    "path": "root/Default/ParameterRegistrar/174469c4HostedZoneId",
+                  },
+                  "174469c4IAMCertificate": {
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.70",
+                    },
+                    "id": "174469c4IAMCertificate",
+                    "path": "root/Default/ParameterRegistrar/174469c4IAMCertificate",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Website": {
                 "children": {
