@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { ParameterRegistrar, resolveValueFromPath } from "./parameter-registrar";
+import { ParameterRegistrar } from "./parameter-registrar";
 
 /**
  * Platform Parameter Props
@@ -41,7 +41,6 @@ export class PlatformParameter extends Construct {
 
   private _required?: boolean;
   private choices?: any[];
-
   private dependentInputsByChoice: { [key: string]: PlatformParameter[] } = {};
 
   constructor(
@@ -55,7 +54,7 @@ export class PlatformParameter extends Construct {
     this._required = props.required;
     this.choices = props.choices;
 
-    this.value = resolveValueFromPath(scope._rawParameters, this.path);
+    this.value = ParameterRegistrar.of(this).readParameterValue(this.path);
   }
 
   /**

@@ -2,7 +2,6 @@ import { readFileSync } from "fs";
 import { basename, dirname, join } from "path";
 import { cwd } from "process";
 import * as vm from "vm";
-import { ParameterRegistrar } from "./parameter-registrar";
 import { IPlatform } from "./platform";
 import { App, AppProps, SynthHooks } from "../core";
 
@@ -106,23 +105,17 @@ export class PlatformManager {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
     });
-
-    const registrar = new ParameterRegistrar("PlatformParametersRegistrar");
-
-    registerParameterHooks.forEach((hook) => {
-      hook(registrar);
-    });
-
-    // synth the registrar before returning the app, this way
-    // the inputs are registered before the app is synthesized
-    registrar.synth();
-
     const app = appCall!({
       ...appProps,
       synthHooks,
       newInstanceOverrides,
-      platformParameterRegistrar: registrar,
     }) as App;
+
+    let registrar = app.platformParameterRegistrar;
+
+    registerParameterHooks.forEach((hook) => {
+      hook(registrar);
+    });
     return app;
   }
 }

@@ -1,6 +1,8 @@
 import { Construct } from "constructs";
-import { PlatformParameter, PlatformParameterProps } from "./platform-parameter";
+import { PlatformParameter } from "./platform-parameter";
 import { loadPlatformSpecificValues } from "./util";
+
+const PARAMETER_REGISTRAR_SYMBOL = Symbol.for("wingsdk.parameterRegistrar");
 
 /**
  * Parameter Registrar
@@ -8,7 +10,26 @@ import { loadPlatformSpecificValues } from "./util";
  * This construct is used to register and validate platform parameters.
  */
 export class ParameterRegistrar extends Construct {
-  private synthed: boolean = false;
+  /** @internal */
+  public readonly [PARAMETER_REGISTRAR_SYMBOL] = true;
+
+  /**
+   * Returns the parameter registrar for the given scope
+   * @param scope the scope to search for the parameter registrar
+   * @returns the parameter registrar
+   */
+  public static of(scope: any): ParameterRegistrar {
+    if (scope && scope[PARAMETER_REGISTRAR_SYMBOL]) {
+      return scope as ParameterRegistrar;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root parameter registrar");
+    }
+
+    return this.of(scope.node.scope);
+  }
+
   private parameterValueByPath: { [key: string]: any } = {};
   private invalidInputMessages: string[] = [];
 
@@ -16,24 +37,8 @@ export class ParameterRegistrar extends Construct {
   public readonly _rawParameters: { [key: string]: any } =
     loadPlatformSpecificValues();
 
-  constructor(id: string) {
-    super(undefined as any, id);
-    this._rawParameters = loadPlatformSpecificValues();
-  }
-
-  public newParameter(id: string, props: PlatformParameterProps): PlatformParameter {
-    const param =  new PlatformParameter(this, id, props);
-    param.value = resolveValueFromPath(this._rawParameters, param.path);
-    return param;
-  }
-
-  /**
-   * Registers an invalid input message
-   *
-   * @param message the message to register
-   */
-  public registerInvalidInputMessage(message: string) {
-    this.invalidInputMessages.push(message);
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
   }
 
   /**
@@ -43,8 +48,12 @@ export class ParameterRegistrar extends Construct {
    * @returns the value of the parameter
    */
   public readParameterValue(path: string): any {
-    if (!this.synthed) {
-      throw new Error("Cannot get parameter value before synthing registrar");
+    if (this.parameterValueByPath[path] === undefined) {
+      // attempt to read the value from the raw parameters, then cache it
+      this.parameterValueByPath[path] = resolveValueFromPath(
+        this._rawParameters,
+        path
+      );
     }
 
     return this.parameterValueByPath[path];
@@ -52,14 +61,9 @@ export class ParameterRegistrar extends Construct {
 
   /**
    * Synth the registrar
+   * @internal
    */
-  public synth() {
-    if (this.synthed) {
-      return;
-    }
-
-    // const isParameter = (node: Construct) => node instanceof PlatformParameter;
-
+  public _preSynthesize() {
     const parameters: PlatformParameter[] = this.node
       .children as PlatformParameter[];
 
@@ -77,10 +81,8 @@ export class ParameterRegistrar extends Construct {
         "Invalid input values were provided the following errors were recorded:\n\t- ";
       throw new Error(message + this.invalidInputMessages.join("\n\t- "));
     }
-    this.synthed = true;
   }
 }
-
 
 /** @internal */
 export function resolveValueFromPath(
@@ -99,5 +101,5 @@ export function resolveValueFromPath(
 
   // recurse
   const nextPath = pathParts.slice(1).join("/");
-  return resolveValueFromPath(rawParameters, nextPath);
+  return resolveValueFromPath(rawParameters[pathParts[0]], nextPath);
 }

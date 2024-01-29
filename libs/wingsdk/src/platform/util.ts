@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import * as path from "path";
 import * as toml from "toml";
 import * as yaml from "yaml";
@@ -68,26 +68,29 @@ export function createValuesObjectFromString(values: string) {
 export function loadPlatformSpecificValues() {
   const cliValues = createValuesObjectFromString(process.env.WING_VALUES ?? "");
 
-  const file = path.join(process.cwd(), process.env.WING_VALUES_FILE ?? "");
-  if (existsSync(file)) {
-    const data = readFileSync(file, "utf-8");
-
-    const fileExtension = path.extname(file);
-    const fileValues = (() => {
-      switch (fileExtension) {
-        case ".yaml":
-        case ".yml":
-          return yaml.parse(data);
-        case ".json":
-          return JSON.parse(data);
-        case ".toml":
-          return toml.parse(data);
-        default:
-          throw new Error(`Unsupported file extension: ${fileExtension}`);
-      }
-    })();
-    return { ...fileValues, ...cliValues };
+  if (
+    process.env.WING_VALUES_FILE === undefined ||
+    process.env.WING_VALUES_FILE === ""
+  ) {
+    return cliValues;
   }
 
-  return cliValues;
+  const file = path.join(process.cwd(), process.env.WING_VALUES_FILE);
+  const data = readFileSync(file, "utf-8");
+
+  const fileExtension = path.extname(file);
+  const fileValues = (() => {
+    switch (fileExtension) {
+      case ".yaml":
+      case ".yml":
+        return yaml.parse(data);
+      case ".json":
+        return JSON.parse(data);
+      case ".toml":
+        return toml.parse(data);
+      default:
+        throw new Error(`Unsupported file extension: ${fileExtension}`);
+    }
+  })();
+  return { ...fileValues, ...cliValues };
 }

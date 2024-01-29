@@ -174,7 +174,7 @@ async function main() {
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
-    .option("--values <file>", "File with Platform-specific values", "wing.yaml")
+    .option("--values <file>", "File with Platform-specific values")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
