@@ -86,7 +86,8 @@ let db = new MyDatabase();
 
 new cloud.Function(inflight () => {
   log(Json.stringify(db.query("my-key")));
-});```
+});
+```
 
 ## Target-specific details
 
