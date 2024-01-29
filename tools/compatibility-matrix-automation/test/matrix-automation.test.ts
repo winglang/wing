@@ -129,7 +129,6 @@ describe("writeToMatrix", () => {
   });
 });
 
-//updateMatrixFromFile
 describe("updateMatrixFromFile", () => {
   test("reads a file and returns matrix information", () => {
     const outFile: TestResultsJson = {
