@@ -75,7 +75,6 @@ export class PlatformParameter extends Construct {
     parameter.node.addDependency(this);
   }
 
-
   /**
    * Set whether the parameter is required
    */

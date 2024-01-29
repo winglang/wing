@@ -205,9 +205,11 @@ describe("cloud.Domain for tf-aws", () => {
     }).toThrowError(
       new RegExp(
         `Invalid input values were provided the following errors were recorded:\\s*` +
-        `- Parameters: "root/Default/Domain/hostedZoneId" is required\\s*` +
-        `- At least one of the parameters "root/Default/Domain/iamCertificate" or "root/Default/Domain/acmCertificateArn" must be provided\\.`
-        .replace(/\s+/g, '\\s*')  // Normalize whitespace for comparison
+          `- Parameters: "root/Default/Domain/hostedZoneId" is required\\s*` +
+          `- At least one of the parameters "root/Default/Domain/iamCertificate" or "root/Default/Domain/acmCertificateArn" must be provided\\.`.replace(
+            /\s+/g,
+            "\\s*"
+          ) // Normalize whitespace for comparison
       )
     );
   });

@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { App } from "../core";
 import { NotImplementedError } from "../core/errors";
 import { PlatformParameter } from "../platform";
-import { App } from "../core";
 
 /**
  * AWS implementation of `cloud.Domain`.
@@ -20,20 +20,32 @@ export class Domain extends cloud.Domain {
 
     const registrar = App.of(scope).platformParameterRegistrar;
 
-    const iamCertificate = new PlatformParameter(registrar, `${this.node.addr.slice(-8)}IAMCertificate`, {
-      path: `${this.node.path}/iamCertificate`,
-    })
+    const iamCertificate = new PlatformParameter(
+      registrar,
+      `${this.node.addr.slice(-8)}IAMCertificate`,
+      {
+        path: `${this.node.path}/iamCertificate`,
+      }
+    );
 
-    const acmCertificateArn = new PlatformParameter(registrar, `${this.node.addr.slice(-8)}ACMCertificateArn`, {
-      path: `${this.node.path}/acmCertificateArn`,
-    })
+    const acmCertificateArn = new PlatformParameter(
+      registrar,
+      `${this.node.addr.slice(-8)}ACMCertificateArn`,
+      {
+        path: `${this.node.path}/acmCertificateArn`,
+      }
+    );
 
     registrar.addOrDependency([iamCertificate, acmCertificateArn]);
 
-    const hostedZoneId = new PlatformParameter(registrar, `${this.node.addr.slice(-8)}HostedZoneId`, {
-      path: `${this.node.path}/hostedZoneId`,
-      required: true,
-    })
+    const hostedZoneId = new PlatformParameter(
+      registrar,
+      `${this.node.addr.slice(-8)}HostedZoneId`,
+      {
+        path: `${this.node.path}/hostedZoneId`,
+        required: true,
+      }
+    );
 
     this._iamCertificate = iamCertificate.value;
     this._hostedZoneId = hostedZoneId.value;

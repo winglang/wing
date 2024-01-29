@@ -75,7 +75,9 @@ export function loadPlatformSpecificValues() {
     return cliValues;
   }
 
-  const file = path.isAbsolute(process.env.WING_VALUES_FILE) ? process.env.WING_VALUES_FILE : path.join(process.cwd(), process.env.WING_VALUES_FILE);
+  const file = path.isAbsolute(process.env.WING_VALUES_FILE)
+    ? process.env.WING_VALUES_FILE
+    : path.join(process.cwd(), process.env.WING_VALUES_FILE);
   if (!existsSync(file)) {
     return cliValues;
   }

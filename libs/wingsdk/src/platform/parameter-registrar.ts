@@ -10,9 +10,6 @@ const PARAMETER_REGISTRAR_SYMBOL = Symbol.for("wingsdk.parameterRegistrar");
  * This construct is used to register and validate platform parameters.
  */
 export class ParameterRegistrar extends Construct {
-  /** @internal */
-  public readonly [PARAMETER_REGISTRAR_SYMBOL] = true;
-
   /**
    * Returns the parameter registrar for the given scope
    * @param scope the scope to search for the parameter registrar
@@ -30,10 +27,12 @@ export class ParameterRegistrar extends Construct {
     return this.of(scope.node.scope);
   }
 
+  /** @internal */
+  public readonly [PARAMETER_REGISTRAR_SYMBOL] = true;
   private parameterValueByPath: { [key: string]: any } = {};
   private invalidInputMessages: string[] = [];
 
-  // These are "OR" relationships, i.e. if we need to require either 
+  // These are "OR" relationships, i.e. if we need to require either
   // parameter A or B or C
   private orDependencies: Array<Array<PlatformParameter>> = [];
 
@@ -43,8 +42,6 @@ export class ParameterRegistrar extends Construct {
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
-
-    this._rawParameters = loadPlatformSpecificValues();
   }
 
   /**
@@ -67,7 +64,7 @@ export class ParameterRegistrar extends Construct {
 
   /**
    * Define an "OR" relationship between parameters
-   * 
+   *
    * @param parameters the parameters that compose the "OR" relationship
    */
   public addOrDependency(parameters: PlatformParameter[]) {
@@ -76,10 +73,16 @@ export class ParameterRegistrar extends Construct {
 
   private validateOrDependencies() {
     for (const group of this.orDependencies) {
-      if (!group.some(param => this.parameterValueByPath[param.path] !== undefined)) {
+      if (
+        !group.some(
+          (param) => this.parameterValueByPath[param.path] !== undefined
+        )
+      ) {
         // Construct a list of parameter paths for the error message
-        const paramPaths = group.map(param => `"${param.path}"`).join(' or ');
-        this.invalidInputMessages.push(`At least one of the parameters ${paramPaths} must be provided.`);
+        const paramPaths = group.map((param) => `"${param.path}"`).join(" or ");
+        this.invalidInputMessages.push(
+          `At least one of the parameters ${paramPaths} must be provided.`
+        );
       }
     }
   }
