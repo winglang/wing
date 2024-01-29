@@ -93,6 +93,7 @@ export const createConsoleServer = async ({
   platform,
   stateDir,
   analyticsAnonymousId,
+  analytics,
   requireSignIn,
   notifySignedIn,
 }: CreateConsoleServerOptions) => {
@@ -281,6 +282,7 @@ export const createConsoleServer = async ({
     },
     testsStateManager,
     analyticsAnonymousId,
+    analytics,
     requireSignIn,
     notifySignedIn,
   });

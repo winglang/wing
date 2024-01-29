@@ -463,7 +463,7 @@ export const createAppRouter = () => {
       };
     }),
 
-    "app.analytics.signInClicked": createProcedure.query(async ({ ctx }) => {
+    "app.analytics.signInClicked": createProcedure.mutation(async ({ ctx }) => {
       ctx.analytics?.track("console_sign_in_clicked");
       return {};
     }),

@@ -61,13 +61,16 @@ const useNotifyAfterSigningIn = () => {
  */
 const useSignIn = () => {
   const { wingCloudSignInUrl } = useContext(AppContext);
+  const { mutateAsync: reportSignInClicked } =
+    trpc["app.analytics.signInClicked"].useMutation();
   const analytics = trpc["app.analytics"].useQuery();
-  return useCallback(() => {
+  return useCallback(async () => {
+    await reportSignInClicked();
     const url = new URL(wingCloudSignInUrl!);
     url.searchParams.append("port", location.port);
     url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
     location.href = url.toString();
-  }, [wingCloudSignInUrl, analytics.data?.anonymousId]);
+  }, [reportSignInClicked, wingCloudSignInUrl, analytics.data?.anonymousId]);
 };
 
 /**
