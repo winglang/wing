@@ -52,16 +52,6 @@ export const createAppRouter = () => {
     "app.wingfile": createProcedure.query(({ ctx }) => {
       return ctx.wingfile.split("/").pop();
     }),
-    /** @deprecated */
-    "app.termsConfig": createProcedure.query(({ ctx }) => {
-      return {
-        requireAcceptTerms: ctx.requireAcceptTerms,
-        accepted: isTermsAccepted(),
-        license: getLicense(),
-      };
-    }),
-    /** @deprecated */
-    "app.acceptTerms": createProcedure.mutation(() => {}),
     "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
       return {
         config: ctx.layoutConfig,
@@ -613,14 +603,24 @@ export const createAppRouter = () => {
       }),
 
     "app.analytics": createProcedure.query(async ({ ctx }) => {
+      const requireSignIn = (await ctx.requireSignIn?.()) ?? false;
+      if (requireSignIn) {
+        ctx.analytics?.track("console_sign_in_shown");
+      }
       return {
         anonymousId: ctx.analyticsAnonymousId,
-        requireSignIn: (await ctx.requireSignIn?.()) ?? false,
+        requireSignIn,
       };
+    }),
+
+    "app.analytics.signInClicked": createProcedure.query(async ({ ctx }) => {
+      ctx.analytics?.track("console_sign_in_clicked");
+      return {};
     }),
 
     "app.analytics.notifySignedIn": createProcedure.mutation(
       async ({ ctx }) => {
+        ctx.analytics?.track("console_sign_in_completed");
         await ctx.notifySignedIn?.();
       },
     ),

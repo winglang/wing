@@ -13,6 +13,7 @@ import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import type { State, Trace } from "./types.js";
 import type { Updater } from "./updater.js";
+import { Analytics } from "./utils/analytics.js";
 import type {
   FileLink,
   LayoutConfig,
@@ -47,6 +48,7 @@ export interface CreateExpressServerOptions {
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
   analyticsAnonymousId?: string;
+  analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
 }
@@ -72,6 +74,7 @@ export const createExpressServer = async ({
   setSelectedNode,
   testsStateManager,
   analyticsAnonymousId,
+  analytics,
   requireSignIn,
   notifySignedIn,
 }: CreateExpressServerOptions) => {
@@ -108,6 +111,7 @@ export const createExpressServer = async ({
       setSelectedNode,
       testsStateManager,
       analyticsAnonymousId,
+      analytics,
       requireSignIn,
       notifySignedIn,
     };

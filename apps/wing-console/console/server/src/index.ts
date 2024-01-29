@@ -3,7 +3,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import type { inferRouterInputs } from "@trpc/server";
-import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
 import type { Express } from "express";
 
@@ -15,6 +14,7 @@ import type { Router } from "./router/index.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
+import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
 import {
   FileLink,
@@ -73,6 +73,7 @@ export interface CreateConsoleServerOptions {
   platform?: string[];
   stateDir?: string;
   analyticsAnonymousId?: string;
+  analytics?: Analytics;
   requireSignIn?: () => Promise<boolean>;
   notifySignedIn?: () => Promise<void>;
 }
