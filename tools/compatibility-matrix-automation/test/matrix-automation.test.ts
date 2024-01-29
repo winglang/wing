@@ -7,7 +7,6 @@ import {
 } from "../src/matrix-automation";
 import { TestResultsJson } from "winglang/dist/commands/test/results";
 
-// addToCompatibilitySet
 describe("addToCompatibilitySet", () => {
   test("adds an implemented method to the right set", () => {
     const compatibilitySet = new Map();
