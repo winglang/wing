@@ -280,3 +280,12 @@ Lastly you can show linting errors in your IDE by enabling the following setting
 // in your VS Code settings
 "rust-analyzer.check.command": "clippy",
 ```
+
+## 🏁 How do I add a quickstart template to the `wing` CLI?
+
+Adding a new template is straightforward!
+
+Each template is represented by a folder located at [https://github.com/winglang/wing/tree/main/apps/wing/project-templates], containing all of the files that template should be initialized with.
+
+Create a new folder with the template name, and insert any code files that are needed to run it.
+Unit tests ran with `pnpm turbo test` (or in GitHub Actions once you make a pull request) will automatically validate that the template is valid.

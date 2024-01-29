@@ -5,7 +5,7 @@ class Foo {
   extern "./external_js.js" static inflight regexInflight(pattern: str, text: str): bool;
   extern "./external_js.js" static inflight getUuid(): str;
   extern "./external_js.js" static inflight getData(): str;
-  extern "./external_js.js" pub static inflight print(msg: str);
+  extern "./external_js.js" pub static inflight print(msg: str): void;
 
   pub inflight call() {
     assert(Foo.regexInflight("[a-z]+-\\d+", "abc-123"));

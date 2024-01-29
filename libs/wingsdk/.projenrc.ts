@@ -61,7 +61,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
@@ -147,6 +146,10 @@ project.eslint?.addOverride({
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
+});
+
+project.package.addField("optionalDependencies", {
+  esbuild: "^0.19.12",
 });
 
 // use fork of jsii-docgen with wing-ish support
@@ -413,7 +416,7 @@ new JsonFile(project, "cdktf.json", {
 });
 project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get --force");
+project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 

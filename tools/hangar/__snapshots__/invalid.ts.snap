@@ -418,7 +418,7 @@ exports[`ambiguous_api_paths.test.w 1`] = `
    | api.get(\\"<ABSOLUTE>/path\\", handler);
 12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
  
  
 Tests 1 failed (1)
@@ -1257,21 +1257,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`extern_above.test.w 1`] = `
-"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
-  --> ../../../examples/tests/invalid/extern_above.test.w:2:3
-  |
-2 |   extern \\"../valid/external_js.js\\" static getGreeting(name: str): str;
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/invalid
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`extern_static.test.w 1`] = `
 "error: Extern methods must be declared \\"static\\" (they cannot access instance members)
   --> ../../../examples/tests/invalid/extern_static.test.w:2:45
@@ -1474,7 +1459,21 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.test.w 1`] = `
-"error: Optional parameters must always be after all non-optional parameters.
+"error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.test.w:3:3
+  |
+3 |   my_method(x: num);
+  |   ^^^^^^^^^^^^^^^^^^ Expected function return type
+
+
+error: Expected function return type
+  --> ../../../examples/tests/invalid/function_type.test.w:5:3
+  |
+5 |   inflight my_method2(x: num);
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected function return type
+
+
+error: Optional parameters must always be after all non-optional parameters.
   --> ../../../examples/tests/invalid/function_type.test.w:9:25
   |
 9 | let my_func3 = (a: num, b: str?, c: bool) => {};
@@ -2221,6 +2220,16 @@ error: Symbol \\"foo\\" already defined in this scope
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
+`;
+
+exports[`invalid compile directory 1`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+  --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
+  |
+2 |   extern \\"../../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+
+"
 `;
 
 exports[`issue_2767.test.w 1`] = `

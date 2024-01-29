@@ -35,7 +35,7 @@
     "@types/node": "^18.17.13",
     "tsup": "^8.0.1",
     "bump-pack": "workspace:^",
-    "vitest": "^0.32.4"
+    "vitest": "^0.34.6"
   },
   "files": [
     "dist"

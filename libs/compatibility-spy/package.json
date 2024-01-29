@@ -17,7 +17,7 @@
     "registry": "https://registry.npmjs.org",
     "tag": "latest"
   },
-  "main": "index.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
     "constructs": "~10.2.69",
@@ -27,12 +27,12 @@
     "bump-pack": "workspace:^",
     "typescript": "^4.9.5",
     "tsup": "^6.7.0",
-    "vitest": "^0.32.4"
+    "vitest": "^0.34.6"
   },
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsup",
     "package": "bump-pack -b",
-    "test": "vitest run --passWithNoTests --update"
+    "test": "vitest run --update"
   },
   "files": [
     "lib"
