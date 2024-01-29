@@ -1,4 +1,8 @@
-import { TableClient } from "@azure/data-tables";
+import {
+  GetTableEntityResponse,
+  TableClient,
+  TableEntityResult,
+} from "@azure/data-tables";
 import { test, expect, beforeEach, afterEach, vi } from "vitest";
 import { CounterClient } from "../../src/shared-azure/counter.inflight";
 
@@ -34,19 +38,37 @@ afterEach(() => {
   delete process.env.dummyKey;
 });
 
-test("increment counter value", async () => {
-  const mockGetEntity = vi.fn().mockResolvedValue({ counterValue: 100 });
-  const mockUpsertEntity = vi.fn().mockResolvedValue(undefined);
-  TableClient.prototype.getEntity = mockGetEntity;
-  TableClient.prototype.upsertEntity = mockUpsertEntity;
+type CounterEntity = {
+  partitionKey: string;
+  rowKey: string;
+  counterValue: number;
+};
 
+TableClient.prototype.getEntity = vi
+  .fn()
+  .mockImplementation((partitionKey, rowKey) => {
+    if (TEST_PATH === "happy") {
+      return Promise.resolve({
+        value: { partitionKey, rowKey, counterValue: 100 }, // Mocked entity
+      });
+    } else {
+      return Promise.reject(new Error("Entity not found"));
+    }
+  });
+
+// Simplified mock for upsertEntity
+TableClient.prototype.upsertEntity = vi.fn().mockResolvedValue({});
+
+test("increment counter value", async () => {
   const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
   const result = await client.inc(1, "testKey");
 
   expect(result).toBe(100);
-  expect(mockGetEntity).toHaveBeenCalled();
-  expect(mockUpsertEntity).toHaveBeenCalled();
+  expect(TableClient.prototype.getEntity).toHaveBeenCalled();
+  expect(TableClient.prototype.upsertEntity).toHaveBeenCalled();
 });
+
+// Additional tests for `dec`, `peek`, `set` methods follow...
 
 // test("decrement counter value", async () => {
 //   const result = await counterClient.dec(1, "testKey");
