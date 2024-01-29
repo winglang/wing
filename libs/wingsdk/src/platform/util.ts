@@ -69,7 +69,7 @@ export function loadPlatformSpecificValues() {
   const cliValues = createValuesObjectFromString(process.env.WING_VALUES ?? "");
 
   const file = path.join(process.cwd(), process.env.WING_VALUES_FILE ?? "");
-  if (existsSync(file) === false) {
+  if (existsSync(file)) {
     const data = readFileSync(file, "utf-8");
 
     const fileExtension = path.extname(file);

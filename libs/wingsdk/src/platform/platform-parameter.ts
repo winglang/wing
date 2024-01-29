@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { ParameterRegistrar } from "./parameter-registrar";
+import { ParameterRegistrar, resolveValueFromPath } from "./parameter-registrar";
 
 /**
  * Platform Parameter Props
@@ -37,7 +37,7 @@ export class PlatformParameter extends Construct {
   /** Parameter description */
   public readonly description?: string;
   /** Parameter value */
-  public readonly value?: any;
+  public value?: any;
 
   private _required?: boolean;
   private choices?: any[];
@@ -55,7 +55,7 @@ export class PlatformParameter extends Construct {
     this._required = props.required;
     this.choices = props.choices;
 
-    this.value = this.resolveValueFromPath(scope._rawParameters, this.path);
+    this.value = resolveValueFromPath(scope._rawParameters, this.path);
   }
 
   /**
@@ -74,25 +74,6 @@ export class PlatformParameter extends Construct {
     this.dependentInputsByChoice[onChoice] = choiceDependents;
 
     parameter.node.addDependency(this);
-  }
-
-  private resolveValueFromPath(
-    parameters: { [key: string]: any },
-    path: string
-  ): any {
-    if (!parameters) {
-      return undefined;
-    }
-
-    const pathParts = path.split("/");
-
-    if (pathParts.length === 1) {
-      return parameters[pathParts[0]];
-    }
-
-    // recurse
-    const nextPath = pathParts.slice(1).join("/");
-    return this.resolveValueFromPath(parameters[pathParts[0]], nextPath);
   }
 
   /**

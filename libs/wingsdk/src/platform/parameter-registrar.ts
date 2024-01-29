@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { PlatformParameter } from "./platform-parameter";
+import { PlatformParameter, PlatformParameterProps } from "./platform-parameter";
 import { loadPlatformSpecificValues } from "./util";
 
 /**
@@ -13,11 +13,18 @@ export class ParameterRegistrar extends Construct {
   private invalidInputMessages: string[] = [];
 
   /** @internal */
-  public readonly _rawParameters: { [key: string]: any } = {};
+  public readonly _rawParameters: { [key: string]: any } =
+    loadPlatformSpecificValues();
 
   constructor(id: string) {
     super(undefined as any, id);
     this._rawParameters = loadPlatformSpecificValues();
+  }
+
+  public newParameter(id: string, props: PlatformParameterProps): PlatformParameter {
+    const param =  new PlatformParameter(this, id, props);
+    param.value = resolveValueFromPath(this._rawParameters, param.path);
+    return param;
   }
 
   /**
@@ -51,11 +58,10 @@ export class ParameterRegistrar extends Construct {
       return;
     }
 
-    const isParameter = (node: Construct) => node instanceof PlatformParameter;
+    // const isParameter = (node: Construct) => node instanceof PlatformParameter;
 
     const parameters: PlatformParameter[] = this.node
-      .findAll()
-      .filter(isParameter) as PlatformParameter[];
+      .children as PlatformParameter[];
 
     for (let param of parameters) {
       const validationErrors = param.collectValidationErrors();
@@ -73,4 +79,25 @@ export class ParameterRegistrar extends Construct {
     }
     this.synthed = true;
   }
+}
+
+
+/** @internal */
+export function resolveValueFromPath(
+  rawParameters: { [key: string]: any },
+  path: string
+): any {
+  if (!rawParameters) {
+    return undefined;
+  }
+
+  const pathParts = path.split("/");
+
+  if (pathParts.length === 1) {
+    return rawParameters[pathParts[0]];
+  }
+
+  // recurse
+  const nextPath = pathParts.slice(1).join("/");
+  return resolveValueFromPath(rawParameters, nextPath);
 }
