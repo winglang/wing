@@ -1,5 +1,5 @@
 import { TableClient } from "@azure/data-tables";
-import { test, expect, beforeEach, vi } from "vitest";
+import { test, expect, beforeEach, afterEach, vi } from "vitest";
 import { CounterClient } from "../../src/shared-azure/counter.inflight";
 
 vi.mock("@azure/data-tables");
@@ -26,19 +26,26 @@ const mockTableClient = new TableClient(
 
 beforeEach(() => {
   vi.clearAllMocks();
-  TEST_PATH = "happy";
+  process.env.dummyKey = "fakeKey";
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  delete process.env.dummyKey;
 });
 
 test("increment counter value", async () => {
-  // GIVEN
-  const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
+  const mockGetEntity = vi.fn().mockResolvedValue({ counterValue: 100 });
+  const mockUpsertEntity = vi.fn().mockResolvedValue(undefined);
+  TableClient.prototype.getEntity = mockGetEntity;
+  TableClient.prototype.upsertEntity = mockUpsertEntity;
 
-  // WHEN
-  TEST_PATH = "happy";
+  const client = new CounterClient("dummyAccount", "dummyTable", "dummyKey");
   const result = await client.inc(1, "testKey");
 
-  // THEN
-  expect(result).toBe(0);
+  expect(result).toBe(100);
+  expect(mockGetEntity).toHaveBeenCalled();
+  expect(mockUpsertEntity).toHaveBeenCalled();
 });
 
 // test("decrement counter value", async () => {
