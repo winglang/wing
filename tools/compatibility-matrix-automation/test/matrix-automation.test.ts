@@ -88,7 +88,6 @@ describe("writeOpImplementationStatus adds method implementation status when", (
   });
 });
 
-// writeToMatrix
 describe("writeToMatrix", () => {
   test("adds supported op set to a matrix", () => {
     const matrix = {};
