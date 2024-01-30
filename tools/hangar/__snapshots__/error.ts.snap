@@ -9,10 +9,58 @@ exports[`bool_from_json.test.w 1`] = `
   | 
 5 | let a: bool = bool.fromJson(j.get(\\"a\\"));
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/bool_from_json.test.w:5:15
  
  
 Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`inflight_stacktraces.test.w 1`] = `
+"fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert            
+     │ runtime error: assertion failed: false
+     │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
+     │   | let bucket = new cloud.Bucket();
+     │   | 
+     │   | test \\"assert\\" {
+     │ 7 |   assert(false);
+     │   |   ^
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
+fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal      
+     │ runtime error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+     │ 
+     │ 1 !== 2
+     │ 
+     │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:11:3
+     │    | }
+     │    | 
+     │    | test \\"expect.equal\\" {
+     │ 11 |   expect.equal(1,2 );
+     │    |   ^
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
+fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get 
+     │ runtime error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
+     │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
+     │    | }
+     │    | 
+     │    | test \\"bucket failed get\\" {
+     │ 15 |   bucket.get(\\"doesn't exist\\");
+     │    |   ^
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
+fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
+     │ runtime error: ouch
+     │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
+     │    | 
+     │    | test \\"throw from closure\\" {
+     │    |   let closure = inflight () => {
+     │ 20 |     throw \\"ouch\\";
+     │    |     ^
+     │ at closure <ABSOLUTE>/inflight_stacktraces.test.w:20:5
+     └ at <ABSOLUTE>/inflight_stacktraces.test.w:22:3
+ 
+ 
+Tests 4 failed (4)
 Test Files 1 failed (1)
 Duration <DURATION>"
 `;
@@ -24,7 +72,7 @@ exports[`num_from_str.test.w 1`] = `
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
 3 | let a: num = num.fromStr(\\"123a\\");
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/num_from_str.test.w:3:14
  
  
 Tests 1 failed (1)
@@ -41,7 +89,7 @@ exports[`number_from_json.test.w 1`] = `
   | 
 5 | let a: num = num.fromJson(j.get(\\"a\\"));
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/number_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
@@ -63,7 +111,7 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   | let bucket1 = new cloud.Bucket();
 4 | let bucket2 = new cloud.Bucket();
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/repeat_construct_id.test.w:4:15
  
  
 Tests 1 failed (1)
@@ -85,7 +133,7 @@ For more information, see https://www.winglang.io/docs/concepts/application-tree
   | let bucket1 = new cloud.Bucket() as \\"{make_name()}\\";
 8 | let bucket2 = new cloud.Bucket() as \\"{make_name()}\\";
   |               ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/repeat_construct_id2.test.w:8:15
  
  
 Tests 1 failed (1)
@@ -102,7 +150,7 @@ exports[`string_from_json.test.w 1`] = `
   | 
 5 | let a: str = str.fromJson(j.get(\\"a\\"));
   |              ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/string_from_json.test.w:5:14
  
  
 Tests 1 failed (1)
@@ -119,7 +167,7 @@ exports[`struct_from_json_1.test.w 1`] = `
    | 
 11 | Person.fromJson(j);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_1.test.w:11:1
  
  
 Tests 1 failed (1)
@@ -137,7 +185,7 @@ exports[`struct_from_json_2.test.w 1`] = `
    | 
 22 | Student.fromJson(missingAdvisor);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_2.test.w:22:1
  
  
 Tests 1 failed (1)
@@ -155,7 +203,7 @@ exports[`struct_from_json_3.test.w 1`] = `
    | 
 26 | Student.fromJson(invalidAdvisorInArray);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_3.test.w:26:1
  
  
 Tests 1 failed (1)
@@ -172,7 +220,7 @@ exports[`struct_from_json_4.test.w 1`] = `
    | 
 27 | Student.fromJson(invalidAdvisorInArray);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_4.test.w:27:1
  
  
 Tests 1 failed (1)
@@ -189,7 +237,7 @@ exports[`struct_from_json_5.test.w 1`] = `
    | 
 16 | Foo.fromJson(jFoo);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/struct_from_json_5.test.w:16:1
  
  
 Tests 1 failed (1)
@@ -202,7 +250,7 @@ exports[`utilities.test.w 1`] = `
   --> ../../../examples/tests/error/utilities.test.w:1:1
 1 | assert(false);
   | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/utilities.test.w:1:1
  
  
 Tests 1 failed (1)

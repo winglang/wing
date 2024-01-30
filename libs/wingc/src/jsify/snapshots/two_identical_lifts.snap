@@ -32,9 +32,9 @@ module.exports = function({ $b }) {
     }
     async handle() {
       (await $b.put("hello", "world"));
-      async () => {
+      (async () => {
         (await $b.put("hello", "world"));
-      };
+      });
     }
   }
   return $Closure1;

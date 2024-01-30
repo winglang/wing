@@ -33,12 +33,17 @@ jobs:
       - name: Install Wing
         run: |
           ${{ matrix.install_command }}
-      - name: Create a new Wing project
+      - name: Create and test each quickstart app
+        shell: bash
         run: |
-          wing new http-api
-      - name: Run Test
-        run: |
-          wing test main.w
+          templates=$(wing new --list-templates)
+          for template in $templates; do
+            mkdir "$template"
+            cd "$_"
+            wing new "$template"
+            wing test main.w
+            cd ..
+          done
       - name: Download examples/tests/valid/hello.test.w
         run: |
           curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/hello.test.w > hello.test.w

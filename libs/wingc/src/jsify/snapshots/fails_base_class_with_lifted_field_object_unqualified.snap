@@ -1,6 +1,0 @@
----
-source: libs/wingc/src/jsify/tests.rs
----
-## Errors
-Cannot access private member "b" of "Derived" 12:13
-Cannot qualify access to a lifted object of type "Bucket" (see https://github.com/winglang/wing/issues/76 for more details) 12:8

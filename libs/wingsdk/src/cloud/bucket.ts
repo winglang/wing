@@ -235,6 +235,28 @@ export interface ObjectMetadata {
 }
 
 /**
+ * Options for `Bucket.get()`.
+ */
+export interface BucketGetOptions {
+  /**
+   * The starting byte to read from.
+   * @default - undefined
+   */
+  readonly startByte?: number;
+
+  /**
+   * The ending byte to read up to (including).
+   * @default - undefined
+   */
+  readonly endByte?: number;
+}
+
+/**
+ * Options for `Bucket.tryGet()`.
+ */
+export interface BucketTryGetOptions extends BucketGetOptions {}
+
+/**
  * Options for `Bucket.put()`.
  */
 export interface BucketPutOptions {
@@ -319,20 +341,27 @@ export interface IBucketClient {
 
   /**
    * Retrieve an object from the bucket.
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string, options?: BucketGetOptions): Promise<string>;
 
   /**
    * Get an object from the bucket if it exists
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @returns the contents of the object as a string if it exists, nil otherwise
    * @inflight
    */
-  tryGet(key: string): Promise<string | undefined>;
+  tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined>;
 
   /**
    * Retrieve a Json object from the bucket.

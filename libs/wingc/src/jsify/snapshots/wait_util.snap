@@ -28,9 +28,9 @@ module.exports = function({ $util_Util }) {
       return $obj;
     }
     async handle() {
-      const r = async () => {
+      const r = (async () => {
         return true;
-      };
+      });
       (await $util_Util.waitUntil(r));
     }
   }

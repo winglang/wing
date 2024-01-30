@@ -70,9 +70,9 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(two, 2), "two == 2");
     }
     async $inflight_init() {
-      this.inflight2 = async () => {
+      this.inflight2 = (async () => {
         return 2;
-      };
+      });
       const ret = (await this.inflight2());
       $helpers.assert($helpers.eq(ret, 2), "ret == 2");
     }

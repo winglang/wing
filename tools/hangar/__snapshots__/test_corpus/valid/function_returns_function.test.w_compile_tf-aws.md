@@ -12,11 +12,11 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const iFn = async (s) => {
-        return async () => {
+      const iFn = (async (s) => {
+        return (async () => {
           return $helpers.eq(s, "wing");
-        };
-      };
+        });
+      });
       const wingInflightFn = (await iFn("wing"));
       const dingInflightFn = (await iFn("ding"));
       $helpers.assert((await wingInflightFn()), "wingInflightFn()");

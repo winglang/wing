@@ -19,6 +19,7 @@ const execPromise = promisify(exec);
 export interface InitOptions {
   readonly template?: string;
   readonly language?: string;
+  readonly listTemplates?: boolean;
 }
 
 /**
@@ -30,6 +31,12 @@ export interface InitOptions {
 export async function init(template: string, options: InitOptions = {}): Promise<void> {
   const templates = projectTemplateNames();
   let language = options.language ?? "wing";
+
+  // If --list-templates is specified, list the available templates and exit
+  if (options.listTemplates) {
+    console.log(templates.join("\n"));
+    return;
+  }
 
   // If no template is specified, let them interactively select one
   if (!template) {

@@ -13,9 +13,9 @@ module.exports = function({  }) {
     }
     async handle(body) {
       const i = 0;
-      const iterator = async (j) => {
+      const iterator = (async (j) => {
         return (j + 1);
-      };
+      });
       while (((await iterator(i)) < 3)) {
         console.log(String.raw({ raw: ["", ""] }, i));
       }

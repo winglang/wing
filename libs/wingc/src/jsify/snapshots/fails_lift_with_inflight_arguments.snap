@@ -1,5 +1,0 @@
----
-source: libs/wingc/src/jsify/tests.rs
----
-## Errors
-Cannot reference an inflight value from within a preflight expression 5:11

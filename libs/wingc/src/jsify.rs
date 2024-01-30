@@ -6,6 +6,7 @@ use camino::{Utf8Path, Utf8PathBuf};
 use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
+use parcel_sourcemap::utils::make_relative_path;
 
 use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, vec};
 
@@ -269,7 +270,11 @@ impl<'a> JSifier<'a> {
 		let source_content = self.source_files.get_file(source_path.as_str()).unwrap();
 
 		let output_base = output.to_string();
-		let output_sourcemap = output.generate_sourcemap(source_path.as_str(), source_content, &preflight_file_name);
+		let output_sourcemap = output.generate_sourcemap(
+			&make_relative_path(self.out_dir.as_str(), source_path.as_str()),
+			source_content,
+			&preflight_file_name,
+		);
 
 		// Emit the file
 		match self
@@ -778,7 +783,7 @@ impl<'a> JSifier<'a> {
 				let item_list = items.iter().map(|expr| self.jsify_expression(expr, ctx)).collect_vec();
 				new_code!(expr_span, "new Set([", item_list, "])")
 			}
-			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx),
+			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, true, ctx),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -1286,6 +1291,7 @@ impl<'a> JSifier<'a> {
 		&self,
 		class: Option<&AstClass>,
 		func_def: &FunctionDefinition,
+		is_closure: bool,
 		ctx: &mut JSifyContext,
 	) -> CodeMaker {
 		let parameters = jsify_function_parameters(func_def);
@@ -1299,22 +1305,30 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(scope, ctx),
 			FunctionBody::External(extern_path) => {
 				let extern_path = Utf8Path::new(extern_path);
-				let entrypoint_dir = if self.compilation_init_path.is_file() {
+				let entrypoint_is_file = self.compilation_init_path.is_file();
+				let entrypoint_dir = if entrypoint_is_file {
 					self.compilation_init_path.parent().unwrap()
 				} else {
 					self.compilation_init_path
 				};
 
-				// extern_path should always be a sub directory of entrypoint_dir
-				let Ok(rel_path) = extern_path.strip_prefix(&entrypoint_dir) else {
-					report_diagnostic(Diagnostic {
-						message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
-						annotations: vec![],
-						hints: vec![],
-						span: Some(func_def.span.clone()),
-					});
-					return CodeMaker::default();
-				};
+				if !entrypoint_is_file {
+					// We are possibly compiling a package, so we need to make sure all externs
+					// are actually contained in this directory to make sure it gets packaged
+
+					if !extern_path.starts_with(entrypoint_dir) {
+						report_diagnostic(Diagnostic {
+							message: format!("{extern_path} must be a sub directory of {entrypoint_dir}"),
+							annotations: vec![],
+							hints: vec![],
+							span: Some(func_def.span.clone()),
+						});
+						return CodeMaker::default();
+					}
+				}
+
+				let rel_path = make_relative_path(entrypoint_dir.as_str(), extern_path.as_str());
+				let rel_path = Utf8PathBuf::from(rel_path);
 
 				let mut path_components = rel_path.components();
 
@@ -1384,8 +1398,8 @@ impl<'a> JSifier<'a> {
 		code.add_code(body);
 		code.close("}");
 
-		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
-		if prefix.is_empty() {
+		// if the function is a closure, we need to wrap it in `(`, `)`
+		if is_closure {
 			new_code!(&func_def.span, "(", code, ")")
 		} else {
 			code
@@ -1477,7 +1491,7 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
-				code.line(self.jsify_function(Some(class), m, ctx));
+				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
 			// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
@@ -1635,7 +1649,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for def in class.inflight_methods(false) {
-			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
+			class_code.line(self.jsify_function(Some(class), def, false, ctx));
 		}
 
 		// emit the $inflight_init function (if it has a body).
@@ -1691,10 +1705,11 @@ impl<'a> JSifier<'a> {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+
 		match self.output_files.borrow_mut().add_file(
 			sourcemap_file,
 			code.generate_sourcemap(
-				root_source.as_str(),
+				&make_relative_path(self.out_dir.as_str(), &root_source),
 				self.source_files.get_file(root_source.as_str()).unwrap(),
 				filename.as_str(),
 			),

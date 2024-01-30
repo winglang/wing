@@ -416,8 +416,8 @@ pub interface Interface {
 }
 
 pub interface ClassInterface {
-	addHandler(handler: inflight (str): str);
-	inflight bar();
+	addHandler(handler: inflight (str): str): void;
+	inflight bar(): void;
 }
 
 pub class ParentClass impl ClassInterface {

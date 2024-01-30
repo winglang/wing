@@ -92,27 +92,6 @@ export abstract class App extends Construct implements IApp {
     return Node.of(scope).app as App;
   }
 
-  /**
-   * Loads the `App` class for the given target.
-   * @param target one of the supported targets
-   * @returns an `App` class constructor
-   */
-  public static for(target: string): any {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require(`../target-${target}/app`).App;
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        const cannotFindModule = e.message.split("\n")[0];
-        throw new Error(
-          `${cannotFindModule}. The target "${target}" requires this module to be installed globally (using "npm i -g").`
-        );
-      }
-
-      throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
-    }
-  }
-
   /** @internal */
   public readonly [APP_SYMBOL] = true;
 
