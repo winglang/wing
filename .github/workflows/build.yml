@@ -206,7 +206,7 @@ jobs:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        node: ["20"]
+        node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
