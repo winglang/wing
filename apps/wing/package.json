@@ -10,7 +10,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=v20.0.0"
   },
   "main": "./dist/cli.js",
   "bin": {
@@ -59,7 +59,7 @@
   "devDependencies": {
     "@types/debug": "^4.1.8",
     "@types/inquirer": "^9.0.7",
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "@types/node-persist": "^3.1.4",
     "@types/npm-packlist": "^7.0.1",
     "@types/npmcli__arborist": "^5.6.2",

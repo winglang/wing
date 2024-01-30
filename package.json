@@ -19,7 +19,7 @@
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "18.16.0",
+    "node": "20.11.0",
     "pnpm": "8.6.5"
   },
   "pnpm": {
