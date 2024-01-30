@@ -228,18 +228,18 @@ async function compileForPreflight(props: {
   log?: (...args: any[]) => void;
 }) {
   if (props.entrypointFile.endsWith(".ts")) {
-    const ts4w = await import("ts4w")
+    const typescriptFramework = await import("@wingcloud/framework")
       .then((m) => m.internal)
       .catch((err) => {
         throw new Error(`\
-Failed to load "ts4w": ${err.message}
+Failed to load "@wingcloud/framework": ${err.message}
 
-To use Wing with TypeScript files, you must install "ts4w" as a dependency of your project.
-npm i ts4w
+To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
+npm i @wingcloud/framework
 `);
       });
 
-    return await ts4w.compile({
+    return await typescriptFramework.compile({
       workDir: props.workDir,
       entrypoint: props.entrypointFile,
     });

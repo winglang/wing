@@ -1,4 +1,4 @@
-import { inflight, lift, main, std, cloud } from "ts4w";
+import { inflight, lift, main, std, cloud } from "@wingcloud/framework";
 import * as winglib from "@winglibs/testfixture";
 
 main((app) => {
