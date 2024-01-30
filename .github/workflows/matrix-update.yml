@@ -1,4 +1,4 @@
-name: Competibility matrix update
+name: Compatibility matrix update
 on:
   workflow_call: {}
 
@@ -13,21 +13,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: ${{ env.PNPM_VERSION }}
+      # - name: Setup pnpm
+      #   uses: pnpm/action-setup@v2.2.4
+      #   with:
+      #     version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js v18
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install pnpm
-        run: pnpm install --frozen-lockfile --filter ./scripts/compatibility-matrix-automation --filter winglang
+      # - name: Install pnpm
+      #   run: pnpm install --frozen-lockfile --filter ./tools/compatibility-matrix-automation --filter winglang
 
-      - name: Compile project
-        run: pnpm compile  --filter ./scripts/compatibility-matrix-automation --filter winglang
+      # - name: Compile project
+      #   run: pnpm compile  --filter ./scripts/compatibility-matrix-automation --filter winglang
 
       - name: Download Output Files
         uses: actions/download-artifact@v3
@@ -37,8 +37,8 @@ jobs:
 
       - name: Run Update Script
         run: |
-          cd scripts/compatibility-matrix-automation
-          OUT_FOLDER=../../out pnpm start
+          cd tools/compatibility-matrix-automation
+          OUT_FOLDER=../../out npx update-matrix
           rm -r ../../out
 
       - name: Create a PR

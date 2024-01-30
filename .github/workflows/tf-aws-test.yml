@@ -79,7 +79,8 @@ jobs:
           if [ "${{env.TARGET}}" = "all" ]; then
             target='["tf-aws", "tf-azure"]'
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
-            target='["tf-aws", "sim"]' 
+            # target='["tf-aws", "sim"]' //TODO: uncomment
+            target='["sim"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
             target='["tf-azure"]'
           else
@@ -202,6 +203,6 @@ jobs:
 
   update-matrix:
     needs: test
-    if: ${{ github.event_name == 'release' || github.workflow == 'build' }}
+    # if: ${{ github.event_name == 'release' || github.workflow == 'build' }} //TODO: uncomment
     uses: ./.github/workflows/matrix-update.yml
     secrets: inherit
