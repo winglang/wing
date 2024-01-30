@@ -2,12 +2,13 @@
 // to avoid a conflict with the "new" keyword in JavaScript
 import { exec } from "child_process";
 import { existsSync } from "fs";
-import { copyFile, mkdir, readdir } from "fs/promises";
+import { copyFile, mkdir, readFile, readdir, writeFile } from "fs/promises";
 import { join, relative } from "path";
 import { promisify } from "util";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { exists } from "./pack";
+import { PACKAGE_VERSION } from "../cli";
 import { projectTemplateNames, PROJECT_TEMPLATES_DIR } from "../util";
 
 const execPromise = promisify(exec);
@@ -118,6 +119,43 @@ export async function init(template: string, options: InitOptions = {}): Promise
 
   // Copy the template
   await copyFiles(templatePath, process.cwd());
+
+  // Replace wing version
+  const packageJsonPath = join(process.cwd(), "package.json");
+  if (existsSync(packageJsonPath)) {
+    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8"));
+    const isDevVersion = PACKAGE_VERSION.startsWith("0.0.0");
+
+    const depKeys = ["dependencies", "devDependencies", "peerDependencies"];
+    for (const depKey of depKeys) {
+      for (const [key, val] of Object.entries(packageJson[depKey] ?? {})) {
+        if ((val as string).includes("#WING_VERSION#")) {
+          if (isDevVersion) {
+            if (key === "winglang") {
+              packageJson[depKey][key] = `file:${join(__dirname, "..", "..")}`;
+            } else {
+              packageJson[depKey][key] = `file:${join(
+                __dirname,
+                "..",
+                "..",
+                "..",
+                "..",
+                "libs",
+                key
+              )}`;
+            }
+          } else {
+            packageJson[depKey][key] = packageJson[depKey][key].replace(
+              "#WING_VERSION#",
+              PACKAGE_VERSION
+            );
+          }
+        }
+      }
+    }
+
+    await writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  }
 
   // Run npm install
   console.log("Installing dependencies...");
