@@ -12,7 +12,7 @@ main((root, test) => {
   test(
     "fn returns hello",
     lift({ fn }).inflight(async ({ fn }) => {
-      const assert = await import("assert");
+      const assert = await import("node:assert");
       assert.equal(await fn.invoke(""), "hello, world");
     })
   );
