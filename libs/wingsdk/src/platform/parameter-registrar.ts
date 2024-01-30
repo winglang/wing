@@ -2,34 +2,15 @@ import { Construct } from "constructs";
 import { validate } from "jsonschema";
 import { loadPlatformSpecificValues } from "./util";
 
-const PARAMETER_REGISTRAR_SYMBOL = Symbol.for("wingsdk.parameterRegistrar");
-
 /**
  * Parameter Registrar
  *
- * This construct is used to register and validate platform parameters.
+ * This class is used to register and lookup parameter values.
  */
 export class ParameterRegistrar extends Construct {
-  /**
-   * Returns the parameter registrar for the given scope
-   * @param scope the scope to search for the parameter registrar
-   * @returns the parameter registrar
-   */
-  public static of(scope: any): ParameterRegistrar {
-    if (scope && scope[PARAMETER_REGISTRAR_SYMBOL]) {
-      return scope as ParameterRegistrar;
-    }
-
-    if (!scope.node.scope) {
-      throw new Error("Cannot find root parameter registrar");
-    }
-
-    return this.of(scope.node.scope);
-  }
-
-  /** @internal */
-  public readonly [PARAMETER_REGISTRAR_SYMBOL] = true;
+  /** Cache for parameter lookups */
   private parameterValueByPath: { [key: string]: any } = {};
+  /** List of all registered parameter schemas */
   private parameterSchemas: any[] = [];
 
   /** @internal */
@@ -41,12 +22,12 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
-   * Reads a parameter value from the registrar
+   * Retrieve a parameter value by its path
    *
    * @param path the path of the parameter
    * @returns the value of the parameter
    */
-  public readParameterValue(path: string): any {
+  public getParameterValue(path: string): any {
     if (this.parameterValueByPath[path] === undefined) {
       // attempt to read the value from the raw parameters, then cache it
       this.parameterValueByPath[path] = resolveValueFromPath(
@@ -68,16 +49,79 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
+   * Helper method to add a parameter schema at a given path.
+   * This method will nest the schema under the given path, making it easier to nest schemas.
+   *
+   * @param schema the schema to add
+   * @param path the path to nest the schema under
+   * @param recursiveRequire whether or not to require all the nested properties
+   */
+  public addParameterSchemaAtPath(
+    schema: any,
+    path: string,
+    recursiveRequire = false
+  ) {
+    this.addParameterSchema(
+      this._nestSchemaUnderPath(schema, path, recursiveRequire)
+    );
+  }
+
+  /**
+   * This is a helper method to nest a schema under a path.
+   *
+   * I.E. if you have a json schema that looks like this:
+   * { type: "object", properties: { foo: { type: "string" } } }
+   *
+   * And we want to nest it under the path "bar/baz", then this method will return:
+   * { type: "object", properties: { bar: { type: "object", properties: { baz: { type: "object", properties: { foo: { type: "string" } } } } } } }
+   *
+   * making it easier to nest schemas under paths, without writing out the object boilerplate.
+   *
+   * @internal
+   */
+  public _nestSchemaUnderPath(
+    schema: any,
+    path: string,
+    recursiveRequire = false
+  ): any {
+    const parts = path.split("/");
+
+    if (parts.length === 0 || path === "") {
+      // base case just return the schema
+      return schema;
+    }
+
+    const currentKey = parts[0];
+
+    // Create and return the schema
+    return {
+      type: "object",
+      properties: {
+        // recurse for the next part of the path
+        [currentKey]: this._nestSchemaUnderPath(
+          schema,
+          parts.slice(1).join("/"),
+          recursiveRequire
+        ),
+      },
+      required: recursiveRequire,
+    };
+  }
+
+  /**
    * @internal
    */
   public _preSynthesize() {
     // TODO: Rather than loop through each schema we should be able to generate a single schema using allOf,
-    //      but I couldn't get this to work, and I suspect it has to do with the jsonschema library we're using.
+    //      but I couldn't get this to work, nesting all the schemas under a single allOf was causing some
+    //      undesired behaviors, I suspect it has to do with the jsonschema library we're using.
     //      Its a little dated and only supports draft-07, so we may want to consider switching to json-schema (https://www.npmjs.com/package/json-schema)
     let parameterValidationErrors: string[] = [];
 
     this.parameterSchemas.forEach((schema) => {
-      const results = validate(this._rawParameters, schema);
+      const results = validate(this._rawParameters, schema, {
+        nestedErrors: true,
+      });
       results.errors.forEach((error) => {
         if (error.message.includes("does not match allOf schema")) {
           // These are just noise, so we can ignore them

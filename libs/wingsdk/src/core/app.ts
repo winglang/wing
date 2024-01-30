@@ -152,7 +152,7 @@ export abstract class App extends Construct implements IApp {
   protected _synthHooks?: SynthHooks;
 
   /**
-   * InputRegistrar of composed platforms
+   * Parameter registrar of composed platforms
    * @internal
    */
   protected _platformParameterRegistrar?: ParameterRegistrar;
@@ -184,8 +184,8 @@ export abstract class App extends Construct implements IApp {
   }
 
   /**
-   * The input registrar for the app, can be used to find input values that were provided to the
-   * wing application.
+   * The parameter registrar for the app, can be used to find and register
+   * parameter values that were provided to the wing application.
    */
   public get platformParameterRegistrar() {
     if (!this._platformParameterRegistrar) {

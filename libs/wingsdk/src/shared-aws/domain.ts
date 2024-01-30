@@ -19,46 +19,41 @@ export class Domain extends cloud.Domain {
 
     const registrar = App.of(scope).platformParameterRegistrar;
 
-    // we have some required parameters that we need to register
-    let schema: any = {
+    // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
+    let s = {
       type: "object",
+      required: true,
+      oneOf: [
+        {
+          required: ["iamCertificate"],
+        },
+        {
+          required: ["acmCertificateArn"],
+        },
+      ],
       properties: {
-        [this.node.path]: {
-          type: "object",
+        iamCertificate: {
+          type: "string",
+        },
+        acmCertificateArn: {
+          type: "string",
+        },
+        hostedZoneId: {
+          type: "string",
           required: true,
-          oneOf: [
-            {
-              required: ["iamCertificate"],
-            },
-            {
-              required: ["acmCertificateArn"],
-            },
-          ],
-          properties: {
-            iamCertificate: {
-              type: "string",
-            },
-            acmCertificateArn: {
-              type: "string",
-            },
-            hostedZoneId: {
-              type: "string",
-              required: true,
-            },
-          },
         },
       },
     };
 
-    registrar.addParameterSchema(schema);
+    registrar.addParameterSchemaAtPath(s, this.node.path, true);
 
-    const iamCertificate = registrar.readParameterValue(
+    const iamCertificate = registrar.getParameterValue(
       `${this.node.path}/iamCertificate`
     );
-    const acmCertificateArn = registrar.readParameterValue(
+    const acmCertificateArn = registrar.getParameterValue(
       `${this.node.path}/acmCertificateArn`
     );
-    const hostedZoneId = registrar.readParameterValue(
+    const hostedZoneId = registrar.getParameterValue(
       `${this.node.path}/hostedZoneId`
     );
 

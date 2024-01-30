@@ -31,6 +31,8 @@ export class Platform implements IPlatform {
         },
         allOf: [
           {
+            $comment:
+              "if vpc is existing, then we need to require the vpc_id, private_subnet_id, and public_subnet_id",
             if: { properties: { vpc: { const: "existing" } } },
             then: {
               required: ["vpc_id", "private_subnet_id", "public_subnet_id"],
