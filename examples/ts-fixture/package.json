@@ -6,7 +6,7 @@
     "test": "wing test ./src/main.ts"
   },
   "dependencies": {
-    "ts4w": "workspace:^",
+    "@wingcloud/framework": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "winglang": "workspace:^",
     "@winglibs/testfixture": "workspace:^"

@@ -1,8 +1,8 @@
-# ts4w - Experimental TypeScript experience for Wing
+# @wingcloud/framework - Experimental TypeScript experience for Wing
 
 ```ts
 // main.ts
-import { main } from "ts4w";
+import { main } from "@wingcloud/framework";
 import { cloud } from "@winglang/sdk";
 
 main((app) => {

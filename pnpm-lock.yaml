@@ -1105,15 +1105,15 @@ importers:
 
   examples/ts-fixture:
     dependencies:
+      '@wingcloud/framework':
+        specifier: workspace:^
+        version: link:../../libs/@wingcloud/framework
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
       '@winglibs/testfixture':
         specifier: workspace:^
         version: link:../wing-fixture
-      ts4w:
-        specifier: workspace:^
-        version: link:../../libs/ts4w
       winglang:
         specifier: workspace:^
         version: link:../../apps/wing
@@ -1126,6 +1126,31 @@ importers:
       winglang:
         specifier: workspace:^
         version: link:../../apps/wing
+
+  libs/@wingcloud/framework:
+    dependencies:
+      constructs:
+        specifier: ~10.2.69
+        version: 10.2.70
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+    devDependencies:
+      '@types/node':
+        specifier: ^18.17.13
+        version: 18.18.4
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../wingsdk
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../../tools/bump-pack
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(typescript@5.3.3)
+      vitest:
+        specifier: ^0.34.6
+        version: 0.34.6
 
   libs/awscdk:
     dependencies:
@@ -1190,31 +1215,6 @@ importers:
         specifier: 0.20.6
         version: 0.20.6
 
-  libs/ts4w:
-    dependencies:
-      constructs:
-        specifier: ~10.2.69
-        version: 10.2.70
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-    devDependencies:
-      '@types/node':
-        specifier: ^18.17.13
-        version: 18.18.4
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../wingsdk
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^8.0.1
-        version: 8.0.1(typescript@5.3.3)
-      vitest:
-        specifier: ^0.34.6
-        version: 0.34.6
-
   libs/wingc:
     devDependencies:
       '@winglang/sdk':
@@ -1229,12 +1229,12 @@ importers:
 
   libs/wingcompiler:
     dependencies:
+      '@wingcloud/framework':
+        specifier: workspace:^
+        version: link:../@wingcloud/framework
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../wingsdk
-      ts4w:
-        specifier: workspace:^
-        version: link:../ts4w
       wasi-js:
         specifier: ^1.7.3
         version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
@@ -15448,7 +15448,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240128
+      typescript: 5.4.0-dev.20240130
     dev: true
 
   /dset@3.1.2:
@@ -17427,7 +17427,7 @@ packages:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       ignore: 5.2.4
       merge2: 1.4.1
       slash: 3.0.0
@@ -25304,8 +25304,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240128:
-    resolution: {integrity: sha512-SfSvvhZKrpjP/LSfkjpg/VUFMXElCXEtU7SzfHoPph8e3PBlbjZlQdLczkEr95M7wj8V/iiXWyqAoPuQ6nuI4A==}
+  /typescript@5.4.0-dev.20240130:
+    resolution: {integrity: sha512-LelY/DlG9yPe807IRs7ZYvKp0eGgk4ehYr/9RvQsZg31E7sF3oYz0r44fsvnqxFWCsM11CWOrmY1r+MD5CDMfQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

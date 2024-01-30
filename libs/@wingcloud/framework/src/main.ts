@@ -16,7 +16,7 @@ export interface AppProps {
  * Create a Wing app.
  *
  * ```ts
- * import { main } from "ts4w";
+ * import { main } from "@wingcloud/framework";
  * import { cloud } from "@winglang/sdk";
  *
  * main(app => {

@@ -1,5 +1,5 @@
 {
-  "name": "ts4w",
+  "name": "@wingcloud/framework",
   "version": "0.0.0",
   "author": {
     "name": "Wing Cloud",
@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git",
-    "directory": "libs/ts4w"
+    "directory": "libs/@wingcloud/framework"
   },
   "description": "Experimental TypeScript experience for Wing",
   "main": "dist/index.js",
@@ -41,6 +41,6 @@
     "dist"
   ],
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   }
 }
