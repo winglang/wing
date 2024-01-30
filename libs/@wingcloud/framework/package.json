@@ -41,6 +41,6 @@
     "dist"
   ],
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   }
 }
