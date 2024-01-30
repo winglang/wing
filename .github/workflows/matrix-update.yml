@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          ref: "github-actions/updating-matrix"
 
       # - name: Setup pnpm
       #   uses: pnpm/action-setup@v2.2.4
@@ -46,7 +48,6 @@ jobs:
         with:
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           title: "chore(docs): compatibility matrix update"
-          base: main
           branch: "github-actions/updating-matrix"
           draft: true #TODO: remove it soon!
           commit-message: |-
