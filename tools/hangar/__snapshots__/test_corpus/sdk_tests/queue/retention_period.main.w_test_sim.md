@@ -11,7 +11,7 @@ Contributions welcome ❤️
   | 
 7 | let q = new cloud.Queue(timeout: timeout, retentionPeriod: retentionPeriod);
   |         ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/retention_period.main.w:7:9
  
  
 Tests 1 unsupported (1)

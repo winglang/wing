@@ -11,7 +11,7 @@ Contributions welcome ❤️
   | let counter = new cloud.Counter(initial: 100);
 5 | let queue = new cloud.Queue(timeout: 10s);
   |             ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/file_counter.test.w:5:13
  
  
 Tests 1 unsupported (1)
