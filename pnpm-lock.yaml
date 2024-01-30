@@ -1397,9 +1397,6 @@ importers:
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.2
-      '@types/json-schema':
-        specifier: ^7.0.13
-        version: 7.0.13
       '@types/mime-types':
         specifier: ^2.1.2
         version: 2.1.2
