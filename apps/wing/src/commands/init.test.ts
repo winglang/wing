@@ -49,8 +49,6 @@ describe("new empty --language=ts", () => {
     const workdir = await generateTmpDir();
     process.chdir(workdir);
 
-    console.debug("HERE");
-
     await init("empty", { language: "typescript" });
 
     await cliTest(["main.ts"], {
