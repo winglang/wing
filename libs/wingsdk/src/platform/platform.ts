@@ -13,9 +13,9 @@ export interface IPlatform {
   readonly target: string;
 
   /**
-   * Provide a list of inputs that the platform will accept or require
+   * The schema for the parameters the platform accepts
    */
-  registerParameters?(inputRegistrar: Construct): void;
+  readonly parameters?: any;
 
   /**
    * Hooks for overriding newInstance calls

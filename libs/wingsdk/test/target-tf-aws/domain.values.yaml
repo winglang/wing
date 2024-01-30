@@ -1,5 +1,2 @@
-root:
-  Default:
-    Domain:
-      hostedZoneId: Z0111111111111111111F
-      acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee
+root/Default/Domain/hostedZoneId: Z0111111111111111111F
+root/Default/Domain/acmCertificateArn: arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee

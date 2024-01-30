@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { PlatformParameter } from "./platform-parameter";
+import { validate } from "jsonschema";
 import { loadPlatformSpecificValues } from "./util";
 
 const PARAMETER_REGISTRAR_SYMBOL = Symbol.for("wingsdk.parameterRegistrar");
@@ -30,11 +30,7 @@ export class ParameterRegistrar extends Construct {
   /** @internal */
   public readonly [PARAMETER_REGISTRAR_SYMBOL] = true;
   private parameterValueByPath: { [key: string]: any } = {};
-  private invalidInputMessages: string[] = [];
-
-  // These are "OR" relationships, i.e. if we need to require either
-  // parameter A or B or C
-  private orDependencies: Array<Array<PlatformParameter>> = [];
+  private parameterSchemas: any[] = [];
 
   /** @internal */
   public readonly _rawParameters: { [key: string]: any } =
@@ -63,54 +59,44 @@ export class ParameterRegistrar extends Construct {
   }
 
   /**
-   * Define an "OR" relationship between parameters
+   * Add parameter schema to registrar
    *
-   * @param parameters the parameters that compose the "OR" relationship
+   * @param schema schema to add to the registrar
    */
-  public addOrDependency(parameters: PlatformParameter[]) {
-    this.orDependencies.push(parameters);
-  }
-
-  private validateOrDependencies() {
-    for (const group of this.orDependencies) {
-      if (
-        !group.some(
-          (param) => this.parameterValueByPath[param.path] !== undefined
-        )
-      ) {
-        // Construct a list of parameter paths for the error message
-        const paramPaths = group.map((param) => `"${param.path}"`).join(" or ");
-        this.invalidInputMessages.push(
-          `At least one of the parameters ${paramPaths} must be provided.`
-        );
-      }
-    }
+  public addParameterSchema(schema: any) {
+    this.parameterSchemas.push(schema);
   }
 
   /**
-   * Synth the registrar
    * @internal
    */
   public _preSynthesize() {
-    const parameters: PlatformParameter[] = this.node
-      .children as PlatformParameter[];
+    // TODO: Rather than loop through each schema we should be able to generate a single schema using allOf,
+    //      but I couldn't get this to work, and I suspect it has to do with the jsonschema library we're using.
+    //      Its a little dated and only supports draft-07, so we may want to consider switching to json-schema (https://www.npmjs.com/package/json-schema)
+    let parameterValidationErrors: string[] = [];
 
-    for (let param of parameters) {
-      const validationErrors = param.collectValidationErrors();
-      if (validationErrors.length > 0) {
-        this.invalidInputMessages.push(...validationErrors);
-      }
-      this.parameterValueByPath[param.path] = param.value;
-    }
+    this.parameterSchemas.forEach((schema) => {
+      const results = validate(this._rawParameters, schema);
+      results.errors.forEach((error) => {
+        if (error.message.includes("does not match allOf schema")) {
+          // These are just noise, so we can ignore them
+          return;
+        }
+        parameterValidationErrors.push(
+          `Parameter ${error.property.replace("instance.", "")} is invalid: ${
+            error.message
+          }`
+        );
+      });
+    });
 
-    // Once we validate all individual parameters, we need to validate the "OR" relationships
-    this.validateOrDependencies();
-
-    // If any invalid input messages were registered, then throw an error
-    if (this.invalidInputMessages.length > 0) {
-      let message =
-        "Invalid input values were provided the following errors were recorded:\n\t- ";
-      throw new Error(message + this.invalidInputMessages.join("\n\t- "));
+    if (parameterValidationErrors.length > 0) {
+      throw new Error(
+        `Parameter validation errors:\n- ${parameterValidationErrors.join(
+          "\n- "
+        )}`
+      );
     }
   }
 }

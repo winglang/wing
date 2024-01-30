@@ -82,11 +82,11 @@ export class PlatformManager {
 
     let newInstanceOverrides: any[] = [];
 
-    let registerParameterHooks: any[] = [];
+    let parameterSchemas: any[] = [];
 
     this.platformInstances.forEach((instance) => {
-      if (instance.registerParameters) {
-        registerParameterHooks.push(instance.registerParameters.bind(instance));
+      if (instance.parameters) {
+        parameterSchemas.push(instance.parameters);
       }
 
       if (instance.preSynth) {
@@ -105,6 +105,7 @@ export class PlatformManager {
         newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
     });
+
     const app = appCall!({
       ...appProps,
       synthHooks,
@@ -113,9 +114,10 @@ export class PlatformManager {
 
     let registrar = app.platformParameterRegistrar;
 
-    registerParameterHooks.forEach((hook) => {
-      hook(registrar);
+    parameterSchemas.forEach((schema) => {
+      registrar.addParameterSchema(schema);
     });
+
     return app;
   }
 }

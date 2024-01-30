@@ -642,40 +642,6 @@ exports[`tree.json for an app with many resources 1`] = `
                 "path": "root/Default/Default",
               },
               "ParameterRegistrar": {
-                "children": {
-                  "ExistingPrivateSubnetIDs": {
-                    "constructInfo": {
-                      "fqn": "@winglang/sdk.platform.PlatformParameter",
-                      "version": "0.0.0",
-                    },
-                    "id": "ExistingPrivateSubnetIDs",
-                    "path": "root/Default/ParameterRegistrar/ExistingPrivateSubnetIDs",
-                  },
-                  "ExistingPublicSubnetIDs": {
-                    "constructInfo": {
-                      "fqn": "@winglang/sdk.platform.PlatformParameter",
-                      "version": "0.0.0",
-                    },
-                    "id": "ExistingPublicSubnetIDs",
-                    "path": "root/Default/ParameterRegistrar/ExistingPublicSubnetIDs",
-                  },
-                  "ExistingVPCID": {
-                    "constructInfo": {
-                      "fqn": "@winglang/sdk.platform.PlatformParameter",
-                      "version": "0.0.0",
-                    },
-                    "id": "ExistingVPCID",
-                    "path": "root/Default/ParameterRegistrar/ExistingVPCID",
-                  },
-                  "VPC": {
-                    "constructInfo": {
-                      "fqn": "@winglang/sdk.platform.PlatformParameter",
-                      "version": "0.0.0",
-                    },
-                    "id": "VPC",
-                    "path": "root/Default/ParameterRegistrar/VPC",
-                  },
-                },
                 "constructInfo": {
                   "fqn": "@winglang/sdk.platform.ParameterRegistrar",
                   "version": "0.0.0",

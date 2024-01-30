@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { App } from "../core";
 import { NotImplementedError } from "../core/errors";
-import { PlatformParameter } from "../platform";
 
 /**
  * AWS implementation of `cloud.Domain`.
@@ -20,36 +19,52 @@ export class Domain extends cloud.Domain {
 
     const registrar = App.of(scope).platformParameterRegistrar;
 
-    const iamCertificate = new PlatformParameter(
-      registrar,
-      `${this.node.addr.slice(-8)}IAMCertificate`,
-      {
-        path: `${this.node.path}/iamCertificate`,
-      }
+    // we have some required parameters that we need to register
+    let schema: any = {
+      type: "object",
+      properties: {
+        [this.node.path]: {
+          type: "object",
+          required: true,
+          oneOf: [
+            {
+              required: ["iamCertificate"],
+            },
+            {
+              required: ["acmCertificateArn"],
+            },
+          ],
+          properties: {
+            iamCertificate: {
+              type: "string",
+            },
+            acmCertificateArn: {
+              type: "string",
+            },
+            hostedZoneId: {
+              type: "string",
+              required: true,
+            },
+          },
+        },
+      },
+    };
+
+    registrar.addParameterSchema(schema);
+
+    const iamCertificate = registrar.readParameterValue(
+      `${this.node.path}/iamCertificate`
+    );
+    const acmCertificateArn = registrar.readParameterValue(
+      `${this.node.path}/acmCertificateArn`
+    );
+    const hostedZoneId = registrar.readParameterValue(
+      `${this.node.path}/hostedZoneId`
     );
 
-    const acmCertificateArn = new PlatformParameter(
-      registrar,
-      `${this.node.addr.slice(-8)}ACMCertificateArn`,
-      {
-        path: `${this.node.path}/acmCertificateArn`,
-      }
-    );
-
-    registrar.addOrDependency([iamCertificate, acmCertificateArn]);
-
-    const hostedZoneId = new PlatformParameter(
-      registrar,
-      `${this.node.addr.slice(-8)}HostedZoneId`,
-      {
-        path: `${this.node.path}/hostedZoneId`,
-        required: true,
-      }
-    );
-
-    this._iamCertificate = iamCertificate.value;
-    this._hostedZoneId = hostedZoneId.value;
-    this._acmCertificateArn = acmCertificateArn.value;
+    this._iamCertificate = iamCertificate;
+    this._hostedZoneId = hostedZoneId;
+    this._acmCertificateArn = acmCertificateArn;
   }
 
   /**
