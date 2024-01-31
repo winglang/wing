@@ -15,18 +15,18 @@ jobs:
         with:
           ref: "github-actions/updating-matrix"
 
-      # - name: Setup pnpm
-      #   uses: pnpm/action-setup@v2.2.4
-      #   with:
-      #     version: ${{ env.PNPM_VERSION }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Setup Node.js v18
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      # - name: Install pnpm
-      #   run: pnpm install --frozen-lockfile --filter ./tools/compatibility-matrix-automation --filter winglang
+      - name: Install pnpm
+        run: pnpm install --frozen-lockfile --filter ./tools/compatibility-matrix-automation
 
       # - name: Compile project
       #   run: pnpm compile  --filter ./scripts/compatibility-matrix-automation --filter winglang
