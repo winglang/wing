@@ -216,6 +216,8 @@ captureTest("struct of maps", () => ({
   ],
 }));
 
+// capturing collections of buckets isn't supported yet
+
 // // array of buckets
 // captureTest("array of buckets", (scope) => ({
 //   bindings: {
