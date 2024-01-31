@@ -1,3 +1,5 @@
+import { Construct } from "constructs";
+import { NotImplementedError } from "./errors";
 import { getTokenResolver } from "./tokens";
 import {
   Datetime,
@@ -5,7 +7,10 @@ import {
   JsonSchema,
   IInflightHost,
   ILiftable,
+  IHostedLiftable,
 } from "../std";
+
+export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
 
 /**
  * Creates a liftable type from a class or enum
@@ -127,7 +132,7 @@ export function onLiftObject(
       if (typeof obj.onLift === "function") {
         // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
         // the host can instantiate a client for this resource.
-        obj.onLift(host, [...ops, "$inflight_init"]);
+        obj.onLift(host, [...ops, INFLIGHT_INIT_METHOD_NAME]);
         return;
       }
 
@@ -175,58 +180,186 @@ export function onLiftObject(
   );
 }
 
+export type LiftDepsMatrixRaw = Record<string, Array<[any, Array<string>]>>;
+export type LiftDepsMatrix = Record<string, Map<any, Set<string>>>;
+
 /**
- * Binds a collection of preflight objects to an inflight host, as part of the lifting process.
+ * Merge two matrixes of lifting dependencies.
  *
- * Internally, this deduplicates lifting operations so that onLiftObject() is called
- * at most once per preflight object. For example:
- *
- * ```
- * onLiftMatrix(host, ["method1", "method2"], {
- *  "method1": [
- *    [foo, ["other1"]],
- *    [bar, ["other2"]]
- *  ],
- *  "method2": [
- *    [foo, ["other1"]],
- *    [bar, ["other3"]]
- *  ],
- *  "method3": [
- *    [foo, ["other4"]],
- *  ]
- * })
- * ```
- *
- * will result in
- *
- * ```
- * onLiftObject(foo, host, ["other1", "other2"]);
- * onLiftObject(bar, host, ["other1", "other3"]);
- * ```
- * @internal
+ * See the unit tests in `lifting.test.ts` for examples.
  */
-export function onLiftMatrix(
-  host: IInflightHost,
-  ops: string[],
-  matrix: Record<string, Array<[any, Array<string>]>>
-): void {
-  const neededOps = new Map<any, Set<string>>();
-  for (const [givenOp, pairs] of Object.entries(matrix)) {
-    if (!ops.includes(givenOp)) {
-      continue;
-    }
-    for (const [obj, thenOps] of pairs) {
-      const objOps = neededOps.get(obj) ?? new Set();
-      for (const thenOp of thenOps) {
-        objOps.add(thenOp);
-      }
-      neededOps.set(obj, objOps);
+export function mergeLiftDeps(
+  matrix1: LiftDepsMatrix,
+  matrix2: LiftDepsMatrix
+): LiftDepsMatrix {
+  const result: LiftDepsMatrix = {};
+  for (const [op, deps] of Object.entries(matrix1)) {
+    result[op] = new Map();
+    for (const [obj, objDeps] of deps) {
+      result[op].set(obj, new Set(objDeps));
     }
   }
 
-  for (const [obj, objOps] of neededOps.entries()) {
-    onLiftObject(obj, host, Array.from(objOps));
+  for (const [op, deps] of Object.entries(matrix2)) {
+    const resultDeps = result[op] ?? new Map();
+    for (const [obj, objDeps] of deps) {
+      const resultObjDeps = resultDeps.get(obj) ?? new Set();
+      for (const dep of objDeps) {
+        resultObjDeps.add(dep);
+      }
+      resultDeps.set(obj, resultObjDeps);
+    }
+    result[op] = resultDeps;
   }
+
+  return result;
+}
+
+/**
+ * Converts a matrix of lifting dependencies from the format emitted by the Wing compiler
+ * (using plain objects and arrays) to a denser format (using Maps and Sets),
+ * deduplicating object references if needed.
+ *
+ * The deduplication is needed because the compiler might generate something like:
+ * ```
+ * [
+ *   [obj1, ["op1"]],
+ *   [obj2, ["op2"]],
+ * ]
+ * ```
+ * not knowing that during preflight execution, obj1 and obj2 are the same object.
+ * The deduplication will turn this into:
+ * ```
+ * new Map([obj1, new Set(["op1", "op2"])])
+ * ```
+ */
+function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
+  const result: LiftDepsMatrix = {};
+  for (const [op, pairs] of Object.entries(data)) {
+    result[op] = new Map();
+    for (const [obj, objDeps] of pairs) {
+      if (!result[op].has(obj)) {
+        result[op].set(obj, new Set());
+      }
+      const depSet = result[op].get(obj)!;
+      for (const dep of objDeps) {
+        depSet.add(dep);
+      }
+    }
+  }
+  return result;
+}
+
+// for debugging...
+// function printMatrix(data: LiftDepsMatrix): string {
+//   const lines = [];
+//   for (const [op, pairs] of Object.entries(data)) {
+//     lines.push(`${op}: {`);
+//     for (const [obj, objDeps] of pairs) {
+//       if (Construct.isConstruct(obj)) {
+//         lines.push(`  ${obj.node.path}: [${[...objDeps]}]`);
+//       } else {
+//         lines.push(`  ${obj}: [${[...objDeps]}]`);
+//       }
+//     }
+//     lines.push("}");
+//   }
+//   return lines.join("\n");
+// }
+
+/**
+ * Collects all of the objects that need to be lifted for a given object and set of operations, by
+ * traversing the object graph.
+ */
+export function collectLifts(
+  initialObj: any,
+  initialOps: Set<string>
+): Map<any, Set<string>> {
+  const explored = new Map<any, Set<string>>();
+  const unexplored = new Map<any, Set<string>>([[initialObj, initialOps]]);
+
+  while (unexplored.size > 0) {
+    // obj and ops are the object and operations requested on it
+    const [obj, ops]: [any, Set<string>] = unexplored.entries().next().value;
+
+    console.error("exploring", obj, ops);
+
+    if (explored.has(obj)) {
+      throw new Error(
+        `unexpected trying to lift ${obj} twice - please report this as a bug`
+      );
+    }
+
+    unexplored.delete(obj);
+    explored.set(obj, ops);
+
+    // check if there are any transitive dependencies that need to be lifted
+    // if so, we will add them to the unexplored set
+    if (typeof obj === "object") {
+      let matrix: LiftDepsMatrix = parseMatrix(
+        (obj as IHostedLiftable)._onLiftDeps ?? {}
+      );
+
+      // if the matrix is any, and there's a _supportedOps method, use that as a backup
+      // this code path can be removed once _supportedOps is removed
+      if (
+        Object.keys(matrix).length === 0 &&
+        typeof obj._supportedOps === "function"
+      ) {
+        for (const op of obj._supportedOps()) {
+          matrix[op] = new Map([]);
+        }
+      }
+
+      for (const op of ops) {
+        const objDeps = matrix[op];
+
+        if (!objDeps) {
+          if (Construct.isConstruct(obj)) {
+            throw new NotImplementedError(
+              `Resource ${obj.node.path} does not support inflight operation ${op}.\nIt might not be implemented yet.`,
+              { resource: obj.constructor.name, operation: op }
+            );
+          } else {
+            throw new Error(
+              `Unknown operation ${op} requested for object ${obj}`
+            );
+          }
+        }
+
+        for (const [depObj, depOps] of objDeps.entries()) {
+          if (explored.has(depObj)) {
+            throw new Error(`circular dependency detected for ${depObj}`);
+          }
+          const unexploredOps = unexplored.get(depObj) ?? new Set();
+          for (const depOp of depOps) {
+            unexploredOps.add(depOp);
+          }
+          unexplored.set(depObj, unexploredOps);
+        }
+      }
+    }
+
+    // TODO: handle _onLiftTypeDeps
+  }
+
+  // filter out all of the objects that don't have some kind of onLift method
+
+  const output = new Map<any, Set<string>>();
+  for (const [obj, ops] of explored.entries()) {
+    // first, if the object has an onLift method, add it to the output
+    if (typeof obj.onLift === "function") {
+      output.set(obj, ops);
+    }
+
+    // second, if the object is a special token type, add it to the output
+    const tokens = getTokenResolver(obj);
+    if (tokens) {
+      output.set(obj, ops);
+    }
+  }
+
+  return output;
 }
 
 function isLiftableType(t: any): t is ILiftableType {
@@ -246,4 +379,35 @@ export interface ILiftableType {
    * other capabilities to the inflight host.
    */
   onLiftType(host: IInflightHost, ops: string[]): void;
+}
+
+/**
+ * Lifting utilities.
+ */
+export class Lifting {
+  /**
+   * Perform the full lifting process on an object.
+   *
+   * Use this instead of calling `onLift` since it will also lift all of the
+   * object's dependencies.
+   */
+  public static lift(
+    obj: IHostedLiftable,
+    host: IInflightHost,
+    ops: Array<string>
+  ) {
+    // obtain all of the objects that need lifting
+    const lifts = collectLifts(obj, new Set(ops));
+
+    // perform the actual lifting
+    for (const [liftedObj, liftedOps] of lifts) {
+      const tokens = getTokenResolver(liftedObj);
+      if (tokens) {
+        tokens.onLiftValue(host, liftedObj);
+        continue;
+      }
+
+      liftedObj.onLift(host, [...liftedOps]);
+    }
+  }
 }

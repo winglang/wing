@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
-import { App } from "../core";
-import { NotImplementedError, AbstractMemberError } from "../core/errors";
+import { App, LiftDepsMatrixRaw } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { log } from "../shared/log";
 import { Node } from "../std";
 
@@ -80,6 +80,12 @@ export interface ILiftable {
  * to access the lifted object inflight.
  */
 export interface IHostedLiftable extends ILiftable {
+  /**
+   * TODO
+   * @internal
+   */
+  _onLiftDeps?: LiftDepsMatrixRaw;
+
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this object inflight. The list of requested inflight methods
@@ -181,6 +187,14 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
+   * TODO
+   * @internal
+   */
+  public get _onLiftDeps(): LiftDepsMatrixRaw | undefined {
+    return {};
+  }
+
+  /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this resource inflight.
    *
@@ -190,16 +204,15 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    const supportedOps = [...(this._supportedOps() ?? []), "$inflight_init"];
-    for (const op of ops) {
-      // For each operation, check if the host supports it
-      if (!supportedOps.includes(op)) {
-        throw new NotImplementedError(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`,
-          { resource: this.constructor.name, operation: op }
-        );
-      }
+    log(
+      `onLift called on a resource (${this.node.path}) with a host (${
+        host.node.path
+      }) and ops: ${JSON.stringify(ops)}`
+    );
 
+    // TODO: move this to Lifting.lift
+
+    for (const op of ops) {
       // Add connection metadata
       Node.of(this).addConnection({
         source: host,
