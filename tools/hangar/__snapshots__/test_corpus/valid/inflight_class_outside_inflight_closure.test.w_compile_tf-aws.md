@@ -103,6 +103,7 @@ class $Root extends $stdlib.std.Resource {
           "$inflight_init": [
           ],
           "add": [
+            [this, ["lhs", "rhs"]],
           ],
         });
         super.onLift(host, ops);
