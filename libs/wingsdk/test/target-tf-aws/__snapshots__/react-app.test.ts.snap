@@ -375,7 +375,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -412,7 +412,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -424,7 +424,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -444,7 +444,7 @@ exports[`Testing ReactApp > default React App behavior 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -699,7 +699,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -736,7 +736,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -748,7 +748,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -768,7 +768,7 @@ exports[`Testing ReactApp > website with addEnvironment 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",

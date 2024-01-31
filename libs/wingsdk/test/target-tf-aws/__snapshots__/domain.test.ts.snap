@@ -183,7 +183,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
               "Domain": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud domain",
@@ -249,7 +249,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -294,7 +294,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -306,7 +306,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -326,7 +326,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -542,7 +542,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
               "Domain": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud domain",
@@ -608,7 +608,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                         },
                         "constructInfo": {
                           "fqn": "constructs.Construct",
-                          "version": "10.2.70",
+                          "version": "10.3.0",
                         },
                         "display": {
                           "description": "Website root/Default/Website/Website-host",
@@ -653,7 +653,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A static website",
@@ -665,7 +665,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A deployable React App",
@@ -685,7 +685,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -896,7 +896,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
               "Domain": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud domain",
@@ -960,7 +960,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "Website root/Default/Website",
@@ -1013,7 +1013,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A static website",
@@ -1033,7 +1033,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1244,7 +1244,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
               "Domain": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud domain",
@@ -1308,7 +1308,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "Website root/Default/Website",
@@ -1361,7 +1361,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A static website",
@@ -1381,7 +1381,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
