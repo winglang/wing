@@ -24,7 +24,7 @@ use crate::type_check::symbol_env::SymbolEnvKind;
 use crate::visit_context::{VisitContext, VisitorWithContext};
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
+	dbg_panic, debug, CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, UTIL_CLASS_NAME, WINGSDK_ARRAY,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_GENERIC, WINGSDK_JSON, WINGSDK_MAP,
 	WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NODE, WINGSDK_RESOURCE, WINGSDK_SET,
 	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
@@ -1580,6 +1580,16 @@ impl Types {
 			.expect("Resouce base class to be a type")
 	}
 
+	pub fn construct_base_type(&self) -> TypeRef {
+		self
+			.libraries
+			.lookup_nested_str(&CONSTRUCT_BASE_CLASS, None)
+			.expect("Construct base class to be loaded")
+			.0
+			.as_type()
+			.expect("Construct base class to be a type")
+	}
+
 	pub fn construct_interface(&self) -> TypeRef {
 		self
 			.libraries
@@ -1906,11 +1916,11 @@ impl<'a> TypeChecker<'a> {
 		env
 			.define(
 				&sym,
-				SymbolKind::make_free_variable(sym.clone(), self.types.construct_interface(), false, Phase::Preflight),
+				SymbolKind::make_free_variable(sym.clone(), self.types.construct_base_type(), false, Phase::Preflight),
 				AccessModifier::Private,
 				StatementIdx::Top,
 			)
-			.expect("Failed to add builtin");
+			.expect("Failed to add this");
 	}
 
 	pub fn add_builtins(&mut self, scope: &mut Scope) {
@@ -2171,7 +2181,6 @@ impl<'a> TypeChecker<'a> {
 							if class.phase == Phase::Preflight && obj_scope.is_none() {
 								// check if there is a "this" symbol in the current environment
 								let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
-
 								// if we have a "this", it means we can use it as a default scope, so we are fine
 								if !has_this {
 									// we don't have a "this", so we need to check if we are in a static method

@@ -3624,6 +3624,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`this.w 1`] = `
+"error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/this.w:3:9
+  |
+3 |     log(this.node.id);
+  |         ^^^^ Unknown symbol \\"this\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`throw_non_string.test.w 1`] = `
 "error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/throw_non_string.test.w:1:7
