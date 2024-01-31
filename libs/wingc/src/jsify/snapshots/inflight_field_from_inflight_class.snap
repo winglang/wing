@@ -79,6 +79,7 @@ class $Root extends $stdlib.std.Resource {
           "$inflight_init": [
           ],
           "getField": [
+            [this, ["field"]],
           ],
         });
         super.onLift(host, ops);

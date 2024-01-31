@@ -1830,7 +1830,10 @@ impl<'a> JSifier<'a> {
 			// add the body of the user defined `onLift` method if exists
 			let preflight_methods = class.preflight_methods(false);
 
-			if let Some(on_lift_fn) = preflight_methods.iter().find(|&&fd| fd.name.clone().unwrap().name == "onLift") {
+			if let Some(on_lift_fn) = preflight_methods
+				.iter()
+				.find(|&&fd| fd.name.clone().unwrap().name == "onLift")
+			{
 				if let FunctionBody::Statements(scope) = &on_lift_fn.body {
 					bind_method.line(self.jsify_scope_body(&scope, ctx));
 				}

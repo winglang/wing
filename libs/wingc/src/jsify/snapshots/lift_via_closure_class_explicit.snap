@@ -126,6 +126,7 @@ class $Root extends $stdlib.std.Resource {
             [this.q, ["push"]],
           ],
           "handle": [
+            [this, ["another"]],
           ],
         });
         super.onLift(host, ops);
