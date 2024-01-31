@@ -1,6 +1,6 @@
 export type CompatibilityMatrix = Record<
   string,
-  Record<string, Record<string, { implemented: boolean; issue?: string }>>
+  Record<string, Record<string, { implemented?: boolean; issue?: string }>>
 >;
 
 export interface CompatibilitySets {

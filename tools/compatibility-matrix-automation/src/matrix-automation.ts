@@ -121,7 +121,10 @@ export function writeOpImplementationStatus(
   if (!matrix[resource][op]) {
     matrix[resource][op] = {};
   }
-  matrix[resource][op][target] = { implemented };
+  if (!matrix[resource][op][target]) {
+    matrix[resource][op][target] = {};
+  }
+  matrix[resource][op][target].implemented = implemented;
 }
 
 export function writeToMatrix(
