@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { describe, test, expect } from "vitest";
-import { Lifting, Resource } from "../../src/std";
+import { Lifting } from "../../src/core";
+import { Resource } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 describe("resource onLift", () => {

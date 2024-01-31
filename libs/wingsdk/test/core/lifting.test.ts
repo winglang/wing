@@ -110,7 +110,7 @@ describe("collectLifts", () => {
   test("object without _onLiftDeps", () => {
     class Foo {}
     const lifts = collectLifts(new Foo(), []);
-    expect(lifts).toEqual(new Map([]));
+    expect(lifts).toEqual(new Map([[expect.any(Foo), new Set([])]]));
   });
 
   test("object with single op, but no onLift method", () => {
@@ -122,7 +122,7 @@ describe("collectLifts", () => {
       }
     }
     const lifts = collectLifts(new Foo(), ["op1"]);
-    expect(lifts).toEqual(new Map([]));
+    expect(lifts).toEqual(new Map([[expect.any(Foo), new Set(["op1"])]]));
   });
 
   test("object with single op and onLift method", () => {
@@ -151,7 +151,14 @@ describe("collectLifts", () => {
       }
     }
     const lifts = collectLifts(new Foo(), ["op1"]);
-    expect(lifts).toEqual(new Map([]));
+    expect(lifts).toEqual(
+      new Map([
+        [expect.any(Foo), new Set(["op1"])],
+        ["hello", new Set()],
+        [123, new Set()],
+        [true, new Set()],
+      ])
+    );
   });
 
   test("object lifting transitive object", () => {
@@ -220,7 +227,14 @@ describe("collectLifts", () => {
       }
     }
     const lifts = collectLifts(new Foo(), ["handle"]);
-    expect(lifts).toEqual(new Map([[expect.any(Bucket), new Set(["list"])]]));
+    expect(lifts).toEqual(
+      new Map([
+        [expect.any(Bucket), new Set(["list"])],
+        [expect.any(MyBucket), new Set(["list"])],
+        [expect.any(MyBucket), new Set(["list"])],
+        [expect.any(Foo), new Set(["handle"])],
+      ])
+    );
   });
 });
 
