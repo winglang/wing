@@ -79,8 +79,7 @@ jobs:
           if [ "${{env.TARGET}}" = "all" ]; then
             target='["tf-aws", "tf-azure"]'
           elif [ "${{env.TARGET}}" = "all-stable" ]; then
-            # target='["tf-aws", "sim"]' //TODO: uncomment
-            target='["sim"]'
+            target='["tf-aws", "sim"]'
           elif [ "${{env.TARGET}}" = "all-unstable" ]; then
             target='["tf-azure"]'
           else
@@ -181,7 +180,7 @@ jobs:
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
               WING_CLI=$(which wing)
-              COMPETABILITY="-t @winglang/compatibility-spy"
+              # COMPETABILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
             else
               WING_CLI=$(realpath localwing/node_modules/.bin/wing)
               COMPETABILITY="-t  ../../../../localwing/node_modules/@winglang/compatibility-spy/lib"
