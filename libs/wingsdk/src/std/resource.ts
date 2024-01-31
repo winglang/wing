@@ -81,7 +81,9 @@ export interface ILiftable {
  */
 export interface IHostedLiftable extends ILiftable {
   /**
-   * TODO
+   * Compiler-generated data that describes the dependencies of this object on other
+   * objects. This is used to determine which permissions need to be granted to the
+   * inflight host.
    * @internal
    */
   _onLiftDeps?: LiftDepsMatrixRaw;
@@ -184,14 +186,6 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _toInflight(): string {
     throw new AbstractMemberError();
-  }
-
-  /**
-   * TODO
-   * @internal
-   */
-  public get _onLiftDeps(): LiftDepsMatrixRaw | undefined {
-    return {};
   }
 
   /**

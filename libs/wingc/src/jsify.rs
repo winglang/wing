@@ -95,6 +95,7 @@ impl VisitorWithContext for JSifyContext<'_> {
 /// Preflight classes have two types of host binding methods:
 /// `Type` for binding static fields and methods to the host and
 /// `instance` for binding instance fields and methods to the host.
+#[derive(PartialEq, Eq)]
 enum BindMethod {
 	Type,
 	Instance,
@@ -1776,22 +1777,6 @@ impl<'a> JSifier<'a> {
 			return bind_method;
 		};
 
-		// let lift_qualifications = lifts
-		// 	.lifts_qualifications
-		// 	.iter()
-		// 	.filter(|(m, _)| {
-		// 		let var_kind = &class_type
-		// 			.as_class()
-		// 			.unwrap()
-		// 			.get_method(&m.as_str().into())
-		// 			.as_ref()
-		// 			.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
-		// 			.kind;
-		// 		let is_static = matches!(var_kind, VariableKind::StaticMember);
-		// 		(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
-		// 	})
-		// 	.collect_vec();
-
 		let mut lift_qualifications: Vec<(&String, &BTreeMap<String, LiftQualification>)> = vec![];
 		let empty_map = BTreeMap::new();
 		for m in class.all_methods(true) {
@@ -1814,21 +1799,6 @@ impl<'a> JSifier<'a> {
 				}
 			}
 		}
-		// class.all_methods(true).iter().filter_map(|m| {
-		// 	let var_kind = &class_type
-		// 		.as_class()
-		// 		.unwrap()
-		// 		.get_method(&m.as_str().into())
-		// 		.as_ref()
-		// 		.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
-		// 		.kind;
-		// 	let is_static = matches!(var_kind, VariableKind::StaticMember);
-		// 	if (*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type)) {
-		// 		Some((m, lifts.lifts_qualifications.get(m).unwrap()))
-		// 	} else {
-		// 		None
-		// 	}
-		// });
 
 		// Skip jsifying this method if there are no lifts (in this case we'll use super's lifting methods)
 		if lift_qualifications.is_empty() {
@@ -1838,11 +1808,12 @@ impl<'a> JSifier<'a> {
 		bind_method.open(format!("{modifier}get {bind_method_name}() {{"));
 
 		if !lift_qualifications.is_empty() {
-			match bind_method_kind {
+			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
 				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
 				// lift deps of this class
-				BindMethod::Instance => bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._onLiftDeps, {{")),
-				BindMethod::Type => bind_method.open("return ({".to_string()),
+				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._onLiftDeps, {{"));
+			} else {
+				bind_method.open("return ({".to_string());
 			}
 
 			for (method_name, method_qual) in lift_qualifications {

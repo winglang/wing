@@ -282,8 +282,6 @@ export function collectLifts(
     // obj and ops are the object and operations requested on it
     const [obj, ops]: [any, Set<string>] = unexplored.entries().next().value;
 
-    console.error("exploring", obj, ops);
-
     if (explored.has(obj)) {
       throw new Error(
         `unexpected trying to lift ${obj} twice - please report this as a bug`
@@ -293,15 +291,18 @@ export function collectLifts(
     unexplored.delete(obj);
     explored.set(obj, ops);
 
-    // check if there are any transitive dependencies that need to be lifted
-    // if so, we will add them to the unexplored set
+    // Inspect the object to see if there are any transitive dependencies that need to be lifted.
+    // Currently there are a few ways to do this:
+    // - The compiler may generate a _onLiftDeps property on the object
+    // - The compiler may generate a static _onLiftTypeDeps method on a class
+    // - The SDK may have a _supportedOps method on a class
     if (typeof obj === "object") {
       let matrix: LiftDepsMatrix = parseMatrix(
         (obj as IHostedLiftable)._onLiftDeps ?? {}
       );
 
-      // if the matrix is any, and there's a _supportedOps method, use that as a backup
-      // this code path can be removed once _supportedOps is removed
+      // If the matrix is empty, and there's a _supportedOps method, use that as a backup.
+      // This code path can be removed once _supportedOps is removed.
       if (
         Object.keys(matrix).length === 0 &&
         typeof obj._supportedOps === "function"
@@ -340,7 +341,32 @@ export function collectLifts(
       }
     }
 
-    // TODO: handle _onLiftTypeDeps
+    if (typeof obj === "function" && isLiftableType(obj)) {
+      let matrix: LiftDepsMatrix = parseMatrix(
+        (obj as ILiftableType)._onLiftTypeDeps ?? {}
+      );
+
+      for (const op of ops) {
+        const objDeps = matrix[op];
+
+        if (!objDeps) {
+          throw new Error(
+            `Unknown operation ${op} requested for object ${obj} (${obj.constructor.name})`
+          );
+        }
+
+        for (const [depObj, depOps] of objDeps.entries()) {
+          if (explored.has(depObj)) {
+            throw new Error(`circular dependency detected for ${depObj}`);
+          }
+          const unexploredOps = unexplored.get(depObj) ?? new Set();
+          for (const depOp of depOps) {
+            unexploredOps.add(depOp);
+          }
+          unexplored.set(depObj, unexploredOps);
+        }
+      }
+    }
   }
 
   // filter out all of the objects that don't have some kind of onLift method
@@ -352,7 +378,12 @@ export function collectLifts(
       output.set(obj, ops);
     }
 
-    // second, if the object is a special token type, add it to the output
+    // second, if the object has an onLiftType method, add it to the output
+    if (typeof obj.onLiftType === "function") {
+      output.set(obj, ops);
+    }
+
+    // last, if the object is a special token type, add it to the output
     const tokens = getTokenResolver(obj);
     if (tokens) {
       output.set(obj, ops);
@@ -370,6 +401,14 @@ function isLiftableType(t: any): t is ILiftableType {
  * Represents a type with static methods that may have other things to lift.
  */
 export interface ILiftableType {
+  /**
+   * Compiler-generated data that describes the dependencies of this object on other
+   * objects. This is used to determine which permissions need to be granted to the
+   * inflight host.
+   * @internal
+   */
+  _onLiftTypeDeps?: LiftDepsMatrixRaw;
+
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this type inflight. The list of requested inflight methods
@@ -407,7 +446,19 @@ export class Lifting {
         continue;
       }
 
-      liftedObj.onLift(host, [...liftedOps]);
+      if (typeof liftedObj.onLift === "function") {
+        liftedObj.onLift(host, [...liftedOps]);
+        continue;
+      }
+
+      if (typeof liftedObj.onLiftType === "function") {
+        liftedObj.onLiftType(host, [...liftedOps]);
+        continue;
+      }
+
+      throw new Error(
+        `unexpected trying to lift ${liftedObj} - please report this as a bug`
+      );
     }
   }
 }
