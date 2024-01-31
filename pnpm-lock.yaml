@@ -1485,31 +1485,6 @@ importers:
         specifier: workspace:^
         version: link:../../apps/wing-api-checker
 
-  scripts/compatibility-matrix-automation:
-    dependencies:
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
-      winglang:
-        specifier: workspace:^
-        version: link:../../apps/wing
-    devDependencies:
-      '@types/node':
-        specifier: ^18.17.13
-        version: 18.18.4
-      bump-pack:
-        specifier: workspace:^
-        version: link:../../tools/bump-pack
-      tsup:
-        specifier: ^6.7.0
-        version: 6.7.0(typescript@4.9.5)
-      typescript:
-        specifier: ^4.9.5
-        version: 4.9.5
-      vitest:
-        specifier: ^0.32.4
-        version: 0.32.4
-
   tools/bump-pack:
     dependencies:
       '@actions/core':
@@ -15477,7 +15452,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240130
+      typescript: 5.4.0-dev.20240131
     dev: true
 
   /dset@3.1.2:
@@ -25333,8 +25308,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240130:
-    resolution: {integrity: sha512-LelY/DlG9yPe807IRs7ZYvKp0eGgk4ehYr/9RvQsZg31E7sF3oYz0r44fsvnqxFWCsM11CWOrmY1r+MD5CDMfQ==}
+  /typescript@5.4.0-dev.20240131:
+    resolution: {integrity: sha512-kuk92IV6W1+z4qpldJXK3ZZFZUrR/qmVFnoLg7weNvy45TJr48FsKJCQmXsrOlfo1wJJr50A257e9ljMj6wTvw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
