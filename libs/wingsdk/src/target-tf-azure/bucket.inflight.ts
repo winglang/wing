@@ -11,6 +11,8 @@ import {
   BucketPutOptions,
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -89,12 +91,15 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns string content of the object as string
    */
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     const blobClient = this.containerClient.getBlobClient(key);
 
     let downloadResponse: BlobDownloadResponseParsed;
     try {
-      downloadResponse = await blobClient.download();
+      const start = options?.startByte !== undefined ? options.startByte : 0;
+      const length =
+        options?.endByte !== undefined ? options.endByte - start : undefined;
+      downloadResponse = await blobClient.download(start, length);
     } catch (e) {
       throw new Error(
         `Object does not exist (key=${key}): ${(e as Error).stack}`
@@ -105,9 +110,9 @@ export class BucketClient implements IBucketClient {
     }
 
     try {
-      return (
+      return new TextDecoder("utf8", { fatal: true }).decode(
         await this.streamToBuffer(downloadResponse.readableStreamBody)
-      ).toString();
+      );
     } catch (e) {
       throw new Error(
         `Object contents could not be read as text (key=${key}): ${
@@ -123,9 +128,12 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    * @returns string content of the object as string
    */
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return this.get(key, options);
     }
 
     return undefined;
