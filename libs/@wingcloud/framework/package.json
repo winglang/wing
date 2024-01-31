@@ -24,7 +24,7 @@
     "tag": "latest"
   },
   "dependencies": {
-    "constructs": "~10.2.69"
+    "constructs": "^10.3"
   },
   "peerDependencies": {
     "@winglang/sdk": "*",

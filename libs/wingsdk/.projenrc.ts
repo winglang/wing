@@ -3,8 +3,8 @@ import { join } from "path";
 import { JsonFile, cdk, javascript, DependencyType } from "projen";
 import * as cloud from "./src";
 
-const JSII_DEPS = ["constructs@~10.2.69"];
-const CDKTF_VERSION = "0.17.0";
+const JSII_DEPS = ["constructs@^10.3"];
+const CDKTF_VERSION = "0.20.3";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
@@ -107,7 +107,7 @@ const project = new cdk.JsiiProject({
     "ulid",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    `@cdktf/provider-aws@^19`, // only for testing Wing plugins
     "wing-api-checker",
     "bump-pack",
     "@types/aws-lambda",
