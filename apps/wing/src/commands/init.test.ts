@@ -5,7 +5,6 @@ import { describe, expect, test, vitest, beforeEach, afterEach, vi } from "vites
 import { test as cliTest } from "./test/test";
 import { init } from "../commands/init";
 import { generateTmpDir, projectTemplateNames } from "../util";
-import { ex } from "@winglang/sdk";
 
 vitest.mock("inquirer");
 
