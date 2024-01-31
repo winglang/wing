@@ -206,10 +206,15 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.envStorageAccountName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "BucketClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.envStorageAccountName()}"]`,
+      ]
+    );
   }
 
   private envName(): string {
