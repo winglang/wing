@@ -190,7 +190,7 @@ jobs:
             $WING_CLI test -t ${{ matrix.target }} $COMPETABILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
-        # if: ${{ env.LOCAL_BUILD ==  'true' || github.event_name == 'release' }}  //TODO: uncomment
+        if: ${{ env.LOCAL_BUILD ==  'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: out
@@ -202,6 +202,6 @@ jobs:
 
   update-matrix:
     needs: test
-    # if: ${{ github.event_name == 'release' || github.workflow == 'build' }} //TODO: uncomment
+    if: ${{ github.workflow == 'build' }}
     uses: ./.github/workflows/matrix-update.yml
     secrets: inherit
