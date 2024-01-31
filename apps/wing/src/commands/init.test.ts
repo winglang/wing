@@ -34,6 +34,54 @@ describe.each(templates)("new %s --language=wing", (template) => {
   });
 });
 
+describe("new --list-templates", () => {
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
+
+  afterEach(() => {
+    console.log = log;
+  });
+
+  test("does not contain duplicate template names", async () => {
+    await init("", { listTemplates: true });
+    expect(console.log).toHaveBeenCalledWith(templates.join("\n"));
+
+    const outputLines = (console.log as any).mock.calls[0][0].split("\n");
+    const outputLinesAsSet = new Set(outputLines);
+
+    expect(outputLines.length).toBeGreaterThan(0);
+    // Check there are no duplicate lines
+    expect(outputLinesAsSet.size).toBe(outputLines.length);
+  });
+});
+
+describe("new empty --language=ts", () => {
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
+
+  afterEach(() => {
+    console.log = log;
+  });
+
+  test(`wing new empty --language ts && wing test main.w`, async () => {
+    const workdir = await generateTmpDir();
+    process.chdir(workdir);
+
+    await init("empty", { language: "typescript" });
+
+    await cliTest(["main.ts"], {
+      platform: ["sim"],
+      clean: false,
+    });
+  });
+});
+
 describe("new", () => {
   let log: any;
   beforeEach(() => {
