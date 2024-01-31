@@ -140,8 +140,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
+          get _onLiftDeps() {
+            return ({
+              "handle": [
+              ],
+              "$inflight_init": [
+              ],
+            });
           }
         }
         this.inflight1 = new $Closure1(this, "$Closure1");
@@ -164,24 +169,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.inflight1, []],
+      get _onLiftDeps() {
+        return ({
+          "makeFn": [
+            [this.inflight1, ["handle"]],
           ],
           "callFn": [
           ],
           "callFn2": [
             [this.inflight1, ["handle"]],
           ],
-          "makeFn": [
-            [this.inflight1, ["handle"]],
+          "$inflight_init": [
+            [this.inflight1, []],
           ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -208,16 +209,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [foo, ["callFn", "callFn2"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

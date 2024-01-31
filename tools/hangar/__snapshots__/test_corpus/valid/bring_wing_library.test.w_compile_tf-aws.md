@@ -154,16 +154,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     new fixture.Store(this, "fixture.Store");
@@ -220,22 +218,24 @@ class Store extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "makeKeyInflight", "set", "$inflight_init"];
-  }
-  onLift(host, ops) {
-    $stdlib.core.onLiftMatrix(host, ops, {
-      "$inflight_init": [
-        [this.data, []],
-        [this.handlers, []],
-      ],
+  get _onLiftDeps() {
+    return ({
       "set": [
         [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
         [this.data, ["put"]],
         [this.handlers, []],
       ],
+      "$inflight_init": [
+        [this.data, []],
+        [this.handlers, []],
+      ],
     });
-    super.onLift(host, ops);
+  }
+  static get _onLiftTypeDeps() {
+    return ({
+      "makeKeyInflight": [
+      ],
+    });
   }
 }
 module.exports = { Store };
@@ -295,8 +295,19 @@ class Util extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "makeKeyInflight", "double", "$inflight_init"];
+  get _onLiftDeps() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _onLiftTypeDeps() {
+    return ({
+      "makeKeyInflight": [
+      ],
+      "double": [
+      ],
+    });
   }
 }
 module.exports = { Util };

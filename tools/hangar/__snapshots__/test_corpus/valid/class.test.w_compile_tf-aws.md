@@ -386,8 +386,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class C2 extends $stdlib.std.Resource {
@@ -412,8 +415,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class C3 extends $stdlib.std.Resource {
@@ -441,8 +447,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class C4 extends $stdlib.std.Resource {
@@ -469,8 +478,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class C5 extends $stdlib.std.Resource {
@@ -494,8 +506,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "x", "y", "set", "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "set": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -522,16 +539,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [c5, ["set", "x", "y"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class Person extends $stdlib.std.Resource {
@@ -556,8 +571,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Student extends Person {
@@ -583,8 +601,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class PaidStudent extends Student {
@@ -610,8 +631,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -640,18 +664,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [student.hrlyWage, []],
             [student.major, []],
             [student.name, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class TeacherAid extends PaidStudent {
@@ -677,8 +699,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -705,16 +730,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [ta.hrlyWage, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -738,15 +761,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "sound", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "$inflight_init": [
           ],
         });
-        super.onLift(host, ops);
       }
     }
     class B extends A {
@@ -771,8 +790,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure4 extends $stdlib.std.AutoIdResource {
@@ -799,8 +821,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -824,8 +851,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Foo extends Bar {
@@ -850,8 +880,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "doStuff", "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "doStuff": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Baz extends Bar {
@@ -876,8 +911,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Boom extends $stdlib.std.Resource {
@@ -901,8 +939,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Bam extends Boom {
@@ -927,8 +968,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     new C1(this, "C1");

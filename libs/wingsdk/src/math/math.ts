@@ -1,4 +1,4 @@
-import { InflightClient } from "../core";
+import { InflightClient, addLiftingMetadata } from "../core";
 
 /**
  * Options for rounding a number.
@@ -425,3 +425,5 @@ export class Util {
 
   private constructor() {}
 }
+
+addLiftingMetadata(Util);

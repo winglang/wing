@@ -116,8 +116,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "bug", "over_inflight", "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "bug": [
+          ],
+          "over_inflight": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Foo extends FooBase {
@@ -142,8 +149,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "bang", "over_inflight", "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "bang": [
+          ],
+          "over_inflight": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -171,16 +185,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [foo, ["bang", "bug", "over_inflight"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

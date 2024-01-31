@@ -73,8 +73,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const baz = new Baz(this, "Baz");

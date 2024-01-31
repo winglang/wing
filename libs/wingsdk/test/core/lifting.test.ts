@@ -109,7 +109,7 @@ test("mergeLiftDeps", () => {
 describe("collectLifts", () => {
   test("object without _onLiftDeps", () => {
     class Foo {}
-    const lifts = collectLifts(new Foo(), new Set([]));
+    const lifts = collectLifts(new Foo(), []);
     expect(lifts).toEqual(new Map([]));
   });
 
@@ -121,7 +121,7 @@ describe("collectLifts", () => {
         };
       }
     }
-    const lifts = collectLifts(new Foo(), new Set(["op1"]));
+    const lifts = collectLifts(new Foo(), ["op1"]);
     expect(lifts).toEqual(new Map([]));
   });
 
@@ -134,7 +134,7 @@ describe("collectLifts", () => {
       }
       public onLift() {}
     }
-    const lifts = collectLifts(new Foo(), new Set(["op1"]));
+    const lifts = collectLifts(new Foo(), ["op1"]);
     expect(lifts).toEqual(new Map([[expect.any(Foo), new Set(["op1"])]]));
   });
 
@@ -150,7 +150,7 @@ describe("collectLifts", () => {
         };
       }
     }
-    const lifts = collectLifts(new Foo(), new Set(["op1"]));
+    const lifts = collectLifts(new Foo(), ["op1"]);
     expect(lifts).toEqual(new Map([]));
   });
 
@@ -172,7 +172,7 @@ describe("collectLifts", () => {
       }
       public onLift() {}
     }
-    const lifts = collectLifts(new Foo(), new Set(["op1"]));
+    const lifts = collectLifts(new Foo(), ["op1"]);
     expect(lifts).toEqual(
       new Map([
         [expect.any(Foo), new Set(["op1"])],
@@ -219,7 +219,7 @@ describe("collectLifts", () => {
         };
       }
     }
-    const lifts = collectLifts(new Foo(), new Set(["handle"]));
+    const lifts = collectLifts(new Foo(), ["handle"]);
     expect(lifts).toEqual(new Map([[expect.any(Bucket), new Set(["list"])]]));
   });
 });

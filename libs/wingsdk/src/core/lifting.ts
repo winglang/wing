@@ -273,124 +273,123 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
  */
 export function collectLifts(
   initialObj: any,
-  initialOps: Set<string>
+  initialOps: Array<string>
 ): Map<any, Set<string>> {
   const explored = new Map<any, Set<string>>();
-  const unexplored = new Map<any, Set<string>>([[initialObj, initialOps]]);
+  const queue = new Array<[any, Array<string>]>([initialObj, [...initialOps]]);
+  const matrixCache = new Map<any, LiftDepsMatrix>();
 
-  while (unexplored.size > 0) {
-    // obj and ops are the object and operations requested on it
-    const [obj, ops]: [any, Set<string>] = unexplored.entries().next().value;
+  while (queue.length > 0) {
+    // `obj` and `ops` are the preflight object and operations requested on it
+    let [obj, ops]: [any, Array<string>] = queue.shift()!;
 
-    if (explored.has(obj)) {
-      throw new Error(
-        `unexpected trying to lift ${obj} twice - please report this as a bug`
-      );
+    if (!explored.has(obj)) {
+      explored.set(obj, new Set());
     }
 
-    unexplored.delete(obj);
-    explored.set(obj, ops);
+    let existingOps = explored.get(obj)!;
 
-    // Inspect the object to see if there are any transitive dependencies that need to be lifted.
+    // Filter out any ops that we've already processed for this object.
+    ops = ops.filter((op) => !existingOps.has(op));
+
+    // If there are no ops left, skip this object.
+    if (ops.length === 0) {
+      continue;
+    }
+
+    // Add the new ops to the explored set.
+    for (const op of ops) {
+      existingOps.add(op);
+    }
+
+    // Inspect the object to see if there are any transitive dependency information.
     // Currently there are a few ways to do this:
     // - The compiler may generate a _onLiftDeps property on the object
     // - The compiler may generate a static _onLiftTypeDeps method on a class
-    // - The SDK may have a _supportedOps method on a class
-    if (typeof obj === "object") {
-      let matrix: LiftDepsMatrix = parseMatrix(
-        (obj as IHostedLiftable)._onLiftDeps ?? {}
-      );
+    // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
-      // If the matrix is empty, and there's a _supportedOps method, use that as a backup.
-      // This code path can be removed once _supportedOps is removed.
-      if (
-        Object.keys(matrix).length === 0 &&
-        typeof obj._supportedOps === "function"
-      ) {
-        for (const op of obj._supportedOps()) {
-          matrix[op] = new Map([]);
+    let matrix: LiftDepsMatrix;
+    if (matrixCache.has(obj)) {
+      matrix = matrixCache.get(obj)!;
+    } else if (typeof obj === "object" && obj._onLiftDeps !== undefined) {
+      matrix = parseMatrix(obj._onLiftDeps ?? {});
+      matrixCache.set(obj, matrix);
+    } else if (
+      typeof obj === "object" &&
+      typeof obj._supportedOps === "function"
+    ) {
+      matrix = {};
+      for (const op of obj._supportedOps()) {
+        matrix[op] = new Map([]);
+      }
+      matrixCache.set(obj, matrix);
+    } else if (
+      typeof obj === "function" &&
+      typeof obj._onLiftTypeDeps !== undefined
+    ) {
+      matrix = parseMatrix(obj._onLiftTypeDeps ?? {});
+      matrixCache.set(obj, matrix);
+    } else {
+      // If the object doesn't have any dependency information, we can skip it.
+      // In the future, we might want to do more advanced analysis to
+      // lift collections of objects with onLift methods etc.
+
+      // Before we `continue` to the next iteration, check for some basic collection types
+      // so if the user puts tokens in a collection, they'll get lifted.
+      //
+      // We can't calculate what ops to put for the collection items (for
+      // example, for cases where the items are resources) since the compiler
+      // doesn't produce that information yet.
+      if (Array.isArray(obj)) {
+        for (const item of obj) {
+          if (!explored.has(item)) {
+            queue.push([item, []]);
+          }
         }
       }
 
-      for (const op of ops) {
-        const objDeps = matrix[op];
-
-        if (!objDeps) {
-          if (Construct.isConstruct(obj)) {
-            throw new NotImplementedError(
-              `Resource ${obj.node.path} does not support inflight operation ${op}.\nIt might not be implemented yet.`,
-              { resource: obj.constructor.name, operation: op }
-            );
-          } else {
-            throw new Error(
-              `Unknown operation ${op} requested for object ${obj}`
-            );
+      if (obj instanceof Set) {
+        for (const item of obj) {
+          if (!explored.has(item)) {
+            queue.push([item, []]);
           }
-        }
-
-        for (const [depObj, depOps] of objDeps.entries()) {
-          if (explored.has(depObj)) {
-            throw new Error(`circular dependency detected for ${depObj}`);
-          }
-          const unexploredOps = unexplored.get(depObj) ?? new Set();
-          for (const depOp of depOps) {
-            unexploredOps.add(depOp);
-          }
-          unexplored.set(depObj, unexploredOps);
         }
       }
+
+      if (obj instanceof Map) {
+        for (const value of obj.values()) {
+          if (!explored.has(value)) {
+            queue.push([value, []]);
+          }
+        }
+      }
+
+      continue;
     }
 
-    if (typeof obj === "function" && isLiftableType(obj)) {
-      let matrix: LiftDepsMatrix = parseMatrix(
-        (obj as ILiftableType)._onLiftTypeDeps ?? {}
-      );
+    for (const op of ops) {
+      const objDeps = matrix[op];
 
-      for (const op of ops) {
-        const objDeps = matrix[op];
-
-        if (!objDeps) {
+      if (!objDeps) {
+        if (Construct.isConstruct(obj)) {
+          throw new NotImplementedError(
+            `Resource ${obj.node.path} does not support inflight operation ${op}.\nIt might not be implemented yet.`,
+            { resource: obj.constructor.name, operation: op }
+          );
+        } else {
           throw new Error(
             `Unknown operation ${op} requested for object ${obj} (${obj.constructor.name})`
           );
         }
+      }
 
-        for (const [depObj, depOps] of objDeps.entries()) {
-          if (explored.has(depObj)) {
-            throw new Error(`circular dependency detected for ${depObj}`);
-          }
-          const unexploredOps = unexplored.get(depObj) ?? new Set();
-          for (const depOp of depOps) {
-            unexploredOps.add(depOp);
-          }
-          unexplored.set(depObj, unexploredOps);
-        }
+      for (const [depObj, depOps] of objDeps.entries()) {
+        queue.push([depObj, [...depOps]]);
       }
     }
   }
 
-  // filter out all of the objects that don't have some kind of onLift method
-
-  const output = new Map<any, Set<string>>();
-  for (const [obj, ops] of explored.entries()) {
-    // first, if the object has an onLift method, add it to the output
-    if (typeof obj.onLift === "function") {
-      output.set(obj, ops);
-    }
-
-    // second, if the object has an onLiftType method, add it to the output
-    if (typeof obj.onLiftType === "function") {
-      output.set(obj, ops);
-    }
-
-    // last, if the object is a special token type, add it to the output
-    const tokens = getTokenResolver(obj);
-    if (tokens) {
-      output.set(obj, ops);
-    }
-  }
-
-  return output;
+  return explored;
 }
 
 function isLiftableType(t: any): t is ILiftableType {
@@ -436,7 +435,7 @@ export class Lifting {
     ops: Array<string>
   ) {
     // obtain all of the objects that need lifting
-    const lifts = collectLifts(obj, new Set(ops));
+    const lifts = collectLifts(obj, ops);
 
     // perform the actual lifting
     for (const [liftedObj, liftedOps] of lifts) {
@@ -456,9 +455,23 @@ export class Lifting {
         continue;
       }
 
-      throw new Error(
-        `unexpected trying to lift ${liftedObj} - please report this as a bug`
-      );
+      // no lift-related methods to call - it's probably a primitive
     }
+  }
+}
+
+/**
+ * A helper function that automatically generates the `_onLiftDeps` property
+ * to a Util class.
+ */
+export function addLiftingMetadata(klass: any) {
+  // obtain a list of all static methods and
+  const methods = Object.getOwnPropertyNames(klass);
+  klass._onLiftTypeDeps = {};
+  for (const method of methods) {
+    if (method === "_toInflightType") {
+      continue;
+    }
+    klass._onLiftTypeDeps[method] = [];
   }
 }

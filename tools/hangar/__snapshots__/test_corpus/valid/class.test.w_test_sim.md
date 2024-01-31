@@ -2,14 +2,12 @@
 
 ## stdout.log
 ```log
-pass ─ class.test.wsim » root/env0/test:access inflight field                      
-pass ─ class.test.wsim » root/env1/test:check derived class instance variables     
-pass ─ class.test.wsim » root/env2/test:devived class init body happens after super
-pass ─ class.test.wsim » root/env3/test:inflight super constructor                 
+runtime error: Resource root/env0/C5 does not support inflight operation x.
+It might not be implemented yet.
  
  
-Tests 4 passed (4)
-Test Files 1 passed (1)
+Tests 1 unsupported (1)
+Test Files 1 unsupported (1)
 Duration <DURATION>
 ```
 

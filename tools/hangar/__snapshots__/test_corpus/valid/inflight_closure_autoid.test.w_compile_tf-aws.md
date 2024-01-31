@@ -97,16 +97,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _onLiftDeps() {
+        return ({
           "handle": [
             [inflights, ["at"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     let inflights = [];
@@ -135,16 +133,14 @@ class $Root extends $stdlib.std.Resource {
             })())
           `;
         }
-        _supportedOps() {
-          return [...super._supportedOps(), "handle", "$inflight_init"];
-        }
-        onLift(host, ops) {
-          $stdlib.core.onLiftMatrix(host, ops, {
+        get _onLiftDeps() {
+          return ({
             "handle": [
               [i, []],
             ],
+            "$inflight_init": [
+            ],
           });
-          super.onLift(host, ops);
         }
       }
       inflights.push(new $Closure1(this, "$Closure1"));

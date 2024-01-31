@@ -1,45 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`aws-counter.test.w 1`] = `
-{
-  "duration": "<DURATION>",
-  "platforms": [
-    "sim",
-    "node_modules/@winglang/compatibility-spy/lib",
-  ],
-  "results": {
-    "counter/aws-counter.test.w": {
-      "validates the AWS counter name": {
-        "args": {
-          "methods": {
-            "Counter": [
-              "dynamoTableArn",
-            ],
-            "TestRunner": [
-              "findTests",
-            ],
-          },
-        },
-        "pass": true,
-        "path": "root/env0/test:validates the AWS counter name",
-        "traces": [
-          {
-            "data": {
-              "message": "Invoke (payload=\\"\\").",
-              "status": "success",
-            },
-            "sourcePath": "root/env0/test:validates the AWS counter name/Handler",
-            "sourceType": "@winglang/sdk.cloud.Function",
-            "timestamp": "<TIMESTAMP>",
-            "type": "resource",
-          },
-        ],
-      },
-    },
-  },
-}
-`;
-
 exports[`dec.test.w 1`] = `
 {
   "duration": "<DURATION>",
@@ -53,6 +13,7 @@ exports[`dec.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "dec",
               "peek",
             ],
@@ -168,6 +129,7 @@ exports[`dec.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "dec",
               "peek",
             ],
@@ -275,6 +237,7 @@ exports[`inc.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "inc",
               "peek",
             ],
@@ -390,6 +353,7 @@ exports[`inc.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "inc",
               "peek",
             ],
@@ -497,6 +461,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "peek",
             ],
             "TestRunner": [
@@ -534,6 +499,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "peek",
             ],
             "TestRunner": [
@@ -571,6 +537,7 @@ exports[`initial.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "peek",
             ],
             "TestRunner": [
@@ -622,6 +589,7 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "inc",
               "peek",
             ],
@@ -693,6 +661,7 @@ exports[`peek.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "inc",
               "peek",
             ],
@@ -778,6 +747,7 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "peek",
               "set",
             ],
@@ -868,6 +838,7 @@ exports[`set.test.w 1`] = `
         "args": {
           "methods": {
             "Counter": [
+              "onLiftType",
               "peek",
               "set",
             ],

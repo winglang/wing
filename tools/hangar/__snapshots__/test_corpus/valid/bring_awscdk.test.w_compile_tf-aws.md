@@ -68,8 +68,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     this.node.root.new("aws-cdk-lib.App", awscdk.App, );

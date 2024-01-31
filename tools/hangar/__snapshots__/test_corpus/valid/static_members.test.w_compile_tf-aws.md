@@ -104,8 +104,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "get123", "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
+      }
+      static get _onLiftTypeDeps() {
+        return ({
+          "get123": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -131,8 +140,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const foo = new Foo(this, "Foo");

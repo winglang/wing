@@ -96,8 +96,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Cat extends Animal {
@@ -122,8 +125,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Dog extends Animal {
@@ -148,8 +154,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _onLiftDeps() {
+        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const sArray = ["one", "two"];
