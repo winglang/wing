@@ -1,4 +1,5 @@
 import {
+  INFLIGHT_INIT_METHOD_NAME,
   InflightBindings,
   LiftDepsMatrixRaw,
   closureId,
@@ -31,8 +32,7 @@ export class Testing {
     for (const v of Object.values(bindings)) {
       liftDeps.handle.push([v.obj, v.ops ?? []]);
     }
-    liftDeps.$inflight_init = [];
-    console.error("liftDeps", liftDeps);
+    liftDeps[INFLIGHT_INIT_METHOD_NAME] = [];
 
     return {
       _id: closureId(),

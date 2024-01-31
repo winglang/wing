@@ -178,6 +178,11 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
 /**
  * Collects all of the objects that need to be lifted for a given object and set of operations, by
  * traversing the object graph.
+ *
+ * Internally, it keeps track of a queue of objects and corresponding operations that need to be lifted
+ * by the inflight host (the explored set), and a queue of objects and operations that need to be
+ * explored (the queue). Objects (any JavaScript values) can be re-added to the queue multiple times
+ * if new operations are determined as needed by the inflight host.
  */
 export function collectLifts(
   initialObj: any,
@@ -331,7 +336,8 @@ export class Lifting {
    * Perform the full lifting process on an object.
    *
    * Use this instead of calling `onLift` since it will also lift all of the
-   * object's dependencies.
+   * object's dependencies, and it will ensure that the onLift methods of
+   * all objects are all called at most once.
    */
   public static lift(
     obj: IHostedLiftable,
@@ -341,7 +347,7 @@ export class Lifting {
     // obtain all of the objects that need lifting
     const lifts = collectLifts(obj, ops);
 
-    // perform the actual lifting
+    // call all of the onLift methods
     for (const [liftedObj, liftedOps] of lifts) {
       const tokens = getTokenResolver(liftedObj);
       if (tokens) {
@@ -349,17 +355,24 @@ export class Lifting {
         continue;
       }
 
-      if (typeof liftedObj.onLift === "function") {
+      if (
+        typeof liftedObj === "object" &&
+        typeof liftedObj.onLift === "function"
+      ) {
         liftedObj.onLift(host, [...liftedOps]);
         continue;
       }
 
-      if (typeof liftedObj.onLiftType === "function") {
+      if (
+        typeof liftedObj === "function" &&
+        typeof liftedObj.onLiftType === "function"
+      ) {
         liftedObj.onLiftType(host, [...liftedOps]);
         continue;
       }
 
       // no lift-related methods to call - it's probably a primitive
+      // so no capabilities need to be added to the inflight host
     }
   }
 }
