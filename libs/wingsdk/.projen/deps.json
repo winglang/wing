@@ -18,10 +18,6 @@
       "type": "build"
     },
     {
-      "name": "@types/json-schema",
-      "type": "build"
-    },
-    {
       "name": "@types/mime-types",
       "type": "build"
     },
