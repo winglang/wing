@@ -173,11 +173,14 @@ class $Root extends $stdlib.std.Resource {
             [this.inflight1, []],
           ],
           "callFn": [
+            [this, ["makeFn"]],
           ],
           "callFn2": [
+            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
           "makeFn": [
+            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
         });

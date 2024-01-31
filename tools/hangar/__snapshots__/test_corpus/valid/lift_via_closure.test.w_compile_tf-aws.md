@@ -219,6 +219,7 @@ class $Root extends $stdlib.std.Resource {
             [this.bucket, []],
           ],
           "handle": [
+            [this, ["putFile"]],
           ],
           "listFiles": [
             [bucket2, ["put"]],
