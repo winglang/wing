@@ -1779,6 +1779,7 @@ impl<'a> JSifier<'a> {
 
 		let mut lift_qualifications: Vec<(&String, &BTreeMap<String, LiftQualification>)> = vec![];
 		let empty_map = BTreeMap::new();
+
 		for m in class.all_methods(true) {
 			let name = m.name.as_ref().unwrap();
 			let method = class_type.as_class().unwrap().get_method(&name);
@@ -1790,6 +1791,22 @@ impl<'a> JSifier<'a> {
 			let filter = match bind_method_kind {
 				BindMethod::Instance => is_inflight && !is_static,
 				BindMethod::Type => is_inflight && is_static && name.name != CLASS_INFLIGHT_INIT_NAME,
+			};
+			if filter {
+				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
+					lift_qualifications.push((&name.name, quals));
+				} else {
+					lift_qualifications.push((&name.name, &empty_map));
+				}
+			}
+		}
+
+		for m in class.inflight_fields() {
+			let name = &m.name;
+			let is_static = m.is_static;
+			let filter = match bind_method_kind {
+				BindMethod::Instance => !is_static,
+				BindMethod::Type => is_static,
 			};
 			if filter {
 				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {

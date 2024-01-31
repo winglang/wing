@@ -434,6 +434,8 @@ class $Root extends $stdlib.std.Resource {
             [this.myResource, []],
             [this.myStr, []],
           ],
+          "inflightField": [
+          ],
         });
       }
     }

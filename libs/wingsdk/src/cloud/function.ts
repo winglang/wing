@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, INFLIGHT_INIT_METHOD_NAME, Lifting } from "../core";
+import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
@@ -107,7 +107,7 @@ export class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    Lifting.lift(this.handler, this, ["handle", INFLIGHT_INIT_METHOD_NAME]);
+    Lifting.lift(this.handler, this, ["handle"]);
   }
 
   /**

@@ -3,6 +3,15 @@ import { NotImplementedError } from "./errors";
 import { getTokenResolver } from "./tokens";
 import { IInflightHost, ILiftable, IHostedLiftable } from "../std";
 
+/**
+ * This is the name of a special operation that is used as a key
+ * by the compiler in the `_onLiftDeps` matrix to indicate that
+ * some transitive object dependencies are always required no matter
+ * what operations are passed to the `host`.
+ *
+ * As a user, this operation is hidden so it will not be
+ * passed as an op to `onLift` or `onLiftType` methods.
+ */
 export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
 
 /**
@@ -183,11 +192,27 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
  * by the inflight host (the explored set), and a queue of objects and operations that need to be
  * explored (the queue). Objects (any JavaScript values) can be re-added to the queue multiple times
  * if new operations are determined as needed by the inflight host.
+ *
+ * For example, suppose an inflight host needs to call op1 on object A and op2 on object B.
+ * In addition, object B needs op3 on object A.
+ * The explored set and queue after each step of the main loop is shown below:
+ *
+ * ```
+ * explored: {} | queue: [(A, [op1]), (B, [op2])]
+ * explored: {A: [op1]} | queue: [(B, [op2])]
+ * explored: {A: [op1], B: [op2]} | queue: [(A, [op3])]
+ * explored: {A: [op1, op3], B: [op2]} | queue: []
  */
 export function collectLifts(
   initialObj: any,
   initialOps: Array<string>
 ): Map<any, Set<string>> {
+  if (initialOps.includes(INFLIGHT_INIT_METHOD_NAME)) {
+    throw new Error(
+      `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+    );
+  }
+
   const explored = new Map<any, Set<string>>();
   const queue = new Array<[any, Array<string>]>([initialObj, [...initialOps]]);
   const matrixCache = new Map<any, LiftDepsMatrix>();
@@ -195,13 +220,6 @@ export function collectLifts(
   while (queue.length > 0) {
     // `obj` and `ops` are the preflight object and operations requested on it
     let [obj, ops]: [any, Array<string>] = queue.shift()!;
-
-    // request the $inflight_init op for every object
-    // hack: skip this if the "obj" is a function since it's probably a type
-    // which means it doesn't need to be instantiated
-    if (typeof obj !== "function") {
-      ops.push(INFLIGHT_INIT_METHOD_NAME);
-    }
 
     if (!explored.has(obj)) {
       explored.set(obj, new Set());
@@ -242,9 +260,6 @@ export function collectLifts(
       for (const op of obj._supportedOps()) {
         matrix[op] = new Map();
       }
-      // if _supportedOps is implemented, it's probably a construct so we
-      // model as if it has an $inflight_init operation
-      matrix[INFLIGHT_INIT_METHOD_NAME] = new Map();
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "function" &&
@@ -290,8 +305,14 @@ export function collectLifts(
       continue;
     }
 
-    for (const op of ops) {
+    for (const op of [...ops, INFLIGHT_INIT_METHOD_NAME]) {
       const objDeps = matrix[op];
+
+      // If the op is $inflight_init, then the operation is implicit
+      // so it's okay it's not defined in the matrix
+      if (op === INFLIGHT_INIT_METHOD_NAME && !objDeps) {
+        continue;
+      }
 
       if (!objDeps) {
         if (Construct.isConstruct(obj)) {
@@ -307,6 +328,11 @@ export function collectLifts(
       }
 
       for (const [depObj, depOps] of objDeps.entries()) {
+        if (depOps.has(INFLIGHT_INIT_METHOD_NAME)) {
+          throw new Error(
+            `The operation ${INFLIGHT_INIT_METHOD_NAME} is implicit and should not be requested explicitly.`
+          );
+        }
         queue.push([depObj, [...depOps]]);
       }
     }
@@ -384,21 +410,5 @@ export class Lifting {
       // no lift-related methods to call - it's probably a primitive
       // so no capabilities need to be added to the inflight host
     }
-  }
-}
-
-/**
- * A helper function that automatically generates the `_onLiftDeps` property
- * to a Util class.
- */
-export function addLiftingMetadata(klass: any) {
-  // obtain a list of all static methods and
-  const methods = Object.getOwnPropertyNames(klass);
-  klass._onLiftTypeDeps = {};
-  for (const method of methods) {
-    if (method === "_toInflightType") {
-      continue;
-    }
-    klass._onLiftTypeDeps[method] = [];
   }
 }

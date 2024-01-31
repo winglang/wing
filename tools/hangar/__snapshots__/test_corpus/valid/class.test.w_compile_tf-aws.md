@@ -512,6 +512,10 @@ class $Root extends $stdlib.std.Resource {
           ],
           "$inflight_init": [
           ],
+          "x": [
+          ],
+          "y": [
+          ],
         });
       }
     }
@@ -764,6 +768,8 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return ({
           "$inflight_init": [
+          ],
+          "sound": [
           ],
         });
       }

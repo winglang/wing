@@ -77,6 +77,8 @@ class $Root extends $stdlib.std.Resource {
           ],
           "$inflight_init": [
           ],
+          "field": [
+          ],
         });
       }
     }

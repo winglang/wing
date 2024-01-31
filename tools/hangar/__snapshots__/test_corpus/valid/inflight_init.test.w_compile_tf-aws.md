@@ -223,6 +223,10 @@ class $Root extends $stdlib.std.Resource {
           ],
           "$inflight_init": [
           ],
+          "field1": [
+          ],
+          "field2": [
+          ],
         });
       }
     }
@@ -251,6 +255,8 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
           "$inflight_init": [
+          ],
+          "field3": [
           ],
         });
       }
