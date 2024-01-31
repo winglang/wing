@@ -49,7 +49,7 @@ describe("new --list-templates", () => {
     await init("", { listTemplates: true });
     expect(console.log).toHaveBeenCalledWith(templates.join("\n"));
 
-    const outputLines = ((console.log as any).mock.calls[0][0]).split("\n");
+    const outputLines = (console.log as any).mock.calls[0][0].split("\n");
     const outputLinesAsSet = new Set(outputLines);
 
     expect(outputLines.length).toBeGreaterThan(0);
