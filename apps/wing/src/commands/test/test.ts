@@ -47,7 +47,7 @@ export interface TestOptions extends CompileOptions {
   retry?: number;
 }
 
-const TEST_FILE_PATTERNS = ["**/*.test.{w,ts}", "**/{main,*.main}.{w,ts}"];
+const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
 const TEST_FILE_IGNORE = ["**/node_modules/**", "**/target/**"];
 
 /**

@@ -98,13 +98,13 @@ describe("collectTestFiles", () => {
     fs.writeFileSync("foo.test.w", "");
     fs.writeFileSync("bar.test.w", "");
     fs.writeFileSync("baz.test.w", "");
-    fs.writeFileSync("typescript.test.ts", "");
+    fs.writeFileSync("main.ts", "");
 
     const files = await collectTestFiles([]);
 
     expect(files).toMatchInlineSnapshot(`
       [
-        "typescript.test.ts",
+        "main.ts",
         "foo.test.w",
         "baz.test.w",
         "bar.test.w",
