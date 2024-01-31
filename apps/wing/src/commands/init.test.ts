@@ -5,6 +5,7 @@ import { describe, expect, test, vitest, beforeEach, afterEach, vi } from "vites
 import { test as cliTest } from "./test/test";
 import { init } from "../commands/init";
 import { generateTmpDir, projectTemplateNames } from "../util";
+import { ex } from "@winglang/sdk";
 
 vitest.mock("inquirer");
 
@@ -31,6 +32,30 @@ describe.each(templates)("new %s --language=wing", (template) => {
       platform: ["sim"],
       clean: false,
     });
+  });
+});
+
+describe("new --list-templates", () => {
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
+
+  afterEach(() => {
+    console.log = log;
+  });
+
+  test("wing new --list-templates", async () => {
+    await init("", { listTemplates: true });
+    expect(console.log).toHaveBeenCalledWith(templates.join("\n"));
+
+    const outputLines = ((console.log as any).mock.calls[0][0]).split("\n");
+    const outputLinesAsSet = new Set(outputLines);
+
+    expect(outputLines.length).toBeGreaterThan(0);
+    // Check there are no duplicate lines
+    expect(outputLinesAsSet.size).toBe(outputLines.length);
   });
 });
 
