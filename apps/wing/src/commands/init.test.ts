@@ -34,6 +34,30 @@ describe.each(templates)("new %s --language=wing", (template) => {
   });
 });
 
+describe("new empty --language=ts", () => {
+  let log: any;
+  beforeEach(() => {
+    log = console.log;
+    console.log = vi.fn();
+  });
+
+  afterEach(() => {
+    console.log = log;
+  });
+
+  test(`wing new empty --language ts && wing test main.w`, async () => {
+    const workdir = await generateTmpDir();
+    process.chdir(workdir);
+
+    await init("empty", { language: "typescript" });
+
+    await cliTest(["main.ts"], {
+      platform: ["sim"],
+      clean: false,
+    });
+  });
+});
+
 describe("new", () => {
   let log: any;
   beforeEach(() => {

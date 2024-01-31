@@ -11,8 +11,8 @@ export async function compile(options: CompileOptions) {
 
   const program = ts.createProgram([options.entrypoint], {
     target: ts.ScriptTarget.ES2022,
-    module: ts.ModuleKind.Node16,
-    moduleResolution: ts.ModuleResolutionKind.Node16,
+    module: ts.ModuleKind.CommonJS,
+    moduleResolution: ts.ModuleResolutionKind.Node10,
     alwaysStrict: true,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,

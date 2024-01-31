@@ -16,18 +16,44 @@ export interface AppProps {
  * Create a Wing app.
  *
  * ```ts
- * import { main } from "@wingcloud/framework";
- * import { cloud } from "@winglang/sdk";
+ * import { main, cloud } from "@wingcloud/framework";
  *
- * main(app => {
- *   new cloud.Bucket(app, "Bucket");
+ * main((root) => {
+ *   new cloud.Bucket(root, "Bucket");
+ * });
+ * ```
+ *
+ * Tests can be added using the second argument:
+ *
+ * ```ts
+ * import { main, cloud } from "@wingcloud/framework";
+ *
+ * main((root, test) => {
+ *   new cloud.Bucket(root, "Bucket");
+ *
+ *   test("bucket holds stuff", async () => {
+ *     lift({ bucket }).inflight(async ({ bucket }) => {
+ *       await bucket.put("key", "value");
+ *     });
+ *   });
+ *
  * });
  * ```
  *
  * @param fn Define your application using the provided root construct.
  *           Note that this function may be called multiple times when used with `wing test`.
  */
-export function main(fn: (root: Construct) => void, props: AppProps = {}) {
+export function main(
+  fn: (
+    root: Construct,
+    test: (
+      name: string,
+      handler: std.ITestHandler,
+      props?: std.TestProps
+    ) => void
+  ) => void,
+  props: AppProps = {}
+) {
   // check if we have everything we need
   const requiredEnvVars = [
     "WING_PLATFORMS",
@@ -46,7 +72,9 @@ This is a Wing app and must be run through the Wing CLI (npm install -f winglang
   class $Root extends std.Resource {
     constructor(scope: Construct, id: string) {
       super(scope, id);
-      fn(this);
+      fn(this, (name, handler, props) => {
+        new std.Test(this, name, handler, props);
+      });
     }
   }
 

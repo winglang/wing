@@ -1111,12 +1111,13 @@ importers:
       '@wingcloud/framework':
         specifier: workspace:^
         version: link:../../libs/@wingcloud/framework
-      '@winglang/sdk':
-        specifier: workspace:^
-        version: link:../../libs/wingsdk
       '@winglibs/testfixture':
         specifier: workspace:^
         version: link:../wing-fixture
+    devDependencies:
+      '@types/node':
+        specifier: ^18
+        version: 18.18.4
       winglang:
         specifier: workspace:^
         version: link:../../apps/wing

@@ -2,8 +2,7 @@
 
 ```ts
 // main.ts
-import { main } from "@wingcloud/framework";
-import { cloud } from "@winglang/sdk";
+import { main, cloud } from "@wingcloud/framework";
 
 main((app) => {
   new cloud.Bucket(app, "Bucket");
