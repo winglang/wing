@@ -7,6 +7,8 @@ import {
   BucketPutOptions,
   IBucketClient,
   ObjectMetadata,
+  BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -116,23 +118,32 @@ export class BucketClient implements IBucketClient {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     try {
-      const body = await this.bucket.file(key).download();
-      return body.toString();
+      const body = await this.bucket
+        .file(key)
+        .download({ start: options?.startByte, end: options?.endByte });
+      return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
     } catch (error) {
-      throw new Error(`Failed to get object. (key=${key})`);
+      throw new Error(
+        `Failed to get object. (key=${key}) ${(error as Error).stack}`
+      );
     }
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined> {
     try {
       if (await this.exists(key)) {
-        return await this.get(key);
+        return await this.get(key, options);
       }
       return undefined;
     } catch (error) {
-      throw new Error(`Failed to tryGet object. (key=${key})`);
+      throw new Error(
+        `Failed to tryGet object. (key=${key}) ${(error as Error).stack}`
+      );
     }
   }
 

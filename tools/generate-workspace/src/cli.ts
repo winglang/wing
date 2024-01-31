@@ -4,7 +4,7 @@ import {writeFileSync} from "fs";
 import {join} from "path";
 
 // Define ignore list and name mapping
-const ignoreList = ["@wingconsole/design-system", "@wingconsole/error-message", "@wingconsole/eslint-plugin", "@wingconsole/tsconfig", "@wingconsole/use-loading", "@wingconsole/use-persistent-state", "@winglang/platform-awscdk", "@winglang/compatibility-spy", "@winglang/tree-sitter-wing", "@winglang/wingc", "@winglang/wingii", "@winglibs/testfixture", "bump-pack", "construct-library", "generate-workspace", "hangar", "jsii-fixture", "ts-fixture", "ts4w"];
+const ignoreList = ["@wingconsole/design-system", "@wingconsole/error-message", "@wingconsole/eslint-plugin", "@wingconsole/tsconfig", "@wingconsole/use-loading", "@wingconsole/use-persistent-state", "@winglang/platform-awscdk", "@winglang/compatibility-spy", "@winglang/tree-sitter-wing", "@winglang/wingc", "@winglang/wingii", "@winglibs/testfixture", "bump-pack", "construct-library", "generate-workspace", "hangar", "jsii-fixture", "ts-fixture", "@wingcloud/framework"];
 
 const nameMapping: Record<string, string> = {
   "@wingconsole/app": "Console App",

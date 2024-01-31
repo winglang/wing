@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27",
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
@@ -39,9 +39,6 @@
     "constructs",
     "jsii"
   ],
-  "engines": {
-    "node": ">= 14.17.0"
-  },
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "homepage": "https://github.com/aws/constructs",
