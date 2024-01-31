@@ -1,5 +1,5 @@
 import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
-import { liftObject, onLiftObject, closureId } from "@winglang/sdk/lib/core";
+import { liftObject, closureId, LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
@@ -161,6 +161,18 @@ class Lifter<
       ...args: Parameters<TFunction>
     ) => ReturnType<TFunction>
   ): Inflight<TFunction> {
+    const _onLiftDeps: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
+    for (const [key, obj] of Object.entries(this.lifts)) {
+      let knownOps = this.grants[key];
+      if (
+        knownOps === undefined &&
+        typeof (obj as IHostedLiftable)?._supportedOps === "function"
+      ) {
+        knownOps = (obj as IHostedLiftable)._supportedOps();
+      }
+      _onLiftDeps.handle.push([obj, knownOps ?? []]);
+    }
+
     return {
       _id: closureId(),
       _toInflight: () => {
@@ -183,19 +195,7 @@ class Lifter<
 }
 )())`;
       },
-      onLift: (host: IInflightHost, _ops: string[]) => {
-        for (const [key, obj] of Object.entries(this.lifts)) {
-          let knownOps = this.grants[key];
-          if (
-            knownOps === undefined &&
-            typeof (obj as IHostedLiftable)?._supportedOps === "function"
-          ) {
-            knownOps = (obj as IHostedLiftable)._supportedOps();
-          }
-
-          onLiftObject(obj, host, knownOps);
-        }
-      },
+      _onLiftDeps,
       _supportedOps: () => [],
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {

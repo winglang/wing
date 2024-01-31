@@ -1,14 +1,7 @@
 import { Construct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { getTokenResolver } from "./tokens";
-import {
-  Datetime,
-  Duration,
-  JsonSchema,
-  IInflightHost,
-  ILiftable,
-  IHostedLiftable,
-} from "../std";
+import { IInflightHost, ILiftable, IHostedLiftable } from "../std";
 
 export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
 
@@ -93,91 +86,6 @@ export function liftObject(obj: any): string {
   }
 
   throw new Error(`Unable to lift object of type ${obj?.constructor?.name}`);
-}
-
-/**
- * Bind a preflight object (either data or resource) to an inflight host, as part of the lifting process.
- *
- * - Primitives and other pure data (e.g. duration, datetime) objects are ignored.
- * - Arrays, sets and maps and structs (Objects) are recursively bound.
- * - Resources are bound to the host by calling their onLift() method.
- * - Resource types are bound to the host by calling their onLiftType() method.
- *
- * @param obj The object to lift.
- * @param host The host to lift to
- * @param ops The set of operations that may access the object (use "?" to indicate that we don't
- * know the operation)
- *
- * @internal
- */
-export function onLiftObject(
-  obj: any,
-  host: IInflightHost,
-  ops: string[] = []
-): void {
-  const tokens = getTokenResolver(obj);
-  if (tokens) {
-    return tokens.onLiftValue(host, obj);
-  }
-
-  switch (typeof obj) {
-    case "string":
-    case "boolean":
-    case "number":
-    case "undefined":
-      return;
-
-    case "object":
-      // if the object is a resource, register a lifting between it and the host.
-      if (typeof obj.onLift === "function") {
-        // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
-        // the host can instantiate a client for this resource.
-        obj.onLift(host, [...ops, INFLIGHT_INIT_METHOD_NAME]);
-        return;
-      }
-
-      if (Array.isArray(obj)) {
-        obj.forEach((item) => onLiftObject(item, host));
-        return;
-      }
-
-      if (obj instanceof Duration || obj instanceof Datetime) {
-        return;
-      }
-
-      if (obj instanceof JsonSchema) {
-        return;
-      }
-
-      if (obj instanceof Set) {
-        return Array.from(obj).forEach((item) => onLiftObject(item, host));
-      }
-
-      if (obj instanceof Map) {
-        Array.from(obj.values()).forEach((item) => onLiftObject(item, host));
-        return;
-      }
-
-      // structs are just plain objects
-      if (obj.constructor.name === "Object") {
-        Object.values(obj).forEach((item) => onLiftObject(item, host, ops));
-        return;
-      }
-
-      break;
-
-    case "function":
-      // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-      if (isLiftableType(obj)) {
-        obj.onLiftType(host, ops);
-        return;
-      }
-      break;
-  }
-
-  throw new Error(
-    `unable to serialize immutable data object of type ${obj.constructor?.name}`
-  );
 }
 
 export type LiftDepsMatrixRaw = Record<string, Array<[any, Array<string>]>>;
@@ -390,10 +298,6 @@ export function collectLifts(
   }
 
   return explored;
-}
-
-function isLiftableType(t: any): t is ILiftableType {
-  return t !== undefined && typeof t.onLiftType === "function";
 }
 
 /**
