@@ -1491,10 +1491,6 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
-				// the onLift method added with `jsify_register_bind_method`
-				if &m.name.clone().unwrap().name == "onLift" {
-					continue;
-				}
 				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
