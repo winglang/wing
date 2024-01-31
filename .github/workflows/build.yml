@@ -19,8 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "18.16.0"
-  PNPM_VERSION: "8.6.3"
+  NODE_VERSION: "20.11.0"
+  PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -206,8 +206,7 @@ jobs:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        # Pinned 20 to 20.5.1 until https://github.com/nodejs/node/issues/49497 is released
-        node: ["18", "20.5.1"]
+        node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -250,11 +249,11 @@ jobs:
         working-directory: tools/hangar
         run: |
           pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
-        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20'
         id: diff
         env:
           RAW_SHARD: ${{ matrix.shard }}
@@ -263,7 +262,7 @@ jobs:
           scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
-        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.diff.outputs.diff_name }}
