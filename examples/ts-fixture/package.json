@@ -7,9 +7,11 @@
   },
   "dependencies": {
     "@wingcloud/framework": "workspace:^",
-    "@winglang/sdk": "workspace:^",
-    "winglang": "workspace:^",
     "@winglibs/testfixture": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^18",
+    "winglang": "workspace:^"
   },
   "volta": {
     "extends": "../../package.json"

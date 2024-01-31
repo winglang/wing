@@ -1,7 +1,7 @@
-import { inflight, lift, main, std, cloud } from "@wingcloud/framework";
+import { inflight, lift, main, cloud } from "@wingcloud/framework";
 import * as winglib from "@winglibs/testfixture";
 
-main((app) => {
+main((app, test) => {
   const bucket = new cloud.Bucket(app, "B1");
   const f = new cloud.Function(
     app,
@@ -27,9 +27,8 @@ main((app) => {
     })
   );
 
-  new std.Test(
-    app,
-    "Test",
+  test(
+    "test",
     lift({ store, inf, f })
       .grant({ store: ["set"] })
       .inflight(async ({ store, inf, f }) => {
