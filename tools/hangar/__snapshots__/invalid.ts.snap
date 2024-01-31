@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:5
+error: Unknown symbol \\"instanceField\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^^^^^^^^^^^^^ Unknown symbol \\"instanceField\\"
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:5
+error: Unknown symbol \\"f\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^ Unknown symbol \\"f\\"
 
 
  
@@ -2590,20 +2590,16 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
-  |
-7 |     return new cloud.Bucket();
-  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-
-
-error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
-   |
-10 |     return new MyClass();
-   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-
-
+"runtime error: Cannot read properties of undefined (reading 'addChild')
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
+  | // explicit \`scope\`.
+  | bring cloud;
+  | 
+5 | class MyClass {
+  |       ^
+at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
+at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
+at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
  
  
 Tests 1 failed (1)
@@ -2842,13 +2838,6 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
-  |
-1 | let my_func1 = (callback: inflight (num): num) => {  };
-  | ^ Unknown symbol \\"this\\"
 
 
  
@@ -3579,11 +3568,11 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"error: \\"super\\" can only be used inside of classes
+"error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
-   |       ^^ \\"super\\" can only be used inside of classes
+   |       ^^ Cannot call super method because class Construct has no parent
 
 
 error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
@@ -3614,11 +3603,11 @@ error: super class \\"A\\" does not have a method named \\"child_method\\"
    |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
 
 
-error: Cannot call super method inside of a static method
+error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();
-   |           ^^^^^^ Cannot call super method inside of a static method
+   |           ^^^^^^ Cannot call super method because class Construct has no parent
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
