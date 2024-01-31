@@ -45,7 +45,7 @@ describe("new --list-templates", () => {
     console.log = log;
   });
 
-  test("wing new --list-templates", async () => {
+  test("does not contain duplicate template names", async () => {
     await init("", { listTemplates: true });
     expect(console.log).toHaveBeenCalledWith(templates.join("\n"));
 
