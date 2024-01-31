@@ -204,8 +204,6 @@ export abstract class Resource extends Construct implements IResource {
       }) and ops: ${JSON.stringify(ops)}`
     );
 
-    // TODO: move this to Lifting.lift
-
     for (const op of ops) {
       // Add connection metadata
       Node.of(this).addConnection({
