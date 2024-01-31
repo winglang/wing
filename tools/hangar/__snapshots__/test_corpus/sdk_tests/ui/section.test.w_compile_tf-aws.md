@@ -169,6 +169,7 @@
         "environment": {
           "variables": {
             "BUCKET_NAME_c70730ce": "${aws_s3_bucket.WidgetService_cloudBucket_4055DD59.bucket}",
+            "DYNAMODB_TABLE_NAME_fa6d1fc4": "${aws_dynamodb_table.WidgetService_cloudCounter_5741B0CD.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Handler-c876ab08",
             "WING_TARGET": "tf-aws"

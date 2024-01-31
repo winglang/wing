@@ -158,7 +158,7 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
   return result;
 }
 
-// for debugging...
+// for debugging
 // function printMatrix(data: LiftDepsMatrix): string {
 //   const lines = [];
 //   for (const [op, pairs] of Object.entries(data)) {
@@ -167,7 +167,7 @@ function parseMatrix(data: LiftDepsMatrixRaw): LiftDepsMatrix {
 //       if (Construct.isConstruct(obj)) {
 //         lines.push(`  ${obj.node.path}: [${[...objDeps]}]`);
 //       } else {
-//         lines.push(`  ${obj}: [${[...objDeps]}]`);
+//         lines.push(`  ${obj?.constructor?.name ?? obj}: [${[...objDeps]}]`);
 //       }
 //     }
 //     lines.push("}");
@@ -195,6 +195,13 @@ export function collectLifts(
   while (queue.length > 0) {
     // `obj` and `ops` are the preflight object and operations requested on it
     let [obj, ops]: [any, Array<string>] = queue.shift()!;
+
+    // request the $inflight_init op for every object
+    // hack: skip this if the "obj" is a function since it's probably a type
+    // which means it doesn't need to be instantiated
+    if (typeof obj !== "function") {
+      ops.push(INFLIGHT_INIT_METHOD_NAME);
+    }
 
     if (!explored.has(obj)) {
       explored.set(obj, new Set());
@@ -233,8 +240,11 @@ export function collectLifts(
     ) {
       matrix = {};
       for (const op of obj._supportedOps()) {
-        matrix[op] = new Map([]);
+        matrix[op] = new Map();
       }
+      // if _supportedOps is implemented, it's probably a construct so we
+      // model as if it has an $inflight_init operation
+      matrix[INFLIGHT_INIT_METHOD_NAME] = new Map();
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "function" &&
