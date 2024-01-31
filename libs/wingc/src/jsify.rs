@@ -1491,6 +1491,10 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
+				// the onLift method added with `jsify_register_bind_method`
+				if &m.name.clone().unwrap().name == "onLift" {
+					continue;
+				}
 				code.line(self.jsify_function(Some(class), m, false, ctx));
 			}
 
@@ -1781,7 +1785,7 @@ impl<'a> JSifier<'a> {
 		class: &AstClass,
 		class_type: TypeRef,
 		bind_method_kind: BindMethod,
-		ctx: &JSifyContext,
+		ctx: &mut JSifyContext,
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
@@ -1822,17 +1826,21 @@ impl<'a> JSifier<'a> {
 			// onLiftMatrix is a helper method that takes in information about all
 			// of the preflight objects and their corresponding ops, and
 			// calls the appropriate onLift method once for each object.
+
+			// add the body of the user defined `onLift` method if exists
+			let preflight_methods = class.preflight_methods(false);
+
+			if let Some(on_lift_fn) = preflight_methods.iter().find(|&&fd| fd.name.clone().unwrap().name == "onLift") {
+				if let FunctionBody::Statements(scope) = &on_lift_fn.body {
+					bind_method.line(self.jsify_scope_body(&scope, ctx));
+				}
+			}
+
 			bind_method.open(format!("{STDLIB_CORE}.onLiftMatrix(host, ops, {{"));
 
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
-					// skip any objects named "this" since lifting oneself is redundant
-					// TODO: is the fact that lift_qualifications includes "this" a bug? not sure if these need to be lifted
-					if code == "this" {
-						continue;
-					}
-
 					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 					bind_method.line(format!("[{code}, [{ops_strings}]],",));
 				}
