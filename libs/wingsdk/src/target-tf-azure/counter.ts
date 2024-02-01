@@ -21,6 +21,8 @@ import { IInflightHost } from "../std";
  * - Table names must be from 3 to 63 characters long.
  * - Some table names are reserved, including "tables".
  *   Attempting to create a table with a reserved table name returns error code 404 (Bad Request).
+ *
+ * @see https://learn.microsoft.com/en-us/rest/api/storageservices/understanding-the-table-service-data-model#table-names
  */
 const TABLE_NAME_OPTS: NameOptions = {
   maxLen: 63,
