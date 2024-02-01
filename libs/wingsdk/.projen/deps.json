@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18",
+      "version": "^20",
       "type": "build"
     },
     {
@@ -225,6 +225,11 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/data-tables",
+      "version": "13.2.2",
+      "type": "bundled"
+    },
+    {
       "name": "@azure/identity",
       "version": "3.1.3",
       "type": "bundled"
@@ -328,7 +333,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18.17.13",
+      "version": "^20.11.0",
       "type": "devenv"
     },
     {

@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=v20.0.0"
   },
   "main": "target/wing-fixture.wsim/.wing/preflight.js",
   "repository": {

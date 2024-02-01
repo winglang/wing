@@ -74,7 +74,7 @@ export class Function extends cloud.Function {
     this.functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
     const functionRuntime = "node";
-    const functionNodeVersion = "18"; // support fetch
+    const functionNodeVersion = "20"; // support fetch
 
     // Create Bucket to store function code
     const functionCodeBucket = new Bucket(this, "FunctionBucket");

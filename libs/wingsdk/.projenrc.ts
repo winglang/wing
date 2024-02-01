@@ -83,6 +83,7 @@ const project = new cdk.JsiiProject({
     "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
+    "@azure/data-tables@13.2.2",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // gcp client dependencies
@@ -130,7 +131,7 @@ const project = new cdk.JsiiProject({
   jest: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "18.13.0",
+  minNodeVersion: "20.0.0",
   projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
@@ -424,6 +425,6 @@ project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

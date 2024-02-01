@@ -8,10 +8,9 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=v20.0.0"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
@@ -32,7 +31,7 @@
     "wasi-js"
   ],
   "devDependencies": {
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "@winglang/wingc": "workspace:^",
     "bump-pack": "workspace:^",
     "tsup": "^6.7.0",
