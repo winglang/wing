@@ -54,9 +54,6 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     return `${wingfile.data} - Wing Console`;
   }, [wingfile.data]);
 
-  const termsConfig = trpc["app.termsConfig"].useQuery();
-  const acceptTerms = trpc["app.acceptTerms"].useMutation();
-
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
       path: selectedItems[0],
@@ -115,7 +112,5 @@ export const useLayout = ({ cloudAppState }: UseLayoutProps) => {
     onResourceClick,
     title,
     wingfile,
-    termsConfig,
-    acceptTerms: acceptTerms.mutate,
   };
 };
