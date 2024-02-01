@@ -3,7 +3,7 @@ import { join, extname } from "path";
 import { TestResultsJson } from "winglang/dist/commands/test/results";
 import { CompatibilityMatrix, CompatibilitySets } from "./types";
 
-export const SKIPPED_RESOURCES = ["TestRunner"];
+export const SKIPPED_RESOURCES = ["TestRunner", "State"];
 export const MATRIX_PATH = join(
   __dirname,
   "../../../docs/docs/04-standard-library/compatibility/compatibility.json"
