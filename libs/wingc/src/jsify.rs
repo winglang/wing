@@ -95,6 +95,7 @@ impl VisitorWithContext for JSifyContext<'_> {
 /// Preflight classes have two types of host binding methods:
 /// `Type` for binding static fields and methods to the host and
 /// `instance` for binding instance fields and methods to the host.
+#[derive(PartialEq)]
 enum BindMethod {
 	Type,
 	Instance,
@@ -1806,8 +1807,16 @@ impl<'a> JSifier<'a> {
 					.as_ref()
 					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
-				let is_static = matches!(var_kind, VariableKind::StaticMember);
-				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
+				// TODO: the following hints that instead of `onLiftType` and `onLift` we need to mark each lift as a
+				// field lift or a type lift. Then for each instance lifts we need to make sure to call their typeLiftToo.
+				if class.phase == Phase::Inflight {
+					// All lifts in inflight classes are "type" lifts since `this` has no preflight fields which need to be
+					// lifted based on the object's instance
+					bind_method_kind == BindMethod::Type
+				} else {
+					let is_static = matches!(var_kind, VariableKind::StaticMember);
+					(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
+				}
 			})
 			.collect_vec();
 

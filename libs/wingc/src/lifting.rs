@@ -6,6 +6,7 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
+		get_udt_definition_phase,
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
@@ -221,16 +222,16 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				// There's also a case when the inflight expression is a call on an inflight closure that's defined as
 				// a preflght class (a class with an inflight `handle` method`). In that case we can't qualify which preflight
 				// object is being accessed.
-				if expr_type.is_closure_class() && node.is_callee {
-						report_diagnostic(Diagnostic {
-							message: format!(
-								"Expression of type \"{expr_type}\" references an unknown inflight closure, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
-							),
-							span: Some(node.span.clone()),
-							annotations: vec![],
-							hints: vec![],
-						});
-					}
+				// if expr_type.is_closure_class() && node.is_callee {
+				// 		report_diagnostic(Diagnostic {
+				// 			message: format!(
+				// 				"Expression of type \"{expr_type}\" references an unknown inflight closure, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)"
+				// 			),
+				// 			span: Some(node.span.clone()),
+				// 			annotations: vec![],
+				// 			hints: vec![],
+				// 		});
+				// 	}
 			}
 
 			//---------------
@@ -257,10 +258,46 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m), property, &code, is_field);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, is_field, None);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
+			}
+			// else if expr_phase == Phase::Inflight && expr_type.is_closure() {
+			// 	// We assume any reference to a closure means it might be called and therefore we need to lift it if it's
+			// 	// a method of a class defined preflight.
+
+			// 	if let Some(sig) = expr_type.as_deep_function_sig() {
+			// 		if let Some(class_type) = sig.this_type {
+			// 			if let Some(class) = class_type.as_class() {
+			// 				if class.defined_in_phase == Phase::Preflight && class.phase == Phase::Inflight {
+			// 					println!("A reference to a method {:?} of an inflight class {class_type}!", v.ctx.current_property());
+
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// }
+			else if expr_phase == Phase::Inflight {
+				// If this is a reference to an inflight class defined preflight then we need to lift it and qualify it with the
+				// current property
+				if let Some(class) = expr_type.as_class() {
+					//let tmp_udt = UserDefinedType::for_name(&class.name);
+					//let class_defined_in = get_udt_definition_phase(&tmp_udt, v.ctx.current_env().expect("an env")).expect("a phase");
+					if class.phase == Phase::Inflight && class.defined_in_phase == Phase::Preflight {
+						if let Some(property) = v.ctx.current_property() {
+							let m = v.ctx.current_method().map(|(m,_)|m).expect("a method");
+							//println!("Access to {property} of preflight defined inflight class {expr_type}, should qualify method {m}!");
+							let mut lifts = v.lifts_stack.pop().unwrap();
+							// Get convert the expression to its type
+							// let code = v.jsify_expr_to_type(&code);
+							//lifts.lift(v.ctx.current_method().map(|(m,_)|m), Some(property), &code, false, Some(expr_type));
+							lifts.qualify_lifted_type(m, property, expr_type);
+							v.lifts_stack.push(lifts);
+							return;
+						}
+					}
+				}
 			}
 
 			visit::visit_expr(v, node);
@@ -282,14 +319,11 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		}
 
 		// Get the type of the udt
-		let udt_type = resolve_user_defined_type(
-			node,
-			self.ctx.current_env().expect("an env"),
-			self.ctx.current_stmt_idx(),
-		)
-		.unwrap_or(self.jsify.types.error());
+		let env = self.ctx.current_env().expect("an env");
+		let udt_type =
+			resolve_user_defined_type(node, env, self.ctx.current_stmt_idx()).unwrap_or(self.jsify.types.error());
 
-		// Since our target languages is isn't statically typed, we don't need to capture interfaces
+		// Since our target language is isn't statically typed, we don't need to capture interfaces
 		if udt_type.as_interface().is_some() {
 			visit::visit_user_defined_type(self, node);
 			return;
@@ -297,27 +331,33 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		//---------------
 		// LIFT
-		if udt_type.is_preflight_class() {
+		if get_udt_definition_phase(node, env).expect("a phase") == Phase::Preflight {
 			// jsify the expression so we can get the preflight code
 			let code = self.jsify_udt(&node);
 
 			let property = self.ctx.current_property();
 
 			// check that we can qualify the lift (e.g. determine which property is being accessed)
-			if property.is_none() {
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
-					span: Some(node.span.clone()),
-					annotations: vec![],
-					hints: vec![],
-				});
+			// if property.is_none() {
+			// 	report_diagnostic(Diagnostic {
+			// 		message: format!(
+			// 			"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
+			// 		span: Some(node.span.clone()),
+			// 		annotations: vec![],
+			// 		hints: vec![],
+			// 	});
 
-				return;
-			}
+			// 	return;
+			// }
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(self.ctx.current_method().map(|(m, _)| m), property, &code, false);
+			lifts.lift(
+				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
+				property,
+				&code,
+				false,
+				Some(udt_type),
+			);
 			self.lifts_stack.push(lifts);
 		}
 

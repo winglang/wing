@@ -702,6 +702,7 @@ impl<'a> JsiiImporter<'a> {
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 			phase: class_phase,
+			defined_in_phase: Phase::Preflight,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
 			lifts: None,

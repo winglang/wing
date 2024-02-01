@@ -327,6 +327,7 @@ pub struct Class {
 	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
+	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `defauld_member_phase`?
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
@@ -3877,6 +3878,7 @@ impl<'a> TypeChecker<'a> {
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
 			phase: ast_class.phase,
+			defined_in_phase: env.phase,
 			type_parameters: None, // TODO no way to have generic args in wing yet
 			docs: Docs::default(),
 			std_construct_args: ast_class.phase == Phase::Preflight,
@@ -4949,6 +4951,7 @@ impl<'a> TypeChecker<'a> {
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
 			phase: original_type_class.phase,
+			defined_in_phase: env.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
 			lifts: None,
@@ -5957,6 +5960,19 @@ pub fn resolve_user_defined_type_ref<'a>(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn get_udt_definition_phase(user_defined_type: &UserDefinedType, env: &SymbolEnv) -> Option<Phase> {
+	let mut nested_name = vec![&user_defined_type.root];
+	nested_name.extend(user_defined_type.fields.iter().collect_vec());
+
+	let lookup_result = env.lookup_nested(&nested_name, None);
+
+	if let LookupResult::Found(_, lookup_info) = lookup_result {
+		Some(lookup_info.env.phase)
+	} else {
+		None
 	}
 }
 
