@@ -24,9 +24,9 @@
   "devDependencies": {
     "typescript": "^4.9.5",
     "vitest": "^0.32.4",
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "npm-which": "^3.0.1",
-    "tsx": "^3.12.8"
+    "tsx": "^4.7.0"
   },
   "files": [
     "dist"
