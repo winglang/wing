@@ -79,7 +79,7 @@ export class Counter extends cloud.Counter {
       throw new Error("counters can only be bound by tfazure.Function for now");
     }
 
-    // TODO: investigate customized roles over builtin for finer grained access control
+    // TODO: investigate customized roles over builtin for finer grained access control: https://github.com/winglang/wing/issues/5598
     if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
       host.addPermission(this.storageAccount, {
         scope: this.storageAccount.id,
