@@ -231,7 +231,7 @@
     },
     {
       "name": "@azure/identity",
-      "version": "3.1.3",
+      "version": "4.0.1",
       "type": "bundled"
     },
     {
