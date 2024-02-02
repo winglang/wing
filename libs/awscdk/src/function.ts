@@ -42,7 +42,15 @@ export class Function extends cloud.Function implements IAwsFunction {
     // This is a workaround for https://github.com/aws/aws-cdk/issues/28732
     const inflightCodeApproximation = this._getCodeLines(inflight).join("\n");
     writeFileSync(this.entrypoint, inflightCodeApproximation);
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, [
+      '@aws-sdk/client-sso',
+      '@aws-sdk/client-sso-oidc',
+      '@aws-sdk/credential-provider-ini',
+      '@aws-sdk/credential-provider-process',
+      '@aws-sdk/credential-provider-sso',
+      '@aws-sdk/credential-provider-web-identity',
+      '@aws-sdk/token-providers'
+    ]);
 
     const logRetentionDays =
       props.logRetentionDays === undefined
@@ -70,7 +78,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.minutes(1),
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
-      logGroup: logs
+      logGroup: logs,
     });
 
     // hack: accessing private field from aws_lambda.AssetCode
@@ -88,7 +96,15 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // produce an inflight code bundle using the latest information, including all
     // changes made to captured variables/resources after the constructor
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, [
+      '@aws-sdk/client-sso',
+      '@aws-sdk/client-sso-oidc',
+      '@aws-sdk/credential-provider-ini',
+      '@aws-sdk/credential-provider-process',
+      '@aws-sdk/credential-provider-sso',
+      '@aws-sdk/credential-provider-web-identity',
+      '@aws-sdk/token-providers'
+    ]);
 
     // copy files from bundle.directory to this.assetPath
     const assetDir = resolve(App.of(this).outdir, this.assetPath);

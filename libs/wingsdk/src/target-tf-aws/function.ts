@@ -239,7 +239,15 @@ export class Function extends cloud.Function implements IAwsFunction {
     // write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.
 
-    const bundle = createBundle(this.entrypoint);
+    const bundle = createBundle(this.entrypoint, [
+      "@aws-sdk/client-sso",
+      "@aws-sdk/client-sso-oidc",
+      "@aws-sdk/credential-provider-ini",
+      "@aws-sdk/credential-provider-process",
+      "@aws-sdk/credential-provider-sso",
+      "@aws-sdk/credential-provider-web-identity",
+      "@aws-sdk/token-providers",
+    ]);
 
     // would prefer to create TerraformAsset in the constructor, but using a CDKTF token for
     // the "path" argument isn't supported
