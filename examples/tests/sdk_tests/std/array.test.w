@@ -399,3 +399,24 @@ test "removeFirst()" {
   assert(r2 == false);
   assert(mutArr.length == 3);
 }
+
+//-----------------------------------------------------------------------------
+// sort() for a mutable array
+
+test "sort()" {
+    let mutArr = MutArray<num>[3, 1, 2];
+    mutArr.sort();
+
+    assert(mutArr == MutArray<num>[1, 2, 3]);
+}
+
+//-----------------------------------------------------------------------------
+// sorted() for a non-mutable array
+
+test "sorted()" {
+    let arr = Array<num>[3, 1, 2];
+    let sortedArr = arr.sorted();
+
+    assert(sortedArr == Array<num>[1, 2, 3]);
+    assert(arr == Array<num>[3, 1, 2]);
+}

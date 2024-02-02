@@ -125,6 +125,17 @@ export class Array {
     searchElement;
     throw new Error("Macro");
   }
+
+  /**
+   * Returns the array sorted without mutating the inital
+   *
+   * @macro ((arr) => [...($self$)].sort())($self$)
+   *
+   * @returns same array, sorted
+   */
+  public sorted(): Array {
+    throw new Error("Macro");
+  }
 }
 
 /**
@@ -309,6 +320,17 @@ export class MutArray {
    */
   public removeFirst(value: T1): boolean {
     value;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the array, sorted and also mutated
+   *
+   * @macro $self$.sort()
+   *
+   * @returns same array, sorted
+   */
+  public sort(): Array {
     throw new Error("Macro");
   }
 }
