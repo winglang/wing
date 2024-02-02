@@ -24,6 +24,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.sorted">sorted</a></code> | Returns the array sorted without mutating the inital. |
 | <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
@@ -133,6 +134,14 @@ to search for.
 
 ---
 
+##### `sorted` <a name="sorted" id="@winglang/sdk.std.Array.sorted"></a>
+
+```wing
+sorted(): Array
+```
+
+Returns the array sorted without mutating the inital.
+
 ##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
 
 ```wing
@@ -192,6 +201,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add values to end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.removeFirst">removeFirst</a></code> | Removes first occurrence of a given value in an array. |
 | <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
+| <code><a href="#@winglang/sdk.std.MutArray.sort">sort</a></code> | Returns the array, sorted and also mutated. |
 
 ---
 
@@ -403,6 +413,14 @@ the index to set the value at.
 the value to set at the given index.
 
 ---
+
+##### `sort` <a name="sort" id="@winglang/sdk.std.MutArray.sort"></a>
+
+```wing
+sort(): Array
+```
+
+Returns the array, sorted and also mutated.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
