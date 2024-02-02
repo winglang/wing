@@ -93,7 +93,7 @@ export async function compile(options: CompileOptions) {
             if (ts.isStringLiteral(moduleSpecifier)) {
               const text = moduleSpecifier.text;
               if (text.startsWith(".")) {
-                const resolved = join(dirname(sourceFile.fileName), text);
+                const resolved = join(dirname(sourceFile.fileName), text).replaceAll("\\", "/");
                 moduleSpecifier = context.factory.createStringLiteral(resolved);
               }
             }
