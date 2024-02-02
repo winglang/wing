@@ -32,10 +32,12 @@ export async function compile(options: CompileOptions) {
 
   const emitResult = program.emit(undefined, undefined, undefined, undefined, {
     before: [
+      // This transformer finds all usages of `inflight` and does the following with the functions passed to it:
+      // 1. Replaces references to top-level imports with inline `require` calls
+      // 2. Throws an error if a reference to a non-import variable declared in an outer scope is used
       (context) => {
         const typeChecker = program.getTypeChecker();
 
-        // checks if a node is inside a block
         function isInBlock(node: ts.Node, block: ts.Block) {
           while (node) {
             if (node === block) {
@@ -57,17 +59,19 @@ export async function compile(options: CompileOptions) {
           return "";
         }
 
+        /**
+         * Checks if the given node is a reference to the `inflight` function from this library
+         */
         function isInflightSymbol(node: ts.Node) {
           let sym = typeChecker.getSymbolAtLocation(node);
           if (!sym) return false;
 
-          // find the original declaration of the symbol
           if (sym.name === "inflight") {
             const decl = sym.declarations?.at(0);
             if (!decl) {
               return true;
             } else if (
-              decl.getSourceFile().fileName.includes("/@wingcloud/framework/")
+              decl.getSourceFile().fileName.replaceAll("\\", "/").includes("/@wingcloud/framework/")
             ) {
               return true;
             } else {
@@ -136,7 +140,7 @@ export async function compile(options: CompileOptions) {
 
               // if this symbol was declared from an import statement, we need to recreate that inline
               const mostRecentDecl = sym.declarations?.at(0);
-              if (mostRecentDecl) {
+              if (mostRecentDecl?.getSourceFile() === sourceFile) {
                 if (ts.isImportClause(mostRecentDecl)) {
                   return requireFromClause(mostRecentDecl);
                 } else if (ts.isImportSpecifier(mostRecentDecl)) {
@@ -144,10 +148,7 @@ export async function compile(options: CompileOptions) {
                 } else if (ts.isNamespaceImport(mostRecentDecl)) {
                   return requireFromClause(mostRecentDecl.parent);
                 } else if (ts.isVariableDeclaration(mostRecentDecl)) {
-                  if (
-                    mostRecentDecl.getSourceFile() === sourceFile &&
-                    !isInBlock(mostRecentDecl, inflightClosureScope as ts.Block)
-                  ) {
+                  if (!isInBlock(mostRecentDecl, inflightClosureScope as ts.Block)) {
                     extraErrors.push({
                       messageText: `Unable to access "${sym.escapedName}" in inflight closure. Use 'lift( { ${sym.escapedName} } )' before 'inflight' and reference through ctx.`,
                       code: 0,
