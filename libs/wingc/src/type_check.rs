@@ -324,7 +324,6 @@ pub struct Class {
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
-	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
 	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `defauld_member_phase`?
@@ -345,8 +344,8 @@ impl Class {
 	pub fn get_closure_method(&self) -> Option<TypeRef> {
 		self
 			.methods(true)
-			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
-			.map(|(_, t)| t)
+			.find(|(name, v)| name == CLOSURE_CLASS_HANDLE_METHOD && v.type_.is_inflight_function())
+			.map(|(_, v)| v.type_)
 	}
 }
 
@@ -391,25 +390,23 @@ impl Display for Interface {
 }
 
 type ClassLikeIterator<'a> =
-	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>>;
+	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, VariableInfo)>>;
 
 pub trait ClassLike: Display {
 	fn get_env(&self) -> &SymbolEnv;
 
 	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			t.as_variable()
-				.unwrap()
-				.type_
-				.as_function_sig()
-				.map(|_| (s.clone(), t.as_variable().unwrap().type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			let v = sym_kind.as_variable().unwrap();
+			v.type_.as_function_sig().map(|_| (s.clone(), v.clone()))
 		})
 	}
 
 	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
-		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
-			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s, t.as_variable().unwrap().type_))
+		self.get_env().iter(with_ancestry).filter_map(|(s, sym_kind, ..)| {
+			let v = sym_kind.as_variable().unwrap();
+			if v.type_.as_function_sig().is_none() {
+				Some((s, v.clone()))
 			} else {
 				None
 			}
@@ -444,6 +441,32 @@ pub trait ClassLike: Display {
 		} else {
 			None
 		}
+	}
+
+	fn phase(&self) -> Phase {
+		// A class is considered a "preflight class" if it has any preflight fields.
+		// Having a preflight state means that different instances of the class
+		// might access different preflight data. Such instances need to be lifted
+		// into inflight individually. Non preflight class instances don't need to be
+		// lifted and can therefore be instantiated inflight.
+		if self
+			.fields(true)
+			.any(|(_, vi)| vi.kind == VariableKind::InstanceMember && vi.phase == Phase::Preflight)
+		{
+			return Phase::Preflight;
+		}
+
+		// If all memebers are phase independent, then this class is phase independent
+		if self
+			.get_env()
+			.iter(true)
+			.all(|(_, v, _)| v.as_variable().unwrap().phase == Phase::Independent)
+		{
+			return Phase::Independent;
+		}
+
+		// Otherwise, this is an inflight class
+		Phase::Inflight
 	}
 }
 
@@ -659,16 +682,14 @@ impl Subtype for Type {
 				// method type (aka "closure classes").
 
 				// First, check if there is exactly one inflight method in the interface
-				let mut inflight_methods = iface
-					.methods(true)
-					.filter(|(_name, type_)| type_.is_inflight_function());
+				let mut inflight_methods = iface.methods(true).filter(|(_name, v)| v.type_.is_inflight_function());
 				let handler_method = inflight_methods.next();
 				if handler_method.is_none() || inflight_methods.next().is_some() {
 					return false;
 				}
 
 				// Next, check that the method's name is "handle"
-				let (handler_method_name, handler_method_type) = handler_method.unwrap();
+				let (handler_method_name, handler_method_var) = handler_method.unwrap();
 				if handler_method_name != CLOSURE_CLASS_HANDLE_METHOD {
 					return false;
 				}
@@ -681,7 +702,7 @@ impl Subtype for Type {
 				};
 
 				// Finally check if they're subtypes
-				res_handle_type.is_subtype_of(&handler_method_type)
+				res_handle_type.is_subtype_of(&handler_method_var.type_)
 			}
 			(Self::Class(res), Self::Function(_)) => {
 				// To support flexible inflight closures, we say that any
@@ -929,7 +950,7 @@ unsafe impl Send for TypeRef {}
 impl TypeRef {
 	pub fn as_preflight_class(&self) -> Option<&Class> {
 		if let Type::Class(ref class) = **self {
-			if class.phase == Phase::Preflight {
+			if class.phase() == Phase::Preflight {
 				return Some(class);
 			}
 		}
@@ -1053,7 +1074,7 @@ impl TypeRef {
 
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
-			return class.phase == Phase::Preflight;
+			return class.phase() == Phase::Preflight;
 		}
 
 		return false;
@@ -1064,10 +1085,10 @@ impl TypeRef {
 		self.as_function_sig().is_some() || self.is_closure_class()
 	}
 
-	/// Returns whether type represents a preflight class representing and inflight closure.
+	/// Returns whether type represents a class representing an inflight closure.
 	pub fn is_closure_class(&self) -> bool {
-		if let Some(ref class) = self.as_preflight_class() {
-			return class.get_closure_method().is_some();
+		if let Some(ref class) = self.as_class() {
+			return class.get_closure_method().is_some() && class.defined_in_phase == Phase::Preflight;
 		}
 		false
 	}
@@ -1171,7 +1192,7 @@ impl TypeRef {
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured
-			Type::Class(c) => c.phase == Phase::Preflight,
+			Type::Class(c) => c.phase() == Phase::Preflight,
 		}
 	}
 
@@ -1214,7 +1235,7 @@ impl TypeRef {
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
 			Type::Struct(ref s) => {
-				for (_, t) in s.fields(true) {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
 					if !t.is_json_legal_value() {
 						return false;
 					}
@@ -1251,8 +1272,8 @@ impl TypeRef {
 		match &**self {
 			Type::Struct(s) => {
 				// check all its fields are json compatible
-				for (_, field) in s.fields(true) {
-					if !field.has_json_representation() {
+				for t in s.fields(true).map(|(_, v)| v.type_) {
+					if !t.has_json_representation() {
 						return false;
 					}
 				}
@@ -2155,7 +2176,7 @@ impl<'a> TypeChecker<'a> {
 
 							// error if we are trying to instantiate a preflight in a static method
 							// without an explicit scope (there is no "this" to use as the scope)
-							if class.phase == Phase::Preflight && obj_scope.is_none() {
+							if class.phase() == Phase::Preflight && obj_scope.is_none() {
 								// check if there is a "this" symbol in the current environment
 								let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
 
@@ -2176,14 +2197,16 @@ impl<'a> TypeChecker<'a> {
 								}
 							}
 
-							if class.phase == Phase::Independent || env.phase == class.phase {
+							if class.phase() == Phase::Independent || env.phase == class.phase() {
 								(&class.env, &class.name)
 							} else {
 								self.spanned_error(
 									exp,
 									format!(
 										"Cannot create {} class \"{}\" in {} phase",
-										class.phase, class.name, env.phase
+										class.phase(),
+										class.name,
+										env.phase
 									),
 								);
 								return (self.types.error(), Phase::Independent);
@@ -2339,21 +2362,9 @@ impl<'a> TypeChecker<'a> {
 					// Make sure this is a function signature type
 					let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 						func_sig.clone()
-					} else if let Some(class) = func_type.as_preflight_class() {
-						// return the signature of the "handle" method
-						let lookup_res = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into());
-						let handle_type = if let Some(method) = lookup_res {
-							method.type_
-						} else {
-							self.spanned_error(callee, "Expected a function or method");
-							return self.resolved_error();
-						};
-						if let Some(sig_type) = handle_type.as_function_sig() {
-							sig_type.clone()
-						} else {
-							self.spanned_error(callee, "Expected a function or method");
-							return self.resolved_error();
-						}
+					} else if func_type.is_closure_class() {
+						let handle_type = func_type.as_class().unwrap().get_closure_method().unwrap();
+						handle_type.as_function_sig().unwrap().clone()
 					} else {
 						self.spanned_error(
 							callee,
@@ -2608,7 +2619,8 @@ impl<'a> TypeChecker<'a> {
 						.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 					// Verify that all expected fields are present and are the right type
-					for (name, field_type) in st.fields(true) {
+					for (name, v) in st.fields(true) {
+						let field_type = v.type_;
 						match fields.get(name.as_str()) {
 							Some(field_exp) => {
 								let t = field_types.get(name.as_str()).unwrap();
@@ -3877,7 +3889,6 @@ impl<'a> TypeChecker<'a> {
 			parent: parent_class,
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
-			phase: ast_class.phase,
 			defined_in_phase: env.phase,
 			type_parameters: None, // TODO no way to have generic args in wing yet
 			docs: Docs::default(),
@@ -4016,7 +4027,8 @@ impl<'a> TypeChecker<'a> {
 			};
 
 			// Check all methods are implemented
-			for (method_name, method_type) in interface_type.methods(true) {
+			for (method_name, v) in interface_type.methods(true) {
+				let method_type = v.type_;
 				if let Some(symbol) = &mut class_type
 					.as_class_mut()
 					.unwrap()
@@ -4561,9 +4573,9 @@ impl<'a> TypeChecker<'a> {
 			return;
 		};
 
-		// If the parent class is phase independent than its init name is just "init" regadless of
+		// If the parent class is phase independent then its init name is just "init" regadless of
 		// whether we're inflight or not.
-		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
+		let parent_init_name = if parent_class.as_class().unwrap().phase() == Phase::Independent {
 			CLASS_INIT_NAME
 		} else {
 			init_name
@@ -4573,13 +4585,13 @@ impl<'a> TypeChecker<'a> {
 			.as_class()
 			.unwrap()
 			.methods(false)
-			.filter(|(name, _type)| name == parent_init_name)
-			.collect_vec()[0]
+			.find(|(name, ..)| name == parent_init_name)
+			.unwrap()
 			.1;
 
 		self.type_check_arg_list_against_function_sig(
 			&arg_list,
-			parent_initializer.as_function_sig().unwrap(),
+			parent_initializer.type_.as_function_sig().unwrap(),
 			super_constructor_call,
 			arg_list_types,
 		);
@@ -4950,7 +4962,6 @@ impl<'a> TypeChecker<'a> {
 			implements: original_type_class.implements.clone(),
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
-			phase: original_type_class.phase,
 			defined_in_phase: env.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
@@ -5396,7 +5407,7 @@ impl<'a> TypeChecker<'a> {
 						if property.name == FROM_JSON || property.name == TRY_FROM_JSON {
 							// we need to validate that only structs with all valid json fields can have a fromJson method
 							for (name, field) in s.fields(true) {
-								if !field.has_json_representation() {
+								if !field.type_.has_json_representation() {
 									self.spanned_error_with_var(
 										property,
 										format!(
@@ -5690,14 +5701,17 @@ impl<'a> TypeChecker<'a> {
 
 		if let Some(parent_class) = parent_type.as_class() {
 			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
-			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
+			if (parent_class.phase() == phase) || (phase == Phase::Inflight && parent_class.phase() == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
 					parent,
 					format!(
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
-						name, phase, parent_class.phase, parent_class.name
+						name,
+						phase,
+						parent_class.phase(),
+						parent_class.name
 					),
 				);
 				(None, None)

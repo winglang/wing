@@ -1902,7 +1902,7 @@ fn parent_class_phase(ctx: &JSifyContext<'_>) -> Phase {
 		.expect("a parent class")
 		.as_class()
 		.expect("a class")
-		.phase;
+		.phase();
 	parent_class_phase
 }
 

@@ -284,7 +284,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				if let Some(class) = expr_type.as_class() {
 					//let tmp_udt = UserDefinedType::for_name(&class.name);
 					//let class_defined_in = get_udt_definition_phase(&tmp_udt, v.ctx.current_env().expect("an env")).expect("a phase");
-					if class.phase == Phase::Inflight && class.defined_in_phase == Phase::Preflight {
+					if class.phase() == Phase::Inflight && class.defined_in_phase == Phase::Preflight {
 						if let Some(property) = v.ctx.current_property() {
 							let m = v.ctx.current_method().map(|(m,_)|m).expect("a method");
 							//println!("Access to {property} of preflight defined inflight class {expr_type}, should qualify method {m}!");
