@@ -63,7 +63,7 @@ describe("storage tests", () => {
             cli_target: "fake-aws",
             cli_platform: "xbox,ps5",
             cli_version: "4.2.0",
-            cli_options: { "-t": "fake-aws" },
+            "cli_options_-t": "fake-aws",
             cli_wing_console_version: "1.2.3",
             cli_wing_sdk_version: "4.5.6",
             os_arch: "x64",
