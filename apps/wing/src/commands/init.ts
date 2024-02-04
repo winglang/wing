@@ -17,8 +17,8 @@ const execPromise = promisify(exec);
  * This is passed from Commander to the `init` function.
  */
 export interface InitOptions {
-  readonly template?: string;
-  readonly language?: string;
+  template?: string;
+  language?: string;
   readonly listTemplates?: boolean;
 }
 
@@ -94,7 +94,9 @@ export async function init(template: string, options: InitOptions = {}): Promise
         `Unknown language: "${language}". Please select from "wing" or "typescript".`
       );
   }
-
+  // Since this object is used by our analytics collector
+  options.language = language;
+  options.template = template;
   // Check if the template exists for the selected language
   const templatePath = join(PROJECT_TEMPLATES_DIR, language, template);
   const templateExists = await exists(templatePath);

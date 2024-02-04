@@ -8,7 +8,7 @@ export interface CLIData {
   platform: string;
   target: string;
   version: string;
-  options: string;
+  options: Record<string, string>;
   entrypoint?: string;
   wing_sdk_version?: string;
   wing_console_version?: string;
@@ -28,7 +28,7 @@ export class CLICollector extends Collector {
     return {
       platform: platform.map((p: string) => basename(p)).join(","), // only report the platform name, not the full path
       target: determineTargetFromPlatforms(platform),
-      options: `${JSON.stringify(this.cmd.opts())}`,
+      options: this.cmd.opts(),
       version: PACKAGE_VERSION,
       wing_sdk_version: this.tryGetModuleVersion("@winglang/sdk/package.json"),
       wing_console_version: this.tryGetModuleVersion(`@wingconsole/app/package.json`),

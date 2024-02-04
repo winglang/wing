@@ -229,7 +229,7 @@ async function main() {
         .argParser((value) => value ?? "wing")
     )
     .addOption(new Option("--list-templates", "List available templates"))
-    .hook("preAction", collectAnalyticsHook)
+    .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
     .action(runSubCommand("init"));
 
   program
