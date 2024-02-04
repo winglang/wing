@@ -395,5 +395,5 @@ export class Util {
       body: await response.text(),
     };
   }
-  private constructor() {}
+  private constructor() { }
 }
