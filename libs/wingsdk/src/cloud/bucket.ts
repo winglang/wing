@@ -107,7 +107,6 @@ export class Bucket extends Resource {
   /**
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
-   * @internal
    */
   private _getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
@@ -130,7 +129,6 @@ export class Bucket extends Resource {
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
-   * @internal
    */
   private _createInflightHandler(
     eventType: BucketEventType,
@@ -150,7 +148,6 @@ export class Bucket extends Resource {
    * @param eventNames the events to subscribe the inflight function to
    * @param inflight the code to run upon event
    * @param opts
-   * @internal
    */
   private _createBucketEvent(
     eventNames: BucketEventType[],

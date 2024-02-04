@@ -3,8 +3,8 @@ on:
   workflow_call: {}
 
 env:
-  NODE_VERSION: "18.16.0"
-  PNPM_VERSION: "8.6.3"
+  NODE_VERSION: "20.11.0"
+  PNPM_VERSION: "8.15.1"
 
 jobs:
   update:
@@ -47,7 +47,7 @@ jobs:
           base: main
           draft: true #TODO: remove it soon!
           commit-message: |-
-            chore(docs): update competability matrix
+            chore(docs): update competibility matrix
 
             [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -55,7 +55,7 @@ jobs:
 
             *Automatically created via the "matrix-update" workflow*
           body: |-
-            chore(docs): update competability matrix
+            chore(docs): update competibility matrix
 
             [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 

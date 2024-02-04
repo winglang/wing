@@ -11,12 +11,14 @@ const PARENT_PROPERTIES: Set<string> = new Set([
 
 function isCloudProp(resourceName: string, opName: string): boolean {
   if ((cloud as any)[resourceName]?.prototype) {
-    return Object.getOwnPropertyNames((cloud as any)[resourceName].prototype).includes(opName);
+    return Object.getOwnPropertyNames(
+      (cloud as any)[resourceName].prototype
+    ).includes(opName);
   }
-  if (!!(ex as any)[resourceName]) {
-    return new Set(
-      Object.getOwnPropertyNames((ex as any)[resourceName].prototype)
-    ).has(opName);
+  if ((ex as any)[resourceName]?.prototype) {
+    return Object.getOwnPropertyNames(
+      (ex as any)[resourceName].prototype
+    ).includes(opName);
   }
 
   return true;
