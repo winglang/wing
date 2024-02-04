@@ -17,11 +17,7 @@ import {
   createProcedure,
   createRouter,
 } from "../utils/createRouter.js";
-import {
-  isTermsAccepted,
-  acceptTerms,
-  getLicense,
-} from "../utils/terms-and-conditions.js";
+import { isTermsAccepted, getLicense } from "../utils/terms-and-conditions.js";
 import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -55,16 +51,6 @@ export const createAppRouter = () => {
     }),
     "app.wingfile": createProcedure.query(({ ctx }) => {
       return ctx.wingfile.split("/").pop();
-    }),
-    "app.termsConfig": createProcedure.query(({ ctx }) => {
-      return {
-        requireAcceptTerms: ctx.requireAcceptTerms,
-        accepted: isTermsAccepted(),
-        license: getLicense(),
-      };
-    }),
-    "app.acceptTerms": createProcedure.mutation(() => {
-      acceptTerms(true);
     }),
     "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
       return {
@@ -465,6 +451,29 @@ export const createAppRouter = () => {
         const { default: launch } = await import("launch-editor");
         launch(`${input.path}:${input.line}:${input.column}`);
       }),
+
+    "app.analytics": createProcedure.query(async ({ ctx }) => {
+      const requireSignIn = (await ctx.requireSignIn?.()) ?? false;
+      if (requireSignIn) {
+        ctx.analytics?.track("console_sign_in_shown");
+      }
+      return {
+        anonymousId: ctx.analyticsAnonymousId,
+        requireSignIn,
+      };
+    }),
+
+    "app.analytics.signInClicked": createProcedure.mutation(async ({ ctx }) => {
+      ctx.analytics?.track("console_sign_in_clicked");
+      return {};
+    }),
+
+    "app.analytics.notifySignedIn": createProcedure.mutation(
+      async ({ ctx }) => {
+        ctx.analytics?.track("console_sign_in_completed");
+        await ctx.notifySignedIn?.();
+      },
+    ),
 
     /**
      * Warning! Subscribing to this procedure will override the default behavior of opening files in the editor

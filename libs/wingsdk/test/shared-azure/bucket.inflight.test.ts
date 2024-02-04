@@ -18,8 +18,8 @@ import {
   ContainerListBlobsOptions,
 } from "@azure/storage-blob";
 import { test, expect, beforeEach, vi } from "vitest";
+import { BucketClient } from "../../src/shared-azure/bucket.inflight";
 import { Datetime } from "../../src/std";
-import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
 
 vi.mock("@azure/storage-blob");
 
