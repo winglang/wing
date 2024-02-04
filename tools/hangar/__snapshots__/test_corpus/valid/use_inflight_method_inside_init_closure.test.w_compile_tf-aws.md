@@ -178,7 +178,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);

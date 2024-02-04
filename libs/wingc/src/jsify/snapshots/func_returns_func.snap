@@ -29,12 +29,12 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      async (s) => {
-        return async () => {
+      (async (s) => {
+        return (async () => {
           s;
           return true;
-        };
-      };
+        });
+      });
     }
   }
   return $Closure1;
@@ -55,7 +55,7 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

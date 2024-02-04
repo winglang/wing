@@ -28,9 +28,9 @@ module.exports = function({ $util_Util, $x }) {
       return $obj;
     }
     async handle() {
-      (await $util_Util.waitUntil(async () => {
+      (await $util_Util.waitUntil((async () => {
         return true;
-      }, { interval: $x }));
+      }), { interval: $x }));
     }
   }
   return $Closure1;
@@ -52,7 +52,7 @@ const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

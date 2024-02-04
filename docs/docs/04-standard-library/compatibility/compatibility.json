@@ -377,8 +377,7 @@
         "issue": 4635
       },
       "tf-gcp": {
-        "implemented": false,
-        "issue": 4599
+        "implemented": true
       },
       "awscdk": {
         "implemented": true
@@ -725,8 +724,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -743,8 +741,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -761,8 +758,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -779,8 +775,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -797,8 +792,7 @@
         "implemented": true
       },
       "tf-azure": {
-        "implemented": false,
-        "issue": 629
+        "implemented": true
       },
       "tf-gcp": {
         "implemented": true
@@ -1064,7 +1058,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "post": {
@@ -1083,7 +1077,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "put": {
@@ -1102,7 +1096,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "delete": {
@@ -1121,7 +1115,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "patch": {
@@ -1140,7 +1134,7 @@
         "issue": 624
       },
       "awscdk": {
-        "implemented": false
+        "implemented": true
       }
     },
     "any": {

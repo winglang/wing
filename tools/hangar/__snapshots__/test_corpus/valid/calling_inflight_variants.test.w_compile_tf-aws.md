@@ -70,9 +70,9 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(two, 2), "two == 2");
     }
     async $inflight_init() {
-      this.inflight2 = async () => {
+      this.inflight2 = (async () => {
         return 2;
-      };
+      });
       const ret = (await this.inflight2());
       $helpers.assert($helpers.eq(ret, 2), "ret == 2");
     }
@@ -117,7 +117,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -184,7 +184,7 @@ class $Root extends $stdlib.std.Resource {
         super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

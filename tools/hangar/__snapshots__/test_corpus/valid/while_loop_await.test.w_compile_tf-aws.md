@@ -13,9 +13,9 @@ module.exports = function({  }) {
     }
     async handle(body) {
       const i = 0;
-      const iterator = async (j) => {
+      const iterator = (async (j) => {
         return (j + 1);
-      };
+      });
       while (((await iterator(i)) < 3)) {
         console.log(String.raw({ raw: ["", ""] }, i));
       }
@@ -190,7 +190,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

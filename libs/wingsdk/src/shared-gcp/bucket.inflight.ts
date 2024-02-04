@@ -3,9 +3,12 @@ import mime from "mime-types";
 import {
   BucketDeleteOptions,
   BucketSignedUrlOptions,
+  BucketSignedUrlAction,
   BucketPutOptions,
   IBucketClient,
   ObjectMetadata,
+  BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { Datetime, Json } from "../std";
 
@@ -115,23 +118,32 @@ export class BucketClient implements IBucketClient {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     try {
-      const body = await this.bucket.file(key).download();
-      return body.toString();
+      const body = await this.bucket
+        .file(key)
+        .download({ start: options?.startByte, end: options?.endByte });
+      return new TextDecoder("utf8", { fatal: true }).decode(body[0]);
     } catch (error) {
-      throw new Error(`Failed to get object. (key=${key})`);
+      throw new Error(
+        `Failed to get object. (key=${key}) ${(error as Error).stack}`
+      );
     }
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined> {
     try {
       if (await this.exists(key)) {
-        return await this.get(key);
+        return await this.get(key, options);
       }
       return undefined;
     } catch (error) {
-      throw new Error(`Failed to tryGet object. (key=${key})`);
+      throw new Error(
+        `Failed to tryGet object. (key=${key}) ${(error as Error).stack}`
+      );
     }
   }
 
@@ -211,13 +223,47 @@ export class BucketClient implements IBucketClient {
     return `https://storage.googleapis.com/${this.bucketName}/${key}`;
   }
 
-  // TODO: implement signedUrl
-  // https://github.com/winglang/wing/issues/4599
-
+  /**
+   * Returns a presigned URL for the specified key in the bucket.
+   * @param key The key of the object in the bucket.
+   * @param opts The options including the action and the duration for the signed URL.
+   * @returns The presigned URL string.
+   * @inflight
+   */
   public async signedUrl(
-    _key: string,
-    _options?: BucketSignedUrlOptions
+    key: string,
+    opts: BucketSignedUrlOptions
   ): Promise<string> {
-    throw new Error("Method not implemented.");
+    const gcsFile = this.bucket.file(key);
+    let gcsAction: "read" | "write" | "delete" | "resumable";
+
+    // Set default action to DOWNLOAD if not provided
+    const action = opts?.action ?? BucketSignedUrlAction.DOWNLOAD;
+
+    // Set the GCS action
+    switch (action) {
+      case BucketSignedUrlAction.DOWNLOAD:
+        if (!(await this.exists(key))) {
+          throw new Error(
+            `Cannot provide signed url for a non-existent key (key=${key})`
+          );
+        }
+        gcsAction = "read";
+        break;
+      case BucketSignedUrlAction.UPLOAD:
+        gcsAction = "write";
+        break;
+      default:
+        throw new Error(`Invalid action: ${opts?.action}`);
+    }
+
+    // Generate the presigned URL
+    const [signedUrl] = await gcsFile.getSignedUrl({
+      version: "v4",
+      action: gcsAction,
+      expires: Date.now() + (opts?.duration?.seconds ?? 900) * 1000,
+    });
+
+    return signedUrl;
   }
 }

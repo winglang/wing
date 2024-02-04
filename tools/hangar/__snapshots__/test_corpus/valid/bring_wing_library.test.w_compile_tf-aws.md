@@ -26,14 +26,18 @@ module.exports = function({ $fixture_Store }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({ $myutil_Util }) {
   class Store {
-    constructor({ $this_data }) {
+    constructor({ $this_data, $this_handlers }) {
       this.$this_data = $this_data;
+      this.$this_handlers = $this_handlers;
     }
     static async makeKeyInflight(name) {
       return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
     async set(message) {
       (await this.$this_data.put("data.txt", (await $myutil_Util.double(message))));
+      for (const handler of this.$this_handlers) {
+        (await handler(message));
+      }
     }
   }
   return Store;
@@ -48,6 +52,9 @@ const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class Util {
     constructor({  }) {
+    }
+    static async makeKeyInflight(name) {
+      return (require("@winglibs/testfixture/util.js")["makeKeyInflight"])(name)
     }
     static async double(msg) {
       return String.raw({ raw: ["", "", ""] }, msg, msg);
@@ -123,7 +130,7 @@ const testfixture2 = require("./preflight.testfixture-5.js");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -182,12 +189,16 @@ const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const myutil = require("./preflight.util-2.js");
 class Store extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
+  constructor($scope, $id, options) {
     super($scope, $id);
     this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    this.handlers = [];
   }
   static makeKey(name) {
     return (require("@winglibs/testfixture/util.js")["makeKey"])(name)
+  }
+  onSet(handler) {
+    this.handlers.push(handler);
   }
   static _toInflightType() {
     return `
@@ -202,6 +213,7 @@ class Store extends $stdlib.std.Resource {
         const StoreClient = ${Store._toInflightType()};
         const client = new StoreClient({
           $this_data: ${$stdlib.core.liftObject(this.data)},
+          $this_handlers: ${$stdlib.core.liftObject(this.handlers)},
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
@@ -215,10 +227,12 @@ class Store extends $stdlib.std.Resource {
     $stdlib.core.onLiftMatrix(host, ops, {
       "$inflight_init": [
         [this.data, []],
+        [this.handlers, []],
       ],
       "set": [
         [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
         [this.data, ["put"]],
+        [this.handlers, []],
       ],
     });
     super.onLift(host, ops);
@@ -282,7 +296,7 @@ class Util extends $stdlib.std.Resource {
     `;
   }
   _supportedOps() {
-    return [...super._supportedOps(), "double", "$inflight_init"];
+    return [...super._supportedOps(), "makeKeyInflight", "double", "$inflight_init"];
   }
 }
 module.exports = { Util };

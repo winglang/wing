@@ -3,6 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -48,6 +49,8 @@ export interface FunctionProps {
  * @abstract
  */
 export class Function extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
   private readonly handler!: IFunctionHandler;
 
@@ -170,7 +173,10 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IInflight {}
+export interface IFunctionHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFunctionHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IFunctionHandler`.

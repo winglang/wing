@@ -32,9 +32,9 @@ module.exports = function({ $b }) {
     }
     async handle() {
       (await $b.put("hello", "world"));
-      async () => {
+      (async () => {
         (await $b.put("hello", "world"));
-      };
+      });
     }
   }
   return $Closure1;
@@ -56,7 +56,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);

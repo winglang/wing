@@ -16,3 +16,17 @@ myfunc(1);
 ((var x: num) => {
   assert(x == 1);
 })(1);
+
+// Immediately invoked function expression in inflight
+struct S {
+  a: str;
+}
+
+test "" {
+  let x: S = S {
+    a: () => {
+      return "b";
+    }()
+  };
+  assert(x.a == "b");
+}
