@@ -4,7 +4,7 @@ id: local
 keywords: [Wing Local, Wing testing, Wing Console installation, Wing Console usage, Wing Console setup]
 ---
 
-The **Wing Console** is a web application that provides an interface that can be used to view, explore, and interact with Wing applications as you develop them on the local machine.
+The **Wing Console** is a local web app to view, explore, and interact with Wing applications as you develop them on the local machine.
 
 ## Starting the Wing Console
 
