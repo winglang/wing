@@ -347,7 +347,7 @@ class WingRestApi extends Construct {
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
-          // Retrieves the API specification from `props.getApiSpec()`.
+          // Retrieves the API specification.
           const apiSpec = props.getApiSpec();
 
           // Merges the specification with `defaultResponse` to handle requests to undefined routes (`/{proxy+}`).
