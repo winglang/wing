@@ -411,7 +411,7 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
@@ -2590,7 +2590,7 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"runtime error: Cannot read properties of undefined (reading 'addChild')
+"Error: Cannot read properties of undefined (reading 'addChild')
   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
   | // explicit \`scope\`.
   | bring cloud;
