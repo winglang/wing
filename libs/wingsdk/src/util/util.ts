@@ -141,6 +141,7 @@ export class Util {
     opts?: ShellOptions
   ): Promise<String> {
     const shellOpts = {
+      windowsHide: true,
       cwd: opts?.cwd,
       env:
         opts?.inheritEnv === true
@@ -183,6 +184,8 @@ export class Util {
     opts?: ExecOptions
   ): Promise<Output> {
     const execOpts = {
+      windowsHide: true,
+      shell: false,
       cwd: opts?.cwd,
       env:
         opts?.inheritEnv === true

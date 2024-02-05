@@ -52,8 +52,9 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   };
 }
 
-function sanitizeOutput(output: string) {
-  return output
+export function sanitizeOutput(output: string) {
+  return (
+    output
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // Normalize windows slashes
@@ -63,10 +64,12 @@ function sanitizeOutput(output: string) {
       // Remove absolute stacktraces
       .replace(/\(\/.+:\d+:\d+\)/g, "(<ABSOLUTE>:LINE:COL)")
       // Remove absolute paths
-      .replace(/(?<=[\s"])(\/|\w:)\S+\/(.+)/g, "<ABSOLUTE>/$2")
+      .replace(/(?<=[\s"])(\/|\w:)\S+\/(\S+)/g, "<ABSOLUTE>/$2")
+      // remove references to random state files
+      .replace(/\/.state\/[^ '"]+/g, "/.state/<STATE_FILE>")
       // Remove duration from test results
       .replace(/Duration \d+m[\d.]+s/g, "Duration <DURATION>")
-  ;
+  );
 }
 
 export function sanitize_json_paths(path: string) {

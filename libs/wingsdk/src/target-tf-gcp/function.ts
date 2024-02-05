@@ -1,16 +1,13 @@
 import { writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { join } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket } from "./bucket";
-import {
-  RoleType,
-  addBucketPermission,
-  addFunctionPermission,
-} from "./permissions";
 import { core } from "..";
 import { CloudfunctionsFunction } from "../.gen/providers/google/cloudfunctions-function";
+import { ProjectIamCustomRole } from "../.gen/providers/google/project-iam-custom-role";
+import { ProjectIamMember } from "../.gen/providers/google/project-iam-member";
 import { ServiceAccount } from "../.gen/providers/google/service-account";
 import { StorageBucketObject } from "../.gen/providers/google/storage-bucket-object";
 import * as cloud from "../cloud";
@@ -21,7 +18,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IInflightHost, IResource } from "../std";
+import { IInflightHost } from "../std";
 
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
@@ -38,7 +35,12 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 export class Function extends cloud.Function {
   private readonly function: CloudfunctionsFunction;
   private readonly functionServiceAccount: ServiceAccount;
-  private permissions: Set<string> = new Set();
+  private readonly functionCustomRole: ProjectIamCustomRole;
+  private readonly permissions: Set<string> = new Set([
+    "cloudfunctions.functions.get",
+  ]);
+
+  private assetPath: string | undefined; // posix path
 
   constructor(
     scope: Construct,
@@ -50,33 +52,6 @@ export class Function extends cloud.Function {
 
     // app is a property of the `cloud.Function` class
     const app = App.of(this) as App;
-
-    // bundled code is guaranteed to be in a fresh directory
-    const bundle = createBundle(this.entrypoint, [
-      "@google-cloud/functions-framework",
-    ]);
-
-    const packageJson = join(bundle.directory, "package.json");
-
-    writeFileSync(
-      packageJson,
-      JSON.stringify(
-        {
-          main: "index.js",
-          dependencies: {
-            "@google-cloud/functions-framework": "^3.0.0",
-          },
-        },
-        null,
-        2
-      )
-    );
-
-    // Create Cloud Function executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: resolve(bundle.directory),
-      type: AssetType.ARCHIVE,
-    });
 
     // memory limits must be between 128 and 8192 MB
     if (props?.memory && (props.memory < 128 || props.memory > 8192)) {
@@ -105,13 +80,21 @@ export class Function extends cloud.Function {
       {
         name: "objects",
         bucket: FunctionBucket.bucket.name,
-        source: asset.path,
+        source: Lazy.stringValue({
+          produce: () => {
+            if (!this.assetPath) {
+              throw new Error("assetPath was not set");
+            }
+            return this.assetPath;
+          },
+        }),
       }
     );
+
     // Step 1: Create Custom Service Account
     this.functionServiceAccount = new ServiceAccount(
       this,
-      `serviceAccount${this.node.addr.substring(-8)}`,
+      `ServiceAccount${this.node.addr.substring(-8)}`,
       {
         accountId: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
         displayName: `Custom Service Account for Cloud Function ${this.node.addr.substring(
@@ -119,13 +102,31 @@ export class Function extends cloud.Function {
         )}`,
       }
     );
-    // create the cloud function
+    // Step 2: Create Custom Role
+    this.functionCustomRole = new ProjectIamCustomRole(
+      this,
+      `CustomRole${this.node.addr.substring(-8)}`,
+      {
+        roleId: `cloudfunctions.custom${this.node.addr.substring(-8)}`,
+        title: `Custom Role for Cloud Function ${this.node.addr.substring(-8)}`,
+        permissions: Lazy.listValue({
+          produce: () => Array.from(this.permissions),
+        }),
+      }
+    );
+    // Step 3: Grant Custom Role to Custom Service Account on the Project
+    new ProjectIamMember(this, "ProjectIamMember", {
+      project: app.projectId,
+      role: `projects/${app.projectId}/roles/${this.functionCustomRole.roleId}`,
+      member: `serviceAccount:${this.functionServiceAccount.email}`,
+    });
+    // Step 4: Create the Cloud Function with Custom Service Account
     this.function = new CloudfunctionsFunction(this, "DefaultFunction", {
       name: ResourceNames.generateName(this, FUNCTION_NAME_OPTS),
       description: "This function was created by Wing",
       project: app.projectId,
       region: app.region,
-      runtime: "nodejs18",
+      runtime: "nodejs20",
       availableMemoryMb: props.memory ?? DEFAULT_MEMORY_SIZE,
       sourceArchiveBucket: FunctionBucket.bucket.name,
       sourceArchiveObject: FunctionObjectBucket.name,
@@ -172,6 +173,41 @@ export class Function extends cloud.Function {
     return lines;
   }
 
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    // bundled code is guaranteed to be in a fresh directory
+    const bundle = createBundle(this.entrypoint, [
+      "@google-cloud/functions-framework",
+      "@google-cloud/datastore",
+    ]);
+
+    const packageJson = join(bundle.directory, "package.json");
+
+    writeFileSync(
+      packageJson,
+      JSON.stringify(
+        {
+          main: "index.js",
+          dependencies: {
+            "@google-cloud/functions-framework": "^3.0.0",
+            "@google-cloud/datastore": "8.4.0",
+          },
+        },
+        null,
+        2
+      )
+    );
+
+    const asset = new TerraformAsset(this, "Asset", {
+      path: bundle.directory,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.assetPath = asset.path;
+  }
+
   public get functionName(): string {
     return this.function.name;
   }
@@ -207,23 +243,10 @@ export class Function extends cloud.Function {
     );
   }
 
-  public addPermission(scopedResource: IResource, permission: RoleType): void {
-    const uniqueId = scopedResource.node.addr.substring(-8);
-
-    if (this.permissions.has(`${uniqueId}_${permission}`)) {
-      return; // already exists
-    }
-    if (scopedResource instanceof Bucket) {
-      addBucketPermission(this, scopedResource, permission);
-    } else if (scopedResource instanceof Function) {
-      addFunctionPermission(this, scopedResource, permission);
-    } else {
-      throw new Error(
-        `Unsupported resource type ${scopedResource.constructor.name}`
-      );
-    }
-
-    this.permissions.add(`${uniqueId}_${permission}`);
+  public addPermissions(permissions: string[]): void {
+    permissions.forEach((permission) => {
+      this.permissions.add(permission);
+    });
   }
 
   public onLift(host: IInflightHost, ops: string[]): void {
@@ -234,7 +257,7 @@ export class Function extends cloud.Function {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPermission(this, RoleType.FUNCTION_INVOKER);
+      host.addPermissions(["cloudfunctions.functions.invoke"]);
     }
 
     const { region, projectId } = App.of(this) as App;

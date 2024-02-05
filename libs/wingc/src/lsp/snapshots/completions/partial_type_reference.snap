@@ -21,4 +21,16 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: onLiftType
+  kind: 2
+  detail: "preflight (host: IInflightHost, ops: Array<str>): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight onLiftType: preflight (host: IInflightHost, ops: Array<str>): void\n```\n---\nA hook called by the Wing compiler once for each inflight host that needs to use this type inflight.\n### Parameters\n- `host` — `IInflightHost`\n- `ops` — `Array<str>`\n\n### Remarks\nThe list of requested inflight methods\nneeded by the inflight host are given by `ops`.\n\nThis method is commonly used for adding permissions, environment variables, or\nother capabilities to the inflight host."
+  sortText: ff|onLiftType
+  insertText: onLiftType($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

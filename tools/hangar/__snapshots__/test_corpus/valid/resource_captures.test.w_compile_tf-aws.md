@@ -70,13 +70,12 @@ module.exports = function({  }) {
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyResource {
-    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
+    constructor({ $___this_setOfStr_has__s3____, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_, $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__, $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myOptStr, $this_myQueue, $this_myResource, $this_myStr }) {
       this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
       this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_;
       this.$__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_ = $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_;
       this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__;
       this.$__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__ = $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__;
-      this.$_this_myOptStr_______ = $_this_myOptStr_______;
       this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
       this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
       this.$this_another = $this_another;
@@ -87,6 +86,7 @@ module.exports = function({  }) {
       this.$this_extNum = $this_extNum;
       this.$this_myBool = $this_myBool;
       this.$this_myNum = $this_myNum;
+      this.$this_myOptStr = $this_myOptStr;
       this.$this_myQueue = $this_myQueue;
       this.$this_myResource = $this_myResource;
       this.$this_myStr = $this_myStr;
@@ -112,7 +112,7 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(this.$this_myBool, true), "this.myBool == true");
     }
     async testCaptureOptional() {
-      $helpers.assert($helpers.eq(this.$_this_myOptStr_______, "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
+      $helpers.assert($helpers.eq((this.$this_myOptStr ?? ""), "myOptString"), "this.myOptStr ?? \"\" == \"myOptString\"");
     }
     async testCaptureResource() {
       (await this.$this_myResource.put("f1.txt", "f1"));
@@ -256,14 +256,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.First-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.First-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this)};
+            const FirstClient = ${First._toInflightType()};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -283,14 +283,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Another-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Another-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this)};
+            const AnotherClient = ${Another._toInflightType()};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -324,21 +324,20 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
               $___this_setOfStr_has__s3____: ${$stdlib.core.liftObject((!(this.setOfStr.has("s3"))))},
               $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__0_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0))},
               $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index______this_arrayOfStr__1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1))},
               $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k1__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"))},
               $__obj__key_______if____key_in_obj___throw_new_Error__Map_does_not_contain_key_____key______return_obj_key______this_mapOfNum___k2__: ${$stdlib.core.liftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"))},
-              $_this_myOptStr_______: ${$stdlib.core.liftObject((this.myOptStr ?? ""))},
               $_this_setOfStr_has__s1___: ${$stdlib.core.liftObject((this.setOfStr.has("s1")))},
               $_this_setOfStr_has__s2___: ${$stdlib.core.liftObject((this.setOfStr.has("s2")))},
               $this_another: ${$stdlib.core.liftObject(this.another)},
@@ -349,6 +348,7 @@ class $Root extends $stdlib.std.Resource {
               $this_extNum: ${$stdlib.core.liftObject(this.extNum)},
               $this_myBool: ${$stdlib.core.liftObject(this.myBool)},
               $this_myNum: ${$stdlib.core.liftObject(this.myNum)},
+              $this_myOptStr: ${$stdlib.core.liftObject(this.myOptStr)},
               $this_myQueue: ${$stdlib.core.liftObject(this.myQueue)},
               $this_myResource: ${$stdlib.core.liftObject(this.myResource)},
               $this_myStr: ${$stdlib.core.liftObject(this.myStr)},
@@ -361,79 +361,81 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "inflightField", "testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
-          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
-          MyResource._registerOnLiftObject(this.another, host, []);
-          MyResource._registerOnLiftObject(this.another.first.myResource, host, []);
-          MyResource._registerOnLiftObject(this.another.myField, host, []);
-          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
-          MyResource._registerOnLiftObject(this.extBucket, host, []);
-          MyResource._registerOnLiftObject(this.extNum, host, []);
-          MyResource._registerOnLiftObject(this.myBool, host, []);
-          MyResource._registerOnLiftObject(this.myNum, host, []);
-          MyResource._registerOnLiftObject(this.myQueue, host, []);
-          MyResource._registerOnLiftObject(this.myResource, host, []);
-          MyResource._registerOnLiftObject(this.myStr, host, []);
-        }
-        if (ops.includes("testCaptureCollectionsOfData")) {
-          MyResource._registerOnLiftObject((!(this.setOfStr.has("s3"))), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), host, []);
-          MyResource._registerOnLiftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), host, []);
-          MyResource._registerOnLiftObject(((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s1")), host, []);
-          MyResource._registerOnLiftObject((this.setOfStr.has("s2")), host, []);
-          MyResource._registerOnLiftObject(this.arrayOfStr.length, host, []);
-        }
-        if (ops.includes("testCaptureOptional")) {
-          MyResource._registerOnLiftObject((this.myOptStr ?? ""), host, []);
-        }
-        if (ops.includes("testCapturePrimitives")) {
-          MyResource._registerOnLiftObject(this.myBool, host, []);
-          MyResource._registerOnLiftObject(this.myNum, host, []);
-          MyResource._registerOnLiftObject(this.myStr, host, []);
-        }
-        if (ops.includes("testCaptureResource")) {
-          MyResource._registerOnLiftObject(this.myResource, host, ["get", "list", "put"]);
-        }
-        if (ops.includes("testExpressionRecursive")) {
-          MyResource._registerOnLiftObject(this.myQueue, host, ["push"]);
-          MyResource._registerOnLiftObject(this.myStr, host, []);
-        }
-        if (ops.includes("testExternal")) {
-          MyResource._registerOnLiftObject(this.extBucket, host, ["list"]);
-          MyResource._registerOnLiftObject(this.extNum, host, []);
-        }
-        if (ops.includes("testNestedInflightField")) {
-          MyResource._registerOnLiftObject(this.another.myField, host, []);
-        }
-        if (ops.includes("testNestedResource")) {
-          MyResource._registerOnLiftObject(this.another.first.myResource, host, ["get", "list", "put"]);
-          MyResource._registerOnLiftObject(this.myStr, host, []);
-        }
-        if (ops.includes("testUserDefinedResource")) {
-          MyResource._registerOnLiftObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [(!(this.setOfStr.has("s3"))), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), []],
+            [(this.setOfStr.has("s1")), []],
+            [(this.setOfStr.has("s2")), []],
+            [this.another, []],
+            [this.another.first.myResource, []],
+            [this.another.myField, []],
+            [this.arrayOfStr.length, []],
+            [this.extBucket, []],
+            [this.extNum, []],
+            [this.myBool, []],
+            [this.myNum, []],
+            [this.myOptStr, []],
+            [this.myQueue, []],
+            [this.myResource, []],
+            [this.myStr, []],
+          ],
+          "testCaptureCollectionsOfData": [
+            [(!(this.setOfStr.has("s3"))), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 0), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(this.arrayOfStr, 1), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k1"), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(this.mapOfNum, "k2"), []],
+            [(this.setOfStr.has("s1")), []],
+            [(this.setOfStr.has("s2")), []],
+            [this.arrayOfStr.length, []],
+          ],
+          "testCaptureOptional": [
+            [this.myOptStr, []],
+          ],
+          "testCapturePrimitives": [
+            [this.myBool, []],
+            [this.myNum, []],
+            [this.myStr, []],
+          ],
+          "testCaptureResource": [
+            [this.myResource, ["get", "list", "put"]],
+          ],
+          "testExpressionRecursive": [
+            [this.myQueue, ["push"]],
+            [this.myStr, []],
+          ],
+          "testExternal": [
+            [this.extBucket, ["list"]],
+            [this.extNum, []],
+          ],
+          "testNestedInflightField": [
+            [this.another.myField, []],
+          ],
+          "testNestedResource": [
+            [this.another.first.myResource, ["get", "list", "put"]],
+            [this.myStr, []],
+          ],
+          "testUserDefinedResource": [
+            [this.another, ["anotherFunc", "meaningOfLife"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -441,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -452,11 +454,13 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

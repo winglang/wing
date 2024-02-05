@@ -10,11 +10,19 @@ const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
-  "google@~>4.63.1",
+  "google@~>5.10.0",
 ];
 
 // those will be skipped out of the docs
-const SKIPPED_MODULES = ["cloud", "ex", "std", "simulator", "core", "platform"];
+const SKIPPED_MODULES = [
+  "cloud",
+  "ex",
+  "std",
+  "simulator",
+  "core",
+  "platform",
+  "helpers",
+];
 const publicModules = Object.keys(cloud).filter(
   (item) => !SKIPPED_MODULES.includes(item)
 );
@@ -53,7 +61,6 @@ const project = new cdk.JsiiProject({
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
     // preflight dependencies
-    "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
@@ -76,11 +83,14 @@ const project = new cdk.JsiiProject({
     "mime@^3.0.0",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
-    "@azure/identity@3.1.3",
+    "@azure/data-tables@13.2.2",
+    "@azure/identity@4.0.1",
     "@azure/core-paging",
     // gcp client dependencies
     "@google-cloud/storage@6.9.5",
+    "@google-cloud/datastore@8.4.0",
     "google-auth-library",
+    "protobufjs@7.2.5",
     // simulator dependencies
     "express",
     "uuid",
@@ -104,10 +114,10 @@ const project = new cdk.JsiiProject({
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "mock-gcs@^1.0.0",
+    "mock-gcs@^1.2.0",
     "@types/express",
-    "aws-sdk-client-mock",
-    "aws-sdk-client-mock-jest",
+    "aws-sdk-client-mock@3.0.0",
+    "aws-sdk-client-mock-jest@3.0.0",
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
@@ -121,14 +131,14 @@ const project = new cdk.JsiiProject({
   jest: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "18.13.0",
+  minNodeVersion: "20.0.0",
   projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
-  jsiiVersion: "5.0.11",
+  jsiiVersion: "~5.3.11",
 });
 
 project.eslint?.addPlugins("sort-exports");
@@ -137,6 +147,10 @@ project.eslint?.addOverride({
   rules: {
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
+});
+
+project.package.addField("optionalDependencies", {
+  esbuild: "^0.19.12",
 });
 
 // use fork of jsii-docgen with wing-ish support
@@ -403,7 +417,7 @@ new JsonFile(project, "cdktf.json", {
 });
 project.gitignore.addPatterns("src/.gen");
 
-project.preCompileTask.exec("cdktf get --force");
+project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 
@@ -411,6 +425,6 @@ project.tryRemoveFile(".npmrc");
 
 project.packageTask.reset("bump-pack -b");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

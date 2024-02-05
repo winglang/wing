@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:5
+error: Unknown symbol \\"instanceField\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^^^^^^^^^^^^^ Unknown symbol \\"instanceField\\"
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:5
+error: Unknown symbol \\"f\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^ Unknown symbol \\"f\\"
 
 
  
@@ -418,7 +418,7 @@ exports[`ambiguous_api_paths.test.w 1`] = `
    | api.get(\\"<ABSOLUTE>/path\\", handler);
 12 | api.get(\\"<ABSOLUTE>/:variable\\", handler);
    | ^
-at (<ABSOLUTE>:LINE:COL)
+at <ABSOLUTE>/ambiguous_api_paths.test.w:12:1
  
  
 Tests 1 failed (1)
@@ -1460,24 +1460,24 @@ Duration <DURATION>"
 
 exports[`function_type.test.w 1`] = `
 "error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:2:26
+  --> ../../../examples/tests/invalid/function_type.test.w:3:3
   |
-2 | let my_func = (callback: (num)) => {  };
-  |                          ^^^^^ Expected function return type
+3 |   my_method(x: num);
+  |   ^^^^^^^^^^^^^^^^^^ Expected function return type
 
 
 error: Expected function return type
-  --> ../../../examples/tests/invalid/function_type.test.w:4:28
+  --> ../../../examples/tests/invalid/function_type.test.w:5:3
   |
-4 | let my_func2 = (callback: ((num)): (str)) => {  };
-  |                            ^^^^^ Expected function return type
+5 |   inflight my_method2(x: num);
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected function return type
 
 
 error: Optional parameters must always be after all non-optional parameters.
-   --> ../../../examples/tests/invalid/function_type.test.w:16:25
-   |
-16 | let my_func3 = (a: num, b: str?, c: bool) => {};
-   |                         ^ Optional parameters must always be after all non-optional parameters.
+  --> ../../../examples/tests/invalid/function_type.test.w:9:25
+  |
+9 | let my_func3 = (a: num, b: str?, c: bool) => {};
+  |                         ^ Optional parameters must always be after all non-optional parameters.
 
 
  
@@ -1535,6 +1535,98 @@ error: Expected type to be \\"Bucket\\", but got \\"bool\\" instead
    |
 24 | funcBucket(bucket1, true, bucket2);
    |                     ^^^^ Expected type to be \\"Bucket\\", but got \\"bool\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`global_symbols.test.w 1`] = `
+"error: Symbol \\"log\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:1:5
+  |
+1 | let log = \\"hi\\";
+  |     ^^^ Symbol \\"log\\" already defined in this scope
+
+
+error: Symbol \\"assert\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:3:5
+  |
+3 | let assert = \\"there\\";
+  |     ^^^^^^ Symbol \\"assert\\" already defined in this scope
+
+
+error: Symbol \\"unsafeCast\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:5:5
+  |
+5 | let unsafeCast = \\"wingnuts\\";
+  |     ^^^^^^^^^^ Symbol \\"unsafeCast\\" already defined in this scope
+
+
+error: Symbol \\"nodeof\\" already defined in this scope
+  --> ../../../examples/tests/invalid/global_symbols.test.w:7:5
+  |
+7 | let nodeof = \\"!\\";
+  |     ^^^^^^ Symbol \\"nodeof\\" already defined in this scope
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:10:1
+   |
+10 | log = \\"hi\\";
+   | ^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:10:7
+   |
+10 | log = \\"hi\\";
+   |       ^^^^ Expected type to be \\"(message: str): void\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:12:1
+   |
+12 | assert = \\"there\\";
+   | ^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:12:10
+   |
+12 | assert = \\"there\\";
+   |          ^^^^^^^ Expected type to be \\"(condition: bool): void\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:14:1
+   |
+14 | unsafeCast = \\"wingnuts\\";
+   | ^^^^^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"(value: any): any\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:14:14
+   |
+14 | unsafeCast = \\"wingnuts\\";
+   |              ^^^^^^^^^^ Expected type to be \\"(value: any): any\\", but got \\"str\\" instead
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/global_symbols.test.w:16:1
+   |
+16 | nodeof = \\"!\\";
+   | ^^^^^^ Variable is not reassignable
+
+
+error: Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/global_symbols.test.w:16:10
+   |
+16 | nodeof = \\"!\\";
+   |          ^^^ Expected type to be \\"preflight (construct: IConstruct): Node\\", but got \\"str\\" instead
 
 
  
@@ -1989,25 +2081,25 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:13:12
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:36:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+36 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:34:13
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:43:5
    |
-34 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+43 |     q.push(\\"push!\\");
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:47:13
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.test.w:48:12
    |
-47 |     let b = this.array.at(1);
-   |             ^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+48 |     assert(b.list().length == 0);
+   |            ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -2018,18 +2110,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:13:12
+"error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:32:5
    |
-13 |     return this.myQueue;
-   |            ^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+32 |     q.push(\\"push!\\");
+   |     ^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:18:12
+error: Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.test.w:35:5
    |
-18 |     return globalQueue;
-   |            ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
+35 |     q2.push(\\"push!\\");
+   |     ^^ Expression of type \\"Queue\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -2040,18 +2132,18 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:13:13
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:15:5
    |
-13 |     let x = this.b;
-   |             ^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     x.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:17:13
+error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.test.w:19:5
    |
-17 |     let y = globalB;
-   |             ^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+19 |     y.put(\\"boom\\", \\"shakalaka\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -2067,6 +2159,20 @@ exports[`interface.test.w 1`] = `
    |
 30 |   bar: str;
    |   ^^^^^^^^^ Properties are not supported in interfaces
+
+
+error: Access modifiers are not allowed in interfaces
+   --> ../../../examples/tests/invalid/interface.test.w:36:3
+   |
+36 |   pub method2(): str;  
+   |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
+
+
+error: Unknown parser error
+   --> ../../../examples/tests/invalid/interface.test.w:36:14
+   |
+36 |   pub method2(): str;  
+   |              ^^ Unknown parser error
 
 
 error: Unknown symbol \\"IB\\"
@@ -2114,6 +2220,16 @@ error: Symbol \\"foo\\" already defined in this scope
 Tests 1 failed (1)
 Test Files 1 failed (1)
 Duration <DURATION>"
+`;
+
+exports[`invalid compile directory 1`] = `
+"error: <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+  --> ../../../examples/tests/invalid/lib/extern_above.w:2:3
+  |
+2 |   extern \\"../../valid/external_js.js\\" static getGreeting(name: str): str;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ <ABSOLUTE>/external_js.js must be a sub directory of <ABSOLUTE>/lib
+
+"
 `;
 
 exports[`issue_2767.test.w 1`] = `
@@ -2474,20 +2590,16 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
-  |
-7 |     return new cloud.Bucket();
-  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-
-
-error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
-   |
-10 |     return new MyClass();
-   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-
-
+"runtime error: Cannot read properties of undefined (reading 'addChild')
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
+  | // explicit \`scope\`.
+  | bring cloud;
+  | 
+5 | class MyClass {
+  |       ^
+at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
+at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
+at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
  
  
 Tests 1 failed (1)
@@ -2543,7 +2655,14 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.test.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"num?\\" instead
+"error: Unexpected 'parameter_type_list'
+   --> ../../../examples/tests/invalid/optionals.test.w:98:36
+   |
+98 | let optionalFunctionWithNoRetType: ()? = () => {};
+   |                                    ^^ Unexpected 'parameter_type_list'
+
+
+error: Expected type to be \\"num\\", but got \\"num?\\" instead
    --> ../../../examples/tests/invalid/optionals.test.w:11:3
    |
 11 | f(x);
@@ -2627,6 +2746,20 @@ error: Cannot call an optional function
    | ^^^^^^^^^^^^^^^^ Cannot call an optional function
 
 
+error: Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
+    --> ../../../examples/tests/invalid/optionals.test.w:102:53
+    |
+102 | let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+    |                                                     ^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (num): void)?\\", but got \\"preflight (x: str): void\\" instead
+
+
+error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+    --> ../../../examples/tests/invalid/optionals.test.w:104:49
+    |
+104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+
+
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:53:3
    |
@@ -2705,13 +2838,6 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
-  |
-1 | let my_func1 = (callback: inflight (num): num) => {  };
-  | ^ Unknown symbol \\"this\\"
 
 
  
@@ -3009,11 +3135,11 @@ Duration <DURATION>"
 `;
 
 exports[`resource_captures.test.w 1`] = `
-"error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/resource_captures.test.w:13:13
+"error: Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
+   --> ../../../examples/tests/invalid/resource_captures.test.w:15:5
    |
-13 |     let b = this.bucket;
-   |             ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+15 |     b.put(\\"hello\\", \\"world\\");
+   |     ^ Expression of type \\"Bucket\\" references an unknown preflight object, can't qualify its capabilities (see https://github.com/winglang/wing/issues/76 for details)
 
 
  
@@ -3151,13 +3277,6 @@ error: Inflight classes cannot have a scope
    |
 17 |   new InflightClass() in pc;
    |                          ^^ Inflight classes cannot have a scope
-
-
-error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/scope_and_id.test.w:17:26
-   |
-17 |   new InflightClass() in pc;
-   |                          ^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -3449,11 +3568,11 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"error: \\"super\\" can only be used inside of classes
+"error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
-   |       ^^ \\"super\\" can only be used inside of classes
+   |       ^^ Cannot call super method because class Construct has no parent
 
 
 error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
@@ -3484,11 +3603,11 @@ error: super class \\"A\\" does not have a method named \\"child_method\\"
    |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
 
 
-error: Cannot call super method inside of a static method
+error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();
-   |           ^^^^^^ Cannot call super method inside of a static method
+   |           ^^^^^^ Cannot call super method because class Construct has no parent
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
@@ -3496,6 +3615,21 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
    |
 52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
    |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`this.w 1`] = `
+"error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/this.w:3:9
+  |
+3 |     log(this.node.id);
+  |         ^^^^ Unknown symbol \\"this\\"
 
 
  
@@ -3557,6 +3691,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 10 | let e3 = \\"{strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/types_strings_arithmetic.test.w:15:6
+   |
+15 | a += b;
+   |      ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -3682,18 +3823,18 @@ error: Unknown symbol \\"unknown\\"
    | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
-error: Unknown symbol \\"assert\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
-   |
-20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Unknown symbol \\"assert\\"
-
-
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:24
    |
 20 |     this.bucket.assert(2 + \\"2\\");
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Unknown symbol \\"assert\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
+   |
+20 |     this.bucket.assert(2 + \\"2\\");
+   |                 ^^^^^^ Unknown symbol \\"assert\\"
 
 
 error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"

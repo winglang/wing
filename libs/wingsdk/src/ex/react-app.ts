@@ -5,11 +5,18 @@ import { IWebsite, WebsiteDomainOptions } from "../cloud/website";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Resource, Node } from "../std";
 
 const DEFAULT_BUILD_FOLDER = "/build";
 export const DEFAULT_REACT_APP_BUILD_COMMAND = "npm run build";
 const DEFAULT_PORT = 3001;
+
+/**
+ * SPA - Redirect all requests to index.html
+ */
+export const REACT_APP_ERROR_DOCUMENT = "index.html";
+
 /**
  * The file that contains the wing environment variables. Will be written into the project files.
  */
@@ -67,6 +74,9 @@ export interface ReactAppOptions {
  * @abstract
  */
 export class ReactApp extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IReactAppClient;
+
   /**
    * @internal
    */

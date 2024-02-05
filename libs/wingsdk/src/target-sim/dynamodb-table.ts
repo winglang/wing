@@ -33,6 +33,7 @@ export class DynamodbTable
         attributeDefinitions: this.props.attributeDefinitions,
         hashKey: this.props.hashKey,
         rangeKey: this.props.rangeKey,
+        globalSecondaryIndex: this.props.globalSecondaryIndex,
       },
       attrs: {} as any,
     };

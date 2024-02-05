@@ -1,6 +1,6 @@
 import * as cp from "child_process";
-import { readFile, rm, rmSync } from "fs";
-import { basename, resolve, sep } from "path";
+import { existsSync, readFile, readFileSync, realpathSync, rm, rmSync, statSync } from "fs";
+import { basename, join, relative, resolve, sep } from "path";
 import { promisify } from "util";
 import { BuiltinPlatform, determineTargetFromPlatforms } from "@winglang/compiler";
 import { std, simulator } from "@winglang/sdk";
@@ -11,7 +11,7 @@ import debug from "debug";
 import { glob } from "glob";
 import { nanoid } from "nanoid";
 import { printResults, validateOutputFilePath, writeResultsToFile } from "./results";
-import { withSpinner, normalPath } from "../../util";
+import { withSpinner } from "../../util";
 import { compile, CompileOptions } from "../compile";
 
 const log = debug("wing:test");
@@ -47,22 +47,52 @@ export interface TestOptions extends CompileOptions {
   retry?: number;
 }
 
-export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
-  let patterns;
+const TEST_FILE_PATTERNS = ["**/*.test.w", "**/{main,*.main}.{w,ts}"];
+const TEST_FILE_IGNORE = ["**/node_modules/**", "**/target/**"];
 
+/**
+ * Collects all the test files that should be run.
+ * If no entrypoints are specified, all the entrypoint files in the current directory (recursive) are collected.
+ * This excludes node_modules and target directories.
+ *
+ * If entrypoints are specified, only the files that contain the entrypoint string are collected.
+ */
+export async function collectTestFiles(entrypoints: string[] = []): Promise<string[]> {
+  const expandedEntrypoints = await glob(TEST_FILE_PATTERNS, {
+    ignore: TEST_FILE_IGNORE,
+    absolute: false,
+    posix: true,
+  });
+
+  // check if any of the entrypoints are exact files
+  const exactEntrypoints = entrypoints.filter(
+    (e) => statSync(e, { throwIfNoEntry: false })?.isFile() === true
+  );
+  const fuzzyEntrypoints = entrypoints.filter((e) => !exactEntrypoints.includes(e));
+
+  let finalEntrypoints: string[] = exactEntrypoints;
+  if (fuzzyEntrypoints.length > 0) {
+    // if entrypoints are specified, filter the expanded entrypoints to ones that contain them
+    finalEntrypoints = finalEntrypoints.concat(
+      expandedEntrypoints.filter((e) => fuzzyEntrypoints.some((f) => e.includes(f)))
+    );
+  } else if (exactEntrypoints.length === 0) {
+    finalEntrypoints = finalEntrypoints.concat(expandedEntrypoints);
+  }
+
+  // dedupe based on real path, then get all paths as relative to cwd
+  const cwd = process.cwd();
+  return [...new Set(finalEntrypoints.map((e) => realpathSync(e)))].map((e) => relative(cwd, e));
+}
+
+export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   if (options.outputFile) {
     validateOutputFilePath(options.outputFile);
   }
 
-  if (entrypoints.length === 0) {
-    patterns = ["*.test.w"];
-  } else {
-    patterns = entrypoints.map((entrypoint) => normalPath(entrypoint));
-  }
-
-  const expandedEntrypoints = await glob(patterns);
-  if (expandedEntrypoints.length === 0) {
-    throw new Error(`No matching files found for patterns: [${patterns.join(", ")}]`);
+  const selectedEntrypoints = await collectTestFiles(entrypoints);
+  if (selectedEntrypoints.length === 0) {
+    throw new Error(`No matching test or entrypoint files found: [${entrypoints.join(", ")}]`);
   }
 
   const startTime = Date.now();
@@ -81,7 +111,9 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
           {
             pass: false,
             unsupported: error.name === "NotImplementedError",
-            path: "",
+            unsupportedResource: (error as any).resource,
+            unsupportedOperation: (error as any).operation,
+            path: "*",
             error: error.message,
             traces: [],
           },
@@ -89,11 +121,11 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
       });
     }
   };
-  await Promise.all(expandedEntrypoints.map(testFile));
+  await Promise.all(selectedEntrypoints.map(testFile));
   const testDuration = Date.now() - startTime;
   printResults(results, testDuration);
   if (options.outputFile) {
-    await writeResultsToFile(results, testDuration, options.outputFile);
+    await writeResultsToFile(results, testDuration, options.outputFile, options.platform);
   }
 
   // if we have any failures, exit with 1
@@ -292,13 +324,18 @@ async function testSimulator(synthDir: string, options: TestOptions) {
   const testReport = await renderTestReport(synthDir, results);
   console.log(testReport);
 
+  let args: { methods: Record<string, Record<string, string>> };
+  if (existsSync(join(synthDir, "usage_context.json"))) {
+    args = { methods: JSON.parse(readFileSync(join(synthDir, "usage_context.json")).toString()) };
+  }
+
   if (clean) {
     rmSync(synthDir, { recursive: true, force: true });
   } else {
     noCleanUp(synthDir);
   }
 
-  return results;
+  return results.map((r) => ({ ...r, args }));
 }
 
 async function testTf(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
@@ -340,7 +377,12 @@ async function testTf(synthDir: string, options: TestOptions): Promise<std.TestR
       console.log("One or more tests failed. Cleaning up resources...");
     }
 
-    return results;
+    let args: { methods: Record<string, Record<string, string>> };
+    if (existsSync(join(synthDir, "usage_context.json"))) {
+      args = { methods: JSON.parse(readFileSync(join(synthDir, "usage_context.json")).toString()) };
+    }
+
+    return results.map((r) => ({ ...r, args }));
   } catch (err) {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];

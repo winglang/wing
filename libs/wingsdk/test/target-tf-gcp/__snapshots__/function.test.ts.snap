@@ -12,22 +12,48 @@ exports[`basic function 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -69,6 +95,14 @@ exports[`basic function 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -86,6 +120,14 @@ exports[`basic function 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -115,13 +157,21 @@ exports[`basic function 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
@@ -202,22 +252,48 @@ exports[`basic function with environment variables 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -259,6 +335,14 @@ exports[`basic function with environment variables 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -276,6 +360,14 @@ exports[`basic function with environment variables 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -305,13 +397,21 @@ exports[`basic function with environment variables 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
@@ -391,22 +491,48 @@ exports[`basic function with memory size specified 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 120,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -448,6 +574,14 @@ exports[`basic function with memory size specified 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -465,6 +599,14 @@ exports[`basic function with memory size specified 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -494,13 +636,21 @@ exports[`basic function with memory size specified 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {
@@ -580,22 +730,48 @@ exports[`basic function with timeout explicitly set 1`] = `
         "name": "function-c852aba6",
         "project": "my-project",
         "region": "us-central1",
-        "runtime": "nodejs18",
-        "service_account_email": "\${google_service_account.Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF.email}",
+        "runtime": "nodejs20",
+        "service_account_email": "\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
         "source_archive_bucket": "\${google_storage_bucket.Function_FunctionBucket_CD7D2793.name}",
         "source_archive_object": "\${google_storage_bucket_object.Function_FunctionObjectBucket_A7CD2097.name}",
         "timeout": 30,
         "trigger_http": true,
       },
     },
+    "google_project_iam_custom_role": {
+      "Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69": {
+        "permissions": [
+          "cloudfunctions.functions.get",
+        ],
+        "role_id": "cloudfunctions.customc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+        "title": "Custom Role for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
+      },
+    },
+    "google_project_iam_member": {
+      "Function_ProjectIamMember_F891F2CD": {
+        "member": "serviceAccount:\${google_service_account.Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375.email}",
+        "project": "my-project",
+        "role": "projects/my-project/roles/\${google_project_iam_custom_role.Function_CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5_22DA7C69.role_id}",
+      },
+    },
+    "google_project_service": {
+      "Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC": {
+        "disable_dependent_services": false,
+        "disable_on_destroy": false,
+        "service": "iamcredentials.googleapis.com",
+      },
+    },
     "google_service_account": {
-      "Function_serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_E91676AF": {
+      "Function_ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5_504E4375": {
         "account_id": "function-c852aba6",
         "display_name": "Custom Service Account for Cloud Function c852aba6d7cbe50c86bbedd1463b05db52425574b5",
       },
     },
     "google_storage_bucket": {
       "Function_FunctionBucket_CD7D2793": {
+        "depends_on": [
+          "google_project_service.Function_FunctionBucket_IamServiceAccountCredentialsApi_EC496DEC",
+        ],
         "force_destroy": false,
         "location": "us-central1",
         "name": "functionbucket-\${random_id.Function_FunctionBucket_Id_216676D0.hex}",
@@ -637,6 +813,14 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
+                  "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/CustomRolec852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                  },
                   "DefaultFunction": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -654,6 +838,14 @@ exports[`basic function with timeout explicitly set 2`] = `
                         },
                         "id": "Default",
                         "path": "root/Default/Function/FunctionBucket/Default",
+                      },
+                      "IamServiceAccountCredentialsApi": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamServiceAccountCredentialsApi",
+                        "path": "root/Default/Function/FunctionBucket/IamServiceAccountCredentialsApi",
                       },
                       "Id": {
                         "constructInfo": {
@@ -683,13 +875,21 @@ exports[`basic function with timeout explicitly set 2`] = `
                     "id": "FunctionObjectBucket",
                     "path": "root/Default/Function/FunctionObjectBucket",
                   },
-                  "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                  "ProjectIamMember": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
-                    "path": "root/Default/Function/serviceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "id": "ProjectIamMember",
+                    "path": "root/Default/Function/ProjectIamMember",
+                  },
+                  "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
+                    "path": "root/Default/Function/ServiceAccountc852aba6d7cbe50c86bbedd1463b05db52425574b5",
                   },
                 },
                 "constructInfo": {

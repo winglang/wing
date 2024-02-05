@@ -1,57 +1,91 @@
-import { Construct } from "constructs";
-import { Bucket } from "./bucket";
-import { Function } from "./function";
-import { CloudfunctionsFunctionIamMember } from "../.gen/providers/google/cloudfunctions-function-iam-member";
-import { StorageBucketIamMember } from "../.gen/providers/google/storage-bucket-iam-member";
+import * as cloud from "../cloud";
 
-export enum RoleType {
-  STORAGE_READ = "roles/storage.objectViewer",
-  STORAGE_READ_WRITE = "roles/storage.objectUser",
-  FUNCTION_INVOKER = "roles/cloudfunctions.invoker",
-  FUNCTION_VIEWER = "roles/cloudfunctions.viewer",
+export function calculateBucketPermissions(ops: string[]): string[] {
+  const permissions: string[] = [];
+
+  if (
+    ops.includes(cloud.BucketInflightMethods.GET) ||
+    ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.EXISTS) ||
+    ops.includes(cloud.BucketInflightMethods.METADATA) ||
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.COPY) ||
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+  ) {
+    permissions.push("storage.objects.get");
+  }
+
+  if (
+    ops.includes(cloud.BucketInflightMethods.PUT) ||
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.COPY) ||
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+  ) {
+    permissions.push("storage.objects.create");
+  }
+
+  if (
+    ops.includes(cloud.BucketInflightMethods.DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.PUT) ||
+    ops.includes(cloud.BucketInflightMethods.PUT_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.COPY) ||
+    ops.includes(cloud.BucketInflightMethods.RENAME) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+  ) {
+    permissions.push("storage.objects.delete");
+  }
+
+  if (
+    ops.includes(cloud.BucketInflightMethods.LIST) ||
+    ops.includes(cloud.BucketInflightMethods.SIGNED_URL)
+  ) {
+    permissions.push("storage.objects.list");
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+    permissions.push("storage.buckets.get");
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.SIGNED_URL)) {
+    permissions.push("iam.serviceAccounts.signBlob");
+  }
+
+  return permissions;
 }
 
-export function addFunctionPermission(
-  host: Function,
-  scopedResource: Function,
-  permission: RoleType
-) {
-  new CloudfunctionsFunctionIamMember(
-    host,
-    createMemberPermissionId(host, scopedResource, permission),
-    {
-      project: scopedResource.project,
-      region: scopedResource.region,
-      cloudFunction: scopedResource.functionName,
-      role: permission,
-      member: `serviceAccount:${host.serviceAccountEmail}`,
-    }
-  );
-}
+export function calculateCounterPermissions(ops: string[]): string[] {
+  const permissions: string[] = [];
 
-function createMemberPermissionId(
-  host: Function,
-  resource: Construct,
-  permission: string
-): string {
-  return `MemberPermission-${permission.replace(
-    /[.\\\/]/g,
-    "-"
-  )}-${resource.node.addr.slice(-8)}-${host.node.addr.slice(-8)}`;
-}
+  if (
+    ops.includes(cloud.CounterInflightMethods.PEEK) ||
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.DEC)
+  ) {
+    permissions.push("datastore.entities.get");
+  }
 
-export function addBucketPermission(
-  host: Function,
-  bucket: Bucket,
-  permission: RoleType
-) {
-  new StorageBucketIamMember(
-    host,
-    createMemberPermissionId(host, bucket, permission),
-    {
-      bucket: bucket.bucket.name,
-      role: permission,
-      member: `serviceAccount:${host.serviceAccountEmail}`,
-    }
-  );
+  if (
+    ops.includes(cloud.CounterInflightMethods.PEEK) ||
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.DEC) ||
+    ops.includes(cloud.CounterInflightMethods.SET)
+  ) {
+    permissions.push("datastore.entities.create");
+  }
+
+  if (
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.DEC) ||
+    ops.includes(cloud.CounterInflightMethods.SET)
+  ) {
+    permissions.push("datastore.entities.update");
+  }
+
+  return permissions;
 }

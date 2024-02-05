@@ -13,6 +13,8 @@ import {
   ObjectMetadata,
   BucketPutOptions,
   BucketDeleteOptions,
+  BucketGetOptions,
+  BucketTryGetOptions,
 } from "../cloud";
 import { deserialize, serialize } from "../simulator/serialization";
 import {
@@ -136,14 +138,30 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string, options?: BucketGetOptions): Promise<string> {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
         const hash = this.hashKey(key);
         const filename = join(this._fileDir, hash);
         try {
-          return await fs.promises.readFile(filename, "utf8");
+          const file = await fs.promises.open(filename, "r");
+          const stat = await file.stat();
+
+          let start = 0;
+          if (options?.startByte !== undefined) {
+            start = options.startByte;
+          }
+
+          let length = stat.size;
+          if (options?.endByte !== undefined) {
+            length = options.endByte + 1;
+          }
+
+          const buffer = Buffer.alloc(length - start);
+          await file.read(buffer, 0, length - start, start);
+          await file.close();
+          return new TextDecoder("utf8", { fatal: true }).decode(buffer);
         } catch (e) {
           throw new Error(
             `Object does not exist (key=${key}): ${(e as Error).stack}`
@@ -153,9 +171,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async tryGet(key: string): Promise<string | undefined> {
+  public async tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined> {
     if (await this.exists(key)) {
-      return this.get(key);
+      return this.get(key, options);
     }
 
     return undefined;
@@ -292,6 +313,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         });
       },
     });
+  }
+
+  public async rename(srcKey: string, dstKey: string): Promise<void> {
+    if (srcKey === dstKey) {
+      throw new Error(
+        `Renaming an object to its current name is not a valid operation (srcKey=${srcKey}, dstKey=${dstKey}).`
+      );
+    }
+
+    await this.copy(srcKey, dstKey);
+    await this.delete(srcKey);
   }
 
   private async addFile(

@@ -1,10 +1,11 @@
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { GoogleProvider } from "../.gen/providers/google/provider";
 import { RandomProvider } from "../.gen/providers/random/provider";
-import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
+import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN } from "../cloud";
 import { AppProps as CdktfAppProps } from "../core";
 import { TABLE_FQN } from "../ex";
 import { CdktfApp } from "../shared-tf/app";
@@ -92,6 +93,8 @@ export class App extends CdktfApp {
         return Function;
       case TABLE_FQN:
         return Table;
+      case COUNTER_FQN:
+        return Counter;
     }
 
     return undefined;

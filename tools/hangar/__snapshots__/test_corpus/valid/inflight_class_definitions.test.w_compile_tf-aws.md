@@ -190,14 +190,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.A-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.A-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const AClient = ${A._toInflightType(this)};
+            const AClient = ${A._toInflightType()};
             const client = new AClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -215,14 +215,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.B-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.B-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const BClient = ${B._toInflightType(this)};
+            const BClient = ${B._toInflightType()};
             const client = new BClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -234,22 +234,22 @@ class $Root extends $stdlib.std.Resource {
         return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -273,14 +273,14 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.E-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.E-1.js")({
               })
             `;
           }
           _toInflight() {
             return `
               (await (async () => {
-                const EClient = ${E._toInflightType(this)};
+                const EClient = ${E._toInflightType()};
                 const client = new EClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -300,14 +300,14 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType() {
             return `
-              require("./inflight.F-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.F-1.js")({
               })
             `;
           }
           _toInflight() {
             return `
               (await (async () => {
-                const FClient = ${F._toInflightType(this)};
+                const FClient = ${F._toInflightType()};
                 const client = new FClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -320,15 +320,15 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+        class $Closure2 extends $stdlib.std.AutoIdResource {
+          _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
-            (std.Node.of(this)).hidden = true;
+            $helpers.nodeof(this).hidden = true;
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure2-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
                 $F: ${$stdlib.core.liftObject(F)},
               })
             `;
@@ -336,7 +336,7 @@ class $Root extends $stdlib.std.Resource {
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure2Client = ${$Closure2._toInflightType(this)};
+                const $Closure2Client = ${$Closure2._toInflightType()};
                 const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -355,14 +355,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.D-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.D-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const DClient = ${D._toInflightType(this)};
+            const DClient = ${D._toInflightType()};
             const client = new DClient({
               $this_inner: ${$stdlib.core.liftObject(this.inner)},
             });
@@ -374,25 +374,27 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "callInner", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          D._registerOnLiftObject(this.inner, host, []);
-        }
-        if (ops.includes("callInner")) {
-          D._registerOnLiftObject(this.inner, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.inner, []],
+          ],
+          "callInner": [
+            [this.inner, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
             $B: ${$stdlib.core.liftObject(B)},
             $a: ${$stdlib.core.liftObject(a)},
             $d: ${$stdlib.core.liftObject(d)},
@@ -404,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -415,14 +417,16 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(a, host, ["goo"]);
-          $Closure3._registerOnLiftObject(d, host, ["callInner"]);
-          $Closure3._registerOnLiftObject(fn, host, ["handle"]);
-          $Closure3._registerOnLiftObject(innerD, host, ["handle"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [a, ["goo"]],
+            [d, ["callInner"]],
+            [fn, ["handle"]],
+            [innerD, ["handle"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const a = new A(this, "A");

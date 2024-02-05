@@ -1,4 +1,5 @@
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { TestRunner } from "./test-runner";
@@ -8,7 +9,7 @@ import { AzurermProvider } from "../.gen/providers/azurerm/provider";
 import { ResourceGroup } from "../.gen/providers/azurerm/resource-group";
 import { ServicePlan } from "../.gen/providers/azurerm/service-plan";
 import { StorageAccount } from "../.gen/providers/azurerm/storage-account";
-import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
+import { BUCKET_FQN, FUNCTION_FQN, COUNTER_FQN } from "../cloud";
 import { AppProps } from "../core";
 import {
   CaseConventions,
@@ -199,6 +200,9 @@ export class App extends CdktfApp {
 
       case BUCKET_FQN:
         return Bucket;
+
+      case COUNTER_FQN:
+        return Counter;
     }
 
     return undefined;

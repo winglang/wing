@@ -52,7 +52,7 @@ module.exports = function({  }) {
       this.$this_url = $this_url;
     }
     static async isValidUrl(url) {
-      return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
+      return (require("../../../url_utils.js")["isValidUrl"])(url)
     }
     async foo() {
       $helpers.assert((await MyResource.isValidUrl(this.$this_url)), "MyResource.isValidUrl(this.url)");
@@ -229,14 +229,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyResource-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyResource-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this)};
+            const MyResourceClient = ${MyResource._toInflightType()};
             const client = new MyResourceClient({
               $this_api_url: ${$stdlib.core.liftObject(this.api.url)},
               $this_url: ${$stdlib.core.liftObject(this.url)},
@@ -249,28 +249,30 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "isValidUrl", "foo", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyResource._registerOnLiftObject(this.api.url, host, []);
-          MyResource._registerOnLiftObject(this.url, host, []);
-        }
-        if (ops.includes("foo")) {
-          MyResource._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
-          MyResource._registerOnLiftObject(this.api.url, host, []);
-          MyResource._registerOnLiftObject(this.url, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.api.url, []],
+            [this.url, []],
+          ],
+          "foo": [
+            [MyResource, ["isValidUrl"]],
+            [this.api.url, []],
+            [this.url, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -278,7 +280,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -289,22 +291,24 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(r, host, ["foo"]);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [r, ["foo"]],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $MyResource: ${$stdlib.core.liftObject(MyResource)},
             $api_url: ${$stdlib.core.liftObject(api.url)},
             $url: ${$stdlib.core.liftObject(url)},
@@ -314,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -325,13 +329,15 @@ class $Root extends $stdlib.std.Resource {
       _supportedOps() {
         return [...super._supportedOps(), "handle", "$inflight_init"];
       }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(MyResource, host, ["isValidUrl"]);
-          $Closure2._registerOnLiftObject(api.url, host, []);
-          $Closure2._registerOnLiftObject(url, host, []);
-        }
-        super._registerOnLift(host, ops);
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "handle": [
+            [MyResource, ["isValidUrl"]],
+            [api.url, []],
+            [url, []],
+          ],
+        });
+        super.onLift(host, ops);
       }
     }
     const r = new MyResource(this, "MyResource");

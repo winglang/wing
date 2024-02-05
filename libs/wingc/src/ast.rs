@@ -309,6 +309,7 @@ pub enum UtilityFunctions {
 	Log,
 	Assert,
 	UnsafeCast,
+	Nodeof,
 }
 
 impl UtilityFunctions {
@@ -318,6 +319,7 @@ impl UtilityFunctions {
 			UtilityFunctions::Log,
 			UtilityFunctions::Assert,
 			UtilityFunctions::UnsafeCast,
+			UtilityFunctions::Nodeof,
 		]
 	}
 }
@@ -328,6 +330,7 @@ impl Display for UtilityFunctions {
 			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Assert => write!(f, "assert"),
 			UtilityFunctions::UnsafeCast => write!(f, "unsafeCast"),
+			UtilityFunctions::Nodeof => write!(f, "nodeof"),
 		}
 	}
 }
@@ -358,6 +361,7 @@ pub struct Class {
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
 	pub access: AccessModifier,
+	pub auto_id: bool,
 }
 
 impl Class {

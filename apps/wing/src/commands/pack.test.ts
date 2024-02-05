@@ -111,12 +111,11 @@ describe("wing pack", () => {
   it("packages a valid Wing project to a default path", async () => {
     // GIVEN
     const outdir = await generateTmpDir();
-    // copy everything to the output directory to sandbox this test
-    await exec(`cp -r ${goodFixtureDir}/* ${outdir}`);
-    process.chdir(outdir);
 
     // WHEN
-    await pack();
+    process.chdir(goodFixtureDir);
+    await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -124,7 +123,7 @@ describe("wing pack", () => {
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
 
-    const expectedFiles = ["index.js", "README.md", "package.json", "store.w"];
+    const expectedFiles = ["README.md", "package.json", "store.w"];
     for (const file of expectedFiles) {
       expect(tarballContents[file]).toBeDefined();
     }
@@ -136,14 +135,52 @@ describe("wing pack", () => {
     expect(pkgJson.wing).toEqual(true);
   });
 
-  it("packages a valid Wing project to a user-specified path", async () => {
+  it("can consume a Wing project from JS", async () => {
     // GIVEN
-    const projectDir = goodFixtureDir;
     const outdir = await generateTmpDir();
-    process.chdir(projectDir);
 
     // WHEN
+    process.chdir(goodFixtureDir);
     await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
+
+    // THEN
+    const files = await fs.readdir(outdir);
+    expect(files.filter((path) => path.endsWith(".tgz")).length).toEqual(1);
+    const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
+    await extractTarball(join(outdir, tarballPath), outdir);
+
+    // symlink node_modules/@winglang/sdk to our version of the sdk so the import works
+    await fs.mkdir(join(outdir, "package", "node_modules", "@winglang"), { recursive: true });
+    await fs.symlink(
+      require.resolve("@winglang/sdk"),
+      join(outdir, "package", "node_modules", "@winglang", "sdk")
+    );
+
+    const packagePath = join(outdir, "package");
+
+    const modPackage = await import(join(packagePath, "package.json"));
+    const mod = await import(join(packagePath, modPackage.main));
+
+    expect(mod).toBeDefined();
+    expect(Object.keys(mod).sort()).toMatchInlineSnapshot(`
+      [
+        "FavoriteNumbers",
+        "Store",
+        "default",
+        "subdir",
+      ]
+    `);
+  });
+
+  it("packages a valid Wing project to a user-specified path", async () => {
+    // GIVEN
+    const outdir = await generateTmpDir();
+
+    // WHEN
+    process.chdir(goodFixtureDir);
+    await pack({ outFile: join(outdir, "tarball.tgz") });
+    process.chdir(outdir);
 
     // THEN
     const files = await fs.readdir(outdir);
@@ -151,18 +188,36 @@ describe("wing pack", () => {
     const tarballPath = files.find((path) => path.endsWith(".tgz"))!;
     const tarballContents = await extractTarball(join(outdir, tarballPath), outdir);
 
-    const expectedFiles = [
-      "index.js",
-      "README.md",
-      "LICENSE",
-      "package.json",
-      "store.w",
-      "enums.w",
-      "subdir/util.w",
-      "util.js",
-      // util.ts - TypeScript files are not included by default
-    ];
-    expect(Object.keys(tarballContents).sort()).toEqual(expectedFiles.sort());
+    expect(Object.keys(tarballContents).sort()).toMatchInlineSnapshot(`
+      [
+        "$lib/.wing/inflight.Store-2.js",
+        "$lib/.wing/inflight.Store-2.js.map",
+        "$lib/.wing/inflight.Util-1.js",
+        "$lib/.wing/inflight.Util-1.js.map",
+        "$lib/.wing/preflight.d.ts",
+        "$lib/.wing/preflight.enums-1.d.ts",
+        "$lib/.wing/preflight.enums-1.js",
+        "$lib/.wing/preflight.enums-1.js.map",
+        "$lib/.wing/preflight.js",
+        "$lib/.wing/preflight.js.map",
+        "$lib/.wing/preflight.store-3.d.ts",
+        "$lib/.wing/preflight.store-3.js",
+        "$lib/.wing/preflight.store-3.js.map",
+        "$lib/.wing/preflight.subdir-4.d.ts",
+        "$lib/.wing/preflight.subdir-4.js",
+        "$lib/.wing/preflight.subdir-4.js.map",
+        "$lib/.wing/preflight.util-2.d.ts",
+        "$lib/.wing/preflight.util-2.js",
+        "$lib/.wing/preflight.util-2.js.map",
+        "LICENSE",
+        "README.md",
+        "enums.w",
+        "package.json",
+        "store.w",
+        "subdir/util.w",
+        "util.js",
+      ]
+    `);
 
     const pkgJson = JSON.parse(tarballContents["package.json"]);
     expect(pkgJson.name).toEqual("@winglibs/testfixture");

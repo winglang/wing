@@ -15,7 +15,7 @@ const project = new typescript.TypeScriptProject({
     "jsii-docgen": "bin/jsii-docgen",
   },
   devDeps: [
-    "jsii@~5.0.0",
+    "jsii@~5.3.11",
     "@types/fs-extra",
     "@types/semver",
     "@types/yargs@^16",
@@ -37,6 +37,9 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
+  jestOptions: {
+    coverageText: false,
+  },
 });
 
 const libraryFixtures = ["construct-library"];
@@ -72,6 +75,6 @@ project.addFields({
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

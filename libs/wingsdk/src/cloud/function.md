@@ -17,8 +17,7 @@ sidebar_position: 1
 The `cloud.Function` resource represents a serverless function for performing short, stateless tasks.
 Functions are typically used to run business logic in response to events, such as a file being uploaded to a bucket, a message being pushed to a queue, or a timer expiring.
 
-When a function is invoked on a cloud provider, it is typically executed in a container that is spun up on demand.
-The container is then destroyed after the function finishes executing.
+When a function is invoked on a cloud provider, it is typically executed in a container/host which is provisioned on demand.
 
 Functions may be invoked more than once, and some cloud providers may automatically retry failed invocations.
 For performance reasons, most cloud providers impose a timeout on functions, after which the function is automatically terminated.
@@ -50,9 +49,44 @@ new cloud.Function(inflight () => {
   let wordsCount = countWords.invoke(sentence);
   log("'${sentence}' has ${wordsCount} words");
 
-  longTask.invokeAsync();
+  longTask.invokeAsync("");
   log("task started");
 }) as "Invoke Me";
+```
+
+## Function container reuse
+
+Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
+to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+
+The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
+
+```js
+bring cloud;
+
+let big = new cloud.Bucket();
+
+big.addObject("bigdata.json", Json.stringify({
+  "my-key": "my-value"
+}));
+
+class MyDatabase {
+  inflight bigdata: Json;
+  inflight new() {
+    // download big data once
+    this.bigdata = big.getJson("bigdata.json");
+  }
+
+  pub inflight query(key: str): Json {
+    return this.bigdata.get(key);
+  }
+}
+
+let db = new MyDatabase();
+
+new cloud.Function(inflight () => {
+  log(Json.stringify(db.query("my-key")));
+});
 ```
 
 ## Target-specific details

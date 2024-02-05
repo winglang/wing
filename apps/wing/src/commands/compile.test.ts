@@ -1,15 +1,18 @@
-import { writeFileSync } from "fs";
 import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
 import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
-import { generateTmpDir } from "../util";
 
 const exampleDir = resolve("../../examples/tests/valid");
+const exampleErrorDir = resolve("../../examples/tests/error");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
+
+function rndTargetDir() {
+  return `./target/wingtest-${Math.random().toString(36).substring(7)}`;
+}
 
 describe(
   "compile command tests",
@@ -17,20 +20,27 @@ describe(
     test("should be able to compile the SDK capture test to sim", async () => {
       const outDir = await compile(exampleFilePath, {
         platform: [BuiltinPlatform.SIM],
-        targetDir: `${await generateTmpDir()}/target`,
+        targetDir: rndTargetDir(),
       });
 
       const stats = await stat(outDir);
       expect(stats.isDirectory()).toBeTruthy();
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+      expect(files).toMatchInlineSnapshot(`
+        [
+          ".wing",
+          "connections.json",
+          "simulator.json",
+          "tree.json",
+        ]
+      `);
     });
 
     test("should be able to compile the SDK capture test to tf-aws", async () => {
       const artifactDir = await compile(exampleFilePath, {
         platform: [BuiltinPlatform.TF_AWS],
-        targetDir: `${await generateTmpDir()}/target`,
+        targetDir: rndTargetDir(),
       });
       const expectedFiles = ["main.tf.json", "tree.json", "connections.json"];
 
@@ -44,14 +54,21 @@ describe(
     test("should be able to compile to default target sim", async () => {
       const outDir = await compile(exampleFilePath, {
         platform: [BuiltinPlatform.SIM],
-        targetDir: `${await generateTmpDir()}/target`,
+        targetDir: rndTargetDir(),
       });
 
       const stats = await stat(outDir);
       expect(stats.isDirectory()).toBeTruthy();
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+      expect(files).toMatchInlineSnapshot(`
+        [
+          ".wing",
+          "connections.json",
+          "simulator.json",
+          "tree.json",
+        ]
+      `);
     });
 
     test("should be able to compile the only entrypoint file in current directory", async () => {
@@ -60,7 +77,7 @@ describe(
 
       try {
         process.chdir(outDir);
-        writeFileSync("main.w", "bring cloud;");
+        await writeFile("main.w", "bring cloud;");
         await compile();
 
         const stats = await stat(outDir);
@@ -79,10 +96,27 @@ describe(
       ).rejects.toThrowError(/Source file cannot be found/);
     });
 
+    test("should create verbose stacktrace with DEBUG env set", async () => {
+      const exampleErrorFile = join(exampleErrorDir, "bool_from_json.test.w");
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.not.toThrowError(/wingsdk/);
+
+      const prevDebug = process.env.DEBUG;
+      process.env.DEBUG = "true";
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.toThrowError(/wingsdk/);
+
+      process.env.DEBUG = prevDebug;
+    });
+
     test("should be able to compile a directory", async () => {
       const artifactDir = await compile(exampleSmallDir, {
         platform: [BuiltinPlatform.SIM],
-        targetDir: `${await generateTmpDir()}/target`,
+        targetDir: rndTargetDir(),
       });
 
       const stats = await stat(artifactDir);
@@ -92,7 +126,7 @@ describe(
     test("should be able to compile a directory to tf-aws", async () => {
       const artifactDir = await compile(exampleSmallDir, {
         platform: [BuiltinPlatform.TF_AWS],
-        targetDir: `${await generateTmpDir()}/target`,
+        targetDir: rndTargetDir(),
       });
 
       const stats = await stat(artifactDir);
@@ -109,21 +143,28 @@ describe(
         // because we changed to the example directory, we can just pass the filename
         const outDir = await compile("extern_implementation.test.w", {
           platform: [BuiltinPlatform.SIM],
-          targetDir: `${await generateTmpDir()}/target`,
+          targetDir: rndTargetDir(),
         });
 
         const stats = await stat(outDir);
         expect(stats.isDirectory()).toBeTruthy();
         const files = (await readdir(outDir)).sort();
         expect(files.length).toBeGreaterThan(0);
-        expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
+        expect(files).toMatchInlineSnapshot(`
+          [
+            ".wing",
+            "connections.json",
+            "simulator.json",
+            "tree.json",
+          ]
+        `);
       } finally {
         process.chdir(oldCwd);
       }
     });
 
     test("should not delete files in the output directory if they are not generated by the compiler", async () => {
-      const targetDir = `${await generateTmpDir()}/target`;
+      const targetDir = rndTargetDir();
       const artifactDir = await compile(exampleFilePath, {
         platform: [BuiltinPlatform.TF_AWS],
         targetDir,

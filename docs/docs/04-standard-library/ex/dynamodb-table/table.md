@@ -232,6 +232,41 @@ dynamodb UpdateItem options.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ex.DynamodbTable.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.ex.DynamodbTable.onLiftType"></a>
+
+```wing
+bring ex;
+
+ex.DynamodbTable.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ex.DynamodbTable.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ex.DynamodbTable.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -478,6 +513,7 @@ let DynamodbTableProps = ex.DynamodbTableProps{ ... };
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.attributeDefinitions">attributeDefinitions</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | Table attribute definitions. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.hashKey">hashKey</a></code> | <code>str</code> | Hash key for this table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
+| <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.globalSecondaryIndex">globalSecondaryIndex</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.ex.GlobalSecondaryIndex">GlobalSecondaryIndex</a>&gt;</code> | The GSI for the table. |
 | <code><a href="#@winglang/sdk.ex.DynamodbTableProps.property.rangeKey">rangeKey</a></code> | <code>str</code> | Range key for this table. |
 
 ---
@@ -520,6 +556,19 @@ The table's name.
 
 ---
 
+##### `globalSecondaryIndex`<sup>Optional</sup> <a name="globalSecondaryIndex" id="@winglang/sdk.ex.DynamodbTableProps.property.globalSecondaryIndex"></a>
+
+```wing
+globalSecondaryIndex: MutArray<GlobalSecondaryIndex>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.ex.GlobalSecondaryIndex">GlobalSecondaryIndex</a>&gt;
+- *Default:* undefined
+
+The GSI for the table.
+
+---
+
 ##### `rangeKey`<sup>Optional</sup> <a name="rangeKey" id="@winglang/sdk.ex.DynamodbTableProps.property.rangeKey"></a>
 
 ```wing
@@ -530,6 +579,121 @@ rangeKey: str;
 - *Default:* undefined
 
 Range key for this table.
+
+---
+
+### GlobalSecondaryIndex <a name="GlobalSecondaryIndex" id="@winglang/sdk.ex.GlobalSecondaryIndex"></a>
+
+Options for `DynamodbTable.GlobalSecondaryIndex`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ex.GlobalSecondaryIndex.Initializer"></a>
+
+```wing
+bring ex;
+
+let GlobalSecondaryIndex = ex.GlobalSecondaryIndex{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.hashKey">hashKey</a></code> | <code>str</code> | The name of the hash key in the index. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.name">name</a></code> | <code>str</code> | The name of the index. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.projectionType">projectionType</a></code> | <code>str</code> | The set of attributes that are projected into the index. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.nonKeyAttributes">nonKeyAttributes</a></code> | <code>MutArray&lt;str&gt;</code> | A list of attributes to project into the index. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.rangeKey">rangeKey</a></code> | <code>str</code> | The name of the range key. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.readCapacity">readCapacity</a></code> | <code>num</code> | Number of write units for this index. |
+| <code><a href="#@winglang/sdk.ex.GlobalSecondaryIndex.property.writeCapacity">writeCapacity</a></code> | <code>num</code> | Number of read units for this index. |
+
+---
+
+##### `hashKey`<sup>Required</sup> <a name="hashKey" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.hashKey"></a>
+
+```wing
+hashKey: str;
+```
+
+- *Type:* str
+
+The name of the hash key in the index.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+The name of the index.
+
+---
+
+##### `projectionType`<sup>Required</sup> <a name="projectionType" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.projectionType"></a>
+
+```wing
+projectionType: str;
+```
+
+- *Type:* str
+- *Default:* "ALL"
+
+The set of attributes that are projected into the index.
+
+---
+
+##### `nonKeyAttributes`<sup>Optional</sup> <a name="nonKeyAttributes" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.nonKeyAttributes"></a>
+
+```wing
+nonKeyAttributes: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* undefined
+
+A list of attributes to project into the index.
+
+---
+
+##### `rangeKey`<sup>Optional</sup> <a name="rangeKey" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.rangeKey"></a>
+
+```wing
+rangeKey: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The name of the range key.
+
+---
+
+##### `readCapacity`<sup>Optional</sup> <a name="readCapacity" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.readCapacity"></a>
+
+```wing
+readCapacity: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+Number of write units for this index.
+
+---
+
+##### `writeCapacity`<sup>Optional</sup> <a name="writeCapacity" id="@winglang/sdk.ex.GlobalSecondaryIndex.property.writeCapacity"></a>
+
+```wing
+writeCapacity: num;
+```
+
+- *Type:* num
+- *Default:* undefined
+
+Number of read units for this index.
 
 ---
 

@@ -89,6 +89,11 @@ export class WingConsoleManager {
         windowsHide: true,
         shell: false,
         detached: process.platform !== "win32",
+        env: {
+          ...process.env,
+          // Ask the Wing Console to not show the sign in prompt.
+          NO_SIGN_IN: "true",
+        },
       }
     );
 

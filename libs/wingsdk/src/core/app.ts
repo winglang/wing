@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { NotImplementedError } from "./errors";
 import { SDK_PACKAGE_NAME } from "../constants";
 import { APP_SYMBOL, IApp, Node } from "../std/node";
-import type { IResource } from "../std/resource";
+import { type IResource } from "../std/resource";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -92,27 +92,6 @@ export abstract class App extends Construct implements IApp {
     return Node.of(scope).app as App;
   }
 
-  /**
-   * Loads the `App` class for the given target.
-   * @param target one of the supported targets
-   * @returns an `App` class constructor
-   */
-  public static for(target: string): any {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require(`../target-${target}/app`).App;
-    } catch (e: any) {
-      if (e.code === "MODULE_NOT_FOUND") {
-        const cannotFindModule = e.message.split("\n")[0];
-        throw new Error(
-          `${cannotFindModule}. The target "${target}" requires this module to be installed globally (using "npm i -g").`
-        );
-      }
-
-      throw new Error(`Unknown compilation target: "${target}": ${e.message}`);
-    }
-  }
-
   /** @internal */
   public readonly [APP_SYMBOL] = true;
 
@@ -159,6 +138,12 @@ export abstract class App extends Construct implements IApp {
    */
   public _testRunner: TestRunner | undefined;
 
+  /**
+   * SynthHooks hooks of dependent platforms
+   * @internal
+   */
+  protected _synthHooks?: SynthHooks;
+
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
     if (!props.entrypointDir) {
@@ -172,6 +157,7 @@ export abstract class App extends Construct implements IApp {
 
     this.entrypointDir = props.entrypointDir;
     this._newInstanceOverrides = props.newInstanceOverrides ?? [];
+    this._synthHooks = props.synthHooks;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
   }
 
@@ -229,8 +215,10 @@ export abstract class App extends Construct implements IApp {
     const instance = this.tryNew(fqn, scope, id, ...args);
     if (!instance) {
       const typeName = fqn.replace(`${SDK_PACKAGE_NAME}.`, "");
+      const typeNameParts = typeName.split(".");
       throw new NotImplementedError(
-        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`
+        `Resource "${fqn}" is not yet implemented for "${this._target}" target. Please refer to the roadmap https://github.com/orgs/winglang/projects/3/views/1?filterQuery=${typeName}`,
+        { resource: typeNameParts[typeNameParts.length - 1] }
       );
     }
 
@@ -283,6 +271,7 @@ export abstract class App extends Construct implements IApp {
     if (!type) {
       return undefined;
     }
+
     return new type(scope, id, ...args);
   }
 }

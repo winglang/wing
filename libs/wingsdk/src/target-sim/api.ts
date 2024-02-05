@@ -8,7 +8,7 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -44,7 +44,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     path: string,
     method: cloud.HttpMethod
   ): Function {
-    let handler = this.handlers[inflight._hash];
+    let handler = this.handlers[inflight._id];
 
     if (handler) {
       const routes = (handler.mapping.eventProps.subscriptionProps as any)
@@ -60,7 +60,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const fn = new Function(
       this,
       App.of(this).makeId(this, "OnRequestHandler"),
-      inflight,
+      inflight as IInflight,
       props
     ) as Function;
     Node.of(fn).sourceModule = SDK_SOURCE_MODULE;
@@ -83,7 +83,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
         },
       }
     );
-    this.handlers[inflight._hash] = {
+    this.handlers[inflight._id] = {
       func: fn,
       mapping: eventMapping,
     };

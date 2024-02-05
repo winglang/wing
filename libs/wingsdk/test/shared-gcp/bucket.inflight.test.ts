@@ -125,7 +125,7 @@ test("delete object from the bucket with mustExist option", async () => {
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
-  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
+  ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
 test("delete a non-existent object from the bucket with mustExist option", async () => {
@@ -138,7 +138,7 @@ test("delete a non-existent object from the bucket with mustExist option", async
 
   await expect(() =>
     client.delete(NON_EXISTENT_KEY, { mustExist: true })
-  ).rejects.toThrowError(`Failed to delete object. (key=${NON_EXISTENT_KEY})`);
+  ).rejects.toThrowError(`Object does not exist (key=${NON_EXISTENT_KEY}).`);
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
@@ -152,7 +152,7 @@ test("Given a non public bucket when reaching to a key public url it should thro
   await client.put(KEY, VALUE);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to get public URL. (key=${KEY})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
   );
 });
 
@@ -165,7 +165,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   const client = new BucketClient(BUCKET_NAME, storage as any);
 
   await expect(() => client.publicUrl(KEY)).rejects.toThrowError(
-    `Failed to get public URL. (key=${KEY})`
+    `Failed to check if bucket is public. (bucket=${BUCKET_NAME})`
   );
 });
 
@@ -366,6 +366,95 @@ test("get object's metadata from bucket", async () => {
     lastModified: Datetime.fromIso("2023-10-22T18:55:00Z"),
     contentType: "text/plain",
   });
+});
+
+test("copy non-existing object", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  // THEN
+  await expect(client.copy(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY})`
+  );
+});
+
+test("copy objects within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  const SRC_VALUE = "hello world";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  await client.put(SRC_KEY, SRC_VALUE);
+  const response1 = await client.copy(SRC_KEY, SRC_KEY);
+  // THEN
+  expect(response1).toEqual(undefined);
+  expect(await client.get(SRC_KEY)).toBe(SRC_VALUE);
+  expect(await client.exists(DST_KEY)).toBe(false);
+
+  // WHEN
+  const response2 = await client.copy(SRC_KEY, DST_KEY);
+  // THEN
+  expect(response2).toEqual(undefined);
+  expect(await client.get(DST_KEY)).toBe(SRC_VALUE);
+});
+
+test("rename valid object in the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const SRC_VALUE = "hello world";
+  const DST_KEY = "DST/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+  await client.put(SRC_KEY, SRC_VALUE);
+  const response = await client.rename(SRC_KEY, DST_KEY);
+
+  // THEN
+  expect(response).toEqual(undefined);
+  expect(await client.get(DST_KEY)).toBe(SRC_VALUE);
+  expect(await client.exists(SRC_KEY)).toBe(false);
+});
+
+test("renaming an object to its current name should throw an error", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, SRC_KEY)).rejects.toThrowError(
+    `Renaming an object to its current name is not a valid operation (srcKey=${SRC_KEY}, dstKey=${SRC_KEY}).`
+  );
+});
+
+test("rename non-existent object within the bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const SRC_KEY = "SRC/KEY";
+  const DST_KEY = "DST/KEY";
+  const mockStorage = new MockStorage();
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, mockStorage as any);
+
+  // THEN
+  await expect(() => client.rename(SRC_KEY, DST_KEY)).rejects.toThrowError(
+    `Source object does not exist (srcKey=${SRC_KEY}).`
+  );
 });
 
 // TODO: implement signedUrl related tests

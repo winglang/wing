@@ -6,8 +6,11 @@
     "test": "wing test ./src/main.ts"
   },
   "dependencies": {
-    "ts4w": "workspace:^",
-    "@winglang/sdk": "workspace:^",
+    "@wingcloud/framework": "workspace:^",
+    "@winglibs/testfixture": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
     "winglang": "workspace:^"
   },
   "volta": {

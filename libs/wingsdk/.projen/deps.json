@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18",
+      "version": "^20",
       "type": "build"
     },
     {
@@ -49,11 +49,13 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock",
+      "name": "aws-sdk-client-mock-jest",
+      "version": "3.0.0",
       "type": "build"
     },
     {
-      "name": "aws-sdk-client-mock-jest",
+      "name": "aws-sdk-client-mock",
+      "version": "3.0.0",
       "type": "build"
     },
     {
@@ -117,12 +119,12 @@
     },
     {
       "name": "jsii",
-      "version": "5.0.11",
+      "version": "~5.3.11",
       "type": "build"
     },
     {
       "name": "mock-gcs",
-      "version": "^1.0.0",
+      "version": "^1.2.0",
       "type": "build"
     },
     {
@@ -223,13 +225,23 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/data-tables",
+      "version": "13.2.2",
+      "type": "bundled"
+    },
+    {
       "name": "@azure/identity",
-      "version": "3.1.3",
+      "version": "4.0.1",
       "type": "bundled"
     },
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@google-cloud/datastore",
+      "version": "8.4.0",
       "type": "bundled"
     },
     {
@@ -258,10 +270,6 @@
     },
     {
       "name": "cron-parser",
-      "type": "bundled"
-    },
-    {
-      "name": "esbuild-wasm",
       "type": "bundled"
     },
     {
@@ -295,6 +303,11 @@
       "type": "bundled"
     },
     {
+      "name": "protobufjs",
+      "version": "7.2.5",
+      "type": "bundled"
+    },
+    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
@@ -320,7 +333,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18.17.13",
+      "version": "^20.11.0",
       "type": "devenv"
     },
     {
