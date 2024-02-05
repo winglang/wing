@@ -301,7 +301,7 @@ export class Api extends cloud.Api implements IAwsApi {
 }
 
 /**
- * Encapsulates the API Gateway REST API as a abstraction for Terraform.
+ * Encapsulates the API Gateway REST API as an abstraction for Terraform.
  */
 class WingRestApi extends Construct {
   public readonly url: string;
