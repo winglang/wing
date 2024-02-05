@@ -115,8 +115,9 @@ export const SignInModal = (props: SignInModalProps) => {
           Wing Console
         </h3>
 
-        <p className={classNames(theme.text2, "text-sm")}>
-          Help us to provide you with a better experience.
+        <p className={classNames(theme.text2, "text-sm text-center")}>
+          Please sign up with your GitHub credentials to help us improve your
+          experience in Wing Console and Wing CLI.
         </p>
 
         <div className="flex justify-around gap-2">
@@ -128,11 +129,10 @@ export const SignInModal = (props: SignInModalProps) => {
 
         <div className="flex justify-around">
           <p className={classNames(theme.text2, "text-xs")}>
-            You acknowledge that you read, and agree to our{" "}
+            By signing up, you agree to our{" "}
             <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
               Terms and Conditions
             </Link>
-            .
           </p>
         </div>
       </div>
