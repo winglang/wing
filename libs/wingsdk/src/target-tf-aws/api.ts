@@ -321,13 +321,13 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    this.api = this._initializeApiGatewayRestApi(id, props);
-    this.deployment = this._initializeApiGatewayDeployment();
-    this.stage = this._initializeApiGatewayStage();
+    this.api = this._initApiGatewayRestApi(id, props);
+    this.deployment = this._initApiGatewayDeployment();
+    this.stage = this._initApiGatewayStage();
     this.url = this._constructInvokeUrl();
   }
 
-  private _initializeApiGatewayRestApi(
+  private _initApiGatewayRestApi(
     id: string,
     props: {
       getApiSpec: () => OpenApiSpec;
@@ -366,7 +366,7 @@ class WingRestApi extends Construct {
     });
   }
 
-  private _initializeApiGatewayDeployment(): ApiGatewayDeployment {
+  private _initApiGatewayDeployment(): ApiGatewayDeployment {
     return new ApiGatewayDeployment(this, "deployment", {
       restApiId: this.api.id,
       lifecycle: { createBeforeDestroy: true },
@@ -375,7 +375,7 @@ class WingRestApi extends Construct {
     });
   }
 
-  private _initializeApiGatewayStage(): ApiGatewayStage {
+  private _initApiGatewayStage(): ApiGatewayStage {
     return new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
       stageName: STAGE_NAME,
