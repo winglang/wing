@@ -341,9 +341,7 @@ class WingRestApi extends Construct {
      *   - 404 (Not Found) for other HTTP methods.
      * - If `props.cors == undefined`, `defaultResponse` defaults to a mock 404 response for any HTTP method.
      */
-    const defaultResponse = props.cors
-      ? API_CORS_DEFAULT_RESPONSE(props.cors)
-      : {};
+    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
     return new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
