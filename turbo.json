@@ -101,6 +101,7 @@
       "inputs": ["*.md", "LICENSE"]
     },
     "topo": {
+      "inputs": ["**", "!node_modules/**", "!**/target/**"],
       "dependsOn": ["^topo"]
     },
     "dev": {
