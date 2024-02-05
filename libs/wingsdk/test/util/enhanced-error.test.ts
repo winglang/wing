@@ -6,7 +6,7 @@ describe("prettyPrintError", () => {
     const result = await prettyPrintError("message");
 
     // no stack trace available
-    expect(result).toMatchInlineSnapshot('"runtime error: message"');
+    expect(result).toMatchInlineSnapshot('"Error: message"');
   });
   test("empty message", async () => {
     const result = await prettyPrintError("");
