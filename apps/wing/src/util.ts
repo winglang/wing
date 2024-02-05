@@ -87,11 +87,11 @@ export const currentPackage: {
 export const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "project-templates");
 
 export function projectTemplateNames(): string[] {
-  const templateNames: string[] = [];
+  const templateNames: Set<string> = new Set();
   readdirSync(join(PROJECT_TEMPLATES_DIR)).forEach((language) => {
     readdirSync(join(PROJECT_TEMPLATES_DIR, language)).forEach((template) => {
-      templateNames.push(template);
+      templateNames.add(template);
     });
   });
-  return templateNames;
+  return [...templateNames];
 }

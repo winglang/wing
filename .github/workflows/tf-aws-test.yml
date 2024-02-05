@@ -27,7 +27,7 @@ on:
           - tf-azure
 env:
   AWS_REGION: "us-east-1"
-  NODE_VERSION: "18.16.0"
+  NODE_VERSION: "20.11.0"
   # this variable indicates wheater to use wing cli from a local version (using the current repo code)
   # or use the latest remote npm version
   LOCAL_BUILD: ${{ github.workflow == 'build' }}
@@ -36,7 +36,7 @@ env:
   REPO: ${{ inputs.repo || github.repository }}
   REF: ${{ inputs.ref || github.ref }}
   TARGET: ${{ inputs.target || (github.workflow == 'build' && 'all-stable') || (github.event_name == 'release' && 'all-unstable')  || 'all' }} #the build runs only stable targets, realease only unstable
-  PNPM_VERSION: "8.6.3"
+  PNPM_VERSION: "8.15.1"
   AZURE_LOCATION: "East US"
   GOOGLE_PROJECT_ID: "sdk-spec-tests" # for the future
   GOOGLE_REGION: "us-central1" # for the future

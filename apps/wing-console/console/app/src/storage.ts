@@ -21,6 +21,8 @@ export interface AnalyticsConfig {
   disclaimerDisplayed?: boolean;
   /** optional opt out value */
   optOut?: boolean;
+  /** whether sign in is required */
+  requireSignIn?: boolean;
 }
 
 /**
@@ -77,6 +79,21 @@ export class AnalyticsStorage {
       this.saveConfig(config);
     }
     return config.anonymousId;
+  }
+
+  public getRequireSignIn(): boolean {
+    let config = this.loadConfig();
+    if (config.requireSignIn == undefined) {
+      config.requireSignIn = true;
+      this.saveConfig(config);
+    }
+    return config.requireSignIn;
+  }
+
+  public notifySignedIn() {
+    let config = this.loadConfig();
+    config.requireSignIn = false;
+    this.saveConfig(config);
   }
 
   private generateAnonymousId(): string {

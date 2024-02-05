@@ -97,7 +97,7 @@ export function printResults(
   console.log(res.filter((value) => !!value).join("\n"));
 }
 
-interface TestResultsJson {
+export interface TestResultsJson {
   duration: number;
   platforms: string[];
   results: Record<string, Record<string, std.TestResult>>;

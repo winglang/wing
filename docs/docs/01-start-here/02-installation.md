@@ -11,7 +11,7 @@ In this section you will install Wing on your system and run your first wing app
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) (>= 18.13.0)
+* [Node.js](https://nodejs.org/en/) (>= 20)
 * [VSCode](https://code.visualstudio.com/) (not required, but currently supported with an [extension](#wing-vscode-extension))
 
 ## Wing Toolchain

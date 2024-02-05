@@ -9,12 +9,9 @@
         "dist/**"
       ]
     },
-    "test": {
-      "dependsOn": ["compile"]
-    },
+    "test": {},
     "package": {
-      "dependsOn": ["compile"],
-      "outputs": ["../../dist/ts4w-*.tgz"]
+      "outputs": ["../../../dist/wingcloud-framework-*.tgz"]
     }
   }
 }
