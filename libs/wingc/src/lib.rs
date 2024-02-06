@@ -216,6 +216,7 @@ pub fn type_check(
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
 	let mut env = types.add_symbol_env(SymbolEnv::new(None, SymbolEnvKind::Scope, Phase::Preflight, 0));
+
 	types.set_scope_env(scope, env);
 
 	let mut tc = TypeChecker::new(types, file_path, file_graph, jsii_types, jsii_imports);
@@ -227,6 +228,12 @@ pub fn type_check(
 		None,
 	);
 	tc.add_builtins(scope);
+
+	let file_path_as_str = file_path.to_string();
+	// If the file is an entrypoint file, we add "this" to its symbol environment
+	if file_path_as_str == "main.w" || file_path_as_str.ends_with(".main.w") || file_path_as_str.ends_with(".test.w") {
+		tc.add_this(&mut env);
+	}
 
 	tc.type_check_file_or_dir(file_path, scope);
 }

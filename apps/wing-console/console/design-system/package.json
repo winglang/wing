@@ -43,6 +43,7 @@
   "devDependencies": {
     "@babel/core": "^7.22.11",
     "@storybook/react": "^7.4.0",
+    "@tailwindcss/typography": "^0.5.10",
     "@testing-library/react": "^14.0.0",
     "@types/lodash.uniq": "^4.5.7",
     "@types/react": "^18.2.21",

@@ -217,7 +217,7 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: "20"
+            node: "18"
             full_run: false
     steps:
       - name: Checkout

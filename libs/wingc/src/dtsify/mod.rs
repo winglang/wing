@@ -72,22 +72,9 @@ impl<'a> DTSifier<'a> {
 	}
 
 	fn dtsify_function_signature(&self, f: &FunctionSignature, as_inflight: bool) -> String {
-		let mut args = vec![];
+		let args = self.dtsify_parameters(&f.parameters, as_inflight);
 
 		let is_inflight = matches!(f.phase, Phase::Inflight);
-
-		for (i, arg) in f.parameters.iter().enumerate() {
-			let arg_name = if arg.name.name.is_empty() {
-				// function type annotations don't always have names
-				format!("arg{}", i)
-			} else {
-				arg.name.name.clone()
-			};
-			args.push(format!(
-				"{arg_name}: {}",
-				self.dtsify_type_annotation(&arg.type_annotation, as_inflight)
-			));
-		}
 
 		let return_type = self.dtsify_type_annotation(&f.return_type, as_inflight);
 		let return_type = if is_inflight {
@@ -96,7 +83,7 @@ impl<'a> DTSifier<'a> {
 			return_type
 		};
 
-		let func = format!("({}) => {return_type}", args.join(", "),);
+		let func = format!("({}) => {return_type}", args,);
 
 		if is_inflight && !as_inflight {
 			// this is the preflight side of an inflight function
@@ -191,7 +178,7 @@ impl<'a> DTSifier<'a> {
 
 		code.open("{");
 
-		let constructor_params = self.dtsify_parameters(&class.initializer.signature.parameters);
+		let constructor_params = self.dtsify_parameters(&class.initializer.signature.parameters, as_inflight);
 		if matches!(class.phase, Phase::Preflight) {
 			if as_inflight {
 				code.line(format!("constructor({constructor_params});"));
@@ -229,8 +216,13 @@ impl<'a> DTSifier<'a> {
 			.filter(|f| !ignore_member_phase(f.phase, as_inflight))
 		{
 			code.line(format!(
-				"{}: {};",
+				"{}{}: {};",
 				field.name,
+				if matches!(field.member_type.kind, TypeAnnotationKind::Optional(_)) {
+					"?"
+				} else {
+					""
+				},
 				self.dtsify_type_annotation(&field.member_type, true)
 			));
 		}
@@ -276,12 +268,14 @@ impl<'a> DTSifier<'a> {
 				}
 
 				for field in fields {
-					let is_optional = matches!(field.member_type.kind, TypeAnnotationKind::Optional(_));
-
 					code.line(format!(
 						"readonly {}{}: {};",
 						field.name,
-						if is_optional { "?" } else { "" },
+						if matches!(field.member_type.kind, TypeAnnotationKind::Optional(_)) {
+							"?"
+						} else {
+							""
+						},
 						self.dtsify_type_annotation(&field.member_type, false)
 					));
 				}
@@ -358,13 +352,25 @@ impl<'a> DTSifier<'a> {
 		code
 	}
 
-	fn dtsify_parameters(&self, arg_list: &Vec<FunctionParameter>) -> String {
+	fn dtsify_parameters(&self, arg_list: &Vec<FunctionParameter>, ignore_phase: bool) -> String {
 		let mut args = vec![];
-		for arg in arg_list {
+
+		for (i, arg) in arg_list.iter().enumerate() {
+			let arg_name = if arg.name.name.is_empty() {
+				// function type annotations don't always have names
+				format!("arg{}", i)
+			} else {
+				arg.name.name.clone()
+			};
+
 			args.push(format!(
-				"{}: {}",
-				arg.name,
-				self.dtsify_type_annotation(&arg.type_annotation, false)
+				"{arg_name}{}: {}",
+				if matches!(arg.type_annotation.kind, TypeAnnotationKind::Optional(_)) {
+					"?"
+				} else {
+					""
+				},
+				self.dtsify_type_annotation(&arg.type_annotation, ignore_phase)
 			));
 		}
 		args.join(", ")
@@ -398,6 +404,13 @@ impl<'a> DTSifier<'a> {
 			TypeAnnotationKind::UserDefined(udt) => udt.to_string(),
 		}
 	}
+}
+
+fn ignore_member_phase(phase: Phase, is_inflight_client: bool) -> bool {
+	// If we're an inflight client, we want to ignore preflight members
+	// Or
+	// If we're a preflight client, we want to ignore inflight members
+	(is_inflight_client && matches!(phase, Phase::Preflight)) || (!is_inflight_client && matches!(phase, Phase::Inflight))
 }
 
 #[test]
@@ -435,9 +448,25 @@ pub class Child extends ParentClass impl ClassInterface {
 	);
 }
 
-fn ignore_member_phase(phase: Phase, is_inflight_client: bool) -> bool {
-	// If we're an inflight client, we want to ignore preflight members
-	// Or
-	// If we're a preflight client, we want to ignore inflight members
-	(is_inflight_client && matches!(phase, Phase::Preflight)) || (!is_inflight_client && matches!(phase, Phase::Inflight))
+#[test]
+fn optionals() {
+	assert_compile_dir!(
+		r#"
+pub struct Struct {
+	n: num?;
+}
+
+pub interface Interface {
+	method(s: Struct?): str;
+}
+
+pub interface ClassInterface {
+	addHandler(handler: inflight (str?): str, s: Struct?): void;
+}
+
+pub class ParentClass impl ClassInterface {
+	pub addHandler(handler: inflight (str?): str, s: Struct?) {}
+}
+"#
+	)
 }
