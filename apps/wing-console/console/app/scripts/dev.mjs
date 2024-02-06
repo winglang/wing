@@ -39,6 +39,7 @@ const consoleServer = await createConsoleServer({
     },
   },
   requireAcceptTerms: true,
+  analyticsAnonymousId: undefined,
 });
 
 const vite = await createViteServer({
