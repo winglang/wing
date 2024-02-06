@@ -172,14 +172,18 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "makeFn": [
+            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
           "callFn": [
+            [this, ["makeFn"]],
           ],
           "callFn2": [
+            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
           "$inflight_init": [
+            [this, ["inflight2"]],
             [this.inflight1, []],
           ],
           "inflight2": [

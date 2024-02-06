@@ -76,6 +76,7 @@ class $Root extends $stdlib.std.Resource {
           "method": [
           ],
           "$inflight_init": [
+            [this, ["field"]],
           ],
           "field": [
           ],
