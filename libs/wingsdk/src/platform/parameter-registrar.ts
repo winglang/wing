@@ -1,5 +1,5 @@
+import Ajv from "ajv";
 import { Construct } from "constructs";
-import { validate } from "jsonschema";
 import { loadPlatformSpecificValues } from "./util";
 
 /**
@@ -104,7 +104,7 @@ export class ParameterRegistrar extends Construct {
           recursiveRequire
         ),
       },
-      required: recursiveRequire,
+      required: recursiveRequire ? [currentKey] : [],
     };
   }
 
@@ -112,34 +112,31 @@ export class ParameterRegistrar extends Construct {
    * @internal
    */
   public _preSynthesize() {
-    // TODO: Rather than loop through each schema we should be able to generate a single schema using allOf,
-    //      but I couldn't get this to work, nesting all the schemas under a single allOf was causing some
-    //      undesired behaviors, I suspect it has to do with the jsonschema library we're using.
-    //      Its a little dated and only supports draft-07, so we may want to consider switching to json-schema (https://www.npmjs.com/package/json-schema)
-    let parameterValidationErrors: string[] = [];
+    if (this.parameterSchemas.length === 0) {
+      return;
+    }
 
-    this.parameterSchemas.forEach((schema) => {
-      const results = validate(this._rawParameters, schema, {
-        nestedErrors: true,
-      });
-      results.errors.forEach((error) => {
-        if (error.message.includes("does not match allOf schema")) {
-          // These are just noise, so we can ignore them
-          return;
-        }
-        parameterValidationErrors.push(
-          `Parameter ${error.property.replace("instance.", "")} is invalid: ${
-            error.message
-          }`
-        );
-      });
-    });
+    const platformParameterSchema = {
+      allOf: [...this.parameterSchemas],
+    };
 
-    if (parameterValidationErrors.length > 0) {
+    console.log(
+      "Validating parameters against schema",
+      JSON.stringify(platformParameterSchema, null, 2)
+    );
+
+    const ajv = new Ajv({ allErrors: true });
+    const validator = ajv.compile(platformParameterSchema);
+    const valid = validator(this._rawParameters);
+
+    if (!valid) {
       throw new Error(
-        `Parameter validation errors:\n- ${parameterValidationErrors.join(
-          "\n- "
-        )}`
+        `Parameter validation errors:\n- ${validator.errors
+          ?.map((error) => error.message)
+          .join("\n- ")}
+
+(hint: make sure to use --values to provide the required parameters file)
+        `
       );
     }
   }

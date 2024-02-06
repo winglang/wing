@@ -22,7 +22,6 @@ export class Domain extends cloud.Domain {
     // Domain requires parameters from the user, so we need to add the parameter schemas to the registrar
     let s = {
       type: "object",
-      required: true,
       oneOf: [
         {
           required: ["iamCertificate"],
@@ -31,6 +30,7 @@ export class Domain extends cloud.Domain {
           required: ["acmCertificateArn"],
         },
       ],
+      required: ["hostedZoneId"],
       properties: {
         iamCertificate: {
           type: "string",
@@ -40,7 +40,6 @@ export class Domain extends cloud.Domain {
         },
         hostedZoneId: {
           type: "string",
-          required: true,
         },
       },
     };

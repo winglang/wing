@@ -1329,6 +1329,9 @@ importers:
       '@types/aws-lambda':
         specifier: ^8.10.119
         version: 8.10.124
+      ajv:
+        specifier: ^8.12.0
+        version: 8.12.0
       cdktf:
         specifier: 0.17.0
         version: 0.17.0(constructs@10.2.70)
@@ -15511,7 +15514,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240201
+      typescript: 5.4.0-dev.20240205
     dev: true
 
   /dset@3.1.2:
@@ -25385,8 +25388,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240201:
-    resolution: {integrity: sha512-KyjAVgMfyIHhjbaYTeTElvoEKM4teDYYATdzsdcxvogVcaDuH0I0JbiwFUe6bIU5FnWxlbxc7rfGyh7aNwpnow==}
+  /typescript@5.4.0-dev.20240205:
+    resolution: {integrity: sha512-waxaX9QSNlTxyhaeS398h73fWzOr0DOq2rV6ZQSDywcabZjxeiCv18hYDIZXRk4dT0Q0DxhbNAL/THzjKjtDlQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

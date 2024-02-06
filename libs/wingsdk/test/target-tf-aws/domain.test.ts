@@ -205,7 +205,7 @@ describe("cloud.Domain for tf-aws", () => {
     }).toThrowError(
       new RegExp(
         `Parameter validation errors:\\s*` +
-          `- Parameter root is invalid: is required\\s*`.replace(/\s+/g, "\\s*") // Normalize whitespace for comparison
+          `- must have required property 'root' \\s*`.replace(/\s+/g, "\\s*") // Normalize whitespace for comparison
       )
     );
   });
