@@ -243,7 +243,7 @@ export function collectLifts(
     // Inspect the object to see if there are any transitive dependency information.
     // Currently there are a few ways to do this:
     // - The compiler may generate a _liftMap property on the object
-    // - The compiler may generate a static _onLiftTypeDeps method on a class
+    // - The compiler may generate a static _liftTypeMap method on a class
     // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
     let matrix: LiftDepsMatrix;
@@ -263,9 +263,9 @@ export function collectLifts(
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "function" &&
-      typeof obj._onLiftTypeDeps !== undefined
+      typeof obj._liftTypeMap !== undefined
     ) {
-      matrix = parseMatrix(obj._onLiftTypeDeps ?? {});
+      matrix = parseMatrix(obj._liftTypeMap ?? {});
       matrixCache.set(obj, matrix);
     } else {
       // If the object doesn't have any dependency information, we can skip it.
@@ -351,7 +351,7 @@ export interface ILiftableType {
    * inflight host.
    * @internal
    */
-  _onLiftTypeDeps?: LiftDepsMatrixRaw;
+  _liftTypeMap?: LiftDepsMatrixRaw;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to

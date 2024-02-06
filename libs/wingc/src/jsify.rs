@@ -1767,7 +1767,7 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "_onLiftTypeDeps"),
+			BindMethod::Type => ("static ", "_liftTypeMap"),
 			BindMethod::Instance => ("", "_liftMap"),
 		};
 
@@ -1786,7 +1786,7 @@ impl<'a> JSifier<'a> {
 			let var_info = method.expect(&format!("method \"{name}\" doesn't exist in {class_name}"));
 			let var_kind = &var_info.kind;
 
-			let is_static = matches!(var_kind, VariableKind::StaticMember);
+			let is_static = m.is_static;
 			let is_inflight = var_info.phase == Phase::Inflight;
 			let filter = match bind_method_kind {
 				BindMethod::Instance => is_inflight && !is_static,

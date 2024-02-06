@@ -110,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
           ],
         });
       }
-      static get _onLiftTypeDeps() {
+      static get _liftTypeMap() {
         return ({
           "get123": [
           ],
