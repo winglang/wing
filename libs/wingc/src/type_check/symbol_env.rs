@@ -31,6 +31,7 @@ pub struct SymbolEnv {
 	pub kind: SymbolEnvKind,
 
 	pub phase: Phase,
+	pub type_parameters: Option<Vec<TypeRef>>,
 	statement_idx: usize,
 }
 
@@ -196,6 +197,31 @@ impl SymbolEnv {
 			kind,
 			phase,
 			statement_idx,
+			type_parameters: None,
+		}
+	}
+
+	pub fn new_with_type_params(
+		parent: Option<SymbolEnvRef>,
+		kind: SymbolEnvKind,
+		phase: Phase,
+		statement_idx: usize,
+		type_params: Vec<UnsafeRef<Type>>,
+	) -> Self {
+		// Some sanity checks
+		// If parent is a type-environent this must be one too
+		assert!(
+			parent.is_none()
+				|| matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
+		);
+
+		Self {
+			symbol_map: BTreeMap::new(),
+			parent,
+			kind,
+			phase,
+			statement_idx,
+			type_parameters: Some(type_params),
 		}
 	}
 

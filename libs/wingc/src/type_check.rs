@@ -323,7 +323,6 @@ pub struct Class {
 	pub env: SymbolEnv,
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
-	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
@@ -353,6 +352,7 @@ impl Class {
 #[derivative(Debug)]
 pub struct Interface {
 	pub name: Symbol,
+	pub fqn: Option<String>,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
@@ -477,6 +477,7 @@ pub struct ArgListTypes {
 #[derivative(Debug)]
 pub struct Struct {
 	pub name: Symbol,
+	pub fqn: Option<String>,
 	pub docs: Docs,
 	pub extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
@@ -816,7 +817,7 @@ impl FunctionSignature {
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
 			.take_while(|arg| {
 				arg.typeref.is_option()
-					|| arg.typeref.is_struct()
+					|| arg.typeref.is_structural()
 					|| arg.typeref.is_anything()
 					|| arg.typeref.is_inferred()
 					|| arg.variadic
@@ -934,6 +935,24 @@ impl TypeRef {
 		}
 
 		None
+	}
+
+	pub fn as_env(&self) -> Option<&SymbolEnv> {
+		match &**self {
+			Type::Class(class) => Some(&class.env),
+			Type::Interface(iface) => Some(&iface.env),
+			Type::Struct(st) => Some(&st.env),
+			_ => None,
+		}
+	}
+
+	pub fn as_env_mut(&mut self) -> Option<&mut SymbolEnv> {
+		match &mut **self {
+			Type::Class(class) => Some(&mut class.env),
+			Type::Interface(iface) => Some(&mut iface.env),
+			Type::Struct(st) => Some(&mut st.env),
+			_ => None,
+		}
 	}
 
 	pub fn as_class_mut(&mut self) -> Option<&mut Class> {
@@ -1078,6 +1097,10 @@ impl TypeRef {
 		matches!(**self, Type::Struct(_))
 	}
 
+	pub fn is_structural(&self) -> bool {
+		matches!(**self, Type::Interface(_) | Type::Struct(_))
+	}
+
 	pub fn is_map(&self) -> bool {
 		matches!(**self, Type::Map(_))
 	}
@@ -1108,10 +1131,13 @@ impl TypeRef {
 	}
 
 	/// If this is a function and its last argument is a struct, return that struct.
-	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
+	pub fn get_function_structural_arg_env(&self) -> Option<&SymbolEnv> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
 			if let Some(arg) = func.parameters.last() {
-				return arg.typeref.maybe_unwrap_option().as_struct();
+				dbg!(arg.typeref.maybe_unwrap_option());
+				if arg.typeref.maybe_unwrap_option().is_structural() {
+					return arg.typeref.maybe_unwrap_option().as_env();
+				}
 			}
 		}
 
@@ -2776,11 +2802,12 @@ impl<'a> TypeChecker<'a> {
 	) -> Option<TypeRef> {
 		// Verify named args
 		let last_param = func_sig.parameters.last();
-		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
-		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
+		let is_last_param_structural =
+			last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_structural();
+		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_structural();
 
 		if !arg_list.named_args.is_empty() {
-			if is_last_param_struct {
+			if is_last_param_structural {
 				let last_param_type = last_param.unwrap().typeref.maybe_unwrap_option();
 				self.validate_structural_type(&arg_list_types.named_args, &last_param_type, call_span);
 			} else {
@@ -2795,7 +2822,7 @@ impl<'a> TypeChecker<'a> {
 			variadic_index.unwrap_or(arg_list.pos_args.len()),
 		);
 		let non_variadic_args_len = pos_args_len
-			+ if is_last_param_struct && !arg_list.named_args.is_empty() {
+			+ if is_last_param_structural && !arg_list.named_args.is_empty() {
 				1
 			} else {
 				0
@@ -2804,7 +2831,7 @@ impl<'a> TypeChecker<'a> {
 		// Verify arity
 		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
 		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
-		let named_args_text = if is_last_param_struct {
+		let named_args_text = if is_last_param_structural {
 			"or named arguments for the last parameter "
 		} else {
 			""
@@ -2830,7 +2857,7 @@ impl<'a> TypeChecker<'a> {
 			};
 
 			self.spanned_error(call_span, err_text);
-		} else if is_last_param_struct && non_variadic_args_len > max_args {
+		} else if is_last_param_structural && non_variadic_args_len > max_args {
 			self.spanned_error(
 				call_span,
 				"Expected either a positional argument or named arguments for the last parameter, but got both",
@@ -2914,7 +2941,7 @@ impl<'a> TypeChecker<'a> {
 		expected_type: &TypeRef,
 		value: &impl Spanned,
 	) {
-		let expected_struct = if let Some(expected_struct) = expected_type.maybe_unwrap_option().as_struct() {
+		let expected_env = if let Some(expected_struct) = expected_type.maybe_unwrap_option().as_env() {
 			expected_struct
 		} else {
 			self.spanned_error(value, format!("{expected_type} is not a struct so it has no fields"));
@@ -2925,7 +2952,7 @@ impl<'a> TypeChecker<'a> {
 		// Also map original field names to the ones in the struct type
 		let mut field_map = IndexMap::new();
 		for (k, _) in object_types.iter() {
-			let field = expected_struct.env.lookup(k, None);
+			let field = expected_env.lookup(k, None);
 			if let Some(field) = field {
 				let field_type = field
 					.as_variable()
@@ -2938,7 +2965,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Verify that all non-optional fields are present and are of the right type
-		for (k, v) in expected_struct.env.iter(true).map(|(k, v, _)| {
+		for (k, v) in expected_env.iter(true).map(|(k, v, _)| {
 			(
 				k,
 				v.as_variable()
@@ -2961,10 +2988,7 @@ impl<'a> TypeChecker<'a> {
 			} else if !v.is_option() {
 				self.spanned_error(
 					value,
-					format!(
-						"Missing required field \"{}\" from \"{}\"",
-						k, expected_struct.name.name
-					),
+					format!("Missing required field \"{k}\" from \"{expected_type}\""),
 				);
 			}
 		}
@@ -3039,7 +3063,7 @@ impl<'a> TypeChecker<'a> {
 			return false;
 		};
 
-		if expected_type_unwrapped.is_struct()
+		if expected_type_unwrapped.is_structural()
 			|| expected_type_unwrapped.is_immutable_collection()
 			|| expected_type_unwrapped.is_json_legal_value()
 		{
@@ -3054,7 +3078,7 @@ impl<'a> TypeChecker<'a> {
 				true
 			}
 			JsonDataKind::Fields(fields) => {
-				if expected_type_unwrapped.is_struct() {
+				if expected_type_unwrapped.is_structural() {
 					self.validate_structural_type(fields, expected_type_unwrapped, span);
 					true
 				} else if let Some(inner_expected) = inner_expected {
@@ -3709,6 +3733,7 @@ impl<'a> TypeChecker<'a> {
 		// Create the struct type
 		let mut struct_type = self.types.add_type(Type::Struct(Struct {
 			name: name.clone(),
+			fqn: None,
 			extends: extends_types.clone(),
 			env: dummy_env,
 			docs: Docs::default(),
@@ -3799,6 +3824,7 @@ impl<'a> TypeChecker<'a> {
 		// Create the interface type and add it to the current environment (so interface implementation can reference itself)
 		let interface_spec = Interface {
 			name: name.clone(),
+			fqn: None,
 			docs: Docs::default(),
 			env: dummy_env,
 			extends: extend_interfaces.clone(),
@@ -3902,7 +3928,6 @@ impl<'a> TypeChecker<'a> {
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
 			phase: ast_class.phase,
-			type_parameters: None, // TODO no way to have generic args in wing yet
 			docs: Docs::default(),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
@@ -4934,24 +4959,21 @@ impl<'a> TypeChecker<'a> {
 	fn hydrate_class_type_arguments(
 		&mut self,
 		env: &SymbolEnv,
-		original_fqn: &str,
+		original_type: TypeRef,
 		type_params: Vec<TypeRef>,
 	) -> TypeRef {
-		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().0.as_type().unwrap();
-		let original_type_class = original_type.as_class().unwrap();
-		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
-			tp
-		} else {
-			panic!(
-				"\"{}\" does not have type parameters and does not need hydration",
-				original_fqn
-			);
+		let Some(original_type_env) = original_type.as_env() else {
+			panic!("\"{original_type}\" does not have an environment and does not need hydration");
+		};
+
+		let Some(original_type_params) = original_type_env.type_parameters.as_ref() else {
+			panic!("\"{original_type}\" does not have type parameters and does not need hydration");
 		};
 
 		if original_type_params.len() != type_params.len() {
 			self.unspanned_error(format!(
 				"Type \"{}\" has {} type parameters, but {} were provided",
-				original_fqn,
+				original_type,
 				original_type_params.len(),
 				type_params.len()
 			));
@@ -4965,37 +4987,58 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(original_type), Phase::Independent, 0);
-		let tt = Type::Class(Class {
-			name: original_type_class.name.clone(),
-			env: dummy_env,
-			fqn: Some(original_fqn.to_string()),
-			parent: original_type_class.parent,
-			implements: original_type_class.implements.clone(),
-			is_abstract: original_type_class.is_abstract,
-			type_parameters: Some(type_params),
-			phase: original_type_class.phase,
-			docs: original_type_class.docs.clone(),
-			std_construct_args: original_type_class.std_construct_args,
-			lifts: None,
-		});
+		let tt = match &*original_type {
+			Type::Class(c) => Type::Class(Class {
+				name: c.name.clone(),
+				env: dummy_env,
+				fqn: c.fqn.clone(),
+				parent: c.parent,
+				implements: c.implements.clone(),
+				is_abstract: c.is_abstract,
+				phase: c.phase,
+				docs: c.docs.clone(),
+				std_construct_args: c.std_construct_args,
+				lifts: None,
+			}),
+			Type::Interface(iface) => Type::Interface(Interface {
+				name: iface.name.clone(),
+				env: dummy_env,
+				fqn: iface.fqn.clone(),
+				docs: iface.docs.clone(),
+				extends: iface.extends.clone(),
+			}),
+			Type::Struct(s) => Type::Struct(Struct {
+				name: s.name.clone(),
+				env: dummy_env,
+				fqn: s.fqn.clone(),
+				docs: s.docs.clone(),
+				extends: s.extends.clone(),
+			}),
+			_ => panic!("Expected type to be a class, interface, or struct"),
+		};
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
-		let new_env = SymbolEnv::new(None, SymbolEnvKind::Type(new_type), Phase::Independent, 0);
+		let new_env =
+			SymbolEnv::new_with_type_params(None, SymbolEnvKind::Type(new_type), Phase::Independent, 0, type_params);
 
-		let new_type_class = new_type.as_class_mut().unwrap();
-
-		// Update the class's env to point to the new env
-		new_type_class.env = new_env;
-
-		let SymbolEnvKind::Type(new_type) = new_type_class.env.kind else {
-			// TODO: Ugly hack to get non mut ref of new_type so we can use it
-			panic!("Expected class env to be a type");
-		};
+		// Update the types's env to point to the new env
+		match *new_type {
+			Type::Class(ref mut class) => {
+				class.env = new_env;
+			}
+			Type::Interface(ref mut iface) => {
+				iface.env = new_env;
+			}
+			Type::Struct(ref mut s) => {
+				s.env = new_env;
+			}
+			_ => {}
+		}
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
-		for (name, symbol, _) in original_type_class.env.iter(true) {
+		for (name, symbol, _) in original_type_env.iter(true) {
 			match symbol {
 				SymbolKind::Variable(VariableInfo {
 					name: _,
@@ -5008,9 +5051,9 @@ impl<'a> TypeChecker<'a> {
 				}) => {
 					// Replace type params in function signatures
 					if let Some(sig) = v.as_function_sig() {
-						let new_return_type = self.get_concrete_type_for_generic(sig.return_type, &types_map);
-						let new_this_type = if let Some(this_type) = sig.this_type {
-							Some(self.get_concrete_type_for_generic(this_type, &types_map))
+						let new_return_type = self.get_concrete_type_for_generic(env, sig.return_type, &types_map);
+						let new_this_type = if let Some(_) = sig.this_type {
+							Some(new_type)
 						} else {
 							None
 						};
@@ -5021,7 +5064,7 @@ impl<'a> TypeChecker<'a> {
 							.map(|param| FunctionParameter {
 								name: param.name.clone(),
 								docs: param.docs.clone(),
-								typeref: self.get_concrete_type_for_generic(param.typeref, &types_map),
+								typeref: self.get_concrete_type_for_generic(env, param.typeref, &types_map),
 								variadic: param.variadic,
 							})
 							.collect();
@@ -5036,7 +5079,7 @@ impl<'a> TypeChecker<'a> {
 						};
 
 						let sym = Symbol::global(name);
-						match new_type_class.env.define(
+						match new_type.as_env_mut().unwrap().define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&sym,
 							SymbolKind::make_member_variable(
@@ -5057,9 +5100,9 @@ impl<'a> TypeChecker<'a> {
 							_ => {}
 						}
 					} else {
-						let new_var_type = self.get_concrete_type_for_generic(*v, &types_map);
+						let new_var_type = self.get_concrete_type_for_generic(env, *v, &types_map);
 						let var_name = Symbol::global(name);
-						match new_type_class.env.define(
+						match new_type.as_env_mut().unwrap().define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&var_name,
 							SymbolKind::make_member_variable(
@@ -5092,6 +5135,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn get_concrete_type_for_generic(
 		&mut self,
+		env: &SymbolEnv,
 		type_to_maybe_replace: TypeRef,
 		types_map: &HashMap<String, (TypeRef, TypeRef)>,
 	) -> TypeRef {
@@ -5103,15 +5147,13 @@ impl<'a> TypeChecker<'a> {
 		{
 			return *new_type_arg;
 		} else {
-			// Handle generic return types
-			// TODO: If a generic class has a method that returns another generic, it must be a builtin
 			if let Type::Optional(t) = *type_to_maybe_replace {
-				let concrete_t = self.get_concrete_type_for_generic(t, types_map);
+				let concrete_t = self.get_concrete_type_for_generic(env, t, types_map);
 				return self.types.add_type(Type::Optional(concrete_t));
 			}
 
-			if let Some(c) = type_to_maybe_replace.as_class() {
-				if let Some(type_parameters) = &c.type_parameters {
+			if let Some(inner_env) = type_to_maybe_replace.as_env() {
+				if let Some(type_parameters) = &inner_env.type_parameters {
 					// For now all our generics only have a single type parameter so use the first type parameter as our "T1"
 					let t1 = type_parameters[0];
 					let t1_replacement = *types_map
@@ -5119,23 +5161,62 @@ impl<'a> TypeChecker<'a> {
 						.filter(|(o, _)| t1.is_same_type_as(o))
 						.map(|(_, n)| n)
 						.expect("generic must have a type parameter");
-					let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
 
-					return match fqn.as_str() {
-						WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(t1_replacement)),
-						WINGSDK_ARRAY => self.types.add_type(Type::Array(t1_replacement)),
-						WINGSDK_MAP => self.types.add_type(Type::Map(t1_replacement)),
-						WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(t1_replacement)),
-						WINGSDK_SET => self.types.add_type(Type::Set(t1_replacement)),
-						WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(t1_replacement)),
-						_ => {
-							self.unspanned_error(format!("\"{}\" is not a supported generic return type", fqn));
-							self.types.error()
-						}
+					let fqn = match &*type_to_maybe_replace {
+						Type::Class(c) => c.fqn.as_ref(),
+						Type::Interface(i) => i.fqn.as_ref(),
+						Type::Struct(s) => s.fqn.as_ref(),
+						_ => None,
 					};
+
+					return if let Some(fqn) = fqn {
+						match fqn
+							.replace(const_format::formatcp!("{WINGSDK_ASSEMBLY_NAME}."), "")
+							.as_str()
+						{
+							WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(t1_replacement)),
+							WINGSDK_ARRAY => self.types.add_type(Type::Array(t1_replacement)),
+							WINGSDK_MAP => self.types.add_type(Type::Map(t1_replacement)),
+							WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(t1_replacement)),
+							WINGSDK_SET => self.types.add_type(Type::Set(t1_replacement)),
+							WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(t1_replacement)),
+							_ => self.hydrate_class_type_arguments(env, type_to_maybe_replace, vec![t1_replacement]),
+						}
+					} else {
+						self.hydrate_class_type_arguments(env, type_to_maybe_replace, vec![t1_replacement])
+					};
+				}
+			} else {
+				match &*type_to_maybe_replace {
+					Type::Array(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::Array(new_inner));
+					}
+					Type::MutArray(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::MutArray(new_inner));
+					}
+					Type::Set(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::Set(new_inner));
+					}
+					Type::MutSet(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::MutSet(new_inner));
+					}
+					Type::Map(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::Map(new_inner));
+					}
+					Type::MutMap(inner_t) => {
+						let new_inner = self.get_concrete_type_for_generic(env, *inner_t, types_map);
+						return self.types.add_type(Type::MutMap(new_inner));
+					}
+					_ => {}
 				}
 			}
 		}
+
 		return type_to_maybe_replace;
 	}
 
@@ -5431,7 +5512,16 @@ impl<'a> TypeChecker<'a> {
 							}
 						}
 
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![type_]);
+						let new_class = self.hydrate_class_type_arguments(
+							env,
+							env
+								.lookup_nested_str(WINGSDK_STRUCT, None)
+								.unwrap()
+								.0
+								.as_type()
+								.unwrap(),
+							vec![type_],
+						);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
 						(v, Phase::Independent)
 					}
@@ -5481,27 +5571,66 @@ impl<'a> TypeChecker<'a> {
 
 			// Lookup wingsdk std types, hydrating generics if necessary
 			Type::Array(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env.lookup_nested_str(WINGSDK_ARRAY, None).unwrap().0.as_type().unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutArray(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env
+						.lookup_nested_str(WINGSDK_MUT_ARRAY, None)
+						.unwrap()
+						.0
+						.as_type()
+						.unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Set(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env.lookup_nested_str(WINGSDK_SET, None).unwrap().0.as_type().unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutSet(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env
+						.lookup_nested_str(WINGSDK_MUT_SET, None)
+						.unwrap()
+						.0
+						.as_type()
+						.unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Map(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env.lookup_nested_str(WINGSDK_MAP, None).unwrap().0.as_type().unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutMap(t) => {
-				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
+				let new_class = self.hydrate_class_type_arguments(
+					env,
+					env
+						.lookup_nested_str(WINGSDK_MUT_MAP, None)
+						.unwrap()
+						.0
+						.as_type()
+						.unwrap(),
+					vec![t],
+				);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Json(_) => self.get_property_from_class_like(

@@ -336,6 +336,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut wing_type = match is_struct {
 			true => self.wing_types.add_type(Type::Struct(Struct {
 				name: new_type_symbol.clone(),
+				fqn: Some(jsii_interface_fqn.to_string()),
 				// Will be replaced below
 				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
@@ -349,6 +350,7 @@ impl<'a> JsiiImporter<'a> {
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
 				name: new_type_symbol.clone(),
+				fqn: Some(jsii_interface_fqn.to_string()),
 				// Will be replaced below
 				extends: vec![],
 				docs: Docs::from(&jsii_interface.docs),
@@ -381,6 +383,7 @@ impl<'a> JsiiImporter<'a> {
 			phase,
 			self.jsii_spec.import_statement_idx,
 		);
+		iface_env.type_parameters = self.type_param_from_docs(&jsii_interface_fqn, &jsii_interface.docs);
 
 		self.add_members_to_class_env(
 			jsii_interface,
@@ -601,6 +604,22 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
+	fn type_param_from_docs(&mut self, fqn: &FQN, docs: &Option<jsii::Docs>) -> Option<Vec<TypeRef>> {
+		docs.as_ref().and_then(|d| {
+			d.custom.as_ref().and_then(|c| {
+				c.get("typeparam").map(|type_param_name| {
+					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
+					args
+						.iter()
+						.map(|a| {
+							self.lookup_or_create_type(&FQN::from(format!("{}.{}", fqn.as_str_without_type_name(), a).as_str()))
+						})
+						.collect::<Vec<_>>()
+				})
+			})
+		})
+	}
+
 	fn import_class(&mut self, jsii_class: &'a wingii::jsii::ClassType) {
 		let mut class_phase = if is_construct_base(&jsii_class.fqn) {
 			Phase::Preflight
@@ -673,24 +692,6 @@ impl<'a> JsiiImporter<'a> {
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
 		debug!("Adding type {} to namespace", type_name.green());
-		let type_params = jsii_class.docs.as_ref().and_then(|docs| {
-			// `@typeparam` allows us to add type args to JSII types
-			// `@typeparam <types>` - where <types> is a comma separated list of type parameters, referencing a class in the same namespace
-			// e.g. `@typeparam T1, T2` - T1 and T2 are type parameters of the class and will be replaced with the actual types when the class is used
-			docs.custom.as_ref().and_then(|c| {
-				c.get("typeparam").map(|type_param_name| {
-					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
-					args
-						.iter()
-						.map(|a| {
-							self.lookup_or_create_type(&FQN::from(
-								format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
-							))
-						})
-						.collect::<Vec<_>>()
-				})
-			})
-		});
 
 		let class_spec = Class {
 			name: new_type_symbol.clone(),
@@ -700,7 +701,6 @@ impl<'a> JsiiImporter<'a> {
 			// Will be replaced below
 			implements: vec![],
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
-			type_parameters: type_params,
 			phase: class_phase,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
@@ -723,6 +723,7 @@ impl<'a> JsiiImporter<'a> {
 
 		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = SymbolEnv::new(base_class_env, SymbolEnvKind::Type(new_type), class_phase, 0);
+		class_env.type_parameters = self.type_param_from_docs(&jsii_class_fqn, &jsii_class.docs);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
