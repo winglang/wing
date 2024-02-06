@@ -1136,9 +1136,6 @@ importers:
 
   libs/@wingcloud/framework:
     dependencies:
-      constructs:
-        specifier: ~10.2.69
-        version: 10.2.70
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
