@@ -221,8 +221,10 @@ export function collectLifts(
     // `obj` and `ops` are the preflight object and operations requested on it
     let [obj, ops]: [any, Array<string>] = queue.shift()!;
 
+    let newObj = false;
     if (!explored.has(obj)) {
       explored.set(obj, new Set());
+      newObj = true;
     }
 
     let existingOps = explored.get(obj)!;
@@ -230,8 +232,8 @@ export function collectLifts(
     // Filter out any ops that we've already processed for this object.
     ops = ops.filter((op) => !existingOps.has(op));
 
-    // If there are no ops left, skip this object.
-    if (ops.length === 0) {
+    // If there are no ops left and we have already seen the object, skip further processing.
+    if (ops.length === 0 && !newObj) {
       continue;
     }
 
@@ -296,6 +298,15 @@ export function collectLifts(
 
       if (obj instanceof Map) {
         for (const value of obj.values()) {
+          if (!explored.has(value)) {
+            queue.push([value, []]);
+          }
+        }
+      }
+
+      // recurse over ordinary objects
+      if (obj.constructor.name === "Object") {
+        for (const value of Object.values(obj)) {
           if (!explored.has(value)) {
             queue.push([value, []]);
           }
