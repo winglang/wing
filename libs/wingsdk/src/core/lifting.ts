@@ -305,7 +305,7 @@ export function collectLifts(
       }
 
       // recurse over ordinary objects
-      if (obj.constructor.name === "Object") {
+      if (typeof obj === "object" && obj.constructor.name === "Object") {
         for (const value of Object.values(obj)) {
           if (!explored.has(value)) {
             queue.push([value, []]);
