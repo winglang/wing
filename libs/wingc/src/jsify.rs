@@ -27,7 +27,7 @@ use crate::{
 		lifts::{LiftQualification, Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
-		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
@@ -1780,11 +1780,18 @@ impl<'a> JSifier<'a> {
 		let mut lift_qualifications: Vec<(&String, &BTreeMap<String, LiftQualification>)> = vec![];
 		let empty_map = BTreeMap::new();
 
+		// Collect all the methods and fields that are accessible inflight on this class
+		// and their lift qualifications, if any.
+		// Even if a method does not require any other permissions (for example, it just
+		// logs something), it is still included in the map as a way of indicating
+		// it's a supported operation.
+		//
+		// Methods on the parent class are not included here, as they are inherited
+		// and will be included in the parent's _liftMap or _liftTypeMap instead
 		for m in class.all_methods(true) {
 			let name = m.name.as_ref().unwrap();
 			let method = class_type.as_class().unwrap().get_method(&name);
 			let var_info = method.expect(&format!("method \"{name}\" doesn't exist in {class_name}"));
-			let var_kind = &var_info.kind;
 
 			let is_static = m.is_static;
 			let is_inflight = var_info.phase == Phase::Inflight;
