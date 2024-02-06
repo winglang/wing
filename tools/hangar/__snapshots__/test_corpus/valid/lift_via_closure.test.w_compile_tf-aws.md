@@ -211,6 +211,7 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return ({
           "handle": [
+            [this, ["putFile"]],
           ],
           "putFile": [
             [this.bucket, ["put"]],

@@ -110,6 +110,7 @@ class $Root extends $stdlib.std.Resource {
           "bar": [
           ],
           "foo": [
+            [this, ["bar"]],
           ],
           "$inflight_init": [
           ],

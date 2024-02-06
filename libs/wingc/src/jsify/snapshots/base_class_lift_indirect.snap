@@ -139,6 +139,7 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
           "foo": [
+            [this, ["put"]],
           ],
           "$inflight_init": [
           ],

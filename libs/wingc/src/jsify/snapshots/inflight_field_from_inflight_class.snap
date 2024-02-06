@@ -74,8 +74,10 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return ({
           "getField": [
+            [this, ["field"]],
           ],
           "$inflight_init": [
+            [this, ["field"]],
           ],
           "field": [
           ],

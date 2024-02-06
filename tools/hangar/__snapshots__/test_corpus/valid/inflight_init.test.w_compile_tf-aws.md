@@ -222,6 +222,7 @@ class $Root extends $stdlib.std.Resource {
           "get_six": [
           ],
           "$inflight_init": [
+            [this, ["field1", "field2", "get_six"]],
           ],
           "field1": [
           ],
@@ -255,6 +256,7 @@ class $Root extends $stdlib.std.Resource {
       get _onLiftDeps() {
         return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
           "$inflight_init": [
+            [this, ["field3"]],
           ],
           "field3": [
           ],
