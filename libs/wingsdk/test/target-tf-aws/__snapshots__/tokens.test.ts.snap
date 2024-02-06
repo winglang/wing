@@ -150,7 +150,7 @@ exports[`captures tokens 2`] = `
 }
 `;
 
-exports[`captures tokens inside structs 1`] = `
+exports[`captures tokens inside plain objects 1`] = `
 "new ((function(){
 return class Handler {
   constructor(clients) {
@@ -167,7 +167,7 @@ foo: {\\"str\\": JSON.parse(process.env[\\"WING_TOKEN_HTTPS_TFTOKEN_TOKEN_37_EXE
 })"
 `;
 
-exports[`captures tokens inside structs 2`] = `
+exports[`captures tokens inside plain objects 2`] = `
 {
   "data": {
     "aws_region": {
