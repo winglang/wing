@@ -2,11 +2,7 @@
 
 ## stdout.log
 ```log
-<<<<<<< HEAD
-runtime error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl.
-=======
-Error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl GET (implicit)/Handler).
->>>>>>> main
+Error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl.
 It might not be implemented yet.
  
  
