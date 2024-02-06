@@ -2,12 +2,13 @@
 
 ## stdout.log
 ```log
-runtime error: Resource root/env0/Bar/Foo does not support inflight operation inflightField.
-It might not be implemented yet.
+pass ┌ resource.test.wsim » root/env0/test:test             
+     └ counter is: 201
+pass ─ resource.test.wsim » root/env1/test:dependency cycles
  
  
-Tests 1 unsupported (1)
-Test Files 1 unsupported (1)
+Tests 2 passed (2)
+Test Files 1 passed (1)
 Duration <DURATION>
 ```
 

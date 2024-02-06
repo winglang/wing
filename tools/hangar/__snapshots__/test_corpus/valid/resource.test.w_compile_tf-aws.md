@@ -739,6 +739,8 @@ class $Root extends $stdlib.std.Resource {
           "$inflight_init": [
             [this.c, ["dec", "inc"]],
           ],
+          "inflightField": [
+          ],
         });
       }
       static get _liftTypeMap() {
