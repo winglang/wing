@@ -323,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "list": [
             [this.bucket, ["list"]],
@@ -359,7 +359,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [b1, ["list"]],
@@ -395,7 +395,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [api.url, []],

@@ -93,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "getStuff": [
             [this.data.field0, []],
@@ -127,7 +127,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
           ],

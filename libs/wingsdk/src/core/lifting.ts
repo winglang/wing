@@ -5,7 +5,7 @@ import { IInflightHost, ILiftable, IHostedLiftable } from "../std";
 
 /**
  * This is the name of a special operation that is used as a key
- * by the compiler in the `_onLiftDeps` matrix to indicate that
+ * by the compiler in the `_liftMap` matrix to indicate that
  * some transitive object dependencies are always required no matter
  * what operations are passed to the `host`.
  *
@@ -242,15 +242,15 @@ export function collectLifts(
 
     // Inspect the object to see if there are any transitive dependency information.
     // Currently there are a few ways to do this:
-    // - The compiler may generate a _onLiftDeps property on the object
+    // - The compiler may generate a _liftMap property on the object
     // - The compiler may generate a static _onLiftTypeDeps method on a class
     // - The SDK may have a _supportedOps method on a class (TODO: remove this?)
 
     let matrix: LiftDepsMatrix;
     if (matrixCache.has(obj)) {
       matrix = matrixCache.get(obj)!;
-    } else if (typeof obj === "object" && obj._onLiftDeps !== undefined) {
-      matrix = parseMatrix(obj._onLiftDeps ?? {});
+    } else if (typeof obj === "object" && obj._liftMap !== undefined) {
+      matrix = parseMatrix(obj._liftMap ?? {});
       matrixCache.set(obj, matrix);
     } else if (
       typeof obj === "object" &&

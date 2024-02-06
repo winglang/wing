@@ -128,7 +128,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "call": [
             [Foo, ["getData", "getUuid", "regexInflight"]],
@@ -174,7 +174,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [f, ["call"]],
@@ -208,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [Foo, ["print"]],

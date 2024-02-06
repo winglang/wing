@@ -161,7 +161,7 @@ class Lifter<
       ...args: Parameters<TFunction>
     ) => ReturnType<TFunction>
   ): Inflight<TFunction> {
-    const _onLiftDeps: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
+    const _liftMap: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
     for (const [key, obj] of Object.entries(this.lifts)) {
       let knownOps = this.grants[key];
       if (
@@ -170,7 +170,7 @@ class Lifter<
       ) {
         knownOps = (obj as IHostedLiftable)._supportedOps();
       }
-      _onLiftDeps.handle.push([obj, knownOps ?? []]);
+      _liftMap.handle.push([obj, knownOps ?? []]);
     }
 
     return {
@@ -195,7 +195,7 @@ class Lifter<
 }
 )())`;
       },
-      _onLiftDeps,
+      _liftMap,
       _supportedOps: () => [],
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {

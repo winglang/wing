@@ -114,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "isEmpty": [
             [this.b, ["list"]],
@@ -152,7 +152,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [t, ["checkIfEmpty"]],

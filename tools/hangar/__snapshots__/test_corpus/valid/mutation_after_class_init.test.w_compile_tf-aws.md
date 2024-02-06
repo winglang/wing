@@ -373,7 +373,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
               ],
@@ -408,7 +408,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_2.consumer, ["handle"]],
@@ -441,7 +441,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "push": [
             [this.data, ["put"]],
@@ -476,7 +476,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [c, ["inc"]],
@@ -512,7 +512,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [c, ["peek"]],

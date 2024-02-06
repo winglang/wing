@@ -202,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_1, ["bar"]],
@@ -231,7 +231,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "bar": [
           ],

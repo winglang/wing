@@ -116,7 +116,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "bug": [
           ],
@@ -149,8 +149,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
-        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "bang": [
           ],
           "over_inflight": [
@@ -185,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [foo, ["bang", "bug", "over_inflight"]],

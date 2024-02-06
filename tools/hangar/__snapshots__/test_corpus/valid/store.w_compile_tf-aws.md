@@ -92,7 +92,7 @@ class Util extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -128,7 +128,7 @@ class Store extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [__parent_this_1.b, ["put"]],
@@ -158,7 +158,7 @@ class Store extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "store": [
         [this.b, ["put"]],

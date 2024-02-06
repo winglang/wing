@@ -274,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_1.b, ["put"]],
@@ -304,7 +304,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "$inflight_init": [
           ],
@@ -335,7 +335,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [f, ["invoke"]],
@@ -368,7 +368,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
           ],

@@ -172,7 +172,7 @@ class ParentClass extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "foo": [
       ],
@@ -211,8 +211,8 @@ class Child extends ParentClass {
       })())
     `;
   }
-  get _onLiftDeps() {
-    return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+  get _liftMap() {
+    return $stdlib.core.mergeLiftDeps(super._liftMap, {
       "$inflight_init": [
       ],
     });

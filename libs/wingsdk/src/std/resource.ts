@@ -86,7 +86,7 @@ export interface IHostedLiftable extends ILiftable {
    * inflight host.
    * @internal
    */
-  _onLiftDeps?: LiftDepsMatrixRaw;
+  _liftMap?: LiftDepsMatrixRaw;
 
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to

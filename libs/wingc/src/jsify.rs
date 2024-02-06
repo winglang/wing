@@ -1768,7 +1768,7 @@ impl<'a> JSifier<'a> {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
 			BindMethod::Type => ("static ", "_onLiftTypeDeps"),
-			BindMethod::Instance => ("", "_onLiftDeps"),
+			BindMethod::Instance => ("", "_liftMap"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1828,7 +1828,7 @@ impl<'a> JSifier<'a> {
 			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
 				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
 				// lift deps of this class
-				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._onLiftDeps, {{"));
+				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._liftMap, {{"));
 			} else {
 				bind_method.open("return ({".to_string());
 			}

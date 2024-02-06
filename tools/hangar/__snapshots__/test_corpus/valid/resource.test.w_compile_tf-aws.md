@@ -728,7 +728,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "fooInc": [
             [this.c, ["inc"]],
@@ -778,7 +778,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "myMethod": [
             [Foo, ["fooStatic"]],
@@ -830,7 +830,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [bucket, ["list"]],
@@ -874,7 +874,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_2.b, ["put"]],
@@ -910,7 +910,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_3.b, ["put"]],
@@ -946,7 +946,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
                 [__parent_this_4.q, ["push"]],
@@ -979,7 +979,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "publish": [
             [this.b2, ["put"]],
@@ -1022,7 +1022,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [bigOlPublisher, ["getObjectCount", "publish"]],
@@ -1056,7 +1056,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "$inflight_init": [
           ],
@@ -1095,7 +1095,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "$inflight_init": [
           ],

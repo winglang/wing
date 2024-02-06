@@ -59,7 +59,7 @@ ${Object.entries(clients)
 
         return inflightCode;
       },
-      _onLiftDeps: liftDeps,
+      _liftMap: liftDeps,
       onLift: (_host: IInflightHost, _ops: string[]) => {},
       _supportedOps: () => [],
     };

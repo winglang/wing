@@ -192,7 +192,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
           ],
@@ -225,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [x, ["handle"]],
@@ -262,7 +262,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "method2": [
           ],
@@ -295,7 +295,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [i3, ["method2"]],
@@ -326,7 +326,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "eat": [
           ],
@@ -357,8 +357,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
-        return $stdlib.core.mergeLiftDeps(super._onLiftDeps, {
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "eat": [
           ],
           "$inflight_init": [
@@ -389,7 +389,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
           ],

@@ -186,7 +186,7 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _onLiftDeps() {
+          get _liftMap() {
             return ({
               "handle": [
               ],
@@ -219,7 +219,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "get": [
             [this.bucket, ["getJson"]],
@@ -259,7 +259,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [counter, ["inc"]],
@@ -295,7 +295,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [counter, ["peek"]],

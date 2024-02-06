@@ -154,7 +154,7 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _onLiftDeps() {
+      get _liftMap() {
         return ({
           "handle": [
             [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
@@ -218,7 +218,7 @@ class Store extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "set": [
         [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), ["double"]],
@@ -295,7 +295,7 @@ class Util extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],

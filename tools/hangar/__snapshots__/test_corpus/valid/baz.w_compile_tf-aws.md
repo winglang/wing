@@ -44,7 +44,7 @@ class Baz extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],

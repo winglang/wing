@@ -107,7 +107,7 @@ test("mergeLiftDeps", () => {
 });
 
 describe("collectLifts", () => {
-  test("object without _onLiftDeps", () => {
+  test("object without _liftMap", () => {
     class Foo {}
     const lifts = collectLifts(new Foo(), []);
     expect(lifts).toEqual(new Map([[expect.any(Foo), new Set([])]]));
@@ -115,7 +115,7 @@ describe("collectLifts", () => {
 
   test("object with single op, but no onLift method", () => {
     class Foo {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           op1: [],
         };
@@ -127,7 +127,7 @@ describe("collectLifts", () => {
 
   test("object with single op and onLift method", () => {
     class Foo {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           op1: [],
         };
@@ -140,7 +140,7 @@ describe("collectLifts", () => {
 
   test("object lifting simple primitives", () => {
     class Foo {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           op1: [
             ["hello", []],
@@ -163,7 +163,7 @@ describe("collectLifts", () => {
 
   test("object lifting transitive object", () => {
     class Bucket {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           list: [],
         };
@@ -172,7 +172,7 @@ describe("collectLifts", () => {
     }
 
     class Foo {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           op1: [[new Bucket(), ["list"]]],
         };
@@ -190,7 +190,7 @@ describe("collectLifts", () => {
 
   test("object lifting shared object through two transitive objects", () => {
     class Bucket {
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           list: [],
         };
@@ -202,7 +202,7 @@ describe("collectLifts", () => {
       constructor(bucket: Bucket) {
         this.bucket = bucket;
       }
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           list: [[this.bucket, ["list"]]],
         };
@@ -217,7 +217,7 @@ describe("collectLifts", () => {
         this.m1 = new MyBucket(bucket);
         this.m2 = new MyBucket(bucket);
       }
-      public get _onLiftDeps() {
+      public get _liftMap() {
         return {
           handle: [
             [this.m1, ["list"]],

@@ -111,7 +111,7 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -154,7 +154,7 @@ class Bar extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -182,7 +182,7 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -283,7 +283,7 @@ class Widget extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],

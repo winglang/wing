@@ -91,7 +91,7 @@ class Bar extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -132,7 +132,7 @@ class Baz extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
@@ -181,7 +181,7 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _onLiftDeps() {
+  get _liftMap() {
     return ({
       "$inflight_init": [
       ],
