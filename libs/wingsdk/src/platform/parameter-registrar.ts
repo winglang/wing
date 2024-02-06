@@ -132,7 +132,7 @@ export class ParameterRegistrar extends Construct {
     if (!valid) {
       throw new Error(
         `Parameter validation errors:\n- ${validator.errors
-          ?.map((error) => error.message)
+          ?.map((error: any) => error.message)
           .join("\n- ")}
 
 (hint: make sure to use --values to provide the required parameters file)
