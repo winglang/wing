@@ -79,16 +79,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
             [(s1.concat(s2)), []],
             [s1.indexOf("s"), []],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const s1 = "some string";

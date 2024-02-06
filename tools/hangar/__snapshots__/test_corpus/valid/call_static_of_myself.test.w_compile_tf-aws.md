@@ -123,23 +123,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "bar", "callThis", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "callThis": [
             [Foo, ["bar"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
-      static get _liftTypeMap() {
-        return ({
-          "foo": [
-          ],
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "bar": [
             [Foo, ["foo"]],
           ],
         });
+        super.onLiftType(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -163,19 +164,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "callThis": [
-          ],
-          "$inflight_init": [
-          ],
-        });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "bar": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "bar", "callThis", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -204,15 +194,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [Foo, ["foo"]],
             [foo, ["callThis"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

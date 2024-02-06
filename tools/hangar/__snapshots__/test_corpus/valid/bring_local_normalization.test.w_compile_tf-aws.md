@@ -91,11 +91,8 @@ class Bar extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
   }
 }
 module.exports = { Bar };
@@ -132,11 +129,8 @@ class Baz extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
   }
 }
 module.exports = { Baz };
@@ -181,11 +175,8 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
   }
 }
 module.exports = { Foo };

@@ -306,11 +306,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -336,13 +333,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -370,14 +362,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [api.url, []],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const api = new AnApi(this, "AnApi");

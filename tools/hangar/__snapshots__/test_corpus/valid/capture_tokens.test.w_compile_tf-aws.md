@@ -246,24 +246,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "isValidUrl", "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.api.url, []],
+            [this.url, []],
+          ],
           "foo": [
             [MyResource, ["isValidUrl"]],
             [this.api.url, []],
             [this.url, []],
           ],
-          "$inflight_init": [
-            [this.api.url, []],
-            [this.url, []],
-          ],
         });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "isValidUrl": [
-          ],
-        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -290,14 +288,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [r, ["foo"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -326,16 +326,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [MyResource, ["isValidUrl"]],
             [api.url, []],
             [url, []],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const r = new MyResource(this, "MyResource");

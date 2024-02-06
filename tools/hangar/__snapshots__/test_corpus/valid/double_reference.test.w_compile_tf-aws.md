@@ -134,14 +134,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "method": [
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "method", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [initCount, ["inc"]],
           ],
         });
+        super.onLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -167,15 +169,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "callFoo": [
-            [this.foo, ["method"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "callFoo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.foo, []],
           ],
+          "callFoo": [
+            [this.foo, ["method"]],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -204,16 +210,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [bar, ["callFoo"]],
             [bar.foo, ["method"]],
             [initCount, ["peek"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const initCount = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");

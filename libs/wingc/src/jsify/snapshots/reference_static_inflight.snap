@@ -88,17 +88,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "myStaticMethod": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "myStaticMethod", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -125,14 +116,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [MyType, ["myStaticMethod"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:test", new $Closure1(this, "$Closure1"));

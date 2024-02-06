@@ -117,11 +117,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class B extends A {
@@ -147,11 +144,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const bucket1 = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "bucket1");

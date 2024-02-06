@@ -74,15 +74,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "method": [
-            [this.x, []],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "method", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.x, []],
           ],
+          "method": [
+            [this.x, []],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
   }

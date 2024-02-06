@@ -92,8 +92,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))), []],
             [("world" in (myMap)), []],
@@ -105,9 +108,8 @@ class $Root extends $stdlib.std.Resource {
             [arr.length, []],
             [mySet.size, []],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const arr = ["hello", "world"];

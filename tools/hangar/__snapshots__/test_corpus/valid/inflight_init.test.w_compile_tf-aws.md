@@ -217,18 +217,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "get_six": [
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "field1", "field2", "get_six", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["field1", "field2", "get_six"]],
-          ],
-          "field1": [
-          ],
-          "field2": [
           ],
         });
+        super.onLift(host, ops);
       }
     }
     class FooChild extends Foo {
@@ -253,14 +250,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      _supportedOps() {
+        return [...super._supportedOps(), "field3", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["field3"]],
-          ],
-          "field3": [
           ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -287,13 +285,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -320,13 +313,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -352,13 +340,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     class $Closure4 extends $stdlib.std.AutoIdResource {
@@ -385,13 +368,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
       }
     }
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight class init", new $Closure1(this, "$Closure1"));

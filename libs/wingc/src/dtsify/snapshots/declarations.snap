@@ -172,21 +172,8 @@ class ParentClass extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "foo": [
-      ],
-      "bar": [
-      ],
-      "$inflight_init": [
-      ],
-    });
-  }
-  static get _liftTypeMap() {
-    return ({
-      "static_method": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "static_method", "foo", "bar", "$inflight_init"];
   }
 }
 class Child extends ParentClass {
@@ -211,11 +198,8 @@ class Child extends ParentClass {
       })())
     `;
   }
-  get _liftMap() {
-    return $stdlib.core.mergeLiftDeps(super._liftMap, {
-      "$inflight_init": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
   }
 }
 module.exports = { ParentClass, Child };

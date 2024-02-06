@@ -57,7 +57,17 @@ bucket: (function() {
         "target": "root/HelloWorld/Counter",
       },
       {
+        "name": "$inflight_init()",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
+        "target": "root/HelloWorld/Counter",
+      },
+      {
         "name": "put()",
+        "source": "root/HelloWorld/Queue/SetConsumer0",
+        "target": "root/HelloWorld/Bucket",
+      },
+      {
+        "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
       },

@@ -92,19 +92,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "incCounter": [
-            [this.c, ["inc"]],
-          ],
-          "dontTouchCounter": [
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "myField2", "incCounter", "dontTouchCounter", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.c, []],
           ],
-          "myField2": [
+          "incCounter": [
+            [this.c, ["inc"]],
           ],
         });
+        super.onLift(host, ops);
       }
     }
   }

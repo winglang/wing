@@ -1,9 +1,4 @@
-import {
-  InflightBindings,
-  LiftDepsMatrixRaw,
-  closureId,
-  liftObject,
-} from "../core";
+import { InflightBindings, closureId, liftObject, onLiftObject } from "../core";
 import { IInflight, IInflightHost } from "../std";
 
 /**
@@ -26,12 +21,6 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IInflight {
-    const liftDeps: LiftDepsMatrixRaw = {};
-    liftDeps.handle = [];
-    for (const v of Object.values(bindings)) {
-      liftDeps.handle.push([v.obj, v.ops ?? []]);
-    }
-
     return {
       _id: closureId(),
       _toInflight: () => {
@@ -59,8 +48,11 @@ ${Object.entries(clients)
 
         return inflightCode;
       },
-      _liftMap: liftDeps,
-      onLift: (_host: IInflightHost, _ops: string[]) => {},
+      onLift: (host: IInflightHost, _ops: string[]) => {
+        for (const v of Object.values(bindings)) {
+          onLiftObject(v.obj, host, v.ops);
+        }
+      },
       _supportedOps: () => [],
     };
   }

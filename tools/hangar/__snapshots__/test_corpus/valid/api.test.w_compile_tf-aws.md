@@ -495,14 +495,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [counter, ["inc"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -529,14 +531,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [api.url, []],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -568,14 +572,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_3.api.url, []],
               ],
-              "$inflight_init": [
-              ],
             });
+            super.onLift(host, ops);
           }
         }
         (this.api.get("/endpoint1", new $Closure3(this, "$Closure3")));
@@ -597,11 +603,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");

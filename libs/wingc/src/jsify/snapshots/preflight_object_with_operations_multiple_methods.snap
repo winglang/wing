@@ -77,17 +77,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "put": [
-            [b, ["put"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "put", "list", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "list": [
             [b, ["list"]],
           ],
-          "$inflight_init": [
+          "put": [
+            [b, ["put"]],
           ],
         });
+        super.onLift(host, ops);
       }
     }
     const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

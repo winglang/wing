@@ -318,14 +318,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [store, ["store"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class Triangle extends $stdlib.std.Resource {
@@ -352,11 +354,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Util extends $stdlib.std.Resource {
@@ -380,11 +379,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const store = new file1.Store(this, "file1.Store");
@@ -432,11 +428,8 @@ class Util extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "$inflight_init"];
   }
 }
 class Store extends $stdlib.std.Resource {
@@ -468,14 +461,16 @@ class Store extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [__parent_this_1.b, ["put"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
@@ -498,15 +493,19 @@ class Store extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "store": [
-        [this.b, ["put"]],
-      ],
+  _supportedOps() {
+    return [...super._supportedOps(), "store", "$inflight_init"];
+  }
+  onLift(host, ops) {
+    $stdlib.core.onLiftMatrix(host, ops, {
       "$inflight_init": [
         [this.b, []],
       ],
+      "store": [
+        [this.b, ["put"]],
+      ],
     });
+    super.onLift(host, ops);
   }
 }
 const Color =
@@ -549,17 +548,8 @@ class Q extends $stdlib.std.Resource {
       })())
     `;
   }
-  get _liftMap() {
-    return ({
-      "$inflight_init": [
-      ],
-    });
-  }
-  static get _liftTypeMap() {
-    return ({
-      "greet": [
-      ],
-    });
+  _supportedOps() {
+    return [...super._supportedOps(), "greet", "$inflight_init"];
   }
 }
 module.exports = { Q };
