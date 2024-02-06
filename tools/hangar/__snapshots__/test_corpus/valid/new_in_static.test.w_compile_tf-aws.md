@@ -128,8 +128,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -156,16 +159,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [bucket, ["list"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const createBucket = (() => {

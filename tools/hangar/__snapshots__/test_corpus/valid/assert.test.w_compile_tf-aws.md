@@ -90,17 +90,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [s1, []],
             [s2, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const s1 = "foo";

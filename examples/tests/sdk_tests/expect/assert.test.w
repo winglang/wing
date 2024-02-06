@@ -141,27 +141,6 @@ test "equal sets" {
 //     expect.notEqual(dt, datetime.fromIso("2024-07-18T20:18:25.177+03:00"));
 // }
 
-// Range tests
-// Doesn't work, while expect.equal([1,2,3,4], [1,2,3,4]); works and the JS equivalent works too
-// 
-//ERROR: Values have same structure but are not reference-equal:
-
-// [
-//     1,
-//     2,
-//     3,
-//     4
-//   ]
-// let myRange = std.Range.of(1,5);
-
-// expect.equal(myRange, [1,2,3,4]);
-// expect.notEqual(myRange, std.Range.of(1,6));
-
-// test "equal ranges" {
-//     expect.equal(myRange, std.Range.of(1,5));
-//     expect.notEqual(myRange, std.Range.of(1,6));
-// }
-
 // Duration tests
 
 expect.equal(60s, 1m);

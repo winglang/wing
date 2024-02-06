@@ -202,11 +202,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [myBool, []],
             [myDur.hours, []],
@@ -216,8 +213,9 @@ class $Root extends $stdlib.std.Resource {
             [mySecondBool, []],
             [myStr, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const myStr = "hello, string";
