@@ -5,6 +5,7 @@
       "compile": {
         "dependsOn": ["^compile"],
         "inputs": ["**/*.w", "**/*.js", "**/*.ts"]
-      }
+      },
+      "topo": {}
     }
   }

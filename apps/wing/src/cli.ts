@@ -147,6 +147,12 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 

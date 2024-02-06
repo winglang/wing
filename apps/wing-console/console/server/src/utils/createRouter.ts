@@ -6,7 +6,9 @@ import { Config } from "../config.js";
 import { ConsoleLogger } from "../consoleLogger.js";
 import { HostUtils } from "../hostUtils.js";
 import type { State, Trace } from "../types.js";
-import { Updater } from "../updater.js";
+import type { Updater } from "../updater.js";
+
+import type { Analytics } from "./analytics.js";
 
 export type QueryNames = {
   query:
@@ -97,6 +99,10 @@ export interface RouterContext {
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
   testsStateManager: () => TestsStateManager;
+  analyticsAnonymousId?: string;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
+  analytics?: Analytics;
 }
 
 const t = initTRPC.context<RouterContext>().create();

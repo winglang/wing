@@ -1,19 +1,7 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "pipeline": {
-    "topo": {
-      "inputs": [
-        "**",
-        "!node_modules/**",
-        "!**/target/**"
-      ],
-      "dependsOn": [
-        "^compile",
-        "^topo"
-      ]
-    }
+    "topo": {}
   }
 }

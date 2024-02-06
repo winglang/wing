@@ -187,7 +187,7 @@ const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const myutil = require("./preflight.util-2.js");
 class Store extends $stdlib.std.Resource {
-  constructor($scope, $id, ) {
+  constructor($scope, $id, options) {
     super($scope, $id);
     this.data = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     this.handlers = [];
