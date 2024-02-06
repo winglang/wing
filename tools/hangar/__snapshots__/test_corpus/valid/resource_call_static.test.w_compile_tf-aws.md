@@ -112,18 +112,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "myStaticMethod", "$inflight_init"];
       }
-      static get _liftTypeMap() {
-        return ({
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "myStaticMethod": [
             [globalCounter, ["peek"]],
           ],
         });
+        super.onLiftType(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -150,14 +148,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [Another, ["myStaticMethod"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const globalCounter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");

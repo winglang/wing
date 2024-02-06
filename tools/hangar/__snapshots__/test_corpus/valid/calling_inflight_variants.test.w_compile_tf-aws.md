@@ -140,13 +140,8 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
-              "handle": [
-              ],
-              "$inflight_init": [
-              ],
-            });
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
           }
         }
         this.inflight1 = new $Closure1(this, "$Closure1");
@@ -169,26 +164,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "makeFn": [
-            [this, ["inflight2"]],
-            [this.inflight1, ["handle"]],
-          ],
-          "callFn": [
-            [this, ["makeFn"]],
-          ],
-          "callFn2": [
-            [this, ["inflight2"]],
-            [this.inflight1, ["handle"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["inflight2"]],
             [this.inflight1, []],
           ],
-          "inflight2": [
+          "callFn": [
+          ],
+          "callFn2": [
+            [this.inflight1, ["handle"]],
+          ],
+          "makeFn": [
+            [this.inflight1, ["handle"]],
           ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -215,14 +208,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [foo, ["callFn", "callFn2"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

@@ -728,26 +728,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "fooInc": [
-            [this.c, ["inc"]],
+      _supportedOps() {
+        return [...super._supportedOps(), "inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.c, ["dec", "inc"]],
           ],
           "fooGet": [
             [this.c, ["peek"]],
           ],
-          "$inflight_init": [
-            [this.c, ["dec", "inc"]],
-          ],
-          "inflightField": [
+          "fooInc": [
+            [this.c, ["inc"]],
           ],
         });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "fooStatic": [
-          ],
-        });
+        super.onLift(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -780,8 +776,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
+          "$inflight_init": [
+            [this.b, []],
+            [this.e, []],
+            [this.foo, []],
+          ],
           "myMethod": [
             [Foo, ["fooStatic"]],
             [this.b, ["get", "put"]],
@@ -792,18 +796,8 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["fooStatic"]],
             [this.e, []],
           ],
-          "$inflight_init": [
-            [this.b, []],
-            [this.e, []],
-            [this.foo, []],
-          ],
         });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "barStatic": [
-          ],
-        });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -832,16 +826,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [bucket, ["list"]],
             [res, ["myMethod", "testTypeAccess"]],
             [res.foo, ["inflightField"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -876,14 +872,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_2.b, ["put"]],
               ],
-              "$inflight_init": [
-              ],
             });
+            super.onLift(host, ops);
           }
         }
         (this.t.onMessage(new $Closure2(this, "$Closure2")));
@@ -912,14 +910,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_3.b, ["put"]],
               ],
-              "$inflight_init": [
-              ],
             });
+            super.onLift(host, ops);
           }
         }
         (this.q.setConsumer(new $Closure3(this, "$Closure3")));
@@ -948,14 +948,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_4.q, ["push"]],
               ],
-              "$inflight_init": [
-              ],
             });
+            super.onLift(host, ops);
           }
         }
         (this.b2.onCreate(new $Closure4(this, "$Closure4")));
@@ -981,23 +983,27 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "publish": [
-            [this.b2, ["put"]],
-            [this.q, ["push"]],
-            [this.t, ["publish"]],
-          ],
-          "getObjectCount": [
-            [this.b, ["list"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "publish", "getObjectCount", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
             [this.b2, []],
             [this.q, []],
             [this.t, []],
           ],
+          "getObjectCount": [
+            [this.b, ["list"]],
+          ],
+          "publish": [
+            [this.b2, ["put"]],
+            [this.q, ["push"]],
+            [this.t, ["publish"]],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.AutoIdResource {
@@ -1024,14 +1030,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [bigOlPublisher, ["getObjectCount", "publish"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     class Dummy extends $stdlib.std.Resource {
@@ -1058,11 +1066,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
@@ -1097,11 +1102,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     const MyEnum =

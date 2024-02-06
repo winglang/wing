@@ -92,11 +92,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     class Derived extends Base {
@@ -122,15 +119,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
-          "foo": [
-            [this.f, []],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.f, []],
           ],
+          "foo": [
+            [this.f, []],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
     const x = "hello";

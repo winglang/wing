@@ -103,15 +103,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "put": [
-            [this.b, ["list", "put"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "put", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [this.b, []],
           ],
+          "put": [
+            [this.b, ["list", "put"]],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
     class Derived extends Base {
@@ -136,14 +140,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "foo": [
-            [this, ["put"]],
-          ],
-          "$inflight_init": [
           ],
         });
+        super.onLift(host, ops);
       }
     }
   }

@@ -934,6 +934,11 @@ async handle(message) {
         "source": "root/my_queue_messages/Function",
         "target": "root/my_queue",
       },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_queue_messages/Function",
+        "target": "root/my_queue",
+      },
     ],
     "version": "connections-0.1",
   },

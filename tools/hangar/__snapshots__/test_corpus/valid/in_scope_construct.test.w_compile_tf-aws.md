@@ -67,11 +67,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "$inflight_init"];
       }
     }
     new MyClass(this.node.root.new("constructs.Construct", c.Construct, this, "c.Construct"), "MyClass");

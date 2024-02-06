@@ -4,7 +4,7 @@
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $f, $util_Util }) {
+module.exports = function({ $f }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -13,7 +13,6 @@ module.exports = function({ $f, $util_Util }) {
     }
     async handle() {
       $helpers.assert($helpers.eq((await $f.foo()), 21), "f.foo() == 21");
-      $helpers.assert($helpers.eq((await $util_Util.env("BAR")), "123"), "util.env(\"BAR\") == \"123\"");
     }
   }
   return $Closure1;
@@ -72,18 +71,12 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
-const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-      }
-      onLift(host, ops) {
-        if (ops.includes("bar")) {
-          (host.addEnvironment("BAR", "123"));
-        }
       }
       static _toInflightType() {
         return `
@@ -102,18 +95,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "bar": [
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "x", "bar", "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "foo": [
-            [this, ["bar"]],
-          ],
-          "$inflight_init": [
-          ],
-          "x": [
           ],
         });
+        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -126,7 +116,6 @@ class $Root extends $stdlib.std.Resource {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $f: ${$stdlib.core.liftObject(f)},
-            $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
           })
         `;
       }
@@ -141,14 +130,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
+      _supportedOps() {
+        return [...super._supportedOps(), "handle", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "handle": [
             [f, ["foo"]],
           ],
-          "$inflight_init": [
-          ],
         });
+        super.onLift(host, ops);
       }
     }
     const f = new Foo(this, "Foo");

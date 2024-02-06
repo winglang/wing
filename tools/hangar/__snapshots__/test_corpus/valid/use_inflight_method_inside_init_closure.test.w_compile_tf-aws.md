@@ -202,14 +202,16 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
-            return ({
+          _supportedOps() {
+            return [...super._supportedOps(), "handle", "$inflight_init"];
+          }
+          onLift(host, ops) {
+            $stdlib.core.onLiftMatrix(host, ops, {
               "handle": [
                 [__parent_this_1, ["bar"]],
               ],
-              "$inflight_init": [
-              ],
             });
+            super.onLift(host, ops);
           }
         }
         this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
@@ -231,13 +233,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "bar": [
-          ],
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "bar", "$inflight_init"];
       }
     }
     new Foo(this, "Foo");

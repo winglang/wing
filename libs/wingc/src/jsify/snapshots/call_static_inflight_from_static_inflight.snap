@@ -85,17 +85,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "foo": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
@@ -120,18 +111,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
+      _supportedOps() {
+        return [...super._supportedOps(), "bar", "$inflight_init"];
       }
-      static get _liftTypeMap() {
-        return ({
+      static onLiftType(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "bar": [
             [A, ["foo"]],
           ],
         });
+        super.onLiftType(host, ops);
       }
     }
   }

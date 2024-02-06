@@ -71,17 +71,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "getField": [
-            [this, ["field"]],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "field", "getField", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
-            [this, ["field"]],
           ],
-          "field": [
+          "getField": [
           ],
         });
+        super.onLift(host, ops);
       }
     }
   }

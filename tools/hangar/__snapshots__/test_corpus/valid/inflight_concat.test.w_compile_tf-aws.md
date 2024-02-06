@@ -73,15 +73,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "foo": [
-            [(this.s1.concat(" world")), []],
-          ],
+      _supportedOps() {
+        return [...super._supportedOps(), "foo", "$inflight_init"];
+      }
+      onLift(host, ops) {
+        $stdlib.core.onLiftMatrix(host, ops, {
           "$inflight_init": [
             [(this.s1.concat(" world")), []],
           ],
+          "foo": [
+            [(this.s1.concat(" world")), []],
+          ],
         });
+        super.onLift(host, ops);
       }
     }
     const r = new R(this, "R");
