@@ -114,7 +114,7 @@
     "safe-stable-stringify": "^2.4.3",
     "stacktracey": "^2.1.8",
     "ulid": "^2.3.0",
-    "undici": "^5.25.4",
+    "undici": "^6.6.2",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
   },

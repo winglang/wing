@@ -1372,8 +1372,8 @@ importers:
         specifier: ^2.3.0
         version: 2.3.0
       undici:
-        specifier: ^5.25.4
-        version: 5.25.4
+        specifier: ^6.6.2
+        version: 6.6.2
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -15508,7 +15508,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240201
+      typescript: 5.4.0-dev.20240206
     dev: true
 
   /dset@3.1.2:
@@ -25378,8 +25378,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240201:
-    resolution: {integrity: sha512-KyjAVgMfyIHhjbaYTeTElvoEKM4teDYYATdzsdcxvogVcaDuH0I0JbiwFUe6bIU5FnWxlbxc7rfGyh7aNwpnow==}
+  /typescript@5.4.0-dev.20240206:
+    resolution: {integrity: sha512-8P1XYxDbG/AyGE5tB8+JpeiQfS5ye1BTvIVDZaHhoK9nJuCn4nkB0L66lvfwYB+46hA4rLo3vE3WkIToSYtqQA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -25426,6 +25426,13 @@ packages:
   /undici@5.25.4:
     resolution: {integrity: sha512-450yJxT29qKMf3aoudzFpIciqpx6Pji3hEWaXqXmanbXF58LTAGCKxcJjxMXWu3iG+Mudgo3ZUfDB6YDFd/dAw==}
     engines: {node: '>=14.0'}
+    dependencies:
+      '@fastify/busboy': 2.0.0
+    dev: false
+
+  /undici@6.6.2:
+    resolution: {integrity: sha512-vSqvUE5skSxQJ5sztTZ/CdeJb1Wq0Hf44hlYMciqHghvz+K88U0l7D6u1VsndoFgskDcnU+nG3gYmMzJVzd9Qg==}
+    engines: {node: '>=18.0'}
     dependencies:
       '@fastify/busboy': 2.0.0
     dev: false
