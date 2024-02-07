@@ -133,7 +133,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -145,7 +145,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -288,7 +288,7 @@ my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -300,7 +300,7 @@ my_array: [(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration)
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -442,7 +442,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -454,7 +454,7 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -595,7 +595,7 @@ my_capture: false
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -607,7 +607,7 @@ my_capture: false
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -750,7 +750,7 @@ my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -762,7 +762,7 @@ my_capture: (new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Duration
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -907,7 +907,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -919,7 +919,7 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1066,7 +1066,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1078,7 +1078,7 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1222,7 +1222,7 @@ my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duratio
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1234,7 +1234,7 @@ my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duratio
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1375,7 +1375,7 @@ my_capture: 123
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1387,7 +1387,7 @@ my_capture: 123
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1531,7 +1531,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1543,7 +1543,7 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1686,7 +1686,7 @@ my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Dur
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1698,7 +1698,7 @@ my_set: new Set([(new (require(\\"[REDACTED]/wingsdk/src/std/duration.js\\").Dur
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1840,7 +1840,7 @@ my_capture: \\"bam bam bam\\"
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1852,7 +1852,7 @@ my_capture: \\"bam bam bam\\"
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1996,7 +1996,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -2008,7 +2008,7 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -2152,7 +2152,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
         "Function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -2164,7 +2164,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
