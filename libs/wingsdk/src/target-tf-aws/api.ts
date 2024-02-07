@@ -309,6 +309,7 @@ class WingRestApi extends Construct {
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
+  private readonly accountId: string;
 
   constructor(
     scope: Construct,
@@ -320,6 +321,7 @@ class WingRestApi extends Construct {
   ) {
     super(scope, id);
     this.region = (App.of(this) as App).region;
+    this.accountId = (App.of(this) as App).accountId;
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
@@ -386,9 +388,17 @@ class WingRestApi extends Construct {
    * @returns OpenApi extension object for the endpoint and handler
    */
   private createApiSpecExtension(handler: Function) {
+    // The ARN of the Lambda function is constructed by hand so that it can be calculated
+    // during preflight, instead of being resolved at deploy time.
+    //
+    // By doing this, the API Gateway does not need to take a dependency on its Lambda functions,
+    // making it possible to write Lambda functions that reference the
+    // API Gateway's URL in their inflight code.
+    const functionArn = `arn:aws:lambda:${this.region}:${this.accountId}:function:${handler.name}`;
+
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {
