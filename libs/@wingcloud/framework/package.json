@@ -23,9 +23,6 @@
     "registry": "https://registry.npmjs.org",
     "tag": "latest"
   },
-  "dependencies": {
-    "constructs": "^10.3"
-  },
   "peerDependencies": {
     "@winglang/sdk": "*",
     "typescript": "^5.3.3"

@@ -155,6 +155,7 @@ my_capture: [\\"hello\\",\\"dude\\"]
 }
 `;
 
+<<<<<<< HEAD
 exports[`array of buckets 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
@@ -393,6 +394,8 @@ my_buckets: [(function() {
 }
 `;
 
+=======
+>>>>>>> a97c509f3133a54d1bbe724054a397e3c1482cee
 exports[`array of durations 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
@@ -1482,6 +1485,7 @@ my_map: new Map([[\\"foo\\",[(new (require(\\"[REDACTED]/wingsdk/src/std/duratio
 }
 `;
 
+<<<<<<< HEAD
 exports[`map of buckets 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
@@ -1717,6 +1721,8 @@ my_map: new Map([[\\"foo\\",(function() {
 }
 `;
 
+=======
+>>>>>>> a97c509f3133a54d1bbe724054a397e3c1482cee
 exports[`number 1`] = `
 {
   ".wing/function_c8e6b4af.js": "\\"use strict\\";
@@ -2646,6 +2652,7 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
   },
 }
 `;
+<<<<<<< HEAD
 
 exports[`struct with resources 1`] = `
 {
@@ -3003,3 +3010,5 @@ my_struct: {\\"bucky\\": (function() {
   },
 }
 `;
+=======
+>>>>>>> a97c509f3133a54d1bbe724054a397e3c1482cee

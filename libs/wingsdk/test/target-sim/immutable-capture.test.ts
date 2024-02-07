@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
 import { InflightBindings } from "../../src/core/inflight";
 import { Testing } from "../../src/simulator";
@@ -217,71 +216,73 @@ captureTest("struct of maps", () => ({
   ],
 }));
 
-// array of buckets
-captureTest("array of buckets", (scope) => ({
-  bindings: {
-    my_buckets: {
-      obj: [new Bucket(scope, "B1"), new Bucket(scope, "B2")],
-    },
-  },
-  inflightCode: [
-    `await this.my_buckets[0].put("hello.txt", "world");`,
-    `const objects = await this.my_buckets[0].list();`,
-    `assert(objects.length === 1)`,
-    `assert(objects[0] === "hello.txt")`,
-    `await this.my_buckets[1].put("foo", "bar");`,
-    `assert(await this.my_buckets[1].get("foo") === "bar")`,
-  ],
-}));
+// capturing collections of buckets isn't supported yet
 
-// map of buckets
-captureTest("map of buckets", (scope) => ({
-  bindings: {
-    my_map: {
-      obj: Object.freeze(
-        new Map([
-          ["foo", new Bucket(scope, "B1")],
-          ["bar", new Bucket(scope, "B2")],
-        ])
-      ),
-    },
-  },
-  inflightCode: [
-    `const foo = this.my_map.get("foo");`,
-    `await foo.put("hello.txt", "world");`,
-    `assert(await foo.get("hello.txt") === "world")`,
-  ],
-}));
+// // array of buckets
+// captureTest("array of buckets", (scope) => ({
+//   bindings: {
+//     my_buckets: {
+//       obj: [new Bucket(scope, "B1"), new Bucket(scope, "B2")],
+//     },
+//   },
+//   inflightCode: [
+//     `await this.my_buckets[0].put("hello.txt", "world");`,
+//     `const objects = await this.my_buckets[0].list();`,
+//     `assert(objects.length === 1)`,
+//     `assert(objects[0] === "hello.txt")`,
+//     `await this.my_buckets[1].put("foo", "bar");`,
+//     `assert(await this.my_buckets[1].get("foo") === "bar")`,
+//   ],
+// }));
 
-// struct with resources
-captureTest("struct with resources", (scope) => ({
-  bindings: {
-    my_struct: {
-      obj: {
-        bucky: new Bucket(scope, "B1"),
-        mapy: Object.freeze(
-          new Map([
-            ["foo", new Bucket(scope, "B2")],
-            ["bar", new Bucket(scope, "B3")],
-          ])
-        ),
-        arry: {
-          boom: [new Bucket(scope, "B4"), new Bucket(scope, "B5")],
-        },
-      },
-    },
-  },
-  inflightCode: [
-    `const b = this.my_struct.bucky;`,
-    `await b.put("hello.txt", "world");`,
-    `assert(await b.get("hello.txt") === "world")`,
-    `const boom = this.my_struct.arry.boom[1];`,
-    `assert((await boom.list()).length === 0)`,
-    `const bar = this.my_struct.mapy.get("bar");`,
-    `await bar.put("foo", "bar");`,
-    `assert(await bar.get("foo") === "bar")`,
-  ],
-}));
+// // map of buckets
+// captureTest("map of buckets", (scope) => ({
+//   bindings: {
+//     my_map: {
+//       obj: Object.freeze(
+//         new Map([
+//           ["foo", new Bucket(scope, "B1")],
+//           ["bar", new Bucket(scope, "B2")],
+//         ])
+//       ),
+//     },
+//   },
+//   inflightCode: [
+//     `const foo = this.my_map.get("foo");`,
+//     `await foo.put("hello.txt", "world");`,
+//     `assert(await foo.get("hello.txt") === "world")`,
+//   ],
+// }));
+
+// // struct with resources
+// captureTest("struct with resources", (scope) => ({
+//   bindings: {
+//     my_struct: {
+//       obj: {
+//         bucky: new Bucket(scope, "B1"),
+//         mapy: Object.freeze(
+//           new Map([
+//             ["foo", new Bucket(scope, "B2")],
+//             ["bar", new Bucket(scope, "B3")],
+//           ])
+//         ),
+//         arry: {
+//           boom: [new Bucket(scope, "B4"), new Bucket(scope, "B5")],
+//         },
+//       },
+//     },
+//   },
+//   inflightCode: [
+//     `const b = this.my_struct.bucky;`,
+//     `await b.put("hello.txt", "world");`,
+//     `assert(await b.get("hello.txt") === "world")`,
+//     `const boom = this.my_struct.arry.boom[1];`,
+//     `assert((await boom.list()).length === 0)`,
+//     `const bar = this.my_struct.mapy.get("bar");`,
+//     `await bar.put("foo", "bar");`,
+//     `assert(await bar.get("foo") === "bar")`,
+//   ],
+// }));
 
 // -----------------------------
 

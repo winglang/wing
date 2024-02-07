@@ -32,6 +32,7 @@
     "@heroicons/react": "^2.0.18",
     "@popperjs/core": "^2.11.8",
     "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.10",
     "classnames": "^2.3.2",
     "lodash.uniq": "^4.5.0",
     "nanoid": "^4.0.2",
@@ -43,7 +44,6 @@
   "devDependencies": {
     "@babel/core": "^7.22.11",
     "@storybook/react": "^7.4.0",
-    "@tailwindcss/typography": "^0.5.10",
     "@testing-library/react": "^14.0.0",
     "@types/lodash.uniq": "^4.5.7",
     "@types/react": "^18.2.21",

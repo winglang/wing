@@ -111,8 +111,11 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 module.exports = { Foo };
@@ -151,8 +154,11 @@ class Bar extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 class Foo extends $stdlib.std.Resource {
@@ -176,8 +182,11 @@ class Foo extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 module.exports = { Bar };
@@ -274,8 +283,11 @@ class Widget extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 module.exports = { Widget };
