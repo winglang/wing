@@ -497,10 +497,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const maybeVar = 123;
-    $helpers.assert($helpers.eq((maybeVar??(()=>{throw new Error("Unexpected nil");})()), 123), "maybeVar! == 123");
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeVar), 123), "maybeVar! == 123");
     const maybeVarNull = undefined;
     try {
-      const err = (maybeVarNull??(()=>{throw new Error("Unexpected nil");})());
+      const err = $helpers.unwrap(maybeVarNull);
       $helpers.assert(false, "false");
     }
     catch ($error_e) {
@@ -513,17 +513,17 @@ class $Root extends $stdlib.std.Resource {
       }
     });
     try {
-      ((maybeFn(false))??(()=>{throw new Error("Unexpected nil");})());
+      $helpers.unwrap((maybeFn(false)));
       $helpers.assert(false, "false");
     }
     catch ($error_e) {
       const e = $error_e.message;
       $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
     }
-    $helpers.assert($helpers.eq(((maybeFn(true))??(()=>{throw new Error("Unexpected nil");})()), ["hi"]), "maybeFn(true)! == [\"hi\"]");
+    $helpers.assert($helpers.eq($helpers.unwrap((maybeFn(true))), ["hi"]), "maybeFn(true)! == [\"hi\"]");
     const maybeVarBool = true;
-    $helpers.assert($helpers.eq((!(maybeVarBool??(()=>{throw new Error("Unexpected nil");})())), false), "!maybeVarBool! == false");
-    const person = (Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30})))??(()=>{throw new Error("Unexpected nil");})());
+    $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
+    const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
     $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
   }
 }
