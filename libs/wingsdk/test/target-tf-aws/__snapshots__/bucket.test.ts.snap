@@ -2495,7 +2495,7 @@ exports[`create a bucket from an existing bucket 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -2503,7 +2503,7 @@ exports[`create a bucket from an existing bucket 2`] = `
               "existing_\${TfToken[TOKEN.0]}": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud object store",
@@ -2515,7 +2515,7 @@ exports[`create a bucket from an existing bucket 2`] = `
               "some-existing-bucket_7dc22579": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformDataSource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "some-existing-bucket_7dc22579",
                 "path": "root/Default/some-existing-bucket_7dc22579",
@@ -2523,7 +2523,7 @@ exports[`create a bucket from an existing bucket 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -2531,7 +2531,7 @@ exports[`create a bucket from an existing bucket 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -2539,7 +2539,7 @@ exports[`create a bucket from an existing bucket 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -2547,7 +2547,7 @@ exports[`create a bucket from an existing bucket 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
