@@ -32,7 +32,7 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -84,18 +84,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(ar, 0), []],
             [ar, ["at"]],
             [ar.length, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const ar = [1, 2, 3];

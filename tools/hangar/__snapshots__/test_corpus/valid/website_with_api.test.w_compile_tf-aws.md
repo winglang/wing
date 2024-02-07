@@ -103,7 +103,7 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {
       "root": {
@@ -647,16 +647,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [usersTable, ["list"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -684,16 +682,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [usersTable, ["insert"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -723,16 +719,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [api.url, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.AutoIdResource {
@@ -762,16 +756,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [api.url, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api", { cors: true, corsOptions: ({"allowOrigin": ["*"], "allowMethods": [cloud.HttpMethod.GET, cloud.HttpMethod.POST, cloud.HttpMethod.OPTIONS], "allowHeaders": ["Content-Type"], "allowCredentials": false, "exposeHeaders": ["Content-Type"], "maxAge": (std.Duration.fromSeconds(600))}) });
