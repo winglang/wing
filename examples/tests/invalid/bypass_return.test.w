@@ -18,3 +18,6 @@ let missingReturn = (): num => {
   }
 }
 //^ Expected to return "num"
+
+let emptyBody = (): num => {};
+//^ Expected to return "num"
