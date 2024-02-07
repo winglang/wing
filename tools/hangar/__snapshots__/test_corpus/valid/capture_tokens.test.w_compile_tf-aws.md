@@ -71,7 +71,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {
       "root": {
@@ -95,6 +95,16 @@ module.exports = function({  }) {
     }
   },
   "data": {
+    "aws_caller_identity": {
+      "account": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/account",
+            "uniqueId": "account"
+          }
+        }
+      }
+    },
     "aws_region": {
       "Region": {
         "//": {

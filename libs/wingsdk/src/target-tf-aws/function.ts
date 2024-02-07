@@ -71,6 +71,9 @@ export class Function extends cloud.Function implements IAwsFunction {
   /** Permissions  */
   public permissions!: LambdaPermission;
 
+  /** Name of the AWS Lambda function in the account/region */
+  public readonly name: string;
+
   private assetPath: string | undefined; // posix path
   private bundleHash: string | undefined;
 
@@ -167,7 +170,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       role: this.role.name,
     });
 
-    const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+    this.name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
@@ -178,7 +181,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     if (!props.logRetentionDays || props.logRetentionDays >= 0) {
       new CloudwatchLogGroup(this, "CloudwatchLogGroup", {
-        name: `/aws/lambda/${name}`,
+        name: `/aws/lambda/${this.name}`,
         retentionInDays: props.logRetentionDays ?? 30,
       });
     } else {
@@ -187,7 +190,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: name,
+      functionName: this.name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -229,7 +232,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", name);
+    this.addEnvironment("WING_FUNCTION_NAME", this.name);
   }
 
   /** @internal */

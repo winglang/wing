@@ -171,7 +171,7 @@ exports[`can add file in preflight 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -183,7 +183,7 @@ exports[`can add file in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -316,7 +316,7 @@ exports[`can add object in preflight 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -328,7 +328,7 @@ exports[`can add object in preflight 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -448,7 +448,7 @@ exports[`create a bucket 1`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -460,7 +460,7 @@ exports[`create a bucket 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -588,7 +588,7 @@ exports[`get invalid object throws an error 2`] = `
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -600,7 +600,7 @@ exports[`get invalid object throws an error 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
