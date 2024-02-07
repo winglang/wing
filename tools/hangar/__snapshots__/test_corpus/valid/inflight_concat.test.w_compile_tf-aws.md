@@ -25,7 +25,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -73,19 +73,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [(this.s1.concat(" world")), []],
-          ],
+      get _liftMap() {
+        return ({
           "foo": [
             [(this.s1.concat(" world")), []],
           ],
+          "$inflight_init": [
+            [(this.s1.concat(" world")), []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const r = new R(this, "R");
