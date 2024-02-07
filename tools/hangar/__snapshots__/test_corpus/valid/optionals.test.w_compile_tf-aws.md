@@ -525,6 +525,10 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
     const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
     $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
+    const maybeX = 0;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
+    const maybeY = "";
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
