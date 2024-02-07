@@ -711,12 +711,7 @@ impl<'a> JSifier<'a> {
 						new_code!(expr_span, "((", js_exp, ") != null)")
 					}
 					UnaryOperator::OptionalUnwrap => {
-						new_code!(
-							expr_span,
-							"(",
-							js_exp,
-							"??(()=>{throw new Error(\"Unexpected nil\");})())"
-						)
+						new_code!(expr_span, "$helpers.unwrap(", js_exp, ")")
 					}
 				}
 			}
