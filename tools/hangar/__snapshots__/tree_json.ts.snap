@@ -255,7 +255,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "fqn": "@winglang/sdk.tf_aws.Bucket",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -277,7 +277,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.cloud.Bucket",
+                          "fqn": "@winglang/sdk.tf_aws.Bucket",
                           "version": "0.0.0",
                         },
                         "display": {
@@ -596,7 +596,7 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.cloud.Bucket",
+                      "fqn": "@winglang/sdk.tf_aws.Bucket",
                       "version": "0.0.0",
                     },
                     "display": {
