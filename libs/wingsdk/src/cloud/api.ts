@@ -698,15 +698,27 @@ export interface ApiRequest {
   readonly headers?: Record<string, string>;
 }
 
+export const DEFAULT_RESPONSE_STATUS = 200;
+
 /**
  * Shape of a response from a inflight handler.
  */
 export interface ApiResponse {
-  /** The response's status code. */
-  readonly status: number;
-  /** The response's body. */
+  /**
+   * The response's status code.
+   * @default 200
+   **/
+  readonly status?: number;
+
+  /**
+   * The response's body.
+   * @default - no body
+   **/
   readonly body?: string;
-  /** The response's headers. */
+  /**
+   * The response's headers.
+   * @default {}
+   **/
   readonly headers?: Record<string, string>;
 }
 
@@ -729,7 +741,7 @@ export interface IApiEndpointHandlerClient {
    * Inflight that will be called when a request is made to the endpoint.
    * @inflight
    */
-  handle(request: ApiRequest): Promise<ApiResponse>;
+  handle(request: ApiRequest): Promise<ApiResponse | undefined>;
 }
 
 /**

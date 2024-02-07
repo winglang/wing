@@ -14,7 +14,7 @@ class Doubler {
   }
 }
 
-let fn = new Doubler(inflight (m: str): str => {
+let fn = new Doubler(inflight (m: str?): str => {
   return "Hello {m}!";
 });
 
@@ -25,8 +25,8 @@ let fn = new Doubler(inflight (m: str): str => {
 class Doubler2 {
   // TODO: make into a static method - see https://github.com/winglang/wing/issues/2583
   pub makeFunc(handler: inflight (num): num): cloud.Function {
-    return new cloud.Function(inflight (x: str): str => {
-      let xStr = num.fromStr(x);
+    return new cloud.Function(inflight (x: str?): str => {
+      let xStr = num.fromStr(x ?? "NaN");
       let y = handler(xStr);
       let z = handler(y);
       return Json.stringify(Json z);

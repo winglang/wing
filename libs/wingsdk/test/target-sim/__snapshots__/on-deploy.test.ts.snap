@@ -178,7 +178,7 @@ exports[`create an OnDeploy 2`] = `
 [
   "@winglang/sdk.cloud.Function created.",
   "super duper success",
-  "Invoke (payload=\\"\\").",
+  "Invoke (payload=undefined).",
   "OnDeploy invoked.",
   "@winglang/sdk.cloud.OnDeploy created.",
   "@winglang/sdk.cloud.OnDeploy deleted.",

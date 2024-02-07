@@ -2,6 +2,7 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {
   ApiRequest,
   ApiResponse,
+  DEFAULT_RESPONSE_STATUS,
   IApiEndpointHandlerClient,
   parseHttpMethod,
   sanitizeParamLikeObject,
@@ -26,7 +27,8 @@ export class ApiOnRequestHandlerClient {
     request: APIGatewayProxyEvent
   ): Promise<APIGatewayProxyResult> {
     const apiRequest: ApiRequest = mapApigatewayEventToCloudApiRequest(request);
-    const apiResponse: ApiResponse = await this.handler.handle(apiRequest);
+    const apiResponse: ApiResponse =
+      (await this.handler.handle(apiRequest)) ?? {};
     const apiGatewayResponse: APIGatewayProxyResult =
       mapCloudApiResponseToApigatewayResponse(apiResponse, this.corsHeaders);
     return apiGatewayResponse;
@@ -43,7 +45,7 @@ function mapCloudApiResponseToApigatewayResponse(
   corsHeaders?: Record<string, string>
 ): APIGatewayProxyResult {
   return {
-    statusCode: resp.status,
+    statusCode: resp.status ?? DEFAULT_RESPONSE_STATUS,
     body: resp.body ?? "",
     headers: {
       "Content-Type": "application/json",

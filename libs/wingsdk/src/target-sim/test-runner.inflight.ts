@@ -44,7 +44,7 @@ export class TestRunner
     let error: string | undefined;
     const previousTraces = this.context.listTraces().length;
     try {
-      await fnClient.invoke("");
+      await fnClient.invoke();
       pass = true;
     } catch (e: any) {
       error = e.stack;

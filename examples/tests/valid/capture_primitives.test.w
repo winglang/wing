@@ -6,7 +6,7 @@ let myBool = true;
 let mySecondBool = false;
 let myDur = 10m;
 
-let handler = inflight (s: str) => {
+let handler = inflight () => {
   log(myStr);
 
   let n = myNum;

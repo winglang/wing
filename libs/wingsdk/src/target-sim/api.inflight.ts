@@ -12,6 +12,7 @@ import {
   API_FQN,
   ApiRequest,
   ApiResponse,
+  DEFAULT_RESPONSE_STATUS,
   IApiClient,
   IFunctionClient,
   parseHttpMethod,
@@ -166,32 +167,24 @@ export class Api
           const apiRequest = transformRequest(req);
 
           try {
-            const response = await fnClient.invoke(
-              // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-              apiRequest as unknown as string
+            const responseString = await fnClient.invoke(
+              JSON.stringify(apiRequest)
             );
+            const response: ApiResponse = JSON.parse(responseString ?? "{}");
 
-            // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-            if (!isApiResponse(response)) {
-              throw new Error(
-                `Expected an ApiResponse struct, found ${JSON.stringify(
-                  response
-                )}`
-              );
-            }
-
-            res.status(response.status);
-            for (const [key, value] of Object.entries(response.headers ?? {})) {
+            const status = response.status ?? DEFAULT_RESPONSE_STATUS;
+            res.status(status);
+            for (const [key, value] of Object.entries(
+              response?.headers ?? {}
+            )) {
               res.set(key, value);
             }
-            if (response.body !== undefined) {
+            if (response?.body !== undefined) {
               res.send(response.body);
             } else {
               res.end();
             }
-            this.addTrace(
-              `${route.method} ${route.path} - ${response.status}.`
-            );
+            this.addTrace(`${route.method} ${route.path} - ${status}.`);
           } catch (err) {
             return next(err);
           }
@@ -211,12 +204,6 @@ export class Api
       timestamp: new Date().toISOString(),
     });
   }
-}
-
-function isApiResponse(response: unknown): response is ApiResponse {
-  return (
-    (response as any).status && typeof (response as any).status === "number"
-  );
 }
 
 function transformRequest(req: express.Request): ApiRequest {
