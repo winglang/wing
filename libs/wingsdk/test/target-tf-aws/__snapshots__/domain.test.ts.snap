@@ -195,7 +195,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
               "ParameterRegistrar": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
@@ -562,7 +562,7 @@ exports[`cloud.Domain for tf-aws > react website with a domain when passing valu
               "ParameterRegistrar": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
@@ -924,7 +924,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values fro
               "ParameterRegistrar": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
@@ -1280,7 +1280,7 @@ exports[`cloud.Domain for tf-aws > website with a domain when passing values on 
               "ParameterRegistrar": {
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "id": "ParameterRegistrar",
                 "path": "root/Default/ParameterRegistrar",
