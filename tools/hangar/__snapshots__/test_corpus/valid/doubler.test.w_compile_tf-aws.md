@@ -279,19 +279,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "invoke", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.func, []],
-          ],
+      get _liftMap() {
+        return ({
           "invoke": [
             [this.func, ["handle"]],
           ],
+          "$inflight_init": [
+            [this.func, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -317,8 +313,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Doubler2 extends $stdlib.std.Resource {
@@ -353,16 +354,14 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [handler, ["handle"]],
               ],
+              "$inflight_init": [
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         return this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure2(this, "$Closure2"));
@@ -384,8 +383,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -411,8 +413,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure4 extends $stdlib.std.AutoIdResource {
@@ -439,16 +446,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [f, ["invoke"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const fn = new Doubler(this, "Doubler", new $Closure1(this, "$Closure1"));

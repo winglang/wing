@@ -329,7 +329,7 @@ let RequestOptions = http.RequestOptions{ ... };
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.cache">cache</a></code> | <code><a href="#@winglang/sdk.http.RequestCache">RequestCache</a></code> | The cache mode you want to use for the request. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | Any headers you want to add to your request. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.method">method</a></code> | <code><a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a></code> | The request method, e.g., GET, POST. The default is GET. |
-| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | The redirect mode to use: follow, error. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | An enum specifying the redirect mode to use: follow, error or manual. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.referrer">referrer</a></code> | <code>str</code> | A string specifying "no-referrer", client, or a URL. |
 
 ---
@@ -355,6 +355,7 @@ cache: RequestCache;
 ```
 
 - *Type:* <a href="#@winglang/sdk.http.RequestCache">RequestCache</a>
+- *Default:* RequestCache.DEFAULT
 
 The cache mode you want to use for the request.
 
@@ -392,9 +393,9 @@ redirect: RequestRedirect;
 ```
 
 - *Type:* <a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a>
-- *Default:* follow
+- *Default:* RequestRedirect.FOLLOW
 
-The redirect mode to use: follow, error.
+An enum specifying the redirect mode to use: follow, error or manual.
 
 The default is follow.
 
@@ -807,10 +808,21 @@ The redirect read-only property that contains the mode for how redirects are han
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.MANUAL">MANUAL</a></code> | Do not follow redirects automatically. |
 | <code><a href="#@winglang/sdk.http.RequestRedirect.FOLLOW">FOLLOW</a></code> | Follow all redirects incurred when fetching a resource. |
 | <code><a href="#@winglang/sdk.http.RequestRedirect.ERROR">ERROR</a></code> | Return a network error when a request is met with a redirect. |
 
 ---
+
+##### `MANUAL` <a name="MANUAL" id="@winglang/sdk.http.RequestRedirect.MANUAL"></a>
+
+Do not follow redirects automatically.
+
+The `Location` response header includes the redirect
+target.
+
+---
+
 
 ##### `FOLLOW` <a name="FOLLOW" id="@winglang/sdk.http.RequestRedirect.FOLLOW"></a>
 

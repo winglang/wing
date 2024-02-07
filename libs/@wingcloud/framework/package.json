@@ -1,5 +1,5 @@
 {
-  "name": "ts4w",
+  "name": "@wingcloud/framework",
   "version": "0.0.0",
   "author": {
     "name": "Wing Cloud",
@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git",
-    "directory": "libs/ts4w"
+    "directory": "libs/@wingcloud/framework"
   },
   "description": "Experimental TypeScript experience for Wing",
   "main": "dist/index.js",
@@ -23,16 +23,13 @@
     "registry": "https://registry.npmjs.org",
     "tag": "latest"
   },
-  "dependencies": {
-    "constructs": "~10.2.69"
-  },
   "peerDependencies": {
     "@winglang/sdk": "*",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@winglang/sdk": "workspace:^",
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "tsup": "^8.0.1",
     "bump-pack": "workspace:^",
     "vitest": "^0.34.6"
@@ -41,6 +38,6 @@
     "dist"
   ],
   "volta": {
-    "extends": "../../package.json"
+    "extends": "../../../package.json"
   }
 }
