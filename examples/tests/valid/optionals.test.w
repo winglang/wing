@@ -252,3 +252,9 @@ struct Person {
 }
 let person = Person.tryParseJson(Json.stringify({"name": "john", "age": 30}))!;
 assert(person.name == "john" && person.age == 30);
+
+let maybeX: num? = 0;
+assert(maybeX! == 0);
+
+let maybeY: str? = "";
+assert(maybeY! == "");

@@ -47,7 +47,7 @@ export function normalPath(path: string): string {
 }
 
 export function unwrap<T>(value: T): T | never {
-  if (value) {
+  if (value != null) {
     return value;
   }
   throw new Error("Unexpected nil");
