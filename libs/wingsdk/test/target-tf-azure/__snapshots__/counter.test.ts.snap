@@ -39,7 +39,7 @@ exports[`counter name valid 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -47,7 +47,7 @@ exports[`counter name valid 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -55,7 +55,7 @@ exports[`counter name valid 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -65,7 +65,7 @@ exports[`counter name valid 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/wingcounter/CounterTable",
@@ -73,7 +73,7 @@ exports[`counter name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -85,7 +85,7 @@ exports[`counter name valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -93,7 +93,7 @@ exports[`counter name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -101,7 +101,7 @@ exports[`counter name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -109,7 +109,7 @@ exports[`counter name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -159,7 +159,7 @@ exports[`counter with initial value 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -167,7 +167,7 @@ exports[`counter with initial value 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -179,7 +179,7 @@ exports[`counter with initial value 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -187,7 +187,7 @@ exports[`counter with initial value 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -195,7 +195,7 @@ exports[`counter with initial value 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -203,7 +203,7 @@ exports[`counter with initial value 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -211,7 +211,7 @@ exports[`counter with initial value 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -219,7 +219,7 @@ exports[`counter with initial value 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -227,7 +227,7 @@ exports[`counter with initial value 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -356,7 +356,7 @@ exports[`dec() policy statement 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
@@ -366,7 +366,7 @@ exports[`dec() policy statement 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -374,7 +374,7 @@ exports[`dec() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -388,7 +388,7 @@ exports[`dec() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -396,7 +396,7 @@ exports[`dec() policy statement 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -404,7 +404,7 @@ exports[`dec() policy statement 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -414,7 +414,7 @@ exports[`dec() policy statement 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -422,7 +422,7 @@ exports[`dec() policy statement 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -434,7 +434,7 @@ exports[`dec() policy statement 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -442,7 +442,7 @@ exports[`dec() policy statement 2`] = `
                   "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
                     "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
@@ -450,7 +450,7 @@ exports[`dec() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -462,7 +462,7 @@ exports[`dec() policy statement 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
@@ -470,7 +470,7 @@ exports[`dec() policy statement 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -478,7 +478,7 @@ exports[`dec() policy statement 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -486,7 +486,7 @@ exports[`dec() policy statement 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -494,7 +494,7 @@ exports[`dec() policy statement 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -502,7 +502,7 @@ exports[`dec() policy statement 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -510,7 +510,7 @@ exports[`dec() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -518,7 +518,7 @@ exports[`dec() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -526,7 +526,7 @@ exports[`dec() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -701,7 +701,7 @@ exports[`function with a counter binding 3`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
@@ -711,7 +711,7 @@ exports[`function with a counter binding 3`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -719,7 +719,7 @@ exports[`function with a counter binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -733,7 +733,7 @@ exports[`function with a counter binding 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -741,7 +741,7 @@ exports[`function with a counter binding 3`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -749,7 +749,7 @@ exports[`function with a counter binding 3`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -759,7 +759,7 @@ exports[`function with a counter binding 3`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -767,7 +767,7 @@ exports[`function with a counter binding 3`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -779,7 +779,7 @@ exports[`function with a counter binding 3`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -787,7 +787,7 @@ exports[`function with a counter binding 3`] = `
                   "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
                     "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
@@ -795,7 +795,7 @@ exports[`function with a counter binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -807,7 +807,7 @@ exports[`function with a counter binding 3`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
@@ -815,7 +815,7 @@ exports[`function with a counter binding 3`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -823,7 +823,7 @@ exports[`function with a counter binding 3`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -831,7 +831,7 @@ exports[`function with a counter binding 3`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -839,7 +839,7 @@ exports[`function with a counter binding 3`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -847,7 +847,7 @@ exports[`function with a counter binding 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -855,7 +855,7 @@ exports[`function with a counter binding 3`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -863,7 +863,7 @@ exports[`function with a counter binding 3`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -871,7 +871,7 @@ exports[`function with a counter binding 3`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1000,7 +1000,7 @@ exports[`inc() policy statement 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
@@ -1010,7 +1010,7 @@ exports[`inc() policy statement 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -1018,7 +1018,7 @@ exports[`inc() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1032,7 +1032,7 @@ exports[`inc() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1040,7 +1040,7 @@ exports[`inc() policy statement 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -1048,7 +1048,7 @@ exports[`inc() policy statement 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -1058,7 +1058,7 @@ exports[`inc() policy statement 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -1066,7 +1066,7 @@ exports[`inc() policy statement 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -1078,7 +1078,7 @@ exports[`inc() policy statement 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -1086,7 +1086,7 @@ exports[`inc() policy statement 2`] = `
                   "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
                     "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
@@ -1094,7 +1094,7 @@ exports[`inc() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1106,7 +1106,7 @@ exports[`inc() policy statement 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
@@ -1114,7 +1114,7 @@ exports[`inc() policy statement 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -1122,7 +1122,7 @@ exports[`inc() policy statement 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -1130,7 +1130,7 @@ exports[`inc() policy statement 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -1138,7 +1138,7 @@ exports[`inc() policy statement 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -1146,7 +1146,7 @@ exports[`inc() policy statement 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1154,7 +1154,7 @@ exports[`inc() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1162,7 +1162,7 @@ exports[`inc() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1170,7 +1170,7 @@ exports[`inc() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1299,7 +1299,7 @@ exports[`peek() policy statement 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
@@ -1309,7 +1309,7 @@ exports[`peek() policy statement 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -1317,7 +1317,7 @@ exports[`peek() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1331,7 +1331,7 @@ exports[`peek() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1339,7 +1339,7 @@ exports[`peek() policy statement 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -1347,7 +1347,7 @@ exports[`peek() policy statement 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -1357,7 +1357,7 @@ exports[`peek() policy statement 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -1365,7 +1365,7 @@ exports[`peek() policy statement 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -1377,7 +1377,7 @@ exports[`peek() policy statement 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -1385,7 +1385,7 @@ exports[`peek() policy statement 2`] = `
                   "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader",
                     "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader",
@@ -1393,7 +1393,7 @@ exports[`peek() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1405,7 +1405,7 @@ exports[`peek() policy statement 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
@@ -1413,7 +1413,7 @@ exports[`peek() policy statement 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -1421,7 +1421,7 @@ exports[`peek() policy statement 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -1429,7 +1429,7 @@ exports[`peek() policy statement 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -1437,7 +1437,7 @@ exports[`peek() policy statement 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -1445,7 +1445,7 @@ exports[`peek() policy statement 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1453,7 +1453,7 @@ exports[`peek() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1461,7 +1461,7 @@ exports[`peek() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1469,7 +1469,7 @@ exports[`peek() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1517,7 +1517,7 @@ exports[`replace invalid character from counter name 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -1525,7 +1525,7 @@ exports[`replace invalid character from counter name 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -1535,7 +1535,7 @@ exports[`replace invalid character from counter name 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/The*Amazing%Counter@01/CounterTable",
@@ -1543,7 +1543,7 @@ exports[`replace invalid character from counter name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1555,7 +1555,7 @@ exports[`replace invalid character from counter name 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -1563,7 +1563,7 @@ exports[`replace invalid character from counter name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1571,7 +1571,7 @@ exports[`replace invalid character from counter name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1579,7 +1579,7 @@ exports[`replace invalid character from counter name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1587,7 +1587,7 @@ exports[`replace invalid character from counter name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1716,7 +1716,7 @@ exports[`set() policy statement 2`] = `
               "ApplicationInsights": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ApplicationInsights",
                 "path": "root/Default/ApplicationInsights",
@@ -1726,7 +1726,7 @@ exports[`set() policy statement 2`] = `
                   "CounterTable": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CounterTable",
                     "path": "root/Default/Counter/CounterTable",
@@ -1734,7 +1734,7 @@ exports[`set() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A distributed atomic counter",
@@ -1748,7 +1748,7 @@ exports[`set() policy statement 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1756,7 +1756,7 @@ exports[`set() policy statement 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -1764,7 +1764,7 @@ exports[`set() policy statement 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -1774,7 +1774,7 @@ exports[`set() policy statement 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -1782,7 +1782,7 @@ exports[`set() policy statement 2`] = `
                     },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
-                      "version": "10.2.70",
+                      "version": "10.3.0",
                     },
                     "display": {
                       "description": "A cloud object store",
@@ -1794,7 +1794,7 @@ exports[`set() policy statement 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -1802,7 +1802,7 @@ exports[`set() policy statement 2`] = `
                   "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
                     "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
@@ -1810,7 +1810,7 @@ exports[`set() policy statement 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1822,7 +1822,7 @@ exports[`set() policy statement 2`] = `
               "LogAnalyticsWorkspace": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "LogAnalyticsWorkspace",
                 "path": "root/Default/LogAnalyticsWorkspace",
@@ -1830,7 +1830,7 @@ exports[`set() policy statement 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -1838,7 +1838,7 @@ exports[`set() policy statement 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -1846,7 +1846,7 @@ exports[`set() policy statement 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -1854,7 +1854,7 @@ exports[`set() policy statement 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -1862,7 +1862,7 @@ exports[`set() policy statement 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1870,7 +1870,7 @@ exports[`set() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1878,7 +1878,7 @@ exports[`set() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1886,7 +1886,7 @@ exports[`set() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",

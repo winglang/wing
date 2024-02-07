@@ -209,7 +209,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -220,7 +220,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -233,7 +233,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -247,7 +247,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -259,7 +259,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -478,7 +478,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -489,7 +489,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -502,7 +502,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -516,7 +516,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -528,7 +528,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -747,7 +747,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -758,7 +758,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -771,7 +771,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -785,7 +785,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -797,7 +797,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1016,7 +1016,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1027,7 +1027,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -1040,7 +1040,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1054,7 +1054,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -1066,7 +1066,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1285,7 +1285,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1296,7 +1296,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -1309,7 +1309,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1323,7 +1323,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -1335,7 +1335,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1554,7 +1554,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1565,7 +1565,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -1578,7 +1578,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1592,7 +1592,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -1604,7 +1604,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -1955,7 +1955,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -1966,7 +1966,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -1979,7 +1979,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -1993,7 +1993,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -2005,7 +2005,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -2241,7 +2241,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -2252,7 +2252,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -2265,7 +2265,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -2279,7 +2279,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -2291,7 +2291,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -2519,7 +2519,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -2530,7 +2530,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -2543,7 +2543,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -2557,7 +2557,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -2569,7 +2569,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -2785,7 +2785,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -2796,7 +2796,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -2809,7 +2809,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -2823,7 +2823,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -2835,7 +2835,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -3123,7 +3123,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -3134,7 +3134,7 @@ return class Handler {
             "ApiEventMapping1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -3145,7 +3145,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -3158,7 +3158,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -3172,7 +3172,7 @@ return class Handler {
             "OnRequestHandler1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -3186,7 +3186,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -3198,7 +3198,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -3488,7 +3488,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -3499,7 +3499,7 @@ return class Handler {
             "ApiEventMapping1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -3510,7 +3510,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -3523,7 +3523,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -3537,7 +3537,7 @@ return class Handler {
             "OnRequestHandler1": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -3551,7 +3551,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -3563,7 +3563,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -3782,7 +3782,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -3793,7 +3793,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -3806,7 +3806,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -3820,7 +3820,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -3832,7 +3832,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -4060,7 +4060,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -4071,7 +4071,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -4084,7 +4084,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -4098,7 +4098,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -4110,7 +4110,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -4329,7 +4329,7 @@ return class Handler {
             "ApiEventMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -4340,7 +4340,7 @@ return class Handler {
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -4353,7 +4353,7 @@ return class Handler {
             "OnRequestHandler0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -4367,7 +4367,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -4379,7 +4379,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -4513,7 +4513,7 @@ exports[`create an api 1`] = `
             "Endpoint": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "Api root/my_api",
@@ -4526,7 +4526,7 @@ exports[`create an api 1`] = `
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A REST API endpoint",
@@ -4538,7 +4538,7 @@ exports[`create an api 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
