@@ -2138,7 +2138,7 @@ impl<'a> TypeChecker<'a> {
 						}
 						UnaryOperator::OptionalUnwrap => {
 							if !type_.is_option() {
-								self.spanned_error(unary_exp, format!("Expected optional type, found \"{}\"", type_));
+								self.spanned_error(unary_exp, format!("'!' expects an optional type, found \"{}\"", type_));
 								(type_, phase)
 							} else {
 								let inner_type = *type_.maybe_unwrap_option();

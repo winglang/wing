@@ -108,11 +108,11 @@ let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
 
 let nonOptional: num = 10;
 let unwrapValue = nonOptional!;
-//                ^^^^^^^^^^^ Expected optional type, found "num"
+//                ^^^^^^^^^^^ '!' expects an optional type, found "num"
 
 let nonOptionalFn = (): num => {
   return 10;
 };
 let unwrapValueFn = nonOptionalFn()!;
-//                  ^^^^^^^^^^^^^^^ Expected optional type, found "num"
+//                  ^^^^^^^^^^^^^^^ '!' expects an optional type, found "num"
 
