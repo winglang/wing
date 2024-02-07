@@ -127,6 +127,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const Person = $stdlib.std.Struct._createJsonSchema({id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -495,6 +496,39 @@ class $Root extends $stdlib.std.Resource {
         $helpers.assert(true, "true");
       }
     }
+    const maybeVar = 123;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeVar), 123), "maybeVar! == 123");
+    const maybeVarNull = undefined;
+    try {
+      const err = $helpers.unwrap(maybeVarNull);
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    const maybeFn = ((b) => {
+      if (b) {
+        return ["hi"];
+      }
+    });
+    try {
+      $helpers.unwrap((maybeFn(false)));
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    $helpers.assert($helpers.eq($helpers.unwrap((maybeFn(true))), ["hi"]), "maybeFn(true)! == [\"hi\"]");
+    const maybeVarBool = true;
+    $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
+    const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
+    $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
+    const maybeX = 0;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
+    const maybeY = "";
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
