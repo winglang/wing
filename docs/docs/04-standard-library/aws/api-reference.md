@@ -955,7 +955,7 @@ RestApi stage name.
 
 ### IAwsBucket <a name="IAwsBucket" id="@winglang/sdk.aws.IAwsBucket"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
+- *Implemented By:* <a href="#@winglang/sdk.tf_aws.Bucket">Bucket</a>, <a href="#@winglang/sdk.aws.IAwsBucket">IAwsBucket</a>
 
 A shared interface for AWS buckets.
 

@@ -81,10 +81,11 @@ const WINGSDK_REGEX_MODULE: &'static str = "regex";
 const WINGSDK_FS_MODULE: &'static str = "fs";
 const WINGSDK_SIM_MODULE: &'static str = "sim";
 const WINGSDK_UI_MODULE: &'static str = "ui";
+const WINGSDK_TF_AWS_MODULE: &'static str = "tf_aws";
 
 pub const UTIL_CLASS_NAME: &'static str = "Util";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 12] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
@@ -96,6 +97,7 @@ const WINGSDK_BRINGABLE_MODULES: [&'static str; 11] = [
 	WINGSDK_FS_MODULE,
 	WINGSDK_SIM_MODULE,
 	WINGSDK_UI_MODULE,
+	WINGSDK_TF_AWS_MODULE,
 ];
 
 const WINGSDK_GENERIC: &'static str = "std.T1";

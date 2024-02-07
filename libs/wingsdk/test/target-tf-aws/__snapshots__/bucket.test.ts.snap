@@ -2471,3 +2471,87 @@ exports[`create a bucket 2`] = `
   "version": "tree-0.1",
 }
 `;
+
+exports[`create a bucket from an existing bucket 1`] = `
+{
+  "data": {
+    "aws_s3_bucket": {
+      "some-existing-bucket_7dc22579": {
+        "bucket": "some-existing-bucket",
+      },
+    },
+  },
+}
+`;
+
+exports[`create a bucket from an existing bucket 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "existing_\${TfToken[TOKEN.0]}": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.70",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "existing_\${TfToken[TOKEN.0]}",
+                "path": "root/Default/existing_\${TfToken[TOKEN.0]}",
+              },
+              "some-existing-bucket_7dc22579": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformDataSource",
+                  "version": "0.17.0",
+                },
+                "id": "some-existing-bucket_7dc22579",
+                "path": "root/Default/some-existing-bucket_7dc22579",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.70",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

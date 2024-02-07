@@ -1,4 +1,3 @@
-// this file must only export the standard library types and not target-specific types.
 export * as cloud from "./cloud";
 export * as core from "./core";
 export * as ex from "./ex";
@@ -13,5 +12,9 @@ export * as aws from "./shared-aws";
 export * as simulator from "./simulator";
 export * as std from "./std";
 export * as sim from "./target-sim";
+// we allow certain target-specific libraries to be exported here
+export * as tf_aws from "./target-tf-aws/bringable";
+
 export * as ui from "./ui";
+
 export * as util from "./util";
