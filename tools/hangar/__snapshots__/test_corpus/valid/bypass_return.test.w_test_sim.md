@@ -2,12 +2,10 @@
 
 ## stdout.log
 ```log
-pass ─ bypass_return.test.wsim » root/env0/test:bypass return type given throw is at parent level   
-pass ─ bypass_return.test.wsim » root/env1/test:bypass return when a throw is found                 
-pass ─ bypass_return.test.wsim » root/env2/test:return when a number is found even if a throw exists
+pass ─ bypass_return.test.wsim (no tests)
  
  
-Tests 3 passed (3)
+Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
