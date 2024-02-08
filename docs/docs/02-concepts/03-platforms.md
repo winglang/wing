@@ -260,7 +260,7 @@ class MyPlatform {
       replicateAllBuckets: {
         type: "boolean",
       },
-      bucketsToReplicate: {
+      nameOfBucketsToReplicate: {
         type: "array",
         items: {
           type: "string",
@@ -273,8 +273,8 @@ class MyPlatform {
     "$comment": "Here in an allOf we can define multiple conditions that must be met for the schema to be valid",
     allOf: [
       {
-        if: { properties: { replicateAllBuckets: { const: true }} },
-        then: { required: ["bucketsToReplicate"] },
+        if: { properties: { replicateAllBuckets: { const: false }} },
+        then: { required: ["nameOfBucketsToReplicate"] },
       }
     ]
   }

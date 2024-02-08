@@ -94,7 +94,9 @@ export function loadPlatformSpecificValues() {
       case ".toml":
         return toml.parse(data);
       default:
-        throw new Error(`Unsupported file extension: ${fileExtension} (expected .yml, .json, or .toml)`);
+        throw new Error(
+          `Unsupported file extension: ${fileExtension} (expected .yml, .json, or .toml)`
+        );
     }
   })();
   return { ...fileValues, ...cliValues };

@@ -171,9 +171,8 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.platformParameters.getParameterValue(
-      `${this._target}/vpc`
-    ) === "existing"
+    return this.platformParameters.getParameterValue(`${this._target}/vpc`) ===
+      "existing"
       ? this.importExistingVpc()
       : this.createDefaultVpc();
   }

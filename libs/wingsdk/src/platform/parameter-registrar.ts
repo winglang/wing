@@ -144,12 +144,12 @@ export class ParameterRegistrar extends Construct {
   }
 }
 
-/** 
+/**
  * Retrieves a value from an object using a given path
- * 
+ *
  * @param rawParameters the object to retrieve the value from
  * @param path the path to the value (I.E. "foo/bar/baz")
- * @internal 
+ * @internal
  */
 export function resolveValueFromPath(
   rawParameters: { [key: string]: any },
