@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^19",
       "type": "build"
     },
     {
@@ -64,7 +64,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.17.0",
+      "version": "0.20.3",
       "type": "build"
     },
     {
@@ -73,7 +73,7 @@
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "build"
     },
     {
@@ -264,8 +264,12 @@
       "type": "bundled"
     },
     {
+      "name": "ajv",
+      "type": "bundled"
+    },
+    {
       "name": "cdktf",
-      "version": "0.17.0",
+      "version": "0.20.3",
       "type": "bundled"
     },
     {
@@ -316,6 +320,10 @@
       "type": "bundled"
     },
     {
+      "name": "toml",
+      "type": "bundled"
+    },
+    {
       "name": "ulid",
       "type": "bundled"
     },
@@ -338,12 +346,12 @@
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "runtime"
     }
   ],

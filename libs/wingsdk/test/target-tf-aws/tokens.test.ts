@@ -46,3 +46,33 @@ test("captures tokens", () => {
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfSanitize(output)).toMatchSnapshot();
 });
+
+test("captures tokens inside plain objects", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const api = new Api(app, "Api");
+  const numVar = new TerraformVariable(app, "Number", {
+    type: "Number",
+    default: 123,
+  });
+
+  const inflight = Testing.makeHandler(
+    `async handle(event) {
+    console.log(this.foo.str, this.foo.num);
+  }`,
+    {
+      foo: {
+        obj: { str: api.url, num: numVar.numberValue },
+        ops: [],
+      },
+    }
+  );
+
+  api.get("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
+});

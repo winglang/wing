@@ -35,7 +35,7 @@ export interface CompileOptions {
    */
   readonly value?: string;
   /**
-   * Path to the YAML file with specific platform values
+   * Path to the file with specific platform values (TOML|YAML|JSON)
    *
    * example of the file's content:
    * root/Default/Domain:
