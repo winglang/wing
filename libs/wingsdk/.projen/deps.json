@@ -264,6 +264,10 @@
       "type": "bundled"
     },
     {
+      "name": "ajv",
+      "type": "bundled"
+    },
+    {
       "name": "cdktf",
       "version": "0.20.3",
       "type": "bundled"
@@ -313,6 +317,10 @@
     },
     {
       "name": "stacktracey",
+      "type": "bundled"
+    },
+    {
+      "name": "toml",
       "type": "bundled"
     },
     {

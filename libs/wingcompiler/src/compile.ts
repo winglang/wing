@@ -183,7 +183,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_SOURCE_DIR: wingDir,
       WING_IS_TEST: process.env["WING_IS_TEST"] ?? testing.toString(),
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
-      WING_VALUES_FILE: options.values,
+      WING_VALUES_FILE: options.values ?? "",
       WING_NODE_MODULES: wingNodeModules,
     };
 
