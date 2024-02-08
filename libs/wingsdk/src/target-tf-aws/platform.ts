@@ -26,7 +26,7 @@ export class Platform implements IPlatform {
             type: "string",
           },
           private_subnet_id: {
-            descriotion:
+            description:
               "If using an existing VPC, provide the private subnet ID",
             type: "string",
           },
