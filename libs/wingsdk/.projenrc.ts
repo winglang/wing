@@ -101,8 +101,10 @@ const project = new cdk.JsiiProject({
     // shared client dependencies
     "ioredis",
     "jsonschema",
+    "ajv",
     // fs module dependency
     "yaml",
+    "toml",
     // enhanced diagnostics
     "stacktracey",
     "ulid",

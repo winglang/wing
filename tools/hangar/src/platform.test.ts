@@ -7,6 +7,7 @@ import {
   sanitize_json_paths,
   tfResourcesOfCount,
 } from "./utils";
+import { tmpdir } from "os";
 import { Testing } from "cdktf";
 
 describe("Multiple platforms", () => {
@@ -37,6 +38,134 @@ describe("Multiple platforms", () => {
     .toEqual(2);
   });
 })
+
+describe("Platform with parameters", () => {
+  const platformParameters = {
+    type: "object",
+    required: ["a", "b", "c"],
+    properties: {
+      a: { type: "string" },
+      b: { type: "number" },
+      c: { type: "boolean" },
+      optionals: {
+        type: "object",
+        properties: {
+          seeNoEvil: { type: "boolean" },
+          hearNoEvil: { type: "boolean" },
+          speakNoEvil: {
+            type: "boolean"
+          },
+        },
+        allOf: [
+          {
+            "$comment": "If see no evil, then we need to know if we hear or speak evil",
+            if: { properties: { seeNoEvil: { const: true } } },
+            then: { required: ["hearNoEvil", "speakNoEvil"] }
+          },
+          {
+            "$comment": "If we hear or speak evil, then we need to know if we see or speak evil",
+            if: { properties: { hearNoEvil: { const: true } } },
+            then: { required: ["seeNoEvil", "speakNoEvil"] }
+          },
+          {
+            "$comment": "If we see or speak evil, then we need to know if we speak or hear evil",
+            if: { properties: { seeNoEvil: { const: true } } },
+            then: { required: ["speakNoEvil", "hearNoEvil"] }
+          }
+        ]
+      }
+    }
+  }
+
+  const platformCode = `
+  exports.Platform = class Platform {
+    target = "*";
+  
+    parameters = ${JSON.stringify(platformParameters)};
+  }
+` 
+  const app = "main.w";
+  const appFile = path.join(platformsDir, app);
+  const tempdir = fs.mkdtempSync(path.join(tmpdir(), "platform-parameters"));
+  const platformWithParametersFile = path.join(tempdir, "platform-with-parameters.js");
+  fs.writeFileSync(platformWithParametersFile, platformCode);
+
+  test("will compile if all required parameters are provided", async () => {
+    // GIVEN
+    const platforms = ["tf-aws", platformWithParametersFile];
+    const params = {
+      a: "some-value",
+      b: 123,
+      c: false,
+    }
+    const paramFile = path.join(tempdir, "params.json");
+    fs.writeFileSync(paramFile, JSON.stringify(params));
+
+    const args = ["compile", "--values", paramFile];
+    
+    // WHEN
+    const output = await runWingCommand({
+      cwd: tmpDir,
+      platforms,
+      wingFile: appFile,
+      args,
+      expectFailure: false
+    });
+
+    // THEN
+    expect(output.stderr).toBe("");
+  });
+
+  test("will throw if missing required parameters", async () => {
+    // GIVEN
+    const args = ["compile"];
+    const platforms = ["tf-aws", platformWithParametersFile];
+    
+    // WHEN
+    const output = await runWingCommand({
+      cwd: tmpDir,
+      platforms,
+      wingFile: appFile,
+      args,
+      expectFailure: true
+    });
+
+    // THEN
+    expect(output.stderr).toContain("Parameter validation errors:");
+    expect(output.stderr).toContain("must have required property 'a'");
+    expect(output.stderr).toContain("must have required property 'b'");
+    expect(output.stderr).toContain("must have required property 'c'");
+  });
+
+  test("will throw if missing conditionally required parameters", async () => {
+    // GIVEN
+    const platforms = ["tf-aws", platformWithParametersFile];
+    const params = {
+      a: "some-value",
+      b: 123,
+      c: false,
+      optionals: {
+        seeNoEvil: true
+      }
+    }
+    const paramFile = path.join(tempdir, "params.json");
+    fs.writeFileSync(paramFile, JSON.stringify(params));    
+    const args = ["compile", "--values", paramFile];
+    // WHEN
+    const output = await runWingCommand({
+      cwd: tmpDir,
+      platforms,
+      wingFile: appFile,
+      args,
+      expectFailure: true
+    });
+
+    // THEN
+    expect(output.stderr).toContain("Parameter validation errors:");
+    expect(output.stderr).toContain("must have required property 'hearNoEvil'");
+    expect(output.stderr).toContain("must have required property 'speakNoEvil'");
+  });
+});
 
 describe("Platform examples", () => {
   const app = "main.w";
