@@ -72,7 +72,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter");
+        this.c = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "Counter");
       }
       static _toInflightType() {
         return `
