@@ -1,6 +1,16 @@
 import { PolicyStatement } from "./types";
 import { IInflightHost } from "../std";
 
+export const externalLibraries = [
+  '@aws-sdk/client-sso',
+  '@aws-sdk/client-sso-oidc',
+  '@aws-sdk/credential-provider-ini',
+  '@aws-sdk/credential-provider-process',
+  '@aws-sdk/credential-provider-sso',
+  '@aws-sdk/credential-provider-web-identity',
+  '@aws-sdk/token-providers'
+];
+
 /**
  * A shared interface for AWS functions.
  */
