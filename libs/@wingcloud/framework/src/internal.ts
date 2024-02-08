@@ -32,7 +32,7 @@ export async function compile(options: CompileOptions) {
   const transformer = new InflightTransformer(program);
 
   const emitResult = program.emit(undefined, undefined, undefined, undefined, {
-    before: [transformer.transform.bind(transformer)],
+    before: [(sourceFile) => transformer.transform(sourceFile)],
   });
 
   const allDiagnostics = emitResult.diagnostics.concat(transformer.extraErrors);
