@@ -20,7 +20,9 @@ export class Platform implements platform.IPlatform {
   public _usageContext: Map<string, Set<string>> = new Map();
   private readonly jsii;
   constructor() {
-    this.jsii = JSON.parse(readFileSync(JSII_PATH, { encoding: "utf8" }));
+    this.jsii = JSON.parse(
+      readFileSync(process.env.JSII_PATH ?? JSII_PATH, { encoding: "utf8" })
+    );
   }
 
   newInstance(fqn: string, scope: Construct, id: string, ...args: any) {
