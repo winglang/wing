@@ -88,9 +88,8 @@ export class Bucket extends Resource {
    * Creates a topic for subscribing to notification events
    * @param actionType
    * @returns the created topic
-   * @internal
    */
-  protected _createTopic(actionType: BucketEventType): Topic {
+  protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
 
     this.node.addDependency(topic);
@@ -110,16 +109,15 @@ export class Bucket extends Resource {
    */
   private _getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
-      this._topics.set(actionType, this._createTopic(actionType));
+      this._topics.set(actionType, this.createTopic(actionType));
     }
     return this._topics.get(actionType) as Topic;
   }
 
   /**
    * Resolves the path to the bucket.onevent.inflight file
-   * @internal
    */
-  protected _eventHandlerLocation(): string {
+  protected eventHandlerLocation(): string {
     throw new Error(
       "please specify under the target file (to get the right relative path)"
     );
@@ -137,7 +135,7 @@ export class Bucket extends Resource {
     return convertBetweenHandlers(
       inflight,
       // since uses __dirname should be specified under the target directory
-      this._eventHandlerLocation(),
+      this.eventHandlerLocation(),
       "BucketEventHandlerClient",
       { eventType }
     );
