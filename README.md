@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" height="360px">
+  <img src="./apps/wing/logo/banner.gif" alt="Wing Banner" >
 </div>
 
 <h1 align="center">Welcome to the Wing Language! :wave:</h1>
