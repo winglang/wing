@@ -54,6 +54,11 @@ async function findFilesWithExtension(
         // Check if the file is a directory
         const stat = await fs.stat(filePath);
         if (stat.isDirectory()) {
+          // Skip hidden directories (e.g. .git, .vscode, .gen)
+          if (file.startsWith(".")) {
+            continue;
+          }
+
           // Get nested files recursively
           const nestedFiles = await traverseDirectory(filePath);
           traverseResults = traverseResults.concat(nestedFiles);

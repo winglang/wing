@@ -139,6 +139,11 @@ const project = new cdk.JsiiProject({
   github: false,
   projenrcTs: true,
   jsiiVersion: "~5.3.11",
+  eslintOptions: {
+    dirs: ["src"],
+    devdirs: ["test"],
+    ignorePatterns: ["**/.gen/**"],
+  },
 });
 
 project.eslint?.addPlugins("sort-exports");
