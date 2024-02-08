@@ -26,6 +26,9 @@ export function makeSimulatorClient(url: string, handle: string) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
           dispatcher: new Agent({
+            connect: {
+              timeout: 15 * 60 * 1000,
+            },
             keepAliveTimeout: 15 * 60 * 1000,
             keepAliveMaxTimeout: 15 * 60 * 1000,
             headersTimeout: 15 * 60 * 1000,

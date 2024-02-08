@@ -90,41 +90,26 @@ exports[`run single test > happy path 1`] = `
 `;
 
 exports[`run single test > test failure 1`] = `
-{
-  "error": "Error: test failed
-<sanitized>
-<sanitized>
-<sanitized>
-    at Script.runInContext (node:vm:<sanitized>)
-    at Object.runInContext (node:vm:<sanitized>)
-<sanitized>
-    at new Promise (<anonymous>)
-<sanitized>
-<sanitized>
-<sanitized>",
-  "pass": false,
-  "path": "root/test",
-  "traces": [
-    {
-      "data": {
-        "message": "I am about to fail",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "log",
+[
+  {
+    "data": {
+      "message": "I am about to fail",
     },
-    {
-      "data": {
-        "error": {},
-        "message": "Invoke (payload=\\"\\").",
-        "status": "failure",
-      },
-      "sourcePath": "root/test/Handler",
-      "sourceType": "@winglang/sdk.cloud.Function",
-      "timestamp": "<TIMESTAMP>",
-      "type": "resource",
+    "sourcePath": "root/test/Handler",
+    "sourceType": "@winglang/sdk.cloud.Function",
+    "timestamp": "<TIMESTAMP>",
+    "type": "log",
+  },
+  {
+    "data": {
+      "error": {},
+      "message": "Invoke (payload=\\"\\").",
+      "status": "failure",
     },
-  ],
-}
+    "sourcePath": "root/test/Handler",
+    "sourceType": "@winglang/sdk.cloud.Function",
+    "timestamp": "<TIMESTAMP>",
+    "type": "resource",
+  },
+]
 `;

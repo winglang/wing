@@ -43,9 +43,12 @@ describe("run single test", () => {
     const testRunner = sim.getResource(
       "/cloud.TestRunner"
     ) as ITestRunnerClient;
-    const result = await testRunner.runTest("root/test");
+    let result = await testRunner.runTest("root/test");
     await sim.stop();
-    expect(sanitizeResult(result)).toMatchSnapshot();
+    result = sanitizeResult(result);
+    expect(result.error).toMatch(/^Error: test failed/);
+    expect(result.pass).toBe(false);
+    expect(result.traces).toMatchSnapshot();
   });
 
   test("not a function", async () => {
