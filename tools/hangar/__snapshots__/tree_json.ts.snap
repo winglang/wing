@@ -641,6 +641,14 @@ exports[`tree.json for an app with many resources 1`] = `
                 "id": "Default",
                 "path": "root/Default/Default",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.platform.ParameterRegistrar",
+                  "version": "0.0.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
