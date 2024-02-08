@@ -106,7 +106,7 @@ exports[`create a topic 1`] = `
         "my_topic": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A pub/sub notification topic",
@@ -118,7 +118,7 @@ exports[`create a topic 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

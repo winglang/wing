@@ -45,3 +45,10 @@ export function nodeof(construct: Construct): Node {
 export function normalPath(path: string): string {
   return path.replace(/\\+/g, "/");
 }
+
+export function unwrap<T>(value: T): T | never {
+  if (value != null) {
+    return value;
+  }
+  throw new Error("Unexpected nil");
+}

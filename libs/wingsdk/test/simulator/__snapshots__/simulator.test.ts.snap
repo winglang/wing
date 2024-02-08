@@ -7,7 +7,7 @@ exports[`provides raw tree data 1`] = `
       "test": {
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.2.70",
+          "version": "10.3.0",
         },
         "display": {
           "description": "A cloud unit test.",
@@ -20,7 +20,7 @@ exports[`provides raw tree data 1`] = `
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.2.70",
+      "version": "10.3.0",
     },
     "id": "root",
     "path": "root",

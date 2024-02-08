@@ -45,6 +45,11 @@ export enum RequestCache {
  */
 export enum RequestRedirect {
   /**
+   * Do not follow redirects automatically. The `Location` response header includes the redirect
+   * target.
+   */
+  MANUAL = "manual",
+  /**
    * Follow all redirects incurred when fetching a resource.
    */
   FOLLOW = "follow",
@@ -108,16 +113,17 @@ export interface RequestOptions {
   readonly body?: string;
   /**
    * The cache mode you want to use for the request.
+   * @default RequestCache.DEFAULT
    */
   readonly cache?: RequestCache;
   /**
-   * The redirect mode to use: follow, error. The default is follow.
-   * @default follow
+   * An enum specifying the redirect mode to use: follow, error or manual. The default is follow.
+   * @default RequestRedirect.FOLLOW
    */
   readonly redirect?: RequestRedirect;
   /**
    * A string specifying "no-referrer", client, or a URL. The default is "about:client".
-   * @default  about:client
+   * @default about:client
    */
   readonly referrer?: string;
 }

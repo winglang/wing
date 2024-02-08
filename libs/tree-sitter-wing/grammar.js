@@ -15,6 +15,7 @@ const PREC = {
   POWER: 140,
   MEMBER: 150,
   CALL: 160,
+  OPTIONAL_UNWRAP: 170,
 };
 
 module.exports = grammar({
@@ -339,6 +340,7 @@ module.exports = grammar({
         $.struct_literal,
         $.optional_test,
         $.compiler_dbg_panic,
+        $.optional_unwrap,
       ),
 
     // Primitives
@@ -543,6 +545,9 @@ module.exports = grammar({
 
     _container_value_type: ($) =>
       seq("<", field("type_parameter", $._type), ">"),
+
+    optional_unwrap: ($) => 
+      prec.right(PREC.OPTIONAL_UNWRAP, seq($.expression, "!")),
 
     unary_expression: ($) => {
       /** @type {Array<[RuleOrLiteral, number]>} */

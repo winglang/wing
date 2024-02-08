@@ -135,7 +135,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -384,8 +384,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -412,27 +415,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "myMethod", "myStaticMethod", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [globalCounter, ["peek"]],
-          ],
+      get _liftMap() {
+        return ({
           "myMethod": [
             [globalCounter, ["inc", "peek"]],
           ],
+          "$inflight_init": [
+            [globalCounter, ["peek"]],
+          ],
         });
-        super.onLift(host, ops);
       }
-      static onLiftType(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      static get _liftTypeMap() {
+        return ({
           "myStaticMethod": [
             [globalCounter, ["peek"]],
           ],
         });
-        super.onLiftType(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -465,17 +463,15 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [$parentThis.localCounter, ["inc"]],
                 [globalCounter, ["inc"]],
               ],
+              "$inflight_init": [
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         (this.localTopic.onMessage(new R(this, "R")));
@@ -509,14 +505,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "myPut", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.localTopic, []],
-          ],
+      get _liftMap() {
+        return ({
           "myPut": [
             [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
             [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
@@ -531,8 +521,10 @@ class $Root extends $stdlib.std.Resource {
             [globalStr, []],
             [this.localTopic, ["publish"]],
           ],
+          "$inflight_init": [
+            [this.localTopic, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.AutoIdResource {
@@ -559,16 +551,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [res, ["myPut"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -595,16 +585,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [Another, ["myStaticMethod"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
