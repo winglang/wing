@@ -1671,19 +1671,19 @@ However, it is possible to create anonymous closures and assign to variables
 
 ---
 
-#### 3.6.2 Structural Expansion
+#### 3.6.2 Struct Expansion
 
-If the last argument of a function call is a structural type (struct or interface), 
-then the argument in the call is "expandable" with a special `:` syntax.  
-In this calling signature, order of members do not matter.  
-Partial structural expansion (supplying less number of arguments than the
-number of fields on type of the struct expected) is not allowed. Omitting `nil`s
+If the last argument of a function call is a struct, then the struct in the call
+is "expandable" with a special `:` syntax.  
+In this calling signature, order of struct members do not matter.  
+Partial struct expansion in terms of supplying less number of arguments than the
+number of fields on type of the struct expected is not allowed. Omitting `nil`s
 is allowed with the same rules as explicit initialization in class constructors.
 
 This style of expansion can be thought of as having positional arguments passed
-in before the final positional argument, which if happens to be structural, it can
+in before the final positional argument, which if happens to be a struct, it can
 be passed as named arguments. As a result of named arguments being passed in, it
-is safe to omit optional fields, or have order of arguments mixed.
+is safe to omit optional struct fields, or have order of arguments mixed.
 
 ```TS
 struct MyStruct {

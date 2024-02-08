@@ -13,10 +13,10 @@ use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::docs::Documented;
 use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
-use crate::type_check::symbol_env::{LookupResult, StatementIdx, SymbolEnv};
+use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, SymbolKind, Type, TypeRef,
-	Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, ClassLike, Namespace, Struct, SymbolKind, Type,
+	TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::extern_json_fn;
@@ -399,8 +399,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							return vec![];
 						};
 
-						return if let Some(env) = structy.maybe_unwrap_option().as_env() {
-							get_inner_env_completions(env, &fields.keys().map(|f| f.name.clone()).collect())
+						return if let Some(structy) = structy.maybe_unwrap_option().as_struct() {
+							get_inner_struct_completions(structy, &fields.keys().map(|f| f.name.clone()).collect())
 						} else {
 							vec![]
 						};
@@ -431,7 +431,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						.collect::<Vec<_>>();
 
 					// if we're in a function, get the struct expansion
-					if let Some(env) = callish_expr.0.get_function_structural_arg_env() {
+					if let Some(structy) = callish_expr.0.get_function_struct_arg() {
 						let func = callish_expr.0.maybe_unwrap_option().as_function_sig().unwrap();
 						if callish_expr
 							.1
@@ -440,7 +440,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							.filter(|a| !types.get_expr_type(a).is_unresolved())
 							.count() == func.parameters.len() - 1
 						{
-							completions.extend(get_inner_env_completions(env, arg_list_strings));
+							completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 						}
 					}
 
@@ -461,8 +461,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								.filter(|a| !types.get_expr_type(a).is_unresolved())
 								.count() == func.parameters.len() - 1
 							{
-								if let Some(env) = init_method.type_.get_function_structural_arg_env() {
-									completions.extend(get_inner_env_completions(env, arg_list_strings));
+								if let Some(structy) = init_method.type_.get_function_struct_arg() {
+									completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 								}
 							}
 						}
@@ -843,10 +843,10 @@ fn completion_sort_text(completion_item: &CompletionItem) -> String {
 
 /// Create completion for fields within a struct.
 /// This can be used in calls (struct expansion) or in struct literals
-fn get_inner_env_completions(env: &SymbolEnv, existing_fields: &Vec<String>) -> Vec<CompletionItem> {
+fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>) -> Vec<CompletionItem> {
 	let mut completions = vec![];
 
-	for field_data in env.iter(true) {
+	for field_data in struct_.env.iter(true) {
 		if !existing_fields.contains(&field_data.0) {
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
 				let v = field_data.1.as_variable().unwrap();
@@ -1944,18 +1944,5 @@ let x: (): S = () => {
 };
 "#,
 		assert!(dot_before_returning_struct.get(0).unwrap().label == "s")
-	);
-
-	test_completion_list!(
-		interface_expansion,
-		r#"
-interface I { f(): void; }
-
-let x = (arg1: I) => {};
-
-x( )
-//^
-"#,
-		assert!(interface_expansion.get(0).unwrap().label == "f:")
 	);
 }

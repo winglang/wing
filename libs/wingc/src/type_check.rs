@@ -817,7 +817,7 @@ impl FunctionSignature {
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
 			.take_while(|arg| {
 				arg.typeref.is_option()
-					|| arg.typeref.is_structural()
+					|| arg.typeref.is_struct()
 					|| arg.typeref.is_anything()
 					|| arg.typeref.is_inferred()
 					|| arg.variadic
@@ -1097,10 +1097,6 @@ impl TypeRef {
 		matches!(**self, Type::Struct(_))
 	}
 
-	pub fn is_structural(&self) -> bool {
-		matches!(**self, Type::Interface(_) | Type::Struct(_))
-	}
-
 	pub fn is_map(&self) -> bool {
 		matches!(**self, Type::Map(_))
 	}
@@ -1131,13 +1127,10 @@ impl TypeRef {
 	}
 
 	/// If this is a function and its last argument is a struct, return that struct.
-	pub fn get_function_structural_arg_env(&self) -> Option<&SymbolEnv> {
+	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
 		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
 			if let Some(arg) = func.parameters.last() {
-				dbg!(arg.typeref.maybe_unwrap_option());
-				if arg.typeref.maybe_unwrap_option().is_structural() {
-					return arg.typeref.maybe_unwrap_option().as_env();
-				}
+				return arg.typeref.maybe_unwrap_option().as_struct();
 			}
 		}
 
@@ -2811,12 +2804,11 @@ impl<'a> TypeChecker<'a> {
 	) -> Option<TypeRef> {
 		// Verify named args
 		let last_param = func_sig.parameters.last();
-		let is_last_param_structural =
-			last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_structural();
-		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_structural();
+		let is_last_param_struct = last_param.is_some() && last_param.unwrap().typeref.maybe_unwrap_option().is_struct();
+		let is_last_param_not_optional_struct = last_param.is_some() && last_param.unwrap().typeref.is_struct();
 
 		if !arg_list.named_args.is_empty() {
-			if is_last_param_structural {
+			if is_last_param_struct {
 				let last_param_type = last_param.unwrap().typeref.maybe_unwrap_option();
 				self.validate_structural_type(&arg_list_types.named_args, &last_param_type, call_span);
 			} else {
@@ -2831,7 +2823,7 @@ impl<'a> TypeChecker<'a> {
 			variadic_index.unwrap_or(arg_list.pos_args.len()),
 		);
 		let non_variadic_args_len = pos_args_len
-			+ if is_last_param_structural && !arg_list.named_args.is_empty() {
+			+ if is_last_param_struct && !arg_list.named_args.is_empty() {
 				1
 			} else {
 				0
@@ -2840,7 +2832,7 @@ impl<'a> TypeChecker<'a> {
 		// Verify arity
 		let min_args = func_sig.min_parameters() + if is_last_param_not_optional_struct { 1 } else { 0 };
 		let max_args = func_sig.parameters.len() - if variadic_index.is_some() { 1 } else { 0 };
-		let named_args_text = if is_last_param_structural {
+		let named_args_text = if is_last_param_struct {
 			"or named arguments for the last parameter "
 		} else {
 			""
@@ -2866,7 +2858,7 @@ impl<'a> TypeChecker<'a> {
 			};
 
 			self.spanned_error(call_span, err_text);
-		} else if is_last_param_structural && non_variadic_args_len > max_args {
+		} else if is_last_param_struct && non_variadic_args_len > max_args {
 			self.spanned_error(
 				call_span,
 				"Expected either a positional argument or named arguments for the last parameter, but got both",
@@ -2950,7 +2942,7 @@ impl<'a> TypeChecker<'a> {
 		expected_type: &TypeRef,
 		value: &impl Spanned,
 	) {
-		let expected_env = if let Some(expected_struct) = expected_type.maybe_unwrap_option().as_env() {
+		let expected_struct = if let Some(expected_struct) = expected_type.maybe_unwrap_option().as_struct() {
 			expected_struct
 		} else {
 			self.spanned_error(value, format!("{expected_type} is not a struct so it has no fields"));
@@ -2961,7 +2953,7 @@ impl<'a> TypeChecker<'a> {
 		// Also map original field names to the ones in the struct type
 		let mut field_map = IndexMap::new();
 		for (k, _) in object_types.iter() {
-			let field = expected_env.lookup(k, None);
+			let field = expected_struct.env.lookup(k, None);
 			if let Some(field) = field {
 				let field_type = field
 					.as_variable()
@@ -2974,7 +2966,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Verify that all non-optional fields are present and are of the right type
-		for (k, v) in expected_env.iter(true).map(|(k, v, _)| {
+		for (k, v) in expected_struct.env.iter(true).map(|(k, v, _)| {
 			(
 				k,
 				v.as_variable()
@@ -2997,7 +2989,10 @@ impl<'a> TypeChecker<'a> {
 			} else if !v.is_option() {
 				self.spanned_error(
 					value,
-					format!("Missing required field \"{k}\" from \"{expected_type}\""),
+					format!(
+						"Missing required field \"{}\" from \"{}\"",
+						k, expected_struct.name.name
+					),
 				);
 			}
 		}
@@ -3072,7 +3067,7 @@ impl<'a> TypeChecker<'a> {
 			return false;
 		};
 
-		if expected_type_unwrapped.is_structural()
+		if expected_type_unwrapped.is_struct()
 			|| expected_type_unwrapped.is_immutable_collection()
 			|| expected_type_unwrapped.is_json_legal_value()
 		{
@@ -3087,7 +3082,7 @@ impl<'a> TypeChecker<'a> {
 				true
 			}
 			JsonDataKind::Fields(fields) => {
-				if expected_type_unwrapped.is_structural() {
+				if expected_type_unwrapped.is_struct() {
 					self.validate_structural_type(fields, expected_type_unwrapped, span);
 					true
 				} else if let Some(inner_expected) = inner_expected {
@@ -5047,90 +5042,35 @@ impl<'a> TypeChecker<'a> {
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
-		for (name, symbol, _) in original_type_env.iter(true) {
+		for (_, symbol, _) in original_type_env.iter(true) {
 			match symbol {
 				SymbolKind::Variable(VariableInfo {
-					name: _,
-					type_: v,
+					name,
+					type_,
 					reassignable,
-					phase: flight,
+					phase,
 					kind,
 					access,
-					docs: _,
+					docs,
 				}) => {
-					// Replace type params in function signatures
-					if let Some(sig) = v.as_function_sig() {
-						let new_return_type = self.get_concrete_type_for_generic(env, sig.return_type, &types_map);
-						let new_this_type = if let Some(_) = sig.this_type {
-							Some(new_type)
-						} else {
-							None
-						};
-
-						let new_params = sig
-							.parameters
-							.iter()
-							.map(|param| FunctionParameter {
-								name: param.name.clone(),
-								docs: param.docs.clone(),
-								typeref: self.get_concrete_type_for_generic(env, param.typeref, &types_map),
-								variadic: param.variadic,
-							})
-							.collect();
-
-						let new_sig = FunctionSignature {
-							this_type: new_this_type,
-							parameters: new_params,
-							return_type: new_return_type,
-							phase: sig.phase,
-							js_override: sig.js_override.clone(),
-							docs: Docs::default(),
-						};
-
-						let sym = Symbol::global(name);
-						match new_type.as_env_mut().unwrap().define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&sym,
-							SymbolKind::make_member_variable(
-								sym.clone(),
-								self.types.add_type(Type::Function(new_sig)),
-								*reassignable,
-								matches!(kind, VariableKind::StaticMember),
-								*flight,
-								*access,
-								None,
-							),
+					match new_type.as_env_mut().unwrap().define(
+						&name,
+						SymbolKind::make_member_variable(
+							name.clone(),
+							self.get_concrete_type_for_generic(env, *type_, &types_map),
+							*reassignable,
+							matches!(kind, VariableKind::StaticMember),
+							*phase,
 							*access,
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(type_error);
-							}
-							_ => {}
+							docs.clone(),
+						),
+						*access,
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
 						}
-					} else {
-						let new_var_type = self.get_concrete_type_for_generic(env, *v, &types_map);
-						let var_name = Symbol::global(name);
-						match new_type.as_env_mut().unwrap().define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&var_name,
-							SymbolKind::make_member_variable(
-								var_name.clone(),
-								new_var_type,
-								*reassignable,
-								matches!(kind, VariableKind::StaticMember),
-								*flight,
-								*access,
-								None,
-							),
-							*access,
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(type_error);
-							}
-							_ => {}
-						}
+						_ => {}
 					}
 				}
 				_ => {
@@ -5159,6 +5099,36 @@ impl<'a> TypeChecker<'a> {
 			if let Type::Optional(t) = *type_to_maybe_replace {
 				let concrete_t = self.get_concrete_type_for_generic(env, t, types_map);
 				return self.types.add_type(Type::Optional(concrete_t));
+			}
+
+			if let Some(sig) = type_to_maybe_replace.as_function_sig() {
+				let new_return_type = self.get_concrete_type_for_generic(env, sig.return_type, types_map);
+
+				let new_params = sig
+					.parameters
+					.iter()
+					.map(|param| FunctionParameter {
+						name: param.name.clone(),
+						docs: param.docs.clone(),
+						typeref: self.get_concrete_type_for_generic(env, param.typeref, types_map),
+						variadic: param.variadic,
+					})
+					.collect();
+
+				let new_sig = FunctionSignature {
+					this_type: sig.this_type,
+					parameters: new_params,
+					return_type: new_return_type,
+					phase: if matches!(sig.phase, Phase::Independent) {
+						env.phase
+					} else {
+						sig.phase
+					},
+					js_override: sig.js_override.clone(),
+					docs: sig.docs.clone(),
+				};
+
+				return self.types.add_type(Type::Function(new_sig));
 			}
 
 			if let Some(inner_env) = type_to_maybe_replace.as_env() {

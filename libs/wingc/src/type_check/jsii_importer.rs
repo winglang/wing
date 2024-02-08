@@ -302,6 +302,55 @@ impl<'a> JsiiImporter<'a> {
 		self.register_jsii_type(&enum_fqn, &enum_symbol, enum_type_ref);
 	}
 
+	/// Import a JSII interface as a function instead
+	/// Takes the first method of the interface and imports it as a function
+	fn import_closure(&mut self, jsii_interface: &wingii::jsii::InterfaceType) {
+		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
+		debug!("Importing closure {}", jsii_interface_fqn.as_str().green());
+
+		let type_name = jsii_interface_fqn.type_name();
+
+		// TODO
+		let phase = Phase::Independent;
+
+		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
+
+		// TODO
+		let first_method = jsii_interface.methods.as_ref().unwrap().first().unwrap();
+
+		let return_type = if let Some(jsii_return_type) = &first_method.returns {
+			self.optional_type_to_wing_type(&jsii_return_type)
+		} else {
+			self.wing_types.void()
+		};
+		let parameters: Vec<FunctionParameter> = first_method
+			.parameters
+			.as_ref()
+			.map(|params| {
+				params
+					.iter()
+					.map(|param| FunctionParameter {
+						name: param.name.clone(),
+						typeref: self.parameter_to_wing_type(&param),
+						docs: Docs::from(&param.docs),
+						variadic: param.variadic.unwrap_or(false),
+					})
+					.collect()
+			})
+			.unwrap_or_default();
+
+		let wing_type = self.wing_types.add_type(Type::Function(FunctionSignature {
+			docs: Docs::from(&jsii_interface.docs),
+			this_type: None,
+			parameters,
+			return_type,
+			phase,
+			js_override: extract_docstring_tag(&first_method.docs, "macro").map(|s| s.to_string()),
+		}));
+
+		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
+	}
+
 	/// Import a JSII interface into the Wing type system.
 	///
 	/// In JSII an interface can either be a "struct" (for data types) or a "behavioral" interface (for normal
@@ -311,6 +360,12 @@ impl<'a> JsiiImporter<'a> {
 	///
 	/// See https://aws.github.io/jsii/specification/2-type-system/#interfaces-structs
 	fn import_interface(&mut self, jsii_interface: &wingii::jsii::InterfaceType) {
+		// check if this interface has a `@callable` tag
+		if extract_docstring_tag(&jsii_interface.docs, "callable").is_some() {
+			self.import_closure(jsii_interface);
+			return;
+		}
+
 		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
 		debug!("Importing interface {}", jsii_interface_fqn.as_str().green());
 
