@@ -5122,7 +5122,7 @@ impl<'a> TypeChecker<'a> {
 					this_type: new_this_type,
 					parameters: new_params,
 					return_type: new_return_type,
-					phase: sig.phase,
+					phase: if new_this_type.is_none() { env.phase } else { sig.phase },
 					js_override: sig.js_override.clone(),
 					docs: sig.docs.clone(),
 				};

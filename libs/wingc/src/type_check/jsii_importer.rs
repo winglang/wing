@@ -302,21 +302,29 @@ impl<'a> JsiiImporter<'a> {
 		self.register_jsii_type(&enum_fqn, &enum_symbol, enum_type_ref);
 	}
 
-	/// Import a JSII interface as a function instead
-	/// Takes the first method of the interface and imports it as a function
+	/// Import a JSII interface as a function instead.
+	/// These interfaces must have the @callable annotation and only one method defined, which will be the function signature.
 	fn import_closure(&mut self, jsii_interface: &wingii::jsii::InterfaceType) {
 		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
 		debug!("Importing closure {}", jsii_interface_fqn.as_str().green());
 
 		let type_name = jsii_interface_fqn.type_name();
 
-		// TODO
-		let phase = Phase::Independent;
+		// TODO These should technically be "phase independent" by default, but wing currently doesn't have a way to create
+		// a phase independent function, so it's more useful to pick one for now.
+		let phase = Phase::Preflight;
 
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 
-		// TODO
-		let first_method = jsii_interface.methods.as_ref().unwrap().first().unwrap();
+		let first_method = if let Some(methods) = &jsii_interface.methods {
+			if methods.len() != 1 {
+				panic!("Expected exactly one method defined in {jsii_interface_fqn}")
+			} else {
+				methods.first().unwrap()
+			}
+		} else {
+			panic!("Expected at least one method")
+		};
 
 		let return_type = if let Some(jsii_return_type) = &first_method.returns {
 			self.optional_type_to_wing_type(&jsii_return_type)
@@ -568,11 +576,7 @@ impl<'a> JsiiImporter<'a> {
 					parameters: fn_params,
 					return_type,
 					phase: member_phase,
-					js_override: m
-						.docs
-						.as_ref()
-						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
-						.flatten(),
+					js_override: extract_docstring_tag(&m.docs, "macro").map(|s| s.to_string()),
 				}));
 				let sym = Self::jsii_name_to_symbol(&m.name, &m.location_in_module);
 				let access_modifier = if matches!(m.protected, Some(true)) {
