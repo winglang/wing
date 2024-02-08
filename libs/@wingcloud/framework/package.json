@@ -16,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "tsup",
+    "test": "vitest run --update",
     "package": "bump-pack -b"
   },
   "publishConfig": {
