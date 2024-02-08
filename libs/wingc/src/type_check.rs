@@ -5102,6 +5102,9 @@ impl<'a> TypeChecker<'a> {
 			}
 
 			if let Some(sig) = type_to_maybe_replace.as_function_sig() {
+				let new_this_type = sig
+					.this_type
+					.map(|t| self.get_concrete_type_for_generic(env, t, types_map));
 				let new_return_type = self.get_concrete_type_for_generic(env, sig.return_type, types_map);
 
 				let new_params = sig
@@ -5116,14 +5119,10 @@ impl<'a> TypeChecker<'a> {
 					.collect();
 
 				let new_sig = FunctionSignature {
-					this_type: sig.this_type,
+					this_type: new_this_type,
 					parameters: new_params,
 					return_type: new_return_type,
-					phase: if matches!(sig.phase, Phase::Independent) {
-						env.phase
-					} else {
-						sig.phase
-					},
+					phase: sig.phase,
 					js_override: sig.js_override.clone(),
 					docs: sig.docs.clone(),
 				};
