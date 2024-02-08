@@ -40,7 +40,7 @@ describe("cloud.Domain for tf-aws", () => {
   test("website with a domain when passing values on the command line", () => {
     // GIVEN
     process.env.WING_VALUES =
-      "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+      "root/Default/Domain/hostedZoneId=Z0111111111111111111F,root/Default/Domain/acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
     const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
@@ -114,9 +114,9 @@ describe("cloud.Domain for tf-aws", () => {
 
   test("react website with a domain when passing values on the command line", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES =
-      "root/Default/Domain.hostedZoneId=Z0111111111111111111F,root/Default/Domain.acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+      "root/Default/Domain/hostedZoneId=Z0111111111111111111F,root/Default/Domain/acmCertificateArn=arn:aws:acm:us-east-1:111111111111:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -154,8 +154,8 @@ describe("cloud.Domain for tf-aws", () => {
 
   test("react website with a domain when passing values from file", () => {
     // GIVEN
-    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     process.env.WING_VALUES_FILE = __dirname + "/domain.values.yaml";
+    const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
     const domain = new cloud.Domain(app, "Domain", {
       domainName: "www.example.com",
     });
@@ -201,11 +201,12 @@ describe("cloud.Domain for tf-aws", () => {
       new cloud.Domain(app, "Domain", {
         domainName: "www.example.com",
       });
-    }).toThrowError(`
-  - 'iamCertificate' or 'acmCertificateArn' is missing from root/Default/Domain
-  - 'hostedZoneId' is missing from root/Default/Domain
-
-These are required properties of platform-specific types. You can set these values
-either through '-v | --value' switches or '--values' file.`);
+      app.synth();
+    }).toThrowError(
+      new RegExp(
+        `Parameter validation errors:\\s*` +
+          `- must have required property 'root' \\s*`.replace(/\s+/g, "\\s*") // Normalize whitespace for comparison
+      )
+    );
   });
 });

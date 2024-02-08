@@ -11,7 +11,7 @@ exports[`tree.json for an app with many resources 1`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -49,7 +49,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "Default": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/Bar/Foo/cloud.Counter/Default",
@@ -124,7 +124,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/b2/Default",
@@ -132,7 +132,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "S3BucketNotification": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "S3BucketNotification",
                             "path": "root/Default/Default/BigPublisher/b2/S3BucketNotification",
@@ -142,7 +142,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "Default": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate/Default",
@@ -150,7 +150,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
@@ -158,7 +158,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "TopicSubscription0": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "TopicSubscription0",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate/TopicSubscription0",
@@ -180,7 +180,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "Asset": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformAsset",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "Asset",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/Asset",
@@ -188,7 +188,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "CloudwatchLogGroup": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "CloudwatchLogGroup",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/CloudwatchLogGroup",
@@ -196,7 +196,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "Default": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "Default",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/Default",
@@ -204,7 +204,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "IamRole": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "IamRole",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRole",
@@ -212,7 +212,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "IamRolePolicy": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "IamRolePolicy",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRolePolicy",
@@ -220,7 +220,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "IamRolePolicyAttachment": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "IamRolePolicyAttachment",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/IamRolePolicyAttachment",
@@ -228,7 +228,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/InvokePermission-c849e824f9ffcc17825860cf0b7344a60826b3ba1a",
@@ -236,7 +236,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "S3Object": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
+                                  "version": "0.20.3",
                                 },
                                 "id": "S3Object",
                                 "path": "root/Default/Default/BigPublisher/b2/oncreate-OnMessage0/S3Object",
@@ -270,7 +270,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Bucket/Default",
@@ -292,7 +292,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue/Default",
@@ -300,7 +300,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "EventSourceMapping": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "EventSourceMapping",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue/EventSourceMapping",
@@ -322,7 +322,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Asset": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformAsset",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Asset",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/Asset",
@@ -330,7 +330,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "CloudwatchLogGroup",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/CloudwatchLogGroup",
@@ -338,7 +338,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/Default",
@@ -346,7 +346,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRole": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRole",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRole",
@@ -354,7 +354,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRolePolicy": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRolePolicy",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRolePolicy",
@@ -362,7 +362,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRolePolicyAttachment",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/IamRolePolicyAttachment",
@@ -370,7 +370,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "S3Object": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "S3Object",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer0/S3Object",
@@ -392,7 +392,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/Default",
@@ -400,7 +400,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "TopicSubscription0": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "TopicSubscription0",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/TopicSubscription0",
@@ -422,7 +422,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Asset": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformAsset",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Asset",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/Asset",
@@ -430,7 +430,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "CloudwatchLogGroup": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "CloudwatchLogGroup",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/CloudwatchLogGroup",
@@ -438,7 +438,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "Default": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/Default",
@@ -446,7 +446,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRole": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRole",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRole",
@@ -454,7 +454,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRolePolicy": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRolePolicy",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRolePolicy",
@@ -462,7 +462,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "IamRolePolicyAttachment": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "IamRolePolicyAttachment",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/IamRolePolicyAttachment",
@@ -470,7 +470,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
@@ -478,7 +478,7 @@ exports[`tree.json for an app with many resources 1`] = `
                           "S3Object": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
-                              "version": "0.17.0",
+                              "version": "0.20.3",
                             },
                             "id": "S3Object",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage0/S3Object",
@@ -589,7 +589,7 @@ exports[`tree.json for an app with many resources 1`] = `
                       "Default": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.20.3",
                         },
                         "id": "Default",
                         "path": "root/Default/Default/cloud.Bucket/Default",
@@ -641,10 +641,18 @@ exports[`tree.json for an app with many resources 1`] = `
                 "id": "Default",
                 "path": "root/Default/Default",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "@winglang/sdk.platform.ParameterRegistrar",
+                  "version": "0.0.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -660,7 +668,7 @@ exports[`tree.json for an app with many resources 1`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -668,7 +676,7 @@ exports[`tree.json for an app with many resources 1`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -676,7 +684,7 @@ exports[`tree.json for an app with many resources 1`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",

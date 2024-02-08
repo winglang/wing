@@ -2162,6 +2162,15 @@ impl<'a> TypeChecker<'a> {
 							}
 							(self.types.bool(), phase)
 						}
+						UnaryOperator::OptionalUnwrap => {
+							if !type_.is_option() {
+								self.spanned_error(unary_exp, format!("'!' expects an optional type, found \"{}\"", type_));
+								(type_, phase)
+							} else {
+								let inner_type = *type_.maybe_unwrap_option();
+								(inner_type, phase)
+							}
+						}
 					}
 				}
 				ExprKind::Range {

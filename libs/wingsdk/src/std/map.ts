@@ -178,7 +178,7 @@ export class MutMap {
    * @macro ((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key, or throw an error if the key can't be found
    */
   public get(key: string): T1 {
     key;

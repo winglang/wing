@@ -20,7 +20,7 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "constructs": "~10.2.69",
+    "constructs": "^10.3",
     "@winglang/sdk": "workspace:^"
   },
   "devDependencies": {
