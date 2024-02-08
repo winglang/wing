@@ -1,6 +1,7 @@
 import Ajv from "ajv";
 import { Construct } from "constructs";
 import { loadPlatformSpecificValues } from "./util";
+import { Node } from "../std";
 
 /**
  * Parameter Registrar
@@ -19,6 +20,7 @@ export class ParameterRegistrar extends Construct {
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
+    Node.of(this).hidden = true;
   }
 
   /**
@@ -142,7 +144,13 @@ export class ParameterRegistrar extends Construct {
   }
 }
 
-/** @internal */
+/** 
+ * Retrieves a value from an object using a given path
+ * 
+ * @param rawParameters the object to retrieve the value from
+ * @param path the path to the value (I.E. "foo/bar/baz")
+ * @internal 
+ */
 export function resolveValueFromPath(
   rawParameters: { [key: string]: any },
   path: string

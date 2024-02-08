@@ -18,7 +18,7 @@ import * as yaml from "yaml";
  * @param values a comma-separated list of values
  * @returns a JSON object with all values
  */
-export function createValuesObjectFromString(values: string) {
+export function parseValuesObjectFromString(values: string) {
   const result: any = {}; // Adjusted type for nested structures
 
   const valuesList = values.split(",");
@@ -66,7 +66,7 @@ export function createValuesObjectFromString(values: string) {
  * @returns a JSON object with all platform-specific values
  */
 export function loadPlatformSpecificValues() {
-  const cliValues = createValuesObjectFromString(process.env.WING_VALUES ?? "");
+  const cliValues = parseValuesObjectFromString(process.env.WING_VALUES ?? "");
 
   if (
     process.env.WING_VALUES_FILE === undefined ||
@@ -94,7 +94,7 @@ export function loadPlatformSpecificValues() {
       case ".toml":
         return toml.parse(data);
       default:
-        throw new Error(`Unsupported file extension: ${fileExtension}`);
+        throw new Error(`Unsupported file extension: ${fileExtension} (expected .yml, .json, or .toml)`);
     }
   })();
   return { ...fileValues, ...cliValues };

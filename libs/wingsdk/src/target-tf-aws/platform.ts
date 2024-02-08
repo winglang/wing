@@ -17,15 +17,19 @@ export class Platform implements IPlatform {
         properties: {
           vpc: {
             type: "string",
+            description: "Determine whether to create a new VPC or use an existing one",
             enum: ["new", "existing"],
           },
           vpc_id: {
+            description: "If using an existing VPC, provide the VPC ID",
             type: "string",
           },
           private_subnet_id: {
+            descriotion: "If using an existing VPC, provide the private subnet ID",
             type: "string",
           },
           public_subnet_id: {
+            description: "If using an existing VPC, provide the public subnet ID",
             type: "string",
           },
         },

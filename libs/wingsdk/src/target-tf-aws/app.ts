@@ -171,7 +171,7 @@ export class App extends CdktfApp {
       return this._vpc;
     }
 
-    return this.platformParameterRegistrar.getParameterValue(
+    return this.platformParameters.getParameterValue(
       `${this._target}/vpc`
     ) === "existing"
       ? this.importExistingVpc()
@@ -179,13 +179,13 @@ export class App extends CdktfApp {
   }
 
   private importExistingVpc(): DataAwsVpc {
-    const vpcId = this.platformParameterRegistrar.getParameterValue(
+    const vpcId = this.platformParameters.getParameterValue(
       `${this._target}/vpc_id`
     );
-    const privateSubnetId = this.platformParameterRegistrar.getParameterValue(
+    const privateSubnetId = this.platformParameters.getParameterValue(
       `${this._target}/private_subnet_id`
     );
-    const publicSubnetId = this.platformParameterRegistrar.getParameterValue(
+    const publicSubnetId = this.platformParameters.getParameterValue(
       `${this._target}/public_subnet_id`
     );
 
