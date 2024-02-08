@@ -14,7 +14,7 @@ import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
 import { createBundle } from "@winglang/sdk/lib/shared/bundling";
-import { IAwsFunction, PolicyStatement } from "@winglang/sdk/lib/shared-aws";
+import { IAwsFunction, PolicyStatement, externalLibraries } from "@winglang/sdk/lib/shared-aws";
 import { resolve } from "path";
 import { renameSync, rmSync, writeFileSync } from "fs";
 import { App } from "./app";
@@ -42,15 +42,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     // This is a workaround for https://github.com/aws/aws-cdk/issues/28732
     const inflightCodeApproximation = this._getCodeLines(inflight).join("\n");
     writeFileSync(this.entrypoint, inflightCodeApproximation);
-    const bundle = createBundle(this.entrypoint, [
-      '@aws-sdk/client-sso',
-      '@aws-sdk/client-sso-oidc',
-      '@aws-sdk/credential-provider-ini',
-      '@aws-sdk/credential-provider-process',
-      '@aws-sdk/credential-provider-sso',
-      '@aws-sdk/credential-provider-web-identity',
-      '@aws-sdk/token-providers'
-    ]);
+    const bundle = createBundle(this.entrypoint, externalLibraries);
 
     const logRetentionDays =
       props.logRetentionDays === undefined
