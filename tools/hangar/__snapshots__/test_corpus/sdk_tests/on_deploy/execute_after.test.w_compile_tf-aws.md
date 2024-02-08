@@ -74,11 +74,11 @@
       }
     },
     "aws_dynamodb_table": {
-      "cloudCounter": {
+      "Counter": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "cloudCounter"
+            "path": "root/Default/Default/Counter/Default",
+            "uniqueId": "Counter"
           }
         },
         "attribute": [
@@ -89,7 +89,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c866f225"
+        "name": "wing-counter-Counter-c824ef62"
       }
     },
     "aws_iam_role": {
@@ -120,7 +120,7 @@
             "uniqueId": "init1_Function_IamRolePolicy_19694F39"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.init1_Function_IamRole_3B884CB0.name}"
       },
       "init2_Function_IamRolePolicy_BC283A7E": {
@@ -130,7 +130,7 @@
             "uniqueId": "init2_Function_IamRolePolicy_BC283A7E"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.Counter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.init2_Function_IamRole_A05B341B.name}"
       }
     },
@@ -169,7 +169,7 @@
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c899c2a8",
             "WING_TARGET": "tf-aws"
@@ -201,7 +201,7 @@
         ],
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_6cb5a3a4": "${aws_dynamodb_table.Counter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
             "WING_FUNCTION_NAME": "Function-c86c3d88",
             "WING_TARGET": "tf-aws"

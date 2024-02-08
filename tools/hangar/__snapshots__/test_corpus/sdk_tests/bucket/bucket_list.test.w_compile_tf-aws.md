@@ -18,26 +18,26 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "cloudBucket_S3Object-file3txt_DFC4715B": {
+      "Bucket_S3Object-file3txt_6AB69768": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/S3Object-file3.txt",
-            "uniqueId": "cloudBucket_S3Object-file3txt_DFC4715B"
+            "path": "root/Default/Default/Bucket/S3Object-file3.txt",
+            "uniqueId": "Bucket_S3Object-file3txt_6AB69768"
           }
         },
-        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "bucket": "${aws_s3_bucket.Bucket.bucket}",
         "content": "Baz",
         "key": "file3.txt"
       }

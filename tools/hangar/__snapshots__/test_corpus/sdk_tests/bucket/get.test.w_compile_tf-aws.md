@@ -18,14 +18,14 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     }

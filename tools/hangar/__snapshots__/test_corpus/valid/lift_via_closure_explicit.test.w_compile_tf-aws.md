@@ -59,15 +59,15 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "MyClosure_cloudQueue_465FD228": {
+      "MyClosure_Queue_7DFF9F76": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyClosure/cloud.Queue/Default",
-            "uniqueId": "MyClosure_cloudQueue_465FD228"
+            "path": "root/Default/Default/MyClosure/Queue/Default",
+            "uniqueId": "MyClosure_Queue_7DFF9F76"
           }
         },
         "message_retention_seconds": 3600,
-        "name": "cloud-Queue-c8cccb9b",
+        "name": "Queue-c832d7dc",
         "visibility_timeout_seconds": 30
       }
     }
@@ -92,7 +92,7 @@ class $Root extends $stdlib.std.Resource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
+        this.q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "Queue");
       }
       static _toInflightType() {
         return `

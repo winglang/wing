@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-Error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl.
+Error: Resource root/env0/Bucket does not support inflight operation signedUrl.
 It might not be implemented yet.
  
  

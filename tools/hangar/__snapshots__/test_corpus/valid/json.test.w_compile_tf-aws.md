@@ -32,14 +32,14 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "cloudBucket": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "cloudBucket"
+            "path": "root/Default/Default/Bucket/Default",
+            "uniqueId": "Bucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "bucket_prefix": "bucket-c88fdc5f-",
         "force_destroy": false
       }
     }
@@ -217,7 +217,7 @@ class $Root extends $stdlib.std.Resource {
     const notJsonMissingField = ({"foo": "bar", "stuff": []});
     const notJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
     let mutableJson = ({"foo": "bar", "stuff": [1, 2, 3], "maybe": ({"good": true, "inner_stuff": [({"hi": 1, "base": "base"})]})});
-    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket")})});
+    const hasBucket = ({"a": ({"a": this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "Bucket")})});
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
