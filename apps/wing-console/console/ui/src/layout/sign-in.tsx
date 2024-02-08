@@ -1,4 +1,10 @@
-import { Button, Link, Modal, useTheme } from "@wingconsole/design-system";
+import {
+  Button,
+  Link,
+  Loader,
+  Modal,
+  useTheme,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useSearchParam } from "react-use";
@@ -102,6 +108,7 @@ export const SignInModal = (props: SignInModalProps) => {
   const signIn = useSignIn();
   const signInRequired = useSignInRequired();
   useNotifyAfterSigningIn();
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Modal visible={signInRequired}>
@@ -121,8 +128,18 @@ export const SignInModal = (props: SignInModalProps) => {
         </p>
 
         <div className="flex justify-around gap-2">
-          <Button onClick={signIn}>
-            <GithubIcon className="w-4 h-4" />
+          <Button
+            disabled={isLoading}
+            onClick={() => {
+              setIsLoading(true);
+              void signIn();
+            }}
+          >
+            {isLoading ? (
+              <Loader size="xs" className={"mr-1"} />
+            ) : (
+              <GithubIcon className="w-4 h-4" />
+            )}
             <span className="text-sm">Sign In</span>
           </Button>
         </div>
