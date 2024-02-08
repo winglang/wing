@@ -10,7 +10,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
 import { BaseResourceSchema } from "../simulator/simulator";
-import { IInflight, IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 
 /**
  * Simulator implementation of `cloud.Api`.
