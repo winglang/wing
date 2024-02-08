@@ -3324,7 +3324,7 @@ impl<'a> TypeChecker<'a> {
 
 			// If the scope doesn't contain any return statements and the return type isn't void or T? or
 			// the scope itself does not have a throw error, throw an error to the user
-			if (!has_stmt_visitor.seen_throw && is_init)
+			if !has_stmt_visitor.seen_throw
 				&& !has_stmt_visitor.seen_return
 				&& !return_type.is_void()
 				&& !return_type.is_option()

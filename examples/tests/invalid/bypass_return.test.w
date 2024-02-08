@@ -10,14 +10,16 @@ let wrongReturnInScope = (): num => {
   }
 
   throw "error";
-}
-
-let missingReturn = (): num => {
-  if true {
-    throw "error";
-  }
-}
-//^ Expected to return "num"
+};
 
 let emptyBody = (): num => {};
-//^ Expected to return "num"
+//^ A function whose return type is "num" must return a value
+
+let dfaSatisfied: (): num = () => {
+  if true {
+    return "a";
+  }
+
+  throw "not implemented";
+};
+//^ Expected type to be "num", but got "str" instead
