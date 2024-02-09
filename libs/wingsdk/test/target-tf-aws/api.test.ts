@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
-import { mkdtemp, tfResourcesOfCount } from "../util";
+import { mkdtemp, tfResourcesOfCount, tfSanitize } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { return "Hello, World"; }`;
 const extractApiSpec = (output: any) => {
@@ -63,6 +63,7 @@ test("api will be private when vpc_api_gateway is true", () => {
     parsedOutput.resource.aws_api_gateway_rest_api[apiGatewayKey]
       .endpoint_configuration.vpc_endpoint_ids.length
   ).toEqual(1); // uses vpc endpoint
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("api with multiple methods on same route", () => {
