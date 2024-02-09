@@ -35,6 +35,10 @@ export class Platform implements IPlatform {
               "If using an existing VPC, provide the public subnet ID",
             type: "string",
           },
+          vpc_api_gateway: {
+            description: "Whether Api gateways should be deployed in the VPC",
+            type: "boolean",
+          },
         },
         allOf: [
           {
