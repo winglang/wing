@@ -36,7 +36,11 @@ export class Platform implements IPlatform {
             type: "string",
           },
           vpc_api_gateway: {
-            description: "Whether Api gateways should be deployed in the VPC",
+            description: "Whether Api gateways should be deployed in a VPC",
+            type: "boolean",
+          },
+          vpc_lambda: {
+            description: "Whether Lambda functions should be deployed in a VPC",
             type: "boolean",
           },
         },
