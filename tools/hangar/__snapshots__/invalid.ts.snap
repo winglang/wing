@@ -852,22 +852,62 @@ error: Cannot instantiate abstract class \\"Resource\\"
 
 
 error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:183:3
+    |
+170 |   x: num;
+    |   - previous definition
+    .
+183 |   x: str;
+    |   ^ Symbol \\"x\\" already defined in this scope
+
+
+error: Symbol \\"x\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:171:3
     |
 170 |   x: num;
     |   - previous definition
-171 |   x() {
+171 |   x(): num {
     |   ^ Symbol \\"x\\" already defined in this scope
 
 
 error: Symbol \\"x\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:185:3
     |
-185 |   x() {
+170 |   x: num;
+    |   - previous definition
+    .
+185 |   x(): str {
+    |   ^ Symbol \\"x\\" already defined in this scope
+
+
+error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:215:3
+    |
+204 |   x: num;
+    |   - previous definition
+    .
+215 |   x: str;
+    |   ^ Symbol \\"x\\" already defined in this scope
+
+
+error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:196:3
+    |
+196 |   x(): num {
     |   ^ Symbol \\"x\\" already defined in this scope
     .
-191 |   x: num;
+204 |   x: num;
     |   - previous definition
+
+
+error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:208:3
+    |
+204 |   x: num;
+    |   - previous definition
+    .
+208 |   x(): str {
+    |   ^ Symbol \\"x\\" already defined in this scope
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -919,11 +959,53 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
     |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
-error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
-    --> ../../../examples/tests/invalid/class.test.w:188:5
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:177:12
     |
-188 |     2 + \\"2\\";
+177 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:187:5
+    |
+187 |     2 + \\"2\\";
     |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:189:12
+    |
+189 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:199:5
+    |
+199 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:201:12
+    |
+201 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:210:5
+    |
+210 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:212:12
+    |
+212 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  

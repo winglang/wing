@@ -3957,7 +3957,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Add methods to the class env
-		let mut method_types: BTreeMap<&str, TypeRef> = BTreeMap::new();
+		let mut method_types: BTreeMap<&Symbol, TypeRef> = BTreeMap::new();
 		for (method_name, method_def) in ast_class.methods.iter() {
 			let mut method_type = self.resolve_type_annotation(&method_def.signature.to_type_annotation(), env);
 			self.add_method_to_class_env(
@@ -3967,7 +3967,7 @@ impl<'a> TypeChecker<'a> {
 				&mut class_env,
 				method_name,
 			);
-			method_types.insert(method_name.name.as_str(), method_type);
+			method_types.insert(&method_name, method_type);
 		}
 
 		// Add the constructor to the class env
@@ -3984,7 +3984,7 @@ impl<'a> TypeChecker<'a> {
 			&mut class_env,
 			&init_symb,
 		);
-		method_types.insert(init_symb.name.as_str(), init_func_type);
+		method_types.insert(&init_symb, init_func_type);
 
 		let inflight_init_symb = Symbol {
 			name: CLASS_INFLIGHT_INIT_NAME.into(),
@@ -4001,7 +4001,7 @@ impl<'a> TypeChecker<'a> {
 			&mut class_env,
 			&inflight_init_symb,
 		);
-		method_types.insert(inflight_init_symb.name.as_str(), inflight_init_func_type);
+		method_types.insert(&inflight_init_symb, inflight_init_func_type);
 
 		// Replace the dummy class environment with the real one before type checking the methods
 		if let Some(mut_class) = class_type.as_class_mut() {
@@ -4047,7 +4047,7 @@ impl<'a> TypeChecker<'a> {
 
 		// Type check methods
 		for (method_name, method_def) in ast_class.methods.iter() {
-			let mut method_type = *method_types.get(method_name.name.as_str()).unwrap();
+			let mut method_type = *method_types.get(&method_name).unwrap();
 			self.type_check_method(class_type, method_name, &mut method_type, env, stmt.idx, method_def);
 		}
 
