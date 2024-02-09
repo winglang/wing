@@ -167,23 +167,23 @@ new std.Resource();
 
 // Class with field and method of the same name (field comes first)
 class C12 {
-  x: num;
-  x(): num {
-  //^ Symbol "x" is already defined
+  z: num;
+  z(): num {
+  //^ Symbol "z" is already defined
     // The method body should still be type checked
     2 + "2";
     //^ Expected type to be "num", but got "str" instead
-    x == 5; // OK
+    this.z == 5; // OK
     return "hello";
     //^ Expected type to be "num", but got "str" instead
   }
   new() {
-    this.x = 5;
+    this.z = 5;
   }
-  x: str;
-  //^ Symbol "x" is already defined
-  x(): str {
-  //^ Symbol "x" is already defined
+  z: str;
+  //^ Symbol "z" is already defined
+  z(): str {
+  //^ Symbol "z" is already defined
     2 + "2";
     //^ Expected type to be "num", but got "str" instead
     return 5;
@@ -193,25 +193,25 @@ class C12 {
 
 // Class with method and field of the same name (method comes first)
 class C13 {
-  x(): num {
-  //^ Symbol "x" is already defined
+  z(): num {
+  //^ Symbol "z" is already defined
     // The method body should still be type checked
     2 + "2";
     //^ Expected type to be "num", but got "str" instead
     return "hello";
     //^ Expected type to be "num", but got "str" instead
   }
-  x: num;
+  z: num;
   new() {
-    this.x = 5;
+    this.z = 5;
   }
-  x(): str {
-  //^ Symbol "x" is already defined
+  z(): str {
+  //^ Symbol "z" is already defined
     2 + "2";
     //^ Expected type to be "num", but got "str" instead
     return 5;
     //^ Expected type to be "str", but got "num" instead
   }
-  x: str;
-  //^ Symbol "x" is already defined
+  z: str;
+  //^ Symbol "z" is already defined
 }
