@@ -2168,6 +2168,20 @@ error: Access modifiers are not allowed in interfaces
    |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
 
 
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:11
+   |
+42 |   method1(a, b): void;
+   |           ^ Expected type annotation
+
+
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:14
+   |
+42 |   method1(a, b): void;
+   |              ^ Expected type annotation
+
+
 error: Unknown parser error
    --> ../../../examples/tests/invalid/interface.test.w:36:14
    |
