@@ -851,6 +851,25 @@ error: Cannot instantiate abstract class \\"Resource\\"
     | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
+error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:171:3
+    |
+170 |   x: num;
+    |   - previous definition
+171 |   x() {
+    |   ^ Symbol \\"x\\" already defined in this scope
+
+
+error: Symbol \\"x\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:185:3
+    |
+185 |   x() {
+    |   ^ Symbol \\"x\\" already defined in this scope
+    .
+191 |   x: num;
+    |   - previous definition
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.test.w:31:14
    |
@@ -891,6 +910,20 @@ error: Expected 1 positional argument(s) but got 0
     |
 157 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:174:5
+    |
+174 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:188:5
+    |
+188 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
  

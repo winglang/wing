@@ -164,3 +164,32 @@ inflight class Jet extends Plane{
 
 new std.Resource();
 //^^^^^^^^^^^^^^^^ Cannot instantiate abstract class "Resource"
+
+// Class with field and method of the same name (field comes first)
+class C12 {
+  x: num;
+  x() {
+  //^ Symbol "x" is already defined
+    // The method body should still be type checked
+    2 + "2";
+    //^ Expected type to be "num", but got "str" instead
+    x == 5; // OK
+  }
+  new() {
+    this.x = 5;
+  }
+}
+
+// Class with method and field of the same name (method comes first)
+class C13 {
+  x() {
+  //^ Symbol "x" is already defined
+    // The method body should still be type checked
+    2 + "2";
+    //^ Expected type to be "num", but got "str" instead
+  }
+  x: num;
+  new() {
+    this.x = 5;
+  }
+}
