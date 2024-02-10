@@ -851,63 +851,63 @@ error: Cannot instantiate abstract class \\"Resource\\"
     | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:183:3
     |
-170 |   x: num;
+170 |   z: num;
     |   - previous definition
     .
-183 |   x: str;
-    |   ^ Symbol \\"x\\" already defined in this scope
+183 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:171:3
     |
-170 |   x: num;
+170 |   z: num;
     |   - previous definition
-171 |   x(): num {
-    |   ^ Symbol \\"x\\" already defined in this scope
+171 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:185:3
     |
-170 |   x: num;
+170 |   z: num;
     |   - previous definition
     .
-185 |   x(): str {
-    |   ^ Symbol \\"x\\" already defined in this scope
+185 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:215:3
     |
-204 |   x: num;
+204 |   z: num;
     |   - previous definition
     .
-215 |   x: str;
-    |   ^ Symbol \\"x\\" already defined in this scope
+215 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:196:3
     |
-196 |   x(): num {
-    |   ^ Symbol \\"x\\" already defined in this scope
+196 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
     .
-204 |   x: num;
+204 |   z: num;
     |   - previous definition
 
 
-error: Symbol \\"x\\" already defined in this scope
+error: Symbol \\"z\\" already defined in this scope
     --> ../../../examples/tests/invalid/class.test.w:208:3
     |
-204 |   x: num;
+204 |   z: num;
     |   - previous definition
     .
-208 |   x(): str {
-    |   ^ Symbol \\"x\\" already defined in this scope
+208 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
