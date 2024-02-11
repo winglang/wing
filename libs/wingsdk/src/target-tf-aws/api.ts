@@ -340,7 +340,7 @@ class WingRestApi extends Construct {
     if (privateApiGateway === true) {
       this.privateVpc = true;
       this._initSecurityGroup(app.vpc.id);
-      this._initVpcEndpoint(app.vpc);
+      this._initVpcEndpoint(app);
     }
 
     this.api = this._initApiGatewayRestApi(id, props);
@@ -363,7 +363,8 @@ class WingRestApi extends Construct {
     });
   }
 
-  private _initVpcEndpoint(vpc: Vpc): void {
+  private _initVpcEndpoint(app: App): void {
+    // Initialize the VPC Endpoint Service lookup
     const service = new DataAwsVpcEndpointService(
       this,
       `${this.id}ServiceLookup`,
@@ -372,12 +373,14 @@ class WingRestApi extends Construct {
       }
     );
 
+    // Create the VPC Endpoint
     this.vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
-      vpcId: vpc.id,
+      vpcId: app.vpc.id,
       serviceName: service.serviceName,
+      privateDnsEnabled: true,
       vpcEndpointType: "Interface",
-      subnetIds: vpc.subnetIds,
-      securityGroupIds: [this.securityGroup!.id],
+      subnetIds: [app.subnets.private.id],
+      securityGroupIds: [this.securityGroup.id],
     });
   }
 
