@@ -314,9 +314,9 @@ class WingRestApi extends Construct {
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
+  public readonly privateVpc: boolean = false;
   public securityGroup?: SecurityGroup;
   public vpcEndpoint?: VpcEndpoint;
-  public readonly privateVpc: boolean = false;
 
   constructor(
     scope: Construct,
@@ -410,10 +410,9 @@ class WingRestApi extends Construct {
      */
     let apiProps: any = {
       name: ResourceNames.generateName(this, NAME_OPTS),
+      lifecycle: { createBeforeDestroy: true },
 
-      /**
-       * Lazy generation of the api spec because routes can be added after the API is created
-       */
+      // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
           // Retrieves the API specification.
@@ -429,8 +428,6 @@ class WingRestApi extends Construct {
           });
         },
       }),
-
-      lifecycle: { createBeforeDestroy: true },
     };
 
     /**
