@@ -184,12 +184,7 @@ pub struct SymbolLookupInfo {
 
 impl SymbolEnv {
 	pub fn new(parent: Option<SymbolEnvRef>, kind: SymbolEnvKind, phase: Phase, statement_idx: usize) -> Self {
-		// Some sanity checks
-		// If parent is a type-environent this must be one too
-		assert!(
-			parent.is_none()
-				|| matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
-		);
+		assert_is_type_env(parent, &kind);
 
 		Self {
 			symbol_map: BTreeMap::new(),
@@ -208,12 +203,7 @@ impl SymbolEnv {
 		statement_idx: usize,
 		type_params: Vec<UnsafeRef<Type>>,
 	) -> Self {
-		// Some sanity checks
-		// If parent is a type-environent this must be one too
-		assert!(
-			parent.is_none()
-				|| matches!(parent, Some(parent) if matches!(parent.kind, SymbolEnvKind::Type(_)) == matches!(kind, SymbolEnvKind::Type(_)))
-		);
+		assert_is_type_env(parent, &kind);
 
 		Self {
 			symbol_map: BTreeMap::new(),
@@ -526,6 +516,16 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 			}
 		} else {
 			None
+		}
+	}
+}
+
+/// Asserts that if the given environment is not `None` and the given kind is a type environment,
+/// then the environment is also a type environment.
+fn assert_is_type_env(env: Option<SymbolEnvRef>, kind: &SymbolEnvKind) {
+	if let Some(env) = &env {
+		if matches!(kind, SymbolEnvKind::Type(_)) {
+			assert!(matches!(env.kind, SymbolEnvKind::Type(_)));
 		}
 	}
 }

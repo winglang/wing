@@ -318,12 +318,12 @@ impl<'a> JsiiImporter<'a> {
 
 		let first_method = if let Some(methods) = &jsii_interface.methods {
 			if methods.len() != 1 {
-				panic!("Expected exactly one method defined in {jsii_interface_fqn}")
+				panic!("Expected exactly one method defined in {jsii_interface_fqn} annotated with @callable")
 			} else {
 				methods.first().unwrap()
 			}
 		} else {
-			panic!("Expected at least one method")
+			panic!("Expected at least one method in {jsii_interface_fqn} annotated with @callable")
 		};
 
 		let return_type = if let Some(jsii_return_type) = &first_method.returns {

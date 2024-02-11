@@ -5490,16 +5490,7 @@ impl<'a> TypeChecker<'a> {
 							}
 						}
 
-						let new_class = self.hydrate_class_type_arguments(
-							env,
-							env
-								.lookup_nested_str(WINGSDK_STRUCT, None)
-								.unwrap()
-								.0
-								.as_type()
-								.unwrap(),
-							vec![type_],
-						);
+						let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_STRUCT, env), vec![type_]);
 						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true, env);
 						(v, Phase::Independent)
 					}
@@ -5549,116 +5540,49 @@ impl<'a> TypeChecker<'a> {
 
 			// Lookup wingsdk std types, hydrating generics if necessary
 			Type::Array(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env.lookup_nested_str(WINGSDK_ARRAY, None).unwrap().0.as_type().unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_ARRAY, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutArray(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env
-						.lookup_nested_str(WINGSDK_MUT_ARRAY, None)
-						.unwrap()
-						.0
-						.as_type()
-						.unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_ARRAY, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Set(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env.lookup_nested_str(WINGSDK_SET, None).unwrap().0.as_type().unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_SET, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutSet(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env
-						.lookup_nested_str(WINGSDK_MUT_SET, None)
-						.unwrap()
-						.0
-						.as_type()
-						.unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_SET, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Map(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env.lookup_nested_str(WINGSDK_MAP, None).unwrap().0.as_type().unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MAP, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::MutMap(t) => {
-				let new_class = self.hydrate_class_type_arguments(
-					env,
-					env
-						.lookup_nested_str(WINGSDK_MUT_MAP, None)
-						.unwrap()
-						.0
-						.as_type()
-						.unwrap(),
-					vec![t],
-				);
+				let new_class = self.hydrate_class_type_arguments(env, lookup_known_type(WINGSDK_MUT_MAP, env), vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false, env)
 			}
 			Type::Json(_) => self.get_property_from_class_like(
-				env
-					.lookup_nested_str(WINGSDK_JSON, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap()
-					.as_class()
-					.unwrap(),
+				lookup_known_type(WINGSDK_JSON, env).as_class().unwrap(),
 				property,
 				false,
 				env,
 			),
 			Type::MutJson => self.get_property_from_class_like(
-				env
-					.lookup_nested_str(WINGSDK_MUT_JSON, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap()
-					.as_class()
-					.unwrap(),
+				lookup_known_type(WINGSDK_MUT_JSON, env).as_class().unwrap(),
 				property,
 				false,
 				env,
 			),
 			Type::String => self.get_property_from_class_like(
-				env
-					.lookup_nested_str(WINGSDK_STRING, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap()
-					.as_class()
-					.unwrap(),
+				lookup_known_type(WINGSDK_STRING, env).as_class().unwrap(),
 				property,
 				false,
 				env,
 			),
 			Type::Duration => self.get_property_from_class_like(
-				env
-					.lookup_nested_str(WINGSDK_DURATION, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap()
-					.as_class()
-					.unwrap(),
+				lookup_known_type(WINGSDK_DURATION, env).as_class().unwrap(),
 				property,
 				false,
 				env,
@@ -6232,6 +6156,17 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 	};
 
 	format!("{WINGSDK_STD_MODULE}.{type_}")
+}
+
+/// If the string is known at compile time and should be assumed to exist,
+/// then this function will return the type reference. Otherwise, it will panic.
+fn lookup_known_type(name: &'static str, env: &SymbolEnv) -> TypeRef {
+	env
+		.lookup_nested_str(name, None)
+		.expect(&format!("Expected known type \"{}\" to be defined", name))
+		.0
+		.as_type()
+		.expect(&format!("Expected known type \"{}\" to be a type", name))
 }
 
 #[cfg(test)]
