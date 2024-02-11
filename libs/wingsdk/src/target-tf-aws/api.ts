@@ -410,7 +410,10 @@ class WingRestApi extends Construct {
      */
     let apiProps: any = {
       name: ResourceNames.generateName(this, NAME_OPTS),
-      // Lazy generation of the api spec because routes can be added after the API is created
+
+      /**
+       * Lazy generation of the api spec because routes can be added after the API is created
+       */
       body: Lazy.stringValue({
         produce: () => {
           // Retrieves the API specification.
@@ -426,6 +429,7 @@ class WingRestApi extends Construct {
           });
         },
       }),
+
       lifecycle: { createBeforeDestroy: true },
     };
 
