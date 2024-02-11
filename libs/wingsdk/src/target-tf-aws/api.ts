@@ -405,7 +405,11 @@ class WingRestApi extends Construct {
      * - If `props.cors == undefined`, `defaultResponse` defaults to a mock 404 response for any HTTP method.
      */
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
-    return new ApiGatewayRestApi(this, `${id}`, {
+
+    /**
+     * Configure basic API Gateway properties
+     */
+    let apiProps: any = {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
@@ -424,7 +428,37 @@ class WingRestApi extends Construct {
         },
       }),
       lifecycle: { createBeforeDestroy: true },
-    });
+    };
+
+    /**
+     * Add extra configuration properties if it's a private ApiGateway
+     */
+    if (this.privateVpc) {
+      apiProps.endpointConfiguration = {
+        types: ["PRIVATE"],
+        vpcEndpointIds: this.vpcEndpoint ? [this.vpcEndpoint.id] : [],
+      };
+
+      // Define a policy that restricts access to the API to only requests coming through the VPC endpoint
+      apiProps.policy = JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: "execute-api:Invoke",
+            Resource: ["*"],
+            Condition: {
+              StringEquals: {
+                "aws:sourceVpce": this.vpcEndpoint ? this.vpcEndpoint.id : "",
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    return new ApiGatewayRestApi(this, `${id}`, apiProps);
   }
 
   private _initApiGatewayDeployment(): ApiGatewayDeployment {
