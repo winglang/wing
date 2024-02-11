@@ -361,10 +361,10 @@ class WingRestApi extends Construct {
         vpcId: vpcId,
         ingress: [
           {
+            cidrBlocks: ["0.0.0.0/0"],
             fromPort: 0,
             toPort: 0,
             protocol: "-1",
-            cidrBlocks: ["0.0.0.0/0"],
           },
         ],
       });
@@ -439,8 +439,10 @@ class WingRestApi extends Construct {
         vpcEndpointIds: this.vpcEndpoint ? [this.vpcEndpoint.id] : [],
       };
 
-      // Define a policy that restricts access to the API to only requests coming through the VPC endpoint
-      apiProps.policy = JSON.stringify({
+      // This policy will explicitly deny all requests that don't come from the VPC endpoint
+      // which means only requests that come from the same vpc on the same private subnet and security group
+      // will be allowed to access the API Gateway
+      this.api.policy = JSON.stringify({
         Version: "2012-10-17",
         Statement: [
           {
@@ -448,9 +450,15 @@ class WingRestApi extends Construct {
             Principal: "*",
             Action: "execute-api:Invoke",
             Resource: ["*"],
+          },
+          {
+            Effect: "Deny",
+            Principal: "*",
+            Action: "execute-api:Invoke",
+            Resource: ["*"],
             Condition: {
-              StringEquals: {
-                "aws:sourceVpce": this.vpcEndpoint ? this.vpcEndpoint.id : "",
+              StringNotEquals: {
+                "aws:sourceVpce": this.vpcEndpoint!.id,
               },
             },
           },
