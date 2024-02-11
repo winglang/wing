@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "typescript": "^4.9.5",
+    "typescript": "^5.3.3",
     "tsup": "^6.7.0",
     "vitest": "^0.34.6"
   },

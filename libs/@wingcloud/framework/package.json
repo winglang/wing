@@ -16,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "compile": "tsup",
+    "test": "vitest run --update",
     "package": "bump-pack -b"
   },
   "publishConfig": {
@@ -28,10 +29,10 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@winglang/sdk": "workspace:^",
     "@types/node": "^20.11.0",
-    "tsup": "^8.0.1",
+    "@winglang/sdk": "workspace:^",
     "bump-pack": "workspace:^",
+    "tsup": "^8.0.1",
     "vitest": "^0.34.6"
   },
   "files": [
