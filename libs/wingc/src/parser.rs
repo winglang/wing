@@ -2310,6 +2310,16 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
+			"optional_unwrap" => {
+				let expression = self.build_expression(&expression_node.named_child(0).unwrap(), phase);
+				Ok(Expr::new(
+					ExprKind::Unary {
+						op: UnaryOperator::OptionalUnwrap,
+						exp: Box::new(expression?),
+					},
+					expression_span,
+				))
+			}
 			"compiler_dbg_panic" => {
 				// Handle the debug panic expression (during parsing)
 				dbg_panic!();

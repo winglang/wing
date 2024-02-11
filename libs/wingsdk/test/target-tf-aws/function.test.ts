@@ -4,7 +4,13 @@ import { Function } from "../../src/cloud";
 import { Testing } from "../../src/simulator";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp, tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {
+  mkdtemp,
+  tfResourcesOf,
+  tfResourcesOfCount,
+  tfSanitize,
+  treeJsonOf,
+} from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
@@ -34,6 +40,30 @@ test("basic function", () => {
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("function will be behind a vpc when vpc_lambda is set to true", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const parameters = app.platformParameters;
+  parameters._rawParameters["tf-aws"] = {
+    vpc: "new",
+    vpc_lambda: true,
+  };
+
+  const inflight = Testing.makeHandler(INFLIGHT_CODE);
+  new Function(app, "Function", inflight);
+
+  // WHEN
+  const output = app.synth();
+
+  // THEN
+  const tfFunction = JSON.parse(output).resource.aws_lambda_function.Function;
+  expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
+  expect(tfFunction.vpc_config).toBeDefined();
+  expect(tfFunction.vpc_config.security_group_ids.length).toEqual(1);
+  expect(tfFunction.vpc_config.subnet_ids.length).toEqual(1);
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("basic function with environment variables", () => {

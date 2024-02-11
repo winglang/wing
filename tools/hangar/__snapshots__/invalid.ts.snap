@@ -411,7 +411,7 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
@@ -2590,7 +2590,7 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"runtime error: Cannot read properties of undefined (reading 'addChild')
+"Error: Cannot read properties of undefined (reading 'addChild')
   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
   | // explicit \`scope\`.
   | bring cloud;
@@ -2758,6 +2758,20 @@ error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): 
     |
 104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    |
+110 | let unwrapValue = nonOptional!;
+    |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    |
+116 | let unwrapValueFn = nonOptionalFn()!;
+    |                     ^^^^^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
 
 
 error: Variable is not reassignable

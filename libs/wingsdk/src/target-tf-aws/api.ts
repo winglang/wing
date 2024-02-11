@@ -9,7 +9,10 @@ import { core } from "..";
 import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
 import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
+import { DataAwsVpcEndpointService } from "../.gen/providers/aws/data-aws-vpc-endpoint-service";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
+import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -21,7 +24,7 @@ import {
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
 import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
-
+import { Vpc } from "../.gen/providers/aws/vpc";
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
  */
@@ -304,11 +307,16 @@ export class Api extends cloud.Api implements IAwsApi {
  * Encapsulates the API Gateway REST API as an abstraction for Terraform.
  */
 class WingRestApi extends Construct {
+  private readonly id: string;
   public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
+  private readonly accountId: string;
   private readonly region: string;
+  public securityGroup?: SecurityGroup;
+  public vpcEndpoint?: VpcEndpoint;
+  public readonly privateVpc: boolean = false;
 
   constructor(
     scope: Construct,
@@ -319,12 +327,58 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    this.region = (App.of(this) as App).region;
+    this.id = id;
+    const app = App.of(this) as App;
+    this.region = app.region;
+    this.accountId = app.accountId;
+    const parameters = app.platformParameters;
+
+    // Check for private API Gateway configuration
+    let privateApiGateway = parameters.getParameterValue(
+      "tf-aws/vpc_api_gateway"
+    );
+    if (privateApiGateway === true) {
+      this.privateVpc = true;
+      this._initSecurityGroup(app.vpc.id);
+      this._initVpcEndpoint(app.vpc);
+    }
 
     this.api = this._initApiGatewayRestApi(id, props);
     this.deployment = this._initApiGatewayDeployment();
     this.stage = this._initApiGatewayStage();
     this.url = this._constructInvokeUrl();
+  }
+
+  private _initSecurityGroup(vpcId: string): void {
+    this.securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
+      vpcId: vpcId,
+      ingress: [
+        {
+          fromPort: 0,
+          toPort: 0,
+          protocol: "-1",
+          cidrBlocks: ["0.0.0.0/0"],
+        },
+      ],
+    });
+  }
+
+  private _initVpcEndpoint(vpc: Vpc): void {
+    const service = new DataAwsVpcEndpointService(
+      this,
+      `${this.id}ServiceLookup`,
+      {
+        service: "execute-api",
+      }
+    );
+
+    this.vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
+      vpcId: vpc.id,
+      serviceName: service.serviceName,
+      vpcEndpointType: "Interface",
+      subnetIds: vpc.subnetIds,
+      securityGroupIds: [this.securityGroup!.id],
+    });
   }
 
   private _initApiGatewayRestApi(

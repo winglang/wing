@@ -2,4 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Unknown symbol "this" 3:8
+Unknown symbol "print" 3:13

@@ -79,7 +79,7 @@ exports[`basic function 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -89,7 +89,7 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -97,7 +97,7 @@ exports[`basic function 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -105,7 +105,7 @@ exports[`basic function 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -113,7 +113,7 @@ exports[`basic function 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -121,7 +121,7 @@ exports[`basic function 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -129,7 +129,7 @@ exports[`basic function 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -137,7 +137,7 @@ exports[`basic function 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -145,7 +145,7 @@ exports[`basic function 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -154,10 +154,18 @@ exports[`basic function 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -165,7 +173,7 @@ exports[`basic function 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -173,7 +181,7 @@ exports[`basic function 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -181,7 +189,7 @@ exports[`basic function 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -189,7 +197,7 @@ exports[`basic function 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -277,7 +285,7 @@ exports[`basic function with custom log retention 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -287,7 +295,7 @@ exports[`basic function with custom log retention 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -295,7 +303,7 @@ exports[`basic function with custom log retention 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -303,7 +311,7 @@ exports[`basic function with custom log retention 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -311,7 +319,7 @@ exports[`basic function with custom log retention 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -319,7 +327,7 @@ exports[`basic function with custom log retention 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -327,7 +335,7 @@ exports[`basic function with custom log retention 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -335,7 +343,7 @@ exports[`basic function with custom log retention 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -343,7 +351,7 @@ exports[`basic function with custom log retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -352,10 +360,18 @@ exports[`basic function with custom log retention 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -363,7 +379,7 @@ exports[`basic function with custom log retention 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -371,7 +387,7 @@ exports[`basic function with custom log retention 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -379,7 +395,7 @@ exports[`basic function with custom log retention 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -387,7 +403,7 @@ exports[`basic function with custom log retention 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -477,7 +493,7 @@ exports[`basic function with environment variables 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -487,7 +503,7 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -495,7 +511,7 @@ exports[`basic function with environment variables 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -503,7 +519,7 @@ exports[`basic function with environment variables 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -511,7 +527,7 @@ exports[`basic function with environment variables 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -519,7 +535,7 @@ exports[`basic function with environment variables 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -527,7 +543,7 @@ exports[`basic function with environment variables 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -535,7 +551,7 @@ exports[`basic function with environment variables 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -543,7 +559,7 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -552,10 +568,18 @@ exports[`basic function with environment variables 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -563,7 +587,7 @@ exports[`basic function with environment variables 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -571,7 +595,7 @@ exports[`basic function with environment variables 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -579,7 +603,7 @@ exports[`basic function with environment variables 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -587,7 +611,7 @@ exports[`basic function with environment variables 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -669,7 +693,7 @@ exports[`basic function with infinite log retention 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -679,7 +703,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -687,7 +711,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -695,7 +719,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -703,7 +727,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -711,7 +735,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -719,7 +743,7 @@ exports[`basic function with infinite log retention 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -727,7 +751,7 @@ exports[`basic function with infinite log retention 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -736,10 +760,18 @@ exports[`basic function with infinite log retention 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -747,7 +779,7 @@ exports[`basic function with infinite log retention 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -755,7 +787,7 @@ exports[`basic function with infinite log retention 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -763,7 +795,7 @@ exports[`basic function with infinite log retention 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -771,7 +803,7 @@ exports[`basic function with infinite log retention 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -859,7 +891,7 @@ exports[`basic function with memory size specified 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -869,7 +901,7 @@ exports[`basic function with memory size specified 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -877,7 +909,7 @@ exports[`basic function with memory size specified 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -885,7 +917,7 @@ exports[`basic function with memory size specified 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -893,7 +925,7 @@ exports[`basic function with memory size specified 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -901,7 +933,7 @@ exports[`basic function with memory size specified 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -909,7 +941,7 @@ exports[`basic function with memory size specified 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -917,7 +949,7 @@ exports[`basic function with memory size specified 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -925,7 +957,7 @@ exports[`basic function with memory size specified 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -934,10 +966,18 @@ exports[`basic function with memory size specified 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -945,7 +985,7 @@ exports[`basic function with memory size specified 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -953,7 +993,7 @@ exports[`basic function with memory size specified 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -961,7 +1001,7 @@ exports[`basic function with memory size specified 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -969,7 +1009,7 @@ exports[`basic function with memory size specified 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1057,7 +1097,7 @@ exports[`basic function with timeout explicitly set 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1067,7 +1107,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1075,7 +1115,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -1083,7 +1123,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -1091,7 +1131,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -1099,7 +1139,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -1107,7 +1147,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -1115,7 +1155,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1123,7 +1163,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1132,10 +1172,18 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1143,7 +1191,7 @@ exports[`basic function with timeout explicitly set 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1151,7 +1199,7 @@ exports[`basic function with timeout explicitly set 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1159,7 +1207,7 @@ exports[`basic function with timeout explicitly set 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1167,7 +1215,7 @@ exports[`basic function with timeout explicitly set 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
@@ -1255,17 +1303,25 @@ exports[`function name valid 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "The-Mighty_Function-01": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/The-Mighty_Function-01/Asset",
@@ -1273,7 +1329,7 @@ exports[`function name valid 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/The-Mighty_Function-01/CloudwatchLogGroup",
@@ -1281,7 +1337,7 @@ exports[`function name valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Mighty_Function-01/Default",
@@ -1289,7 +1345,7 @@ exports[`function name valid 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/The-Mighty_Function-01/IamRole",
@@ -1297,7 +1353,7 @@ exports[`function name valid 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/The-Mighty_Function-01/IamRolePolicy",
@@ -1305,7 +1361,7 @@ exports[`function name valid 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/The-Mighty_Function-01/IamRolePolicyAttachment",
@@ -1313,7 +1369,7 @@ exports[`function name valid 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/The-Mighty_Function-01/S3Object",
@@ -1321,7 +1377,7 @@ exports[`function name valid 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1333,7 +1389,7 @@ exports[`function name valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1341,7 +1397,7 @@ exports[`function name valid 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1349,7 +1405,7 @@ exports[`function name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1357,7 +1413,7 @@ exports[`function name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1365,12 +1421,215 @@ exports[`function name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
   },
   "version": "tree-0.1",
+}
+`;
+
+exports[`function will be behind a vpc when vpc_lambda is set to true 1`] = `
+{
+  "data": {
+    "aws_region": {
+      "Region": {},
+    },
+  },
+  "resource": {
+    "aws_cloudwatch_log_group": {
+      "Function_CloudwatchLogGroup_ABDCF4C4": {
+        "name": "/aws/lambda/Function-c852aba6",
+        "retention_in_days": 30,
+      },
+    },
+    "aws_eip": {
+      "EIP": {},
+    },
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"ec2:CreateNetworkInterface\\",\\"ec2:DescribeNetworkInterfaces\\",\\"ec2:DeleteNetworkInterface\\",\\"ec2:DescribeSubnets\\",\\"ec2:DescribeSecurityGroups\\"],\\"Resource\\":[\\"*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
+    },
+    "aws_internet_gateway": {
+      "InternetGateway": {
+        "tags": {
+          "Name": "Default-c82bf964-internet-gateway",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_lambda_function": {
+      "Function": {
+        "architectures": [
+          "arm64",
+        ],
+        "environment": {
+          "variables": {
+            "NODE_OPTIONS": "--enable-source-maps",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
+        },
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "memory_size": 1024,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs20.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 60,
+        "vpc_config": {
+          "security_group_ids": [
+            "\${aws_security_group.Function_FunctionSecurityGroup_2DC31536.id}",
+          ],
+          "subnet_ids": [
+            "\${aws_subnet.PrivateSubnet.id}",
+          ],
+        },
+      },
+    },
+    "aws_nat_gateway": {
+      "NATGateway": {
+        "allocation_id": "\${aws_eip.EIP.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+        "tags": {
+          "Name": "Default-c82bf964-nat-gateway",
+        },
+      },
+    },
+    "aws_route_table": {
+      "PrivateRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": null,
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": "\${aws_nat_gateway.NATGateway.id}",
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-private-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicRouteTable": {
+        "route": [
+          {
+            "carrier_gateway_id": null,
+            "cidr_block": "0.0.0.0/0",
+            "core_network_arn": null,
+            "destination_prefix_list_id": null,
+            "egress_only_gateway_id": null,
+            "gateway_id": "\${aws_internet_gateway.InternetGateway.id}",
+            "ipv6_cidr_block": null,
+            "local_gateway_id": null,
+            "nat_gateway_id": null,
+            "network_interface_id": null,
+            "transit_gateway_id": null,
+            "vpc_endpoint_id": null,
+            "vpc_peering_connection_id": null,
+          },
+        ],
+        "tags": {
+          "Name": "Default-c82bf964-public-route-table-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_route_table_association": {
+      "PrivateRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PrivateRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PrivateSubnet.id}",
+      },
+      "PublicRouteTableAssociation": {
+        "route_table_id": "\${aws_route_table.PublicRouteTable.id}",
+        "subnet_id": "\${aws_subnet.PublicSubnet.id}",
+      },
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
+    },
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+    "aws_security_group": {
+      "Function_FunctionSecurityGroup_2DC31536": {
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0",
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0,
+          },
+        ],
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_subnet": {
+      "PrivateSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.4.0/22",
+        "tags": {
+          "Name": "Default-c82bf964-private-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+      "PublicSubnet": {
+        "availability_zone": "\${data.aws_region.Region.name}a",
+        "cidr_block": "10.0.0.0/24",
+        "tags": {
+          "Name": "Default-c82bf964-public-subnet-1",
+        },
+        "vpc_id": "\${aws_vpc.VPC.id}",
+      },
+    },
+    "aws_vpc": {
+      "VPC": {
+        "cidr_block": "10.0.0.0/16",
+        "enable_dns_hostnames": true,
+        "enable_dns_support": true,
+        "tags": {
+          "Name": "Default-c82bf964-vpc",
+        },
+      },
+    },
+  },
 }
 `;
 
@@ -1453,17 +1712,25 @@ exports[`replace invalid character from function name 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "The%Mighty$Function": {
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/The%Mighty$Function/Asset",
@@ -1471,7 +1738,7 @@ exports[`replace invalid character from function name 2`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/The%Mighty$Function/CloudwatchLogGroup",
@@ -1479,7 +1746,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/The%Mighty$Function/Default",
@@ -1487,7 +1754,7 @@ exports[`replace invalid character from function name 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/The%Mighty$Function/IamRole",
@@ -1495,7 +1762,7 @@ exports[`replace invalid character from function name 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/The%Mighty$Function/IamRolePolicy",
@@ -1503,7 +1770,7 @@ exports[`replace invalid character from function name 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/The%Mighty$Function/IamRolePolicyAttachment",
@@ -1511,7 +1778,7 @@ exports[`replace invalid character from function name 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/The%Mighty$Function/S3Object",
@@ -1519,7 +1786,7 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -1531,7 +1798,7 @@ exports[`replace invalid character from function name 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1539,7 +1806,7 @@ exports[`replace invalid character from function name 2`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -1547,7 +1814,7 @@ exports[`replace invalid character from function name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1555,7 +1822,7 @@ exports[`replace invalid character from function name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -1563,7 +1830,7 @@ exports[`replace invalid character from function name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
