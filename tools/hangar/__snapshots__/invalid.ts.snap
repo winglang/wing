@@ -2248,18 +2248,13 @@ Duration <DURATION>"
 `;
 
 exports[`jsii_access_modifiers.test.w 1`] = `
-"error: Unknown symbol \\"createTopic\\"
+"error: Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
    --> ../../../examples/tests/invalid/jsii_access_modifiers.test.w:13:3
    |
 13 | b.createTopic(cloud.BucketEventType.CREATE);
-   |   ^^^^^^^^^^^ Unknown symbol \\"createTopic\\"
-
-
-error: Unknown symbol \\"createTopic\\"
-  --> ../../../examples/tests/invalid/jsii_access_modifiers.test.w:9:7
-  |
-9 |     b.createTopic(cloud.BucketEventType.CREATE);
-  |       ^^^^^^^^^^^ Unknown symbol \\"createTopic\\"
+   |   ^^^^^^^^^^^ Cannot access protected member \\"createTopic\\" of \\"Bucket\\"
+   |
+   = hint: the definition of \\"createTopic\\" needs a broader access modifier like \\"pub\\" to be used outside of \\"Bucket\\"
 
 
  

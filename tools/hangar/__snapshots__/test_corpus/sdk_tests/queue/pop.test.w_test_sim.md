@@ -2,7 +2,7 @@
 
 ## stdout.log
 ```log
-runtime error: Queue.timeout is not supported on the sim platform yet.
+Error: Queue.timeout is not supported on the sim platform yet.
 For more information see: https://github.com/winglang/wing/issues/1980.
 Contributions welcome ❤️
   --> pop.test.w:5:9
