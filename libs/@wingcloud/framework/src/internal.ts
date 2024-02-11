@@ -20,6 +20,7 @@ export async function compile(options: CompileOptions) {
     strict: true,
     sourceMap: true,
     outDir,
+    declaration: false,
     noEmitOnError: true,
     listEmittedFiles: true,
     baseUrl: dirname(options.entrypoint),

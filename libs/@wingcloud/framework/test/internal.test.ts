@@ -15,19 +15,26 @@ describe("compile", async () => {
 
     describe(dir, async () => {
       for (const file of readdirSync(statusDir)) {
-        test(file, async () => {
-          const tmpDir = await mkdtemp(join(tmpdir(), `wingts.${file}`));
-          const filePath = join(statusDir, file);
-          await compile({
-            entrypoint: filePath,
-            workDir: tmpDir,
-          }).catch((e) => {
-            if (!shouldFail) {
-              expect.fail("expected to pass: " + e);
-            }
-          });
-        });
+        test.concurrent(
+          file,
+          async () => {
+            const tmpDir = await mkdtemp(join(tmpdir(), `wingts.${file}`));
+            const filePath = join(statusDir, file);
+            await compile({
+              entrypoint: filePath,
+              workDir: tmpDir,
+            }).catch((e) => {
+              if (!shouldFail) {
+                expect.fail("expected to pass: " + e);
+              }
+            });
+          },
+          {
+            // The typescript compiler is quite slow, especially in CI
+            timeout: 10000,
+          }
+        );
       }
     });
   }
-})
+});
