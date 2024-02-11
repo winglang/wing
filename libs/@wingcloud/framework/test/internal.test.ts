@@ -15,7 +15,7 @@ describe("compile", async () => {
 
     describe(dir, async () => {
       for (const file of readdirSync(statusDir)) {
-        test.concurrent(
+        test(
           file,
           async () => {
             const tmpDir = await mkdtemp(join(tmpdir(), `wingts.${file}`));
@@ -31,7 +31,7 @@ describe("compile", async () => {
           },
           {
             // The typescript compiler is quite slow, especially in CI
-            timeout: 10000,
+            timeout: 20000,
           }
         );
       }
