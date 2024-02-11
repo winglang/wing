@@ -54,7 +54,7 @@ new fs.Util();
 | <code><a href="#@winglang/sdk.fs.Util.readJson">readJson</a></code> | Read the contents of the file and convert it to JSON. |
 | <code><a href="#@winglang/sdk.fs.Util.readYaml">readYaml</a></code> | Convert all YAML objects from a single file into JSON objects. |
 | <code><a href="#@winglang/sdk.fs.Util.relative">relative</a></code> | Solve the relative path from {from} to {to} based on the current working directory. |
-| <code><a href="#@winglang/sdk.fs.Util.remove">remove</a></code> | Remove files and directories (modeled on the standard POSIX `rm`utility). |
+| <code><a href="#@winglang/sdk.fs.Util.remove">remove</a></code> | Remove files and directories (modeled on the standard POSIX `rm` utility). |
 | <code><a href="#@winglang/sdk.fs.Util.setPermissions">setPermissions</a></code> | Set the permissions of the file, directory, etc. |
 | <code><a href="#@winglang/sdk.fs.Util.symlink">symlink</a></code> | Creates a symbolic link. |
 | <code><a href="#@winglang/sdk.fs.Util.symlinkMetadata">symlinkMetadata</a></code> | Gets the stats of the given path without following symbolic links. |
@@ -378,7 +378,7 @@ bring fs;
 fs.remove(path: str, opts?: RemoveOptions);
 ```
 
-Remove files and directories (modeled on the standard POSIX `rm`utility).
+Remove files and directories (modeled on the standard POSIX `rm` utility).
 
 Returns `undefined`.
 
@@ -648,7 +648,7 @@ The file path that needs to be written.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-The YANL objects to be dumped.
+The YAML objects to be dumped.
 
 ---
 

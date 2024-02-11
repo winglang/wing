@@ -78,9 +78,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(command: str, opts: ShellOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic shell: (command: str, opts: ShellOptions?): str\n```\n---\nExecutes a command in the shell and returns its standard output.\n### Parameters\n- `command` — `str` — The command string to execute in the shell.\n- `...opts` — `ShellOptions?` — `ShellOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `throw?` — `bool?` — Whether to throw an error on command execution failure.\n\n### Returns\nThe standard output of the shell command.\n\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
+    value: "```wing\nstatic shell: (command: str, opts: ShellOptions?): str\n```\n---\nExecutes a command in the shell and returns its standard output.\n### Parameters\n- `command` — `str` — The command string to execute in the shell.\n- `...opts` — `ShellOptions?` — `ShellOptions`, such as the working directory and environment variables.\n  \n  - `cwd?` — `str?`\n  - `env?` — `Map<str>?`\n  - `inheritEnv?` — `bool?`\n  - `throw?` — `bool?` — Whether to throw an error on command execution failure.\n\n### Returns\nThe standard output of the shell command.\n\n*@inflightImpl* *__shell__inflight*\n*@throws* *An error if the shell command execution fails or returns a non-zero exit code.*"
   sortText: ff|shell
   insertText: shell($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: sleep
+  kind: 2
+  detail: "(delay: duration): void"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sleep: (delay: duration): void\n```\n---\nSuspends execution for a given duration.\n### Parameters\n- `delay` — `duration` — The time to suspend execution.\n\n*@inflightImpl* *__sleep__inflight*"
+  sortText: ff|sleep
+  insertText: sleep($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -121,7 +133,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `exec` — `(program: str, args: Array<str>, opts: ExecOptions?): Output` — Execute a program with the given arguments, wait for it to finish, and return its outputs.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `shell` — `(command: str, opts: ShellOptions?): str` — Executes a command in the shell and returns its standard output.\n- `sleep` — `inflight (delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
+    value: "```wing\nclass Util\n```\n---\nUtility functions.\n\n### Methods\n- `base64Decode` — `(stringToDecode: str, url: bool?): str` — Converts a string from base64 to UTF-8.\n- `base64Encode` — `(stringToEncode: str, url: bool?): str` — Converts a string from UTF-8 to base64.\n- `env` — `(name: str): str` — Returns the value of an environment variable.\n- `exec` — `(program: str, args: Array<str>, opts: ExecOptions?): Output` — Execute a program with the given arguments, wait for it to finish, and return its outputs.\n- `nanoid` — `(options: NanoidOptions?): str` — Generates a unique ID using the nanoid library.\n- `sha256` — `(data: str): str` — Computes the SHA256 hash of the given data.\n- `shell` — `(command: str, opts: ShellOptions?): str` — Executes a command in the shell and returns its standard output.\n- `sleep` — `(delay: duration): void` — Suspends execution for a given duration.\n- `tryEnv` — `(name: str): str?` — Returns the value of an environment variable.\n- `ulid` — `(options: UlidOptions?): str` — Generates universally unique lexicographically sortable identifier.\n- `uuidv4` — `(): str` — Generates a version 4 UUID.\n- `waitUntil` — `inflight (predicate: inflight (): bool, props: WaitUntilProps?): bool` — Run a predicate repeatedly, waiting until it returns true or until the timeout elapses."
   sortText: gg|Util
 - label: CommandOptions
   kind: 22
