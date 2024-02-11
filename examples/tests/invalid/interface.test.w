@@ -36,3 +36,9 @@ interface IPointy {
   pub method2(): str;  
 //^^^ Access modifiers are not allowed in interfaces
 }
+
+// interface parameters must have types
+interface IMissingParamTypes {
+  method1(a, b): void;
+  //^ Expected type annotation
+}
