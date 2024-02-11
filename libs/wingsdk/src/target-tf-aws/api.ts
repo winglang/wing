@@ -22,7 +22,7 @@ import {
   ResourceNames,
 } from "../shared/resource-names";
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
-import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
+import { API_DEFAULT_RESPONSE } from "../shared-aws/api.default";
 import { IInflightHost, Node } from "../std";
 
 /**
@@ -398,12 +398,12 @@ class WingRestApi extends Construct {
   ): ApiGatewayRestApi {
     /**
      * Configures the default response for requests to undefined routes (`/{proxy+}`).
-     * - If CORS options are provided, `defaultResponse` sets up CORS-compliant mock responses:
+     * - If CORS options are defined, `defaultResponse` sets up CORS-compliant mock responses:
      *   - 204 (No Content) for OPTIONS requests.
      *   - 404 (Not Found) for other HTTP methods.
-     * - If `props.cors == undefined`, `defaultResponse` defaults to a mock 404 response for any HTTP method.
+     * - If CORS options are undefined, `defaultResponse` set up a mock 404 response for any HTTP method.
      */
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
 
     /**
      * BASIC API Gateway properties
