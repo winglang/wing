@@ -342,9 +342,12 @@ class WingRestApi extends Construct {
       this._initVpcResources(app);
     }
 
+    // Create the API Gateway and configure it
     this.api = this._initApiGatewayRestApi(id, props);
     this.deployment = this._initApiGatewayDeployment();
     this.stage = this._initApiGatewayStage();
+
+    // Construct the URL for the deployed API Gateway stage
     this.url = this._constructInvokeUrl();
   }
 
