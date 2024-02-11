@@ -331,10 +331,9 @@ class WingRestApi extends Construct {
     this.id = id;
     this.region = app.region;
     this.accountId = app.accountId;
-    const parameters = app.platformParameters;
 
     // Check for private API Gateway configuration
-    let privateApiGateway = parameters.getParameterValue(
+    let privateApiGateway = app.platformParameters.getParameterValue(
       "tf-aws/vpc_api_gateway"
     );
     if (privateApiGateway === true) {
@@ -433,16 +432,16 @@ class WingRestApi extends Construct {
     /**
      * PRIVATE API Gateway properties
      */
-    if (this.privateVpc) {
+    if (this.privateVpc && this.vpcEndpoint) {
       apiProps.endpointConfiguration = {
         types: ["PRIVATE"],
-        vpcEndpointIds: this.vpcEndpoint ? [this.vpcEndpoint.id] : [],
+        vpcEndpointIds: [this.vpcEndpoint.id],
       };
 
       // This policy will explicitly deny all requests that don't come from the VPC endpoint
       // which means only requests that come from the same vpc on the same private subnet and security group
       // will be allowed to access the API Gateway
-      this.api.policy = JSON.stringify({
+      apiProps.policy = JSON.stringify({
         Version: "2012-10-17",
         Statement: [
           {
@@ -458,7 +457,7 @@ class WingRestApi extends Construct {
             Resource: ["*"],
             Condition: {
               StringNotEquals: {
-                "aws:sourceVpce": this.vpcEndpoint!.id,
+                "aws:sourceVpce": this.vpcEndpoint.id,
               },
             },
           },
@@ -466,7 +465,7 @@ class WingRestApi extends Construct {
       });
     }
 
-    return new ApiGatewayRestApi(this, `${id}`, apiProps);
+    return new ApiGatewayRestApi(this, id, apiProps);
   }
 
   private _initApiGatewayDeployment(): ApiGatewayDeployment {
