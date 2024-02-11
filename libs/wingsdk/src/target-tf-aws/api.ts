@@ -308,12 +308,12 @@ export class Api extends cloud.Api implements IAwsApi {
  */
 class WingRestApi extends Construct {
   private readonly id: string;
+  private readonly region: string;
+  private readonly accountId: string;
   public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
-  private readonly accountId: string;
-  private readonly region: string;
   public securityGroup?: SecurityGroup;
   public vpcEndpoint?: VpcEndpoint;
   public readonly privateVpc: boolean = false;
@@ -327,8 +327,8 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    this.id = id;
     const app = App.of(this) as App;
+    this.id = id;
     this.region = app.region;
     this.accountId = app.accountId;
     const parameters = app.platformParameters;
