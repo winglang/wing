@@ -339,8 +339,7 @@ class WingRestApi extends Construct {
     );
     if (privateApiGateway === true) {
       this.privateVpc = true;
-      this._initSecurityGroup(app.vpc.id);
-      this._initVpcEndpoint(app);
+      this._initVpcResources(app);
     }
 
     this.api = this._initApiGatewayRestApi(id, props);
@@ -349,21 +348,25 @@ class WingRestApi extends Construct {
     this.url = this._constructInvokeUrl();
   }
 
-  private _initSecurityGroup(vpcId: string): void {
-    this.securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
-      vpcId: vpcId,
-      ingress: [
-        {
-          fromPort: 0,
-          toPort: 0,
-          protocol: "-1",
-          cidrBlocks: ["0.0.0.0/0"],
-        },
-      ],
-    });
-  }
+  private _initVpcResources(app: App): void {
+    const vpcId: string = app.vpc.id;
+    const subnetIds: string[] = [app.subnets.private.id];
 
-  private _initVpcEndpoint(app: App): void {
+    // Initialize Security Group
+    if (!this.securityGroup) {
+      this.securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
+        vpcId: vpcId,
+        ingress: [
+          {
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+            cidrBlocks: ["0.0.0.0/0"],
+          },
+        ],
+      });
+    }
+
     // Initialize the VPC Endpoint Service lookup
     const service = new DataAwsVpcEndpointService(
       this,
@@ -373,13 +376,13 @@ class WingRestApi extends Construct {
       }
     );
 
-    // Create the VPC Endpoint
+    // Create the VPC Endpoint using the newly created security group
     this.vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
-      vpcId: app.vpc.id,
+      vpcId: vpcId,
       serviceName: service.serviceName,
       privateDnsEnabled: true,
       vpcEndpointType: "Interface",
-      subnetIds: [app.subnets.private.id],
+      subnetIds: subnetIds,
       securityGroupIds: [this.securityGroup.id],
     });
   }
@@ -465,9 +468,17 @@ class WingRestApi extends Construct {
    * @returns OpenApi extension object for the endpoint and handler
    */
   private _createApiSpecExtension(handler: Function) {
+    // The ARN of the Lambda function is constructed by hand so that it can be calculated
+    // during preflight, instead of being resolved at deploy time.
+    //
+    // By doing this, the API Gateway does not need to take a dependency on its Lambda functions,
+    // making it possible to write Lambda functions that reference the
+    // API Gateway's URL in their inflight code.
+    const functionArn = `arn:aws:lambda:${this.region}:${this.accountId}:function:${handler.name}`;
+
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {
