@@ -6,8 +6,6 @@ import { App as SimApp } from "@winglang/sdk/lib/target-sim/app";
 
 import { Platform as SimPlatform } from "@winglang/sdk/lib/target-sim/platform";
 
-vi.stubEnv("JSII_PATH", join(__dirname, "../../../libs/wingsdk/.jsii"));
-
 describe("compatibility spy", async () => {
   let spyPlatform = new Platform();
 

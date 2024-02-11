@@ -3,8 +3,6 @@ import { resolve, join } from "node:path";
 import { Construct } from "constructs";
 import { platform, core, std } from "@winglang/sdk";
 
-const JSII_PATH = join(__dirname, "../../libs/wingsdk/.jsii");
-
 const PARENT_PROPERTIES: Set<string> = new Set([
   "node",
   "onLiftMap",
@@ -21,7 +19,12 @@ export class Platform implements platform.IPlatform {
   private readonly jsii;
   constructor() {
     this.jsii = JSON.parse(
-      readFileSync(process.env.JSII_PATH ?? JSII_PATH, { encoding: "utf8" })
+      readFileSync(
+        join(require.resolve("@winglang/sdk"), "..", "..", ".jsii"),
+        {
+          encoding: "utf8",
+        }
+      )
     );
   }
 
