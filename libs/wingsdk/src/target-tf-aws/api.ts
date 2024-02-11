@@ -24,7 +24,7 @@ import {
 import { IAwsApi, STAGE_NAME } from "../shared-aws";
 import { API_CORS_DEFAULT_RESPONSE } from "../shared-aws/api.cors";
 import { IInflightHost, Node } from "../std";
-import { Vpc } from "../.gen/providers/aws/vpc";
+
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
  */
@@ -431,7 +431,7 @@ class WingRestApi extends Construct {
     };
 
     /**
-     * Add extra configuration properties if it's a private ApiGateway
+     * Add extra configuration properties if it's a private API Gateway
      */
     if (this.privateVpc) {
       apiProps.endpointConfiguration = {
