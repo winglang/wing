@@ -2765,6 +2765,20 @@ error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): 
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
 
 
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    |
+110 | let unwrapValue = nonOptional!;
+    |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    |
+116 | let unwrapValueFn = nonOptionalFn()!;
+    |                     ^^^^^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:53:3
    |
