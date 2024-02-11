@@ -14,7 +14,7 @@ import { Function } from "./function";
 import { cloud, core, std } from "@winglang/sdk";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert";
 import { IAwsApi, STAGE_NAME } from "@winglang/sdk/lib/shared-aws/api";
-import { API_CORS_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.cors";
+import { API_DEFAULT_RESPONSE } from "@winglang/sdk/lib/shared-aws/api.default";
 
 /**
  * AWS Implementation of `cloud.Api`.
@@ -242,12 +242,9 @@ export class Api extends cloud.Api implements IAwsApi {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "ApiClient",
-      [`process.env["${this.urlEnvName()}"]`]
-    );
+    return core.InflightClient.for(__dirname, __filename, "ApiClient", [
+      `process.env["${this.urlEnvName()}"]`,
+    ]);
   }
 
   private urlEnvName(): string {
@@ -299,7 +296,7 @@ class WingRestApi extends Construct {
     super(scope, id);
     this.region = (App.of(this) as App).region;
 
-    const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    const defaultResponse = API_DEFAULT_RESPONSE(props.cors);
 
     this.api = new SpecRestApi(this, `${id}`, {
       apiDefinition: ApiDefinition.fromInline(
