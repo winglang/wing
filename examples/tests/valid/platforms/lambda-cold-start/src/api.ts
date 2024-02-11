@@ -15,6 +15,7 @@ import {
   type IApiEndpointHandler,
 } from "@winglang/sdk/lib/cloud";
 import { App, Lifting } from "@winglang/sdk/lib/core";
+import { Testing } from "@winglang/sdk/lib/simulator/testing";
 import { convertBetweenHandlers } from "@winglang/sdk/lib/shared/convert.js";
 import {
   ResourceNames,
@@ -24,7 +25,6 @@ import { Node } from "@winglang/sdk/lib/std";
 import { App as TfAwsApp } from "@winglang/sdk/lib/target-tf-aws/app.js";
 import type { Construct } from "constructs";
 import { CustomFunction } from "./function";
-import { Handler } from "./handler";
 
 export class CustomApi extends Api {
   NAME_OPTS: NameOptions = {
@@ -42,7 +42,7 @@ export class CustomApi extends Api {
       this.handlersLines,
       this,
       `${id}-function`,
-      Handler.makeHandler(`
+      Testing.makeHandler(`
 async handle(event) {
 console.log(JSON.stringify(event, null, 2))
 const fn = exports[\`\${event.httpMethod.toUpperCase()}__\${event.path}\`];
