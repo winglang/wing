@@ -407,7 +407,7 @@ class WingRestApi extends Construct {
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
 
     /**
-     * Configure basic API Gateway properties
+     * BASIC API Gateway properties
      */
     let apiProps: any = {
       name: ResourceNames.generateName(this, NAME_OPTS),
@@ -431,7 +431,7 @@ class WingRestApi extends Construct {
     };
 
     /**
-     * Add extra configuration properties if it's a private API Gateway
+     * PRIVATE API Gateway properties
      */
     if (this.privateVpc) {
       apiProps.endpointConfiguration = {
