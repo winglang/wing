@@ -6,6 +6,16 @@ import { T1 } from "./generics";
 import { InflightClient } from "../core";
 
 /**
+ * Comparator function for sorting arrays
+ *
+ * @typeparam T1
+ * @callable
+ */
+export interface IComparator {
+  fn(a: T1, b: T1): number;
+}
+
+/**
  * Immutable Array
  *
  * @typeparam T1
@@ -129,11 +139,12 @@ export class Array {
   /**
    * Returns the array sorted without mutating the inital
    *
-   * @macro ((arr) => [...($self$)].sort())($self$)
+   * @macro ((arr, args) => { return args && args[0] ? [...(arr)].sort(args[0]) : [...(arr)].sort() })($self$, $args$)
    *
    * @returns same array, sorted
    */
-  public sorted(): Array {
+  public sorted(comparator?: IComparator): Array {
+    comparator;
     throw new Error("Macro");
   }
 }
@@ -326,11 +337,12 @@ export class MutArray {
   /**
    * Returns the array, sorted and also mutated
    *
-   * @macro $self$.sort()
+   * @macro ((arr, args) => { return args && args[0] ? arr.sort(args[0]) : arr.sort() })($self$, $args$)
    *
    * @returns same array, sorted
    */
-  public sort(): Array {
+  public sort(comparator?: IComparator): Array {
+    comparator;
     throw new Error("Macro");
   }
 }
