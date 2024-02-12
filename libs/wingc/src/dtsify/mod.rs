@@ -276,13 +276,9 @@ impl<'a> DTSifier<'a> {
 				}
 				code.close("}");
 			}
-			StmtKind::Enum {
-				name,
-				values,
-				access: _,
-			} => {
-				code.open(format!("export enum {} {{", name.name));
-				for value in values {
+			StmtKind::Enum(enu) => {
+				code.open(format!("export enum {} {{", enu.name.name));
+				for value in &enu.values {
 					code.line(format!("{},", value.name));
 				}
 				code.close("}");

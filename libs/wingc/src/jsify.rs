@@ -12,9 +12,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
-		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
+		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -1151,10 +1151,15 @@ impl<'a> JSifier<'a> {
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
 			}
-			StmtKind::Struct { .. } => {
+			StmtKind::Struct(_) => {
 				// Struct schemas are emitted before jsification phase
 			}
-			StmtKind::Enum { name, values, .. } => {
+			StmtKind::Enum(enu) => {
+				let Enum {
+					name,
+					values,
+					access: _,
+				} = enu;
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(name, values));
 				code.close(";");
@@ -1937,10 +1942,10 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Interface(_) => {}
 			// structs are bringable, but we don't emit anything for them
 			// unless a static method is called on them
-			StmtKind::Struct { .. } => {}
-			StmtKind::Enum { name, access, .. } => {
-				if *access == AccessModifier::Public {
-					symbols.push(name.clone());
+			StmtKind::Struct(_) => {}
+			StmtKind::Enum(enu) => {
+				if enu.access == AccessModifier::Public {
+					symbols.push(enu.name.clone());
 				}
 			}
 			StmtKind::TryCatch { .. } => {}

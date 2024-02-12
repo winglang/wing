@@ -11,7 +11,7 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
-	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+	ElifBlock, ElifLetBlock, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
 	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
 	UserDefinedType,
@@ -1143,11 +1143,11 @@ impl<'s> Parser<'s> {
 			)?;
 		}
 
-		Ok(StmtKind::Enum {
+		Ok(StmtKind::Enum(Enum {
 			name: name.unwrap(),
 			values,
 			access,
-		})
+		}))
 	}
 
 	fn get_modifier<'a>(&'a self, modifier: &str, maybe_modifiers: &'a Option<Node>) -> DiagnosticResult<Option<Node>> {

@@ -435,6 +435,13 @@ pub struct Struct {
 }
 
 #[derive(Debug)]
+pub struct Enum {
+	pub name: Symbol,
+	pub values: IndexSet<Symbol>,
+	pub access: AccessModifier,
+}
+
+#[derive(Debug)]
 pub enum BringSource {
 	BuiltinModule(Symbol),
 	/// The name of the trusted module, and the path to the library (usually inside node_modules)
@@ -516,11 +523,7 @@ pub enum StmtKind {
 	Class(Class),
 	Interface(Interface),
 	Struct(Struct),
-	Enum {
-		name: Symbol,
-		values: IndexSet<Symbol>,
-		access: AccessModifier,
-	},
+	Enum(Enum),
 	TryCatch {
 		try_statements: Scope,
 		catch_block: Option<CatchBlock>,

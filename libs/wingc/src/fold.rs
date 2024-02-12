@@ -1,9 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind,
-		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
-		InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Enum, Expr,
+		ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface,
+		InterpolatedString, InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField,
+		Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -32,6 +32,9 @@ pub trait Fold {
 	}
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
+	}
+	fn fold_enum(&mut self, node: Enum) -> Enum {
+		fold_enum(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
@@ -183,11 +186,7 @@ where
 		StmtKind::Class(class) => StmtKind::Class(f.fold_class(class)),
 		StmtKind::Interface(interface) => StmtKind::Interface(f.fold_interface(interface)),
 		StmtKind::Struct(st) => StmtKind::Struct(f.fold_struct(st)),
-		StmtKind::Enum { name, values, access } => StmtKind::Enum {
-			name: f.fold_symbol(name),
-			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
-			access,
-		},
+		StmtKind::Enum(enu) => StmtKind::Enum(f.fold_enum(enu)),
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -295,6 +294,17 @@ where
 			.into_iter()
 			.map(|field| f.fold_struct_field(field))
 			.collect(),
+		access: node.access,
+	}
+}
+
+pub fn fold_enum<F>(f: &mut F, node: Enum) -> Enum
+where
+	F: Fold + ?Sized,
+{
+	Enum {
+		name: f.fold_symbol(node.name),
+		values: node.values.into_iter().map(|v| f.fold_symbol(v)).collect(),
 		access: node.access,
 	}
 }

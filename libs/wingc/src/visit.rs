@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, BringSource, CalleeKind, Class, Elifs, Enum, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
 		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
@@ -47,6 +47,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
+	}
+	fn visit_enum(&mut self, node: &'ast Enum) {
+		visit_enum(self, node);
 	}
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
@@ -181,9 +184,7 @@ where
 				v.visit_scope(statements);
 			}
 		}
-		StmtKind::Expression(expr) => {
-			v.visit_expr(&expr);
-		}
+		StmtKind::Expression(expr) => v.visit_expr(&expr),
 		StmtKind::Assignment {
 			kind: _,
 			variable,
@@ -197,29 +198,12 @@ where
 				v.visit_expr(expr);
 			}
 		}
-		StmtKind::Throw(expr) => {
-			v.visit_expr(expr);
-		}
-		StmtKind::Scope(scope) => {
-			v.visit_scope(scope);
-		}
-		StmtKind::Class(class) => {
-			v.visit_class(class);
-		}
-		StmtKind::Interface(interface) => {
-			v.visit_interface(interface);
-		}
+		StmtKind::Throw(expr) => v.visit_expr(expr),
+		StmtKind::Scope(scope) => v.visit_scope(scope),
+		StmtKind::Class(class) => v.visit_class(class),
+		StmtKind::Interface(interface) => v.visit_interface(interface),
 		StmtKind::Struct(st) => v.visit_struct(st),
-		StmtKind::Enum {
-			name,
-			values,
-			access: _,
-		} => {
-			v.visit_symbol(name);
-			for value in values {
-				v.visit_symbol(value);
-			}
-		}
+		StmtKind::Enum(enu) => v.visit_enum(enu),
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -295,6 +279,16 @@ where
 
 	for extend in &node.extends {
 		v.visit_user_defined_type(extend);
+	}
+}
+
+pub fn visit_enum<'ast, V>(v: &mut V, node: &'ast Enum)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	for value in &node.values {
+		v.visit_symbol(value);
 	}
 }
 

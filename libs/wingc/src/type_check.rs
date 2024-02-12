@@ -11,7 +11,7 @@ use crate::ast::{
 	TypeAnnotationKind, UtilityFunctions,
 };
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
+	ArgList, BinaryOperator, Class as AstClass, Elifs, Enum as AstEnum, Expr, ExprKind, FunctionBody,
 	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
 	Reference, Scope, Spanned, Stmt, StmtKind, Struct as AstStruct, Symbol, TypeAnnotation, UnaryOperator,
 	UserDefinedType,
@@ -3710,8 +3710,8 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Struct(st) => {
 				tc.type_check_struct(st, env);
 			}
-			StmtKind::Enum { name, values, access } => {
-				tc.type_check_enum(name, values, access, env);
+			StmtKind::Enum(enu) => {
+				tc.type_check_enum(enu, env);
 			}
 			StmtKind::TryCatch {
 				try_statements,
@@ -3787,20 +3787,19 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_enum(
-		&mut self,
-		name: &Symbol,
-		values: &IndexSet<Symbol>,
-		access: &AccessModifier,
-		env: &mut SymbolEnv,
-	) {
+	fn type_check_enum(&mut self, enu: &AstEnum, env: &mut SymbolEnv) {
 		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
-			name: name.clone(),
-			values: values.clone(),
+			name: enu.name.clone(),
+			values: enu.values.clone(),
 			docs: Default::default(),
 		}));
 
-		match env.define(name, SymbolKind::Type(enum_type_ref), *access, StatementIdx::Top) {
+		match env.define(
+			&enu.name,
+			SymbolKind::Type(enum_type_ref),
+			enu.access,
+			StatementIdx::Top,
+		) {
 			Err(type_error) => {
 				self.type_error(type_error);
 			}
