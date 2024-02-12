@@ -22,3 +22,13 @@ interface IPointy {
 interface ISquare extends IShape, IPointy {
     
 }
+
+class C {}
+
+// interfaces can reference classes
+interface IClass {
+    method1(): C;
+    // method2(): D; // TODO: not supported yet - classes are not hoisted
+}
+
+class D {}
