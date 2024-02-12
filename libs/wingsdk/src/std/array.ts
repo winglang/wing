@@ -146,6 +146,7 @@ export class Array {
    *
    * @macro ((arr, args) => { return args && args[0] ? [...(arr)].sort(args[0]) : [...(arr)].sort() })($self$, $args$)
    *
+   * @param comparator Function used to determine the order of the elements.
    * @returns same array, sorted
    */
   public sorted(comparator?: IComparator): Array {
@@ -344,6 +345,7 @@ export class MutArray {
    *
    * @macro ((arr, args) => { return args && args[0] ? arr.sort(args[0]) : arr.sort() })($self$, $args$)
    *
+   * @param comparator Function used to determine the order of the elements.
    * @returns same array, sorted
    */
   public sort(comparator?: IComparator): Array {
