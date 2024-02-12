@@ -37,7 +37,7 @@ use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 
 use std::cmp;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -3985,15 +3985,17 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Add methods to the class env
+		let mut method_types: BTreeMap<&Symbol, TypeRef> = BTreeMap::new();
 		for (method_name, method_def) in ast_class.methods.iter() {
+			let mut method_type = self.resolve_type_annotation(&method_def.signature.to_type_annotation(), env);
 			self.add_method_to_class_env(
-				&method_def.signature,
-				env,
+				&mut method_type,
 				if method_def.is_static { None } else { Some(class_type) },
 				method_def.access,
 				&mut class_env,
 				method_name,
 			);
+			method_types.insert(&method_name, method_type);
 		}
 
 		// Add the constructor to the class env
@@ -4002,14 +4004,15 @@ impl<'a> TypeChecker<'a> {
 			span: ast_class.initializer.span.clone(),
 		};
 
+		let mut init_func_type = self.resolve_type_annotation(&ast_class.initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
-			&ast_class.initializer.signature,
-			env,
+			&mut init_func_type,
 			None,
 			ast_class.initializer.access,
 			&mut class_env,
 			&init_symb,
 		);
+		method_types.insert(&init_symb, init_func_type);
 
 		let inflight_init_symb = Symbol {
 			name: CLASS_INFLIGHT_INIT_NAME.into(),
@@ -4017,14 +4020,16 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Add the inflight initializer to the class env
+		let mut inflight_init_func_type =
+			self.resolve_type_annotation(&ast_class.inflight_initializer.signature.to_type_annotation(), env);
 		self.add_method_to_class_env(
-			&ast_class.inflight_initializer.signature,
-			env,
+			&mut inflight_init_func_type,
 			Some(class_type),
 			ast_class.inflight_initializer.access,
 			&mut class_env,
 			&inflight_init_symb,
 		);
+		method_types.insert(&inflight_init_symb, inflight_init_func_type);
 
 		// Replace the dummy class environment with the real one before type checking the methods
 		if let Some(mut_class) = class_type.as_class_mut() {
@@ -4038,7 +4043,14 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Type check constructor
-		self.type_check_method(class_type, &init_symb, env, stmt.idx, &ast_class.initializer);
+		self.type_check_method(
+			class_type,
+			&init_symb,
+			&mut init_func_type,
+			env,
+			stmt.idx,
+			&ast_class.initializer,
+		);
 
 		// Verify if all fields of a class/resource are initialized in the initializer.
 		let init_statements = match &ast_class.initializer.body {
@@ -4052,6 +4064,7 @@ impl<'a> TypeChecker<'a> {
 		self.type_check_method(
 			class_type,
 			&inflight_init_symb,
+			&mut inflight_init_func_type,
 			env,
 			stmt.idx,
 			&ast_class.inflight_initializer,
@@ -4062,7 +4075,8 @@ impl<'a> TypeChecker<'a> {
 
 		// Type check methods
 		for (method_name, method_def) in ast_class.methods.iter() {
-			self.type_check_method(class_type, method_name, env, stmt.idx, method_def);
+			let mut method_type = *method_types.get(&method_name).unwrap();
+			self.type_check_method(class_type, method_name, &mut method_type, env, stmt.idx, method_def);
 		}
 
 		// Check that the class satisfies all of its interfaces
@@ -4696,6 +4710,7 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		class_type: TypeRef,
 		method_name: &Symbol,
+		method_type: &mut TypeRef,
 		parent_env: &SymbolEnv, // the environment in which the class is declared
 		statement_idx: usize,
 		method_def: &FunctionDefinition,
@@ -4703,13 +4718,6 @@ impl<'a> TypeChecker<'a> {
 		let class_env = &class_type.as_class().unwrap().env;
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
-		// Lookup the method in the class_env
-		let method_type = class_env
-			.lookup(&method_name, None)
-			.expect(format!("Expected method '{}' to be in class env", method_name.name).as_str())
-			.as_variable()
-			.expect("Expected method to be a variable")
-			.type_;
 
 		let method_sig = method_type
 			.as_function_sig()
@@ -4721,7 +4729,7 @@ impl<'a> TypeChecker<'a> {
 			Some(parent_env.get_ref()),
 			SymbolEnvKind::Function {
 				is_init,
-				sig: method_type,
+				sig: *method_type,
 			},
 			method_sig.phase,
 			statement_idx,
@@ -4767,14 +4775,12 @@ impl<'a> TypeChecker<'a> {
 
 	fn add_method_to_class_env(
 		&mut self,
-		method_sig: &ast::FunctionSignature,
-		env: &mut SymbolEnv,
+		method_type: &mut TypeRef,
 		instance_type: Option<TypeRef>,
 		access: AccessModifier,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
-		let mut method_type = self.resolve_type_annotation(&method_sig.to_type_annotation(), env);
 		// use the class type as the function's "this" type (or None if static)
 		method_type
 			.as_mut_function_sig()
@@ -4815,14 +4821,16 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
+		let method_phase = method_type.as_function_sig().unwrap().phase;
+
 		match class_env.define(
 			method_name,
 			SymbolKind::make_member_variable(
 				method_name.clone(),
-				method_type,
+				*method_type,
 				false,
 				instance_type.is_none(),
-				method_sig.phase,
+				method_phase,
 				access,
 				None,
 			),
