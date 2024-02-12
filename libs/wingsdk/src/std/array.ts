@@ -147,7 +147,7 @@ export class Array {
   }
 
   /**
-   * Returns the array sorted without mutating the inital
+   * Returns a sorted copy of the array.
    *
    * @macro ((arr, args) => { return args && args[0] ? [...(arr)].sort(args[0]) : [...(arr)].sort() })($self$, $args$)
    *
