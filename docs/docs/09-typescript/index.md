@@ -3,7 +3,7 @@ title: TypeScript For Wing
 id: typescript
 ---
 
-Wing's CLI has experimental support for TypeScript! 
+Wing's CLI has experimental support for TypeScript.
 
 We see winglang as the ideal language to create Wing apps, but using TypeScript allows you to use many powerful features of wing without fully diving into a new language.
 
