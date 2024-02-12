@@ -9,7 +9,10 @@ import { core } from "..";
 import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
 import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
+import { DataAwsVpcEndpointService } from "../.gen/providers/aws/data-aws-vpc-endpoint-service";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
+import { SecurityGroup } from "../.gen/providers/aws/security-group";
+import { VpcEndpoint } from "../.gen/providers/aws/vpc-endpoint";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../shared/convert";
@@ -308,7 +311,11 @@ class WingRestApi extends Construct {
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
+  public readonly securityGroup?: SecurityGroup;
+  public readonly privateVpc: boolean;
+  public readonly vpcEndpoint?: VpcEndpoint;
   private readonly region: string;
+  private readonly accountId: string;
 
   constructor(
     scope: Construct,
@@ -319,9 +326,49 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    this.region = (App.of(this) as App).region;
+    const app = App.of(this) as App;
+    this.region = app.region;
+    this.accountId = app.accountId;
+    this.privateVpc = false;
 
     const defaultResponse = API_CORS_DEFAULT_RESPONSE(props.cors);
+    const parameters = app.platformParameters;
+
+    let privateApiGateway = parameters.getParameterValue(
+      "tf-aws/vpc_api_gateway"
+    );
+    if (privateApiGateway === true) {
+      let vpc = app.vpc;
+      this.privateVpc = true;
+      this.securityGroup = new SecurityGroup(this, `${id}SecurityGroup`, {
+        vpcId: vpc.id,
+        ingress: [
+          {
+            cidrBlocks: ["0.0.0.0/0"],
+            fromPort: 0,
+            toPort: 0,
+            protocol: "-1",
+          },
+        ],
+      });
+
+      const service = new DataAwsVpcEndpointService(
+        this,
+        `${id}ServiceLookup`,
+        {
+          service: "execute-api",
+        }
+      );
+
+      this.vpcEndpoint = new VpcEndpoint(this, `${id}-vpc-endpoint`, {
+        vpcId: vpc.id,
+        serviceName: service.serviceName,
+        privateDnsEnabled: true,
+        vpcEndpointType: "Interface",
+        subnetIds: [app.subnets.private.id],
+        securityGroupIds: [this.securityGroup.id],
+      });
+    }
 
     this.api = new ApiGatewayRestApi(this, `${id}`, {
       name: ResourceNames.generateName(this, NAME_OPTS),
@@ -342,6 +389,37 @@ class WingRestApi extends Construct {
         createBeforeDestroy: true,
       },
     });
+
+    if (privateApiGateway === true) {
+      this.api.endpointConfiguration.types = ["PRIVATE"];
+      this.api.endpointConfiguration.vpcEndpointIds = [this.vpcEndpoint!.id];
+
+      // This policy will explicitly deny all requests that don't come from the VPC endpoint
+      // which means only requests that come from the same vpc on the same private subnet and security group
+      // will be allowed to access the API Gateway
+      this.api.policy = JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: "execute-api:Invoke",
+            Resource: ["*"],
+          },
+          {
+            Effect: "Deny",
+            Principal: "*",
+            Action: "execute-api:Invoke",
+            Resource: ["*"],
+            Condition: {
+              StringNotEquals: {
+                "aws:sourceVpce": this.vpcEndpoint!.id,
+              },
+            },
+          },
+        ],
+      });
+    }
 
     this.deployment = new ApiGatewayDeployment(this, "deployment", {
       restApiId: this.api.id,
@@ -386,9 +464,17 @@ class WingRestApi extends Construct {
    * @returns OpenApi extension object for the endpoint and handler
    */
   private createApiSpecExtension(handler: Function) {
+    // The ARN of the Lambda function is constructed by hand so that it can be calculated
+    // during preflight, instead of being resolved at deploy time.
+    //
+    // By doing this, the API Gateway does not need to take a dependency on its Lambda functions,
+    // making it possible to write Lambda functions that reference the
+    // API Gateway's URL in their inflight code.
+    const functionArn = `arn:aws:lambda:${this.region}:${this.accountId}:function:${handler.name}`;
+
     const extension = {
       "x-amazon-apigateway-integration": {
-        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${handler.functionArn}/invocations`,
+        uri: `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${functionArn}/invocations`,
         type: "aws_proxy",
         httpMethod: "POST",
         responses: {

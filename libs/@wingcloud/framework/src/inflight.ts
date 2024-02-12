@@ -1,15 +1,16 @@
 import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
-import { liftObject, onLiftObject, closureId } from "@winglang/sdk/lib/core";
+import {
+  liftObject,
+  closureId,
+  LiftDepsMatrixRaw,
+} from "@winglang/sdk/lib/core";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
   Inflight,
   OperationsOf,
 } from "@winglang/sdk/lib/core/types";
-import type {
-  IHostedLiftable,
-  IInflightHost,
-} from "@winglang/sdk/lib/std/resource";
+import type { IHostedLiftable } from "@winglang/sdk/lib/std/resource";
 
 /**
  * Prepares preflight objects for use in inflight functions.
@@ -161,6 +162,23 @@ class Lifter<
       ...args: Parameters<TFunction>
     ) => ReturnType<TFunction>
   ): Inflight<TFunction> {
+    // This is a simplified version of the Wing compiler's _liftMap generation
+    // It specifies what transitive permissions need to be added based on what
+    // inflight methods are called on an object
+    // The SDK models inflight functions as objects with a "handle" property,
+    // so here we annotate that "handle" needs all of the required permissions
+    const _liftMap: LiftDepsMatrixRaw = { handle: [], $inflight_init: [] };
+    for (const [key, obj] of Object.entries(this.lifts)) {
+      let knownOps = this.grants[key];
+      if (
+        knownOps === undefined &&
+        typeof (obj as IHostedLiftable)?._supportedOps === "function"
+      ) {
+        knownOps = (obj as IHostedLiftable)._supportedOps();
+      }
+      _liftMap.handle.push([obj, knownOps ?? []]);
+    }
+
     return {
       _id: closureId(),
       _toInflight: () => {
@@ -183,19 +201,7 @@ class Lifter<
 }
 )())`;
       },
-      onLift: (host: IInflightHost, _ops: string[]) => {
-        for (const [key, obj] of Object.entries(this.lifts)) {
-          let knownOps = this.grants[key];
-          if (
-            knownOps === undefined &&
-            typeof (obj as IHostedLiftable)?._supportedOps === "function"
-          ) {
-            knownOps = (obj as IHostedLiftable)._supportedOps();
-          }
-
-          onLiftObject(obj, host, knownOps);
-        }
-      },
+      _liftMap,
       _supportedOps: () => [],
       // @ts-expect-error This function's type doesn't actually match, but it will just throw anyways
       [INFLIGHT_SYMBOL]: () => {

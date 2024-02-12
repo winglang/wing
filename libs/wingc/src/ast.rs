@@ -733,6 +733,7 @@ pub enum UnaryOperator {
 	Minus,
 	Not,
 	OptionalTest,
+	OptionalUnwrap,
 }
 
 #[derive(Debug)]

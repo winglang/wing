@@ -30,7 +30,7 @@ test("unsupported resource in target", async ({ expect }) => {
     },
   });
 
-  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot('"runtime error: A Google Cloud region must be specified through the GOOGLE_REGION environment variable."');
+  expect(sanitizeOutput(result.stderr)).toMatchInlineSnapshot('"Error: A Google Cloud region must be specified through the GOOGLE_REGION environment variable."');
 });
 
 function sanitizeOutput(inputString: string): string {
