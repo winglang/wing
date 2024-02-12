@@ -235,4 +235,48 @@ exports.Platform = class MyPlatform {
 } 
 ```
 
-<!-- TODO: Create step by step guide for writing custom platforms and publishing them as node modules -->
+### Defining Custom Platform Parameters
+
+In addition to the hooks mentioned above, you can also define custom parameters for your platform. These parameters can be used to pass
+configuration to your platform and can be optional or required.
+
+Parameters are defined using the `parameters` property of the platform. These parameters are expected to be provided in the form of a 
+(JSON schema)[https://json-schema.org/]. 
+
+The following example shoes how to define three parameters `replicateAllBuckets`, `bucketsToReplicate` and `replicaRegion` for a custom platform.
+Our platform's logic will either replicate all buckets if `replicateAllBuckets` is set to `true` or replicate only the buckets specified in `bucketsToReplicate` to the region specified in `replicaRegion`.
+
+Its important to understand the relationship between these parameters, as in if `replicateAllBuckets` is set to `true` then `bucketsToReplicate` is not required.
+Whereas no matter the value of `replicateAllBuckets`, `replicaRegion` is always required.
+
+Luckily, JSON schema allows us to define these relationships and constraints like so:
+
+```js
+class MyPlatform {
+  parameters = {
+    type: "object",
+    required: ["replicateAllBuckets", "replicaRegion"],
+    properties: {
+      replicateAllBuckets: {
+        type: "boolean",
+      },
+      nameOfBucketsToReplicate: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+      replicaRegion: {
+        type: "string",
+      },
+    },
+    "$comment": "Here in an allOf we can define multiple conditions that must be met for the schema to be valid",
+    allOf: [
+      {
+        if: { properties: { replicateAllBuckets: { const: false }} },
+        then: { required: ["nameOfBucketsToReplicate"] },
+      }
+    ]
+  }
+}
+```

@@ -80,7 +80,7 @@ export async function getWingBin(): Promise<string | null> {
     Loggers.default.appendLine(
       `"which ${configuredWingBin}" => "${whichPath}"`
     );
-    return resolvePath(whichPath);
+    return await resolvePath(whichPath);
   } catch (e) {
     const choice = await window.showWarningMessage(
       `Unable to find wing from "${configuredWingBin}" (not in PATH). Install globally with \`npm install -g winglang@latest\`? (${e})`,
@@ -120,7 +120,7 @@ export async function resolvePath(p: string) {
       if (!vResult) {
         return null;
       } else {
-        return resolvePath(vResult);
+        return await resolvePath(vResult);
       }
     }
 

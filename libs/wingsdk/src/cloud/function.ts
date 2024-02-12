@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
@@ -100,14 +100,14 @@ export class Function extends Resource implements IInflightHost {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
+    // write the entrypoint next to the partial inflight code emitted by the compiler,
+    // so that `require` resolves naturally.
     const lines = this._getCodeLines(this.handler);
     writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    this.handler.onLift(this, ["handle", "$inflight_init"]);
+    Lifting.lift(this.handler, this, ["handle"]);
   }
 
   /**

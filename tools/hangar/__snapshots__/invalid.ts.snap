@@ -411,7 +411,7 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
@@ -622,6 +622,42 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
    |
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
    |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`bypass_return.test.w 1`] = `
+"error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/bypass_return.test.w:2:12
+  |
+2 |     return \\"a\\";
+  |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/bypass_return.test.w:8:12
+  |
+8 |     return \\"a\\";
+  |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: A function whose return type is \\"num\\" must return a value.
+   --> ../../../examples/tests/invalid/bypass_return.test.w:15:28
+   |
+15 | let emptyBody = (): num => {};
+   |                            ^^ A function whose return type is \\"num\\" must return a value.
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/bypass_return.test.w:20:12
+   |
+20 |     return \\"a\\";
+   |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -2168,6 +2204,20 @@ error: Access modifiers are not allowed in interfaces
    |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
 
 
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:11
+   |
+42 |   method1(a, b): void;
+   |           ^ Expected type annotation
+
+
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:14
+   |
+42 |   method1(a, b): void;
+   |              ^ Expected type annotation
+
+
 error: Unknown parser error
    --> ../../../examples/tests/invalid/interface.test.w:36:14
    |
@@ -2590,7 +2640,7 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"runtime error: Cannot read properties of undefined (reading 'addChild')
+"Error: Cannot read properties of undefined (reading 'addChild')
   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
   | // explicit \`scope\`.
   | bring cloud;
@@ -2758,6 +2808,20 @@ error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): 
     |
 104 | let functionWithOptionalFuncParam2: (():num)? = ():str => { return \\"s\\"; };
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    |
+110 | let unwrapValue = nonOptional!;
+    |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    |
+116 | let unwrapValueFn = nonOptionalFn()!;
+    |                     ^^^^^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
 
 
 error: Variable is not reassignable
