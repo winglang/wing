@@ -2,7 +2,7 @@ use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, Class, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedStringPart, Literal, New, Reference, Scope,
-		Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Stmt, StmtKind, Struct, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -41,6 +41,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_class(&mut self, node: &'ast Class) {
 		visit_class(self, node);
+	}
+	fn visit_struct(&mut self, node: &'ast Struct) {
+		visit_struct(self, node);
 	}
 	fn visit_interface(&mut self, node: &'ast Interface) {
 		visit_interface(self, node);
@@ -206,21 +209,7 @@ where
 		StmtKind::Interface(interface) => {
 			v.visit_interface(interface);
 		}
-		StmtKind::Struct {
-			name,
-			extends,
-			fields,
-			access: _,
-		} => {
-			v.visit_symbol(name);
-			for extend in extends {
-				v.visit_user_defined_type(extend);
-			}
-			for member in fields {
-				v.visit_symbol(&member.name);
-				v.visit_type_annotation(&member.member_type);
-			}
-		}
+		StmtKind::Struct(st) => v.visit_struct(st),
 		StmtKind::Enum {
 			name,
 			values,
@@ -276,6 +265,20 @@ where
 
 	for implement in &node.implements {
 		v.visit_user_defined_type(&implement);
+	}
+}
+
+pub fn visit_struct<'ast, V>(v: &mut V, node: &'ast Struct)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	for extend in &node.extends {
+		v.visit_user_defined_type(&extend);
+	}
+	for member in &node.fields {
+		v.visit_symbol(&member.name);
+		v.visit_type_annotation(&member.member_type);
 	}
 }
 

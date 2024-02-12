@@ -67,11 +67,11 @@ impl Visit<'_> for DocumentSymbolVisitor {
 					.document_symbols
 					.push(create_document_symbol(symbol, SymbolKind::CLASS));
 			}
-			StmtKind::Struct { name, .. } => {
-				let symbol = name;
+			StmtKind::Struct(st) => {
+				let symbol = &st.name;
 				self
 					.document_symbols
-					.push(create_document_symbol(symbol, SymbolKind::STRUCT));
+					.push(create_document_symbol(&symbol, SymbolKind::STRUCT));
 			}
 			StmtKind::Enum { name, .. } => {
 				let symbol = name;

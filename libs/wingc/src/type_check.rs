@@ -13,7 +13,8 @@ use crate::ast::{
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Elifs, Expr, ExprKind, FunctionBody,
 	FunctionParameter as AstFunctionParameter, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Spanned, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Reference, Scope, Spanned, Stmt, StmtKind, Struct as AstStruct, Symbol, TypeAnnotation, UnaryOperator,
+	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticAnnotation, TypeError, WingSpan};
@@ -3391,12 +3392,11 @@ impl<'a> TypeChecker<'a> {
 	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
 		for statement in scope.statements.iter() {
 			match &statement.kind {
-				StmtKind::Struct {
-					name,
-					extends,
-					fields: _,
-					access,
-				} => {
+				StmtKind::Struct(st) => {
+					let AstStruct {
+						name, extends, access, ..
+					} = st;
+
 					// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
 					if let Some(_) = env.parent {
 						self.spanned_error(
@@ -3707,13 +3707,8 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Interface(ast_iface) => {
 				tc.type_check_interface(ast_iface, env);
 			}
-			StmtKind::Struct {
-				name,
-				extends,
-				fields,
-				access,
-			} => {
-				tc.type_check_struct(fields, extends, name, access, env);
+			StmtKind::Struct(st) => {
+				tc.type_check_struct(st, env);
 			}
 			StmtKind::Enum { name, values, access } => {
 				tc.type_check_enum(name, values, access, env);
@@ -3813,14 +3808,14 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn type_check_struct(
-		&mut self,
-		fields: &Vec<ast::StructField>,
-		_extends: &Vec<UserDefinedType>,
-		name: &Symbol,
-		_access: &AccessModifier,
-		env: &mut SymbolEnv,
-	) {
+	fn type_check_struct(&mut self, st: &AstStruct, env: &mut SymbolEnv) {
+		let AstStruct {
+			name,
+			extends: _,
+			fields,
+			access: _,
+		} = st;
+
 		// Note: to support mutually recursive type definitions (types that refer to each other), struct types
 		// are initialized during `type_check_scope`. The struct type is created with a dummy environment and
 		// then replaced with the real environment after the struct's fields are type checked.

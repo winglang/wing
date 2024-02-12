@@ -2,8 +2,8 @@ use crate::{
 	ast::{
 		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind,
 		FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, IfLet, Interface, InterpolatedString,
-		InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UserDefinedType,
+		InterpolatedStringPart, Literal, New, Reference, Scope, Stmt, StmtKind, Struct, StructField, Symbol,
+		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -23,6 +23,9 @@ pub trait Fold {
 	}
 	fn fold_class_field(&mut self, node: ClassField) -> ClassField {
 		fold_class_field(self, node)
+	}
+	fn fold_struct(&mut self, node: Struct) -> Struct {
+		fold_struct(self, node)
 	}
 	fn fold_struct_field(&mut self, node: StructField) -> StructField {
 		fold_struct_field(self, node)
@@ -179,17 +182,7 @@ where
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
 		StmtKind::Class(class) => StmtKind::Class(f.fold_class(class)),
 		StmtKind::Interface(interface) => StmtKind::Interface(f.fold_interface(interface)),
-		StmtKind::Struct {
-			name,
-			extends,
-			fields,
-			access,
-		} => StmtKind::Struct {
-			name: f.fold_symbol(name),
-			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
-			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
-			access,
-		},
+		StmtKind::Struct(st) => StmtKind::Struct(f.fold_struct(st)),
 		StmtKind::Enum { name, values, access } => StmtKind::Enum {
 			name: f.fold_symbol(name),
 			values: values.into_iter().map(|value| f.fold_symbol(value)).collect(),
@@ -285,6 +278,22 @@ where
 			.extends
 			.into_iter()
 			.map(|interface| f.fold_user_defined_type(interface))
+			.collect(),
+		access: node.access,
+	}
+}
+
+pub fn fold_struct<F>(f: &mut F, node: Struct) -> Struct
+where
+	F: Fold + ?Sized,
+{
+	Struct {
+		name: f.fold_symbol(node.name),
+		extends: node.extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
+		fields: node
+			.fields
+			.into_iter()
+			.map(|field| f.fold_struct_field(field))
 			.collect(),
 		access: node.access,
 	}

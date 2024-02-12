@@ -13,7 +13,7 @@ use crate::ast::{
 	AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField,
 	ElifBlock, ElifLetBlock, Elifs, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
 	FunctionSignature, IfLet, Interface, InterpolatedString, InterpolatedStringPart, Literal, New, Phase, Reference,
-	Scope, Spanned, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
+	Scope, Spanned, Stmt, StmtKind, Struct, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
 	UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
@@ -866,12 +866,12 @@ impl<'s> Parser<'s> {
 			)?;
 		}
 
-		Ok(StmtKind::Struct {
+		Ok(StmtKind::Struct(Struct {
 			name,
 			extends,
 			fields: members,
 			access,
-		})
+		}))
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
