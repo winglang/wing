@@ -3,6 +3,9 @@ struct A {
   field0: IShape;
 }
 
+// type annotations can reference interfaces before they are defined
+let a: IShape? = nil;
+
 interface IShape {
     // method with a return type
     method1(): str;

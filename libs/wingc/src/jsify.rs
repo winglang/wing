@@ -139,9 +139,12 @@ impl<'a> JSifier<'a> {
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
-			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
-			(StmtKind::Class(AstClass { .. }), _) => Ordering::Less,
-			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
+			(StmtKind::Enum(_), StmtKind::Enum(_)) => Ordering::Equal,
+			(StmtKind::Enum(_), _) => Ordering::Less,
+			(_, StmtKind::Enum(_)) => Ordering::Greater,
+			(StmtKind::Class(_), StmtKind::Class(_)) => Ordering::Equal,
+			(StmtKind::Class(_), _) => Ordering::Less,
+			(_, StmtKind::Class(_)) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);

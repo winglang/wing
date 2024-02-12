@@ -3386,115 +3386,140 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Check if there are any type declaration statements in the given scope, and if so,
-	/// hoist them to the top-level of the environment so that they can be referenced by other
-	/// type declarations.
+	/// Check if there are any type declaration statements in the given scope.
+	/// If so, define the the respective types in the environment so that the type can be referenced by other
+	/// type declarations, even if they come before the type declaration.
 	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
 		for statement in scope.statements.iter() {
 			match &statement.kind {
-				StmtKind::Struct(st) => {
-					let AstStruct {
-						name, extends, access, ..
-					} = st;
-
-					// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
-					if let Some(_) = env.parent {
-						self.spanned_error(
-							name,
-							format!("struct \"{name}\" must be declared at the top-level of a file"),
-						);
-					}
-
-					// Create environment representing this struct, for now it'll be empty just so we can support referencing it
-					let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, statement.idx);
-
-					// Collect types this struct extends
-					let extends_types = extends
-						.iter()
-						.filter_map(|ext| {
-							let t = self
-								.resolve_user_defined_type(ext, &env, self.ctx.current_stmt_idx())
-								.unwrap_or_else(|e| self.type_error(e));
-							if t.as_struct().is_some() {
-								Some(t)
-							} else {
-								self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
-								None
-							}
-						})
-						.collect::<Vec<_>>();
-
-					// Create the struct type with the empty environment
-					let struct_type = self.types.add_type(Type::Struct(Struct {
-						name: name.clone(),
-						fqn: None,
-						extends: extends_types.clone(),
-						env: dummy_env,
-						docs: Docs::default(),
-					}));
-
-					match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
-				}
-				StmtKind::Interface(iface) => {
-					// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves
-					// from the interface definition or by other type definitions that come before the interface statement.
-					let dummy_env = SymbolEnv::new(
-						None,
-						SymbolEnvKind::Type(self.types.void()),
-						env.phase,
-						self.ctx.current_stmt_idx(),
-					);
-
-					// Collect types this interface extends
-					let extend_interfaces = iface
-						.extends
-						.iter()
-						.filter_map(|i| {
-							let t = self
-								.resolve_user_defined_type(i, env, self.ctx.current_stmt_idx())
-								.unwrap_or_else(|e| self.type_error(e));
-							if t.as_interface().is_some() {
-								Some(t)
-							} else {
-								// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
-								if !t.is_unresolved() {
-									self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
-								}
-								None
-							}
-						})
-						.collect::<Vec<_>>();
-
-					// Create the interface type with the empty environment
-					let interface_spec = Interface {
-						name: iface.name.clone(),
-						fqn: None,
-						docs: Docs::default(),
-						env: dummy_env,
-						extends: extend_interfaces.clone(),
-					};
-					let interface_type = self.types.add_type(Type::Interface(interface_spec));
-
-					match env.define(
-						&iface.name,
-						SymbolKind::Type(interface_type),
-						iface.access,
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
-				}
+				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
+				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env),
+				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env),
 				_ => {}
 			}
 		}
+	}
+
+	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv) {
+		let AstStruct {
+			name, extends, access, ..
+		} = st;
+
+		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+		if let Some(_) = env.parent {
+			self.spanned_error(
+				name,
+				format!("struct \"{name}\" must be declared at the top-level of a file"),
+			);
+		}
+
+		// Create environment representing this struct, for now it'll be empty just so we can support referencing it
+		let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, 0);
+
+		// Collect types this struct extends
+		let extends_types = extends
+			.iter()
+			.filter_map(|ext| {
+				let t = self
+					.resolve_user_defined_type(ext, &env, self.ctx.current_stmt_idx())
+					.unwrap_or_else(|e| self.type_error(e));
+				if t.as_struct().is_some() {
+					Some(t)
+				} else {
+					self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
+					None
+				}
+			})
+			.collect::<Vec<_>>();
+
+		// Create the struct type with the empty environment
+		let struct_type = self.types.add_type(Type::Struct(Struct {
+			name: name.clone(),
+			fqn: None,
+			extends: extends_types.clone(),
+			env: dummy_env,
+			docs: Docs::default(),
+		}));
+
+		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
+	}
+
+	fn hoist_interface_definition(&mut self, iface: &AstInterface, env: &mut SymbolEnv) {
+		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves
+		// from the interface definition or by other type definitions that come before the interface statement.
+		let dummy_env = SymbolEnv::new(
+			None,
+			SymbolEnvKind::Type(self.types.void()),
+			env.phase,
+			self.ctx.current_stmt_idx(),
+		);
+
+		// Collect types this interface extends
+		let extend_interfaces = iface
+			.extends
+			.iter()
+			.filter_map(|i| {
+				let t = self
+					.resolve_user_defined_type(i, env, self.ctx.current_stmt_idx())
+					.unwrap_or_else(|e| self.type_error(e));
+				if t.as_interface().is_some() {
+					Some(t)
+				} else {
+					// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
+					if !t.is_unresolved() {
+						self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
+					}
+					None
+				}
+			})
+			.collect::<Vec<_>>();
+
+		// Create the interface type with the empty environment
+		let interface_spec = Interface {
+			name: iface.name.clone(),
+			fqn: None,
+			docs: Docs::default(),
+			env: dummy_env,
+			extends: extend_interfaces.clone(),
+		};
+		let interface_type = self.types.add_type(Type::Interface(interface_spec));
+
+		match env.define(
+			&iface.name,
+			SymbolKind::Type(interface_type),
+			iface.access,
+			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
+	}
+
+	fn hoist_enum_definition(&mut self, enu: &AstEnum, env: &mut SymbolEnv) {
+		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
+			name: enu.name.clone(),
+			values: enu.values.clone(),
+			docs: Default::default(),
+		}));
+
+		match env.define(
+			&enu.name,
+			SymbolKind::Type(enum_type_ref),
+			enu.access,
+			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
 	}
 
 	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv) -> TypeRef {
@@ -3710,8 +3735,8 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Struct(st) => {
 				tc.type_check_struct(st, env);
 			}
-			StmtKind::Enum(enu) => {
-				tc.type_check_enum(enu, env);
+			StmtKind::Enum(_) => {
+				// nothing to do here - enums are hoisted during type_check_scope
 			}
 			StmtKind::TryCatch {
 				try_statements,
@@ -3785,26 +3810,6 @@ impl<'a> TypeChecker<'a> {
 			self.types.set_scope_env(finally_statements, finally_env);
 			self.inner_scopes.push((finally_statements, self.ctx.clone()));
 		}
-	}
-
-	fn type_check_enum(&mut self, enu: &AstEnum, env: &mut SymbolEnv) {
-		let enum_type_ref = self.types.add_type(Type::Enum(Enum {
-			name: enu.name.clone(),
-			values: enu.values.clone(),
-			docs: Default::default(),
-		}));
-
-		match env.define(
-			&enu.name,
-			SymbolKind::Type(enum_type_ref),
-			enu.access,
-			StatementIdx::Top,
-		) {
-			Err(type_error) => {
-				self.type_error(type_error);
-			}
-			_ => {}
-		};
 	}
 
 	fn type_check_struct(&mut self, st: &AstStruct, env: &mut SymbolEnv) {

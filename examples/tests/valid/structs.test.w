@@ -3,6 +3,9 @@ interface IFoo {
   field0(): A;
 }
 
+// type annotations can reference structs before they are defined
+let a: A? = nil;
+
 struct A {
   field0: str;
 }
