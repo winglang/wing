@@ -278,7 +278,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// 		}
 			// 	}
 			// }
-			else if expr_phase == Phase::Inflight {
+
+			
+			// Before we continue lets dive into this (non-preflight) expression to see if we need to lift any parts of it
+			visit::visit_expr(v, node);
+
+			// Check if this is an inflight class defined preflight and if we need to qualify the lift
+			if expr_phase == Phase::Inflight {
 				// If this is a reference to an inflight class defined preflight then we need to lift it and qualify it with the
 				// current property
 				if let Some(class) = expr_type.as_class() {
@@ -299,8 +305,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 					}
 				}
 			}
-
-			visit::visit_expr(v, node);
 		});
 	}
 
