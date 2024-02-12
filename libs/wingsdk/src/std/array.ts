@@ -12,6 +12,11 @@ import { InflightClient } from "../core";
  * @callable
  */
 export interface IComparator {
+  /**
+   * @param a
+   * @param b
+   * @returns a negative number if a < b, a positive number if a > b, or 0 if a == b
+   */
   fn(a: T1, b: T1): number;
 }
 
