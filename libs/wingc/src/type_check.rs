@@ -5432,7 +5432,7 @@ impl<'a> TypeChecker<'a> {
 								format!("Class \"{c}\" contains a member \"{property}\" but it is not static"),
 							);
 						}
-						// If the property is phase independent then but it's a method call with inflight
+						// If the property is phase independent but it's a method call with inflight
 						// args then treat it as an inflight property
 						let phase = if v.phase == Phase::Independent && callee_with_inflight_args {
 							Phase::Inflight

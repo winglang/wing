@@ -162,9 +162,12 @@ export function onLiftObject(
       break;
 
     case "function":
-      // If the object is actually a resource type, call the type's _registerTypeOnLift() static method
-      if (isLiftableType(obj)) {
+      // If the object is actually a resource type, call the type's onLiftType() static method
+      if (isHostedLiftableType(obj)) {
         obj.onLiftType(host, ops);
+        return;
+      } else if (isLiftableType(obj)) {
+        // If this is a liftable type that is host agnostic, we don't need to do anything.
         return;
       }
       break;
@@ -229,14 +232,18 @@ export function onLiftMatrix(
   }
 }
 
+function isHostedLiftableType(t: any): t is IHostedLiftableType {
+  return isLiftableType(t) && typeof (t as any).onLiftType === "function";
+}
+
 function isLiftableType(t: any): t is ILiftableType {
-  return t !== undefined && typeof t.onLiftType === "function";
+  return t !== undefined && typeof t._toInflightType === "function";
 }
 
 /**
  * Represents a type with static methods that may have other things to lift.
  */
-export interface ILiftableType {
+export interface IHostedLiftableType extends ILiftableType {
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this type inflight. The list of requested inflight methods
@@ -246,4 +253,15 @@ export interface ILiftableType {
    * other capabilities to the inflight host.
    */
   onLiftType(host: IInflightHost, ops: string[]): void;
+}
+
+/**
+ * Represents a type that can be lifted to an inflight type.
+ */
+export interface ILiftableType {
+  /**
+   * A hook called by the Wing compiler to lift this type to an inflight type.
+   * @internal
+   */
+  _toInflightType(): string;
 }
