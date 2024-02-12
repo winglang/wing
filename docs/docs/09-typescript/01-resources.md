@@ -19,12 +19,12 @@ main((root) => {
 API documentation for the `cloud` namespace is available [here](../04-standard-library/cloud).
 Note that those docs are meant for The TypeScript API is similar, with two primary differences:
 
-- Resources always have 2 arguments first: the scope resource and id
+- Resources always have 2 arguments first: the `scope` resource and `id` for the resource
 - Some types are different, a table can be found in the [winglang reference](../03-language-reference.md#522-type-model)
 
 ### Creating new resources
 
-Resources can be grouped together by using [Constructs](https://github.com/aws/constructs).
+Resources can be grouped together by using [constructs](https://github.com/aws/constructs).
 
 ```ts
 // my-construct.ts

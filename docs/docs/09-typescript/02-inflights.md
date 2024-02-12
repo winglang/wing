@@ -4,13 +4,13 @@ id: inflights
 ---
 
 The concepts of `preflight` and `inflight` in winglang are described [here](../02-concepts/01-preflight-and-inflight.md).
-In TypeScript, this is analogous to the difference between the `main` function (`preflight`) and the `inflight` function.
+In TypeScript, this is analogous to the difference between the `main` function (preflight) and the `inflight` function.
 
 ### Functions and `inflight`
 
-Some resources, like `cloud.Function`, run code in the cloud. This code is an `inflight`.
+Some resources, like `cloud.Function`, run code in the cloud. This code is called an *inflight closure*.
 
-To create an `inflight` in TypeScript, you can use the `inflight` function and pass it an async closure:
+To create an inflight closure in TypeScript, you can use the `inflight()` function and pass it an async closure:
 
 ```ts
 import { main, cloud, inflight } from "@wingcloud/framework";
@@ -27,10 +27,10 @@ main((root) => {
 });
 ```
 
-### `lift`ing `inflight`
+### Lifting objects into inflight closures
 
-`inflight`s do not run in the same environment as the rest of the code, so you can't just reference variables from the outside.
-The `lift` function ensures you have an interface with the data you need. This includes `inflight`-specific APIs for some resources:
+Inflight closures do not run in the same environment as the rest of the code, so you can't just reference variables from the outside.
+The `lift()` function ensures you have an interface with the data you need. This includes the inflight APIs for the lifted resources:
 
 ```ts
 import { main, cloud, lift } from "@wingcloud/framework";
@@ -43,6 +43,7 @@ main((root) => {
     root,
     "MyFn",
     lift({ bucket, plainData }).inflight(async ({ bucket, plainData }) => {
+      // note that inflight methods are always asynchronous
       await bucket.put("hello.txt", plainData);
       return plainData;
     })
@@ -50,7 +51,7 @@ main((root) => {
 });
 ```
 
-`inflight`s themselves can also be lifted. Once lifted, they can be called like normal function:
+Inflight closures themselves can also be lifted. Once lifted, they can be called like normal closure:
 
 ```ts
 import { main, lift } from "@wingcloud/framework";
@@ -66,8 +67,8 @@ main((root) => {
 });
 ```
 
-Regular functions and classes cannot be lifted.
-Unlike other variable, imports can be referenced inflight as-is. The imports will be brought to the inflight's environment when bundled.
+Normal functions and classes cannot be lifted.
+Unlike other variable, imports can be referenced as-is from within inflight closures. The imports will be bundled into the inflight's environment.
 
 ```ts
 import { main, inflight } from "@wingcloud/framework";
@@ -82,9 +83,9 @@ main((root) => {
 
 ### Permissions
 
-When `lift` is used with resources, permissions are granted automatically to access them in the cloud.
+When `lift()` is used with resources, permissions are granted automatically to access them in the cloud.
 By default, these permissions are permissive and allow all actions on the resource.
-To restrict the permissions, use the `grant` method after `lift`ing:
+To restrict the permissions, chain `grant()` calls to your `lift()`:
 
 ```ts
 import { main, cloud, lift } from "@wingcloud/framework";
@@ -108,7 +109,7 @@ main((root) => {
 
 ### Testing
 
-`wing test` runs all tests within your `main`. To define a test, use the `test` function provided as the second argument to `main`:
+`wing test` runs all tests within your `main`. To define a test, use the `test()` function provided as the second argument to `main`:
 
 ```ts
 import { main, cloud, inflight, lift } from "@wingcloud/framework";
