@@ -2,6 +2,7 @@
 id: installation
 title: Installation
 keywords: [Wing installation, installation, Wing toolchain]
+slug: /
 ---
 
 ## Prerequisite
