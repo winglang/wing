@@ -17,7 +17,7 @@ export interface IComparator {
 
   /**
    * Comparator function for sorting arrays
-   * @
+   *
    * @param a
    * @param b
    * @returns a negative number if a < b, a positive number if a > b, or 0 if a == b
@@ -354,6 +354,19 @@ export class MutArray {
    * @returns same array, sorted
    */
   public sort(comparator?: IComparator): Array {
+    comparator;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Sorts the array, creating a new array.
+   *
+   * @macro ((arr, args) => { return args && args[0] ? [...arr].sort(args[0]) : [...arr].sort() })($self$, $args$)
+   *
+   * @param comparator Function used to determine the order of the elements.
+   * @returns a new array with the elements sorted
+   */
+  public sorted(comparator?: IComparator): Array {
     comparator;
     throw new Error("Macro");
   }
