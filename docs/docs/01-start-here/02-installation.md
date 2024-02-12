@@ -2,21 +2,15 @@
 id: installation
 title: Installation
 keywords: [Wing installation, installation, Wing toolchain]
-slug: /
 ---
 
-In this section you will install Wing on your system and run your first wing application.
+## Prerequisite
 
-## Prerequisites
+* [Node.js](https://nodejs.org/en/) v20 or later
 
-To install Wing, you will need the following setup:
+## Install
 
-* [Node.js](https://nodejs.org/en/) (>= 20)
-* [VSCode](https://code.visualstudio.com/) (not required, but currently supported with an [extension](#wing-vscode-extension))
-
-## Wing Toolchain
-
-The Wing Toolchain is distributed via [npm](https://www.npmjs.com/):
+The Wing CLI is distributed via [npm](https://www.npmjs.com/package/winglang):
 
 ```sh
 npm install -g winglang
@@ -24,22 +18,37 @@ npm install -g winglang
 
 Verify your installation:
 ```
-wing --version
+wing -V
 ```
 
-To install the Wing VSCode extension, [download](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) it from the VSCode Marketplace. It is distributed via the VSCode Marketplace.
+## IDE Extension
 
+Wing has extended support for two IDEs. They provide syntax highlighting, completions, go-to-definition, etc. and embedded Wing Console support:
+
+- [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
+- [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
+
+To use Wing in other IDEs, there are a few tools available to help:
+
+- Language server - Running `wing lsp` serves the official language server
+- [TextMate grammar](https://github.com/winglang/wing/blob/main/apps/vscode-wing/syntaxes/wing.tmLanguage.json) - For syntax highlighting
+- [tree-sitter grammar and queries](https://github.com/winglang/wing/tree/main/libs/tree-sitter-wing) - For syntax highlighting and more
+- [Syntax Highlighting for GitHub (Chrome extension)](https://chromewebstore.google.com/detail/winglang-syntax-hightligh/gjnleleianfjpmckmmdeahlklhcdlakj) - Adds syntax highlighting to various locations within GitHub
 
 ## Create your project
 
-Let's create an empty directory for your project.
+First let's create an empty directory for your project:
 
 ```sh
 mkdir hello-wing
 cd hello-wing
 ```
-Add a new file called `main.w` with the following code. This file is the
-entrypoint of your Wing application.
+
+You can use the CLI to bootstrap a new project: Use the `new` command and then modify `main.w` to have the following:
+
+```sh
+wing new empty
+```
 
 ```js
 bring cloud;
@@ -64,7 +73,43 @@ queue.setConsumer(inflight (message: str) => {
 });
 ```
 
-This code should be mostly self explanatory. We define a queue and a counter, and every time a
-message is added to the queue, a handler is triggered and creates a file named `wing-<counter-index>.txt` with `"Hello, {message}!"` content, and the counter is incremented by 1.
+:::info
+
+<details><summary>Experimental TypeScript Support</summary>
+
+If you'd like to use TypeScript instead of winglang, you can add the `--language ts` flag when creating a new project:
+
+```sh
+wing new empty --language ts
+```
+
+Then modify `main.ts` to have the following, equivalent to the above winglang code:
+
+```ts
+import { main, cloud, lift } from "@wingcloud/framework";
+
+main((root) => {
+  const bucket = new cloud.Bucket(root, "Bucket");
+  const counter = new cloud.Counter(root, "Counter");
+  const queue = new cloud.Queue(root, "Queue");
+
+  queue.setConsumer(
+    lift({ bucket, counter }).inflight(async ({ bucket, counter }, message) => {
+      const index = await counter.inc();
+      await bucket.put(`wing-${index}.txt`, `Hello, ${message}`);
+      console.log(`file wing-${index}.txt created`);
+    })
+  );
+});
+```
+
+The rest of the starting guide will be the same!
+See [here](../09-typescript/index.md) for more information on using TypeScript with Wing.
+  
+</details>
+
+:::
+
+Here we defined a queue and a counter. Every time a message is added to the queue, a handler is triggered and creates a file named `wing-{counter-index}.txt` with the content `"Hello, {message}!"`, and the counter is incremented by 1.
 
 Now that we've written this program, let's run and test it using the **Wing Console**.
