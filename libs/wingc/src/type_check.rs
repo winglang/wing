@@ -3392,12 +3392,151 @@ impl<'a> TypeChecker<'a> {
 	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
 		for statement in scope.statements.iter() {
 			match &statement.kind {
+				StmtKind::Bring { source, identifier } => self.hoist_bring_statement(source, identifier, statement, env),
 				StmtKind::Struct(st) => self.hoist_struct_definition(st, env),
 				StmtKind::Interface(iface) => self.hoist_interface_definition(iface, env),
 				StmtKind::Enum(enu) => self.hoist_enum_definition(enu, env),
 				_ => {}
 			}
 		}
+	}
+
+	fn hoist_bring_statement(
+		&mut self,
+		source: &BringSource,
+		identifier: &Option<Symbol>,
+		stmt: &Stmt,
+		env: &mut SymbolEnv,
+	) {
+		let library_name: String;
+		let namespace_filter: Vec<String>;
+		let alias: &Symbol;
+		match &source {
+			BringSource::BuiltinModule(name) => {
+				if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
+					library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+					namespace_filter = vec![name.name.clone()];
+					alias = identifier.as_ref().unwrap_or(&name);
+				} else if name.name.as_str() == WINGSDK_STD_MODULE {
+					self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+					return;
+				} else {
+					self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
+					return;
+				}
+			}
+			BringSource::JsiiModule(name) => {
+				library_name = name.name.to_string();
+				// no namespace filter (we only support importing entire libraries at the moment)
+				namespace_filter = vec![];
+				alias = identifier.as_ref().unwrap();
+			}
+			BringSource::WingFile(name) => {
+				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
+					Some(SymbolEnvOrNamespace::Namespace(_)) => {
+						panic!("Expected a symbol environment to be associated with the file")
+					}
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				let ns = self.types.add_namespace(Namespace {
+					name: name.name.to_string(),
+					envs: vec![brought_env],
+					loaded: true,
+					module_path: ResolveSource::WingFile,
+				});
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(ns),
+					AccessModifier::Private,
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::WingLibrary(name, module_dir) | BringSource::TrustedModule(name, module_dir) => {
+				let brought_ns = match self.types.source_file_envs.get(module_dir) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the library")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap_or(&name),
+					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+			BringSource::Directory(name) => {
+				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
+					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
+						panic!("Expected a namespace to be associated with the directory")
+					}
+					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
+					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
+						report_diagnostic(Diagnostic {
+							span: Some(stmt.span()),
+							..diagnostic.clone()
+						});
+						return;
+					}
+					None => {
+						self.spanned_error(
+							stmt,
+							format!("Could not type check \"{}\" due to cyclic bring statements", name),
+						);
+						return;
+					}
+				};
+				if let Err(e) = env.define(
+					identifier.as_ref().unwrap(),
+					SymbolKind::Namespace(*brought_ns),
+					AccessModifier::Private,
+					StatementIdx::Top,
+				) {
+					self.type_error(e);
+				}
+				return;
+			}
+		}
+		self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
+		// library_name is the name of the library we are importing from the JSII world
+		// namespace_filter describes what types we are importing from the library
+		// e.g. [] means we are importing everything from `mylib`
+		// e.g. ["ns1", "ns2"] means we are importing everything from `mylib.ns1.ns2`
+		// alias is the symbol we are giving to the imported library or namespace
 	}
 
 	fn hoist_struct_definition(&mut self, st: &AstStruct, env: &mut SymbolEnv) {
@@ -3707,8 +3846,8 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Assignment { kind, variable, value } => {
 				tc.type_check_assignment(kind, value, variable, env);
 			}
-			StmtKind::Bring { source, identifier } => {
-				tc.type_check_bring(source, identifier, stmt, env);
+			StmtKind::Bring { .. } => {
+				// nothing to do here - bring statements are hoisted during type_check_scope
 			}
 			StmtKind::Scope(scope) => {
 				let scope_env = tc.types.add_symbol_env(SymbolEnv::new(
@@ -4206,138 +4345,6 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_throw(&mut self, exp: &Expr, env: &mut SymbolEnv) {
 		let (exp_type, _) = self.type_check_exp(exp, env);
 		self.validate_type(exp_type, self.types.string(), exp);
-	}
-
-	fn type_check_bring(&mut self, source: &BringSource, identifier: &Option<Symbol>, stmt: &Stmt, env: &mut SymbolEnv) {
-		let library_name: String;
-		let namespace_filter: Vec<String>;
-		let alias: &Symbol;
-		match &source {
-			BringSource::BuiltinModule(name) => {
-				if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
-					library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-					namespace_filter = vec![name.name.clone()];
-					alias = identifier.as_ref().unwrap_or(&name);
-				} else if name.name.as_str() == WINGSDK_STD_MODULE {
-					self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
-					return;
-				} else {
-					self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
-					return;
-				}
-			}
-			BringSource::JsiiModule(name) => {
-				library_name = name.name.to_string();
-				// no namespace filter (we only support importing entire libraries at the moment)
-				namespace_filter = vec![];
-				alias = identifier.as_ref().unwrap();
-			}
-			BringSource::WingFile(name) => {
-				let brought_env = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(SymbolEnvOrNamespace::SymbolEnv(env)) => *env,
-					Some(SymbolEnvOrNamespace::Namespace(_)) => {
-						panic!("Expected a symbol environment to be associated with the file")
-					}
-					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-						report_diagnostic(Diagnostic {
-							span: Some(stmt.span()),
-							..diagnostic.clone()
-						});
-						return;
-					}
-					None => {
-						self.spanned_error(
-							stmt,
-							format!("Could not type check \"{}\" due to cyclic bring statements", name),
-						);
-						return;
-					}
-				};
-				let ns = self.types.add_namespace(Namespace {
-					name: name.name.to_string(),
-					envs: vec![brought_env],
-					loaded: true,
-					module_path: ResolveSource::WingFile,
-				});
-				if let Err(e) = env.define(
-					identifier.as_ref().unwrap(),
-					SymbolKind::Namespace(ns),
-					AccessModifier::Private,
-					StatementIdx::Top,
-				) {
-					self.type_error(e);
-				}
-				return;
-			}
-			BringSource::WingLibrary(name, module_dir) | BringSource::TrustedModule(name, module_dir) => {
-				let brought_ns = match self.types.source_file_envs.get(module_dir) {
-					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
-						panic!("Expected a namespace to be associated with the library")
-					}
-					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
-					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-						report_diagnostic(Diagnostic {
-							span: Some(stmt.span()),
-							..diagnostic.clone()
-						});
-						return;
-					}
-					None => {
-						self.spanned_error(
-							stmt,
-							format!("Could not type check \"{}\" due to cyclic bring statements", name),
-						);
-						return;
-					}
-				};
-				if let Err(e) = env.define(
-					identifier.as_ref().unwrap_or(&name),
-					SymbolKind::Namespace(*brought_ns),
-					AccessModifier::Private,
-					StatementIdx::Top,
-				) {
-					self.type_error(e);
-				}
-				return;
-			}
-			BringSource::Directory(name) => {
-				let brought_ns = match self.types.source_file_envs.get(Utf8Path::new(&name.name)) {
-					Some(SymbolEnvOrNamespace::SymbolEnv(_)) => {
-						panic!("Expected a namespace to be associated with the directory")
-					}
-					Some(SymbolEnvOrNamespace::Namespace(ns)) => ns,
-					Some(SymbolEnvOrNamespace::Error(diagnostic)) => {
-						report_diagnostic(Diagnostic {
-							span: Some(stmt.span()),
-							..diagnostic.clone()
-						});
-						return;
-					}
-					None => {
-						self.spanned_error(
-							stmt,
-							format!("Could not type check \"{}\" due to cyclic bring statements", name),
-						);
-						return;
-					}
-				};
-				if let Err(e) = env.define(
-					identifier.as_ref().unwrap(),
-					SymbolKind::Namespace(*brought_ns),
-					AccessModifier::Private,
-					StatementIdx::Top,
-				) {
-					self.type_error(e);
-				}
-				return;
-			}
-		}
-		self.add_jsii_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
-		// library_name is the name of the library we are importing from the JSII world
-		// namespace_filter describes what types we are importing from the library
-		// e.g. [] means we are importing everything from `mylib`
-		// e.g. ["ns1", "ns2"] means we are importing everything from `mylib.ns1.ns2`
-		// alias is the symbol we are giving to the imported library or namespace
 	}
 
 	fn type_check_assignment(&mut self, kind: &AssignmentKind, value: &Expr, variable: &Reference, env: &mut SymbolEnv) {

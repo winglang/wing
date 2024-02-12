@@ -79,3 +79,12 @@ test "struct definitions are phase independant" {
 
   assert(s2.a == "foo");
 }
+
+// mutually referential structs
+struct M1 {
+  m2: M2?;
+}
+
+struct M2 {
+  m1: M1?;
+}

@@ -32,3 +32,12 @@ interface IClass {
 }
 
 class D {}
+
+// mutually referential interfaces
+interface IThing1 {
+  m2(): IThing2?;
+}
+
+interface IThing2 {
+  m1(): IThing1?;
+}
