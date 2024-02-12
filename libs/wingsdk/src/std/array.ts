@@ -12,7 +12,12 @@ import { InflightClient } from "../core";
  * @callable
  */
 export interface IComparator {
+  /** @internal */
+  (a: T1, b: T1): number;
+
   /**
+   * Comparator function for sorting arrays
+   * @
    * @param a
    * @param b
    * @returns a negative number if a < b, a positive number if a > b, or 0 if a == b

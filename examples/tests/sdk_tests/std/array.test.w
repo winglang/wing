@@ -425,39 +425,39 @@ test "sorted()" {
 // sorted() for a mutable array with a comparator
 
 test "sortedMutWithComparator()" {
-    let mutArr = MutArray<num>[3, 2, 1];
-    mutArr.sort((a, b) => {
-        if (a < b) {
-            return -1;
-        }
+  let mutArr = MutArray<num>[3, 2, 1];
+  mutArr.sort((a, b) => {
+    if (a < b) {
+        return -1;
+    }
 
-        if (a > b) {
-            return 1;
-        }
+    if (a > b) {
+        return 1;
+    }
 
-        return 0;
-    });
+    return 0;
+  });
 
-    assert(mutArr == MutArray<num>[1, 2, 3]);
+  assert(mutArr == MutArray<num>[1, 2, 3]);
 }
 
 //-----------------------------------------------------------------------------
 // sorted() for a non-mutable array with a comparator
 
 test "sortedWithComparator()" {
-    let arr = Array<num>[3, 2, 1];
-    let sortedArr = arr.sorted((a, b) => {
-        if (a < b) {
-            return -1;
-        }
+  let arr = Array<num>[3, 2, 1];
+  let sortedArr = arr.sorted((a, b) => {
+    if (a < b) {
+        return -1;
+    }
 
-        if (a > b) {
-            return 1;
-        }
+    if (a > b) {
+        return 1;
+    }
 
-        return 0;
-    });
+    return 0;
+  });
 
-    assert(sortedArr == Array<num>[1, 2, 3]);
-    assert(arr == Array<num>[3, 2, 1]);
+  assert(sortedArr == Array<num>[1, 2, 3]);
+  assert(arr == Array<num>[3, 2, 1]);
 }
