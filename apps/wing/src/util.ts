@@ -95,3 +95,18 @@ export function projectTemplateNames(): string[] {
   });
   return [...templateNames];
 }
+
+export function flattenObject(item: any, parentKey: string = "") {
+  let flattened: Record<string, unknown> = {};
+
+  if (typeof item === "object") {
+    for (const key in item) {
+      const propName: string = parentKey ? `${parentKey}_${key}` : key;
+      Object.assign(flattened, flattenObject(item[key] as Record<string, unknown>, propName));
+    }
+  } else {
+    flattened[parentKey] = item;
+  }
+
+  return flattened;
+}
