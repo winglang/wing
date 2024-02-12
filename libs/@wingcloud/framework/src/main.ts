@@ -1,5 +1,5 @@
 import { platform, std } from "@winglang/sdk";
-import { Construct } from "constructs";
+import type { Construct } from "@winglang/sdk/lib/core/types";
 
 /**
  * Properties for a Wing app.

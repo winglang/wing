@@ -18,6 +18,9 @@ const listEndpoints = (simulator: Simulator) => {
 export const createEndpointRouter = () => {
   return createRouter({
     "endpoint.list": createProcedure.query(async ({ input, ctx }) => {
+      if (ctx.appState() !== "success") {
+        return [];
+      }
       const endpoints = listEndpoints(await ctx.simulator());
       return endpoints.map((endpoint) => {
         return {
