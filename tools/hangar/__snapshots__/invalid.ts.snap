@@ -2239,11 +2239,11 @@ error: Unknown symbol \\"IDontExist\\"
    |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
 
 
-error: Expected an interface, instead found type \\"ISomeClass\\"
+error: Unknown symbol \\"ISomeClass\\"
    --> ../../../examples/tests/invalid/interface.test.w:16:34
    |
 16 | interface ISomeInterface extends ISomeClass {
-   |                                  ^^^^^^^^^^ Expected an interface, instead found type \\"ISomeClass\\"
+   |                                  ^^^^^^^^^^ Unknown symbol \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
