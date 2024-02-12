@@ -346,7 +346,7 @@ export class MutArray {
   }
 
   /**
-   * Returns the array, sorted and also mutated
+   * Sorts the array, modifying it in-place.
    *
    * @macro ((arr, args) => { return args && args[0] ? arr.sort(args[0]) : arr.sort() })($self$, $args$)
    *
