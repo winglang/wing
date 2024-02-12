@@ -7,8 +7,8 @@ use crate::{
 	type_check::{
 		self,
 		symbol_env::{StatementIdx, SymbolEnvKind},
-		Class, ClassLike, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type,
-		TypeRef, Types, CLASS_INIT_NAME,
+		Class, FunctionParameter, FunctionSignature, Interface, ResolveSource, Struct, SymbolKind, Type, TypeRef, Types,
+		CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
@@ -655,7 +655,7 @@ impl<'a> JsiiImporter<'a> {
 				"Base class {} of {} is not a class",
 				base_class_type, type_name
 			));
-			class_phase = base_class.phase();
+			class_phase = base_class.phase;
 			Some(base_class.env.get_ref())
 		} else {
 			None
@@ -701,6 +701,7 @@ impl<'a> JsiiImporter<'a> {
 			implements: vec![],
 			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
+			phase: class_phase,
 			defined_in_phase: Phase::Preflight,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args

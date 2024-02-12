@@ -324,9 +324,10 @@ pub struct Class {
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
+	pub phase: Phase,
 	pub docs: Docs,
 	pub lifts: Option<Lifts>,
-	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `defauld_member_phase`?
+	pub defined_in_phase: Phase, // TODO: naming: maybe this should just be `phase` while `phase` should be `default_member_phase`?
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
@@ -443,31 +444,31 @@ pub trait ClassLike: Display {
 		}
 	}
 
-	fn phase(&self) -> Phase {
-		// A class is considered a "preflight class" if it has any preflight fields.
-		// Having a preflight state means that different instances of the class
-		// might access different preflight data. Such instances need to be lifted
-		// into inflight individually. Non preflight class instances don't need to be
-		// lifted and can therefore be instantiated inflight.
-		if self
-			.fields(true)
-			.any(|(_, vi)| vi.kind == VariableKind::InstanceMember && vi.phase == Phase::Preflight)
-		{
-			return Phase::Preflight;
-		}
+	// fn phase(&self) -> Phase {
+	// 	// A class is considered a "preflight class" if it has any preflight fields.
+	// 	// Having a preflight state means that different instances of the class
+	// 	// might access different preflight data. Such instances need to be lifted
+	// 	// into inflight individually. Non preflight class instances don't need to be
+	// 	// lifted and can therefore be instantiated inflight.
+	// 	if self
+	// 		.fields(true)
+	// 		.any(|(_, vi)| vi.kind == VariableKind::InstanceMember && vi.phase == Phase::Preflight)
+	// 	{
+	// 		return Phase::Preflight;
+	// 	}
 
-		// If all memebers are phase independent, then this class is phase independent
-		if self
-			.get_env()
-			.iter(true)
-			.all(|(_, v, _)| v.as_variable().unwrap().phase == Phase::Independent)
-		{
-			return Phase::Independent;
-		}
+	// 	// If all memebers are phase independent, then this class is phase independent
+	// 	if self
+	// 		.get_env()
+	// 		.iter(true)
+	// 		.all(|(_, v, _)| v.as_variable().unwrap().phase == Phase::Independent)
+	// 	{
+	// 		return Phase::Independent;
+	// 	}
 
-		// Otherwise, this is an inflight class
-		Phase::Inflight
-	}
+	// 	// Otherwise, this is an inflight class
+	// 	Phase::Inflight
+	// }
 }
 
 impl ClassLike for Interface {
@@ -950,7 +951,7 @@ unsafe impl Send for TypeRef {}
 impl TypeRef {
 	pub fn as_preflight_class(&self) -> Option<&Class> {
 		if let Type::Class(ref class) = **self {
-			if class.phase() == Phase::Preflight {
+			if class.phase == Phase::Preflight {
 				return Some(class);
 			}
 		}
@@ -1074,7 +1075,7 @@ impl TypeRef {
 
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
-			return class.phase() == Phase::Preflight;
+			return class.phase == Phase::Preflight;
 		}
 
 		return false;
@@ -1192,7 +1193,7 @@ impl TypeRef {
 			Type::Function(sig) => sig.phase == Phase::Inflight,
 
 			// only preflight classes can be captured
-			Type::Class(c) => c.phase() == Phase::Preflight,
+			Type::Class(c) => c.phase == Phase::Preflight,
 		}
 	}
 
@@ -2176,7 +2177,7 @@ impl<'a> TypeChecker<'a> {
 
 							// error if we are trying to instantiate a preflight in a static method
 							// without an explicit scope (there is no "this" to use as the scope)
-							if class.phase() == Phase::Preflight && obj_scope.is_none() {
+							if class.phase == Phase::Preflight && obj_scope.is_none() {
 								// check if there is a "this" symbol in the current environment
 								let has_this = env.lookup(&"this".into(), Some(self.ctx.current_stmt_idx())).is_some();
 
@@ -2197,16 +2198,14 @@ impl<'a> TypeChecker<'a> {
 								}
 							}
 
-							if class.phase() == Phase::Independent || env.phase == class.phase() {
+							if class.phase == Phase::Independent || env.phase == class.phase {
 								(&class.env, &class.name)
 							} else {
 								self.spanned_error(
 									exp,
 									format!(
 										"Cannot create {} class \"{}\" in {} phase",
-										class.phase(),
-										class.name,
-										env.phase
+										class.phase, class.name, env.phase
 									),
 								);
 								return (self.types.error(), Phase::Independent);
@@ -3889,6 +3888,7 @@ impl<'a> TypeChecker<'a> {
 			parent: parent_class,
 			implements: impl_interfaces.clone(),
 			is_abstract: false,
+			phase: ast_class.phase,
 			defined_in_phase: env.phase,
 			type_parameters: None, // TODO no way to have generic args in wing yet
 			docs: Docs::default(),
@@ -4575,7 +4575,7 @@ impl<'a> TypeChecker<'a> {
 
 		// If the parent class is phase independent then its init name is just "init" regadless of
 		// whether we're inflight or not.
-		let parent_init_name = if parent_class.as_class().unwrap().phase() == Phase::Independent {
+		let parent_init_name = if parent_class.as_class().unwrap().phase == Phase::Independent {
 			CLASS_INIT_NAME
 		} else {
 			init_name
@@ -4962,6 +4962,7 @@ impl<'a> TypeChecker<'a> {
 			implements: original_type_class.implements.clone(),
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params),
+			phase: original_type_class.phase,
 			defined_in_phase: env.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
@@ -5701,17 +5702,14 @@ impl<'a> TypeChecker<'a> {
 
 		if let Some(parent_class) = parent_type.as_class() {
 			// Parent class must be either the same phase as the child or, if the child is an inflight class, the parent can be an independent class
-			if (parent_class.phase() == phase) || (phase == Phase::Inflight && parent_class.phase() == Phase::Independent) {
+			if (parent_class.phase == phase) || (phase == Phase::Inflight && parent_class.phase == Phase::Independent) {
 				(Some(parent_type), Some(parent_class.env.get_ref()))
 			} else {
 				self.spanned_error(
 					parent,
 					format!(
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
-						name,
-						phase,
-						parent_class.phase(),
-						parent_class.name
+						name, phase, parent_class.phase, parent_class.name
 					),
 				);
 				(None, None)

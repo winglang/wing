@@ -387,7 +387,7 @@ fn render_class(c: &Class) -> String {
 	}
 	render_docs(&mut markdown, &c.docs);
 
-	if matches!(c.phase(), Phase::Preflight | Phase::Independent) {
+	if matches!(c.phase, Phase::Preflight | Phase::Independent) {
 		if let Some(initializer) = c.get_method(&Symbol::global(CLASS_INIT_NAME)) {
 			let function_sig = initializer.type_.as_function_sig().unwrap();
 			if function_sig.parameters.len() > 0 {
