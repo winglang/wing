@@ -2060,6 +2060,20 @@ error: Unable to infer type
     |                   ^^^ Unable to infer type
 
 
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:118:16
+    |
+118 |   let s: str = a;
+    |                ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:120:10
+    |
+120 |   return \\"\\";
+    |          ^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
 error: Unable to infer type
    --> ../../../examples/tests/invalid/inference.test.w:69:5
    |
