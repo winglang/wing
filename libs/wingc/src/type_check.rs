@@ -3324,6 +3324,8 @@ impl<'a> TypeChecker<'a> {
 		assert!(self.inner_scopes.is_empty());
 		let mut env = self.types.get_scope_env(scope);
 
+		self.hoist_type_definitions(scope, &mut env);
+
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, &mut env);
 		}
@@ -3379,6 +3381,118 @@ impl<'a> TypeChecker<'a> {
 				if !var_info.name.span.file_id.is_empty() && self.check_for_inferences(&var_info.type_) {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
+			}
+		}
+	}
+
+	/// Check if there are any type declaration statements in the given scope, and if so,
+	/// hoist them to the top-level of the environment so that they can be referenced by other
+	/// type declarations.
+	fn hoist_type_definitions(&mut self, scope: &Scope, env: &mut SymbolEnv) {
+		for statement in scope.statements.iter() {
+			match &statement.kind {
+				StmtKind::Struct {
+					name,
+					extends,
+					fields: _,
+					access,
+				} => {
+					// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
+					if let Some(_) = env.parent {
+						self.spanned_error(
+							name,
+							format!("struct \"{name}\" must be declared at the top-level of a file"),
+						);
+					}
+
+					// Create environment representing this struct, for now it'll be empty just so we can support referencing it
+					let dummy_env = SymbolEnv::new(None, SymbolEnvKind::Type(self.types.void()), env.phase, statement.idx);
+
+					// Collect types this struct extends
+					let extends_types = extends
+						.iter()
+						.filter_map(|ext| {
+							let t = self
+								.resolve_user_defined_type(ext, &env, self.ctx.current_stmt_idx())
+								.unwrap_or_else(|e| self.type_error(e));
+							if t.as_struct().is_some() {
+								Some(t)
+							} else {
+								self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
+								None
+							}
+						})
+						.collect::<Vec<_>>();
+
+					// Create the struct type with the empty environment
+					let struct_type = self.types.add_type(Type::Struct(Struct {
+						name: name.clone(),
+						fqn: None,
+						extends: extends_types.clone(),
+						env: dummy_env,
+						docs: Docs::default(),
+					}));
+
+					match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+				}
+				StmtKind::Interface(iface) => {
+					// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves
+					// from the interface definition or by other type definitions that come before the interface statement.
+					let dummy_env = SymbolEnv::new(
+						None,
+						SymbolEnvKind::Type(self.types.void()),
+						env.phase,
+						self.ctx.current_stmt_idx(),
+					);
+
+					// Collect types this interface extends
+					let extend_interfaces = iface
+						.extends
+						.iter()
+						.filter_map(|i| {
+							let t = self
+								.resolve_user_defined_type(i, env, self.ctx.current_stmt_idx())
+								.unwrap_or_else(|e| self.type_error(e));
+							if t.as_interface().is_some() {
+								Some(t)
+							} else {
+								// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
+								if !t.is_unresolved() {
+									self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
+								}
+								None
+							}
+						})
+						.collect::<Vec<_>>();
+
+					// Create the interface type with the empty environment
+					let interface_spec = Interface {
+						name: iface.name.clone(),
+						fqn: None,
+						docs: Docs::default(),
+						env: dummy_env,
+						extends: extend_interfaces.clone(),
+					};
+					let interface_type = self.types.add_type(Type::Interface(interface_spec));
+
+					match env.define(
+						&iface.name,
+						SymbolKind::Type(interface_type),
+						iface.access,
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+				}
+				_ => {}
 			}
 		}
 	}
@@ -3702,56 +3816,27 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_struct(
 		&mut self,
 		fields: &Vec<ast::StructField>,
-		extends: &Vec<UserDefinedType>,
+		_extends: &Vec<UserDefinedType>,
 		name: &Symbol,
-		access: &AccessModifier,
+		_access: &AccessModifier,
 		env: &mut SymbolEnv,
 	) {
-		// Structs can't be defined in preflight or inflight contexts, only at the top-level of a program
-		if let Some(_) = env.parent {
-			self.spanned_error(
-				name,
-				format!("struct \"{name}\" must be declared at the top-level of a file"),
-			);
-		}
+		// Note: to support mutually recursive type definitions (types that refer to each other), struct types
+		// are initialized during `type_check_scope`. The struct type is created with a dummy environment and
+		// then replaced with the real environment after the struct's fields are type checked.
+		// In this method, we are filling in the struct's environment with the fields and parent members
+		// and updating the struct's Type with the new environment.
+		let mut struct_type = env
+			.lookup(name, Some(self.ctx.current_stmt_idx()))
+			.expect("struct type should have been defined in the environment")
+			.as_type()
+			.unwrap();
+
 		// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 		//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 		//   fail type checking.
 
-		// Create a dummy environment for the struct so we can create the struct type
-		let dummy_env = SymbolEnv::new(
-			None,
-			SymbolEnvKind::Type(self.types.void()),
-			Phase::Independent,
-			self.ctx.current_stmt_idx(),
-		);
-
-		// Collect types this struct extends
-		let extends_types = extends
-			.iter()
-			.filter_map(|ext| {
-				let t = self
-					.resolve_user_defined_type(ext, env, self.ctx.current_stmt_idx())
-					.unwrap_or_else(|e| self.type_error(e));
-				if t.as_struct().is_some() {
-					Some(t)
-				} else {
-					self.spanned_error(ext, format!("Expected a struct, found type \"{}\"", t));
-					None
-				}
-			})
-			.collect::<Vec<_>>();
-
-		// Create the struct type
-		let mut struct_type = self.types.add_type(Type::Struct(Struct {
-			name: name.clone(),
-			fqn: None,
-			extends: extends_types.clone(),
-			env: dummy_env,
-			docs: Docs::default(),
-		}));
-
-		// Create the actual environment for the struct
+		// Create an environment for the struct's members
 		let mut struct_env = SymbolEnv::new(
 			None,
 			SymbolEnvKind::Type(struct_type),
@@ -3786,15 +3871,10 @@ impl<'a> TypeChecker<'a> {
 			};
 		}
 
-		if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
+		let extends_types = &struct_type.as_struct().unwrap().extends;
+		if let Err(e) = add_parent_members_to_struct_env(extends_types, name, &mut struct_env) {
 			self.type_error(e);
 		}
-		match env.define(name, SymbolKind::Type(struct_type), *access, StatementIdx::Top) {
-			Err(type_error) => {
-				self.type_error(type_error);
-			}
-			_ => {}
-		};
 
 		// Replace the dummy struct environment with the real one
 		struct_type.as_mut_struct().unwrap().env = struct_env;
@@ -3803,51 +3883,21 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_interface(&mut self, ast_iface: &AstInterface, env: &mut SymbolEnv) {
 		let AstInterface {
 			name,
-			extends,
+			extends: _,
 			methods,
-			access,
+			access: _,
 		} = ast_iface;
-		// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
-		let dummy_env = SymbolEnv::new(
-			None,
-			SymbolEnvKind::Type(self.types.void()),
-			env.phase,
-			self.ctx.current_stmt_idx(),
-		);
 
-		let extend_interfaces = extends
-			.iter()
-			.filter_map(|i| {
-				let t = self
-					.resolve_user_defined_type(i, env, self.ctx.current_stmt_idx())
-					.unwrap_or_else(|e| self.type_error(e));
-				if t.as_interface().is_some() {
-					Some(t)
-				} else {
-					// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
-					if !t.is_unresolved() {
-						self.spanned_error(i, format!("Expected an interface, instead found type \"{}\"", t));
-					}
-					None
-				}
-			})
-			.collect::<Vec<_>>();
-
-		// Create the interface type and add it to the current environment (so interface implementation can reference itself)
-		let interface_spec = Interface {
-			name: name.clone(),
-			fqn: None,
-			docs: Docs::default(),
-			env: dummy_env,
-			extends: extend_interfaces.clone(),
-		};
-		let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
-		match env.define(name, SymbolKind::Type(interface_type), *access, StatementIdx::Top) {
-			Err(type_error) => {
-				self.type_error(type_error);
-			}
-			_ => {}
-		};
+		// Note: to support mutually recursive type definitions (types that refer to each other), interface types
+		// are initialized during `type_check_scope`. The interface type is created with a dummy environment and
+		// then replaced with the real environment after the interface's fields are type checked.
+		// In this method, we are filling in the interface's environment with its members
+		// and updating the interface's Type with the new environment.
+		let mut interface_type = env
+			.lookup(name, Some(self.ctx.current_stmt_idx()))
+			.expect("interface type should have been defined in the environment")
+			.as_type()
+			.unwrap();
 
 		// Create the real interface environment to be filled with the interface AST types
 		let mut interface_env = SymbolEnv::new(
@@ -3889,7 +3939,8 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// add methods from all extended interfaces to the interface env
-		if let Err(e) = add_parent_members_to_iface_env(&extend_interfaces, name, &mut interface_env) {
+		let extend_interfaces = &interface_type.as_interface().unwrap().extends;
+		if let Err(e) = add_parent_members_to_iface_env(extend_interfaces, name, &mut interface_env) {
 			self.type_error(e);
 		}
 

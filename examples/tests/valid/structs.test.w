@@ -1,3 +1,8 @@
+interface IFoo {
+  // other types can reference structs before they are defined
+  field0(): A;
+}
+
 struct A {
   field0: str;
 }

@@ -1,3 +1,8 @@
+struct A {
+  // other types can reference interfaces before they are defined
+  field0: IShape;
+}
+
 interface IShape {
     // method with a return type
     method1(): str;
