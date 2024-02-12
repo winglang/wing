@@ -6,11 +6,13 @@ import {
 import { App } from "./app";
 import { Function } from "./function";
 import { Construct } from "constructs";
-import * as cloud from "@winglang/sdk/src/cloud";
-import * as core from "@winglang/sdk/src/core";
+import { std, core, cloud } from "@winglang/sdk";
 import { IInflightHost, Json, Duration as StdDuration } from "@winglang/sdk/src/std";
 import {convertBetweenHandlers} from "@winglang/sdk/src/shared/convert";
+import { calculateStreamPermissions } from "@winglang/sdk/lib/shared-aws/permissions";
 import {join} from "path";
+import { KinesisEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 
 /**
 * AWS implementation of `cloud.Stream`
@@ -38,7 +40,10 @@ export class Stream extends cloud.Stream {
       cloud.StreamInflightMethods.GET,
     ];
   }
-  public setConsumer(inflight: cloud.IStreamSetConsumerHandler, props: any = {}): cloud.Function {
+  public setConsumer(
+    inflight: cloud.IStreamSetConsumerHandler,
+     props: cloud.StreamSetConsumerOptions = {}
+  ): cloud.Function {
     const functionHandler = convertBetweenHandlers(
       inflight,
       join(
@@ -55,9 +60,38 @@ export class Stream extends cloud.Stream {
       {
         ...props,
       }
-    )
+    );
 
-    throw new Error("Method not implemented.");
+    if (!(fn instanceof Function)) {
+      throw new Error("Stream only supports creating awscdk.Function right now.");
+    }
+
+    const eventSource = new KinesisEventSource(this.stream, {
+      batchSize: props.batchSize ?? 100,
+      startingPosition: props.consumeAt as StartingPosition,
+    });
+
+    std.Node.of(this).addConnection({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
+    });
+
+    return fn;
+  }
+
+  public onLift(host: IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("Stream only supports creating awscdk.Function right now.");
+    }
+
+    host.addPolicyStatements(
+      ...calculateStreamPermissions(this.stream.streamArn, ops)
+    );
+
+    // TODO: Determine if we need to manage dependency resolution
+
+    super.onLift(host, ops);
   }
 
   public _toInflight(): string {

@@ -1,8 +1,16 @@
 import { Construct } from "constructs";
-import { fqnForType } from "../constants";
 import { Function, FunctionProps } from "./function";
+import { fqnForType } from "../constants";
 import { App } from "../core";
-import {Json, Node, Resource, Duration, Struct, JsonSchema, IInflight} from "../std";
+import {
+  Json,
+  Node,
+  Resource,
+  Duration,
+  Struct,
+  JsonSchema,
+  IInflight,
+} from "../std";
 
 /**
  * Global identifier for `Stream`
@@ -23,21 +31,21 @@ export interface StreamProps {
    * The stream's data horizon.
    * This defines the last of the end of the data that will be kept in the stream
    * Essentially, data younger than the horizon will be kept, everything else dropped
-   * @default - 24h
+   * @default 24h
    */
   readonly horizon?: Duration;
 
   /**
    * The stream's provisioned read capacity
    * This is a complex calculation based on shard amount and capacity per shard
-   * @default - 1
+   * @default 1
    */
   readonly read?: number;
 
   /**
    * The stream's provisioned write capacity
    * This is a complex calculation based on shard amount and capacity per shard
-   * @default - 1
+   * @default 1
    */
   readonly write?: number;
 }
@@ -100,6 +108,16 @@ export interface StreamSetConsumerOptions extends FunctionProps {
    * @default 1
    */
   readonly batchSize?: number;
+
+  /**
+   * The starting position of where the function should start consuming the stream.
+   * Choice between - "TRIM_HORIZON", "LATEST", "AT_TIMESTAMP"
+   * Inherited from aws.lambda.StartingPosition (for now - ?)
+   *
+   * TODO: Figure out checkpointing(?) to use AT_TIMESTAMP
+   * @default "LATEST"
+   */
+  readonly consumeAt?: string;
 }
 
 /**

@@ -1,13 +1,16 @@
 import type {
   IFunctionHandlerClient,
-  IStreamSetConsumerHandlerClient, IStreamData
+  IStreamSetConsumerHandlerClient,
+  IStreamData,
 } from "../cloud";
 
-export class StreamSetConsumerHandlerClient implements IStreamSetConsumerHandlerClient {
+export class StreamSetConsumerHandlerClient
+  implements IStreamSetConsumerHandlerClient
+{
   private readonly handler: IFunctionHandlerClient;
 
-  constructor({handler}: { handler: IFunctionHandlerClient }) {
-    this.handler = handler;
+  constructor(handler: { handler: IFunctionHandlerClient }) {
+    this.handler = handler.handler;
   }
 
   public async handle(event: IStreamData[]) {
