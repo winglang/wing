@@ -11,7 +11,11 @@ pass ─ array.test.wsim » root/env13/test:lastIndexOf()
 pass ─ array.test.wsim » root/env14/test:set()                     
 pass ─ array.test.wsim » root/env15/test:insert()                  
 pass ─ array.test.wsim » root/env16/test:removeFirst()             
+pass ─ array.test.wsim » root/env17/test:sort()                    
+pass ─ array.test.wsim » root/env18/test:sorted()                  
+pass ─ array.test.wsim » root/env19/test:sortedMutWithComparator() 
 pass ─ array.test.wsim » root/env2/test:pushAndPop()               
+pass ─ array.test.wsim » root/env20/test:sortedWithComparator()    
 pass ─ array.test.wsim » root/env3/test:popAt()                    
 pass ─ array.test.wsim » root/env4/test:concatMutArray()           
 pass ─ array.test.wsim » root/env5/test:concatArray()              
@@ -21,7 +25,7 @@ pass ─ array.test.wsim » root/env8/test:indexOfArray()
 pass ─ array.test.wsim » root/env9/test:join()                     
  
  
-Tests 17 passed (17)
+Tests 21 passed (21)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
