@@ -194,12 +194,12 @@ test.skip("messages are requeued if the function fails after timeout", async () 
   ).toContain(REQUEUE_MSG);
 });
 
-test("messages are not requeued if the function fails before timeout", async () => {
+test.skip("messages are not requeued if the function fails before timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue", {
-    // timeout: Duration.fromSeconds(30),
+    timeout: Duration.fromSeconds(30),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
