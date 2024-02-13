@@ -7,7 +7,7 @@ let bucket2 = new cloud.Bucket(cloud.BucketProps {
 let bucket3 = new cloud.Bucket(public: false) as "PrivateBucket";
 let queue = new cloud.Queue();
 
-let handler = inflight () => {
+let handler = inflight (event: str) => {
   bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
   bucket2.get("file2.txt");
@@ -26,7 +26,7 @@ let handler = inflight () => {
   }
 };
 
-queue.setConsumer(inflight () => { handler(); }, batchSize: 5);
+queue.setConsumer(inflight (event) => { handler(event); }, batchSize: 5);
 
 new cloud.Function(
   handler, 

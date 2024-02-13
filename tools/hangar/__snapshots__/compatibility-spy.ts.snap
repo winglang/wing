@@ -22,7 +22,7 @@ exports[`aws-counter.test.w 1`] = `
         "traces": [
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:validates the AWS counter name/Handler",
@@ -151,7 +151,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:dec()/Handler",
@@ -244,7 +244,7 @@ exports[`dec.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env1/test:dec() with custom key/Handler",
@@ -373,7 +373,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:inc()/Handler",
@@ -466,7 +466,7 @@ exports[`inc.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env1/test:inc() with custom key/Handler",
@@ -517,7 +517,7 @@ exports[`initial.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:initial:default/Handler",
@@ -554,7 +554,7 @@ exports[`initial.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env2/test:initial:negative-value/Handler",
@@ -591,7 +591,7 @@ exports[`initial.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env1/test:initial:positive-value/Handler",
@@ -676,7 +676,7 @@ exports[`peek.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env1/test:key peek/Handler",
@@ -747,7 +747,7 @@ exports[`peek.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:peek/Handler",
@@ -851,7 +851,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env0/test:set()/Handler",
@@ -941,7 +941,7 @@ exports[`set.test.w 1`] = `
           },
           {
             "data": {
-              "message": "Invoke (payload=undefined).",
+              "message": "Invoke (payload=\\"\\").",
               "status": "success",
             },
             "sourcePath": "root/env1/test:set() with custom key/Handler",

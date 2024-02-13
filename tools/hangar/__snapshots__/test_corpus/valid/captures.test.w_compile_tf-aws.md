@@ -11,7 +11,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
+    async handle(event) {
       (await $bucket1.put("file.txt", "data"));
       (await $bucket2.get("file.txt"));
       (await $bucket2.get("file2.txt"));
@@ -45,8 +45,8 @@ module.exports = function({ $handler }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
-      (await $handler());
+    async handle(event) {
+      (await $handler(event));
     }
   }
   return $Closure2;

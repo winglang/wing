@@ -6,7 +6,7 @@ import { IFunctionClient } from "../wingsdk.js";
 export type ResponseEnvelope =
   | {
       success: true;
-      response: string | undefined;
+      response: string;
     }
   | {
       success: false;

@@ -4,11 +4,11 @@ class Util {
   extern "./logging.js" pub static inflight logging(): void;
 }
 
-let f1 = new cloud.Function(inflight () => {
+let f1 = new cloud.Function(inflight (input: str) => {
   log("log inside f1");
 }) as "f1";
 
-let f2 = new cloud.Function(inflight () => {
+let f2 = new cloud.Function(inflight (input: str) => {
   f1.invoke("");
   log("log inside f2");
   f1.invoke("");

@@ -19,13 +19,24 @@ export class FunctionClient implements IFunctionClient {
    * Invokes the function with a payload and waits for the result.
    *  @returns the function response payload.
    */
-  public async invoke(payload?: string): Promise<string | undefined> {
+  public async invoke(payload: string): Promise<string> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
-      Payload: payload ? fromUtf8(JSON.stringify(payload)) : undefined,
+      Payload: fromUtf8(JSON.stringify(payload)),
     });
     const response = await this.lambdaClient.send(command);
-    return parseCommandOutput(response, this.functionArn);
+
+    const value = parseCommandOutput(response, this.functionArn);
+
+    if (!value) {
+      return "";
+    }
+    if (typeof value !== "string") {
+      throw new Error(
+        `function returned value of type ${typeof value}, not string`
+      );
+    }
+    return value;
   }
 
   /**
@@ -81,7 +92,7 @@ export class FunctionClient implements IFunctionClient {
 function parseCommandOutput(
   payload: InvokeCommandOutput,
   functionArn: string
-): string | undefined {
+): any | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
     let errorData;
@@ -99,18 +110,17 @@ function parseCommandOutput(
       newError.stack = errorData.trace?.join("\n");
       throw newError;
     }
-
     throw new Error(
       `Invoke failed with message: "${
         payload.FunctionError
       }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
-  }
-
-  if (!payload.Payload) {
-    return undefined;
   } else {
-    return JSON.parse(toUtf8(payload.Payload));
+    if (!payload.Payload) {
+      return undefined;
+    } else {
+      return JSON.parse(toUtf8(payload.Payload));
+    }
   }
 }
 

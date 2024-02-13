@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
+    async handle(payload) {
       (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {

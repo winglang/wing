@@ -24,7 +24,7 @@ export class OnDeploy implements IOnDeployClient, ISimulatorResourceInstance {
     await this.context.withTrace({
       message: "OnDeploy invoked.",
       activity: async () => {
-        return functionClient.invoke();
+        return functionClient.invoke("");
       },
     });
     return {};

@@ -1,7 +1,7 @@
 bring cloud;
 
 class Foo impl cloud.IFunctionHandler {
-  pub inflight handle(): str {
+  pub inflight handle(message: str): str {
     return "hello world!";
   }
 }

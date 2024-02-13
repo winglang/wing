@@ -32,13 +32,7 @@ module.exports = function({ $storeInBucket }) {
       return $obj;
     }
     async handle(event) {
-      {
-        const $if_let_value = event;
-        if ($if_let_value != undefined) {
-          const event = $if_let_value;
-          (await $storeInBucket(event, "file1"));
-        }
-      }
+      (await $storeInBucket(event, "file1"));
     }
   }
   return $Closure2;

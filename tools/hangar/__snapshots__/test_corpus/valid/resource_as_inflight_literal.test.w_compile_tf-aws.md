@@ -31,7 +31,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
+    async handle(message) {
       return "hello world!";
     }
   }

@@ -59,7 +59,7 @@ export class SimApp extends App {
     // returns an "invoker" for this function
     return async (s: Simulator) => {
       const fn = s.getResource("/" + id) as IFunctionClient;
-      return fn.invoke();
+      return fn.invoke("");
     };
   }
 

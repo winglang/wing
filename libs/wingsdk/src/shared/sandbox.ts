@@ -151,9 +151,9 @@ export class Sandbox {
         $reject(reason);
       };
 
-      const code = `exports.${fn}(${args
-        .map((a) => JSON.stringify(a))
-        .join(",")}).then($resolve).catch($reject);`;
+      const code = `exports.${fn}(${args.join(
+        ","
+      )}).then($resolve).catch($reject);`;
       vm.runInContext(code, this.context, {
         filename: this.entrypoint,
         timeout: this.options.timeout,

@@ -7,21 +7,21 @@ import { SimApp } from "../sim-app";
 
 // Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
-  `async handle(req) { return { body: "${body}" }; }`;
+  `async handle(req) { return { status: 200, body: "${body}" }; }`;
 // Handler that responds to a request with the request body
-const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { body: req.body, headers: req.headers }; }`;
+const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body, headers: req.headers }; }`;
 // Handler that responds to a request with the request method
-const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { body: req.method }; }`;
+const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, body: req.method }; }`;
 // Handler that responds to a request with the request path
-const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { body: req.path }; }`;
+const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { status: 200, body: req.path }; }`;
 // Handler that responds to a request with the request query params
-const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }`;
+const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: JSON.stringify(req.query), headers: { "Content-Type": "application/json" } }; }`;
 // Handler that responds to a request with the request params
-const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { body: req.vars ?? {} }; }`;
+const INFLIGHT_CODE_ECHO_PARAMS = `async handle(req) { return { status: 200, body: req.vars ?? {} }; }`;
 // Handler that responds to a request with extra response headers
-const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
+const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 // Handler that reseponds to a request with Content-Type different from default `application/json`
-const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = `async handle(req) { return { body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }`;
+const INFLIGHT_CODE_WITH_CONTENTTYPE_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "Content-Type": "application/octet-stream; charset=utf-8" } }; }`;
 // Handler that responds to a request without a response body
 const INFLIGHT_CODE_NO_BODY = `async handle(req) { return { status: 200 }; }`;
 
@@ -486,13 +486,13 @@ test("api url can be used as environment variable", async () => {
     s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
 
   const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
-  const response = await fnClient.invoke();
+  const response = await fnClient.invoke("");
 
   // THEN
   await s.stop();
   expect(fnEnvironmentValue).toEqual("${wsim#root/my_api#attrs.url}");
   expect(fnEnvironmentValueAfterStart).toEqual(expect.stringMatching(/^http/));
-  expect(response?.startsWith("http://")).toEqual(true);
+  expect(response.startsWith("http://")).toEqual(true);
 });
 
 test("api response returns Content-Type header from inflight", async () => {

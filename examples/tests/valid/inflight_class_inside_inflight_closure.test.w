@@ -6,7 +6,7 @@ class PreflightClass {
     this.b = new cloud.Bucket();
   }
   pub preflight_method(): cloud.Function {
-    let inflight_closure = inflight () => {
+    let inflight_closure = inflight (payload: str) => {
       this.b.put("k","v");  // Here `this` is the parent class instance
       inflight class InflightClass {
         field: str;

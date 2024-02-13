@@ -32,7 +32,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
       return $obj;
     }
     async handle(x) {
-      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })((x ?? "NaN"));
+      const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return Number(args) })(x);
       const y = (await $handler(xStr));
       const z = (await $handler(y));
       return ((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(z);

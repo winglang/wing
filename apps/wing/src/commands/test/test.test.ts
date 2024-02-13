@@ -449,7 +449,7 @@ const BUCKET_TEST_RESULT = [
         sourceType: "@winglang/sdk.cloud.Bucket",
       },
       {
-        data: { message: "Invoke (payload=undefined).", status: "success" },
+        data: { message: 'Invoke (payload="").', status: "success" },
         type: "resource",
         sourcePath: "root/env0/test:put/Handler",
         sourceType: "@winglang/sdk.cloud.Function",
@@ -486,7 +486,7 @@ const OUTPUT_FILE = {
           },
           {
             data: {
-              message: "Invoke (payload=undefined).",
+              message: 'Invoke (payload="").',
               status: "success",
             },
             type: "resource",

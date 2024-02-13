@@ -11,7 +11,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
+    async handle(s) {
     }
   }
   return $Closure1;
@@ -30,9 +30,9 @@ module.exports = function({ $strToStr }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle() {
+    async handle(s) {
       (await $strToStr.invoke("one"));
-      console.log(((await $strToStr.invoke("two")) ?? "no response"));
+      console.log((await $strToStr.invoke("two")));
     }
   }
   return $Closure2;
