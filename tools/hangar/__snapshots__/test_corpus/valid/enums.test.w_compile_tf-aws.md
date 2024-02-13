@@ -52,6 +52,14 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const SomeEnum =
+      (function (tmp) {
+        tmp[tmp["ONE"] = 0] = ",ONE";
+        tmp[tmp["TWO"] = 1] = ",TWO";
+        tmp[tmp["THREE"] = 2] = ",THREE";
+        return tmp;
+      })({})
+    ;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -89,14 +97,8 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const SomeEnum =
-      (function (tmp) {
-        tmp[tmp["ONE"] = 0] = ",ONE";
-        tmp[tmp["TWO"] = 1] = ",TWO";
-        tmp[tmp["THREE"] = 2] = ",THREE";
-        return tmp;
-      })({})
-    ;
+    const opt = undefined;
+    const three = SomeEnum.THREE;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight", new $Closure1(this, "$Closure1"));
