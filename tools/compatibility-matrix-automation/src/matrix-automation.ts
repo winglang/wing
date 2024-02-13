@@ -3,7 +3,7 @@ import { join, extname } from "path";
 import { TestResultsJson } from "winglang/dist/commands/test/results";
 import { CompatibilityMatrix, CompatibilitySets } from "./types";
 
-export const SKIPPED_RESOURCES = ["TestRunner"];
+export const SKIPPED_RESOURCES = ["TestRunner", "State"];
 export const MATRIX_PATH = join(
   __dirname,
   "../../../docs/docs/04-standard-library/compatibility/compatibility.json"
@@ -30,7 +30,7 @@ export function updateMatrix(outFolderPath: string, matrixPath = MATRIX_PATH) {
   for (const file of files) {
     try {
       const outFile = JSON.parse(
-        readFileSync(join(file.path, file.name), "utf8")
+        readFileSync(join(outFolderPath, file.name), "utf8")
       ) as TestResultsJson;
 
       updateMatrixFromFile(outFile, matrix);
@@ -54,6 +54,7 @@ export function updateMatrixFromFile(
   const platform = outFile.platforms[0] as keyof typeof PLATFORMS;
 
   for (const testFile of Object.values(outFile.results)) {
+    // @ts-expect-error
     for (const testName in testFile) {
       const {
         pass,
@@ -61,6 +62,7 @@ export function updateMatrixFromFile(
         unsupportedOperation,
         unsupportedResource,
         args = {},
+        // @ts-expect-error
       } = testFile[testName];
       if (unsupported && unsupportedOperation && unsupportedResource) {
         addToCompatibilitySet(
@@ -121,7 +123,11 @@ export function writeOpImplementationStatus(
   if (!matrix[resource][op]) {
     matrix[resource][op] = {};
   }
-  matrix[resource][op][target] = { implemented };
+  if (!matrix[resource][op][target]) {
+    matrix[resource][op][target] = { implemented };
+  } else {
+    matrix[resource][op][target].implemented = implemented;
+  }
 }
 
 export function writeToMatrix(
