@@ -332,6 +332,15 @@ export class Util {
   }
 
   /**
+   * Returns a string identifying the operating system platform.
+   * @returns The operating system platform
+   * @example "linux", "darwin", "win32"
+   */
+  public static os(): string {
+    return process.platform;
+  }
+
+  /**
    * @internal
    */
   public static _toInflightType(): string {
