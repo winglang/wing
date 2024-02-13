@@ -49,7 +49,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return;
   }
 
-  public async save(): Promise<void> { }
+  public async save(): Promise<void> {}
 
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
