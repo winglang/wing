@@ -337,6 +337,11 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     });
+    const takesOptionalClosure = ((fn) => {
+    });
+    (takesOptionalClosure(((a) => {
+      return "";
+    })));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
