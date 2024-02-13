@@ -887,6 +887,65 @@ error: Cannot instantiate abstract class \\"Resource\\"
     | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:183:3
+    |
+170 |   z: num;
+    |   - previous definition
+    .
+183 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:171:3
+    |
+170 |   z: num;
+    |   - previous definition
+171 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:185:3
+    |
+170 |   z: num;
+    |   - previous definition
+    .
+185 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:215:3
+    |
+204 |   z: num;
+    |   - previous definition
+    .
+215 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:196:3
+    |
+196 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
+    .
+204 |   z: num;
+    |   - previous definition
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:208:3
+    |
+204 |   z: num;
+    |   - previous definition
+    .
+208 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.test.w:31:14
    |
@@ -927,6 +986,62 @@ error: Expected 1 positional argument(s) but got 0
     |
 157 |     super();
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:174:5
+    |
+174 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:177:12
+    |
+177 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:187:5
+    |
+187 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:189:12
+    |
+189 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:199:5
+    |
+199 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:201:12
+    |
+201 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:210:5
+    |
+210 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:212:12
+    |
+212 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  
@@ -1943,6 +2058,20 @@ error: Unable to infer type
     |
 107 | let unknownArg = (arg) => {
     |                   ^^^ Unable to infer type
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:118:16
+    |
+118 |   let s: str = a;
+    |                ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:120:10
+    |
+120 |   return \\"\\";
+    |          ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Unable to infer type
