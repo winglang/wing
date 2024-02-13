@@ -3,6 +3,7 @@
 import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
 import type { Construct } from "constructs";
 import { Node } from "./std/node";
+import util from "node:util";
 
 export function eq(a: any, b: any): boolean {
   try {
@@ -53,36 +54,48 @@ export function unwrap<T>(value: T): T | never {
   throw new Error("Unexpected nil");
 }
 
-export async function mergeSort<T>(
+async function merge<T>(
+  left: Array<T>,
+  right: Array<T>,
+  compare: (a: T, b: T) => Promise<number>
+): Promise<Array<T>> {
+  const result = [];
+  let il = 0;
+  let ir = 0;
+
+  while (il < left.length && ir < right.length) {
+    if ((await compare(left[il], right[ir])) <= 0) {
+      result.push(left[il++]);
+    } else {
+      result.push(right[ir++]);
+    }
+  }
+
+  return result.concat(left.slice(il)).concat(right.slice(ir));
+}
+
+async function mergeSortAsync<T>(
   array: Array<T>,
-  fn: (a: T, b: T) => Promise<number>
+  comparator: (a: T, b: T) => Promise<number>
 ): Promise<Array<T>> {
   if (array.length <= 1) {
     return array;
   }
 
-  const mid = Math.floor(array.length / 2),
-    left = array.slice(0, mid),
-    right = array.slice(mid);
+  const mid = Math.floor(array.length / 2);
+  const left = await mergeSortAsync(array.slice(0, mid), comparator);
+  const right = await mergeSortAsync(array.slice(mid), comparator);
 
-  await mergeSort(left, fn);
-  await mergeSort(right, fn);
+  return merge(left, right, comparator);
+}
 
-  let ia = 0,
-    il = 0,
-    ir = 0;
-
-  while (il < left.length && ir < right.length) {
-    array[ia++] =
-      (await fn(left[il], right[ir])) <= 0 ? left[il++] : right[ir++];
+export function mergeSort<T>(
+  array: Array<T>,
+  fn: (a: T, b: T) => number | Promise<number>
+): Array<T> | Promise<Array<T>> {
+  if (util.types.isAsyncFunction(fn)) {
+    return mergeSortAsync(array, fn as (a: T, b: T) => Promise<number>);
+  } else {
+    return array.sort(fn as (a: T, b: T) => number);
   }
-
-  while (il < left.length) {
-    array[ia++] = left[il++];
-  }
-
-  while (ir < right.length) {
-    array[ia++] = right[ir++];
-  }
-  return array;
 }
