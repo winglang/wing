@@ -149,7 +149,7 @@ export class Array {
   /**
    * Returns a sorted copy of the array.
    *
-   * @macro ((arr, args) => { return args && args[0] ? [...(arr)].sort(args[0]) : [...(arr)].sort() })($self$, $args$)
+   * @macro ($self$.sort($args$ ?? undefined))
    *
    * @param comparator Function used to determine the order of the elements.
    * @returns same array, sorted
