@@ -93,6 +93,14 @@ exports[`create an OnDeploy 2`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
@@ -327,6 +335,14 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {
@@ -585,6 +601,14 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "aws": {
                 "constructInfo": {

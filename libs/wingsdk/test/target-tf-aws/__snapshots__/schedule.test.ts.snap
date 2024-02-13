@@ -105,6 +105,14 @@ exports[`schedule behavior with cron 2`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Schedule": {
                 "children": {
                   "OnTick0": {
@@ -361,6 +369,14 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Schedule": {
                 "children": {
@@ -673,6 +689,14 @@ exports[`schedule with two functions 2`] = `
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
+              },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
               },
               "Schedule": {
                 "children": {

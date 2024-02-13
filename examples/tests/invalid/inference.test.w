@@ -112,3 +112,12 @@ let unknownArg = (arg) => {
 if true {
   unknownArg({ a: true });
 }
+
+let takesOptionalClosure = (fn: ((num): num)?) => {};
+takesOptionalClosure((a) => {
+  let s: str = a;
+  //           ^ Expected type to be "str", but got "num" instead
+  return "";
+  //     ^^ Expected type to be "str", but got "num" instead
+});
+

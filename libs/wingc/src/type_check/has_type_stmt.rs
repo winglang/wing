@@ -3,13 +3,14 @@ use crate::{
 	visit::{self, Visit},
 };
 
-/// Determine a list of all fields that are initialized in a class constructor.
+// List in this file the fields that are initialized in a class constructor.
 #[derive(Default)]
-pub struct HasReturnStatementVisitor {
+pub struct HasStatementVisitor {
 	pub seen_return: bool,
+	pub seen_throw: bool,
 }
 
-impl HasReturnStatementVisitor {
+impl HasStatementVisitor {
 	pub fn visit(&mut self, statements: &[Stmt]) {
 		for stmt in statements {
 			self.visit_stmt(stmt);
@@ -17,9 +18,10 @@ impl HasReturnStatementVisitor {
 	}
 }
 
-impl Visit<'_> for HasReturnStatementVisitor {
+impl Visit<'_> for HasStatementVisitor {
 	fn visit_stmt(&mut self, node: &Stmt) {
 		match &node.kind {
+			StmtKind::Throw(_) => self.seen_throw = true,
 			StmtKind::Return(_) => self.seen_return = true,
 			_ => (),
 		}

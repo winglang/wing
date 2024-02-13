@@ -377,6 +377,14 @@ exports[`topic with subscriber function 3`] = `
                 "id": "Code",
                 "path": "root/Default/Code",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Topic": {
                 "children": {
                   "Default": {

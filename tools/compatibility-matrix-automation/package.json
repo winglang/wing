@@ -22,7 +22,7 @@
     "winglang": "workspace:^"
   },
   "devDependencies": {
-    "typescript": "^4.9.5",
+    "typescript": "^5.3.3",
     "vitest": "^0.32.4",
     "@types/node": "^20.11.0",
     "npm-which": "^3.0.1",

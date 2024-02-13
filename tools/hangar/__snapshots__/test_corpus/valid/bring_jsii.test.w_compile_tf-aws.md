@@ -52,6 +52,7 @@ const std = $stdlib.std;
 const $helpers = $stdlib.helpers;
 const cloud = $stdlib.cloud;
 const stuff = require("jsii-code-samples");
+const jsii_fixture = require("jsii-fixture");
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
@@ -93,6 +94,10 @@ class $Root extends $stdlib.std.Resource {
     const hello = new stuff.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:sayHello", new $Closure1(this, "$Closure1"));
+    const jsiiClass = new jsii_fixture.JsiiClass(10);
+    $helpers.assert($helpers.eq((jsiiClass.applyClosure(5, ((x) => {
+      return (x * 2);
+    }))), 10), "jsiiClass.applyClosure(5, (x) => { return x * 2; }) == 10");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

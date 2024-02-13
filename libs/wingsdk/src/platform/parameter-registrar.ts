@@ -122,11 +122,6 @@ export class ParameterRegistrar extends Construct {
       allOf: [...this.parameterSchemas],
     };
 
-    console.log(
-      "Validating parameters against schema",
-      JSON.stringify(platformParameterSchema, null, 2)
-    );
-
     const ajv = new Ajv({ allErrors: true });
     const validator = ajv.compile(platformParameterSchema);
     const valid = validator(this._rawParameters);
