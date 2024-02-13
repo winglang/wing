@@ -52,3 +52,37 @@ export function unwrap<T>(value: T): T | never {
   }
   throw new Error("Unexpected nil");
 }
+
+export async function mergeSort<T>(
+  array: Array<T>,
+  fn: (a: T, b: T) => Promise<number>
+): Promise<Array<T>> {
+  if (array.length <= 1) {
+    return array;
+  }
+
+  const mid = Math.floor(array.length / 2),
+    left = array.slice(0, mid),
+    right = array.slice(mid);
+
+  await mergeSort(left, fn);
+  await mergeSort(right, fn);
+
+  let ia = 0,
+    il = 0,
+    ir = 0;
+
+  while (il < left.length && ir < right.length) {
+    array[ia++] =
+      (await fn(left[il], right[ir])) <= 0 ? left[il++] : right[ir++];
+  }
+
+  while (il < left.length) {
+    array[ia++] = left[il++];
+  }
+
+  while (ir < right.length) {
+    array[ia++] = right[ir++];
+  }
+  return array;
+}
