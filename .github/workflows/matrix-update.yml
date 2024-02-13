@@ -46,9 +46,9 @@ jobs:
           base: main
           add-paths: docs/**
           commit-message: |-
-            chore(docs): update compatibility matrix
+            Updates the [Compatibility Matrix](https://www.winglang.io/docs/standard-library/compatibility-matrix)
 
-            [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            [Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             ------
 
