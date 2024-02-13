@@ -5,7 +5,7 @@ import { fqnForType } from "../constants";
 import { App, Lifting } from "../core";
 import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
+import { Duration, IInflight, IInflightHost, Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -186,7 +186,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event: string): Promise<string | undefined>;
+  handle(event: Json): Promise<string | undefined>;
 }
 
 /**

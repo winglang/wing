@@ -1,0 +1,1 @@
+export { StreamSetConsumerHandlerClient } from "@winglang/sdk/lib/shared-aws/stream.setconsumer.inflight";

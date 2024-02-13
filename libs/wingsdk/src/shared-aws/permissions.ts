@@ -255,3 +255,21 @@ export function calculateSecretPermissions(
 
   return policies;
 }
+
+export function calculateStreamPermissions(
+  arn: string,
+  ops: string[]
+): PolicyStatement[] {
+  const actions: string[] = [];
+
+  if (ops.includes(cloud.StreamInflightMethods.GET)) {
+    actions.push("kinesis:Get*");
+  }
+
+  if (ops.includes(cloud.StreamInflightMethods.PUT)) {
+    actions.push("kinesis:Put*");
+  }
+
+  return [{ actions, resources: [arn, `${arn}/*`]}];
+}
+
