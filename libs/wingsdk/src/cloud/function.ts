@@ -156,15 +156,18 @@ export class Function extends Resource implements IInflightHost {
 export interface IFunctionClient {
   /**
    * Invokes the function with a payload and waits for the result.
+   * @param payload payload to pass to the function. If not defined, an empty string will be passed.
+   * @returns An optional response from the function
    * @inflight
    */
-  invoke(payload: string): Promise<string>;
+  invoke(payload?: string): Promise<string | undefined>;
 
   /**
    * Kicks off the execution of the function with a payload and returns immediately while the function is running.
+   * @param payload payload to pass to the function. If not defined, an empty string will be passed.
    * @inflight
    */
-  invokeAsync(payload: string): Promise<void>;
+  invokeAsync(payload?: string): Promise<void>;
 }
 
 /**
@@ -186,7 +189,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event: string): Promise<string | undefined>;
+  handle(event?: string): Promise<string | undefined>;
 }
 
 /**

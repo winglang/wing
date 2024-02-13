@@ -3,7 +3,7 @@ bring util;
 
 let counter = new cloud.Counter();
 
-let fn = new cloud.Function(inflight (input: str) => {
+let fn = new cloud.Function(inflight () => {
   log("log inside fn");
   util.sleep(3s);
   counter.inc();
