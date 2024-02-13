@@ -45,7 +45,6 @@ jobs:
           title: "chore(docs): compatibility matrix update"
           branch: "github-actions/updating-matrix"
           base: main
-          draft: true #TODO: remove it soon!
           commit-message: |-
             chore(docs): update competibility matrix
 
