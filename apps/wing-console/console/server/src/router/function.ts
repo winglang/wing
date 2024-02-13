@@ -6,7 +6,7 @@ import { IFunctionClient } from "../wingsdk.js";
 export type ResponseEnvelope =
   | {
       success: true;
-      response: string;
+      response: string | undefined;
     }
   | {
       success: false;
@@ -46,7 +46,7 @@ export const createFunctionRouter = () => {
         try {
           const response: ResponseEnvelope = {
             success: true,
-            response: (await client.invoke(input.message)) ?? "",
+            response: await client.invoke(input.message),
           };
           return response;
         } catch (error) {
