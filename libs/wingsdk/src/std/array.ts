@@ -149,7 +149,7 @@ export class Array {
   /**
    * Returns a sorted copy of the array.
    *
-   * @macro ((arr, args) => { return args ? $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$)
+   * @macro (await (async (arr, args) => { return args ? await $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$))
    *
    * @param comparator Function used to determine the order of the elements.
    * @returns same array, sorted
@@ -348,7 +348,7 @@ export class MutArray {
   /**
    * Sorts the array, modifying it in-place.
    *
-   * @macro ((arr, args) => { return args ? $helpers.mergeSort(arr, args) : arr.sort() })($self$, $args$)
+   * @macro (await (async (arr, args) => { return args ? await $helpers.mergeSort(arr, args) : arr.sort() })($self$, $args$))
    *
    * @param comparator Function used to determine the order of the elements.
    * @returns same array, sorted
@@ -361,7 +361,7 @@ export class MutArray {
   /**
    * Sorts the array, creating a new array.
    *
-   * @macro ((arr, args) => { return args ? $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$)
+   * @macro (await (async (arr, args) => { return args ? await $helpers.mergeSort([...arr], args) : [...arr].sort() })($self$, $args$))
    *
    * @param comparator Function used to determine the order of the elements.
    * @returns a new array with the elements sorted
