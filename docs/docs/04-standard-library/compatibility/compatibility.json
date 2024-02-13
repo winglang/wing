@@ -39,7 +39,7 @@
         "implemented": true
       },
       "tf-aws": {
-        "implemented": false,
+        "implemented": true,
         "issue": 2724
       },
       "tf-azure": {
@@ -76,7 +76,7 @@
         "implemented": true
       },
       "tf-aws": {
-        "implemented": false,
+        "implemented": true,
         "issue": 2724
       },
       "tf-azure": {
@@ -95,7 +95,7 @@
         "implemented": true
       },
       "tf-aws": {
-        "implemented": false,
+        "implemented": true,
         "issue": 2724
       },
       "tf-azure": {
@@ -380,6 +380,14 @@
         "implemented": true
       },
       "awscdk": {
+        "implemented": true
+      }
+    },
+    "addFile": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
         "implemented": true
       }
     }
@@ -713,6 +721,14 @@
       "awscdk": {
         "implemented": true
       }
+    },
+    "env": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Counter": {
@@ -800,6 +816,11 @@
       "awscdk": {
         "implemented": true
       }
+    },
+    "initial": {
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Topic": {
@@ -838,6 +859,11 @@
         "issue": 620
       },
       "awscdk": {
+        "implemented": true
+      }
+    },
+    "permissions": {
+      "tf-aws": {
         "implemented": true
       }
     }
@@ -978,6 +1004,22 @@
       "awscdk": {
         "implemented": false
       }
+    },
+    "addJson": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "addFile": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Api": {
@@ -1005,7 +1047,7 @@
         "implemented": true
       },
       "tf-aws": {
-        "implemented": false,
+        "implemented": true,
         "issue": 3342
       },
       "tf-azure": {
@@ -1179,6 +1221,30 @@
       "awscdk": {
         "implemented": false,
         "issue": 1850
+      }
+    },
+    "options": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "head": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "connect": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
       }
     }
   },
@@ -1556,6 +1622,21 @@
       "awscdk": {
         "implemented": false
       }
+    },
+    "started": {
+      "sim": {
+        "implemented": true
+      }
+    },
+    "stop": {
+      "sim": {
+        "implemented": true
+      }
+    },
+    "start": {
+      "sim": {
+        "implemented": true
+      }
     }
   },
   "Table": {
@@ -1783,6 +1864,84 @@
       },
       "awscdk": {
         "implemented": false
+      }
+    },
+    "tryGet": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "upsert": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "Endpoint": {
+    "url": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "DynamodbTable": {
+    "putItem": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "query": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "getItem": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "transactWriteItems": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "ReactApp": {
+    "addEnvironment": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "url": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
       }
     }
   }
