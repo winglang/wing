@@ -87,7 +87,7 @@ export class Bucket extends Resource {
   /**
    * Creates a topic for subscribing to notification events
    * @param actionType
-   * @returns the created topi
+   * @returns the created topic
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
@@ -106,7 +106,6 @@ export class Bucket extends Resource {
   /**
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
-   * @returns
    */
   private getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
@@ -128,7 +127,6 @@ export class Bucket extends Resource {
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
-   * @returns
    */
   private createInflightHandler(
     eventType: BucketEventType,

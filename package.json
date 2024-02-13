@@ -4,6 +4,7 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
+    "@winglang/compatibility-spy": "workspace:^",
     "turbo": "^1.11.3"
   },
   "scripts": {
