@@ -107,7 +107,7 @@ export class Bucket extends Resource {
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
    */
-  private _getTopic(actionType: BucketEventType): Topic {
+  private getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
       this._topics.set(actionType, this.createTopic(actionType));
     }
@@ -128,7 +128,7 @@ export class Bucket extends Resource {
    * @param eventType
    * @param inflight
    */
-  private _createInflightHandler(
+  private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
   ): IInflight {
@@ -147,25 +147,25 @@ export class Bucket extends Resource {
    * @param inflight the code to run upon event
    * @param opts
    */
-  private _createBucketEvent(
+  private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
     opts?: BucketOnCreateOptions
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this._getTopic(BucketEventType.CREATE).onMessage(
-        this._createInflightHandler(BucketEventType.CREATE, inflight)
+      this.getTopic(BucketEventType.CREATE).onMessage(
+        this.createInflightHandler(BucketEventType.CREATE, inflight)
       );
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this._getTopic(BucketEventType.UPDATE).onMessage(
-        this._createInflightHandler(BucketEventType.UPDATE, inflight)
+      this.getTopic(BucketEventType.UPDATE).onMessage(
+        this.createInflightHandler(BucketEventType.UPDATE, inflight)
       );
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this._getTopic(BucketEventType.DELETE).onMessage(
-        this._createInflightHandler(BucketEventType.DELETE, inflight)
+      this.getTopic(BucketEventType.DELETE).onMessage(
+        this.createInflightHandler(BucketEventType.DELETE, inflight)
       );
     }
   }
@@ -177,7 +177,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onCreate does not support options yet");
     }
-    this._createBucketEvent([BucketEventType.CREATE], fn, opts);
+    this.createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
 
   /**
@@ -187,7 +187,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onDelete does not support options yet");
     }
-    this._createBucketEvent([BucketEventType.DELETE], fn, opts);
+    this.createBucketEvent([BucketEventType.DELETE], fn, opts);
   }
 
   /**
@@ -197,7 +197,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onUpdate does not support options yet");
     }
-    this._createBucketEvent([BucketEventType.UPDATE], fn, opts);
+    this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
   }
 
   /**
@@ -207,7 +207,7 @@ export class Bucket extends Resource {
     if (opts) {
       console.warn("bucket.onEvent does not support options yet");
     }
-    this._createBucketEvent(
+    this.createBucketEvent(
       [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
       fn,
       opts

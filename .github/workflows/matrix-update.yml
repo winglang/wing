@@ -35,8 +35,7 @@ jobs:
       - name: Run Update Script
         run: |
           cd tools/compatibility-matrix-automation
-          OUT_FOLDER=../../out npx update-matrix
-          rm -r ../../out
+          TEST_OUTPUT_FOLDER=../../out npx update-matrix
 
       - name: Create a PR
         uses: peter-evans/create-pull-request@v5
@@ -45,7 +44,7 @@ jobs:
           title: "chore(docs): compatibility matrix update"
           branch: "github-actions/updating-matrix"
           base: main
-          draft: true #TODO: remove it soon!
+          add-paths: docs/**
           commit-message: |-
             chore(docs): update competibility matrix
 

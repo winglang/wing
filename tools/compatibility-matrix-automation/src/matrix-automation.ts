@@ -54,6 +54,7 @@ export function updateMatrixFromFile(
   const platform = outFile.platforms[0] as keyof typeof PLATFORMS;
 
   for (const testFile of Object.values(outFile.results)) {
+    // @ts-expect-error
     for (const testName in testFile) {
       const {
         pass,
@@ -61,6 +62,7 @@ export function updateMatrixFromFile(
         unsupportedOperation,
         unsupportedResource,
         args = {},
+        // @ts-expect-error
       } = testFile[testName];
       if (unsupported && unsupportedOperation && unsupportedResource) {
         addToCompatibilitySet(
