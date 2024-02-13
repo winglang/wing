@@ -1,3 +1,11 @@
+interface IFoo {
+  // other types can reference structs before they are defined
+  field0(): A;
+}
+
+// type annotations can reference structs before they are defined
+let a: A? = nil;
+
 struct A {
   field0: str;
 }
@@ -70,4 +78,13 @@ test "struct definitions are phase independant" {
   };
 
   assert(s2.a == "foo");
+}
+
+// mutually referential structs
+struct M1 {
+  m2: M2?;
+}
+
+struct M2 {
+  m1: M1?;
 }
