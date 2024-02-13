@@ -22,6 +22,9 @@ export class FunctionClient implements IFunctionClient {
   public async invoke(payload?: string): Promise<string | undefined> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
+      // If payload is undefined, pass json `null` as the payload to the function
+      // to ensure the received event will be `null` (which will be converted to `undefined` in the function code)
+      // If the Payload is undefined, the resulting event will instead be `{}`
       Payload: fromUtf8(payload ? JSON.stringify(payload) : "null"),
     });
     const response = await this.lambdaClient.send(command);
