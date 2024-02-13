@@ -1052,14 +1052,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello {name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
   |  
   = hint: expected phase to be inflight, but got preflight instead
 
@@ -1979,11 +1979,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                                                            ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse?\\" instead
    --> ../../../examples/tests/invalid/inference.test.w:57:31
    |
 57 | (new cloud.Bucket()).onCreate(func);
-   |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+   |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse?\\" instead
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
@@ -3624,16 +3624,6 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
-error: \\"status\\" is not initialized
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:15:9
-   |  
-15 |   let x = cloud.ApiResponse {
-   | /---------^
-16 | |   body: \\"Hello, world!\\",
-17 | | };
-   | \\\\-^ \\"status\\" is not initialized
-
-
 error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    --> ../../../examples/tests/invalid/struct_expansion.test.w:20:9
    |  
@@ -3644,6 +3634,13 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
 23 | | // ^^^^^^^^^^^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 24 | | };
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
+
+
+error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:27:3
+   |
+27 |   handler, 
+   |   ^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
 
 
 error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
@@ -3801,6 +3798,13 @@ error: Cannot call super method because class Construct has no parent
    |
 26 |     super.method();
    |           ^^^^^^ Cannot call super method because class Construct has no parent
+
+
+error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
+   --> ../../../examples/tests/invalid/super_call.test.w:55:31
+   |
+55 |     return new cloud.Function(inflight_closure);
+   |                               ^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474

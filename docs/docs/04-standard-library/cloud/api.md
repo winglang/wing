@@ -904,21 +904,9 @@ let ApiResponse = cloud.ApiResponse{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>str</code> | The response's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
-
----
-
-##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.cloud.ApiResponse.property.status"></a>
-
-```wing
-status: num;
-```
-
-- *Type:* num
-
-The response's status code.
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
 
 ---
 
@@ -929,6 +917,7 @@ body: str;
 ```
 
 - *Type:* str
+- *Default:* no body
 
 The response's body.
 
@@ -941,8 +930,22 @@ headers: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
+- *Default:* {}
 
 The response's headers.
+
+---
+
+##### `status`<sup>Optional</sup> <a name="status" id="@winglang/sdk.cloud.ApiResponse.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+- *Default:* 200
+
+The response's status code.
 
 ---
 

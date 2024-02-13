@@ -11,7 +11,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(event) {
+    async handle() {
       for (const x of $helpers.range(0,10,false)) {
         $helpers.assert((x <= 0), "x <= 0");
         $helpers.assert((x > 10), "x > 10");

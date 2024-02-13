@@ -11,7 +11,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(s) {
+    async handle() {
       console.log($myStr);
       const n = $myNum;
       console.log(String.raw({ raw: ["", ""] }, n));
