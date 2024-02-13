@@ -16,11 +16,11 @@ let f = new cloud.Function(inflight (input): str => {
 test "invoke" {
   log("log inside test");
   let x = f.invoke("hello");
-  assert(x == "hello-response");
+  expect.equal(x, "hello-response");
 }
 
 let f2 = new cloud.Function(inflight (e) => {
-  expect.equal(nil, e);
+  expect.equal(e, nil);
   log("no event, no return!");
 }) as "f2";
 
@@ -30,8 +30,8 @@ let f3 = new cloud.Function(inflight () => {
 
 test "invoke without inputs and outputs" {
   let x = f2.invoke();
-  assert(x == nil);
+  expect.equal(x, nil);
 
   let response = f3.invoke();
-  assert(response == nil);
+  expect.equal(response, nil);
 }

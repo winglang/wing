@@ -22,7 +22,12 @@ export class FunctionClient implements IFunctionClient {
   public async invoke(payload?: string): Promise<string | undefined> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
-      Payload: payload ? fromUtf8(JSON.stringify(payload)) : undefined,
+      // If payload is undefined, pass json `null` as the payload to the function
+      // to ensure the received event will be `null` (which will be converted to `undefined` in the function code)
+      // If the Payload is undefined, the resulting event will instead be `{}`
+      Payload: fromUtf8(
+        payload !== undefined ? JSON.stringify(payload) : "null"
+      ),
     });
     const response = await this.lambdaClient.send(command);
     return parseCommandOutput(response, this.functionArn);
@@ -110,7 +115,8 @@ function parseCommandOutput(
   if (!payload.Payload) {
     return undefined;
   } else {
-    return JSON.parse(toUtf8(payload.Payload));
+    const returnObject = JSON.parse(toUtf8(payload.Payload));
+    return returnObject === null ? undefined : returnObject;
   }
 }
 
