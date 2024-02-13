@@ -180,14 +180,14 @@ jobs:
             elif ${{ env.LOCAL_BUILD == 'false'}}
             then 
               WING_CLI=$(which wing)
-              # COMPETIBILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
+              # COMPATIBILITY="-t @winglang/compatibility-spy" //TODO: will be handled in a following PR
             else
               WING_CLI=$(realpath localwing/node_modules/.bin/wing)
-              COMPETIBILITY="-t  ../../../../localwing/node_modules/@winglang/compatibility-spy/lib"
-              echo $COMPETIBILITY
+              COMPATIBILITY="-t  ../../../../localwing/node_modules/@winglang/compatibility-spy/lib"
+              echo $COMPATIBILITY
             fi
             cd ${{ matrix.test.directory }}
-            $WING_CLI test -t ${{ matrix.target }} $COMPETIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
+            $WING_CLI test -t ${{ matrix.target }} $COMPATIBILITY *.test.w -o ../../../../out/${{ matrix.test.name }}-${{ matrix.target }}.json
 
       - name: Upload Artifacts
         if: ${{ env.LOCAL_BUILD ==  'true' }}

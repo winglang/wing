@@ -46,7 +46,7 @@ jobs:
           base: main
           add-paths: docs/**
           commit-message: |-
-            chore(docs): update competibility matrix
+            chore(docs): update compatibility matrix
 
             [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -54,7 +54,7 @@ jobs:
 
             *Automatically created via the "matrix-update" workflow*
           body: |-
-            chore(docs): update competibility matrix
+            chore(docs): update compatibility matrix
 
             [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
