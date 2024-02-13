@@ -46,7 +46,7 @@ jobs:
           branch: "github-actions/updating-matrix"
           base: main
           commit-message: |-
-            chore(docs): update competibility matrix
+            chore(docs): update compatibility matrix
 
             [Workflow Run]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
