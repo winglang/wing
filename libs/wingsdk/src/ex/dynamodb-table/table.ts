@@ -39,6 +39,7 @@ import {
   DynamodbTransactWriteItemsOptions,
 } from ".";
 import { fqnForType } from "../../constants";
+import { INFLIGHT_SYMBOL } from "../../core/types";
 import { Json, Node, Resource } from "../../std";
 
 /**
@@ -120,6 +121,9 @@ export interface DynamodbTableProps {
  * @abstract
  */
 export class DynamodbTable extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IDynamodbTableClient;
+
   /**
    * Table name
    */

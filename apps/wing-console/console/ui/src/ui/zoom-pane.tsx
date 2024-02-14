@@ -80,7 +80,7 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { boundingBox, children, className } = props;
+  const { boundingBox, children, className, ...divProps } = props;
 
   const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -138,6 +138,52 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     });
   }, []);
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
+
+  const [isDragging, setDragging] = useState(false);
+  const dragStart = useRef({ x: 0, y: 0 });
+  useEvent(
+    "mousedown",
+    useCallback((event: MouseEvent) => {
+      setDragging(true);
+      dragStart.current = { x: event.x, y: event.y };
+    }, []) as (event: Event) => void,
+    containerRef.current,
+  );
+
+  useEvent(
+    "mousemove",
+    useCallback(
+      (event: MouseEvent) => {
+        if (!isDragging) {
+          return;
+        }
+
+        const diff = {
+          x: dragStart.current.x - event.x,
+          y: dragStart.current.y - event.y,
+        };
+        dragStart.current = { x: event.x, y: event.y };
+
+        setViewTransform((viewTransform) => {
+          return {
+            x: viewTransform.x + diff.x / viewTransform.z,
+            y: viewTransform.y + diff.y / viewTransform.z,
+            z: viewTransform.z,
+          };
+        });
+      },
+      [isDragging, dragStart],
+    ) as (event: Event) => void,
+    containerRef.current,
+  );
+
+  useEvent(
+    "mouseup",
+    useCallback((event: MouseEvent) => {
+      setDragging(false);
+    }, []) as (event: Event) => void,
+    containerRef.current,
+  );
 
   const zoomIn = useCallback(() => {
     const container = containerRef.current;
@@ -212,7 +258,10 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
         // Scale contents to fit.
         const zx = boundingRect.width / viewport.width;
         const zy = boundingRect.height / viewport.height;
-        const z = Math.min(zx, zy);
+        const z = Math.min(
+          MAX_ZOOM_LEVEL,
+          Math.max(MIN_ZOOM_LEVEL, Math.min(zx, zy)),
+        );
 
         // Center contents.
         const dx = (boundingRect.width - viewport.width * z) / 2 / z;
@@ -270,8 +319,11 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   return (
     <div
       ref={containerRef}
-      {...props}
-      className={classNames(className, "relative overflow-hidden")}
+      {...divProps}
+      className={classNames(className, "relative overflow-hidden", {
+        "cursor-grab": !isDragging,
+        "cursor-grabbing": isDragging,
+      })}
     >
       <div ref={targetRef} className="absolute inset-0 origin-top-left">
         {children}

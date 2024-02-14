@@ -3,8 +3,9 @@
 exports[`can create sequential files in a bucket 1`] = `
 {
   ".wing/setconsumer0_c8e82e9f.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
+  $handler = $handler ?? (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -40,7 +41,8 @@ bucket: (function() {
   }
   return require(\\"@winglang/sdk/lib/simulator/client\\").makeSimulatorClient(simulatorUrl, handle);
 })()
-}), args: {} })).handle(event);
+}), args: {} }));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -55,17 +57,7 @@ bucket: (function() {
         "target": "root/HelloWorld/Counter",
       },
       {
-        "name": "$inflight_init()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Counter",
-      },
-      {
         "name": "put()",
-        "source": "root/HelloWorld/Queue/SetConsumer0",
-        "target": "root/HelloWorld/Bucket",
-      },
-      {
-        "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/SetConsumer0",
         "target": "root/HelloWorld/Bucket",
       },
@@ -225,7 +217,7 @@ bucket: (function() {
             "Bucket": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud object store",
@@ -237,7 +229,7 @@ bucket: (function() {
             "Counter": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A distributed atomic counter",
@@ -251,7 +243,7 @@ bucket: (function() {
                 "QueueEventMapping0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.2.70",
+                    "version": "10.3.0",
                   },
                   "display": {
                     "hidden": true,
@@ -262,7 +254,7 @@ bucket: (function() {
                 "SetConsumer0": {
                   "constructInfo": {
                     "fqn": "constructs.Construct",
-                    "version": "10.2.70",
+                    "version": "10.3.0",
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
@@ -275,7 +267,7 @@ bucket: (function() {
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A distributed message queue",
@@ -287,7 +279,7 @@ bucket: (function() {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -295,7 +287,7 @@ bucket: (function() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

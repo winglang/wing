@@ -1,19 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "extends": [
-    "//"
-  ],
+  "extends": ["//"],
   "pipeline": {
     "topo": {
-      "inputs": [
-        "**",
-        "!node_modules/**",
-        "!**/target/**"
-      ],
-      "dependsOn": [
-        "^compile",
-        "^topo"
-      ]
+      "dependsOn": ["^topo", "jsii-fixture#compile"]
     }
   }
 }

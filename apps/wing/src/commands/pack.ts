@@ -13,7 +13,16 @@ import { compile } from "./compile";
 // TODO: let the user specify library's supported targets in package.json, and compile to each before packaging
 // TODO: print information about the generated library? (e.g. size, dependencies, number of public APIs)
 
-const defaultGlobs = ["**/*.js", "**/*.w", "README*", "LICENSE*", "!target"];
+const defaultGlobs = [
+  "**/*.js",
+  "**/*.w",
+  "README*",
+  "LICENSE*",
+  "!target",
+  "!**/main.w",
+  "!**/*.main.w",
+  "!**/*.test.w",
+];
 const compilerOutputFolder = "$lib";
 const dotWingDir = ".wing";
 
@@ -105,12 +114,6 @@ export async function pack(options: PackageOptions = {}): Promise<string> {
         throw new Error(`Missing required field "${field}" in package.json.`);
       }
     }
-
-    // TODO Remove once we are generating .d.ts files
-    await fs.writeFile(
-      path.join(compilerOutputDir, dotWingDir, "preflight.d.ts"),
-      `declare module '${pkgJson.name}';`
-    );
 
     // move compiler output
     await fs.rename(compilerOutputDir, path.join(workdir, compilerOutputFolder));

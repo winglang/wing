@@ -2,6 +2,7 @@ import { stat } from "node:fs/promises";
 import { relative, resolve, sep, join } from "node:path";
 import type Chalk from "chalk";
 import type StackTracey from "stacktracey";
+import { normalPath } from "../shared/misc";
 
 export interface PrettyPrintErrorOptions {
   /**
@@ -63,17 +64,31 @@ export async function prettyPrintError(
     originalMessage = error.message;
   }
 
-  const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
+  const message = fBold(fRed("Error: ")) + fRed(originalMessage);
 
-  st = await st.clean().withSourcesAsync();
+  st = await st
+    .clean()
+    .filter((item) => !item.native)
+    // strip node internals
+    .filter((item) => !item.file.startsWith("node:"))
+    // strip wingsdk
+    .filter(
+      (item) =>
+        !normalPath(item.file).includes("/libs/wingsdk/src/") &&
+        !normalPath(item.file).includes("/@winglang/sdk/")
+    )
+    // special: remove the handler wrapper (See `cloud.Function` entrypoint for where this comes from)
+    .filter((item) => !normalPath(item.file).match(/\.wing\/handler_\w+\.js$/))
+    .withSourcesAsync();
 
-  let traceWithSources = st.items.filter((item) => !item.native);
+  let traceWithSources = st.items;
 
   if (traceWithSources.length === 0) {
     return message;
   }
 
   let interestingRoot = options?.sourceEntrypoint;
+
   if (
     interestingRoot !== undefined &&
     (await stat(interestingRoot)
@@ -178,10 +193,21 @@ function printItem(item: StackTracey.Entry) {
     calleeShort = "";
   }
 
+  if (item.callee.match(/\$Closure\d+\.handle$/)) {
+    // inflight closures use "handle" as a way to represent calling the inflight itself
+    calleeShort = "";
+  }
+
+  if (item.fileName.endsWith(".w") && calleeShort.startsWith("async ")) {
+    // In userland wing traces, async = inflight and is currently redundant to mention
+    calleeShort = calleeShort.replace("async ", "");
+  }
+
   const file = item.file;
   const line = item.line;
   const column = item.column;
-  return `at ${calleeShort}(${file}:${line}:${column})`;
+
+  return `at ${calleeShort}${file}:${line}:${column}`;
 }
 
 export function rewriteCommonError(error: Error): Error {

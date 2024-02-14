@@ -1,22 +1,17 @@
 import { test } from "vitest";
 import { compatibilityTestFiles, tmpDir, compatibilityTestsDir } from "./paths";
 import { runWingCommand } from "./utils";
-import { join, relative, basename } from "path";
+import { join, relative } from "path";
 import { rmSync, readFileSync } from "fs";
 
 compatibilityTestFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const platforms = ["sim", "../../../libs/compatibility-spy/lib"];
-    const args = ["test", "--no-clean"];
+    // "@winglang/compatibility-spy" will be installed in the tmpDir
+    const platforms = ["sim", "node_modules/@winglang/compatibility-spy/lib"];
+    const args = ["test", "-o", "out.json"];
 
     const absoluteWingFile = join(compatibilityTestsDir, wingFile);
     const relativeWingFile = relative(tmpDir, absoluteWingFile);
-
-    const targetDir = join(
-      compatibilityTestsDir,
-      "target/test",
-      `${basename(wingFile).replace(".w", "")}.wsim`
-    );
 
     await runWingCommand({
       cwd: tmpDir,
@@ -26,11 +21,23 @@ compatibilityTestFiles.forEach((wingFile) => {
       expectFailure: false,
     });
 
-    const usageContext = readFileSync(
-      join(targetDir, "usage_context.json")
-    ).toString();
+    const usageContext = JSON.parse(
+      readFileSync(join(tmpDir, "out.json")).toString()
+    );
+    // sanitize the output
+    usageContext.duration = "<DURATION>";
 
-    rmSync(targetDir, { recursive: true, force: true });
+    for (const testFile in usageContext.results) {
+      for (const singleTest in usageContext.results[testFile]) {
+        usageContext.results[testFile][singleTest].traces.forEach(
+          (trace: Record<string, unknown>) => {
+            trace.timestamp = "<TIMESTAMP>";
+          }
+        );
+      }
+    }
+
+    rmSync(join(tmpDir, "out.json"), { recursive: true, force: true });
 
     expect(usageContext).toMatchSnapshot();
   });

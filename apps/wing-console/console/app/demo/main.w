@@ -6,14 +6,18 @@ bring ex;
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 let api = new cloud.Api();
+let counter = new cloud.Counter(initial: 0);
+
 
 api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  bucket.put("hello.txt", "Hello, GET!");
   return cloud.ApiResponse {
     status: 200,
     body: Json.stringify(req.query)
   };
 });
 api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  counter.inc();
   return cloud.ApiResponse {
     status: 200,
     body: "Hello, POST!"
@@ -28,7 +32,6 @@ let handler = inflight (message: str): str => {
 
 queue.setConsumer(handler);
 
-let counter = new cloud.Counter(initial: 0);
 new cloud.Function(inflight (message: str): str => {
   counter.inc();
   log("Counter is now {counter.inc(0)}");

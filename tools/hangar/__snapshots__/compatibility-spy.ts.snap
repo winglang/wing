@@ -1,72 +1,957 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`aws-counter.test.w 1`] = `
-"{
-  \\"Counter\\": [
-    \\"dynamoTableArn\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"TestRunner\\": [
-    \\"findTests\\"
-  ]
-}"
+  "results": {
+    "counter/aws-counter.test.w": {
+      "validates the AWS counter name": {
+        "args": {
+          "methods": {
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:validates the AWS counter name",
+        "traces": [
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:validates the AWS counter name/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;
 
 exports[`dec.test.w 1`] = `
-"{
-  \\"TestRunner\\": [
-    \\"findTests\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"Counter\\": [
-    \\"dec\\",
-    \\"peek\\"
-  ]
-}"
+  "results": {
+    "counter/dec.test.w": {
+      "dec()": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "dec",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:dec()",
+        "traces": [
+          {
+            "data": {
+              "message": "Dec (amount=1).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-1).",
+              "result": "-1",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Dec (amount=5).",
+              "result": "-1",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-6).",
+              "result": "-6",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Dec (amount=-4).",
+              "result": "-6",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-2).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Dec (amount=0).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-2).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:dec()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "dec() with custom key": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "dec",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env1/test:dec() with custom key",
+        "traces": [
+          {
+            "data": {
+              "message": "Dec (amount=5, key: custom-key).",
+              "result": "-1",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-6, key: custom-key).",
+              "result": "-6",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Dec (amount=-4, key: custom-key).",
+              "result": "-6",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-2, key: custom-key).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Dec (amount=0, key: custom-key).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-2, key: custom-key).",
+              "result": "-2",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/test:dec() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;
 
 exports[`inc.test.w 1`] = `
-"{
-  \\"TestRunner\\": [
-    \\"findTests\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\"
-  ]
-}"
+  "results": {
+    "counter/inc.test.w": {
+      "inc()": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "inc",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:inc()",
+        "traces": [
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "result": "1",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=5).",
+              "result": "1",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=6).",
+              "result": "6",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=-4).",
+              "result": "6",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=2).",
+              "result": "2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=0).",
+              "result": "2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=2).",
+              "result": "2",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:inc()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "inc() with custom key": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "inc",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env1/test:inc() with custom key",
+        "traces": [
+          {
+            "data": {
+              "message": "Inc (amount=5, key: custom-key).",
+              "result": "-1",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=4, key: custom-key).",
+              "result": "4",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=-4, key: custom-key).",
+              "result": "4",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0, key: custom-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=0, key: custom-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0, key: custom-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/test:inc() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;
 
 exports[`initial.test.w 1`] = `
-"{
-  \\"TestRunner\\": [
-    \\"findTests\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"Counter\\": [
-    \\"peek\\"
-  ]
-}"
+  "results": {
+    "counter/initial.test.w": {
+      "initial:default": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:initial:default",
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counterA",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:initial:default/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "initial:negative-value": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env2/test:initial:negative-value",
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=-198).",
+              "result": "-198",
+              "status": "success",
+            },
+            "sourcePath": "root/env2/counterC",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env2/test:initial:negative-value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "initial:positive-value": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env1/test:initial:positive-value",
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=500).",
+              "result": "500",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counterB",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/test:initial:positive-value/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;
 
 exports[`peek.test.w 1`] = `
-"{
-  \\"TestRunner\\": [
-    \\"findTests\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\"
-  ]
-}"
+  "results": {
+    "counter/peek.test.w": {
+      "key peek": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "inc",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env1/test:key peek",
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=0, key: my-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0, key: my-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1, key: my-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=1, key: my-key).",
+              "result": "1",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/test:key peek/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "peek": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "inc",
+              "peek",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:peek",
+        "traces": [
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Inc (amount=1).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=1).",
+              "result": "1",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/cloud.Counter",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:peek/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;
 
 exports[`set.test.w 1`] = `
-"{
-  \\"TestRunner\\": [
-    \\"findTests\\"
+{
+  "duration": "<DURATION>",
+  "platforms": [
+    "sim",
+    "node_modules/@winglang/compatibility-spy/lib",
   ],
-  \\"Counter\\": [
-    \\"inc\\",
-    \\"peek\\",
-    \\"set\\"
-  ]
-}"
+  "results": {
+    "counter/set.test.w": {
+      "set()": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "peek",
+              "set",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env0/test:set()",
+        "traces": [
+          {
+            "data": {
+              "message": "Set (value=42).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=42).",
+              "result": "42",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Set (value=-100).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-100).",
+              "result": "-100",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Set (value=0).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/counter1",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env0/test:set()/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+      "set() with custom key": {
+        "args": {
+          "methods": {
+            "Counter": [
+              "peek",
+              "set",
+            ],
+            "TestRunner": [
+              "findTests",
+            ],
+          },
+        },
+        "pass": true,
+        "path": "root/env1/test:set() with custom key",
+        "traces": [
+          {
+            "data": {
+              "message": "Set (value=42, key: custom-key).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=42, key: custom-key).",
+              "result": "42",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Set (value=-100, key: custom-key).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=-100, key: custom-key).",
+              "result": "-100",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Set (value=0, key: custom-key).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Peek (value=0, key: custom-key).",
+              "result": "0",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/counter2",
+            "sourceType": "@winglang/sdk.cloud.Counter",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+          {
+            "data": {
+              "message": "Invoke (payload=undefined).",
+              "status": "success",
+            },
+            "sourcePath": "root/env1/test:set() with custom key/Handler",
+            "sourceType": "@winglang/sdk.cloud.Function",
+            "timestamp": "<TIMESTAMP>",
+            "type": "resource",
+          },
+        ],
+      },
+    },
+  },
+}
 `;

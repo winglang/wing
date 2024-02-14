@@ -11,6 +11,18 @@ use crate::{
 };
 
 #[macro_export]
+macro_rules! assert_compile_dir {
+  ($code:literal) => {
+    insta::with_settings!({
+      prepend_module_to_snapshot => false,
+      omit_expression => true,
+    }, {
+      insta::assert_snapshot!($crate::test_utils::compile_dir($code));
+    })
+  };
+}
+
+#[macro_export]
 macro_rules! assert_compile_ok {
   ($code:literal) => {
     insta::with_settings!({
@@ -34,8 +46,17 @@ macro_rules! assert_compile_fail {
   };
 }
 
+pub fn compile_dir(code: &str) -> String {
+	let snap = compile_code(code, true);
+	if found_errors() {
+		get_diagnostics().iter().for_each(|d| println!("{}", d));
+		assert!(false, "expected no errors");
+	}
+	snap
+}
+
 pub fn compile_ok(code: &str) -> String {
-	let snap = compile_code(code);
+	let snap = compile_code(code, false);
 	if found_errors() {
 		get_diagnostics().iter().for_each(|d| println!("{}", d));
 		assert!(false, "expected no errors");
@@ -44,16 +65,15 @@ pub fn compile_ok(code: &str) -> String {
 }
 
 pub fn compile_fail(code: &str) -> String {
-	let snap = compile_code(code);
+	let snap = compile_code(code, false);
 	assert!(found_errors());
 	snap
 }
 
 /// Compiles `code` and returns the capture scanner results as a string that can be snapshotted
-fn compile_code(code: &str) -> String {
+fn compile_code(code: &str, as_dir: bool) -> String {
 	let project_dir = tempfile::tempdir().unwrap();
 	let project_dir = Utf8Path::from_path(project_dir.path()).unwrap();
-	let source_path = project_dir.join("main.w");
 	let out_dir = project_dir.join("target/main.out/.wing");
 
 	// NOTE: this is needed for debugging to work regardless of where you run the test
@@ -62,7 +82,14 @@ fn compile_code(code: &str) -> String {
 	// convert tabs to 2 spaces
 	let code = code.replace("\t", "  ");
 
-	let result = compile(project_dir, &source_path, Some(code.clone()), &out_dir);
+	let result = if as_dir {
+		// Write lib.w to the project dir because compiling a directory requires an actual file to exist
+		std::fs::write(project_dir.join("lib.w"), &code).unwrap();
+
+		compile(project_dir, &project_dir, None, &out_dir)
+	} else {
+		compile(project_dir, &project_dir.join("main.w"), Some(code.clone()), &out_dir)
+	};
 
 	let mut snap = vec![];
 

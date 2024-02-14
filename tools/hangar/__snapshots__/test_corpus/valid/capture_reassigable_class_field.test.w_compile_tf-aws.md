@@ -56,12 +56,12 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k")), 2);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k2")), 1);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
     }
   }
   return $Closure3;
@@ -99,7 +99,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -186,8 +186,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
+          get _liftMap() {
+            return ({
+              "handle": [
+              ],
+              "$inflight_init": [
+              ],
+            });
           }
         }
         this.onUpdateCallback = new $Closure1(this, "$Closure1");
@@ -214,15 +219,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "get", "set", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.bucket, []],
-            [this.onUpdateCallback, []],
-          ],
+      get _liftMap() {
+        return ({
           "get": [
             [this.bucket, ["getJson"]],
             [this.onUpdateCallback, ["handle"]],
@@ -230,11 +228,14 @@ class $Root extends $stdlib.std.Resource {
           "set": [
             [this.bucket, ["putJson"]],
           ],
+          "$inflight_init": [
+            [this.bucket, []],
+            [this.onUpdateCallback, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -258,19 +259,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [counter, ["inc"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -296,17 +295,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [counter, ["peek"]],
             [kv, ["get", "set"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const kv = new KeyValueStore(this, "KeyValueStore");

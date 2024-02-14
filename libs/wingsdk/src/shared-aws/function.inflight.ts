@@ -19,24 +19,18 @@ export class FunctionClient implements IFunctionClient {
    * Invokes the function with a payload and waits for the result.
    *  @returns the function response payload.
    */
-  public async invoke(payload: string): Promise<string> {
+  public async invoke(payload?: string): Promise<string | undefined> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
-      Payload: fromUtf8(JSON.stringify(payload)),
+      // If payload is undefined, pass json `null` as the payload to the function
+      // to ensure the received event will be `null` (which will be converted to `undefined` in the function code)
+      // If the Payload is undefined, the resulting event will instead be `{}`
+      Payload: fromUtf8(
+        payload !== undefined ? JSON.stringify(payload) : "null"
+      ),
     });
     const response = await this.lambdaClient.send(command);
-
-    const value = parseCommandOutput(response, this.functionArn);
-
-    if (!value) {
-      return "";
-    }
-    if (typeof value !== "string") {
-      throw new Error(
-        `function returned value of type ${typeof value}, not string`
-      );
-    }
-    return value;
+    return parseCommandOutput(response, this.functionArn);
   }
 
   /**
@@ -92,7 +86,7 @@ export class FunctionClient implements IFunctionClient {
 function parseCommandOutput(
   payload: InvokeCommandOutput,
   functionArn: string
-): any | undefined {
+): string | undefined {
   if (payload.FunctionError) {
     let errorText = toUtf8(payload.Payload!);
     let errorData;
@@ -110,17 +104,19 @@ function parseCommandOutput(
       newError.stack = errorData.trace?.join("\n");
       throw newError;
     }
+
     throw new Error(
       `Invoke failed with message: "${
         payload.FunctionError
       }"\nLogs: ${cloudwatchLogsPath(functionArn)}\nFull Error: "${errorText}"`
     );
+  }
+
+  if (!payload.Payload) {
+    return undefined;
   } else {
-    if (!payload.Payload) {
-      return undefined;
-    } else {
-      return JSON.parse(toUtf8(payload.Payload));
-    }
+    const returnObject = JSON.parse(toUtf8(payload.Payload));
+    return returnObject === null ? undefined : returnObject;
   }
 }
 

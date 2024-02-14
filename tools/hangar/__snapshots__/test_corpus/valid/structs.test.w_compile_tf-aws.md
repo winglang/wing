@@ -46,7 +46,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -93,22 +93,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "getStuff", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.data.field0, []],
-          ],
+      get _liftMap() {
+        return ({
           "getStuff": [
             [this.data.field0, []],
           ],
+          "$inflight_init": [
+            [this.data.field0, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -131,10 +127,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
+    const a = undefined;
     const x = ({"field0": "Sup"});
     const y = ({"field0": "hello", "field1": 1, "field2": "world", "field3": ({"field0": "foo"})});
     $helpers.assert($helpers.eq(x.field0, "Sup"), "x.field0 == \"Sup\"");

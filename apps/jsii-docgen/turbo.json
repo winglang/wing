@@ -4,6 +4,10 @@
   "pipeline": {
     "compile": {
       "outputs": ["lib/**"]
+    },
+    "test": {
+      "inputs": ["src/**", "test/**"],
+      "outputs": ["test/**"]
     }
   }
 }

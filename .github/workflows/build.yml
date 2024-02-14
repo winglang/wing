@@ -19,8 +19,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODE_VERSION: "18.16.0"
-  PNPM_VERSION: "8.6.3"
+  NODE_VERSION: "20.11.0"
+  PNPM_VERSION: "8.15.1"
   CARGO_TERM_COLOR: always
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
@@ -206,8 +206,7 @@ jobs:
       fail-fast: true
       matrix:
         runner: [windows, macos, ubuntu]
-        # Pinned 20 to 20.5.1 until https://github.com/nodejs/node/issues/49497 is released
-        node: ["18", "20.5.1"]
+        node: ["20", "18"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
@@ -218,7 +217,7 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: "20"
+            node: "18"
             full_run: false
     steps:
       - name: Checkout
@@ -243,18 +242,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid --filter @winglang/compatibility-spy
-          pnpm run compile --filter jsii-fixture --filter @winglang/compatibility-spy
+          pnpm install --frozen-lockfile --ignore-scripts --filter hangar --filter examples-valid --filter examples-invalid
+          pnpm run compile --filter jsii-fixture
 
       - name: Run Hangar Tests
         working-directory: tools/hangar
         run: |
           pnpm test:generate
-          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '20' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
-        if: matrix.runner == 'ubuntu' && matrix.node == '18'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20'
         id: diff
         env:
           RAW_SHARD: ${{ matrix.shard }}
@@ -263,13 +262,13 @@ jobs:
           scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
-        if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
+        if: matrix.runner == 'ubuntu' && matrix.node == '20' && steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
-  aws-sdk-spec-test:
+  sdk-spec-test:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
@@ -332,10 +331,10 @@ jobs:
       - e2e-test
       - benchmark
       - test
-      - aws-sdk-spec-test
+      - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.aws-sdk-spec-test.result == 'failure'
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
         run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3
@@ -385,7 +384,7 @@ jobs:
             set -o pipefail
 
             cd dist
-            PACKAGES=("@winglang/sdk" "ts4w" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
+            PACKAGES=("@winglang/sdk" "@wingcloud/framework" "@winglang/compiler" "@wingconsole/design-system" "@wingconsole/ui" "@wingconsole/server" "@wingconsole/app" "winglang" "@winglang/platform-awscdk" "@winglang/compatibility-spy")
             for PACKAGE in "${PACKAGES[@]}"; do
               # Check if already published
               VERSION_FOUND=$(npm view "$PACKAGE@$PACKAGE_VERSION" version --verbose || true)

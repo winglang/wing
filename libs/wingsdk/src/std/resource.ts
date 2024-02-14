@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
-import { App } from "../core";
-import { NotImplementedError, AbstractMemberError } from "../core/errors";
+import { App, LiftDepsMatrixRaw } from "../core";
+import { AbstractMemberError } from "../core/errors";
 import { log } from "../shared/log";
 import { Node } from "../std";
 
@@ -80,6 +80,14 @@ export interface ILiftable {
  * to access the lifted object inflight.
  */
 export interface IHostedLiftable extends ILiftable {
+  /**
+   * Compiler-generated data that describes the dependencies of this object on other
+   * objects. This is used to determine which permissions need to be granted to the
+   * inflight host.
+   * @internal
+   */
+  _liftMap?: LiftDepsMatrixRaw;
+
   /**
    * A hook called by the Wing compiler once for each inflight host that needs to
    * use this object inflight. The list of requested inflight methods
@@ -190,15 +198,13 @@ export abstract class Resource extends Construct implements IResource {
    * actually bound.
    */
   public onLift(host: IInflightHost, ops: string[]): void {
-    const supportedOps = [...(this._supportedOps() ?? []), "$inflight_init"];
-    for (const op of ops) {
-      // For each operation, check if the host supports it
-      if (!supportedOps.includes(op)) {
-        throw new NotImplementedError(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path}).\nIt might not be implemented yet.`
-        );
-      }
+    log(
+      `onLift called on a resource (${this.node.path}) with a host (${
+        host.node.path
+      }) and ops: ${JSON.stringify(ops)}`
+    );
 
+    for (const op of ops) {
       // Add connection metadata
       Node.of(this).addConnection({
         source: host,
@@ -218,6 +224,18 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _preSynthesize(): void {
     // do nothing by default
+  }
+}
+
+/**
+ * A resource that has an automatically generated id.
+ * Used by the Wing compiler to generate unique ids for auto generated resources
+ * from inflight function closures.
+ */
+export abstract class AutoIdResource extends Resource {
+  constructor(scope: Construct, idPrefix: string = "") {
+    const id = App.of(scope).makeId(scope, idPrefix ? `${idPrefix}_` : "");
+    super(scope, id);
   }
 }
 

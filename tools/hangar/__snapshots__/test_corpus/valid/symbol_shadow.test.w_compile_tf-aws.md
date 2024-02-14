@@ -102,7 +102,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -133,7 +133,7 @@ class $Root extends $stdlib.std.Resource {
         const s = "inResource";
         $helpers.assert($helpers.eq(s, "inResource"), "s == \"inResource\"");
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -157,16 +157,14 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [s, []],
               ],
+              "$inflight_init": [
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight in resource should capture the right scoped var", new $Closure2(this, "$Closure2"));
@@ -188,11 +186,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -216,19 +217,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [s, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -251,15 +250,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const s = "top";
     if (true) {
       const s = "inner";
       $helpers.assert($helpers.eq(s, "inner"), "s == \"inner\"");
-      class $Closure1 extends $stdlib.std.Resource {
+      class $Closure1 extends $stdlib.std.AutoIdResource {
         _id = $stdlib.core.closureId();
         constructor($scope, $id, ) {
           super($scope, $id);
@@ -283,16 +287,14 @@ class $Root extends $stdlib.std.Resource {
             })())
           `;
         }
-        _supportedOps() {
-          return [...super._supportedOps(), "handle", "$inflight_init"];
-        }
-        onLift(host, ops) {
-          $stdlib.core.onLiftMatrix(host, ops, {
+        get _liftMap() {
+          return ({
             "handle": [
               [s, []],
             ],
+            "$inflight_init": [
+            ],
           });
-          super.onLift(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:inflight nested should not capture the shadowed var", new $Closure1(this, "$Closure1"));

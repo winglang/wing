@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { describe, test, expect } from "vitest";
+import { Lifting } from "../../src/core";
 import { Resource } from "../../src/std";
 import { SimApp } from "../sim-app";
 
@@ -35,9 +36,9 @@ describe("resource onLift", () => {
     const example = new Example(app, "example");
 
     expect(() =>
-      example.onLift(new Example(app, "host"), ["nonExistentOp"])
+      Lifting.lift(example, new Example(app, "host"), ["nonExistentOp"])
     ).toThrow(
-      `Resource root/example does not support inflight operation nonExistentOp (requested by root/host).\nIt might not be implemented yet.`
+      `Resource root/example does not support inflight operation nonExistentOp.\nIt might not be implemented yet.`
     );
   });
 

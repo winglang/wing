@@ -93,24 +93,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "boom", "bam", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.b, []],
+      get _liftMap() {
+        return ({
+          "boom": [
+            [this.b, ["list"]],
             [this.s.length, []],
           ],
           "bam": [
             [this.b, ["get", "put"]],
           ],
-          "boom": [
-            [this.b, ["list"]],
+          "$inflight_init": [
+            [this.b, []],
             [this.s.length, []],
           ],
         });
-        super.onLift(host, ops);
       }
     }
   }

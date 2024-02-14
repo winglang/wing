@@ -6,7 +6,7 @@ describe("prettyPrintError", () => {
     const result = await prettyPrintError("message");
 
     // no stack trace available
-    expect(result).toMatchInlineSnapshot('"runtime error: message"');
+    expect(result).toMatchInlineSnapshot('"Error: message"');
   });
   test("empty message", async () => {
     const result = await prettyPrintError("");
@@ -20,7 +20,7 @@ describe("prettyPrintError", () => {
     const interestingPart = resultLines.slice(0, 7).join("\n");
     expect(resultLines[8]).toMatch(/^at /);
     expect(interestingPart).toMatchInlineSnapshot(`
-      "runtime error: message
+      "Error: message
          --> test/util/enhanced-error.test.ts:17:43
          |   expect(result).toBe(\\"\\");
          | });
@@ -36,7 +36,7 @@ describe("prettyPrintError", () => {
 
     const interestingPart = result.split("\n").slice(0, 8).join("\n");
     expect(interestingPart).toMatchInlineSnapshot(`
-      "runtime error: message
+      "Error: message
       with extra line
          --> test/util/enhanced-error.test.ts:34:7
          | });

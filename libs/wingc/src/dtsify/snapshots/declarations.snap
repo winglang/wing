@@ -1,0 +1,224 @@
+---
+source: libs/wingc/src/dtsify/mod.rs
+---
+## Code
+
+```w
+
+pub struct Struct {
+  n: num;
+  d: Array<duration>;
+  j: Json;
+}
+
+pub interface Interface {
+  method(s: Struct): str;
+  inflight inflightMethod(): str;
+}
+
+pub interface ClassInterface {
+  addHandler(handler: inflight (str): str): void;
+  inflight bar(): void;
+}
+
+pub class ParentClass impl ClassInterface {
+  pub static inflight static_method() {}
+
+  inflight foo() {}
+  pub inflight bar() {}
+
+  pub addHandler(handler: inflight (str): str) {}
+}
+
+pub class Child extends ParentClass impl ClassInterface {
+  
+}
+```
+
+## inflight.Child-1.js
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $ParentClass }) {
+  class Child extends $ParentClass {
+    constructor({  }) {
+      super({  });
+    }
+  }
+  return Child;
+}
+//# sourceMappingURL=inflight.Child-1.js.map
+```
+
+## inflight.ParentClass-1.js
+
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({  }) {
+  class ParentClass {
+    constructor({  }) {
+    }
+    static async static_method() {
+    }
+    async foo() {
+    }
+    async bar() {
+    }
+  }
+  return ParentClass;
+}
+//# sourceMappingURL=inflight.ParentClass-1.js.map
+```
+
+## preflight.d.ts
+
+```js
+export * from "./preflight.lib-1.js"
+```
+
+## preflight.js
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+module.exports = {
+  ...require("./preflight.lib-1.js"),
+};
+//# sourceMappingURL=preflight.js.map
+```
+
+## preflight.lib-1.d.ts
+
+```js
+import * as $internal from "@winglang/sdk/lib/core/types"
+import { std } from "@winglang/sdk"
+export interface Struct {
+  readonly n: number;
+  readonly d: (readonly (std.Duration)[]);
+  readonly j: Readonly<$internal.Json>;
+}
+export interface Interface
+{
+  readonly method: (s: Struct) => string;
+}
+export interface Interface$Inflight
+{
+  readonly inflightMethod: () => Promise<string>;
+}
+export interface ClassInterface
+{
+  readonly addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
+}
+export interface ClassInterface$Inflight
+{
+  readonly bar: () => Promise<void>;
+}
+export class ParentClass extends std.Resource implements ClassInterface
+{
+  constructor(scope: $internal.Construct, id: string);
+  [$internal.INFLIGHT_SYMBOL]?: ParentClass$Inflight;
+  _supportedOps(): $internal.OperationsOf<ParentClass$Inflight>;
+  addHandler: (handler: $internal.Inflight<(arg0: string) => Promise<string>>) => void;
+}
+export class ParentClass$Inflight implements ClassInterface$Inflight
+{
+  constructor();
+  static static_method: () => Promise<void>;
+  bar: () => Promise<void>;
+}
+export class Child extends ParentClass implements ClassInterface
+{
+  constructor(scope: $internal.Construct, id: string);
+  [$internal.INFLIGHT_SYMBOL]?: Child$Inflight;
+  _supportedOps(): $internal.OperationsOf<Child$Inflight>;
+}
+export class Child$Inflight extends ParentClass$Inflight implements ClassInterface$Inflight
+{
+  constructor();
+}
+```
+
+## preflight.lib-1.js
+
+```js
+"use strict";
+const $stdlib = require('@winglang/sdk');
+const std = $stdlib.std;
+const $helpers = $stdlib.helpers;
+class ParentClass extends $stdlib.std.Resource {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  addHandler(handler) {
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.ParentClass-1.js")({
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ParentClassClient = ${ParentClass._toInflightType()};
+        const client = new ParentClassClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return ({
+      "foo": [
+      ],
+      "bar": [
+      ],
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "static_method": [
+      ],
+    });
+  }
+}
+class Child extends ParentClass {
+  constructor($scope, $id, ) {
+    super($scope, $id);
+  }
+  static _toInflightType() {
+    return `
+      require("${$helpers.normalPath(__dirname)}/inflight.Child-1.js")({
+        $ParentClass: ${$stdlib.core.liftObject(ParentClass)},
+      })
+    `;
+  }
+  _toInflight() {
+    return `
+      (await (async () => {
+        const ChildClient = ${Child._toInflightType()};
+        const client = new ChildClient({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `;
+  }
+  get _liftMap() {
+    return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      "$inflight_init": [
+      ],
+    });
+  }
+}
+module.exports = { ParentClass, Child };
+//# sourceMappingURL=preflight.lib-1.js.map
+```
+

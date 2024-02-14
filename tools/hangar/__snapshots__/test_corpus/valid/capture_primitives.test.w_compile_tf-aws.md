@@ -11,7 +11,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(s) {
+    async handle() {
       console.log($myStr);
       const n = $myNum;
       console.log(String.raw({ raw: ["", ""] }, n));
@@ -41,7 +41,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -172,7 +172,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -202,11 +202,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [myBool, []],
             [myDur.hours, []],
@@ -216,8 +213,9 @@ class $Root extends $stdlib.std.Resource {
             [mySecondBool, []],
             [myStr, []],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const myStr = "hello, string";

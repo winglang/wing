@@ -66,9 +66,9 @@ async handle(event) {
 
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::SQS::Queue", 1);
-  template.resourceCountIs("AWS::Lambda::Function", 2);
-  template.resourceCountIs("AWS::IAM::Role", 2);
-  template.resourceCountIs("AWS::IAM::Policy", 2);
+  template.resourceCountIs("AWS::Lambda::Function", 1);
+  template.resourceCountIs("AWS::IAM::Role", 1);
+  template.resourceCountIs("AWS::IAM::Policy", 1);
   template.resourceCountIs("AWS::Lambda::EventSourceMapping", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

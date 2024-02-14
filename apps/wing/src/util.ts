@@ -1,4 +1,5 @@
 import * as cp from "child_process";
+import { readdirSync } from "fs";
 import * as fs from "fs/promises";
 import { tmpdir } from "os";
 import { join } from "path";
@@ -82,3 +83,30 @@ export const currentPackage: {
   engines: { node: string };
   // eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require("../package.json");
+
+export const PROJECT_TEMPLATES_DIR = join(__dirname, "..", "project-templates");
+
+export function projectTemplateNames(): string[] {
+  const templateNames: Set<string> = new Set();
+  readdirSync(join(PROJECT_TEMPLATES_DIR)).forEach((language) => {
+    readdirSync(join(PROJECT_TEMPLATES_DIR, language)).forEach((template) => {
+      templateNames.add(template);
+    });
+  });
+  return [...templateNames];
+}
+
+export function flattenObject(item: any, parentKey: string = "") {
+  let flattened: Record<string, unknown> = {};
+
+  if (typeof item === "object") {
+    for (const key in item) {
+      const propName: string = parentKey ? `${parentKey}_${key}` : key;
+      Object.assign(flattened, flattenObject(item[key] as Record<string, unknown>, propName));
+    }
+  } else {
+    flattened[parentKey] = item;
+  }
+
+  return flattened;
+}

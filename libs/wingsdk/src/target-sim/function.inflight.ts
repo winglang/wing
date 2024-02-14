@@ -13,6 +13,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
+  private readonly sandbox: Sandbox;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
@@ -22,20 +23,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
-  }
-
-  public async init(): Promise<FunctionAttributes> {
-    return {};
-  }
-
-  public async cleanup(): Promise<void> {
-    return;
-  }
-
-  public async save(): Promise<void> {}
-
-  private createSandbox(): Sandbox {
-    return new Sandbox(this.filename, {
+    this.sandbox = new Sandbox(this.filename, {
       env: {
         ...this.env,
         WING_SIMULATOR_URL: this.context.serverUrl,
@@ -53,12 +41,21 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     });
   }
 
+  public async init(): Promise<FunctionAttributes> {
+    return {};
+  }
+
+  public async cleanup(): Promise<void> {
+    return;
+  }
+
+  public async save(): Promise<void> {}
+
   public async invoke(payload: string): Promise<string> {
     return this.context.withTrace({
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = this.createSandbox();
-        return sb.call("handler", JSON.stringify(payload)) ?? "";
+        return this.sandbox.call("handler", payload) ?? "";
       },
     });
   }
@@ -67,9 +64,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     await this.context.withTrace({
       message: `InvokeAsync (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
-        const sb = this.createSandbox();
         process.nextTick(() => {
-          void sb.call("handler", JSON.stringify(payload));
+          void this.sandbox.call("handler", payload);
         });
       },
     });

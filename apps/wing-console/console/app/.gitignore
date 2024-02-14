@@ -3,3 +3,4 @@
 /**/target/*.wsim.*/
 /playwright-report/
 /test-results/
+/web/.env

@@ -808,6 +808,7 @@ Here's a quick summary of how optionality works in Wing:
   otherwise.
 * `if let y = x { } else { }` is a special control flow statement which binds `y` inside the first
   block only if `x` has a value. Otherwise, the `else` block will be executed.
+* The `x!` notation will return the value in `x` if there is one, otherwise it will throw an error.
 * The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
   expression is `Z?` (an optional based on the type of the last component).
 * The `x ?? y` notation will return the value in `x` if there is one, `y` otherwise.

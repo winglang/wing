@@ -4,6 +4,7 @@ import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
+import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { DynamodbTable } from "./dynamodb-table";
@@ -20,6 +21,7 @@ import { Website } from "./website";
 import { cloud } from "@winglang/sdk";
 
 const {
+  API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
   ENDPOINT_FQN,
@@ -55,6 +57,9 @@ export class App extends core.App {
   public readonly isTestEnvironment: boolean;
 
   public readonly _target = "awscdk";
+
+  private awsAccount?: string;
+  private awsRegion?: string;
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -147,6 +152,9 @@ export class App extends core.App {
 
   protected typeForFqn(fqn: string): any {
     switch (fqn) {
+      case API_FQN:
+        return Api;
+
       case FUNCTION_FQN:
         return Function;
 
@@ -184,5 +192,25 @@ export class App extends core.App {
         return Endpoint;
     }
     return undefined;
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccount) {
+      this.awsAccount = this.cdkStack.account;
+    }
+    return this.awsAccount;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegion) {
+      this.awsRegion = this.cdkStack.region;
+    }
+    return this.awsRegion;
   }
 }

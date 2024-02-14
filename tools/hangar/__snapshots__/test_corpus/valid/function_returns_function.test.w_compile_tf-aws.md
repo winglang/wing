@@ -12,11 +12,11 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const iFn = async (s) => {
-        return async () => {
+      const iFn = (async (s) => {
+        return (async () => {
           return $helpers.eq(s, "wing");
-        };
-      };
+        });
+      });
       const wingInflightFn = (await iFn("wing"));
       const dingInflightFn = (await iFn("ding"));
       $helpers.assert((await wingInflightFn()), "wingInflightFn()");
@@ -35,7 +35,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -60,7 +60,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -83,8 +83,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const fn = ((s) => {

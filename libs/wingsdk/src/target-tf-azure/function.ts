@@ -74,14 +74,17 @@ export class Function extends cloud.Function {
     this.functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
     const functionRuntime = "node";
-    const functionNodeVersion = "18"; // support fetch
+    const functionNodeVersion = "20"; // support fetch
 
     // Create Bucket to store function code
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
     // throw an error if props.memory is defined for an Azure function
     if (props.memory) {
-      throw new NotImplementedError("memory is an invalid parameter on Azure");
+      throw new NotImplementedError("memory is an invalid parameter on Azure", {
+        resource: this.constructor.name,
+        operation: "memory",
+      });
     }
 
     // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
@@ -89,7 +92,11 @@ export class Function extends cloud.Function {
     if (props.timeout) {
       throw new NotImplementedError(
         "Function.timeout is not implemented yet on tf-azure target.",
-        "https://github.com/winglang/wing/issues/4494"
+        {
+          issue: "https://github.com/winglang/wing/issues/4494",
+          resource: this.constructor.name,
+          operation: "timeout",
+        }
       );
     }
 

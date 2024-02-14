@@ -1,10 +1,10 @@
-import { Command, Option } from "commander";
+import { Argument, Command, Option } from "commander";
 import { satisfies } from "compare-versions";
 
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { exportAnalytics } from "./analytics/export";
 import { loadEnvVariables } from "./env";
-import { currentPackage } from "./util";
+import { currentPackage, projectTemplateNames } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
@@ -147,6 +147,12 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 
@@ -168,7 +174,7 @@ async function main() {
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
-    .option("--values <file>", "Yaml file with Platform-specific values")
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -210,6 +216,21 @@ async function main() {
     .addOption(new Option("-o --out-file <filename>", "Output filename"))
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("pack"));
+
+  program
+    .command("new")
+    .description("Create a new Wing project")
+    .addArgument(
+      new Argument("<template>", "Template name").choices(projectTemplateNames()).argOptional()
+    )
+    .addOption(
+      new Option("-l --language [language]", "Language")
+        .choices(["wing", "typescript"])
+        .argParser((value) => value ?? "wing")
+    )
+    .addOption(new Option("--list-templates", "List available templates"))
+    .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
+    .action(runSubCommand("init"));
 
   program
     .command("docs")

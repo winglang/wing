@@ -7,6 +7,9 @@ import {
   IEventSource,
   Runtime,
 } from "aws-cdk-lib/aws-lambda";
+import {
+  LogGroup, RetentionDays
+} from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct } from "constructs";
 import { cloud, std, core } from "@winglang/sdk";
@@ -45,10 +48,14 @@ export class Function extends cloud.Function implements IAwsFunction {
       props.logRetentionDays === undefined
         ? 30
         : props.logRetentionDays < 0
-          ? undefined // Negative value means Infinite retention
+          ? RetentionDays.INFINITE // Negative value means Infinite retention
           : props.logRetentionDays;
 
     const code = Code.fromAsset(resolve(bundle.directory));
+
+    const logs = new LogGroup(this, "LogGroup", {
+      retention: logRetentionDays
+    });
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
@@ -63,7 +70,7 @@ export class Function extends cloud.Function implements IAwsFunction {
         : Duration.minutes(1),
       memorySize: props.memory ?? 1024,
       architecture: Architecture.ARM_64,
-      logRetention: logRetentionDays,
+      logGroup: logs
     });
 
     // hack: accessing private field from aws_lambda.AssetCode

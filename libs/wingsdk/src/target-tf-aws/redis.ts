@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
 import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
@@ -24,7 +25,7 @@ export class Redis extends ex.Redis {
   private readonly clusterId: string;
   private readonly clusterArn: string;
   private readonly securityGroup: SecurityGroup;
-  private readonly subnet: Subnet;
+  private readonly subnet: Subnet | DataAwsSubnet;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);

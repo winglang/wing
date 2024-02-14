@@ -18,7 +18,7 @@ const Cell = ({item: {implemented, issue} = {}}) => (
   <td>
     <div className="cell">
       {implemented ? <CheckMark fill={"var(--ifm-color-success-lightest)"} /> : <XMark fill={"var(--ifm-color-danger-light)"} />}
-      {issue ? (
+      {!implemented && issue ? (
         <a target="_blank" href={`https://github.com/winglang/wing/issues/${issue}`}>
           #{issue}
         </a>

@@ -29,10 +29,7 @@ test("basic function", () => {
       Timeout: 60,
     })
   );
-  expect(
-    Object.keys(template.findResources("Custom::LogRetention")).length,
-    "should have LogRetention"
-  ).toEqual(1);
+  template.resourceCountIs("AWS::Logs::LogGroup", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -109,6 +106,25 @@ test("basic function with memory size specified", () => {
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
+test("basic function with standard log retention", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = simulator.Testing.makeHandler(INFLIGHT_CODE);
+  new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("AWS::Logs::LogGroup", 1);
+  template.hasResourceProperties(
+    "AWS::Logs::LogGroup",
+    Match.objectEquals({
+      RetentionInDays: 30
+    })
+  );
+  expect(awscdkSanitize(template)).toMatchSnapshot();
+});
+
 test("basic function with custom log retention", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
@@ -118,10 +134,13 @@ test("basic function with custom log retention", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(
-    Object.keys(template.findResources("Custom::LogRetention")).length,
-    "should have LogRetention"
-  ).toEqual(1);
+  template.resourceCountIs("AWS::Logs::LogGroup", 1);
+  template.hasResourceProperties(
+    "AWS::Logs::LogGroup",
+    Match.objectEquals({
+      RetentionInDays: 7
+    })
+  );
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
@@ -134,10 +153,7 @@ test("basic function with infinite log retention", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(
-    Object.keys(template.findResources("Custom::LogRetention")).length,
-    "should NOT have LogRetention"
-  ).toEqual(0);
+  template.resourceCountIs("AWS::Logs::LogGroup", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 

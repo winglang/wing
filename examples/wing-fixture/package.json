@@ -8,13 +8,22 @@
     "url": "https://wing.cloud",
     "organization": true
   },
+  "scripts": {
+    "compile": "wing compile .",
+    "test": "wing test"
+  },
   "license": "MIT",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=v20.0.0"
   },
+  "main": "target/wing-fixture.wsim/.wing/preflight.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
+  },
+  "devDependencies": {
+    "winglang": "workspace:^",
+    "@winglang/sdk": "workspace:^"
   },
   "private": true,
   "wing": true,

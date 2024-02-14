@@ -4,6 +4,7 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
+    "@winglang/compatibility-spy": "workspace:^",
     "turbo": "^1.11.3"
   },
   "scripts": {
@@ -19,8 +20,8 @@
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "18.16.0",
-    "pnpm": "8.6.5"
+    "node": "20.11.0",
+    "pnpm": "8.15.1"
   },
   "pnpm": {
     "overrides": {
@@ -28,9 +29,9 @@
     },
     "patchedDependencies": {
       "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
-      "jsii@5.0.11": "patches/jsii@5.0.11.patch",
-      "esbuild-wasm@0.18.20": "patches/esbuild-wasm@0.18.20.patch",
-      "mime@3.0.0": "patches/mime@3.0.0.patch"
+      "mime@3.0.0": "patches/mime@3.0.0.patch",
+      "protobufjs@7.2.5": "patches/protobufjs@7.2.5.patch",
+      "jsii@5.3.11": "patches/jsii@5.3.11.patch"
     }
   }
 }

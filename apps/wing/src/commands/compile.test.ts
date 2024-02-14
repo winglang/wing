@@ -1,4 +1,4 @@
-import { readdir, stat, writeFile, mkdtemp, readFile } from "fs/promises";
+import { readdir, stat, writeFile, mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { BuiltinPlatform } from "@winglang/compiler";
@@ -6,6 +6,7 @@ import { describe, test, expect } from "vitest";
 import { compile } from "./compile";
 
 const exampleDir = resolve("../../examples/tests/valid");
+const exampleErrorDir = resolve("../../examples/tests/error");
 const exampleSmallDir = resolve("../../examples/tests/valid/subdir2");
 const exampleFilePath = join(exampleDir, "captures.test.w");
 
@@ -28,7 +29,6 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toMatchInlineSnapshot(`
         [
-          ".manifest",
           ".wing",
           "connections.json",
           "simulator.json",
@@ -63,7 +63,6 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toMatchInlineSnapshot(`
         [
-          ".manifest",
           ".wing",
           "connections.json",
           "simulator.json",
@@ -95,6 +94,23 @@ describe(
       return expect(
         compile("non-existent-file.w", { platform: [BuiltinPlatform.SIM] })
       ).rejects.toThrowError(/Source file cannot be found/);
+    });
+
+    test("should create verbose stacktrace with DEBUG env set", async () => {
+      const exampleErrorFile = join(exampleErrorDir, "bool_from_json.test.w");
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.not.toThrowError(/wingsdk/);
+
+      const prevDebug = process.env.DEBUG;
+      process.env.DEBUG = "true";
+
+      await expect(
+        compile(exampleErrorFile, { platform: [BuiltinPlatform.SIM] })
+      ).rejects.toThrowError(/wingsdk/);
+
+      process.env.DEBUG = prevDebug;
     });
 
     test("should be able to compile a directory", async () => {
@@ -136,7 +152,6 @@ describe(
         expect(files.length).toBeGreaterThan(0);
         expect(files).toMatchInlineSnapshot(`
           [
-            ".manifest",
             ".wing",
             "connections.json",
             "simulator.json",
@@ -174,11 +189,6 @@ describe(
       const files2 = await readdir(artifactDir2);
       expect(files2.length).toBeGreaterThan(0);
       expectedFiles.forEach((file) => expect(files2).toContain(file));
-
-      // check the manifest file to make sure it does not contain "terraform.tfstate"
-      const manifestFile = join(artifactDir2, ".manifest");
-      const manifest = JSON.parse(await readFile(manifestFile, "utf-8"));
-      expect(manifest.generatedFiles).not.toContain("terraform.tfstate");
     });
   },
   { timeout: 1000 * 60 * 5 }

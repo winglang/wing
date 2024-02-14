@@ -2,6 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["src/index.ts"],
-  dts: true,
-  clean: true,
+  bundle: false,
+  format: "cjs",
+  outDir: "lib",
 });

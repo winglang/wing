@@ -361,6 +361,7 @@ pub struct Class {
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
 	pub access: AccessModifier,
+	pub auto_id: bool,
 }
 
 impl Class {
@@ -422,6 +423,21 @@ pub struct Interface {
 	pub name: Symbol,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
+	pub access: AccessModifier,
+}
+
+#[derive(Debug)]
+pub struct Struct {
+	pub name: Symbol,
+	pub extends: Vec<UserDefinedType>,
+	pub fields: Vec<StructField>,
+	pub access: AccessModifier,
+}
+
+#[derive(Debug)]
+pub struct Enum {
+	pub name: Symbol,
+	pub values: IndexSet<Symbol>,
 	pub access: AccessModifier,
 }
 
@@ -506,17 +522,8 @@ pub enum StmtKind {
 	Scope(Scope),
 	Class(Class),
 	Interface(Interface),
-	Struct {
-		name: Symbol,
-		extends: Vec<UserDefinedType>,
-		fields: Vec<StructField>,
-		access: AccessModifier,
-	},
-	Enum {
-		name: Symbol,
-		values: IndexSet<Symbol>,
-		access: AccessModifier,
-	},
+	Struct(Struct),
+	Enum(Enum),
 	TryCatch {
 		try_statements: Scope,
 		catch_block: Option<CatchBlock>,
@@ -732,6 +739,7 @@ pub enum UnaryOperator {
 	Minus,
 	Not,
 	OptionalTest,
+	OptionalUnwrap,
 }
 
 #[derive(Debug)]

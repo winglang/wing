@@ -70,9 +70,9 @@ module.exports = function({  }) {
       $helpers.assert($helpers.eq(two, 2), "two == 2");
     }
     async $inflight_init() {
-      this.inflight2 = async () => {
+      this.inflight2 = (async () => {
         return 2;
-      };
+      });
       const ret = (await this.inflight2());
       $helpers.assert($helpers.eq(ret, 2), "ret == 2");
     }
@@ -89,7 +89,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -117,7 +117,7 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
@@ -140,8 +140,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
+          get _liftMap() {
+            return ({
+              "handle": [
+              ],
+              "$inflight_init": [
+              ],
+            });
           }
         }
         this.inflight1 = new $Closure1(this, "$Closure1");
@@ -164,27 +169,29 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.inflight1, []],
+      get _liftMap() {
+        return ({
+          "makeFn": [
+            [this, ["inflight2"]],
+            [this.inflight1, ["handle"]],
           ],
           "callFn": [
+            [this, ["makeFn"]],
           ],
           "callFn2": [
+            [this, ["inflight2"]],
             [this.inflight1, ["handle"]],
           ],
-          "makeFn": [
-            [this.inflight1, ["handle"]],
+          "$inflight_init": [
+            [this, ["inflight2"]],
+            [this.inflight1, []],
+          ],
+          "inflight2": [
           ],
         });
-        super.onLift(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -208,16 +215,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [foo, ["callFn", "callFn2"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const foo = new Foo(this, "Foo");

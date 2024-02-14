@@ -1,13 +1,23 @@
+interface NotImplementedErrorOptions {
+  issue?: string;
+  resource?: string;
+  operation?: string;
+}
+
 export class NotImplementedError extends Error {
   public name: string = "NotImplementedError";
-  constructor(message: string, issue?: string) {
+  public resource?: string;
+  public operation?: string;
+  constructor(message: string, options?: NotImplementedErrorOptions) {
     super(
       `${message}${
-        issue
-          ? `\nFor more information see: ${issue}.\nContributions welcome ❤️`
+        options?.issue
+          ? `\nFor more information see: ${options.issue}.\nContributions welcome ❤️`
           : ""
       }`
     );
+    this.resource = options?.resource;
+    this.operation = options?.operation;
   }
 }
 

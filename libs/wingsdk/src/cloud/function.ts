@@ -2,7 +2,8 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Lifting } from "../core";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration, IInflight, IInflightHost, Node, Resource } from "../std";
 
@@ -48,6 +49,8 @@ export interface FunctionProps {
  * @abstract
  */
 export class Function extends Resource implements IInflightHost {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IFunctionClient;
   private readonly _env: Record<string, string> = {};
   private readonly handler!: IFunctionHandler;
 
@@ -97,14 +100,14 @@ export class Function extends Resource implements IInflightHost {
   public _preSynthesize(): void {
     super._preSynthesize();
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
-    // `require` resolves naturally.
+    // write the entrypoint next to the partial inflight code emitted by the compiler,
+    // so that `require` resolves naturally.
     const lines = this._getCodeLines(this.handler);
     writeFileSync(this.entrypoint, lines.join("\n"));
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    this.handler.onLift(this, ["handle", "$inflight_init"]);
+    Lifting.lift(this.handler, this, ["handle"]);
   }
 
   /**
@@ -115,10 +118,13 @@ export class Function extends Resource implements IInflightHost {
   protected _getCodeLines(handler: IFunctionHandler): string[] {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
+    const client = "$handler";
 
     lines.push('"use strict";');
+    lines.push(`var ${client} = undefined;`);
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient}).handle(event);`);
+    lines.push(`  ${client} = ${client} ?? (${inflightClient});`);
+    lines.push(`  return await ${client}.handle(event);`);
     lines.push("};");
 
     return lines;
@@ -150,15 +156,18 @@ export class Function extends Resource implements IInflightHost {
 export interface IFunctionClient {
   /**
    * Invokes the function with a payload and waits for the result.
+   * @param payload payload to pass to the function. If not defined, an empty string will be passed.
+   * @returns An optional response from the function
    * @inflight
    */
-  invoke(payload: string): Promise<string>;
+  invoke(payload?: string): Promise<string | undefined>;
 
   /**
    * Kicks off the execution of the function with a payload and returns immediately while the function is running.
+   * @param payload payload to pass to the function. If not defined, an empty string will be passed.
    * @inflight
    */
-  invokeAsync(payload: string): Promise<void>;
+  invokeAsync(payload?: string): Promise<void>;
 }
 
 /**
@@ -167,7 +176,10 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IInflight {}
+export interface IFunctionHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IFunctionHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IFunctionHandler`.
@@ -177,7 +189,7 @@ export interface IFunctionHandlerClient {
    * Entrypoint function that will be called when the cloud function is invoked.
    * @inflight
    */
-  handle(event: string): Promise<string | undefined>;
+  handle(event?: string): Promise<string | undefined>;
 }
 
 /**

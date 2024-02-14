@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Endpoint } from "./endpoint";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Node, Resource, Duration, IInflight } from "../std";
 
 /**
@@ -227,6 +228,9 @@ export class Api extends Resource {
    * CORS options for api
    */
   protected corsOptions?: ApiCorsOptions;
+
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IApiClient;
 
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     if (new.target === Api) {
@@ -694,15 +698,27 @@ export interface ApiRequest {
   readonly headers?: Record<string, string>;
 }
 
+export const DEFAULT_RESPONSE_STATUS = 200;
+
 /**
  * Shape of a response from a inflight handler.
  */
 export interface ApiResponse {
-  /** The response's status code. */
-  readonly status: number;
-  /** The response's body. */
+  /**
+   * The response's status code.
+   * @default 200
+   **/
+  readonly status?: number;
+
+  /**
+   * The response's body.
+   * @default - no body
+   **/
   readonly body?: string;
-  /** The response's headers. */
+  /**
+   * The response's headers.
+   * @default {}
+   **/
   readonly headers?: Record<string, string>;
 }
 
@@ -712,7 +728,10 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IInflight {}
+export interface IApiEndpointHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IApiEndpointHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IApiEndpointHandler`.
@@ -722,7 +741,7 @@ export interface IApiEndpointHandlerClient {
    * Inflight that will be called when a request is made to the endpoint.
    * @inflight
    */
-  handle(request: ApiRequest): Promise<ApiResponse>;
+  handle(request: ApiRequest): Promise<ApiResponse | undefined>;
 }
 
 /**

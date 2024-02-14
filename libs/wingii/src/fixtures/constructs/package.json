@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27",
-    "@types/node": "^18.17.13",
+    "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
@@ -22,15 +22,15 @@
     "eslint-plugin-import": "^2.26.0",
     "jest": "^27",
     "jest-junit": "^13",
-    "jsii": "^1.67.0",
-    "jsii-diff": "^1.67.0",
-    "jsii-docgen": "^1.8.110",
-    "jsii-pacmak": "^1.67.0",
+    "jsii": "~5.3.11",
+    "jsii-diff": "^1.94.0",
+    "jsii-docgen": "^10.3.19",
+    "jsii-pacmak": "^1.94.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "projen": "^0.62.3",
     "standard-version": "^9",
-    "ts-jest": "^27",
+    "ts-jest": "^29.1.2",
     "typescript": "^3.9.10"
   },
   "keywords": [
@@ -39,9 +39,6 @@
     "constructs",
     "jsii"
   ],
-  "engines": {
-    "node": ">= 14.17.0"
-  },
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "homepage": "https://github.com/aws/constructs",

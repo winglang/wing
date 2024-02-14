@@ -292,6 +292,7 @@ impl Fold for ClosureTransformer {
 							access: AccessModifier::Public,
 						},
 						access: AccessModifier::Private,
+						auto_id: true,
 					}),
 					idx: self.nearest_stmt_idx,
 					span: WingSpan::for_file(file_id),
