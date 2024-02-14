@@ -21,6 +21,9 @@ import { cloud, lift, main } from "@wingcloud/framework";
  * And retrieve the note:
  * `aws lambda invoke --cli-binary-format raw-in-base64-out --function-name <function-name> --payload "\"n1\"" response.json`
  * `cat response.json`
+ * 
+ * If you have not made changes to this template you can find your function names in AWS using the following command:
+ * `aws lambda list-functions --query "Functions[?starts_with(FunctionName, 'Consumer')].FunctionName"`
  */
 main((root) => {
   let noteBucket = new cloud.Bucket(root, "Bucket");
@@ -28,7 +31,6 @@ main((root) => {
   const api = new cloud.Api(root, "Api");
 
   api.get('/note', lift({noteBucket}).inflight(async ({noteBucket}, request) => {
-    console.log("REQUEST:", request)
     let noteName = request.query.name; 
     const note = await noteBucket.get(noteName);
 
@@ -65,7 +67,6 @@ main((root) => {
       return "event is required `NAME:NOTE`"
     }
     const [name, note] = event!.split(":");
-    // send put request to the api
     const response = await fetch(`${url}/note/${name}`, {
       method: 'PUT',
       body: JSON.stringify(note)
