@@ -2070,8 +2070,6 @@ assert(Json [1, 2, 3] == Json [1, 2, 3]);
 assert(Json { "foo": 1, "bar": 2 } == Json { "foo": 1, "bar": 2 });
 ```
 
-> *Note*: `Json` equality is not fully implemented. See [#2938](https://github.com/winglang/wing/issues/2938), [#2937](https://github.com/winglang/wing/issues/2937).
-
 #### 6.1.7 Structs
 
 Two structs are equal if they have the same type and all of their fields are equal (based on rules of equality of their type).
