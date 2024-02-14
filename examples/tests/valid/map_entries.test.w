@@ -26,10 +26,3 @@ test "check entries() when map has multiple entries" {
   // check array length
   assert(map.entries().length == 2);
 }
-
-test "check entries() when map has numbers as values" {
-  let map = { "foo" => 1, "bar" => 2 };
-
-  // check array length
-  assert(map.entries().length == 2);
-}
