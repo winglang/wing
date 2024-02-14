@@ -108,7 +108,7 @@ exports[`create a counter 1`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -120,7 +120,7 @@ exports[`create a counter 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -249,7 +249,7 @@ exports[`dec 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -261,7 +261,7 @@ exports[`dec 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -390,7 +390,7 @@ exports[`inc 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -402,7 +402,7 @@ exports[`inc 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -531,7 +531,7 @@ exports[`key dec 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -543,7 +543,7 @@ exports[`key dec 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -672,7 +672,7 @@ exports[`key inc 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -684,7 +684,7 @@ exports[`key inc 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -811,7 +811,7 @@ exports[`key set to new value 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -823,7 +823,7 @@ exports[`key set to new value 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -950,7 +950,7 @@ exports[`set to new value 2`] = `
         "my_counter": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A distributed atomic counter",
@@ -962,7 +962,7 @@ exports[`set to new value 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

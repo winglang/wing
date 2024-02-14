@@ -37,7 +37,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@cdktf/provider-aws": "^15.0.0",
+    "@cdktf/provider-aws": "^19",
     "@types/aws-lambda": "^8.10.109",
     "@types/express": "^4.17.17",
     "@types/fs-extra": "^11.0.1",
@@ -51,9 +51,9 @@
     "aws-sdk-client-mock": "3.0.0",
     "aws-sdk-client-mock-jest": "3.0.0",
     "bump-pack": "workspace:^",
-    "cdktf-cli": "0.17.0",
+    "cdktf-cli": "0.20.3",
     "chalk": "^4.1.2",
-    "constructs": "~10.2.69",
+    "constructs": "^10.3",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-import-resolver-node": "^0.3.9",
@@ -72,12 +72,12 @@
     "projen": "^0.71.163",
     "standard-version": "^9",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.5",
+    "typescript": "^5.3.3",
     "vitest": "^0.34.6",
     "wing-api-checker": "workspace:^"
   },
   "peerDependencies": {
-    "constructs": "~10.2.69"
+    "constructs": "^10.3"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.502.0",
@@ -100,8 +100,9 @@
     "@smithy/util-stream": "2.0.17",
     "@smithy/util-utf8": "2.0.0",
     "@types/aws-lambda": "^8.10.119",
-    "cdktf": "0.17.0",
-    "constructs": "~10.2.69",
+    "ajv": "^8.12.0",
+    "cdktf": "0.20.3",
+    "constructs": "^10.3",
     "cron-parser": "^4.9.0",
     "express": "^4.18.2",
     "google-auth-library": "^8.9.0",
@@ -113,8 +114,9 @@
     "protobufjs": "7.2.5",
     "safe-stable-stringify": "^2.4.3",
     "stacktracey": "^2.1.8",
+    "toml": "^3.0.0",
     "ulid": "^2.3.0",
-    "undici": "^5.25.4",
+    "undici": "^6.6.2",
     "uuid": "^8.3.2",
     "yaml": "^2.3.2"
   },
@@ -139,6 +141,7 @@
     "@smithy/util-stream",
     "@smithy/util-utf8",
     "@types/aws-lambda",
+    "ajv",
     "cdktf",
     "cron-parser",
     "express",
@@ -151,6 +154,7 @@
     "protobufjs",
     "safe-stable-stringify",
     "stacktracey",
+    "toml",
     "ulid",
     "undici",
     "uuid",

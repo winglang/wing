@@ -12,9 +12,9 @@ use std::{borrow::Borrow, cell::RefCell, cmp::Ordering, collections::BTreeMap, v
 
 use crate::{
 	ast::{
-		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Expr,
-		ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference, Scope,
-		Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
+		AccessModifier, ArgList, AssignmentKind, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Elifs, Enum,
+		Expr, ExprKind, FunctionBody, FunctionDefinition, IfLet, InterpolatedStringPart, Literal, New, Phase, Reference,
+		Scope, Stmt, StmtKind, Symbol, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic,
@@ -24,10 +24,10 @@ use crate::{
 	parser::is_entrypoint_file,
 	type_check::{
 		is_udt_struct_type,
-		lifts::{Liftable, Lifts},
+		lifts::{LiftQualification, Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
-		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::{VisitContext, VisitorWithContext},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_AUTOID_RESOURCE,
@@ -95,6 +95,7 @@ impl VisitorWithContext for JSifyContext<'_> {
 /// Preflight classes have two types of host binding methods:
 /// `Type` for binding static fields and methods to the host and
 /// `instance` for binding instance fields and methods to the host.
+#[derive(PartialEq, Eq)]
 enum BindMethod {
 	Type,
 	Instance,
@@ -138,9 +139,12 @@ impl<'a> JSifier<'a> {
 		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
-			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
-			(StmtKind::Class(AstClass { .. }), _) => Ordering::Less,
-			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
+			(StmtKind::Enum(_), StmtKind::Enum(_)) => Ordering::Equal,
+			(StmtKind::Enum(_), _) => Ordering::Less,
+			(_, StmtKind::Enum(_)) => Ordering::Greater,
+			(StmtKind::Class(_), StmtKind::Class(_)) => Ordering::Equal,
+			(StmtKind::Class(_), _) => Ordering::Less,
+			(_, StmtKind::Class(_)) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
 			let scope_env = self.types.get_scope_env(&scope);
@@ -709,6 +713,9 @@ impl<'a> JSifier<'a> {
 						// We use the abstract inequality operator here because we want to check for null or undefined
 						new_code!(expr_span, "((", js_exp, ") != null)")
 					}
+					UnaryOperator::OptionalUnwrap => {
+						new_code!(expr_span, "$helpers.unwrap(", js_exp, ")")
+					}
 				}
 			}
 			ExprKind::Binary { op, left, right } => {
@@ -1147,10 +1154,15 @@ impl<'a> JSifier<'a> {
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
 			}
-			StmtKind::Struct { .. } => {
+			StmtKind::Struct(_) => {
 				// Struct schemas are emitted before jsification phase
 			}
-			StmtKind::Enum { name, values, .. } => {
+			StmtKind::Enum(enu) => {
+				let Enum {
+					name,
+					values,
+					access: _,
+				} = enu;
 				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(name, values));
 				code.close(";");
@@ -1498,7 +1510,6 @@ impl<'a> JSifier<'a> {
 			// `_liftType`).
 			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
-			code.add_code(self.jsify_get_inflight_ops_method(&class));
 
 			// emit `onLift` and `onLiftType` to bind permissions and environment variables to inflight hosts
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1542,24 +1553,6 @@ impl<'a> JSifier<'a> {
 
 		code.add_code(body_code);
 
-		code.close("}");
-		code
-	}
-
-	fn jsify_get_inflight_ops_method(&self, class: &AstClass) -> CodeMaker {
-		let mut code = CodeMaker::with_source(&class.name.span);
-
-		code.open("_supportedOps() {");
-
-		let mut ops = vec![];
-		for field in class.inflight_fields() {
-			ops.push(format!("\"{}\"", field.name.name));
-		}
-		for method in class.inflight_methods(true) {
-			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
-		}
-
-		code.line(format!("return [...super._supportedOps(), {}];", ops.join(", ")));
 		code.close("}");
 		code
 	}
@@ -1785,8 +1778,8 @@ impl<'a> JSifier<'a> {
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::with_source(&class.span);
 		let (modifier, bind_method_name) = match bind_method_kind {
-			BindMethod::Type => ("static ", "onLiftType"),
-			BindMethod::Instance => ("", "onLift"),
+			BindMethod::Type => ("static ", "_liftTypeMap"),
+			BindMethod::Instance => ("", "_liftMap"),
 		};
 
 		let class_name = class.name.to_string();
@@ -1795,44 +1788,72 @@ impl<'a> JSifier<'a> {
 			return bind_method;
 		};
 
-		let lift_qualifications = lifts
-			.lifts_qualifications
-			.iter()
-			.filter(|(m, _)| {
-				let var_kind = &class_type
-					.as_class()
-					.unwrap()
-					.get_method(&m.as_str().into())
-					.as_ref()
-					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
-					.kind;
-				let is_static = matches!(var_kind, VariableKind::StaticMember);
-				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
-			})
-			.collect_vec();
+		let mut lift_qualifications: Vec<(&String, &BTreeMap<String, LiftQualification>)> = vec![];
+		let empty_map = BTreeMap::new();
 
-		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
+		// Collect all the methods and fields that are accessible inflight on this class
+		// and their lift qualifications, if any.
+		// Even if a method does not require any other permissions (for example, it just
+		// logs something), it is still included in the map as a way of indicating
+		// it's a supported operation.
+		//
+		// Methods on the parent class are not included here, as they are inherited
+		// and will be included in the parent's _liftMap or _liftTypeMap instead
+		for m in class.all_methods(true) {
+			let name = m.name.as_ref().unwrap();
+			let method = class_type.as_class().unwrap().get_method(&name);
+			let var_info = method.expect(&format!("method \"{name}\" doesn't exist in {class_name}"));
+
+			let is_static = m.is_static;
+			let is_inflight = var_info.phase == Phase::Inflight;
+			let filter = match bind_method_kind {
+				BindMethod::Instance => is_inflight && !is_static,
+				BindMethod::Type => is_inflight && is_static && name.name != CLASS_INFLIGHT_INIT_NAME,
+			};
+			if filter {
+				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
+					lift_qualifications.push((&name.name, quals));
+				} else {
+					lift_qualifications.push((&name.name, &empty_map));
+				}
+			}
+		}
+
+		for m in class.inflight_fields() {
+			let name = &m.name;
+			let is_static = m.is_static;
+			let filter = match bind_method_kind {
+				BindMethod::Instance => !is_static,
+				BindMethod::Type => is_static,
+			};
+			if filter {
+				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
+					lift_qualifications.push((&name.name, quals));
+				} else {
+					lift_qualifications.push((&name.name, &empty_map));
+				}
+			}
+		}
+
+		// Skip jsifying this method if there are no lifts (in this case we'll use super's lifting methods)
 		if lift_qualifications.is_empty() {
 			return bind_method;
 		}
 
-		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
+		bind_method.open(format!("{modifier}get {bind_method_name}() {{"));
 
 		if !lift_qualifications.is_empty() {
-			// onLiftMatrix is a helper method that takes in information about all
-			// of the preflight objects and their corresponding ops, and
-			// calls the appropriate onLift method once for each object.
-			bind_method.open(format!("{STDLIB_CORE}.onLiftMatrix(host, ops, {{"));
+			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
+				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
+				// lift deps of this class
+				bind_method.open(format!("return {STDLIB_CORE}.mergeLiftDeps(super._liftMap, {{"));
+			} else {
+				bind_method.open("return ({".to_string());
+			}
 
 			for (method_name, method_qual) in lift_qualifications {
 				bind_method.open(format!("\"{method_name}\": [",));
 				for (code, method_lift_qual) in method_qual {
-					// skip any objects named "this" since lifting oneself is redundant
-					// TODO: is the fact that lift_qualifications includes "this" a bug? not sure if these need to be lifted
-					if code == "this" {
-						continue;
-					}
-
 					let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 					bind_method.line(format!("[{code}, [{ops_strings}]],",));
 				}
@@ -1842,7 +1863,6 @@ impl<'a> JSifier<'a> {
 			bind_method.close("});");
 		}
 
-		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method
 	}
@@ -1925,10 +1945,10 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Interface(_) => {}
 			// structs are bringable, but we don't emit anything for them
 			// unless a static method is called on them
-			StmtKind::Struct { .. } => {}
-			StmtKind::Enum { name, access, .. } => {
-				if *access == AccessModifier::Public {
-					symbols.push(name.clone());
+			StmtKind::Struct(_) => {}
+			StmtKind::Enum(enu) => {
+				if enu.access == AccessModifier::Public {
+					symbols.push(enu.name.clone());
 				}
 			}
 			StmtKind::TryCatch { .. } => {}

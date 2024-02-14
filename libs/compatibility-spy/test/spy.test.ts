@@ -15,11 +15,8 @@ describe("compatibility spy", async () => {
     platformPaths: ["sim", join(__dirname, "../lib")],
   });
 
-  //@ts-expect-error- accessing private method
   vi.spyOn(manager, "loadPlatformPath").mockImplementation(
-    //@ts-expect-error- accessing private method
     (platformPath: string) => {
-      //@ts-expect-error- accessing private property
       manager.platformInstances.push(
         platformPath === "sim" ? new SimPlatform() : spyPlatform
       );
@@ -32,7 +29,6 @@ describe("compatibility spy", async () => {
 
   test("app overrides and hooks set correctly", () => {
     expect(app._newInstanceOverrides.length).toBe(1);
-    //@ts-expect-error - _synthHooks is protected
     expect(app._synthHooks?.preSynthesize.length).toBe(1);
   });
 
@@ -43,13 +39,12 @@ describe("compatibility spy", async () => {
   ) as cloud.Bucket;
 
   bucket.addObject("a", "b");
-  // @ts-expect-error- accessing private property
   bucket.public;
 
   test("each new instance is wrapped in a proxy", () => {
     expect(spyPlatform.newInstance).toBeCalledTimes(1);
     expect(spyPlatform._usageContext.get("Bucket")).toEqual(
-      new Set(["addObject", "initialObjects", "public"])
+      new Set(["addObject"])
     );
   });
 });

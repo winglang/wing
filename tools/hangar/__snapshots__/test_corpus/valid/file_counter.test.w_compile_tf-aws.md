@@ -29,7 +29,7 @@ module.exports = function({ $bucket, $counter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -197,7 +197,7 @@ module.exports = function({ $bucket, $counter }) {
         },
         "message_retention_seconds": 3600,
         "name": "cloud-Queue-c86e03d8",
-        "visibility_timeout_seconds": 10
+        "visibility_timeout_seconds": 30
       }
     }
   }
@@ -242,22 +242,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [bucket, ["put"]],
             [counter, ["inc"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter", { initial: 100 });
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }

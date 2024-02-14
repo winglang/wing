@@ -11,7 +11,7 @@ module.exports = function({ $__parent_this_1_b }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(payload) {
+    async handle() {
       (await $__parent_this_1_b.put("k", "v"));
       class InflightClass {
         async method() {
@@ -101,7 +101,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -274,16 +274,14 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [__parent_this_1.b, ["put"]],
               ],
+              "$inflight_init": [
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         const inflight_closure = new $Closure1(this, "$Closure1");
@@ -306,8 +304,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -334,16 +335,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [f, ["invoke"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -369,8 +368,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "handle": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const p = new PreflightClass(this, "PreflightClass");

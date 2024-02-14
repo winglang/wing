@@ -30,7 +30,7 @@
     "npm-check-updates": "^15",
     "projen": "^0.62.3",
     "standard-version": "^9",
-    "ts-jest": "^27",
+    "ts-jest": "^29.1.2",
     "typescript": "^3.9.10"
   },
   "keywords": [

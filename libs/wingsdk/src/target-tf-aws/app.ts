@@ -16,6 +16,8 @@ import { Topic } from "./topic";
 import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
+import { DataAwsSubnet } from "../.gen/providers/aws/data-aws-subnet";
+import { DataAwsVpc } from "../.gen/providers/aws/data-aws-vpc";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
 import { NatGateway } from "../.gen/providers/aws/nat-gateway";
@@ -55,11 +57,11 @@ export class App extends CdktfApp {
 
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
-  private _vpc?: Vpc;
+  private _vpc?: Vpc | DataAwsVpc;
   private _codeBucket?: S3Bucket;
 
   /** Subnets shared across app */
-  public subnets: { [key: string]: Subnet };
+  public subnets: { [key: string]: Subnet | DataAwsSubnet };
 
   constructor(props: AppProps) {
     super(props);
@@ -164,16 +166,53 @@ export class App extends CdktfApp {
   /**
    * Returns the VPC for this app. Will create a new VPC if one does not exist.
    */
-  public get vpc(): Vpc {
+  public get vpc(): Vpc | DataAwsVpc {
     if (this._vpc) {
       return this._vpc;
     }
 
+    return this.platformParameters.getParameterValue(`${this._target}/vpc`) ===
+      "existing"
+      ? this.importExistingVpc()
+      : this.createDefaultVpc();
+  }
+
+  private importExistingVpc(): DataAwsVpc {
+    const vpcId = this.platformParameters.getParameterValue(
+      `${this._target}/vpc_id`
+    );
+    const privateSubnetId = this.platformParameters.getParameterValue(
+      `${this._target}/private_subnet_id`
+    );
+    const publicSubnetId = this.platformParameters.getParameterValue(
+      `${this._target}/public_subnet_id`
+    );
+
+    this._vpc = new DataAwsVpc(this, "ExistingVpc", {
+      id: vpcId,
+    });
+
+    this.subnets.private = new DataAwsSubnet(this, "PrivateSubnet", {
+      vpcId: vpcId,
+      id: privateSubnetId,
+    });
+
+    // Make public subnet optional
+    if (publicSubnetId !== "") {
+      this.subnets.public = new DataAwsSubnet(this, "PublicSubnet", {
+        vpcId: vpcId,
+        id: publicSubnetId,
+      });
+    }
+
+    return this._vpc;
+  }
+
+  private createDefaultVpc(): Vpc {
     const VPC_NAME_OPTS: NameOptions = {
       maxLen: 32,
       disallowedRegex: /[^a-zA-Z0-9-]/,
     };
-
     const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS);
 
     // create the app wide VPC

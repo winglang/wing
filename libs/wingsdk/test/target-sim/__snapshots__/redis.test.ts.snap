@@ -106,7 +106,7 @@ exports[`create a Redis resource 1`] = `
         "my_redis": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A Redis server",
@@ -118,7 +118,7 @@ exports[`create a Redis resource 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

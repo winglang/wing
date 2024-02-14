@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bool_from_json.test.w 1`] = `
-"runtime error: unable to parse bool:
+"Error: unable to parse bool:
 - instance is not of a type(s) boolean
   --> ../../../examples/tests/error/bool_from_json.test.w:5:15
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
@@ -19,7 +19,7 @@ Duration <DURATION>"
 
 exports[`inflight_stacktraces.test.w 1`] = `
 "fail ┌ inflight_stacktraces.test.wsim » root/env0/test:assert            
-     │ runtime error: assertion failed: false
+     │ Error: assertion failed: false
      │   --> ../../../examples/tests/error/inflight_stacktraces.test.w:7:3
      │   | let bucket = new cloud.Bucket();
      │   | 
@@ -28,7 +28,7 @@ exports[`inflight_stacktraces.test.w 1`] = `
      │   |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:7:3
 fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal      
-     │ runtime error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+     │ Error: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
      │ 
      │ 1 !== 2
      │ 
@@ -40,7 +40,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env1/test:expect.equal
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:11:3
 fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get 
-     │ runtime error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
+     │ Error: Object does not exist (key=doesn't exist): Error: ENOENT: no such file or directory, open '../../../examples/tests/error/target/test/inflight_stacktraces.test.wsim/.state/<STATE_FILE>'
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:15:3
      │    | }
      │    | 
@@ -49,7 +49,7 @@ fail ┌ inflight_stacktraces.test.wsim » root/env2/test:bucket failed get
      │    |   ^
      └ at <ABSOLUTE>/inflight_stacktraces.test.w:15:3
 fail ┌ inflight_stacktraces.test.wsim » root/env3/test:throw from closure
-     │ runtime error: ouch
+     │ Error: ouch
      │    --> ../../../examples/tests/error/inflight_stacktraces.test.w:20:5
      │    | 
      │    | test \\"throw from closure\\" {
@@ -66,7 +66,7 @@ Duration <DURATION>"
 `;
 
 exports[`num_from_str.test.w 1`] = `
-"runtime error: unable to parse \\"123a\\" as a number
+"Error: unable to parse \\"123a\\" as a number
   --> ../../../examples/tests/error/num_from_str.test.w:3:14
   | // Note that this test has to be alone because it needs to compile successfully and fail at preflight.
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
@@ -81,7 +81,7 @@ Duration <DURATION>"
 `;
 
 exports[`number_from_json.test.w 1`] = `
-"runtime error: unable to parse num:
+"Error: unable to parse num:
 - instance is not of a type(s) number
   --> ../../../examples/tests/error/number_from_json.test.w:5:14
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
@@ -98,7 +98,7 @@ Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id.test.w 1`] = `
-"runtime error: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
+"Error: There is already a Construct with name 'cloud.Bucket' in $Root [env0]
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 
@@ -120,7 +120,7 @@ Duration <DURATION>"
 `;
 
 exports[`repeat_construct_id2.test.w 1`] = `
-"runtime error: There is already a Construct with name 'bucket-name' in $Root [env0]
+"Error: There is already a Construct with name 'bucket-name' in $Root [env0]
 
 hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:
 
@@ -142,7 +142,7 @@ Duration <DURATION>"
 `;
 
 exports[`string_from_json.test.w 1`] = `
-"runtime error: unable to parse string:
+"Error: unable to parse string:
 - instance is not of a type(s) string
   --> ../../../examples/tests/error/string_from_json.test.w:5:14
   | // If it is run with other tests, subsequent failures will be ignored in snapshot.
@@ -159,7 +159,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_json_1.test.w 1`] = `
-"runtime error: unable to parse Person:
+"Error: unable to parse Person:
 - instance.age is not of a type(s) number
    --> ../../../examples/tests/error/struct_from_json_1.test.w:11:1
    | 
@@ -176,7 +176,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_json_2.test.w 1`] = `
-"runtime error: unable to parse Student:
+"Error: unable to parse Student:
 - instance.age is not of a type(s) number
 - instance requires property \\"advisor\\"
    --> ../../../examples/tests/error/struct_from_json_2.test.w:22:1
@@ -194,7 +194,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_json_3.test.w 1`] = `
-"runtime error: unable to parse Student:
+"Error: unable to parse Student:
 - instance.advisors[1].id is not of a type(s) string
 - instance.age is not of a type(s) number
    --> ../../../examples/tests/error/struct_from_json_3.test.w:26:1
@@ -212,7 +212,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_json_4.test.w 1`] = `
-"runtime error: unable to parse Student:
+"Error: unable to parse Student:
 - instance.advisors contains duplicate item
    --> ../../../examples/tests/error/struct_from_json_4.test.w:27:1
    |   ]
@@ -229,7 +229,7 @@ Duration <DURATION>"
 `;
 
 exports[`struct_from_json_5.test.w 1`] = `
-"runtime error: unable to parse Foo:
+"Error: unable to parse Foo:
 - instance.names.c is not of a type(s) string
    --> ../../../examples/tests/error/struct_from_json_5.test.w:16:1
    |   }
@@ -246,7 +246,7 @@ Duration <DURATION>"
 `;
 
 exports[`utilities.test.w 1`] = `
-"runtime error: assertion failed: false
+"Error: assertion failed: false
   --> ../../../examples/tests/error/utilities.test.w:1:1
 1 | assert(false);
   | ^

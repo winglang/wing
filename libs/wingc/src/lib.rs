@@ -19,7 +19,7 @@ use indexmap::IndexMap;
 use jsify::JSifier;
 
 use lifting::LiftVisitor;
-use parser::parse_wing_project;
+use parser::{is_entrypoint_file, parse_wing_project};
 use struct_schema::StructSchemaVisitor;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::SymbolEnvKind;
@@ -229,9 +229,8 @@ pub fn type_check(
 	);
 	tc.add_builtins(scope);
 
-	let file_path_as_str = file_path.to_string();
 	// If the file is an entrypoint file, we add "this" to its symbol environment
-	if file_path_as_str == "main.w" || file_path_as_str.ends_with(".main.w") || file_path_as_str.ends_with(".test.w") {
+	if is_entrypoint_file(file_path) {
 		tc.add_this(&mut env);
 	}
 

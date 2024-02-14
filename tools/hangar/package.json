@@ -19,7 +19,7 @@
     "@winglang/sdk": "workspace:^",
     "@winglang/platform-awscdk": "workspace:^",
     "@winglang/compatibility-spy": "workspace:^",
-    "cdktf": "^0.17.3",
+    "cdktf": "^0.20.3",
     "execa": "^7.2.0",
     "fflate": "^0.8.1",
     "npm": "^9.8.1",
