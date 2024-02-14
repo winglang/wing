@@ -23,6 +23,10 @@ export async function compile(options: CompileOptions) {
     declaration: false,
     noEmitOnError: true,
     listEmittedFiles: true,
+    allowJs: true,
+    skipLibCheck: true,
+    resolveJsonModule: true,
+    isolatedModules: true,
     baseUrl: dirname(options.entrypoint),
     paths: {
       "@winglang/sdk/*": [dirname(require.resolve("@winglang/sdk")) + "/*"],
