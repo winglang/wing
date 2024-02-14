@@ -121,7 +121,7 @@ export class Map {
   }
 
   /**
-   * Returns the entries from the array.
+   * Returns the entries from the map.
    *
    * @macro Object.entries($self$).map(([key, value]) => ({ key, value }))
    *
