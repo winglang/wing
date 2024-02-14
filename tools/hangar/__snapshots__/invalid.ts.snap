@@ -2615,6 +2615,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`map_entries.test.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:20
+  |
+2 | let someStr: str = mapToNumber.entries().at(0).value;
+  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`missing_return.test.w 1`] = `
 "error: A function whose return type is \\"str\\" must return a value.
   --> ../../../examples/tests/invalid/missing_return.test.w:1:40
