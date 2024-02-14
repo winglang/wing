@@ -2672,32 +2672,102 @@ error: Unexpected 'identifier'
   |                                              ^^^ Unexpected 'identifier'
 
 
-error: Unexpected 'string'
-  --> ../../../examples/tests/invalid/map_entries.test.w:2:50
+error: Expected ';'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:55
   |
 2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
-  |                                                  ^^^^^ Unexpected 'string'
+  |                                                       ^ Expected ';'
+
+
+error: Expected ';'
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:63
+  |
+2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                               ^ Expected ';'
+
+
+error: Unexpected 'ERROR'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:20
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unexpected 'ERROR'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:52
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                    ^^^^^^^^ Unexpected 'reference'
 
 
 error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:61
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                             ^^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:66
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                  ^^ Unexpected 'reference'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:69
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                     ^^ Unexpected 'identifier'
+
+
+error: Unexpected 'string'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:72
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                        ^^^^^ Unexpected 'string'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:79
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                               ^^^ Unexpected 'reference'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:83
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                                   ^^^ Unexpected 'identifier'
+
+
+error: Unexpected 'string'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:87
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                                       ^^^^^ Unexpected 'string'
+
+
+error: Unexpected 'identifier'
+  --> ../../../examples/tests/invalid/map_entries.test.w:7:93
+  |
+7 |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+  |                                                                                             ^^^^^^^ Unexpected 'identifier'
+
+
+error: Unknown symbol \\"instead\\"
   --> ../../../examples/tests/invalid/map_entries.test.w:2:56
   |
 2 |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
-  |                                                        ^^^^^^^ Unexpected 'identifier'
+  |                                                        ^^^^^^^ Unknown symbol \\"instead\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/map_entries.test.w:1:13
+  --> ../../../examples/tests/invalid/map_entries.test.w:6:20
   |
-1 | let map = { 1 => \\"foo\\", 2 => \\"bar\\" };
-  |             ^ Expected type to be \\"str\\", but got \\"num\\" instead
-
-
-error: Expected type to be \\"str\\", but got \\"num\\" instead
-  --> ../../../examples/tests/invalid/map_entries.test.w:1:25
-  |
-1 | let map = { 1 => \\"foo\\", 2 => \\"bar\\" };
-  |                         ^ Expected type to be \\"str\\", but got \\"num\\" instead
+6 | let someStr: str = mapUnsafe.entries().at(0).value;
+  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
  
