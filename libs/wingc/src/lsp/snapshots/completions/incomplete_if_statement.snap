@@ -34,7 +34,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(): Array<ArrayEntry>"
   documentation:
     kind: markdown
-    value: "```wing\nentries: (): Array<ArrayEntry>\n```\n---\nReturns the entries from the array.\n\n### Returns\nthe entries as Array<ArrayEntry>"
+    value: "```wing\nentries: (): Array<ArrayEntry>\n```\n---\nReturns the entries from the map.\n\n### Returns\nthe entries as Array<ArrayEntry>"
   sortText: ff|entries
   insertText: entries()
 - label: get
