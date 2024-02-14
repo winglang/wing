@@ -87,27 +87,6 @@ module.exports = function({  }) {
 //# sourceMappingURL=inflight.$Closure4-1.js.map
 ```
 
-## inflight.$Closure5-1.js
-```js
-"use strict";
-const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
-  class $Closure5 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      const map = ({["foo"]: 1, ["bar"]: 2});
-      $helpers.assert($helpers.eq(Object.entries(map).map(([key, value]) => ({ key, value })).length, 2), "map.entries().length == 2");
-    }
-  }
-  return $Closure5;
-}
-//# sourceMappingURL=inflight.$Closure5-1.js.map
-```
-
 ## main.tf.json
 ```json
 {
@@ -277,44 +256,11 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    class $Closure5 extends $stdlib.std.AutoIdResource {
-      _id = $stdlib.core.closureId();
-      constructor($scope, $id, ) {
-        super($scope, $id);
-        $helpers.nodeof(this).hidden = true;
-      }
-      static _toInflightType() {
-        return `
-          require("${$helpers.normalPath(__dirname)}/inflight.$Closure5-1.js")({
-          })
-        `;
-      }
-      _toInflight() {
-        return `
-          (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType()};
-            const client = new $Closure5Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `;
-      }
-      get _liftMap() {
-        return ({
-          "handle": [
-          ],
-          "$inflight_init": [
-          ],
-        });
-      }
-    }
     const map = ({["foo"]: "hello"});
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check if map has entries", new $Closure1(this, "$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:get value from map", new $Closure2(this, "$Closure2"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:iterate map using entries() method", new $Closure3(this, "$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check entries() when map has multiple entries", new $Closure4(this, "$Closure4"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:check entries() when map has numbers as values", new $Closure5(this, "$Closure5"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
