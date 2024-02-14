@@ -13,7 +13,7 @@ test "get value from map" {
 test "iterate map using entries() method" {
   // iterate over map entries
   let entries = map.entries();
-  
+
   for x in map.entries() {
     assert(x.key == "foo");
     assert(x.value == "hello");
@@ -22,14 +22,14 @@ test "iterate map using entries() method" {
 
 test "check entries() when map has multiple entries" {
   let map = { "foo" => "hello", "bar" => "world" };
-  
+
   // check array length
   assert(map.entries().length == 2);
 }
 
 test "check entries() when map has numbers as values" {
   let map = { "foo" => 1, "bar" => 2 };
-  
+
   // check array length
   assert(map.entries().length == 2);
 }

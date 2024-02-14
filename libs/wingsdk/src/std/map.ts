@@ -8,12 +8,14 @@ import { InflightClient } from "../core";
 
 /**
  * Array entry representation
+ *
+ * @typeparam T1
  */
 export interface ArrayEntry {
   /** The entry key */
   readonly key: string;
   /** The entry value */
-  readonly value: any;
+  readonly value: T1;
 }
 
 /**
