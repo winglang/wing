@@ -27,11 +27,11 @@ import { cloud, lift, main } from "@wingcloud/framework";
  */
 main((root) => {
   let noteBucket = new cloud.Bucket(root, "Bucket");
-  
+
   const api = new cloud.Api(root, "Api");
 
-  api.get('/note', lift({noteBucket}).inflight(async ({noteBucket}, request) => {
-    let noteName = request.query.name; 
+  api.get('/note', lift({ noteBucket }).inflight(async ({ noteBucket }, request) => {
+    let noteName = request.query.name;
     const note = await noteBucket.get(noteName);
 
     return {
@@ -40,7 +40,7 @@ main((root) => {
     }
   }));
 
-  api.put('/note/:name', lift({noteBucket}).inflight(async ({noteBucket}, request) => {
+  api.put('/note/:name', lift({ noteBucket }).inflight(async ({ noteBucket }, request) => {
     let note = request.body;
     let noteName = request.vars.name;
 
@@ -62,7 +62,7 @@ main((root) => {
 
 
   // Consumer functions (not required for the app to work, but useful for testing)
-  new cloud.Function(root, "Consumer-PUT", lift({url: api.url}).inflight(async ({url}, event) => {
+  new cloud.Function(root, "Consumer-PUT", lift({ url: api.url }).inflight(async ({ url }, event) => {
     if (!event) {
       return "event is required `NAME:NOTE`"
     }
@@ -75,7 +75,7 @@ main((root) => {
     return await response.text();
   }))
 
-  new cloud.Function(root, "Consumer-GET", lift({url: api.url}).inflight(async ({url}, event) => {
+  new cloud.Function(root, "Consumer-GET", lift({ url: api.url }).inflight(async ({ url }, event) => {
     if (!event) {
       return "event is required `NAME`"
     }
