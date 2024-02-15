@@ -61,7 +61,7 @@ export class App extends CdktfApp {
   private _codeBucket?: S3Bucket;
 
   /** Subnets shared across app */
-  public subnets: { [key: string]: Subnet | DataAwsSubnet };
+  public subnets: { [key: string]: (Subnet | DataAwsSubnet)[] };
 
   constructor(props: AppProps) {
     super(props);
@@ -181,28 +181,29 @@ export class App extends CdktfApp {
     const vpcId = this.platformParameters.getParameterValue(
       `${this._target}/vpc_id`
     );
-    const privateSubnetId = this.platformParameters.getParameterValue(
-      `${this._target}/private_subnet_id`
+    const privateSubnetIds = this.platformParameters.getParameterValue(
+      `${this._target}/private_subnet_ids`
     );
-    const publicSubnetId = this.platformParameters.getParameterValue(
-      `${this._target}/public_subnet_id`
+    const publicSubnetIds = this.platformParameters.getParameterValue(
+      `${this._target}/public_subnet_ids`
     );
 
     this._vpc = new DataAwsVpc(this, "ExistingVpc", {
       id: vpcId,
     });
 
-    this.subnets.private = new DataAwsSubnet(this, "PrivateSubnet", {
-      vpcId: vpcId,
-      id: privateSubnetId,
-    });
-
-    // Make public subnet optional
-    if (publicSubnetId !== "") {
-      this.subnets.public = new DataAwsSubnet(this, "PublicSubnet", {
+    for (const subnetId of privateSubnetIds) {
+      this.subnets.private.push(new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
         vpcId: vpcId,
-        id: publicSubnetId,
-      });
+        id: privateSubnetIds,
+      }));
+    }
+
+    for (const subnetId of publicSubnetIds) {
+      this.subnets.public.push(new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+        vpcId: vpcId,
+        id: publicSubnetIds,
+      }));
     }
 
     return this._vpc;
@@ -312,8 +313,8 @@ export class App extends CdktfApp {
       routeTableId: privateRouteTable.id,
     });
 
-    this.subnets.public = publicSubnet;
-    this.subnets.private = privateSubnet;
+    this.subnets.public.push(publicSubnet);
+    this.subnets.private.push(privateSubnet);
     return this._vpc;
   }
 }
