@@ -158,6 +158,8 @@ Compiles your program for AWS CDK with CloudFormation to run on AWS.
 Usage:
 
 ```sh
+# npm init is only needed if you don't already have a package.json file
+$ npm init -y
 $ npm i @winglang/platform-awscdk
 $ export CDK_STACK_NAME="my-project"
 $ wing compile --platform @winglang/platform-awscdk [entrypoint]
