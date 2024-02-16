@@ -10,7 +10,33 @@ description: Protection of resources from accidental deletion/moves
 - **Stage**: Proposal
 - **Stage Date**: 2024-02-15
 
-Introduces `pin` as a mechanism to protect resources from accidental deletion/moves in the logical application tree.
+Introduce a mechanism to protect resources from accidental deletion/moves in the logical application tree.
+
+## Requirements
+
+### Functional
+- User-ability in sources to signify intent for a resource to not be deleted or moved (e.g. "pinning")
+- Git-trackable way to store changes to pinned resources between compilations, per target platform (e.g. "pinfile")
+- User-ability to manually and declaratively override a pinned resource's path in the resource tree
+- Compilation failure when a pinned resource is deleted without explicit removal from the pinfile
+- Compilation failure when a pinned resource is moved without explicit mapping of a previous path to a new path
+- Compilation failure when a resource is no longer pinned in source but is still present in the pinfile
+
+### Non-Functional
+- The pinfile is human-readable and editable
+- The pinfile contains the minimal information necessary to achieve the functional requirements
+- The pinfile is stable and predictable between compilations on different machines
+- CLI provides clear error messages and guidance for resolving deletion/moves of pinned resources
+
+### Cases
+
+For the following cases, assume a user has expressed their intent to protect a resource from deletion/moves somehow.
+The following cases should be handled by this RFC:
+
+- A pinned resource's id was changed in source (using `as`)
+- A pinned resource was moved to a different path in the resource tree (e.g. placed inside a different class)
+- An update to wing itself changed a pinned resource's path
+- An update to a dependency changed the id's within a resource it exports, and the user has pinned an instance of that resource
 
 ## User Journey
 
@@ -34,7 +60,7 @@ pin(new cloud.Bucket() as "CoolBucket");
 
 They run `wing compile` and then `wing test`, nice looks like everything works.
 
-Running `wing compile -t tf-aws` also succeeds with the following output and automatically generates a lockfile next to the entrypoint file.
+Running `wing compile -t tf-aws` also succeeds with the following output and automatically generates a pinfile next to the entrypoint file.
 
 ```shell
 # (output)
@@ -42,7 +68,7 @@ Running `wing compile -t tf-aws` also succeeds with the following output and aut
 ```
 
 ```json
-// main.w.lock.json
+// main.w.pin.json
 {
   "version": "1",
   "pinned": {
@@ -84,14 +110,14 @@ pin(new MyBucket());
 Error: The following pin has been moved or deleted:
   - /root/CoolBucket
 
-If moved, add "fromPath" to their lockfile entry.
-If deleted, remove the entry from the lockfile.
+If moved, add "fromPath" to their pinfile entry.
+If deleted, remove the entry from the pinfile.
 ```
 
-So Sally adds fromPath to the lockfile:
+So Sally adds fromPath to the pinfile:
 
 ```json
-// main.w.lock.json
+// main.w.pin.json
 {
   "version": "1",
   "pinned": {
@@ -110,6 +136,22 @@ Running `wing compile -t tf-aws` now succeeds and nothing is deleted or moved in
 
 ## Implementation
 
+### pinning
+
+The `pin` function is used to mark a created resource as "pinned" in the resource tree. It takes a construct and returns the same construct, with metadata added to the tree to track the pin. This means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
+
+This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a pinfile to inform the user when this changes between compilation and allow them to resolve any renames.
+
+### pinfile API
+
+Platforms/Apps are provided with a pinfile API. The pinfile itself is a JSON file that contains the current state of the resource tree. The pinfile is created next to the entrypoint file and is named `<entrypoint>.pin.json`. The pinfile API provides a way to add pins to the pinfile, get a list of orphaned pins, and write the current state of the pinfile to disk.
+
+Minimal API:
+
+- `addPin(construct: Construct): void` - Adds a construct to the known pins for the current compilation
+- `getOrphanedPins(): string[]` - Gets a list of paths that are present in the saved pinfile but not in the current one
+- `write(): void` - Writes the current state of the pinfile to disk for the current platform. This list automatically will not include pins that are "fromPath" of a different pin.
+
 ### Note on "statefulness"
 
 Statefulness is a useful concept when thinking about infrastructure but it can serve different purposes.
@@ -121,22 +163,6 @@ Sometimes it isn't actually stateful but is treated as so by requiring additiona
 Designing distributed systems requires balancing the trade-offs of statefulness and statelessness against factors like cost and reliability so it's not always obvious what the right choice is.
 
 Given all this, I think it's important to avoid the word "stateful" and to provide tools to express the true intent for API consumers rather than as an intrinsic property of the resource.
-
-### pinning
-
-The `pin` function is used to mark a created resource as "pinned" in the resource tree. It takes a construct and returns the same construct, with metadata added to the tree to track the pin. This means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
-
-This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a lockfile to inform the user when this changes between compilation and allow them to resolve any renames.
-
-### Lockfile API
-
-Platforms/Apps are provided with a lockfile API. The lockfile itself is a JSON file that contains the current state of the resource tree. The lockfile is created next to the entrypoint file and is named `<entrypoint>.lock.json`. The lockfile API provides a way to add pins to the lockfile, get a list of orphaned pins, and write the current state of the lockfile to disk.
-
-Minimal API:
-
-- `addPin(construct: Construct): void` - Adds a construct to the known pins for the current compilation
-- `getOrphanedPins(): string[]` - Gets a list of paths that are present in the saved lockfile but not in the current one
-- `write(): void` - Writes the current state of the lockfile to disk for the current platform. This list automatically will not include pins that are "fromPath" of a different pin.
 
 ## Out-of-scope Thoughts
 
@@ -156,4 +182,4 @@ There are tools that provisioning engines have for managing resources you intend
 
 #### `wing compile -t tf-aws --update-pins`
 
-Automatically removes any orphaned pins from the lockfile. For now this is no different from just deleting the lockfile and recompiling.
+Automatically removes any orphaned pins from the pinfile. For now this is no different from just deleting the pinfile and recompiling.
