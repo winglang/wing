@@ -44,6 +44,29 @@ fn free_inflight_obj_from_inflight() {
 }
 
 #[test]
+fn qualify_inflight_type_refrencing_preflight_instance() {
+	assert_compile_ok!(
+		r#"
+    class PreflightC {
+      pub inflight bar() {}
+    }
+    let pc = new PreflightC();
+
+    inflight class InflightC {
+      pub foo() {
+        pc.bar();
+      }
+    }
+
+    test "test" {
+      let ic = new InflightC();
+      ic.foo();
+    }
+    "#
+	);
+}
+
+#[test]
 fn call_static_inflight_from_static_inflight() {
 	assert_compile_ok!(
 		r#"
