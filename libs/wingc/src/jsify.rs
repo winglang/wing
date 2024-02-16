@@ -1823,7 +1823,7 @@ impl<'a> JSifier<'a> {
 					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
 				// TODO: the following hints that instead of `onLiftType` and `onLift` we need to mark each lift as a
-				// field lift or a type lift. Then for each instance lifts we need to make sure to call their typeLiftToo.
+				// field lift or a type lift. Then for each instance lifts we need to make sure to call their typeLift too.
 				if class.phase == Phase::Inflight {
 					// All lifts in inflight classes are "type" lifts since `this` has no preflight fields which need to be
 					// lifted based on the object's instance
