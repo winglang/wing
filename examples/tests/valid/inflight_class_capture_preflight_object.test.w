@@ -24,3 +24,15 @@ test "inflight class qualified without explicit reference" {
   // Now Foo needs to be qualified correcly
   foo.uploadToBucket("greetings.txt", "universe");
 }
+
+test "inflight class defined inflight captures preflight object" {
+  class Foo2 {
+    pub uploadToBucket() {
+      b.put("x", "y");
+      assert(b.get("x") == "y");
+    }
+  }
+
+  let f = new Foo2();
+  f.uploadToBucket();
+}
