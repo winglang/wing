@@ -67,7 +67,10 @@ export class App extends CdktfApp {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    this.subnets = {};
+    this.subnets = {
+      private: [],
+      public: [],
+    };
 
     TestRunner._createTree(this, props.rootConstruct);
   }
@@ -195,15 +198,17 @@ export class App extends CdktfApp {
     for (const subnetId of privateSubnetIds) {
       this.subnets.private.push(new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
         vpcId: vpcId,
-        id: privateSubnetIds,
+        id: subnetId,
       }));
     }
-
-    for (const subnetId of publicSubnetIds) {
-      this.subnets.public.push(new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
-        vpcId: vpcId,
-        id: publicSubnetIds,
-      }));
+    
+    if (publicSubnetIds) {
+      for (const subnetId of publicSubnetIds) {
+        this.subnets.public.push(new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+          vpcId: vpcId,
+          id: subnetId,
+        }));
+      }
     }
 
     return this._vpc;

@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import { mkdtemp } from "../util";
 import { PlatformManager } from "../../src/platform";
+import { Testing } from "../../src/simulator";
+import { Function } from "../../src/cloud";
 
 describe("tf-aws platform parameters", () => {
   let platformManager;
@@ -87,5 +89,28 @@ describe("tf-aws platform parameters", () => {
     
     // THEN
     expect(() => app.synth()).not.toThrow();
+  });
+
+  test("all private subnets are used when creating functions", () => {
+    // GIVEN
+    const providedParameters = {
+      "tf-aws": {
+        vpc: "existing",
+        vpc_id: "vpc-123",
+        private_subnet_ids: ["subnet-123", "subnet-456"],
+        vpc_lambda: true,
+      },
+    };
+    fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
+    
+    // WHEN
+    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
+    const inflight = Testing.makeHandler("");
+    new Function(app, "Function", inflight);
+
+    // THEN
+    const output = app.synth();
+    const tfFunction = JSON.parse(output).resource.aws_lambda_function.Function;
+    expect(tfFunction.vpc_config.subnet_ids.length).toEqual(2);
   });
 })
