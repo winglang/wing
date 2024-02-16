@@ -7,12 +7,21 @@ inflight class Foo {
     b.put(k, value);
     assert(b.get(k) == value);
   }
+
+  static pub fooStatic() {
+    b.list();
+  }
 }
 
 test "inflight class captures preflight resource" {
   let f = new Foo();
   f.uploadToBucket("hello.txt", "world");
 }
+
+test "inflight class type captures preflight resource" {
+  Foo.fooStatic();
+}
+
 
 let getFoo = inflight () => {
   return new Foo();
