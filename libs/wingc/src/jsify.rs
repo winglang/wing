@@ -1506,11 +1506,17 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
-			code.line(format!(
-				"const {} = {};",
-				self.unique_class_alias(class_type),
-				class.name
-			));
+
+			// Inflight classes might need their type to be lift-qualified (onLift), but their type name might not be necessarily avaialble
+			// at the scope when they are qualified (it might even be shadowed by another type name). Here we generate a unique
+			// type name to be used in such cases.
+			if class.phase == Phase::Inflight {
+				code.line(format!(
+					"const {} = {};",
+					self.unique_class_alias(class_type),
+					class.name
+				));
+			}
 			code
 		})
 	}
