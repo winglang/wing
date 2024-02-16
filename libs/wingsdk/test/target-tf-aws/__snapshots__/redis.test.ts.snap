@@ -21,7 +21,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "\${aws_security_group.Redis_securityGroup_BE4B8855.id}",
+          "\${aws_security_group.Redis_KEN15securityGroup_9FF06889.id}",
         ],
         "subnet_group_name": "\${aws_elasticache_subnet_group.Redis_RedisSubnetGroup_E7D796E2.name}",
       },
@@ -110,7 +110,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
       },
     },
     "aws_security_group": {
-      "Redis_securityGroup_BE4B8855": {
+      "Redis_KEN15securityGroup_9FF06889": {
         "egress": [
           {
             "cidr_blocks": [
