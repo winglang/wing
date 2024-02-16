@@ -6,7 +6,6 @@ inflight class Foo {
   pub uploadToBucket(k: str, value: str) {
     b.put(k, value);
     assert(b.get(k) == value);
-    log(b.get(k));
   }
 }
 
