@@ -196,18 +196,22 @@ export class App extends CdktfApp {
     });
 
     for (const subnetId of privateSubnetIds) {
-      this.subnets.private.push(new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
-        vpcId: vpcId,
-        id: subnetId,
-      }));
-    }
-    
-    if (publicSubnetIds) {
-      for (const subnetId of publicSubnetIds) {
-        this.subnets.public.push(new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+      this.subnets.private.push(
+        new DataAwsSubnet(this, `PrivateSubnet${subnetId.slice(-8)}`, {
           vpcId: vpcId,
           id: subnetId,
-        }));
+        })
+      );
+    }
+
+    if (publicSubnetIds) {
+      for (const subnetId of publicSubnetIds) {
+        this.subnets.public.push(
+          new DataAwsSubnet(this, `PublicSubnet${subnetId.slice(-8)}`, {
+            vpcId: vpcId,
+            id: subnetId,
+          })
+        );
       }
     }
 

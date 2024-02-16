@@ -1,18 +1,18 @@
-import { test, expect, describe, beforeEach } from "vitest";
 import fs from "fs";
 import path from "path";
-import { mkdtemp } from "../util";
+import { test, expect, describe, beforeEach } from "vitest";
+import { Function } from "../../src/cloud";
 import { PlatformManager } from "../../src/platform";
 import { Testing } from "../../src/simulator";
-import { Function } from "../../src/cloud";
+import { mkdtemp } from "../util";
 
 describe("tf-aws platform parameters", () => {
   let platformManager;
   let tempdir;
   let wingParametersFile;
-  
+
   beforeEach(() => {
-    platformManager = new PlatformManager({platformPaths: ["tf-aws"]});
+    platformManager = new PlatformManager({ platformPaths: ["tf-aws"] });
     tempdir = mkdtemp();
     wingParametersFile = path.join(tempdir, "wing.json");
     process.env.WING_VALUES_FILE = wingParametersFile;
@@ -30,7 +30,10 @@ describe("tf-aws platform parameters", () => {
     fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
 
     // WHEN
-    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
+    const app = platformManager.createApp({
+      outdir: tempdir,
+      entrypointDir: tempdir,
+    });
 
     // THEN
     expect(() => app.synth()).toThrow(/must be array/);
@@ -48,7 +51,10 @@ describe("tf-aws platform parameters", () => {
     fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
 
     // WHEN
-    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
+    const app = platformManager.createApp({
+      outdir: tempdir,
+      entrypointDir: tempdir,
+    });
 
     // THEN
     expect(() => app.synth()).not.toThrow();
@@ -64,13 +70,16 @@ describe("tf-aws platform parameters", () => {
       },
     };
     fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
-    
-    // WHEN
-    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
-    
-    // THEN
-    expect(() => app.synth()).toThrow(/must have required property 'private_subnet_ids'/);
 
+    // WHEN
+    const app = platformManager.createApp({
+      outdir: tempdir,
+      entrypointDir: tempdir,
+    });
+    // THEN
+    expect(() => app.synth()).toThrow(
+      /must have required property 'private_subnet_ids'/
+    );
   });
 
   test("does not require public subnet ids, when vpc = existing", () => {
@@ -83,10 +92,12 @@ describe("tf-aws platform parameters", () => {
       },
     };
     fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
-    
+
     // WHEN
-    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
-    
+    const app = platformManager.createApp({
+      outdir: tempdir,
+      entrypointDir: tempdir,
+    });
     // THEN
     expect(() => app.synth()).not.toThrow();
   });
@@ -102,9 +113,12 @@ describe("tf-aws platform parameters", () => {
       },
     };
     fs.writeFileSync(wingParametersFile, JSON.stringify(providedParameters));
-    
+
     // WHEN
-    const app = platformManager.createApp({ outdir: tempdir, entrypointDir: tempdir });
+    const app = platformManager.createApp({
+      outdir: tempdir,
+      entrypointDir: tempdir,
+    });
     const inflight = Testing.makeHandler("");
     new Function(app, "Function", inflight);
 
@@ -113,4 +127,4 @@ describe("tf-aws platform parameters", () => {
     const tfFunction = JSON.parse(output).resource.aws_lambda_function.Function;
     expect(tfFunction.vpc_config.subnet_ids.length).toEqual(2);
   });
-})
+});

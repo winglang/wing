@@ -52,29 +52,29 @@ export class Redis extends ex.Redis {
     this.securityGroups = [];
     const clusterName = ResourceNames.generateName(this, ELASTICACHE_NAME_OPTS);
     for (const subnet of this.subnets) {
-
-      this.securityGroups.push(new SecurityGroup(this, `${subnet.id.slice(-8)}securityGroup`, {
-        vpcId: vpc.id,
-        name: `${this.node.addr.slice(-8)}-securityGroup`,
-        ingress: [
-          {
-            cidrBlocks: [subnet.cidrBlock],
-            fromPort: REDIS_PORT,
-            toPort: REDIS_PORT,
-            protocol: "tcp",
-            selfAttribute: true,
-          },
-        ],
-        egress: [
-          {
-            cidrBlocks: ["0.0.0.0/0"],
-            fromPort: 0,
-            toPort: 0,
-            protocol: "-1",
-          },
-        ],
-      }))
-  
+      this.securityGroups.push(
+        new SecurityGroup(this, `${subnet.id.slice(-8)}securityGroup`, {
+          vpcId: vpc.id,
+          name: `${this.node.addr.slice(-8)}-securityGroup`,
+          ingress: [
+            {
+              cidrBlocks: [subnet.cidrBlock],
+              fromPort: REDIS_PORT,
+              toPort: REDIS_PORT,
+              protocol: "tcp",
+              selfAttribute: true,
+            },
+          ],
+          egress: [
+            {
+              cidrBlocks: ["0.0.0.0/0"],
+              fromPort: 0,
+              toPort: 0,
+              protocol: "-1",
+            },
+          ],
+        })
+      );
     }
 
     const subnetGroup = new ElasticacheSubnetGroup(this, "RedisSubnetGroup", {
