@@ -283,22 +283,17 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// Before we continue lets dive into this (non-preflight) expression to see if we need to lift any parts of it
 			visit::visit_expr(v, node);
 
-			// Check if this is an inflight class defined preflight and if we need to qualify the lift
+			// Check if this is an inflight class defined preflight and if we need to qualify the lift with the current property
 			if expr_phase == Phase::Inflight {
-				// If this is a reference to an inflight class defined preflight then we need to lift it and qualify it with the
-				// current property
 				if let Some(class) = expr_type.as_class() {
-					//let tmp_udt = UserDefinedType::for_name(&class.name);
-					//let class_defined_in = get_udt_definition_phase(&tmp_udt, v.ctx.current_env().expect("an env")).expect("a phase");
 					if class.phase == Phase::Inflight && class.defined_in_phase == Phase::Preflight {
 						if let Some(property) = v.ctx.current_property() {
 							let m = v.ctx.current_method().map(|(m,_)|m).expect("a method");
-							//println!("Access to {property} of preflight defined inflight class {expr_type}, should qualify method {m}!");
 							let mut lifts = v.lifts_stack.pop().unwrap();
-							// Get convert the expression to its type
-							// let code = v.jsify_expr_to_type(&code);
-							//lifts.lift(v.ctx.current_method().map(|(m,_)|m), Some(property), &code, false, Some(expr_type));
-							lifts.qualify_lifted_type(m, property, expr_type);
+							// Get preflight code that references the type of the class so we can qualify the lift, note we use a unique
+							// type alias here since we might not have the actual type name available in scope here.
+							let code = &v.jsify.unique_class_alias(expr_type);
+							lifts.lift(m, Some(property), code, false, Some(expr_type));
 							v.lifts_stack.push(lifts);
 							return;
 						}

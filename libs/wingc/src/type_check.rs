@@ -334,6 +334,10 @@ pub struct Class {
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
+
+	// Unique identifier for this class type, used to generate a unique type alias for this class se we can
+	// reference it regardless of type name shadowing.
+	pub uid: usize,
 }
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
@@ -1763,6 +1767,9 @@ pub struct TypeChecker<'a> {
 
 	is_in_mut_json: bool,
 
+	/// Class counter, used to generate unique names class types
+	class_counter: usize,
+
 	ctx: VisitContext,
 }
 
@@ -1793,6 +1800,7 @@ impl<'a> TypeChecker<'a> {
 			jsii_imports,
 			is_in_mut_json: false,
 			ctx: VisitContext::new(),
+			class_counter: 0,
 		}
 	}
 
@@ -3894,7 +3902,9 @@ impl<'a> TypeChecker<'a> {
 			docs: Docs::default(),
 			std_construct_args: ast_class.phase == Phase::Preflight,
 			lifts: None,
+			uid: self.class_counter,
 		};
+		self.class_counter += 1;
 		let mut class_type = self.types.add_type(Type::Class(class_spec));
 		match env.define(
 			&ast_class.name,
@@ -4967,6 +4977,7 @@ impl<'a> TypeChecker<'a> {
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
 			lifts: None,
+			uid: original_type_class.uid,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!

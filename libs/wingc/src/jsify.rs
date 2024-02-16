@@ -1506,8 +1506,17 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
+			code.line(format!(
+				"const {} = {};",
+				self.unique_class_alias(class_type),
+				class.name
+			));
 			code
 		})
+	}
+
+	pub fn unique_class_alias(&self, type_: TypeRef) -> String {
+		format!("$UniqueClassAlias{}", type_.as_class().unwrap().uid)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
