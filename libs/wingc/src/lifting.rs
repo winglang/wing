@@ -279,7 +279,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			// 	}
 			// }
 
-			
+
 			// Before we continue lets dive into this (non-preflight) expression to see if we need to lift any parts of it
 			visit::visit_expr(v, node);
 
