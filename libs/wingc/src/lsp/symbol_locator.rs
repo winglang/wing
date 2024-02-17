@@ -221,14 +221,14 @@ impl<'a> Visit<'a> for SymbolLocator<'a> {
 
 		// Handle situations where symbols are actually defined in inner scopes
 		match &node.kind {
-			StmtKind::Struct { name, fields, .. } => {
-				let Some(struct_env) = self.get_env_from_classlike_symbol(name) else {
+			StmtKind::Struct(st) => {
+				let Some(struct_env) = self.get_env_from_classlike_symbol(&st.name) else {
 					return;
 				};
 
 				self.ctx.push_env(struct_env);
 
-				for field in fields {
+				for field in &st.fields {
 					self.visit_symbol(&field.name);
 				}
 

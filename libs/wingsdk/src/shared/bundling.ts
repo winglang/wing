@@ -55,6 +55,7 @@ export function createBundle(
     sourcemap: "linked",
     platform: "node",
     target: "node18",
+    format: "cjs",
     external,
     write: false,
   });

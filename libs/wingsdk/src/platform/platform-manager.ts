@@ -82,7 +82,13 @@ export class PlatformManager {
 
     let newInstanceOverrides: any[] = [];
 
+    let parameterSchemas: any[] = [];
+
     this.platformInstances.forEach((instance) => {
+      if (instance.parameters) {
+        parameterSchemas.push(instance.parameters);
+      }
+
       if (instance.preSynth) {
         synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
       }
@@ -100,7 +106,19 @@ export class PlatformManager {
       }
     });
 
-    return appCall!({ ...appProps, synthHooks, newInstanceOverrides }) as App;
+    const app = appCall!({
+      ...appProps,
+      synthHooks,
+      newInstanceOverrides,
+    }) as App;
+
+    let registrar = app.platformParameters;
+
+    parameterSchemas.forEach((schema) => {
+      registrar.addParameterSchema(schema);
+    });
+
+    return app;
   }
 }
 

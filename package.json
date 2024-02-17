@@ -4,6 +4,7 @@
   "devDependencies": {
     "bump-pack": "workspace:^",
     "generate-workspace": "workspace:^",
+    "@winglang/compatibility-spy": "workspace:^",
     "turbo": "^1.11.3"
   },
   "scripts": {
@@ -19,8 +20,8 @@
     "wing": "turbo compile --filter=winglang --output-logs=errors-only && ./apps/wing/bin/wing"
   },
   "volta": {
-    "node": "18.16.0",
-    "pnpm": "8.6.5"
+    "node": "20.11.0",
+    "pnpm": "8.15.1"
   },
   "pnpm": {
     "overrides": {

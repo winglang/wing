@@ -72,8 +72,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "s", "foo", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "foo": [
+          ],
+          "$inflight_init": [
+          ],
+          "s": [
+          ],
+        });
       }
     }
   }

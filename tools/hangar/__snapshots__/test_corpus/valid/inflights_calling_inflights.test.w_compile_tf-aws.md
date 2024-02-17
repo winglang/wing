@@ -32,7 +32,13 @@ module.exports = function({ $storeInBucket }) {
       return $obj;
     }
     async handle(event) {
-      (await $storeInBucket(event, "file1"));
+      {
+        const $if_let_value = event;
+        if ($if_let_value != undefined) {
+          const event = $if_let_value;
+          (await $storeInBucket(event, "file1"));
+        }
+      }
     }
   }
   return $Closure2;
@@ -128,7 +134,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -294,16 +300,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [globalBucket, ["put"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.AutoIdResource {
@@ -330,16 +334,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [storeInBucket, ["handle"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.AutoIdResource {
@@ -367,17 +369,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [func1, ["invoke"]],
             [globalBucket, ["get"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -408,16 +408,14 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [globalBucket, ["list"]],
               ],
+              "$inflight_init": [
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         this.closure = new $Closure4(this, "$Closure4");
@@ -440,19 +438,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
-          "$inflight_init": [
-            [this.closure, []],
-          ],
+      get _liftMap() {
+        return ({
           "foo": [
             [this.closure, ["handle"]],
           ],
+          "$inflight_init": [
+            [this.closure, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.AutoIdResource {
@@ -479,16 +473,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [x, ["foo"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const globalBucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");

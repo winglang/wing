@@ -108,7 +108,7 @@ exports[`create a schedule 1`] = `
         "my_schedule": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -120,7 +120,7 @@ exports[`create a schedule 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -289,7 +289,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -302,7 +302,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -313,7 +313,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -325,7 +325,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -494,7 +494,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -507,7 +507,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -518,7 +518,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -530,7 +530,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -699,7 +699,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTick0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -712,7 +712,7 @@ console.log(\\"Hello from schedule!\\");
             "OnTickMapping0": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "hidden": true,
@@ -723,7 +723,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
@@ -735,7 +735,7 @@ console.log(\\"Hello from schedule!\\");
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

@@ -26,7 +26,7 @@ Some Guides:
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-- [Node.js] v18 and [PNPM] v8
+- [Node.js] v20 and [PNPM] v8
   - We recommend [volta] to manage node tools
 - [Rust]
   - We recommend using [rustup] to manage your Rust installation if Rust is not already installed. Be careful of conflicting Rust installations (homebrew rust and rustup)

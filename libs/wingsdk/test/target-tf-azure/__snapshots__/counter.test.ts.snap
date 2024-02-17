@@ -1,0 +1,1896 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`counter name valid 1`] = `
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "wingcounter_CounterTable_785CC80E": {
+        "name": "wingcounterxc83c126d",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`counter name valid 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+              "wingcounter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/wingcounter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "wingcounter",
+                "path": "root/Default/wingcounter",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`counter with initial value 1`] = `
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`counter with initial value 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`dec() policy statement 1`] = `
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "STORAGE_ACCOUNT_0a1532c6": "\${azurerm_storage_account.StorageAccount.name}",
+          "STORAGE_ACCOUNT_KEY_0a1532c6": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+          "TABLE_NAME_0a1532c6": "\${azurerm_storage_table.Counter_CounterTable_D17407E5.name}",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
+        },
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
+        },
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
+        },
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageTableDataContributor_3E18F445": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Table Data Contributor",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+    },
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`dec() policy statement 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CodeBlob",
+                    "path": "root/Default/Function/CodeBlob",
+                  },
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/Function/Function",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "id": "Bucket",
+                        "path": "root/Default/Function/FunctionBucket/Bucket",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "ReadLambdaCodeAssignment",
+                    "path": "root/Default/Function/ReadLambdaCodeAssignment",
+                  },
+                  "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                    "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`default counter behavior 1`] = `
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`function with a counter binding 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-azure/counter.inflight\\")).CounterClient(process.env[\\"STORAGE_ACCOUNT_0a1532c6\\"], process.env[\\"TABLE_NAME_0a1532c6\\"], \\"STORAGE_ACCOUNT_KEY_0a1532c6\\", 0)
+})"
+`;
+
+exports[`function with a counter binding 2`] = `
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "STORAGE_ACCOUNT_0a1532c6": "\${azurerm_storage_account.StorageAccount.name}",
+          "STORAGE_ACCOUNT_KEY_0a1532c6": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+          "TABLE_NAME_0a1532c6": "\${azurerm_storage_table.Counter_CounterTable_D17407E5.name}",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
+        },
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
+        },
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
+        },
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageTableDataContributor_3E18F445": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Table Data Contributor",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+    },
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`function with a counter binding 3`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CodeBlob",
+                    "path": "root/Default/Function/CodeBlob",
+                  },
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/Function/Function",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "id": "Bucket",
+                        "path": "root/Default/Function/FunctionBucket/Bucket",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "ReadLambdaCodeAssignment",
+                    "path": "root/Default/Function/ReadLambdaCodeAssignment",
+                  },
+                  "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                    "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`inc() policy statement 1`] = `
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "STORAGE_ACCOUNT_0a1532c6": "\${azurerm_storage_account.StorageAccount.name}",
+          "STORAGE_ACCOUNT_KEY_0a1532c6": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+          "TABLE_NAME_0a1532c6": "\${azurerm_storage_table.Counter_CounterTable_D17407E5.name}",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
+        },
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
+        },
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
+        },
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageTableDataContributor_3E18F445": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Table Data Contributor",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+    },
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`inc() policy statement 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CodeBlob",
+                    "path": "root/Default/Function/CodeBlob",
+                  },
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/Function/Function",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "id": "Bucket",
+                        "path": "root/Default/Function/FunctionBucket/Bucket",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "ReadLambdaCodeAssignment",
+                    "path": "root/Default/Function/ReadLambdaCodeAssignment",
+                  },
+                  "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                    "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`peek() policy statement 1`] = `
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "STORAGE_ACCOUNT_0a1532c6": "\${azurerm_storage_account.StorageAccount.name}",
+          "STORAGE_ACCOUNT_KEY_0a1532c6": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+          "TABLE_NAME_0a1532c6": "\${azurerm_storage_table.Counter_CounterTable_D17407E5.name}",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
+        },
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
+        },
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
+        },
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageTableDataReader_6582E97E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Table Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+    },
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`peek() policy statement 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CodeBlob",
+                    "path": "root/Default/Function/CodeBlob",
+                  },
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/Function/Function",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "id": "Bucket",
+                        "path": "root/Default/Function/FunctionBucket/Bucket",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "ReadLambdaCodeAssignment",
+                    "path": "root/Default/Function/ReadLambdaCodeAssignment",
+                  },
+                  "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader",
+                    "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Reader",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`replace invalid character from counter name 1`] = `
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "TheAmazingCounter01_CounterTable_5DDDAD60": {
+        "name": "thexamazingxcounterx01xc848151b",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`replace invalid character from counter name 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "The*Amazing%Counter@01": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/The*Amazing%Counter@01/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "The*Amazing%Counter@01",
+                "path": "root/Default/The*Amazing%Counter@01",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`set() policy statement 1`] = `
+{
+  "resource": {
+    "azurerm_application_insights": {
+      "ApplicationInsights": {
+        "application_type": "web",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "application-insights",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "workspace_id": "\${azurerm_log_analytics_workspace.LogAnalyticsWorkspace.id}",
+      },
+    },
+    "azurerm_linux_function_app": {
+      "Function_042596DC": {
+        "app_settings": {
+          "FUNCTIONS_WORKER_RUNTIME": "node",
+          "STORAGE_ACCOUNT_0a1532c6": "\${azurerm_storage_account.StorageAccount.name}",
+          "STORAGE_ACCOUNT_KEY_0a1532c6": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+          "TABLE_NAME_0a1532c6": "\${azurerm_storage_table.Counter_CounterTable_D17407E5.name}",
+          "WEBSITE_RUN_FROM_PACKAGE": "https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}",
+        },
+        "https_only": true,
+        "identity": {
+          "type": "SystemAssigned",
+        },
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "function-c852aba6",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "service_plan_id": "\${azurerm_service_plan.ServicePlan.id}",
+        "site_config": {
+          "application_insights_connection_string": "\${azurerm_application_insights.ApplicationInsights.connection_string}",
+          "application_insights_key": "\${azurerm_application_insights.ApplicationInsights.instrumentation_key}",
+          "application_stack": {
+            "node_version": "20",
+          },
+        },
+        "storage_account_access_key": "\${azurerm_storage_account.StorageAccount.primary_access_key}",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_log_analytics_workspace": {
+      "LogAnalyticsWorkspace": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_role_assignment": {
+      "Function_ReadLambdaCodeAssignment_75049D5E": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Blob Data Reader",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+      "Function_RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_StorageTableDataContributor_3E18F445": {
+        "principal_id": "\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}",
+        "role_definition_name": "Storage Table Data Contributor",
+        "scope": "\${azurerm_storage_account.StorageAccount.id}",
+      },
+    },
+    "azurerm_service_plan": {
+      "ServicePlan": {
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "Default-c82bf964",
+        "os_type": "Linux",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+        "sku_name": "Y1",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "Function_CodeBlob_8A9705C9": {
+        "name": "function-c852aba6.zip",
+        "source": "<source>",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "Function_FunctionBucket_0F705EF9": {
+        "container_access_type": "private",
+        "name": "functionbucket-c8ccf7e8",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+    "azurerm_storage_table": {
+      "Counter_CounterTable_D17407E5": {
+        "name": "counterxc824ef62",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`set() policy statement 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ApplicationInsights": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ApplicationInsights",
+                "path": "root/Default/ApplicationInsights",
+              },
+              "Counter": {
+                "children": {
+                  "CounterTable": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CounterTable",
+                    "path": "root/Default/Counter/CounterTable",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.20.3",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "CodeBlob": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "CodeBlob",
+                    "path": "root/Default/Function/CodeBlob",
+                  },
+                  "Function": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/Function/Function",
+                  },
+                  "FunctionBucket": {
+                    "children": {
+                      "Bucket": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.20.3",
+                        },
+                        "id": "Bucket",
+                        "path": "root/Default/Function/FunctionBucket/Bucket",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.3.0",
+                    },
+                    "display": {
+                      "description": "A cloud object store",
+                      "title": "Bucket",
+                    },
+                    "id": "FunctionBucket",
+                    "path": "root/Default/Function/FunctionBucket",
+                  },
+                  "ReadLambdaCodeAssignment": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "ReadLambdaCodeAssignment",
+                    "path": "root/Default/Function/ReadLambdaCodeAssignment",
+                  },
+                  "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.20.3",
+                    },
+                    "id": "RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                    "path": "root/Default/Function/RoleAssignmentc8e1d35875c13ca650f2fed5dbae08291b89c185ec_Storage Table Data Contributor",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "LogAnalyticsWorkspace": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "LogAnalyticsWorkspace",
+                "path": "root/Default/LogAnalyticsWorkspace",
+              },
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.20.3",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.20.3",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.20.3",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.20.3",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.20.3",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

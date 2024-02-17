@@ -7,6 +7,18 @@ import { T1 } from "./generics";
 import { InflightClient } from "../core";
 
 /**
+ * Array entry representation
+ *
+ * @typeparam T1
+ */
+export interface ArrayEntry {
+  /** The entry key */
+  readonly key: string;
+  /** The entry value */
+  readonly value: T1;
+}
+
+/**
  * Immutable Map
  *
  * @typeparam T1
@@ -107,6 +119,17 @@ export class Map {
   public values(): Array {
     throw new Error("Macro");
   }
+
+  /**
+   * Returns the entries from the map.
+   *
+   * @macro Object.entries($self$).map(([key, value]) => ({ key, value }))
+   *
+   * @returns the entries as Array<ArrayEntry>
+   */
+  public entries(): ArrayEntry[] {
+    throw new Error("Macro");
+  }
 }
 
 /**
@@ -178,7 +201,7 @@ export class MutMap {
    * @macro ((obj, key) => { if (!(key in obj)) throw new Error(`MutMap does not contain key: "${key}"`); return obj[key]; })($self$, $args$)
    *
    * @param key The key of the element to return.
-   * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @returns The element associated with the specified key, or throw an error if the key can't be found
    */
   public get(key: string): T1 {
     key;
@@ -245,6 +268,17 @@ export class MutMap {
    * @returns an array containing of type T the values of this map
    */
   public values(): Array {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the entries from the map.
+   *
+   * @macro Object.entries($self$).map(([key, value]) => ({ key, value }))
+   *
+   * @returns the entries as Array<ArrayEntry>
+   */
+  public entries(): ArrayEntry[] {
     throw new Error("Macro");
   }
 }

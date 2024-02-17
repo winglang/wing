@@ -1,11 +1,15 @@
 bring cloud;
 bring "./subdir/util.w" as myutil;
 
+pub struct StoreOptions {
+  name: str?;
+}
+
 pub class Store {
   handlers: MutArray<inflight (str): void>;
   data: cloud.Bucket;
 
-  new() {
+  new(options: StoreOptions?) {
     this.data = new cloud.Bucket();
     this.handlers = MutArray<inflight (str): void> [];
   }

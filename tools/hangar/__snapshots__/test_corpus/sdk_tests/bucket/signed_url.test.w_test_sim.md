@@ -2,15 +2,8 @@
 
 ## stdout.log
 ```log
-runtime error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl (requested by root/env0/test:signedUrl GET (implicit)/Handler).
+Error: Resource root/env0/cloud.Bucket does not support inflight operation signedUrl.
 It might not be implemented yet.
-  --> signed_url.test.w:8:33
-  | 
-  | let bucket = new cloud.Bucket();
-  | 
-8 | test "signedUrl GET (implicit)" {
-  |                                 ^
-at onLift <ABSOLUTE>/signed_url.test.w:8:33
  
  
 Tests 1 unsupported (1)

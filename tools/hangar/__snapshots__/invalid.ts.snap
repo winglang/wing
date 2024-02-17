@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:5
+error: Unknown symbol \\"instanceField\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^^^^^^^^^^^^^ Unknown symbol \\"instanceField\\"
 
 
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:5
+error: Unknown symbol \\"f\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^ Unknown symbol \\"this\\"
+  |          ^ Unknown symbol \\"f\\"
 
 
  
@@ -411,7 +411,7 @@ Duration <DURATION>"
 `;
 
 exports[`ambiguous_api_paths.test.w 1`] = `
-"runtime error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
+"Error: Endpoint for path '/test/:variable' and method 'GET' is ambiguous - it conflicts with existing endpoint for path '/test/path'
    --> ../../../examples/tests/invalid/ambiguous_api_paths.test.w:12:1
    | };
    | 
@@ -622,6 +622,42 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
    |
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
    |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`bypass_return.test.w 1`] = `
+"error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/bypass_return.test.w:2:12
+  |
+2 |     return \\"a\\";
+  |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/bypass_return.test.w:8:12
+  |
+8 |     return \\"a\\";
+  |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: A function whose return type is \\"num\\" must return a value.
+   --> ../../../examples/tests/invalid/bypass_return.test.w:15:28
+   |
+15 | let emptyBody = (): num => {};
+   |                            ^^ A function whose return type is \\"num\\" must return a value.
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/bypass_return.test.w:20:12
+   |
+20 |     return \\"a\\";
+   |            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -851,6 +887,65 @@ error: Cannot instantiate abstract class \\"Resource\\"
     | ^^^^^^^^^^^^^^^^^^ Cannot instantiate abstract class \\"Resource\\"
 
 
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:183:3
+    |
+170 |   z: num;
+    |   - previous definition
+    .
+183 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:171:3
+    |
+170 |   z: num;
+    |   - previous definition
+171 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:185:3
+    |
+170 |   z: num;
+    |   - previous definition
+    .
+185 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:215:3
+    |
+204 |   z: num;
+    |   - previous definition
+    .
+215 |   z: str;
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:196:3
+    |
+196 |   z(): num {
+    |   ^ Symbol \\"z\\" already defined in this scope
+    .
+204 |   z: num;
+    |   - previous definition
+
+
+error: Symbol \\"z\\" already defined in this scope
+    --> ../../../examples/tests/invalid/class.test.w:208:3
+    |
+204 |   z: num;
+    |   - previous definition
+    .
+208 |   z(): str {
+    |   ^ Symbol \\"z\\" already defined in this scope
+
+
 error: Expected type to be \\"num\\", but got \\"str\\" instead
    --> ../../../examples/tests/invalid/class.test.w:31:14
    |
@@ -893,6 +988,62 @@ error: Expected 1 positional argument(s) but got 0
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:174:5
+    |
+174 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:177:12
+    |
+177 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:187:5
+    |
+187 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:189:12
+    |
+189 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:199:5
+    |
+199 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:201:12
+    |
+201 |     return \\"hello\\";
+    |            ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+    --> ../../../examples/tests/invalid/class.test.w:210:5
+    |
+210 |     2 + \\"2\\";
+    |     ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/class.test.w:212:12
+    |
+212 |     return 5;
+    |            ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
  
  
 Tests 1 failed (1)
@@ -901,14 +1052,14 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.test.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
+"error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.test.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |   return \\"Hello {name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (event: str): str?\\", but got \\"preflight (name: str): str\\" instead
+  | \\\\-^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"preflight (name: str): str\\" instead
   |  
   = hint: expected phase to be inflight, but got preflight instead
 
@@ -1828,11 +1979,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                                                            ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse?\\" instead
    --> ../../../examples/tests/invalid/inference.test.w:57:31
    |
 57 | (new cloud.Bucket()).onCreate(func);
-   |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+   |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse?\\" instead
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
@@ -1907,6 +2058,20 @@ error: Unable to infer type
     |
 107 | let unknownArg = (arg) => {
     |                   ^^^ Unable to infer type
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:118:16
+    |
+118 |   let s: str = a;
+    |                ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+    --> ../../../examples/tests/invalid/inference.test.w:120:10
+    |
+120 |   return \\"\\";
+    |          ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Unable to infer type
@@ -2168,6 +2333,20 @@ error: Access modifiers are not allowed in interfaces
    |   ^^^^^^^^^^^^^^^^^^^ Access modifiers are not allowed in interfaces
 
 
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:11
+   |
+42 |   method1(a, b): void;
+   |           ^ Expected type annotation
+
+
+error: Expected type annotation
+   --> ../../../examples/tests/invalid/interface.test.w:42:14
+   |
+42 |   method1(a, b): void;
+   |              ^ Expected type annotation
+
+
 error: Unknown parser error
    --> ../../../examples/tests/invalid/interface.test.w:36:14
    |
@@ -2189,11 +2368,11 @@ error: Unknown symbol \\"IDontExist\\"
    |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
 
 
-error: Expected an interface, instead found type \\"ISomeClass\\"
+error: Unknown symbol \\"ISomeClass\\"
    --> ../../../examples/tests/invalid/interface.test.w:16:34
    |
 16 | interface ISomeInterface extends ISomeClass {
-   |                                  ^^^^^^^^^^ Expected an interface, instead found type \\"ISomeClass\\"
+   |                                  ^^^^^^^^^^ Unknown symbol \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
@@ -2436,6 +2615,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`map_entries.test.w 1`] = `
+"error: Expected type to be \\"str\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/map_entries.test.w:2:20
+  |
+2 | let someStr: str = mapToNumber.entries().at(0).value;
+  |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`missing_return.test.w 1`] = `
 "error: A function whose return type is \\"str\\" must return a value.
   --> ../../../examples/tests/invalid/missing_return.test.w:1:40
@@ -2590,20 +2784,16 @@ Duration <DURATION>"
 `;
 
 exports[`new_in_static_without_scope.test.w 1`] = `
-"error: Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:7:12
-  |
-7 |     return new cloud.Bucket();
-  |            ^^^^^^^^^^^^^^^^^^ Cannot instantiate preflight class \\"Bucket\\" in a static method without an explicit scope
-
-
-error: Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-   --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:10:12
-   |
-10 |     return new MyClass();
-   |            ^^^^^^^^^^^^^ Cannot instantiate preflight class \\"MyClass\\" in a static method without an explicit scope
-
-
+"Error: Cannot read properties of undefined (reading 'addChild')
+  --> ../../../examples/tests/invalid/new_in_static_without_scope.test.w:5:7
+  | // explicit \`scope\`.
+  | bring cloud;
+  | 
+5 | class MyClass {
+  |       ^
+at new MyClass <ABSOLUTE>/new_in_static_without_scope.test.w:5:7
+at createMyClass <ABSOLUTE>/new_in_static_without_scope.test.w:10:16
+at <ABSOLUTE>/new_in_static_without_scope.test.w:14:1
  
  
 Tests 1 failed (1)
@@ -2764,6 +2954,20 @@ error: Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): 
     |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"(preflight (): num)?\\", but got \\"preflight (): str\\" instead
 
 
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:110:19
+    |
+110 | let unwrapValue = nonOptional!;
+    |                   ^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
+error: '!' expects an optional type, found \\"num\\"
+    --> ../../../examples/tests/invalid/optionals.test.w:116:21
+    |
+116 | let unwrapValueFn = nonOptionalFn()!;
+    |                     ^^^^^^^^^^^^^^^ '!' expects an optional type, found \\"num\\"
+
+
 error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.test.w:53:3
    |
@@ -2842,13 +3046,6 @@ error: Expected type to be \\"preflight (inflight (str): str): void\\", but got 
    |
 25 | accepts_callback(callback); // error
    |                  ^^^^^^^^ Expected type to be \\"preflight (inflight (str): str): void\\", but got \\"preflight (inner_fn: preflight (preflight (str): str): void): void\\" instead
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/phase_mismatch.test.w:1:1
-  |
-1 | let my_func1 = (callback: inflight (num): num) => {  };
-  | ^ Unknown symbol \\"this\\"
 
 
  
@@ -3442,16 +3639,6 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
-error: \\"status\\" is not initialized
-   --> ../../../examples/tests/invalid/struct_expansion.test.w:15:9
-   |  
-15 |   let x = cloud.ApiResponse {
-   | /---------^
-16 | |   body: \\"Hello, world!\\",
-17 | | };
-   | \\\\-^ \\"status\\" is not initialized
-
-
 error: \\"notAField\\" is not a field of \\"ApiResponse\\"
    --> ../../../examples/tests/invalid/struct_expansion.test.w:20:9
    |  
@@ -3462,6 +3649,13 @@ error: \\"notAField\\" is not a field of \\"ApiResponse\\"
 23 | | // ^^^^^^^^^^^ \\"notAField\\" is not a field of \\"ApiResponse\\"
 24 | | };
    | \\\\-^ \\"notAField\\" is not a field of \\"ApiResponse\\"
+
+
+error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
+   --> ../../../examples/tests/invalid/struct_expansion.test.w:27:3
+   |
+27 |   handler, 
+   |   ^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (event: str): unknown\\" instead
 
 
 error: Expected between 2 and 3 positional arguments or named arguments for the last parameter but got 1
@@ -3579,11 +3773,11 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.test.w 1`] = `
-"error: \\"super\\" can only be used inside of classes
+"error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:32:7
    |
 32 | super.do();
-   |       ^^ \\"super\\" can only be used inside of classes
+   |       ^^ Cannot call super method because class Construct has no parent
 
 
 error: Cannot override private method \\"m1\\" of \\"BaseClass\\"
@@ -3614,11 +3808,18 @@ error: super class \\"A\\" does not have a method named \\"child_method\\"
    |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
 
 
-error: Cannot call super method inside of a static method
+error: Cannot call super method because class Construct has no parent
    --> ../../../examples/tests/invalid/super_call.test.w:26:11
    |
 26 |     super.method();
-   |           ^^^^^^ Cannot call super method inside of a static method
+   |           ^^^^^^ Cannot call super method because class Construct has no parent
+
+
+error: Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
+   --> ../../../examples/tests/invalid/super_call.test.w:55:31
+   |
+55 |     return new cloud.Function(inflight_closure);
+   |                               ^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (event: str?): str?\\", but got \\"inflight (s: str): str\\" instead
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
@@ -3626,6 +3827,21 @@ error: \`super\` calls inside inflight closures not supported yet, see: https://
    |
 52 |       return \\"this: {this.m1()}, super: {super.m1()}\\";
    |                                                ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`this.w 1`] = `
+"error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/this.w:3:9
+  |
+3 |     log(this.node.id);
+  |         ^^^^ Unknown symbol \\"this\\"
 
 
  

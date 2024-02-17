@@ -124,7 +124,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -318,16 +318,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [store, ["store"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     class Triangle extends $stdlib.std.Resource {
@@ -354,8 +352,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Util extends $stdlib.std.Resource {
@@ -379,8 +380,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const store = new file1.Store(this, "file1.Store");
@@ -407,6 +411,14 @@ const $helpers = $stdlib.helpers;
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
+const Color =
+  (function (tmp) {
+    tmp[tmp["RED"] = 0] = ",RED";
+    tmp[tmp["GREEN"] = 1] = ",GREEN";
+    tmp[tmp["BLUE"] = 2] = ",BLUE";
+    return tmp;
+  })({})
+;
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -428,8 +440,11 @@ class Util extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 class Store extends $stdlib.std.Resource {
@@ -461,16 +476,14 @@ class Store extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [__parent_this_1.b, ["put"]],
           ],
+          "$inflight_init": [
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const prefill = this.node.root.new("@winglang/sdk.cloud.OnDeploy", cloud.OnDeploy, this, "cloud.OnDeploy", new $Closure1(this, "$Closure1"));
@@ -493,29 +506,17 @@ class Store extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "store", "$inflight_init"];
-  }
-  onLift(host, ops) {
-    $stdlib.core.onLiftMatrix(host, ops, {
-      "$inflight_init": [
-        [this.b, []],
-      ],
+  get _liftMap() {
+    return ({
       "store": [
         [this.b, ["put"]],
       ],
+      "$inflight_init": [
+        [this.b, []],
+      ],
     });
-    super.onLift(host, ops);
   }
 }
-const Color =
-  (function (tmp) {
-    tmp[tmp["RED"] = 0] = ",RED";
-    tmp[tmp["GREEN"] = 1] = ",GREEN";
-    tmp[tmp["BLUE"] = 2] = ",BLUE";
-    return tmp;
-  })({})
-;
 module.exports = { Util, Store, Color };
 //# sourceMappingURL=preflight.store-2.js.map
 ```
@@ -548,8 +549,17 @@ class Q extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "greet", "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
+  }
+  static get _liftTypeMap() {
+    return ({
+      "greet": [
+      ],
+    });
   }
 }
 module.exports = { Q };
