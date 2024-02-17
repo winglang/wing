@@ -798,6 +798,7 @@ class $Root extends $stdlib.std.Resource {
           "testTypeAccess": [
             [Bar, ["barStatic"]],
             [Foo, ["fooStatic"]],
+            [MyEnum, ["B"]],
             [this.e, []],
           ],
           "$inflight_init": [

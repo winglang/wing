@@ -217,9 +217,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
           "get_six": [
+          ],
+          "init": [
           ],
           "$inflight_init": [
             [this, ["field1", "field2", "get_six"]],
@@ -231,6 +233,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $UniqueClassAlias0 = Foo;
     class FooChild extends Foo {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -253,8 +256,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      static get _liftTypeMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
+          "init": [
+          ],
           "$inflight_init": [
             [this, ["field3"]],
           ],
@@ -263,6 +268,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $UniqueClassAlias1 = FooChild;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -290,6 +296,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias0, ["field1", "field2"]],
+            [Foo, []],
           ],
           "$inflight_init": [
           ],
@@ -323,6 +331,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias1, ["field1", "field2", "field3"]],
+            [FooChild, []],
           ],
           "$inflight_init": [
           ],
@@ -388,6 +398,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
           "$inflight_init": [
           ],
