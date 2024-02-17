@@ -403,15 +403,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
           "description": [
+          ],
+          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias5 = InflightA;
     class InflightB extends InflightA {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -434,15 +437,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      static get _liftTypeMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
           "description": [
+          ],
+          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias6 = InflightB;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -471,6 +477,9 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias6, ["description"]],
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
+            [InflightB, []],
           ],
           "$inflight_init": [
           ],
@@ -570,6 +579,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [extended, ["do"]],
           ],
           "$inflight_init": [

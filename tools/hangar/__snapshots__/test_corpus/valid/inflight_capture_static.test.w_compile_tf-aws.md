@@ -213,19 +213,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return ({
-          "$inflight_init": [
-          ],
-        });
-      }
       static get _liftTypeMap() {
         return ({
           "staticMethod": [
           ],
+          "init": [
+          ],
+          "$inflight_init": [
+          ],
         });
       }
     }
+    const $UniqueClassAlias1 = OuterInflight;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -287,6 +286,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [OuterInflight, ["staticMethod"]],
           ],
           "$inflight_init": [
           ],
@@ -352,6 +352,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"), ["tryEnv"]],
           ],
           "$inflight_init": [
           ],

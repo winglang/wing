@@ -235,15 +235,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
           "foo": [
+          ],
+          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias1 = B;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -333,15 +336,18 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          get _liftMap() {
+          static get _liftTypeMap() {
             return ({
               "foo": [
+              ],
+              "init": [
               ],
               "$inflight_init": [
               ],
             });
           }
         }
+        const $UniqueClassAlias7 = F;
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.AutoIdResource {
           _id = $stdlib.core.closureId();
@@ -370,6 +376,8 @@ class $Root extends $stdlib.std.Resource {
           get _liftMap() {
             return ({
               "handle": [
+                [$UniqueClassAlias7, ["foo"]],
+                [F, ["foo"]],
               ],
               "$inflight_init": [
               ],
@@ -441,6 +449,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias1, ["foo"]],
+            [B, []],
             [a, ["goo"]],
             [d, ["callInner"]],
             [fn, ["handle"]],

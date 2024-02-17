@@ -765,8 +765,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
+          "init": [
+          ],
           "$inflight_init": [
             [this, ["sound"]],
           ],
@@ -775,6 +777,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const $UniqueClassAlias12 = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -797,13 +800,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      static get _liftTypeMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
+          "init": [
+          ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias13 = B;
     class $Closure4 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -831,6 +837,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias13, ["sound"]],
+            [B, []],
           ],
           "$inflight_init": [
           ],

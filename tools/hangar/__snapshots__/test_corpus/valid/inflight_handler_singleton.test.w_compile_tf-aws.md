@@ -443,6 +443,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), ["equal"]],
             [fn, ["invoke"]],
             [fn2, ["invoke"]],
             [sim, []],
