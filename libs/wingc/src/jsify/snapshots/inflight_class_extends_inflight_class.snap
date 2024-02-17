@@ -70,13 +70,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
+          "init": [
+          ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias0 = A;
     class B extends A {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -99,13 +102,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+      static get _liftTypeMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
+          "init": [
+          ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias1 = B;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

@@ -96,16 +96,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
           "putInBucket": [
             [b, ["put"]],
+          ],
+          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias0 = MyInflightClass;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -133,6 +136,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias0, ["putInBucket"]],
+            [MyInflightClass, []],
           ],
           "$inflight_init": [
           ],

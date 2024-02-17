@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "foo": [
-            [this.closure, []],
+            [this.closure, ["handle"]],
           ],
           "$inflight_init": [
             [this.closure, []],
