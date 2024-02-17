@@ -2159,13 +2159,6 @@ error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
    |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
 
 
-error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.test.w:19:7
-   |
-19 |   new PreflightClass();
-   |       ^^^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-
-
  
  
 Tests 1 failed (1)
@@ -3363,13 +3356,6 @@ exports[`resource_inflight.test.w 1`] = `
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
-
-
-error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-  --> ../../../examples/tests/invalid/resource_inflight.test.w:4:7
-  |
-4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
-  |       ^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  

@@ -90,16 +90,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      get _liftMap() {
+      static get _liftTypeMap() {
         return ({
           "getValue": [
             [myConst, []],
+          ],
+          "init": [
           ],
           "$inflight_init": [
           ],
         });
       }
     }
+    const $UniqueClassAlias0 = Foo;
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -128,6 +131,8 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
+            [$UniqueClassAlias0, ["getValue"]],
+            [Foo, []],
             [myConst, []],
           ],
           "$inflight_init": [
