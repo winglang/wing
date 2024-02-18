@@ -258,7 +258,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, is_field, None);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, is_field);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -293,7 +293,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 							// Get preflight code that references the type of the class so we can qualify the lift, note we use a unique
 							// type alias here since we might not have the actual type name available in scope here.
 							let code = &v.jsify.unique_class_alias(expr_type);
-							lifts.lift(m, Some(property), code, false, Some(expr_type));
+							lifts.lift(m, Some(property), code, false);
 							v.lifts_stack.push(lifts);
 							return;
 						}
@@ -355,7 +355,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				property,
 				&code,
 				false,
-				Some(udt_type),
 			);
 			self.lifts_stack.push(lifts);
 		}

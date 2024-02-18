@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use crate::ast::{Symbol, UserDefinedType};
 
-use super::{ExprId, Subtype, TypeRef, CLASS_INFLIGHT_INIT_NAME};
+use super::{ExprId, CLASS_INFLIGHT_INIT_NAME};
 
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
@@ -31,8 +31,6 @@ pub enum Liftable {
 pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
-	/// For type (not object) lifts, the type these qualify
-	pub type_: Option<TypeRef>,
 }
 
 /// A record that describes a lift from a class.
@@ -59,62 +57,22 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str, is_field: bool, type_: Option<TypeRef>) {
-		self.add_lift(
-			method.name.clone(),
-			code,
-			property.as_ref().map(|s| s.name.clone()),
-			type_,
-		);
+	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str, is_field: bool) {
+		self.add_lift(method.name.clone(), code, property.as_ref().map(|s| s.name.clone()));
 
 		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None, type_);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}
 
-	pub fn qualify_lifted_type(&mut self, method: Symbol, property: Symbol, type_: TypeRef) {
-		let Some(method_lifts) = self.lifts_qualifications.get_mut(&method.name) else {
-			panic!("Can't qualify unlifted type \"{type_}\" with \"{property}\": method \"{method}\" has no lifts.");
-		};
-
-		// Make sure this type actually exists in the lifts
-		// TODO: change this to a lookup instead of a linear search over `code`
-		let lift_qualification = method_lifts
-			.values_mut()
-			.find(|lift| lift.type_.is_some() && lift.type_.unwrap().is_same_type_as(&type_))
-			.unwrap_or_else(|| panic!("Can't qualify unlifted type \"{type_}\" with \"{property}\""));
-
-		// Add the property to the lift qualification
-		lift_qualification.ops.insert(property.name.clone());
-	}
-
-	fn add_lift(&mut self, method: String, code: &str, property: Option<String>, type_: Option<TypeRef>) {
+	fn add_lift(&mut self, method: String, code: &str, property: Option<String>) {
 		let lift = self
 			.lifts_qualifications
 			.entry(method)
 			.or_default()
 			.entry(code.to_string())
-			.or_insert(LiftQualification {
-				ops: BTreeSet::new(),
-				type_,
-			});
-
-		// Make sure the type for the given lift is consistent
-		match (&lift.type_, &type_) {
-			(Some(t1), Some(t2)) => {
-				assert!(
-					t1.is_same_type_as(t2),
-					"Lift type mismatch for code \"{code}\": type \"{t1}\" != \"{t2}\""
-				);
-			}
-			(Some(t), None) | (None, Some(t)) => {
-				panic!("Lift type mismatch for code \"{code}\": type \"{t}\" != None");
-			}
-			_ => {
-				// do nothing
-			}
-		}
+			.or_insert(LiftQualification { ops: BTreeSet::new() });
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
