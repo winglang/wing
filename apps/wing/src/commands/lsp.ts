@@ -81,7 +81,7 @@ export async function lsp() {
 
   let connection = createConnection(process.stdin, process.stdout);
   connection.onInitialize((params: InitializeParams) => {
-    // certain IDEs don't internally respect the `parameterHints` option, so we must check it ourselves
+    // certain IDEs don't internally respect a `parameterHints` option, so we must check it ourselves
     const signatureHelpProvider =
       params.initializationOptions?.parameterHints ?? true
         ? {
