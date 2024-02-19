@@ -134,6 +134,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["getData", "getUuid", "regexInflight"]],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }
@@ -180,6 +181,7 @@ class $Root extends $stdlib.std.Resource {
             [f, ["call"]],
           ],
           "$inflight_init": [
+            [f, []],
           ],
         });
       }
@@ -214,6 +216,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["print"]],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }

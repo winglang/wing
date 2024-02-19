@@ -447,6 +447,10 @@ class $Root extends $stdlib.std.Resource {
             [innerD, ["handle"]],
           ],
           "$inflight_init": [
+            [a, []],
+            [d, []],
+            [fn, []],
+            [innerD, []],
           ],
         });
       }

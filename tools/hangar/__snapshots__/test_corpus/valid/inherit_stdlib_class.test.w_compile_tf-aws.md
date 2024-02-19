@@ -386,6 +386,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }

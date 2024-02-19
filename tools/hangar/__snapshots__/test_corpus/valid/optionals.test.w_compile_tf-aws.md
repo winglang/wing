@@ -282,6 +282,9 @@ class $Root extends $stdlib.std.Resource {
             [payloadWithBucket.c, ["put"]],
           ],
           "$inflight_init": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, []],
           ],
         });
       }
