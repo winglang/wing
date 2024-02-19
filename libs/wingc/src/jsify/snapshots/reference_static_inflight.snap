@@ -131,6 +131,7 @@ class $Root extends $stdlib.std.Resource {
             [MyType, ["myStaticMethod"]],
           ],
           "$inflight_init": [
+            [MyType, []],
           ],
         });
       }
