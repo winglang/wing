@@ -2187,12 +2187,21 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
 				expression_span,
 			)),
-			"array_literal" => {
+			"set_literal" => self.build_set_literal(expression_node, phase),
+			"array_or_set_literal" => {
 				let array_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
 					self.build_type_annotation(Some(type_node), phase).ok()
 				} else {
 					None
 				};
+
+				// check if the array type is annotated as a Set/MutSet
+				// if so, we should build a set literal instead
+				if let Some(TypeAnnotation { kind, .. }) = &array_type {
+					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) {
+						return self.build_set_literal(expression_node, phase);
+					}
+				}
 
 				let mut items = Vec::new();
 				let mut cursor = expression_node.walk();
@@ -2220,14 +2229,6 @@ impl<'s> Parser<'s> {
 				};
 
 				let fields = self.build_map_fields(expression_node, phase)?;
-
-				// Special case: empty {} (which is detected as map by tree-sitter) -
-				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(TypeAnnotation { kind, .. }) = &map_type {
-					if matches!(kind, TypeAnnotationKind::Set(_) | TypeAnnotationKind::MutSet(_)) && fields.is_empty() {
-						return self.build_set_literal(expression_node, phase);
-					}
-				}
 
 				Ok(Expr::new(
 					ExprKind::MapLiteral {
@@ -2284,7 +2285,6 @@ impl<'s> Parser<'s> {
 				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
-			"set_literal" => self.build_set_literal(expression_node, phase),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(get_actual_child_by_field_name(*expression_node, "type"), phase);
 				let mut fields = IndexMap::new();
