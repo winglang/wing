@@ -363,6 +363,18 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						return filter_completions(completions);
 					}
+
+					if node_to_complete_kind == "type_identifier" {
+						// we're in an incomplete bare type (e.g. `new clou` or `extends clo`),
+						// we should attempt to use the text we have to match existing scope symbols
+						return filter_completions(get_current_scope_completions(
+							&types,
+							&scope_visitor,
+							&node_to_complete,
+							&preceding_text,
+						));
+					}
+
 					return vec![];
 				}
 			} else if matches!(
@@ -1307,6 +1319,21 @@ new cloud.
 		// all items are preflight
 		// TODO https://github.com/winglang/wing/issues/2512
 		// assert!(new_expression_nested.iter().all(|item| item.detail.as_ref().unwrap().starts_with("preflight")))
+	);
+
+	test_completion_list!(
+		new_expression_partial_namespace,
+		r#"
+bring cloud;
+
+struct cloudy {}
+
+new clo
+     //^
+"#,
+		assert!(!new_expression_partial_namespace.is_empty())
+		assert!(new_expression_partial_namespace.len() == 1)
+		assert!(new_expression_partial_namespace.get(0).unwrap().label == "cloud")
 	);
 
 	test_completion_list!(
