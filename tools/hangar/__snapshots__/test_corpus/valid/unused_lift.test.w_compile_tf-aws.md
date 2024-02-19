@@ -1,4 +1,4 @@
-# [extern_implementation.test.w](../../../../../examples/tests/valid/extern_implementation.test.w) | compile | tf-aws
+# [unused_lift.test.w](../../../../../examples/tests/valid/unused_lift.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
@@ -12,7 +12,7 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      (await $f.call());
+      (await $f.m());
     }
   }
   return $Closure1;
@@ -24,7 +24,7 @@ module.exports = function({ $f }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $Foo }) {
+module.exports = function({ $bar }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,7 +32,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      (await $Foo.print("hey there"));
+      (await $bar.m());
     }
   }
   return $Closure2;
@@ -40,31 +40,37 @@ module.exports = function({ $Foo }) {
 //# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
+## inflight.Bar-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $b }) {
+  class Bar {
+    constructor({  }) {
+    }
+    static async access_b() {
+      (await $b.list());
+    }
+    async m() {
+    }
+  }
+  return Bar;
+}
+//# sourceMappingURL=inflight.Bar-1.js.map
+```
+
 ## inflight.Foo-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
+module.exports = function({ $b }) {
   class Foo {
     constructor({  }) {
     }
-    static async regexInflight(pattern, text) {
-      return (require("../../../external_js.js")["regexInflight"])(pattern, text)
+    async access_b() {
+      (await $b.list());
     }
-    static async getUuid() {
-      return (require("../../../external_js.js")["getUuid"])()
-    }
-    static async getData() {
-      return (require("../../../external_js.js")["getData"])()
-    }
-    static async print(msg) {
-      return (require("../../../external_js.js")["print"])(msg)
-    }
-    async call() {
-      $helpers.assert((await Foo.regexInflight("[a-z]+-\\d+", "abc-123")), "Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")");
-      const uuid = (await Foo.getUuid());
-      $helpers.assert($helpers.eq(uuid.length, 36), "uuid.length == 36");
-      $helpers.assert($helpers.eq((await Foo.getData()), "Cool data!"), "Foo.getData() == \"Cool data!\"");
+    async m() {
     }
   }
   return Foo;
@@ -87,6 +93,20 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "cloudBucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
+      }
+    }
   }
 }
 ```
@@ -108,12 +128,10 @@ class $Root extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
       }
-      static getGreeting(name) {
-        return (require("../../../external_js.js")["getGreeting"])(name)
-      }
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }
@@ -130,23 +148,13 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
-          "call": [
-            [Foo, ["getData", "getUuid", "regexInflight"]],
+          "access_b": [
+            [b, ["list"]],
+          ],
+          "m": [
           ],
           "$inflight_init": [
-            [Foo, []],
-          ],
-        });
-      }
-      static get _liftTypeMap() {
-        return ({
-          "regexInflight": [
-          ],
-          "getUuid": [
-          ],
-          "getData": [
-          ],
-          "print": [
+            [b, []],
           ],
         });
       }
@@ -178,10 +186,49 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [f, ["call"]],
+            [f, ["m"]],
           ],
           "$inflight_init": [
             [f, []],
+          ],
+        });
+      }
+    }
+    class Bar extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
+            $b: ${$stdlib.core.liftObject(b)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const BarClient = ${Bar._toInflightType()};
+            const client = new BarClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "m": [
+          ],
+          "$inflight_init": [
+            [b, []],
+          ],
+        });
+      }
+      static get _liftTypeMap() {
+        return ({
+          "access_b": [
+            [b, ["list"]],
           ],
         });
       }
@@ -195,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
-            $Foo: ${$stdlib.core.liftObject(Foo)},
+            $bar: ${$stdlib.core.liftObject(bar)},
           })
         `;
       }
@@ -213,22 +260,23 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [Foo, ["print"]],
+            [bar, ["m"]],
           ],
           "$inflight_init": [
-            [Foo, []],
+            [bar, []],
           ],
         });
       }
     }
-    $helpers.assert($helpers.eq((Foo.getGreeting("Wingding")), "Hello, Wingding!"), "Foo.getGreeting(\"Wingding\") == \"Hello, Wingding!\"");
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const f = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:call", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:console", new $Closure2(this, "$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Use class but not method that access lifted object", new $Closure1(this, "$Closure1"));
+    const bar = new Bar(this, "Bar");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Use class but not static method that access lifted object", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "extern_implementation.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "unused_lift.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```

@@ -212,6 +212,9 @@ class $Root extends $stdlib.std.Resource {
             [initCount, ["peek"]],
           ],
           "$inflight_init": [
+            [bar, []],
+            [bar.foo, []],
+            [initCount, []],
           ],
         });
       }

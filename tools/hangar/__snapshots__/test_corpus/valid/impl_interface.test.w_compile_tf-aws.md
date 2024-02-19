@@ -231,6 +231,7 @@ class $Root extends $stdlib.std.Resource {
             [x, ["handle"]],
           ],
           "$inflight_init": [
+            [x, []],
           ],
         });
       }
@@ -301,6 +302,7 @@ class $Root extends $stdlib.std.Resource {
             [i3, ["method2"]],
           ],
           "$inflight_init": [
+            [i3, []],
           ],
         });
       }
