@@ -363,6 +363,18 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						return filter_completions(completions);
 					}
+
+					if node_to_complete_kind == "type_identifier" {
+						// we're in an incomplete bare type (e.g. `new clou` or `extends clo`),
+						// we should attempt to use the text we have to match existing scope symbols
+						return filter_completions(get_current_scope_completions(
+							&types,
+							&scope_visitor,
+							&node_to_complete,
+							&preceding_text,
+						));
+					}
+
 					return vec![];
 				}
 			} else if matches!(
@@ -1295,7 +1307,7 @@ mod tests {
 		r#"
 bring cloud;
 
-new cloud.
+new cloud. 
         //^
 "#,
 		assert!(!new_expression_nested.is_empty())
@@ -1309,13 +1321,28 @@ new cloud.
 	);
 
 	test_completion_list!(
+		new_expression_partial_namespace,
+		r#"
+bring cloud;
+
+struct cloudy {}
+
+new clo
+     //^
+"#,
+		assert!(!new_expression_partial_namespace.is_empty())
+		assert!(new_expression_partial_namespace.len() == 1)
+		assert!(new_expression_partial_namespace.get(0).unwrap().label == "cloud")
+	);
+
+	test_completion_list!(
 		static_method_call,
 		r#"
 class Resource {
 	static hello() {}
 }
 
-Resource.
+Resource. 
        //^
 "#,
 		assert!(!static_method_call.is_empty())
@@ -1331,10 +1358,10 @@ let a = 1;
 if a == 1 {
 	let x = "";
 }
-
-let b =
+	
+let b =  
 			//^
-
+			
 let c = 3;
 "#,
 		assert!(!only_show_symbols_in_scope.is_empty())
@@ -1356,7 +1383,7 @@ if a.
 	test_completion_list!(
 		json_statics,
 		r#"
-Json.
+Json. 
    //^"#,
 		assert!(!json_statics.is_empty())
 	);
@@ -1453,7 +1480,7 @@ x..
 		inside_class_declaration,
 		r#"
 class Foo {
-
+   
 //^
 }
 "#,
@@ -1546,7 +1573,7 @@ j.tryGet("").
 		r#"
 struct Foo {}
 
-let x:
+let x: 
     //^
 "#,
 		assert!(!type_annotation_shows_struct.is_empty())
@@ -1557,8 +1584,8 @@ let x:
 		struct_definition_middle,
 		r#"
 struct Foo {
-
-//^
+   
+//^ 
 }
 "#,
 		assert!(struct_definition_middle.is_empty())
@@ -1571,7 +1598,7 @@ bring cloud;
 
 struct Foo {
 	x:
-	//^
+	//^ 
 }
 "#
 	);
@@ -1732,7 +1759,7 @@ let x: Outer = { bThing: {   } }
 	test_completion_list!(
 		bring_suggestions,
 		r#"
-bring
+bring 
     //^
 "#
 	);
@@ -1748,7 +1775,7 @@ bring c
 	test_completion_list!(
 		bring_alias,
 		r#"
-bring "" as
+bring "" as 
 	        //^
 "#,
 		assert!(bring_alias.is_empty())
@@ -1766,7 +1793,7 @@ let a
 	test_completion_list!(
 		definition_identifier,
 		r#"
-let
+let 
   //^
 "#,
 		assert!(definition_identifier.is_empty())
@@ -1793,7 +1820,7 @@ for x i
 	test_completion_list!(
 		comment,
 		r#"
-let x = // hi
+let x = // hi 
             //^
 "#,
 		assert!(comment.is_empty())
@@ -1829,7 +1856,7 @@ x.
 		r#"
 class S {
   a: num;
-  new() {
+  new() { 
     this.
        //^
   }
@@ -1845,7 +1872,7 @@ struct S { ab: num; }
 
 test "" {
   let x = S {
-
+    
   //^
   };
 }
@@ -1856,7 +1883,7 @@ test "" {
 	test_completion_list!(
 		no_completions_after_let,
 		r#"
-let
+let 
   //^
 let y = 3;
 "#,
@@ -1868,7 +1895,7 @@ let y = 3;
 		r#"
 let x = 2;
 test "" {
-
+  
 //^
 }
 let y = 3;
