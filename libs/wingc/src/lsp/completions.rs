@@ -363,9 +363,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						return filter_completions(completions);
 					}
-					if is_new_expression {
-						// we're in an incomplete "new" expression (i.e. `new clou`),
-						// we should attempt to use the text we have to match existing symbols
+
+					if node_to_complete_kind == "type_identifier" {
+						// we're in an incomplete bare type (e.g. `new clou` or `extends clo`),
+						// we should attempt to use the text we have to match existing scope symbols
 						return filter_completions(get_current_scope_completions(
 							&types,
 							&scope_visitor,
