@@ -174,6 +174,7 @@ class $Root extends $stdlib.std.Resource {
             [foo, ["returnNil"]],
           ],
           "$inflight_init": [
+            [foo, []],
           ],
         });
       }
@@ -208,6 +209,7 @@ class $Root extends $stdlib.std.Resource {
             [foo, ["getOptionalValue", "setOptionalValue"]],
           ],
           "$inflight_init": [
+            [foo, []],
           ],
         });
       }

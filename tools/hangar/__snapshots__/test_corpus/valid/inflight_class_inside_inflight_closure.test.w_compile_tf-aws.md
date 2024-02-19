@@ -280,6 +280,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_1.b, ["put"]],
               ],
               "$inflight_init": [
+                [__parent_this_1.b, []],
               ],
             });
           }
@@ -341,6 +342,7 @@ class $Root extends $stdlib.std.Resource {
             [f, ["invoke"]],
           ],
           "$inflight_init": [
+            [f, []],
           ],
         });
       }

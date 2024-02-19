@@ -324,6 +324,7 @@ class $Root extends $stdlib.std.Resource {
             [store, ["store"]],
           ],
           "$inflight_init": [
+            [store, []],
           ],
         });
       }
@@ -482,6 +483,7 @@ class Store extends $stdlib.std.Resource {
             [__parent_this_1.b, ["put"]],
           ],
           "$inflight_init": [
+            [__parent_this_1.b, []],
           ],
         });
       }

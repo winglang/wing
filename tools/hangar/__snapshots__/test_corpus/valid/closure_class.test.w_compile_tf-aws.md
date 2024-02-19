@@ -138,6 +138,7 @@ class $Root extends $stdlib.std.Resource {
             [fn, ["another", "handle"]],
           ],
           "$inflight_init": [
+            [fn, []],
           ],
         });
       }
