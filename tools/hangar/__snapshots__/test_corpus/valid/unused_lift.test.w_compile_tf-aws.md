@@ -1,10 +1,10 @@
-# [nil.test.w](../../../../../examples/tests/valid/nil.test.w) | compile | tf-aws
+# [unused_lift.test.w](../../../../../examples/tests/valid/unused_lift.test.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $foo }) {
+module.exports = function({ $f }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,8 +12,7 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.returnNil(true))) != null), true), "foo.returnNil(true)? == true");
-      $helpers.assert($helpers.eq((((await $foo.returnNil(false))) != null), false), "foo.returnNil(false)? == false");
+      (await $f.m());
     }
   }
   return $Closure1;
@@ -25,7 +24,7 @@ module.exports = function({ $foo }) {
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $foo }) {
+module.exports = function({ $bar }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -33,13 +32,7 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
-      (await $foo.setOptionalValue("hello"));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), true), "foo.getOptionalValue()? == true");
-      $helpers.assert($helpers.neq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() != nil");
-      (await $foo.setOptionalValue(undefined));
-      $helpers.assert($helpers.eq((((await $foo.getOptionalValue())) != null), false), "foo.getOptionalValue()? == false");
-      $helpers.assert($helpers.eq((await $foo.getOptionalValue()), undefined), "foo.getOptionalValue() == nil");
+      (await $bar.m());
     }
   }
   return $Closure2;
@@ -47,28 +40,37 @@ module.exports = function({ $foo }) {
 //# sourceMappingURL=inflight.$Closure2-1.js.map
 ```
 
+## inflight.Bar-1.js
+```js
+"use strict";
+const $helpers = require("@winglang/sdk/lib/helpers");
+module.exports = function({ $b }) {
+  class Bar {
+    constructor({  }) {
+    }
+    static async access_b() {
+      (await $b.list());
+    }
+    async m() {
+    }
+  }
+  return Bar;
+}
+//# sourceMappingURL=inflight.Bar-1.js.map
+```
+
 ## inflight.Foo-1.js
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({  }) {
+module.exports = function({ $b }) {
   class Foo {
     constructor({  }) {
     }
-    async returnNil(t) {
-      if (t) {
-        return "hello";
-      }
-      return undefined;
+    async access_b() {
+      (await $b.list());
     }
-    async setOptionalValue(msg) {
-      this.optionalVar = msg;
-    }
-    async getOptionalValue() {
-      return this.optionalVar;
-    }
-    async $inflight_init() {
-      this.optionalVar = undefined;
+    async m() {
     }
   }
   return Foo;
@@ -91,6 +93,20 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "cloudBucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
+      }
+    }
   }
 }
 ```
@@ -115,6 +131,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
+            $b: ${$stdlib.core.liftObject(b)},
           })
         `;
       }
@@ -131,15 +148,13 @@ class $Root extends $stdlib.std.Resource {
       }
       get _liftMap() {
         return ({
-          "returnNil": [
+          "access_b": [
+            [b, ["list"]],
           ],
-          "setOptionalValue": [
-          ],
-          "getOptionalValue": [
+          "m": [
           ],
           "$inflight_init": [
-          ],
-          "optionalVar": [
+            [b, []],
           ],
         });
       }
@@ -153,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $foo: ${$stdlib.core.liftObject(foo)},
+            $f: ${$stdlib.core.liftObject(f)},
           })
         `;
       }
@@ -171,10 +186,49 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["returnNil"]],
+            [f, ["m"]],
           ],
           "$inflight_init": [
-            [foo, []],
+            [f, []],
+          ],
+        });
+      }
+    }
+    class Bar extends $stdlib.std.Resource {
+      constructor($scope, $id, ) {
+        super($scope, $id);
+      }
+      static _toInflightType() {
+        return `
+          require("${$helpers.normalPath(__dirname)}/inflight.Bar-1.js")({
+            $b: ${$stdlib.core.liftObject(b)},
+          })
+        `;
+      }
+      _toInflight() {
+        return `
+          (await (async () => {
+            const BarClient = ${Bar._toInflightType()};
+            const client = new BarClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `;
+      }
+      get _liftMap() {
+        return ({
+          "m": [
+          ],
+          "$inflight_init": [
+            [b, []],
+          ],
+        });
+      }
+      static get _liftTypeMap() {
+        return ({
+          "access_b": [
+            [b, ["list"]],
           ],
         });
       }
@@ -188,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
-            $foo: ${$stdlib.core.liftObject(foo)},
+            $bar: ${$stdlib.core.liftObject(bar)},
           })
         `;
       }
@@ -206,21 +260,23 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [foo, ["getOptionalValue", "setOptionalValue"]],
+            [bar, ["m"]],
           ],
           "$inflight_init": [
-            [foo, []],
+            [bar, []],
           ],
         });
       }
     }
-    const foo = new Foo(this, "Foo");
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:nil return", new $Closure1(this, "$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:optional instance variable", new $Closure2(this, "$Closure2"));
+    const b = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
+    const f = new Foo(this, "Foo");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Use class but not method that access lifted object", new $Closure1(this, "$Closure1"));
+    const bar = new Bar(this, "Bar");
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:Use class but not static method that access lifted object", new $Closure2(this, "$Closure2"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
-const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "nil.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
+const $APP = $PlatformManager.createApp({ outdir: $outdir, name: "unused_lift.test", rootConstruct: $Root, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] });
 $APP.synth();
 //# sourceMappingURL=preflight.js.map
 ```

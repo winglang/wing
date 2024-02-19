@@ -335,6 +335,7 @@ class $Root extends $stdlib.std.Resource {
             [strToStr, ["invoke"]],
           ],
           "$inflight_init": [
+            [strToStr, []],
           ],
         });
       }

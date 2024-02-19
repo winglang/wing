@@ -239,6 +239,7 @@ class $Root extends $stdlib.std.Resource {
             [fn, ["invoke"]],
           ],
           "$inflight_init": [
+            [fn, []],
           ],
         });
       }
