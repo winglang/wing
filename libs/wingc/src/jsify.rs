@@ -1824,7 +1824,7 @@ impl<'a> JSifier<'a> {
 			let is_inflight = var_info.phase == Phase::Inflight;
 			let filter = match bind_method_kind {
 				BindMethod::Instance => is_inflight && !is_static,
-				BindMethod::Type => is_inflight && (is_static || name.name == CLASS_INFLIGHT_INIT_NAME),
+				BindMethod::Type => is_inflight && is_static && name.name != CLASS_INFLIGHT_INIT_NAME,
 			};
 			if filter {
 				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
