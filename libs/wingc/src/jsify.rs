@@ -1521,10 +1521,10 @@ impl<'a> JSifier<'a> {
 			// at the scope when they are qualified (it might even be shadowed by another type name). Here we generate a unique
 			// type name to be used in such cases.
 			if class.phase == Phase::Inflight {
+				let inflight_class_unique_instance = self.unique_class_alias(class_type);
 				code.line(format!(
-					"const {} = {};",
-					self.unique_class_alias(class_type),
-					class.name
+					"const {inflight_class_unique_instance} = new {}(this, \"{inflight_class_unique_instance}\");",
+					class.name,
 				));
 			}
 			code
@@ -1532,7 +1532,8 @@ impl<'a> JSifier<'a> {
 	}
 
 	pub fn unique_class_alias(&self, type_: TypeRef) -> String {
-		format!("$UniqueClassAlias{}", type_.as_class().unwrap().uid)
+		let c = type_.as_class().unwrap();
+		format!("${}_{}", c.name, c.uid)
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
@@ -1821,18 +1822,9 @@ impl<'a> JSifier<'a> {
 
 			let is_static = m.is_static;
 			let is_inflight = var_info.phase == Phase::Inflight;
-			let filter = if class.phase == Phase::Inflight {
-				// TODO: the following hints that instead of `onLiftType` and `onLift` we need to mark each lift as a
-				// field lift or a type lift. Then for each instance lifts we need to make sure to call their typeLift too.
-
-				// All lifts in inflight classes are "type" lifts since `this` has no preflight fields which need to be
-				// lifted based on the object's instance
-				bind_method_kind == BindMethod::Type
-			} else {
-				match bind_method_kind {
-					BindMethod::Instance => is_inflight && !is_static,
-					BindMethod::Type => is_inflight && is_static && name.name != CLASS_INFLIGHT_INIT_NAME,
-				}
+			let filter = match bind_method_kind {
+				BindMethod::Instance => is_inflight && !is_static,
+				BindMethod::Type => is_inflight && (is_static || name.name == CLASS_INFLIGHT_INIT_NAME),
 			};
 			if filter {
 				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
@@ -1846,15 +1838,9 @@ impl<'a> JSifier<'a> {
 		for f in class.inflight_fields() {
 			let name = &f.name;
 			let is_static = f.is_static;
-			let filter = if class.phase == Phase::Inflight {
-				// All lifts in inflight classes are "type" lifts since `this` has no preflight fields which need to be
-				// lifted based on the object's instance
-				bind_method_kind == BindMethod::Type
-			} else {
-				match bind_method_kind {
-					BindMethod::Instance => !is_static,
-					BindMethod::Type => is_static,
-				}
+			let filter = match bind_method_kind {
+				BindMethod::Instance => !is_static,
+				BindMethod::Type => is_static,
 			};
 			if filter {
 				if let Some(quals) = lifts.lifts_qualifications.get(&name.name) {
@@ -1873,7 +1859,7 @@ impl<'a> JSifier<'a> {
 		bind_method.open(format!("{modifier}get {bind_method_name}() {{"));
 
 		if !lift_qualifications.is_empty() {
-			if class.parent.is_some() {
+			if bind_method_kind == BindMethod::Instance && class.parent.is_some() {
 				// mergeLiftDeps is a helper method that combines the lift deps of the parent class with the
 				// lift deps of this class
 				bind_method.open(format!(
