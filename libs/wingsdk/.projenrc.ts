@@ -5,7 +5,7 @@ import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@^10.3"];
 const CDKTF_VERSION = "0.20.3";
-const AWS_SDK_VERSION = "3.449.0";
+const AWS_SDK_VERSION = "3.490.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
