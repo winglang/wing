@@ -345,7 +345,10 @@ module.exports = function({ $api_url, $expect_Util, $http_HttpMethod, $http_Util
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "users-tableex.Table-c840a49c"
+        "name": "users-tableex.Table-c840a49c",
+        "point_in_time_recovery": {
+          "enabled": true
+        }
       }
     },
     "aws_iam_role": {

@@ -14,6 +14,9 @@ exports[`default table behavior 1`] = `
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "my-wing-tableTable-c89b2d37",
+        "point_in_time_recovery": {
+          "enabled": true,
+        },
       },
     },
   },
@@ -57,6 +60,9 @@ exports[`function with a table binding 2`] = `
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "my-wing-tableTable-c89b2d37",
+        "point_in_time_recovery": {
+          "enabled": true,
+        },
       },
     },
     "aws_iam_role": {
