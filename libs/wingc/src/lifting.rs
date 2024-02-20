@@ -293,7 +293,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 							// Get preflight code that references the type of the class so we can qualify the lift, note we use a unique
 							// type alias here since we might not have the actual type name available in scope here.
 							let code = &v.jsify.unique_class_alias(expr_type);
-							lifts.lift(m, Some(property), code, false);
+							lifts.lift(m, Some(property), code);
 							v.lifts_stack.push(lifts);
 							return;
 						}
