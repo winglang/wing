@@ -1,6 +1,7 @@
 import { execFile } from "child_process";
 import { readFileSync } from "fs";
 import { promisify } from "util";
+import { v4 as uuidv4 } from "uuid";
 
 const execFilePromise = promisify(execFile);
 
@@ -29,6 +30,12 @@ export function normalPath(path: string) {
 export async function runCommand(cmd: string, args: string[]): Promise<any> {
   const { stdout } = await execFilePromise(cmd, args);
   return stdout;
+}
+
+export function generateDockerContainerName(prefix: string): string {
+  // Docker checks against [a-zA-Z0-9][a-zA-Z0-9_.-]
+  const name = prefix.replace(/[^a-zA-Z0-9_.-]/g, "-");
+  return `${name}-${uuidv4()}`;
 }
 
 export interface runDockerImageProps {
