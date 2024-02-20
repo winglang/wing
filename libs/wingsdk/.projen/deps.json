@@ -212,7 +212,6 @@
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.449.0",
       "type": "bundled"
     },
     {

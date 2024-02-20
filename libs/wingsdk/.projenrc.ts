@@ -5,6 +5,7 @@ import * as cloud from "./src";
 
 const JSII_DEPS = ["constructs@^10.3"];
 const CDKTF_VERSION = "0.20.3";
+const AWS_SDK_VERSION = "3.449.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>5.31.0",
@@ -62,23 +63,23 @@ const project = new cdk.JsiiProject({
     ...sideLoad,
     // preflight dependencies
     "safe-stable-stringify",
-    // aws client dependencies
-    // (note: these should always be updated together, otherwise they will
-    // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.449.0",
-    "@aws-sdk/client-dynamodb@3.449.0",
-    "@aws-sdk/client-elasticache@3.449.0",
-    "@aws-sdk/util-dynamodb@3.449.0",
-    "@aws-sdk/client-lambda@3.449.0",
-    "@aws-sdk/client-secrets-manager@3.449.0",
-    "@aws-sdk/client-sqs@3.449.0",
-    "@aws-sdk/client-sns@3.449.0",
-    "@aws-sdk/client-s3@3.449.0",
-    "@aws-sdk/s3-request-presigner@3.449.0",
-    "@aws-sdk/types@3.449.0",
+    // aws sdk client dependencies
+    // update `AWS_SDK_VERSION` to change all at once
+    "@aws-sdk/client-cloudwatch-logs",
+    "@aws-sdk/client-dynamodb",
+    "@aws-sdk/client-elasticache",
+    "@aws-sdk/client-lambda",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/client-secrets-manager",
+    "@aws-sdk/client-sns",
+    "@aws-sdk/client-sqs",
+    "@aws-sdk/s3-request-presigner",
+    "@aws-sdk/util-dynamodb",
+    // aws other client dependencies
     "@smithy/util-stream@2.0.17",
     "@smithy/util-utf8@2.0.0",
     "@types/aws-lambda",
+    "@aws-sdk/types",
     "mime-types",
     "mime@^3.0.0",
     // azure client dependencies
@@ -142,6 +143,18 @@ const project = new cdk.JsiiProject({
   projenrcTs: true,
   jsiiVersion: "~5.3.11",
 });
+
+/**
+ * Pin AWS SDK version and keep deps in sync
+ *
+ * `@aws-sdk/types` is excluded since it gets updated independently
+ * and its version may not match that of the AWS SDK clients
+ */
+project.deps.all
+  .filter(
+    (dep) => dep.name.startsWith("@aws-sdk/") && dep.name !== "@aws-sdk/types"
+  )
+  .map((dep) => project.addBundledDeps(`${dep.name}@${AWS_SDK_VERSION}`));
 
 project.eslint?.addPlugins("sort-exports");
 project.eslint?.addOverride({
