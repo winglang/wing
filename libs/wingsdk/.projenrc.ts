@@ -64,7 +64,7 @@ const project = new cdk.JsiiProject({
     // preflight dependencies
     "safe-stable-stringify",
     // aws sdk client dependencies
-    // update `AWS_SDK_VERSION` to change all at once
+    // change `AWS_SDK_VERSION` to update all deps at once
     "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-elasticache",
