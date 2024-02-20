@@ -512,6 +512,7 @@ class $Root extends $stdlib.std.Resource {
             [counter, ["inc"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [counter, []],
           ],
         });

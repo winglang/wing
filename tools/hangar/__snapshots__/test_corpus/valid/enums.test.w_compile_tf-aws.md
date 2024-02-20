@@ -94,6 +94,7 @@ class $Root extends $stdlib.std.Resource {
             [two, []],
           ],
           "$inflight_init": [
+            [SomeEnum, []],
             [one, []],
             [two, []],
           ],

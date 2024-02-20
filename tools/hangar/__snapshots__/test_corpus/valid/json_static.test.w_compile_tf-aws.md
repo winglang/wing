@@ -107,6 +107,7 @@ class $Root extends $stdlib.std.Resource {
             [jj, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
             [jj, []],
           ],
         });
@@ -142,6 +143,7 @@ class $Root extends $stdlib.std.Resource {
             [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), ["has"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(std.Json, "@winglang/sdk/std", "Json"), []],
           ],
         });
       }

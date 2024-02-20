@@ -71,11 +71,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "method": [
-          ],
-          "init": [
           ],
           "$inflight_init": [
             [this, ["field"]],
@@ -85,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $UniqueClassAlias0 = C;
+    const $C_0 = new C(this, "$C_0");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

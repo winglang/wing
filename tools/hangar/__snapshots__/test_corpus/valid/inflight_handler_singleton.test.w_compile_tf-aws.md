@@ -451,6 +451,7 @@ class $Root extends $stdlib.std.Resource {
             [sim, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
             [fn, []],
             [fn2, []],
             [sim, []],

@@ -405,6 +405,8 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
@@ -446,6 +448,9 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
@@ -487,6 +492,9 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(expect.Util, "@winglang/sdk/expect", "Util"), []],
+            [$stdlib.core.toLiftableModuleType(http.HttpMethod, "@winglang/sdk/http", "HttpMethod"), []],
+            [$stdlib.core.toLiftableModuleType(http.Util, "@winglang/sdk/http", "Util"), []],
             [api.url, []],
           ],
         });
