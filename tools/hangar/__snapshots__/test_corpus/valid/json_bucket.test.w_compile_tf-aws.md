@@ -223,6 +223,8 @@ class $Root extends $stdlib.std.Resource {
             [fileName, []],
           ],
           "$inflight_init": [
+            [b, []],
+            [fileName, []],
           ],
         });
       }
@@ -263,6 +265,10 @@ class $Root extends $stdlib.std.Resource {
             [j, []],
           ],
           "$inflight_init": [
+            [b, []],
+            [fileName, []],
+            [getJson, []],
+            [j, []],
           ],
         });
       }

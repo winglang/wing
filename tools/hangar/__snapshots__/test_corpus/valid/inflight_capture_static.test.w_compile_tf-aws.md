@@ -255,6 +255,7 @@ class $Root extends $stdlib.std.Resource {
             [Preflight, ["staticMethod"]],
           ],
           "$inflight_init": [
+            [Preflight, []],
           ],
         });
       }

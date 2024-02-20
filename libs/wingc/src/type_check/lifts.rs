@@ -60,8 +60,11 @@ impl Lifts {
 	pub fn lift(&mut self, method: Symbol, property: Option<Symbol>, code: &str, is_field: bool) {
 		self.add_lift(method.name.clone(), code, property.as_ref().map(|s| s.name.clone()));
 
-		// add a lift to the inflight initializer or capture it if its not a field
-		if is_field {
+		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
+
+		// Add a lift to the inflight initializer to signify this class requires access to that preflight object.
+		// "this" is a special case since it's already in scope and doesn't need to be lifted.
+		if code != "this" {
 			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}

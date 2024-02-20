@@ -222,6 +222,7 @@ class $Root extends $stdlib.std.Resource {
             [j, []],
           ],
           "$inflight_init": [
+            [j, []],
           ],
         });
       }
@@ -292,6 +293,7 @@ class $Root extends $stdlib.std.Resource {
             [jStudent1, []],
           ],
           "$inflight_init": [
+            [jStudent1, []],
           ],
         });
       }
@@ -334,6 +336,9 @@ class $Root extends $stdlib.std.Resource {
             [jMyStruct, []],
           ],
           "$inflight_init": [
+            [(schema.asStr()), []],
+            [expectedSchema, []],
+            [jMyStruct, []],
           ],
         });
       }

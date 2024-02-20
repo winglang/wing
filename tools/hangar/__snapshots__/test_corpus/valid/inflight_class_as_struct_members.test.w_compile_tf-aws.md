@@ -185,6 +185,7 @@ class $Root extends $stdlib.std.Resource {
             [getBar, ["handle"]],
           ],
           "$inflight_init": [
+            [getBar, []],
           ],
         });
       }

@@ -414,6 +414,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_2.consumer, ["handle"]],
               ],
               "$inflight_init": [
+                [__parent_this_2.consumer, []],
               ],
             });
           }
@@ -482,6 +483,7 @@ class $Root extends $stdlib.std.Resource {
             [c, ["inc"]],
           ],
           "$inflight_init": [
+            [c, []],
           ],
         });
       }
@@ -520,6 +522,8 @@ class $Root extends $stdlib.std.Resource {
             [q, ["push"]],
           ],
           "$inflight_init": [
+            [c, []],
+            [q, []],
           ],
         });
       }

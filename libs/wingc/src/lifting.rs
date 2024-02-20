@@ -258,7 +258,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				let mut lifts = v.lifts_stack.pop().unwrap();
 				let is_field = code.contains("this."); // TODO: starts_with?
-				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code, is_field);
+				lifts.lift(v.ctx.current_method().map(|(m,_)|m).expect("a method"), property, &code);
 				lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 				v.lifts_stack.push(lifts);
 				return;
@@ -354,7 +354,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.ctx.current_method().map(|(m, _)| m).expect("a method"),
 				property,
 				&code,
-				false,
 			);
 			self.lifts_stack.push(lifts);
 		}

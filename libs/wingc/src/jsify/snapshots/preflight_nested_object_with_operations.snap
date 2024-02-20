@@ -130,6 +130,7 @@ class $Root extends $stdlib.std.Resource {
             [a.bucky, ["list"]],
           ],
           "$inflight_init": [
+            [a.bucky, []],
           ],
         });
       }

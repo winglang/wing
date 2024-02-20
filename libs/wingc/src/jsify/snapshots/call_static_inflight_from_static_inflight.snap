@@ -120,19 +120,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+            [A, []],
+          ],
+        });
+      }
       static get _liftTypeMap() {
         return ({
           "bar": [
             [A, ["foo"]],
           ],
-          "init": [
-          ],
-          "$inflight_init": [
-          ],
         });
       }
     }
-    const $UniqueClassAlias1 = B;
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

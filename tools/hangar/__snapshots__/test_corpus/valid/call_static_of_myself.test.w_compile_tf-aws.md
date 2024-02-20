@@ -129,6 +129,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["bar"]],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }
@@ -213,6 +214,8 @@ class $Root extends $stdlib.std.Resource {
             [foo, ["callThis"]],
           ],
           "$inflight_init": [
+            [Foo, []],
+            [foo, []],
           ],
         });
       }

@@ -75,6 +75,7 @@ class $Root extends $stdlib.std.Resource {
             [Foo, ["static_method"]],
           ],
           "$inflight_init": [
+            [Foo, []],
           ],
         });
       }

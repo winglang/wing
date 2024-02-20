@@ -160,6 +160,7 @@ class $Root extends $stdlib.std.Resource {
             [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), ["makeKeyInflight"]],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(fixture.Store, "", "Store"), []],
           ],
         });
       }
@@ -226,6 +227,7 @@ class Store extends $stdlib.std.Resource {
         [this.handlers, []],
       ],
       "$inflight_init": [
+        [$stdlib.core.toLiftableModuleType(myutil.Util, "", "Util"), []],
         [this.data, []],
         [this.handlers, []],
       ],

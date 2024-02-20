@@ -380,6 +380,7 @@ class $Root extends $stdlib.std.Resource {
             [apiDefaultCors.url, []],
           ],
           "$inflight_init": [
+            [apiDefaultCors.url, []],
           ],
         });
       }
@@ -420,6 +421,7 @@ class $Root extends $stdlib.std.Resource {
             [apiDefaultCors.url, []],
           ],
           "$inflight_init": [
+            [apiDefaultCors.url, []],
           ],
         });
       }

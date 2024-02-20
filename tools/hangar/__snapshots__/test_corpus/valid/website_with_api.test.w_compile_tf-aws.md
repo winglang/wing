@@ -664,6 +664,7 @@ class $Root extends $stdlib.std.Resource {
             [usersTable, ["list"]],
           ],
           "$inflight_init": [
+            [usersTable, []],
           ],
         });
       }
@@ -700,6 +701,7 @@ class $Root extends $stdlib.std.Resource {
             [usersTable, ["insert"]],
           ],
           "$inflight_init": [
+            [usersTable, []],
           ],
         });
       }
@@ -740,6 +742,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }
@@ -780,6 +783,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }

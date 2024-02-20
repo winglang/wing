@@ -98,6 +98,7 @@ class $Root extends $stdlib.std.Resource {
           "init": [
           ],
           "$inflight_init": [
+            [myConst, []],
           ],
         });
       }
@@ -136,6 +137,7 @@ class $Root extends $stdlib.std.Resource {
             [myConst, []],
           ],
           "$inflight_init": [
+            [myConst, []],
           ],
         });
       }

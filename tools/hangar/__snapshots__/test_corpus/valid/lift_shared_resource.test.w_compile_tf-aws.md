@@ -376,6 +376,8 @@ class $Root extends $stdlib.std.Resource {
             [b2, ["list"]],
           ],
           "$inflight_init": [
+            [b1, []],
+            [b2, []],
           ],
         });
       }
@@ -412,6 +414,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }

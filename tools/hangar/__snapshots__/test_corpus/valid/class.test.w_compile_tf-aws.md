@@ -549,6 +549,7 @@ class $Root extends $stdlib.std.Resource {
             [c5, ["set", "x", "y"]],
           ],
           "$inflight_init": [
+            [c5, []],
           ],
         });
       }
@@ -676,6 +677,9 @@ class $Root extends $stdlib.std.Resource {
             [student.name, []],
           ],
           "$inflight_init": [
+            [student.hrlyWage, []],
+            [student.major, []],
+            [student.name, []],
           ],
         });
       }
@@ -740,6 +744,7 @@ class $Root extends $stdlib.std.Resource {
             [ta.hrlyWage, []],
           ],
           "$inflight_init": [
+            [ta.hrlyWage, []],
           ],
         });
       }

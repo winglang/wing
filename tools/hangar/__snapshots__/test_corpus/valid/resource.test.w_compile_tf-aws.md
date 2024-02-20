@@ -802,6 +802,8 @@ class $Root extends $stdlib.std.Resource {
             [this.e, []],
           ],
           "$inflight_init": [
+            [Bar, []],
+            [Foo, []],
             [this.b, []],
             [this.e, []],
             [this.foo, []],
@@ -849,6 +851,9 @@ class $Root extends $stdlib.std.Resource {
             [res.foo, ["inflightField"]],
           ],
           "$inflight_init": [
+            [bucket, []],
+            [res, []],
+            [res.foo, []],
           ],
         });
       }
@@ -891,6 +896,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_2.b, ["put"]],
               ],
               "$inflight_init": [
+                [__parent_this_2.b, []],
               ],
             });
           }
@@ -927,6 +933,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_3.b, ["put"]],
               ],
               "$inflight_init": [
+                [__parent_this_3.b, []],
               ],
             });
           }
@@ -963,6 +970,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_4.q, ["push"]],
               ],
               "$inflight_init": [
+                [__parent_this_4.q, []],
               ],
             });
           }
@@ -1039,6 +1047,7 @@ class $Root extends $stdlib.std.Resource {
             [bigOlPublisher, ["getObjectCount", "publish"]],
           ],
           "$inflight_init": [
+            [bigOlPublisher, []],
           ],
         });
       }
