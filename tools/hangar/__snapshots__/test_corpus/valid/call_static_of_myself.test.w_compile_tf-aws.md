@@ -164,21 +164,24 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      get _liftMap() {
+        return ({
+          "callThis": [
+            [Bar, ["bar"]],
+          ],
+          "$inflight_init": [
+            [Bar, []],
+          ],
+        });
+      }
       static get _liftTypeMap() {
         return ({
           "bar": [
           ],
-          "callThis": [
-            [Bar, ["bar"]],
-          ],
-          "init": [
-          ],
-          "$inflight_init": [
-          ],
         });
       }
     }
-    const $UniqueClassAlias1 = Bar;
+    const $Bar_1 = new Bar(this, "$Bar_1");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -208,12 +211,14 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias1, ["callThis"]],
+            [$Bar_1, ["callThis"]],
             [Bar, ["bar"]],
             [Foo, ["foo"]],
             [foo, ["callThis"]],
           ],
           "$inflight_init": [
+            [$Bar_1, []],
+            [Bar, []],
             [Foo, []],
             [foo, []],
           ],

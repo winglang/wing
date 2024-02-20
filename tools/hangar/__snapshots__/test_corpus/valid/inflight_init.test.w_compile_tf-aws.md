@@ -217,11 +217,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
+      get _liftMap() {
         return ({
           "get_six": [
-          ],
-          "init": [
           ],
           "$inflight_init": [
             [this, ["field1", "field2", "get_six"]],
@@ -233,7 +231,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $UniqueClassAlias0 = Foo;
+    const $Foo_0 = new Foo(this, "$Foo_0");
     class FooChild extends Foo {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -256,10 +254,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      static get _liftTypeMap() {
-        return $stdlib.core.mergeLiftDeps(super._liftTypeMap, {
-          "init": [
-          ],
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
           "$inflight_init": [
             [this, ["field3"]],
           ],
@@ -268,7 +264,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
-    const $UniqueClassAlias1 = FooChild;
+    const $FooChild_1 = new FooChild(this, "$FooChild_1");
     class $Closure1 extends $stdlib.std.AutoIdResource {
       _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
@@ -296,10 +292,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias0, ["field1", "field2"]],
+            [$Foo_0, ["field1", "field2"]],
             [Foo, []],
           ],
           "$inflight_init": [
+            [$Foo_0, []],
+            [Foo, []],
           ],
         });
       }
@@ -331,10 +329,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [$UniqueClassAlias1, ["field1", "field2", "field3"]],
+            [$FooChild_1, ["field1", "field2", "field3"]],
             [FooChild, []],
           ],
           "$inflight_init": [
+            [$FooChild_1, []],
+            [FooChild, []],
           ],
         });
       }
@@ -401,6 +401,7 @@ class $Root extends $stdlib.std.Resource {
             [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
           "$inflight_init": [
+            [$stdlib.core.toLiftableModuleType(jsii_fixture.JsiiClass, "jsii-fixture", "JsiiClass"), []],
           ],
         });
       }
