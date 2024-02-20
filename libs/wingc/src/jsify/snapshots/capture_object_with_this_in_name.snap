@@ -78,6 +78,7 @@ class $Root extends $stdlib.std.Resource {
             [bucket_this, ["put"]],
           ],
           "$inflight_init": [
+            [bucket_this, []],
           ],
         });
       }

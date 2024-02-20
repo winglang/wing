@@ -214,6 +214,13 @@ class $Root extends $stdlib.std.Resource {
             [myStr, []],
           ],
           "$inflight_init": [
+            [myBool, []],
+            [myDur.hours, []],
+            [myDur.minutes, []],
+            [myDur.seconds, []],
+            [myNum, []],
+            [mySecondBool, []],
+            [myStr, []],
           ],
         });
       }

@@ -106,6 +106,15 @@ class $Root extends $stdlib.std.Resource {
             [mySet.size, []],
           ],
           "$inflight_init": [
+            [("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))), []],
+            [("world" in (myMap)), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 1), []],
+            [((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), []],
+            [(mySet.has("my")), []],
+            [Object.keys(myMap).length, []],
+            [arr.length, []],
+            [mySet.size, []],
           ],
         });
       }

@@ -33,7 +33,10 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
-        "name": "usersex.Table-c840a49c"
+        "name": "usersex.Table-c840a49c",
+        "point_in_time_recovery": {
+          "enabled": true
+        }
       }
     },
     "aws_dynamodb_table_item": {

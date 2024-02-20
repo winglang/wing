@@ -470,6 +470,8 @@ class $Root extends $stdlib.std.Resource {
                 [globalCounter, ["inc"]],
               ],
               "$inflight_init": [
+                [$parentThis.localCounter, []],
+                [globalCounter, []],
               ],
             });
           }
@@ -522,6 +524,17 @@ class $Root extends $stdlib.std.Resource {
             [this.localTopic, ["publish"]],
           ],
           "$inflight_init": [
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(globalArrayOfStr, 0), []],
+            [((obj, key) => { if (!(key in obj)) throw new Error(`Map does not contain key: "${key}"`); return obj[key]; })(globalMapOfNum, "a"), []],
+            [(globalSetOfStr.has("a")), []],
+            [Another, []],
+            [globalAnother, []],
+            [globalAnother.first.myResource, []],
+            [globalAnother.myField, []],
+            [globalBool, []],
+            [globalBucket, []],
+            [globalNum, []],
+            [globalStr, []],
             [this.localTopic, []],
           ],
         });
@@ -557,6 +570,7 @@ class $Root extends $stdlib.std.Resource {
             [res, ["myPut"]],
           ],
           "$inflight_init": [
+            [res, []],
           ],
         });
       }
@@ -591,6 +605,7 @@ class $Root extends $stdlib.std.Resource {
             [Another, ["myStaticMethod"]],
           ],
           "$inflight_init": [
+            [Another, []],
           ],
         });
       }

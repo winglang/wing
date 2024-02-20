@@ -321,6 +321,10 @@ class $Root extends $stdlib.std.Resource {
             [strB, []],
           ],
           "$inflight_init": [
+            [numA, []],
+            [numB, []],
+            [strA, []],
+            [strB, []],
           ],
         });
       }
@@ -361,6 +365,10 @@ class $Root extends $stdlib.std.Resource {
             [strC, []],
           ],
           "$inflight_init": [
+            [numA, []],
+            [numC, []],
+            [strA, []],
+            [strC, []],
           ],
         });
       }
@@ -397,6 +405,8 @@ class $Root extends $stdlib.std.Resource {
             [jsonB, []],
           ],
           "$inflight_init": [
+            [jsonA, []],
+            [jsonB, []],
           ],
         });
       }
@@ -435,6 +445,9 @@ class $Root extends $stdlib.std.Resource {
             [jsonC, []],
           ],
           "$inflight_init": [
+            [jsonA, []],
+            [jsonB, []],
+            [jsonC, []],
           ],
         });
       }
@@ -471,6 +484,8 @@ class $Root extends $stdlib.std.Resource {
             [setB, []],
           ],
           "$inflight_init": [
+            [setA, []],
+            [setB, []],
           ],
         });
       }
@@ -509,6 +524,9 @@ class $Root extends $stdlib.std.Resource {
             [setC, []],
           ],
           "$inflight_init": [
+            [setA, []],
+            [setB, []],
+            [setC, []],
           ],
         });
       }
@@ -545,6 +563,8 @@ class $Root extends $stdlib.std.Resource {
             [mapB, []],
           ],
           "$inflight_init": [
+            [mapA, []],
+            [mapB, []],
           ],
         });
       }
@@ -583,6 +603,9 @@ class $Root extends $stdlib.std.Resource {
             [mapC, []],
           ],
           "$inflight_init": [
+            [mapA, []],
+            [mapB, []],
+            [mapC, []],
           ],
         });
       }
@@ -619,6 +642,8 @@ class $Root extends $stdlib.std.Resource {
             [arrayB, []],
           ],
           "$inflight_init": [
+            [arrayA, []],
+            [arrayB, []],
           ],
         });
       }
@@ -657,6 +682,9 @@ class $Root extends $stdlib.std.Resource {
             [arrayC, []],
           ],
           "$inflight_init": [
+            [arrayA, []],
+            [arrayB, []],
+            [arrayC, []],
           ],
         });
       }
@@ -693,6 +721,8 @@ class $Root extends $stdlib.std.Resource {
             [cat2, []],
           ],
           "$inflight_init": [
+            [cat1, []],
+            [cat2, []],
           ],
         });
       }
@@ -731,6 +761,9 @@ class $Root extends $stdlib.std.Resource {
             [cat3, []],
           ],
           "$inflight_init": [
+            [cat1, []],
+            [cat2, []],
+            [cat3, []],
           ],
         });
       }

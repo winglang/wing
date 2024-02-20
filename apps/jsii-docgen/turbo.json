@@ -6,8 +6,7 @@
       "outputs": ["lib/**"]
     },
     "test": {
-      "inputs": ["src/**", "test/**"],
-      "outputs": ["test/**"]
+      "outputs": ["test/**/*.snap"]
     }
   }
 }

@@ -221,6 +221,7 @@ class $Root extends $stdlib.std.Resource {
             [foo, ["callFn", "callFn2"]],
           ],
           "$inflight_init": [
+            [foo, []],
           ],
         });
       }
