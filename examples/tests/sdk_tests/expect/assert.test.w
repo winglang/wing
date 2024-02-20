@@ -115,14 +115,14 @@ test "equal maps" {
 
 // Set tests
 
-let mySet = Set<num> {1, 2, 3};
+let mySet = Set<num>[1, 2, 3];
 
-expect.equal(mySet, Set<num> {1, 2, 3});
-expect.notEqual(mySet, Set<num> {1, 2, 3, 4});
+expect.equal(mySet, Set<num>[1, 2, 3]);
+expect.notEqual(mySet, Set<num>[1, 2, 3, 4]);
 
 test "equal sets" {
-    expect.equal(mySet, Set<num> {1, 2, 3});
-    expect.notEqual(mySet, Set<num> {1, 2, 3, 4});
+    expect.equal(mySet, Set<num>[1, 2, 3]);
+    expect.notEqual(mySet, Set<num>[1, 2, 3, 4);
 }
 
 // DateTime tests
