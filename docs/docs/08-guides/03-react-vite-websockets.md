@@ -66,6 +66,7 @@ In this step, we will be creating our project.
 wing run main.w
 ```
 > The result should be a page shows a single `Cloud.Function` if you invoke it, it should show `hello, world` in the response section.
+
 5. Invoke the cloud.Function to see that response.
 6. Ctrl-C to go back to CLI prompt.
 
