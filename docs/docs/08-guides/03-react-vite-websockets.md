@@ -86,8 +86,8 @@ Open VScode / Intellij on the project directory.
  cd ~/shared-counter/backend
  npm i -s @winglibs/vite
  ```
-2.  Bring and instantiate Vite in `backend/main.w`:
- ```wing
+2.  Clear `backend/main.w` from existing code, and add the following code to bring and instantiate Vite in `backend/main.w`:
+ ```ts
  bring vite;
  
  new vite.Vite(
@@ -106,7 +106,7 @@ Now that we have our backend instantiate the Vite resource,
 we would like to see how we can pass constant data from the backend to the frontend.
 
 1. Use `publicEnv` in order to pass `title` from the backend to the frontend. In `backend/main.w:
- ```wing
+ ```ts
  bring vite;
  
  new vite.Vite(
@@ -129,7 +129,7 @@ On the frontend, we will switch from using a local counter to a backend-based co
 ### Creating a counter and read/update API routes
 
 1. Instantiate a `cloud.Api` in `backend/main.w` by adding the following code:
-```wing
+```ts
 bring vite;
 bring cloud;
 
@@ -147,12 +147,12 @@ Notice that we added a new environment variable called `API_URL` to our frontend
 
 2. Now, let's also instantiate a `cloud.Counter`:
  
-```wing
+```ts
 let counter = new cloud.Counter();
 ``` 
 3. Add the following routes:
   - A `GET /counter` for retrieving the counter value (using `counter.peek()`)
-  ```wing
+  ```ts
   api.get("/counter", inflight () => {
     return {
       status: 200, 
@@ -161,7 +161,7 @@ let counter = new cloud.Counter();
   });
   ```
   - A `POST /counter` for incrementing the counter (using `counter.inc()`)
-  ```wing
+  ```ts
   api.post("/counter", inflight () => {
     let oldValue = counter.inc();
     return {
@@ -286,7 +286,7 @@ The Broadcaster class contains two public API endpoints:
 npm i -s @winglibs/websockets
 ```
 2. Lets create a new file `backend/broadcaster.w`, and implement it:
-```wing
+```ts
 bring cloud;
 bring websockets;
 
@@ -316,13 +316,13 @@ pub class Broadcaster {
 }
 ```
 3. In our `backend/main.w` file lets instantiate the broadcasting service:
-```wing
+```ts
 bring "./broadcaster.w" as b;
 
 let broadcaster = new b.Broadcaster();
 ```
 4. Send the websocket url to the client
-```wing
+```ts
 new vite.Vite(
   root: "../frontend",
   publicEnv: {
@@ -334,7 +334,7 @@ new vite.Vite(
 ```
 5. Also, lets send a broadcast "refresh" message every time we increment the counter, 
 in `backend/main.w` `post` endpoint:
-```wing
+```ts
 api.post("/counter", inflight () => {
   let oldValue = counter.inc();
   broadcaster.broadcast("refresh");
@@ -346,7 +346,7 @@ api.post("/counter", inflight () => {
 ```
 
 6. For convenience, here is the entire `backend/main.w` file:
-```wing
+```ts
 bring vite;
 bring cloud;
 bring "./broadcaster.w" as b;
