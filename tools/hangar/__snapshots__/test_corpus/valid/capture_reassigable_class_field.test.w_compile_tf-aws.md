@@ -265,6 +265,7 @@ class $Root extends $stdlib.std.Resource {
             [counter, ["inc"]],
           ],
           "$inflight_init": [
+            [counter, []],
           ],
         });
       }
@@ -302,6 +303,8 @@ class $Root extends $stdlib.std.Resource {
             [kv, ["get", "set"]],
           ],
           "$inflight_init": [
+            [counter, []],
+            [kv, []],
           ],
         });
       }

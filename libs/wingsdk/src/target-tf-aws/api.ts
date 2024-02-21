@@ -352,7 +352,7 @@ class WingRestApi extends Construct {
 
   private _initVpcResources(app: App): void {
     const vpcId: string = app.vpc.id;
-    const subnetIds: string[] = [app.subnets.private.id];
+    const subnetIds: string[] = [...app.subnets.private.map((s) => s.id)];
 
     // Initialize Security Group
     if (!this.securityGroup) {

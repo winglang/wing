@@ -136,6 +136,7 @@ class $Root extends $stdlib.std.Resource {
         });
       }
     }
+    const a = undefined;
     const x = ({"field0": "Sup"});
     const y = ({"field0": "hello", "field1": 1, "field2": "world", "field3": ({"field0": "foo"})});
     $helpers.assert($helpers.eq(x.field0, "Sup"), "x.field0 == \"Sup\"");

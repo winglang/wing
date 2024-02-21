@@ -11,7 +11,7 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(event) {
+    async handle() {
       (await $bucket1.put("file.txt", "data"));
       (await $bucket2.get("file.txt"));
       (await $bucket2.get("file2.txt"));
@@ -45,8 +45,8 @@ module.exports = function({ $handler }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(event) {
-      (await $handler(event));
+    async handle() {
+      (await $handler());
     }
   }
   return $Closure2;
@@ -683,6 +683,9 @@ class $Root extends $stdlib.std.Resource {
             [bucket3, ["get"]],
           ],
           "$inflight_init": [
+            [bucket1, []],
+            [bucket2, []],
+            [bucket3, []],
           ],
         });
       }
@@ -717,6 +720,7 @@ class $Root extends $stdlib.std.Resource {
             [handler, ["handle"]],
           ],
           "$inflight_init": [
+            [handler, []],
           ],
         });
       }
@@ -751,6 +755,7 @@ class $Root extends $stdlib.std.Resource {
             [headers, []],
           ],
           "$inflight_init": [
+            [headers, []],
           ],
         });
       }

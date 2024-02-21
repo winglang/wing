@@ -47,7 +47,7 @@ exports[`run all tests > single test 1`] = `
       },
       {
         "data": {
-          "message": "Invoke (payload=\\"\\").",
+          "message": "Invoke (payload=undefined).",
           "status": "success",
         },
         "sourcePath": "root/test/Handler",
@@ -77,7 +77,7 @@ exports[`run single test > happy path 1`] = `
     },
     {
       "data": {
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=undefined).",
         "status": "success",
       },
       "sourcePath": "root/test/Handler",
@@ -117,7 +117,7 @@ exports[`run single test > test failure 1`] = `
     {
       "data": {
         "error": {},
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=undefined).",
         "status": "failure",
       },
       "sourcePath": "root/test/Handler",

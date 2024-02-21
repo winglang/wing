@@ -324,6 +324,7 @@ class $Root extends $stdlib.std.Resource {
             [store, ["store"]],
           ],
           "$inflight_init": [
+            [store, []],
           ],
         });
       }
@@ -411,6 +412,14 @@ const $helpers = $stdlib.helpers;
 const file3 = require("./preflight.empty-1.js");
 const math = $stdlib.math;
 const cloud = $stdlib.cloud;
+const Color =
+  (function (tmp) {
+    tmp[tmp["RED"] = 0] = ",RED";
+    tmp[tmp["GREEN"] = 1] = ",GREEN";
+    tmp[tmp["BLUE"] = 2] = ",BLUE";
+    return tmp;
+  })({})
+;
 class Util extends $stdlib.std.Resource {
   constructor($scope, $id, ) {
     super($scope, $id);
@@ -474,6 +483,7 @@ class Store extends $stdlib.std.Resource {
             [__parent_this_1.b, ["put"]],
           ],
           "$inflight_init": [
+            [__parent_this_1.b, []],
           ],
         });
       }
@@ -509,14 +519,6 @@ class Store extends $stdlib.std.Resource {
     });
   }
 }
-const Color =
-  (function (tmp) {
-    tmp[tmp["RED"] = 0] = ",RED";
-    tmp[tmp["GREEN"] = 1] = ",GREEN";
-    tmp[tmp["BLUE"] = 2] = ",BLUE";
-    return tmp;
-  })({})
-;
 module.exports = { Util, Store, Color };
 //# sourceMappingURL=preflight.store-2.js.map
 ```

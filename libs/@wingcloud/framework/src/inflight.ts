@@ -1,15 +1,16 @@
 import { LiftableMap, LiftedMap, PickNonFunctions } from "./utility-types";
-import { liftObject, closureId, LiftDepsMatrixRaw } from "@winglang/sdk/lib/core";
+import {
+  liftObject,
+  closureId,
+  LiftDepsMatrixRaw,
+} from "@winglang/sdk/lib/core";
 import {
   AsyncFunction,
   INFLIGHT_SYMBOL,
   Inflight,
   OperationsOf,
 } from "@winglang/sdk/lib/core/types";
-import type {
-  IHostedLiftable,
-  IInflightHost,
-} from "@winglang/sdk/lib/std/resource";
+import type { IHostedLiftable } from "@winglang/sdk/lib/std/resource";
 
 /**
  * Prepares preflight objects for use in inflight functions.

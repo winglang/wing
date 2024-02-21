@@ -268,7 +268,7 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
-  aws-sdk-spec-test:
+  sdk-spec-test:
     needs:
       - build
     if: github.event_name == 'push' && needs.build.outputs.e2e-changed == 'true'
@@ -331,10 +331,10 @@ jobs:
       - e2e-test
       - benchmark
       - test
-      - aws-sdk-spec-test
+      - sdk-spec-test
     steps:
       - name: Check failure
-        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.aws-sdk-spec-test.result == 'failure'
+        if: needs.build.result == 'failure' || needs.e2e-test.result == 'failure' || needs.benchmark.result == 'failure' || needs.test.result == 'failure' || needs.sdk-spec-test.result == 'failure'
         run: exit 1
       - name: Download patches
         uses: actions/download-artifact@v3

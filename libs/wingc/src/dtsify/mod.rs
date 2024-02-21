@@ -251,23 +251,18 @@ impl<'a> DTSifier<'a> {
 				code.line(self.dtsify_interface(interface, false));
 				code.line(self.dtsify_interface(interface, true));
 			}
-			StmtKind::Struct {
-				name,
-				extends,
-				fields,
-				access: _,
-			} => {
-				if !extends.is_empty() {
+			StmtKind::Struct(st) => {
+				if !st.extends.is_empty() {
 					code.open(format!(
 						"export interface {} extends {} {{",
-						name.name,
-						extends.iter().map(|udt| udt.to_string()).join(", ")
+						st.name.name,
+						st.extends.iter().map(|udt| udt.to_string()).join(", ")
 					));
 				} else {
-					code.open(format!("export interface {} {{", name.name));
+					code.open(format!("export interface {} {{", st.name.name));
 				}
 
-				for field in fields {
+				for field in &st.fields {
 					code.line(format!(
 						"readonly {}{}: {};",
 						field.name,
@@ -281,13 +276,9 @@ impl<'a> DTSifier<'a> {
 				}
 				code.close("}");
 			}
-			StmtKind::Enum {
-				name,
-				values,
-				access: _,
-			} => {
-				code.open(format!("export enum {} {{", name.name));
-				for value in values {
+			StmtKind::Enum(enu) => {
+				code.open(format!("export enum {} {{", enu.name.name));
+				for value in &enu.values {
 					code.line(format!("{},", value.name));
 				}
 				code.close("}");

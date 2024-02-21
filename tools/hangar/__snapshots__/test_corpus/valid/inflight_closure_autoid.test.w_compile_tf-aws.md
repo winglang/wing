@@ -103,6 +103,7 @@ class $Root extends $stdlib.std.Resource {
             [inflights, ["at"]],
           ],
           "$inflight_init": [
+            [inflights, []],
           ],
         });
       }
@@ -139,6 +140,7 @@ class $Root extends $stdlib.std.Resource {
               [i, []],
             ],
             "$inflight_init": [
+              [i, []],
             ],
           });
         }

@@ -98,6 +98,7 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "$inflight_init": [
+            [b, []],
           ],
         });
       }
@@ -139,6 +140,7 @@ class $Root extends $stdlib.std.Resource {
             [A, ["myop"]],
           ],
           "$inflight_init": [
+            [A, []],
           ],
         });
       }

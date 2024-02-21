@@ -84,7 +84,7 @@ export class Schedule
         timestamp: new Date().toISOString(),
       });
 
-      void fnClient.invoke("").catch((err) => {
+      void fnClient.invoke().catch((err) => {
         this.context.addTrace({
           data: {
             message: `Schedule error: ${err}`,

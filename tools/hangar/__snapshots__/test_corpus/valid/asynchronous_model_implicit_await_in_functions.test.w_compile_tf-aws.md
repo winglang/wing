@@ -11,7 +11,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(s) {
+    async handle() {
     }
   }
   return $Closure1;
@@ -30,9 +30,9 @@ module.exports = function({ $strToStr }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(s) {
+    async handle() {
       (await $strToStr.invoke("one"));
-      console.log((await $strToStr.invoke("two")));
+      console.log(((await $strToStr.invoke("two")) ?? "no response"));
     }
   }
   return $Closure2;
@@ -335,6 +335,7 @@ class $Root extends $stdlib.std.Resource {
             [strToStr, ["invoke"]],
           ],
           "$inflight_init": [
+            [strToStr, []],
           ],
         });
       }

@@ -7,6 +7,18 @@ import { T1 } from "./generics";
 import { InflightClient } from "../core";
 
 /**
+ * Array entry representation
+ *
+ * @typeparam T1
+ */
+export interface ArrayEntry {
+  /** The entry key */
+  readonly key: string;
+  /** The entry value */
+  readonly value: T1;
+}
+
+/**
  * Immutable Map
  *
  * @typeparam T1
@@ -105,6 +117,17 @@ export class Map {
    * @returns an array of type T containing the values of this map
    */
   public values(): Array {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the entries from the map.
+   *
+   * @macro Object.entries($self$).map(([key, value]) => ({ key, value }))
+   *
+   * @returns the entries as Array<ArrayEntry>
+   */
+  public entries(): ArrayEntry[] {
     throw new Error("Macro");
   }
 }
@@ -245,6 +268,17 @@ export class MutMap {
    * @returns an array containing of type T the values of this map
    */
   public values(): Array {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the entries from the map.
+   *
+   * @macro Object.entries($self$).map(([key, value]) => ({ key, value }))
+   *
+   * @returns the entries as Array<ArrayEntry>
+   */
+  public entries(): ArrayEntry[] {
     throw new Error("Macro");
   }
 }

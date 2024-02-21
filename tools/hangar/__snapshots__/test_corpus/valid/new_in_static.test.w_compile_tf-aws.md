@@ -165,6 +165,7 @@ class $Root extends $stdlib.std.Resource {
             [bucket, ["list"]],
           ],
           "$inflight_init": [
+            [bucket, []],
           ],
         });
       }

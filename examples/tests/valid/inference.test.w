@@ -49,3 +49,8 @@ let closureWithUnwrapping = (optionalString) => {
     log(justString);
   }
 };
+
+let takesOptionalClosure = (fn: ((num): str)?) => {};
+takesOptionalClosure((a) => {
+  return "";
+});
