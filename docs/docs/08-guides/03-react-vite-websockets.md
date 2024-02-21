@@ -123,7 +123,7 @@ You can verify it by opening javascript console under developer tools and runnin
 Now that we understand how to pass information from the backend to the frontend, we will create an API Gateway on the backend and provide the frontend code with a URL.
 On the frontend, we will switch from using a local counter to a backend-based counter.
 
-### Creating a Counter and Access/Modify Routes
+### Creating a counter and read/update API routes
 
 1. Instantiate an API gateway in `backend/main.w` by adding the following code:
 ```wing
