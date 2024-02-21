@@ -13,7 +13,7 @@ The webapp will have a counter that can be incremented by clicking on it. This c
 ## Prerequisites
 
 - Node.js v20 or later.
-- Wing supports two popular IDEs with syntax highlighting, completions, go-to-definition and an embedded Wing Console:
+- Wing supports two popular IDEs with syntax highlighting, completions, go-to-definition and an embedded Wing Simulator:
 
   - [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
   - [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
@@ -97,7 +97,7 @@ Open VScode / Intellij on the project directory.
  ```sh
  wing run main.w
  ```
-> You should have 2 web pages open: the React web application and the Wing Console, showing the simulator.
+> You should have 2 web pages open: the React web application and the Wing Simulator, showing the simulator.
 
 ### Sending data to your Vite app using `publicEnv`
 
@@ -260,7 +260,7 @@ function App() {
 
 export default App;
 ```
-4. Once you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
+4. Once you save the code, you can examine both the webpage and the Simulator to see how the counter gets incremented.
 
 ## Step 4 - Create a broadcasting service using `@winglibs/websockets` 
 
