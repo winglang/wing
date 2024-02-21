@@ -6,60 +6,62 @@ keywords: [Websockets, React, Vite, Local, Wing]
 
 # React, Vite & Websockets 
 
-In this guide we will go through building a simple react webpage that is connected to wing backend. 
+In this guide, we will go through the process of building a simple React webpage that connects to a Wing backend.
 
-The webpage will be showcasing a counter that can be incremented by clicking on it. The counter will increment a distributed counter deployed via Wing backend, we will also demo how to get realtime updates from the backend to the browser every time the counter is updated from any other webpage, using websockets.
+The webpage will showcase a counter that can be incremented by clicking on it. This counter will increment a distributed counter deployed via the Wing backend. We will also demonstrate how to get real-time updates from the backend to the browser every time the counter is updated from any other webpage, using Websockets.
 
 ## Prerequisites
 
-Node.js v20 or later.
-Wing has extended support for two IDEs. They provide syntax highlighting, completions, go-to-definition, etc. and embedded Wing Console support:
+- Node.js v20 or later.
+- Wing has extended support for two IDEs. They provide syntax highlighting, completions, go-to-definition, etc. and embedded Wing Console support:
 
-- [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
-- [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
+  - [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
+  - [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
 
-## Step 1 - Installations & Scaffolding
-In this step, we will be creating our project.
-We will use this by creating two folders:
+## Step 1 - Installation & Scaffolding
+In this step, we will be creating our project by setting up two folders:
+
  - `backend` - The place for Wing's backend code
- - `frontend` - The place for our react app code
+ - `frontend` - The place for our React app code
 
-### Creating React app with Vite
-1. Create root project folder:
-```sh
-mkdir /tmp/confjs-wing-react
-cd /tmp/confjs-wing-react
-```
-2. Create a new React app using vite under `frontend` folder
-```sh
-npm create vite frontend -- --template react-ts
-```
-3. Run your React app and make sure it works
-```sh
-cd frontend
-npm install
-npm run dev
-```
-> The result should be a very simple webpage that runs locally, and works without any backend (notice the counter is not shared between tabs)
-4. Ctrl-C to go back to CLI prompt.
+### Creating a React App with Vite
 
+1. Create the root project folder:
+ ```sh
+ mkdir /tmp/confjs-wing-react
+ cd /tmp/confjs-wing-react
+ ```
+2. Create a new React app using Vite under the frontend folder:
+ ```sh
+ npm create vite frontend -- --template react-ts
+ ```
+3. Run your React app and ensure it works:
+ ```sh
+ cd frontend
+ npm install
+ npm run dev
+ ```
+> The result should be a very simple webpage that runs locally and works without any backend (note the counter is not shared between tabs).
 
-### Creating a new Wing app 
-1. Install Wing
-```sh
-npm install -g winglang
-# Verify installation
-wing -V 
-```
-2. Create `backend` directory under project root
-```sh
-mkdir /tmp/confjs-wing-react/backend
-cd /tmp/confjs-wing-react/backend
-```
-3. Generate a new empty Wing project
-```sh
-wing new empty
-```
+4. Press Ctrl-C to return to the CLI prompt.
+
+### Creating a New Wing App
+
+1. Install Wing:
+ ```sh
+ npm install -g winglang
+ # Verify installation
+ wing -V 
+ ```
+2. Create a `backend` directory under the project root:
+ ```sh
+ mkdir /tmp/confjs-wing-react/backend
+ cd /tmp/confjs-wing-react/backend
+ ```
+3. Generate a new empty Wing project:
+ ```sh
+ wing new empty
+ ```
 > This will generate three files: `package.json`, `package-lock.json` and `main.w` file with a simple hello-world `Cloud.Function`
 4. Run this project inside Wing Simulator
 ```sh
@@ -69,49 +71,51 @@ wing run main.w
 5. Ctrl-C to go back to CLI prompt.
 
 ## Step 2 - Hello `@winglibs/vite` 
-In the previous step we used `npm run dev` to start the local webserver, in this step we will be installing the `@winglibs/vite` package that will be responsile for starting the dev server. We will also pass information from the backend to the frontend 
+
+In the previous step, we used `npm run dev` to start the local web server. 
+In this step, we will install the `@winglibs/vite` package responsible for starting the dev server. 
+We will also pass information from the backend to the frontend.
 
 ### Install and Use `@winglibs/vite`
 
-1. Install `@winglibs/vite`
-```sh
-cd /tmp/confjs-wing-react/backend
-npm i -s @winglibs/vite
-```
-1. Bring and Instantiate vite in `backend/main.w`
-```wing
-bring vite;
+1. Install `@winglibs/vite`:
+ ```sh
+ cd /tmp/confjs-wing-react/backend
+ npm i -s @winglibs/vite
+ ```
+1. Bring and instantiate Vite in `backend/main.w`:
+ ```wing
+ bring vite;
+ 
+ new vite.Vite(
+   root:"../frontend"
+ );
+ ```
+3. Run this project inside the Wing Simulator:
+ ```sh
+ wing run main.w
+ ```
+> You should have 2 web pages open: the browser and the Wing Console, showing the simulator.
 
-new vite.Vite(
-  root:"../frontend"
-);
-```
-3. Run this project inside Wing Simulator
-```sh
-wing run main.w
-```
-> You should have 2 webpage open, the browser and Wing Console that is showing the simulator
+### Using `publicEnv` for Constant Data
 
-### Using `publicEnv` for Constant data 
-Now when we have our backend instantiate the Vite resource, we would like to see how we can pass constant data from the backend to the frontend.
-1. Use `publicEnv` for the Title in `backend/main.w`
-```wing
-bring vite;
+Now that we have our backend instantiate the Vite resource, 
+we would like to see how we can pass constant data from the backend to the frontend.
 
-new vite.Vite(
-  root:"../frontend",
-  publicEnv: {
-    title: "Wing + Vite + React"
-  }
-);
-```
-2. Notice that the react webpage now has 
-3. `window.wing.env` now contains this title. 
-4. Read `window.wing.env.title` in `frontend/src/App.tsx`
-
-    Look for `<h1>Vite + React</h1>` and replace it with `<h1>{window.wing.env.title}</h1>`.
-
-4. Upon saving both the wing file and the typescript you should be seeing the new title.
+1. Use `publicEnv` for the title in `backend/main.w:
+ ```wing
+ bring vite;
+ 
+ new vite.Vite(
+   root:"../frontend",
+   publicEnv: {
+     title: "Wing + Vite + React"
+   }
+ );
+ ```
+2. Notice that the React webpage now has `window.wing.env` containing this title.
+4. Read `window.wing.env.title` in `frontend/src/App.tsx` by looking for `<h1>Vite + React</h1>` and replacing it with `<h1>{window.wing.env.title}</h1>`.
+5. Upon saving both the wing file and the TypeScript file, you should see the new title.
 
 ## Step 3 - Connect the Counter
 Now that we know how pass information from the backend the the frontend we will create an Api Gateway on the backend and provide the frontend code a url.
