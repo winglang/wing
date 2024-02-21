@@ -120,7 +120,7 @@ You can verify it by opening javascript console under developer tools and runnin
 
 ## Step 3 - Adding a counter
 
-Now that we understand how to pass information from the backend to the frontend, we will create an API Gateway on the backend and provide the frontend code with a URL.
+Now that we understand how to pass information from the backend to the frontend, we will create a backend API endpoint and provide the frontend code with a URL.
 On the frontend, we will switch from using a local counter to a backend-based counter.
 
 ### Creating a counter and read/update API routes
