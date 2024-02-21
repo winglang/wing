@@ -92,7 +92,7 @@ test "signedUrl duration option is respected" {
   util.sleep(2s);
 
   // Download file from private bucket using expired GET presigned URL
-  let output = util.shell("curl \"{getSignedUrl}\"", { throw: false });
+  let output = util.shell("curl \"{getSignedUrl}\"");
 
   expect.equal(isExpiredTokenError(output), true);
 }
