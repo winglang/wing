@@ -218,7 +218,7 @@ function App() {
   const API_URL = window.wing.env.API_URL;
   const [count, setCount] = useState("NA")
   const incrementCount = async () => {
-    const response = await fetch(`${API_URL}/counterInc`, {
+    const response = await fetch(`${API_URL}/counter`, {
       method: "POST"
     });
     setCount(await response.text()); 
