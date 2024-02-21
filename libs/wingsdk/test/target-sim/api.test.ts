@@ -722,3 +722,19 @@ test("api with CORS settings responds to OPTIONS request", async () => {
   );
   expect(response.headers.get("access-control-max-age")).toEqual("300");
 });
+
+test("api reuses ports between simulator runs", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Api(app, "my_api");
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl1 = getApiUrl(s, "/my_api");
+  await s.stop();
+  await s.start();
+  const apiUrl2 = getApiUrl(s, "/my_api");
+
+  // THEN
+  expect(apiUrl1).toEqual(apiUrl2);
+});
