@@ -315,8 +315,8 @@ class WingRestApi extends Construct {
   public readonly stage: ApiGatewayStage;
   public readonly deployment: ApiGatewayDeployment;
   public readonly privateVpc: boolean = false;
-  public securityGroup?: SecurityGroup;
-  public vpcEndpoint?: VpcEndpoint;
+  public readonly securityGroup?: SecurityGroup;
+  public readonly vpcEndpoint?: VpcEndpoint;
 
   constructor(
     scope: Construct,
@@ -332,13 +332,15 @@ class WingRestApi extends Construct {
     this.region = app.region;
     this.accountId = app.accountId;
 
-    // Check for private API Gateway configuration
+    // Check for PRIVATE API Gateway configuration
     let privateApiGateway = app.platformParameters.getParameterValue(
       "tf-aws/vpc_api_gateway"
     );
     if (privateApiGateway === true) {
       this.privateVpc = true;
-      this._initVpcResources(app);
+      const vpcResources = this._initVpcResources(app);
+      this.securityGroup = vpcResources.securityGroup;
+      this.vpcEndpoint = vpcResources.vpcEndpoint;
     }
 
     // Create the API Gateway and configure it
@@ -350,26 +352,25 @@ class WingRestApi extends Construct {
     this.url = this._constructInvokeUrl();
   }
 
-  private _initVpcResources(app: App): void {
+  private _initVpcResources(app: App): {
+    securityGroup: SecurityGroup;
+    vpcEndpoint: VpcEndpoint;
+  } {
     const vpcId: string = app.vpc.id;
     const subnetIds: string[] = [...app.subnets.private.map((s) => s.id)];
 
-    // Initialize Security Group
-    if (!this.securityGroup) {
-      this.securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
-        vpcId: vpcId,
-        ingress: [
-          {
-            cidrBlocks: ["0.0.0.0/0"],
-            fromPort: 0,
-            toPort: 0,
-            protocol: "-1",
-          },
-        ],
-      });
-    }
+    const securityGroup = new SecurityGroup(this, `${this.id}SecurityGroup`, {
+      vpcId: vpcId,
+      ingress: [
+        {
+          cidrBlocks: ["0.0.0.0/0"],
+          fromPort: 0,
+          toPort: 0,
+          protocol: "-1",
+        },
+      ],
+    });
 
-    // Initialize the VPC Endpoint Service lookup
     const service = new DataAwsVpcEndpointService(
       this,
       `${this.id}ServiceLookup`,
@@ -378,15 +379,16 @@ class WingRestApi extends Construct {
       }
     );
 
-    // Create the VPC Endpoint using the newly created security group
-    this.vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
+    const vpcEndpoint = new VpcEndpoint(this, `${this.id}-vpc-endpoint`, {
       vpcId: vpcId,
       serviceName: service.serviceName,
       privateDnsEnabled: true,
       vpcEndpointType: "Interface",
       subnetIds: subnetIds,
-      securityGroupIds: [this.securityGroup.id],
+      securityGroupIds: [securityGroup.id],
     });
+
+    return { securityGroup, vpcEndpoint };
   }
 
   private _initApiGatewayRestApi(
