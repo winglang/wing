@@ -260,8 +260,205 @@ export default App;
 ```
 4. One you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
 
-## Step 4 - Use `@winglibs/websockets`
-WIP
+## Step 4 - Create a broadcasting service using `@winglibs/websockets` 
+
+In the current implementation when we open two browser side by side, we only
+see the counter latest value upon refresh. In this step we will be deploying a broadcasting service
+that utilize a websocket server on the backend, and connecting to that websocket from the clients. 
+
+When the counter is incremented, the broadcaster service will notify all clients that they need to fetch a 
+new value from our API.
+
+### Create a Broadcaster class
+
+The Broadcaster class contains two public API:
+- a public websocket URL that will be sent to clients
+- a `inflight` broadcast message, that send a message to all clients connected
+
+1. We will be using `@winglibs/websockets`, so lets first install it
+```sh
+npm i -s @winglibs/websockets
+```
+2. Lets create a new file `backend/broadcaster.w`, and implement it:
+```wing
+bring cloud;
+bring websockets;
+
+pub class Broadcaster {
+  pub wsUrl: str;
+  wb: websockets.WebSocket;
+  db: cloud.Bucket;
+  new() {
+    this.wb = new websockets.WebSocket(name: "MyWebSocket") as "my-websocket";
+    this.wsUrl = this.wb.url;
+    this.db = new cloud.Bucket();
+  
+    this.wb.onConnect(inflight(id: str): void => {
+      this.db.put(id, "");
+    });
+
+    this.wb.onDisconnect(inflight(id: str): void => {
+      this.db.delete(id);
+    });
+
+  }
+  pub inflight broadcast(messgae: str) {
+    for id in this.db.list() {
+      this.wb.sendMessage(id, messgae);
+    }
+  }
+}
+```
+3. On our `backend/main.w` file lets instantiate the broadcasting service:
+```wing
+bring "./broadcaster.w" as b;
+
+let broadcaster = new b.Broadcaster();
+```
+4. Send the websocket url to the client
+```wing
+new vite.Vite(
+  root: "../frontend",
+  publicEnv: {
+    title: "Wing + Vite + React",
+    API_URL: api.url,
+    WS_URL: broadcaster.wsUrl // <-- This is new
+  }
+);
+```
+5. Also, lets send a broadcast "refresh" command every time we increment the counter, 
+in `backend/main.w` `post` endpoint:
+```wing
+api.post("/counter", inflight () => {
+  let oldValue = counter.inc();
+  broadcaster.broadcast("refresh");
+  return {
+    status: 200, 
+    body: "{oldValue + 1}"
+  };
+});
+```
+
+6. For convenience, here is the entire `backend/main.w` file:
+```wing
+bring vite;
+bring cloud;
+bring "./broadcaster.w" as b;
+
+let broadcaster = new b.Broadcaster();
+let api = new cloud.Api(cors: true);
+
+new vite.Vite(
+  root: "../frontend",
+  publicEnv: {
+    title: "Wing + Vite + React",
+    API_URL: api.url,
+    WS_URL: broadcaster.wsUrl
+  }
+);
+let counter = new cloud.Counter();
+api.get("/counter", inflight () => {
+  return {
+    status: 200, 
+    body: "{counter.peek()}"
+  };
+});
+
+api.post("/counter", inflight () => {
+  let oldValue = counter.inc();
+  return {
+    status: 200, 
+    body: "{oldValue + 1}"
+  };
+});
+```
+
+
+### Listen to ws message and trigger data refresh
+
+On the client side we are going to use `react-use-websocket` and listen to any
+event from the broadcaster, once an event is received we will read the counter value from 
+the API. 
+
+1. Start by installing `react-use-websocket` on the `frontend/`:
+```sh
+cd ~/shared-counter/frontend
+npm i -s react-use-websocket
+```
+2. Lets import and use it inside `frontend/App.tsx`:
+```ts
+import useWebSocket from 'react-use-websocket';
+```
+3. And use it inside the `App()` function body: 
+```ts
+useWebSocket(window.wing.env.WS_URL, {
+  onMessage: () => {
+    getCount();
+  }
+});
+```
+4. For convenience, here is the entire `App.tsx` file:
+
+```ts
+import { useState, useEffect } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import useWebSocket from 'react-use-websocket';
+
+
+function App() {
+  const API_URL = window.wing.env.API_URL;
+  const [count, setCount] = useState("NA")
+  const incrementCount = async () => {
+    const response = await fetch(`${API_URL}/counter`, {
+      method: "POST"
+    });
+    setCount(await response.text()); 
+  };
+  const getCount = async () => {
+    const response = await fetch(`${API_URL}/counter`);
+    setCount(await response.text()); 
+  };
+  useWebSocket(window.wing.env.WS_URL, {
+    onMessage: () => {
+      getCount();
+    }
+  });
+  useEffect(() => {
+    getCount();
+  }, []);
+  return (
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>{window.wing.env.title}</h1>
+      <div className="card">
+        <button onClick={incrementCount}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  );
+}
+
+export default App;
+```
+5. Play arround with multiple tabs of the website, they should be automatically updated upon counter increment. 
+
+
 ## Step 5 - Deploy on AWS
 
 ###  Prerequisites
