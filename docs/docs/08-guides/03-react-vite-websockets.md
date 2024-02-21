@@ -78,7 +78,7 @@ In this step, we will install the `@winglibs/vite` package responsible for start
 We will also pass information from the backend to the frontend.
 
 ### Install and use `@winglibs/vite`
-
+Open VScode / Intellij on the project directory.
 1. Install `@winglibs/vite`:
  ```sh
  cd ~/shared-counter/backend
