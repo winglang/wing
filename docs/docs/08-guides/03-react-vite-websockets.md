@@ -467,6 +467,10 @@ export default App;
 
 ## Step 5 - Deploy on AWS
 
+Once deployed, the above code translates to the following (simplieid) AWS architectue
+
+![AWS Architecture](./vite-react-websockets-AWS-diagram.png 'AWS Architecture')
+
 ###  Prerequisites
 
 In order to deploy to AWS, you will need:
