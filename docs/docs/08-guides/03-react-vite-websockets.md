@@ -257,7 +257,7 @@ function App() {
 
 export default App
 ```
-4. One you have the code update you can examine both the webpage and the console to see how the counter gets incremented.
+4. One you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
 
 ## Step 4 - Use `@winglibs/websockets`
 WIP
