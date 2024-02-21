@@ -118,7 +118,7 @@ You can verify it by opening javascript console under developer tools and runnin
 4. Read `window.wing.env.title` in `frontend/src/App.tsx` by looking for `<h1>Vite + React</h1>` and replacing it with `<h1>{window.wing.env.title}</h1>`.
 5. Upon saving both the Wing file and the TypeScript file, you should see the new title.
 
-## Step 3 - Connect the Counter
+## Step 3 - Adding a counter
 
 Now that we understand how to pass information from the backend to the frontend, we will create an API Gateway on the backend and provide the frontend code with a URL.
 On the frontend, we will switch from using a local counter to a backend-based counter.
