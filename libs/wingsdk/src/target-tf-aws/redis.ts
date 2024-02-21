@@ -24,8 +24,8 @@ const ELASTICACHE_NAME_OPTS: NameOptions = {
 export class Redis extends ex.Redis {
   private readonly clusterId: string;
   private readonly clusterArn: string;
-  private readonly securityGroup: SecurityGroup;
-  private readonly subnet: Subnet | DataAwsSubnet;
+  private readonly securityGroups: SecurityGroup[];
+  private readonly subnets: (Subnet | DataAwsSubnet)[];
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -48,34 +48,38 @@ export class Redis extends ex.Redis {
 
     const app = App.of(this) as App;
     const vpc = app.vpc;
-    this.subnet = app.subnets.private;
+    this.subnets = app.subnets.private;
+    this.securityGroups = [];
     const clusterName = ResourceNames.generateName(this, ELASTICACHE_NAME_OPTS);
-
-    this.securityGroup = new SecurityGroup(this, "securityGroup", {
-      vpcId: vpc.id,
-      name: `${this.node.addr.slice(-8)}-securityGroup`,
-      ingress: [
-        {
-          cidrBlocks: [this.subnet.cidrBlock],
-          fromPort: REDIS_PORT,
-          toPort: REDIS_PORT,
-          protocol: "tcp",
-          selfAttribute: true,
-        },
-      ],
-      egress: [
-        {
-          cidrBlocks: ["0.0.0.0/0"],
-          fromPort: 0,
-          toPort: 0,
-          protocol: "-1",
-        },
-      ],
-    });
+    for (const subnet of this.subnets) {
+      this.securityGroups.push(
+        new SecurityGroup(this, `${subnet.id.slice(-8)}securityGroup`, {
+          vpcId: vpc.id,
+          name: `${this.node.addr.slice(-8)}-securityGroup`,
+          ingress: [
+            {
+              cidrBlocks: [subnet.cidrBlock],
+              fromPort: REDIS_PORT,
+              toPort: REDIS_PORT,
+              protocol: "tcp",
+              selfAttribute: true,
+            },
+          ],
+          egress: [
+            {
+              cidrBlocks: ["0.0.0.0/0"],
+              fromPort: 0,
+              toPort: 0,
+              protocol: "-1",
+            },
+          ],
+        })
+      );
+    }
 
     const subnetGroup = new ElasticacheSubnetGroup(this, "RedisSubnetGroup", {
       name: `${clusterName}-subnetGroup`,
-      subnetIds: [this.subnet.id],
+      subnetIds: [...this.subnets.map((s) => s.id)],
     });
 
     const cluster = new ElasticacheCluster(this, "RedisCluster", {
@@ -84,9 +88,9 @@ export class Redis extends ex.Redis {
       engineVersion,
       nodeType,
       parameterGroupName,
-      availabilityZone: this.subnet.availabilityZone,
+      availabilityZone: this.subnets[0].availabilityZone,
       subnetGroupName: subnetGroup.name,
-      securityGroupIds: [this.securityGroup.id],
+      securityGroupIds: [...this.securityGroups.map((s) => s.id)],
       numCacheNodes: 1, // This number will always be 1 for Redis
     });
 
@@ -124,8 +128,8 @@ export class Redis extends ex.Redis {
 
     host.addEnvironment(env, this.clusterId);
     host.addNetworkConfig({
-      securityGroupIds: [this.securityGroup.id],
-      subnetIds: [this.subnet.id],
+      securityGroupIds: [...this.securityGroups.map((s) => s.id)],
+      subnetIds: [...this.subnets.map((s) => s.id)],
     });
 
     super.onLift(host, ops);

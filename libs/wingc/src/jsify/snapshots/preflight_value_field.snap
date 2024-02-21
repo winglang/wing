@@ -140,6 +140,9 @@ class $Root extends $stdlib.std.Resource {
             [t.name.length, []],
           ],
           "$inflight_init": [
+            [t.last, []],
+            [t.name, []],
+            [t.name.length, []],
           ],
         });
       }

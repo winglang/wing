@@ -469,6 +469,7 @@ class $Root extends $stdlib.std.Resource {
             [r, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]],
           ],
           "$inflight_init": [
+            [r, []],
           ],
         });
       }

@@ -114,7 +114,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+          "${aws_security_group.exRedis_KEN15securityGroup_3840F345.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.exRedis_RedisSubnetGroup_EE9BBE48.name}"
       },
@@ -133,7 +133,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_securityGroup_35A75C2E.id}"
+          "${aws_security_group.r2_KEN24securityGroup_AFC21ADF.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -256,7 +256,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+            "${aws_security_group.exRedis_KEN15securityGroup_3840F345.id}"
           ],
           "subnet_ids": [
             "${aws_subnet.PrivateSubnet.id}"
@@ -386,11 +386,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
     },
     "aws_security_group": {
-      "exRedis_securityGroup_3948C3F2": {
+      "exRedis_KEN15securityGroup_3840F345": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Redis/securityGroup",
-            "uniqueId": "exRedis_securityGroup_3948C3F2"
+            "path": "root/Default/Default/ex.Redis/KEN.15]}securityGroup",
+            "uniqueId": "exRedis_KEN15securityGroup_3840F345"
           }
         },
         "egress": [
@@ -426,11 +426,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "name": "89baf91f-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_securityGroup_35A75C2E": {
+      "r2_KEN24securityGroup_AFC21ADF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/securityGroup",
-            "uniqueId": "r2_securityGroup_35A75C2E"
+            "path": "root/Default/Default/r2/KEN.24]}securityGroup",
+            "uniqueId": "r2_KEN24securityGroup_AFC21ADF"
           }
         },
         "egress": [
@@ -575,6 +575,7 @@ class $Root extends $stdlib.std.Resource {
             [r, ["set"]],
           ],
           "$inflight_init": [
+            [r, []],
           ],
         });
       }
@@ -614,6 +615,9 @@ class $Root extends $stdlib.std.Resource {
             [r2, ["get", "set"]],
           ],
           "$inflight_init": [
+            [queue, []],
+            [r, []],
+            [r2, []],
           ],
         });
       }

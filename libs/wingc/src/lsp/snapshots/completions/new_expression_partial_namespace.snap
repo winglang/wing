@@ -1,0 +1,10 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: cloud
+  kind: 9
+  documentation:
+    kind: markdown
+    value: "Module `cloud`"
+  sortText: kk|cloud
+

@@ -7,5 +7,5 @@ vpc_lambda = true
 vpc_api_gateway = true
 # The following parameters will be required if using "existing" vpc
 # vpc_id = "vpc-123xyz"
-# private_subnet_id = "subnet-123xyz"
-# public_subnet_id = "subnet-123xyz"
+# private_subnet_id = ["subnet-123xyz"]
+# public_subnet_id = ["subnet-123xyz"]

@@ -511,6 +511,7 @@ class $Root extends $stdlib.std.Resource {
             [counter, ["inc"]],
           ],
           "$inflight_init": [
+            [counter, []],
           ],
         });
       }
@@ -545,6 +546,7 @@ class $Root extends $stdlib.std.Resource {
             [api.url, []],
           ],
           "$inflight_init": [
+            [api.url, []],
           ],
         });
       }
@@ -584,6 +586,7 @@ class $Root extends $stdlib.std.Resource {
                 [__parent_this_3.api.url, []],
               ],
               "$inflight_init": [
+                [__parent_this_3.api.url, []],
               ],
             });
           }

@@ -365,7 +365,7 @@ class WingRestApi extends Construct {
         serviceName: service.serviceName,
         privateDnsEnabled: true,
         vpcEndpointType: "Interface",
-        subnetIds: [app.subnets.private.id],
+        subnetIds: [...app.subnets.private.map((s) => s.id)],
         securityGroupIds: [this.securityGroup.id],
       });
     }
