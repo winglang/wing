@@ -118,12 +118,13 @@ we would like to see how we can pass constant data from the backend to the front
 5. Upon saving both the wing file and the TypeScript file, you should see the new title.
 
 ## Step 3 - Connect the Counter
-Now that we know how pass information from the backend the the frontend we will create an Api Gateway on the backend and provide the frontend code a url.
 
-On the frontend, we will replace the use of a local counter to a backend based counter. 
+Now that we understand how to pass information from the backend to the frontend, we will create an API Gateway on the backend and provide the frontend code with a URL.
+On the frontend, we will switch from using a local counter to a backend-based counter.
 
-### Creating a Counter and Access/Modify Routes 
-1. Instantiate an API gateway on `backend/main.w`, by adding the following
+### Creating a Counter and Access/Modify Routes
+
+1. Instantiate an API gateway in `backend/main.w` by adding the following code:
 ```wing
 bring vite;
 bring cloud;
@@ -138,12 +139,14 @@ new vite.Vite(
   }
 );
 ```
-Notice that we've added api_url to the client's env vars
-2. Now lets also instantiate a `cloud.Counter` 
+Notice that we've added api_url to the client's environment variables.
+
+2. Now, let's also instantiate a `cloud.Counter`:
+ 
 ```wing
 let counter = new cloud.Counter();
 ``` 
-3. Now, lets add two routes:
+3. Add the following routes:
   - A `GET /counter` for retrieving the counter value (using `counter.peek()`)
   ```wing
   api.get("/counter", inflight () => {
@@ -163,17 +166,18 @@ let counter = new cloud.Counter();
     };
   });
   ```
-4. play with the Wing Simulator to see that these routes actually work.
+4. Experiment with the Wing Simulator to see that these routes work as expected.
 
-### Setup `App.tsx` Code to use the above routes
-Lets modify our frontend code to fetch/update the 
-counter value using the above routes.
+### Setup `App.tsx`  Code to Use the Above Routes
+Let's modify our frontend code to fetch and update the counter value using the routes defined above.
 
-1. First, store the `api_url` in some variable
+
+
+1. First, store the `api_url` in some variable:
 ```ts
 const API_URL = window.wing.env.api_url;
 ```
-2. Then lets use react hooks to update the counter data
+2. Then, lets use React hooks to update the counter data:
 ```ts
 function App() {
   const API_URL = window.wing.env.api_url;
@@ -192,16 +196,17 @@ function App() {
     getCount();
 }, []);
 ```
-** Notice that in order to use `useEffect` you need to import it from react as well 
+**Note:** To use `useEffect`, you need to import it from React as well:
 ```ts
 import { useState, useEffect } from 'react'
 ```
-3. Now, when the user is clicking to increment the counter, lets trigger the `incrementCount` function.
+3. Now, let's trigger the `incrementCount` function when the user clicks to increment the counter:
 ```ts
    <button onClick={incrementCount}>
 ```
 
-For convinience here is the entire `App.tsx` file
+For convenience, here is the entire `App.tsx` file:
+
 ```ts
 import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
@@ -252,9 +257,7 @@ function App() {
 
 export default App
 ```
-4. One you have the code update you can play with 
-both the webpage and the console to see how the counter
-gets incremented.
+4. One you have the code update you can examine both the webpage and the console to see how the counter gets incremented.
 
 ## Step 4 - Use `@winglibs/websockets`
 WIP
