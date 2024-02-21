@@ -171,6 +171,9 @@ let counter = new cloud.Counter();
   ```
 4. Experiment with the Wing Simulator to see that these routes work as expected.
 
+> You can click on the API and use the right side panel to test the endpoints, 
+you can also examine the Counter value or even modify it.
+
 ### Edit `App.tsx` to call our backend
 Let's modify our frontend code to fetch and update the counter value using the routes defined above.
 
