@@ -6,9 +6,9 @@ keywords: [Websockets, React, Vite, Local, Wing]
 
 # React, Vite & Websockets 
 
-In this guide, we will go through the process of building a simple React webpage that connects to a Wing backend.
+In this guide, we will build a simple React web application with a Wing backend.
 
-The webpage will showcase a counter that can be incremented by clicking on it. This counter will increment a distributed counter deployed via the Wing backend. We will also demonstrate how to get real-time updates from the backend to the browser every time the counter is updated from any other webpage, using Websockets.
+The webapp will have a counter that can be incremented by clicking on it. This counter will increment a distributed counter deployed via the Wing backend. We will also demonstrate how to use websockets in order to get real-time updates from the backend every time the counter is updated from any other webpage.
 
 ## Prerequisites
 
@@ -68,7 +68,8 @@ In this step, we will be creating our project by setting up two folders:
 wing run main.w
 ```
 > The result should be a page shows a single `Cloud.Function` if you invoke it, it should show `hello, world` in the response section.
-5. Ctrl-C to go back to CLI prompt.
+5. Invoke the cloud.Function to see that response.
+6. Ctrl-C to go back to CLI prompt.
 
 ## Step 2 - Hello `@winglibs/vite` 
 
@@ -83,7 +84,7 @@ We will also pass information from the backend to the frontend.
  cd ~/shared-counter/backend
  npm i -s @winglibs/vite
  ```
-1. Bring and instantiate Vite in `backend/main.w`:
+2.  Bring and instantiate Vite in `backend/main.w`:
  ```wing
  bring vite;
  
@@ -95,14 +96,14 @@ We will also pass information from the backend to the frontend.
  ```sh
  wing run main.w
  ```
-> You should have 2 web pages open: the browser and the Wing Console, showing the simulator.
+> You should have 2 web pages open: the React web application and the Wing Console, showing the simulator.
 
 ### Sending data to your Vite app using `publicEnv`
 
 Now that we have our backend instantiate the Vite resource, 
 we would like to see how we can pass constant data from the backend to the frontend.
 
-1. Use `publicEnv` for the title in `backend/main.w:
+1. Use `publicEnv` in order to pass `title` from the backend to the frontend. In `backend/main.w:
  ```wing
  bring vite;
  
@@ -115,7 +116,7 @@ we would like to see how we can pass constant data from the backend to the front
  ```
 2. Notice that the React webpage now has `window.wing.env` containing this title. 
 You can verify it by opening javascript console under developer tools and running `console.log(window.wing.env);`
-4. Read `window.wing.env.title` in `frontend/src/App.tsx` by looking for `<h1>Vite + React</h1>` and replacing it with `<h1>{window.wing.env.title}</h1>`.
+4. Use `window.wing.env.title` in `frontend/src/App.tsx`. Look for `<h1>Vite + React</h1>` and replace it with `<h1>{window.wing.env.title}</h1>`.
 5. Upon saving both the Wing file and the TypeScript file, you should see the new title.
 
 ## Step 3 - Adding a counter
@@ -140,7 +141,7 @@ new vite.Vite(
   }
 );
 ```
-Notice that we've a new environment variable called `API_URL` which points to the URL of our API endpoint.
+Notice that we added a new environment variable called `API_URL` to our frontend application which points to the URL of our API endpoint.
 
 2. Now, let's also instantiate a `cloud.Counter`:
  
@@ -258,7 +259,7 @@ function App() {
 
 export default App;
 ```
-4. One you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
+4. Once you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
 
 ## Step 4 - Create a broadcasting service using `@winglibs/websockets` 
 
@@ -271,9 +272,9 @@ new value from our API.
 
 ### Create a Broadcaster class
 
-The Broadcaster class contains two public API:
+The Broadcaster class contains two public API endpoints:
 - a public websocket URL that will be sent to clients
-- a `inflight` broadcast message, that send a message to all clients connected
+- an `inflight` broadcast message, that sends a message to all connected clients
 
 1. We will be using `@winglibs/websockets`, so lets first install it
 ```sh
@@ -309,7 +310,7 @@ pub class Broadcaster {
   }
 }
 ```
-3. On our `backend/main.w` file lets instantiate the broadcasting service:
+3. In our `backend/main.w` file lets instantiate the broadcasting service:
 ```wing
 bring "./broadcaster.w" as b;
 
@@ -326,7 +327,7 @@ new vite.Vite(
   }
 );
 ```
-5. Also, lets send a broadcast "refresh" command every time we increment the counter, 
+5. Also, lets send a broadcast "refresh" message every time we increment the counter, 
 in `backend/main.w` `post` endpoint:
 ```wing
 api.post("/counter", inflight () => {
@@ -366,6 +367,7 @@ api.get("/counter", inflight () => {
 
 api.post("/counter", inflight () => {
   let oldValue = counter.inc();
+  broadcaster.broadcast("refresh");
   return {
     status: 200, 
     body: "{oldValue + 1}"
