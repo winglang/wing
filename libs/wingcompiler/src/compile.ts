@@ -181,9 +181,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       WING_PLATFORMS: resolvePlatformPaths(options.platform),
       WING_SYNTH_DIR: synthDir,
       WING_SOURCE_DIR: wingDir,
-      WING_IS_TEST: testing.toString(),
+      WING_IS_TEST: process.env["WING_IS_TEST"] ?? testing.toString(),
       WING_VALUES: options.value?.length == 0 ? undefined : options.value,
-      WING_VALUES_FILE: options.values,
+      WING_VALUES_FILE: options.values ?? defaultValuesFile(),
       WING_NODE_MODULES: wingNodeModules,
     };
 
@@ -228,18 +228,18 @@ async function compileForPreflight(props: {
   log?: (...args: any[]) => void;
 }) {
   if (props.entrypointFile.endsWith(".ts")) {
-    const ts4w = await import("ts4w")
+    const typescriptFramework = await import("@wingcloud/framework")
       .then((m) => m.internal)
       .catch((err) => {
         throw new Error(`\
-Failed to load "ts4w": ${err.message}
+Failed to load "@wingcloud/framework": ${err.message}
 
-To use Wing with TypeScript files, you must install "ts4w" as a dependency of your project.
-npm i ts4w
+To use Wing with TypeScript files, you must install "@wingcloud/framework" as a dependency of your project.
+npm i @wingcloud/framework
 `);
       });
 
-    return await ts4w.compile({
+    return await typescriptFramework.compile({
       workDir: props.workDir,
       entrypoint: props.entrypointFile,
     });
@@ -292,6 +292,23 @@ npm i ts4w
 
     return join(props.workDir, WINGC_PREFLIGHT);
   }
+}
+
+/**
+ * Check if in the current working directory there is a default values file
+ * only the first match is returned from the list of default values files 
+ * 
+ * @returns default values file from the current working directory
+ */
+function defaultValuesFile() {
+  const defaultConfigs = [ "wing.toml", "wing.yaml", "wing.yml", "wing.json"]
+  
+  for (const configFile of defaultConfigs) {
+    if (existsSync(join(process.cwd(), configFile))) {
+      return configFile;
+    }
+  }
+  return "";
 }
 
 async function runPreflightCodeInWorkerThread(

@@ -35,7 +35,7 @@ export interface CompileOptions {
    */
   readonly value?: string;
   /**
-   * Path to the YAML file with specific platform values
+   * Path to the file with specific platform values (TOML|YAML|JSON)
    *
    * example of the file's content:
    * root/Default/Domain:
@@ -63,10 +63,10 @@ export interface CompileOptions {
  */
 export async function compile(entrypoint?: string, options?: CompileOptions): Promise<string> {
   if (!entrypoint) {
-    const wingFiles = (await glob("{main,*.main}.w")).sort();
+    const wingFiles = (await glob("{main,*.main}.{w,ts}")).sort();
     if (wingFiles.length === 0) {
       throw new Error(
-        "Cannot find entrypoint files (main.w or *.main.w) in the current directory."
+        "Cannot find an entrypoint file (main.w, main.ts, *.main.w, *.main.ts) in the current directory."
       );
     }
     if (wingFiles.length > 1) {

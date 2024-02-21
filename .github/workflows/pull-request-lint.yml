@@ -7,15 +7,14 @@ on:
       - synchronize
       - reopened
       - edited
-    branches-ignore:
-      - "mergify/merge-queue/*"
 
 jobs:
   validate:
     name: Validate PR title
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.head_ref, 'mergify/merge-queue/') }}
     steps:
-      - uses: amannn/action-semantic-pull-request@v5.2.0
+      - uses: amannn/action-semantic-pull-request@v5.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -32,6 +31,8 @@ jobs:
             vscode
             platforms
             console
+            typescript
+            lsp
           types: |-
             feat
             fix

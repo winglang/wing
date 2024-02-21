@@ -87,7 +87,7 @@ export class Bucket extends Resource {
   /**
    * Creates a topic for subscribing to notification events
    * @param actionType
-   * @returns the created topi
+   * @returns the created topic
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = new Topic(this, actionType.toLowerCase());
@@ -106,7 +106,6 @@ export class Bucket extends Resource {
   /**
    * Gets topic form the topics map, or creates if not exists
    * @param actionType
-   * @returns
    */
   private getTopic(actionType: BucketEventType): Topic {
     if (!this._topics.has(actionType)) {
@@ -128,7 +127,6 @@ export class Bucket extends Resource {
    * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
-   * @returns
    */
   private createInflightHandler(
     eventType: BucketEventType,
@@ -232,6 +230,28 @@ export interface ObjectMetadata {
 }
 
 /**
+ * Options for `Bucket.get()`.
+ */
+export interface BucketGetOptions {
+  /**
+   * The starting byte to read from.
+   * @default - undefined
+   */
+  readonly startByte?: number;
+
+  /**
+   * The ending byte to read up to (including).
+   * @default - undefined
+   */
+  readonly endByte?: number;
+}
+
+/**
+ * Options for `Bucket.tryGet()`.
+ */
+export interface BucketTryGetOptions extends BucketGetOptions {}
+
+/**
  * Options for `Bucket.put()`.
  */
 export interface BucketPutOptions {
@@ -316,20 +336,27 @@ export interface IBucketClient {
 
   /**
    * Retrieve an object from the bucket.
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string, options?: BucketGetOptions): Promise<string>;
 
   /**
    * Get an object from the bucket if it exists
+   * If the bytes returned are not a valid UTF-8 string, an error is thrown.
    * @param key Key of the object.
+   * @param options Additional get options
    * @returns the contents of the object as a string if it exists, nil otherwise
    * @inflight
    */
-  tryGet(key: string): Promise<string | undefined>;
+  tryGet(
+    key: string,
+    options?: BucketTryGetOptions
+  ): Promise<string | undefined>;
 
   /**
    * Retrieve a Json object from the bucket.

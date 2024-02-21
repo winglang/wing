@@ -254,6 +254,6 @@ project.tryRemoveFile(".npmrc");
 
 project.addTask("dev").exec("node scripts/dev.mjs");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

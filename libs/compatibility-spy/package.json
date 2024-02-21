@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git",
-    "directory": "libs/awscdk"
+    "directory": "libs/compatibility-spy"
   },
   "description": "Wing Platform for spying the usage of cloud resources' methods and properties",
   "publishConfig": {
@@ -20,12 +20,12 @@
   "main": "lib/index.js",
   "license": "MIT",
   "dependencies": {
-    "constructs": "~10.2.69",
+    "constructs": "^10.3",
     "@winglang/sdk": "workspace:^"
   },
   "devDependencies": {
     "bump-pack": "workspace:^",
-    "typescript": "^4.9.5",
+    "typescript": "^5.3.3",
     "tsup": "^6.7.0",
     "vitest": "^0.34.6"
   },

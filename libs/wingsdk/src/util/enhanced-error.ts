@@ -64,7 +64,7 @@ export async function prettyPrintError(
     originalMessage = error.message;
   }
 
-  const message = fBold(fRed("runtime error: ")) + fRed(originalMessage);
+  const message = fBold(fRed("Error: ")) + fRed(originalMessage);
 
   st = await st
     .clean()

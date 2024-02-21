@@ -128,7 +128,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18.17.13",
+      "version": "^20.11.0",
       "type": "devenv"
     }
   ],

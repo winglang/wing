@@ -1,0 +1,11 @@
+[ tf-aws ]
+# vpc can be set to "new" or "existing"
+vpc = "new"
+# vpc_lambda will ensure that lambda functions are created within the vpc on the private subnet
+vpc_lambda = true
+# vpc_api_gateway will ensure that the api gateway is created within the vpc on the private subnet
+vpc_api_gateway = true
+# The following parameters will be required if using "existing" vpc
+# vpc_id = "vpc-123xyz"
+# private_subnet_id = ["subnet-123xyz"]
+# public_subnet_id = ["subnet-123xyz"]

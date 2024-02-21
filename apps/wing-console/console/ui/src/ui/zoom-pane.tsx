@@ -80,7 +80,7 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { boundingBox, children, className } = props;
+  const { boundingBox, children, className, ...divProps } = props;
 
   const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -319,7 +319,7 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   return (
     <div
       ref={containerRef}
-      {...props}
+      {...divProps}
       className={classNames(className, "relative overflow-hidden", {
         "cursor-grab": !isDragging,
         "cursor-grabbing": isDragging,

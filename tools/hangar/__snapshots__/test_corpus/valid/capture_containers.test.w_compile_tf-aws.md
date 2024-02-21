@@ -35,7 +35,7 @@ module.exports = function({ $Object_keys_myMap__length, $__arr__index_______if__
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -92,11 +92,8 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      onLift(host, ops) {
-        $stdlib.core.onLiftMatrix(host, ops, {
+      get _liftMap() {
+        return ({
           "handle": [
             [("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))), []],
             [("world" in (myMap)), []],
@@ -108,8 +105,18 @@ class $Root extends $stdlib.std.Resource {
             [arr.length, []],
             [mySet.size, []],
           ],
+          "$inflight_init": [
+            [("bang" in (((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arrOfMap, 0))), []],
+            [("world" in (myMap)), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 0), []],
+            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })(arr, 1), []],
+            [((obj, args) => { if (obj[args] === undefined) throw new Error(`Json property "${args}" does not exist`); return obj[args] })(j, "b"), []],
+            [(mySet.has("my")), []],
+            [Object.keys(myMap).length, []],
+            [arr.length, []],
+            [mySet.size, []],
+          ],
         });
-        super.onLift(host, ops);
       }
     }
     const arr = ["hello", "world"];

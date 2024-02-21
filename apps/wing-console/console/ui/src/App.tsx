@@ -57,7 +57,7 @@ export const App = ({ layout, theme, color, onTrace }: AppProps) => {
               wingVersion: appDetails.data?.wingVersion,
               layoutConfig: layoutConfig.data?.config,
             }}
-          ></LayoutProvider>
+          />
         </TestsContextProvider>
       </NotificationsProvider>
     </ThemeProvider>

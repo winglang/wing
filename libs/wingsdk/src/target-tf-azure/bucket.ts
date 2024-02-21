@@ -109,7 +109,7 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
 
-    // TODO: investigate customized roles over builtin for finer grained access control
+    // TODO: investigate customized roles over builtin for finer grained access control: https://github.com/winglang/wing/issues/5598
     if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
@@ -206,10 +206,15 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.envStorageAccountName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-azure", "shared-azure"),
+      __filename,
+      "BucketClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.envStorageAccountName()}"]`,
+      ]
+    );
   }
 
   private envName(): string {

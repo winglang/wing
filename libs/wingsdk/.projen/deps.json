@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^19",
       "type": "build"
     },
     {
@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18",
+      "version": "^20",
       "type": "build"
     },
     {
@@ -64,7 +64,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.17.0",
+      "version": "0.20.3",
       "type": "build"
     },
     {
@@ -73,7 +73,7 @@
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "build"
     },
     {
@@ -225,8 +225,13 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/data-tables",
+      "version": "13.2.2",
+      "type": "bundled"
+    },
+    {
       "name": "@azure/identity",
-      "version": "3.1.3",
+      "version": "4.0.1",
       "type": "bundled"
     },
     {
@@ -259,8 +264,12 @@
       "type": "bundled"
     },
     {
+      "name": "ajv",
+      "type": "bundled"
+    },
+    {
       "name": "cdktf",
-      "version": "0.17.0",
+      "version": "0.20.3",
       "type": "bundled"
     },
     {
@@ -311,6 +320,10 @@
       "type": "bundled"
     },
     {
+      "name": "toml",
+      "type": "bundled"
+    },
+    {
       "name": "ulid",
       "type": "bundled"
     },
@@ -328,17 +341,17 @@
     },
     {
       "name": "@types/node",
-      "version": "^18.17.13",
+      "version": "^20.11.0",
       "type": "devenv"
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.2.69",
+      "version": "^10.3",
       "type": "runtime"
     }
   ],

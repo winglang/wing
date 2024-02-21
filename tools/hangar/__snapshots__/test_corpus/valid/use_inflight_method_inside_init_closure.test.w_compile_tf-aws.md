@@ -43,7 +43,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -202,16 +202,15 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
-          }
-          onLift(host, ops) {
-            $stdlib.core.onLiftMatrix(host, ops, {
+          get _liftMap() {
+            return ({
               "handle": [
                 [__parent_this_1, ["bar"]],
               ],
+              "$inflight_init": [
+                [__parent_this_1, []],
+              ],
             });
-            super.onLift(host, ops);
           }
         }
         this.node.root.new("@winglang/sdk.cloud.Function", cloud.Function, this, "cloud.Function", new $Closure1(this, "$Closure1"));
@@ -233,8 +232,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "bar", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "bar": [
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     new Foo(this, "Foo");

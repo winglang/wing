@@ -75,6 +75,6 @@ project.addFields({
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
-project.deps.addDependency("@types/node@^18.17.13", DependencyType.DEVENV);
+project.deps.addDependency("@types/node@^20.11.0", DependencyType.DEVENV);
 
 project.synth();

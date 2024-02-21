@@ -323,6 +323,35 @@ maybeVal ?? 2 == 2;
       (number))))
 
 ================================================================================
+Unwrap expression
+================================================================================
+
+maybeVal!;
+tryGet()!;
+!tryGetBool()!;
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (optional_unwrap
+      (reference
+        (reference_identifier))))
+  (expression_statement
+    (optional_unwrap
+      (call
+        (reference
+          (reference_identifier))
+        (argument_list))))
+  (expression_statement
+    (unary_expression
+      (optional_unwrap
+        (call
+          (reference
+            (reference_identifier))
+          (argument_list))))))
+
+================================================================================
 Set Literal
 ================================================================================
 

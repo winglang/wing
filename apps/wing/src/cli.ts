@@ -147,6 +147,12 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .option(
+      "-t, --platform <platform> --platform <platform>",
+      "Target platform provider (builtin: sim)",
+      collectPlatformVariadic,
+      DEFAULT_PLATFORM
+    )
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("run"));
 
@@ -168,7 +174,7 @@ async function main() {
     )
     .option("-r, --rootId <rootId>", "App root id")
     .option("-v, --value <value>", "Platform-specific value in the form KEY=VALUE", addValue, [])
-    .option("--values <file>", "Yaml file with Platform-specific values")
+    .option("--values <file>", "File with platform-specific values (TOML|YAML|JSON)")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("compile"));
@@ -223,7 +229,7 @@ async function main() {
         .argParser((value) => value ?? "wing")
     )
     .addOption(new Option("--list-templates", "List available templates"))
-    .hook("preAction", collectAnalyticsHook)
+    .hook("postAction", collectAnalyticsHook) // to catch the options that are added later
     .action(runSubCommand("init"));
 
   program

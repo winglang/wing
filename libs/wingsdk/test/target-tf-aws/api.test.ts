@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { Testing } from "../../src/simulator";
 import * as tfaws from "../../src/target-tf-aws";
 import { Api, Function } from "../../src/target-tf-aws";
-import { mkdtemp, tfResourcesOfCount } from "../util";
+import { mkdtemp, tfResourcesOfCount, tfSanitize } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { return "Hello, World"; }`;
 const extractApiSpec = (output: any) => {
@@ -31,6 +31,39 @@ test("api with GET route at root", () => {
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get"]);
   expect(apiSpec).toMatchSnapshot();
+});
+
+test("api will be private when vpc_api_gateway is true", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const parameters = app.platformParameters;
+  parameters._rawParameters["tf-aws"] = {
+    vpc: "new",
+    vpc_api_gateway: true,
+  };
+  const api = new Api(app, "Api");
+
+  // WHEN
+  const output = app.synth();
+
+  // THEN
+  const parsedOutput = JSON.parse(output);
+
+  const apiGatewayKey = Object.keys(
+    parsedOutput.resource.aws_api_gateway_rest_api
+  )[0];
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_vpc")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_vpc_endpoint")).toEqual(1);
+  expect(
+    parsedOutput.resource.aws_api_gateway_rest_api[apiGatewayKey]
+      .endpoint_configuration.types[0]
+  ).toEqual("PRIVATE");
+  expect(
+    parsedOutput.resource.aws_api_gateway_rest_api[apiGatewayKey]
+      .endpoint_configuration.vpc_endpoint_ids.length
+  ).toEqual(1); // uses vpc endpoint
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("api with multiple methods on same route", () => {
