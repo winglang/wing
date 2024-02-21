@@ -19,10 +19,8 @@ The webapp will have a counter that can be incremented by clicking on it. This c
   - [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
 
 ## Step 1 - Installation & Scaffolding
-In this step, we will be creating our project by setting up two folders:
+In this step, we will be creating our project.
 
- - `backend` - The place for Wing's backend code
- - `frontend` - The place for our React app code
 
 ### Creating a React App with Vite
 
