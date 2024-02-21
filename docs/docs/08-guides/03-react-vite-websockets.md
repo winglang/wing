@@ -125,22 +125,22 @@ On the frontend, we will switch from using a local counter to a backend-based co
 
 ### Creating a counter and read/update API routes
 
-1. Instantiate an API gateway in `backend/main.w` by adding the following code:
+1. Instantiate a `cloud.Api` in `backend/main.w` by adding the following code:
 ```wing
 bring vite;
 bring cloud;
 
-let api = new cloud.Api(cors:true);
+let api = new cloud.Api(cors: true);
 
 new vite.Vite(
-  root:"../frontend",
+  root: "../frontend",
   publicEnv: {
     title: "Wing + Vite + React",
-    api_url: api.url
+    API_URL: api.url
   }
 );
 ```
-Notice that we've added api_url to the client's environment variables.
+Notice that we've a new environment variable called `API_URL` which points to the URL of our API endpoint.
 
 2. Now, let's also instantiate a `cloud.Counter`:
  
@@ -152,39 +152,39 @@ let counter = new cloud.Counter();
   ```wing
   api.get("/counter", inflight () => {
     return {
-      status:200, 
+      status: 200, 
       body: "{counter.peek()}"
     };
   });
   ```
-  - A `POST /counterInc` for incrementing the counter (using `counter.inc()`)
+  - A `POST /counter` for incrementing the counter (using `counter.inc()`)
   ```wing
-  api.post("/counterInc", inflight () => {
+  api.post("/counter", inflight () => {
     let oldValue = counter.inc();
     return {
-      status:200, 
+      status: 200, 
       body: "{oldValue + 1}"
     };
   });
   ```
 4. Experiment with the Wing Simulator to see that these routes work as expected.
 
-### Setup `App.tsx`  Code to Use the Above Routes
+### Edit `App.tsx` to call our backend
 Let's modify our frontend code to fetch and update the counter value using the routes defined above.
 
 
 
-1. First, store the `api_url` in some variable:
+1. First, store the `API_URL` in some variable:
 ```ts
-const API_URL = window.wing.env.api_url;
+const API_URL = window.wing.env.API_URL;
 ```
 2. Then, lets use React hooks to update the counter data:
 ```ts
 function App() {
-  const API_URL = window.wing.env.api_url;
+  const API_URL = window.wing.env.API_URL;
   const [count, setCount] = useState("NA")
   const incrementCount = async () => {
-    const response = await fetch(`${API_URL}/counterInc`, {
+    const response = await fetch(`${API_URL}/counter`, {
       method: "POST"
     });
     setCount(await response.text()); 
@@ -199,7 +199,7 @@ function App() {
 ```
 **Note:** To use `useEffect`, you need to import it from React as well:
 ```ts
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 ```
 3. Now, let's trigger the `incrementCount` function when the user clicks to increment the counter:
 ```ts
@@ -215,18 +215,18 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const API_URL = window.wing.env.api_url;
+  const API_URL = window.wing.env.API_URL;
   const [count, setCount] = useState("NA")
   const incrementCount = async () => {
     const response = await fetch(`${API_URL}/counterInc`, {
       method: "POST"
     });
     setCount(await response.text()); 
-  }
+  };
   const getCount = async () => {
     const response = await fetch(`${API_URL}/counter`);
     setCount(await response.text()); 
-  }
+  };
   useEffect(() => {
     getCount();
   }, []);
@@ -253,10 +253,10 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
 ```
 4. One you save the code, you can examine both the webpage and the console to see how the counter gets incremented.
 
