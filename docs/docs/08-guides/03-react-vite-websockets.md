@@ -179,7 +179,7 @@ Let's modify our frontend code to fetch and update the counter value using the r
 
 
 
-1. First, store the `API_URL` in some variable:
+1. First, store the `API_URL` in some variable in `frontend/src/App.tsx`:
 ```ts
 const API_URL = window.wing.env.API_URL;
 ```
