@@ -45,7 +45,7 @@ In this step, we will be creating our project by setting up two folders:
 
 4. Press Ctrl-C to return to the CLI prompt.
 
-### Creating a New Wing App
+### Creating a Wing backend
 
 1. Install Wing:
  ```sh
