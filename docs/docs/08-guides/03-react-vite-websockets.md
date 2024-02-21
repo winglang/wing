@@ -185,8 +185,13 @@ Let's modify our frontend code to fetch and update the counter value using the r
 const API_URL = window.wing.env.API_URL;
 ```
 2. Then, lets use React hooks to update the counter data:
+- Add the import statement for  `useEffect`:
 ```ts
-function App() {
+import { useState, useEffect } from 'react';
+```
+- Add the code inside `function App`
+```ts
+// function App() {
 // ...
   const [count, setCount] = useState("NA")
   const incrementCount = async () => {
@@ -203,10 +208,7 @@ function App() {
     getCount();
 }, []);
 ```
-**Note:** To use `useEffect`, you need to import it from React as well:
-```ts
-import { useState, useEffect } from 'react';
-```
+
 3. Now, let's trigger the `incrementCount` function when the user clicks to increment the counter:
 ```ts
    <button onClick={incrementCount}>
