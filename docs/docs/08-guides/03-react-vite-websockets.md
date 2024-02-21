@@ -86,7 +86,7 @@ Open VScode / Intellij on the project directory.
  cd ~/shared-counter/backend
  npm i -s @winglibs/vite
  ```
-2.  Clear `backend/main.w` from existing code, and add the code to bring and instantiate Vite in `backend/main.w`:
+2.  Clear `backend/main.w` from existing code, and add the following code to bring and instantiate Vite in `backend/main.w`:
  ```ts
  bring vite;
  
