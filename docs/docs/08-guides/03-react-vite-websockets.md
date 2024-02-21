@@ -186,7 +186,7 @@ const API_URL = window.wing.env.API_URL;
 2. Then, lets use React hooks to update the counter data:
 ```ts
 function App() {
-  const API_URL = window.wing.env.API_URL;
+// ...
   const [count, setCount] = useState("NA")
   const incrementCount = async () => {
     const response = await fetch(`${API_URL}/counter`, {
