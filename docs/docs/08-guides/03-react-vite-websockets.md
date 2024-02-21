@@ -28,8 +28,8 @@ In this step, we will be creating our project by setting up two folders:
 
 1. Create the root project folder:
  ```sh
- mkdir /tmp/confjs-wing-react
- cd /tmp/confjs-wing-react
+ mkdir ~/shared-counter
+ cd ~/shared-counter
  ```
 2. Create a new React app using Vite under the frontend folder:
  ```sh
@@ -55,8 +55,8 @@ In this step, we will be creating our project by setting up two folders:
  ```
 2. Create a `backend` directory under the project root:
  ```sh
- mkdir /tmp/confjs-wing-react/backend
- cd /tmp/confjs-wing-react/backend
+ mkdir ~/shared-counter/backend
+ cd ~/shared-counter/backend
  ```
 3. Generate a new empty Wing project:
  ```sh
@@ -80,7 +80,7 @@ We will also pass information from the backend to the frontend.
 
 1. Install `@winglibs/vite`:
  ```sh
- cd /tmp/confjs-wing-react/backend
+ cd ~/shared-counter/backend
  npm i -s @winglibs/vite
  ```
 1. Bring and instantiate Vite in `backend/main.w`:
@@ -278,7 +278,7 @@ We will use the `tf-aws` platform to tell the compiler to bind all of our resour
 to the default set of AWS resources and use Terraform as the provisioning engine.
 
 ```sh
-cd /tmp/confjs-wing-react/backend
+cd ~/shared-counter/backend
 wing compile --platform tf-aws main.w
 ```
 
