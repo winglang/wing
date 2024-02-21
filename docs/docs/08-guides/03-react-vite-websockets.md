@@ -273,7 +273,7 @@ In order to deploy to AWS, you will need:
 [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 for more information.
 
-1.Compile to Terraform/AWS
+1. Compile to Terraform/AWS
 
 We will use the `tf-aws` platform to tell the compiler to bind all of our resources
 to the default set of AWS resources and use Terraform as the provisioning engine.
