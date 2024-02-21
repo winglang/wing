@@ -116,7 +116,7 @@ we would like to see how we can pass constant data from the backend to the front
 2. Notice that the React webpage now has `window.wing.env` containing this title. 
 You can verify it by opening javascript console under developer tools and running `console.log(window.wing.env);`
 4. Read `window.wing.env.title` in `frontend/src/App.tsx` by looking for `<h1>Vite + React</h1>` and replacing it with `<h1>{window.wing.env.title}</h1>`.
-5. Upon saving both the wing file and the TypeScript file, you should see the new title.
+5. Upon saving both the Wing file and the TypeScript file, you should see the new title.
 
 ## Step 3 - Connect the Counter
 
