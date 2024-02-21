@@ -13,7 +13,7 @@ The webpage will showcase a counter that can be incremented by clicking on it. T
 ## Prerequisites
 
 - Node.js v20 or later.
-- Wing has extended support for two IDEs. They provide syntax highlighting, completions, go-to-definition, etc. and embedded Wing Console support:
+- Wing supports two popular IDEs with syntax highlighting, completions, go-to-definition and an embedded Wing Console:
 
   - [VSCode](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) - Official extension
   - [IntelliJ](https://plugins.jetbrains.com/plugin/22353-wing) - Community extension
