@@ -76,7 +76,7 @@ In the previous step, we used `npm run dev` to start the local web server.
 In this step, we will install the `@winglibs/vite` package responsible for starting the dev server. 
 We will also pass information from the backend to the frontend.
 
-### Install and Use `@winglibs/vite`
+### Install and use `@winglibs/vite`
 
 1. Install `@winglibs/vite`:
  ```sh
