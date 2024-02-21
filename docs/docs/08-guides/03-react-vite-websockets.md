@@ -97,7 +97,7 @@ We will also pass information from the backend to the frontend.
  ```
 > You should have 2 web pages open: the browser and the Wing Console, showing the simulator.
 
-### Using `publicEnv` for Constant Data
+### Sending data to your Vite app using `publicEnv`
 
 Now that we have our backend instantiate the Vite resource, 
 we would like to see how we can pass constant data from the backend to the frontend.
