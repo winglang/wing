@@ -44,7 +44,7 @@ test "lift closure in complex collection" {
   // to make sure we don't lift the closure, but the entire collection
   let i = 0;
   let k = "k1";
-  let inner_set = complex.at(i).get("k1");
+  let inner_set = complex.at(i).get(k);
   for c in inner_set {
     c();
   }
