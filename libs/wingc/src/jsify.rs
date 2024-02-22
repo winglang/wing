@@ -917,17 +917,17 @@ impl<'a> JSifier<'a> {
 					let preflight_file_name = preflight_file_map.get(module_dir).unwrap();
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
-				BringSource::WingFile(name) => {
+				BringSource::WingFile(path) => {
 					// checked during type checking
 					let var_name = identifier.as_ref().expect("bring wing file requires an alias");
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					let preflight_file_name = preflight_file_map.get(path).unwrap();
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
-				BringSource::Directory(name) => {
+				BringSource::Directory(path) => {
 					// checked during type checking
 					let preflight_file_map = self.preflight_file_map.borrow();
-					let preflight_file_name = preflight_file_map.get(Utf8Path::new(&name.name)).unwrap();
+					let preflight_file_name = preflight_file_map.get(path).unwrap();
 					let var_name = identifier.as_ref().expect("bring wing directory requires an alias");
 					code.line(format!("const {var_name} = require(\"./{preflight_file_name}\");"))
 				}
