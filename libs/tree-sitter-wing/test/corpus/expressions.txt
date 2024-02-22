@@ -361,7 +361,7 @@ Set<num>[ 1, 2, 3 ];
 
 (source
   (expression_statement
-    (array_or_set_literal
+    (array_literal
       type: (immutable_container_type
         type_parameter: (builtin_type))
       element: (number)
@@ -419,12 +419,12 @@ Array<str>[];
 
 (source
   (expression_statement
-    (array_or_set_literal
+    (array_literal
       element: (number)
       element: (number)
       element: (number)))
   (expression_statement
-    (array_or_set_literal
+    (array_literal
       type: (immutable_container_type
         type_parameter: (builtin_type)))))
 
@@ -441,7 +441,7 @@ let a: Array<num> = [];
     name: (identifier)
     type: (immutable_container_type
       type_parameter: (builtin_type))
-    value: (array_or_set_literal)))
+    value: (array_literal)))
 
 ================================================================================
 Container Type Constructor Invocation

@@ -18,7 +18,7 @@ m4.clear();
 // ^^^^^ Unknown symbol "clear"
 
 
-let s1: Set<Array<num>> = MutSet<Array<num>> {[1]};
+let s1: Set<Array<num>> = MutSet<Array<num>>[[1]];
 //                        ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "Set<Array<num>>", but got "MutSet<Array<num>>" instead
 let s2 = Set<str> {"a", "b", "c"};
 s2.delete("a");
@@ -29,5 +29,5 @@ let s3 = s2.copy();
 //          ^^^^ Unknown symbol "copy"
 s2.clear();
 // ^^^^^ Unknown symbol "clear"
-let s4: Set<bool> = {[3]};
+let s4: Set<bool> = Set<bool>[[3]];
 //                  ^^^^^ Expected type to be "Set<bool>", but got "Set<Array<num>>" instead

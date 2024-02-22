@@ -2187,7 +2187,7 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
 				expression_span,
 			)),
-			"array_or_set_literal" => {
+			"array_literal" => {
 				let array_type = if let Some(type_node) = get_actual_child_by_field_name(*expression_node, "type") {
 					self.build_type_annotation(Some(type_node), phase).ok()
 				} else {

@@ -24,7 +24,7 @@ let m5 = {"a" => 1, "{1+1}" => 2, 1+1 => 3};
 let s1: Set<num> = [1, "2", 3];
 let s2 = Set<num> [1, "2", 3];
 let s3: Set<num> = [1, "2", 3];
-let s4 = Set<num>{1,2};
+let s4 = Set<num>[1,2];
 let s5: Set<str> = s4;
 s1.someRandomMethod();
 
@@ -38,10 +38,10 @@ let mm3 = mm2.copyMut();
 //            ^^^^^^^ Unknown symbol "copyMut"
 
 
-let ss1: MutSet<str> = Set{"c"};
+let ss1: MutSet<str> = Set["c"];
 //                        ^^^^^ Expected type to be "MutSet<str>", but got "Set<str>" instead
 let ss2: MutSet<num> = MutSet<num>[true];
 //                                  ^^^^ Expected type to be "num", but got "bool" instead
-let ss3 = MutSet<bool> {false, true};
+let ss3 = MutSet<bool> [false, true];
 let ss4 = ss3.copyMut();
 //            ^^^^^^^ Unknown symbol "copyMut"
