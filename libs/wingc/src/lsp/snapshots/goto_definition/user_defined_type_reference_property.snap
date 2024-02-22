@@ -4,7 +4,7 @@ source: libs/wingc/src/lsp/goto_definition.rs
 - originSelectionRange:
     start:
       line: 5
-      character: 0
+      character: 4
     end:
       line: 5
       character: 17

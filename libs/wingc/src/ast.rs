@@ -450,9 +450,9 @@ pub enum BringSource {
 	WingLibrary(Symbol, Utf8PathBuf),
 	JsiiModule(Symbol),
 	/// Refers to a relative path to a file
-	WingFile(Symbol),
+	WingFile(Utf8PathBuf),
 	/// Refers to a relative path to a directory
-	Directory(Symbol),
+	Directory(Utf8PathBuf),
 }
 
 #[derive(Debug)]

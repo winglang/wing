@@ -1,5 +1,7 @@
+import * as fs from "fs";
 import { Server } from "http";
-import { AddressInfo } from "net";
+import { AddressInfo, createServer } from "net";
+import { join } from "path";
 import express from "express";
 import { IEventPublisher } from "./event-mapping";
 import {
@@ -8,6 +10,7 @@ import {
   ApiSchema,
   EventSubscription,
 } from "./schema-resources";
+import { exists } from "./util";
 import {
   API_FQN,
   ApiRequest,
@@ -26,6 +29,18 @@ import { TraceType } from "../std";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
+const STATE_FILENAME = "state.json";
+
+/**
+ * Contents of the state file for this resource.
+ */
+interface StateFileContents {
+  /**
+   * The last port used by the API server on a previous simulator run.
+   */
+  readonly lastPort?: number;
+}
+
 interface ApiRouteWithFunctionHandle extends ApiRoute {
   functionHandle: string;
 }
@@ -38,6 +53,7 @@ export class Api
   private readonly app: express.Application;
   private server: Server | undefined;
   private url: string | undefined;
+  private port: number | undefined;
 
   constructor(props: ApiSchema["props"], context: ISimulatorContext) {
     props;
@@ -79,11 +95,22 @@ export class Api
   }
 
   public async init(): Promise<ApiAttributes> {
+    // Check for a previous state file to see if there was a port that was previously being used
+    // if so, try to use it out of convenience
+    let lastPort: number | undefined;
+    const state: StateFileContents = await this.loadState();
+    if (state.lastPort) {
+      const portAvailable = await isPortAvailable(state.lastPort);
+      if (portAvailable) {
+        lastPort = state.lastPort;
+      }
+    }
+
     // `server.address()` returns `null` until the server is listening
     // on a port. We use a promise to wait for the server to start
     // listening before returning the URL.
     const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
+      this.server = this.app.listen(lastPort ?? 0, LOCALHOST_ADDRESS, () => {
         const addr = this.server?.address();
         if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
           resolve(addr);
@@ -92,6 +119,7 @@ export class Api
         }
       });
     });
+    this.port = addrInfo.port;
     this.url = `http://${addrInfo.address}:${addrInfo.port}`;
 
     this.addTrace(`Server listening on ${this.url}`);
@@ -107,7 +135,31 @@ export class Api
     this.server?.closeAllConnections();
   }
 
-  public async save(): Promise<void> {}
+  public async save(): Promise<void> {
+    await this.saveState({ lastPort: this.port });
+  }
+
+  private async loadState(): Promise<StateFileContents> {
+    const stateFileExists = await exists(
+      join(this.context.statedir, STATE_FILENAME)
+    );
+    if (stateFileExists) {
+      const stateFileContents = await fs.promises.readFile(
+        join(this.context.statedir, STATE_FILENAME),
+        "utf-8"
+      );
+      return JSON.parse(stateFileContents);
+    } else {
+      return {};
+    }
+  }
+
+  private async saveState(state: StateFileContents): Promise<void> {
+    await fs.promises.writeFile(
+      join(this.context.statedir, STATE_FILENAME),
+      JSON.stringify(state)
+    );
+  }
 
   public async addEventSubscription(
     subscriber: string,
@@ -238,4 +290,23 @@ function asyncMiddleware(
   ) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
+}
+
+async function isPortAvailable(port: number): Promise<boolean> {
+  return new Promise((resolve, _reject) => {
+    let s = createServer();
+    s.once("error", (err) => {
+      s.close();
+      if ((err as any).code == "EADDRINUSE") {
+        resolve(false);
+      } else {
+        resolve(false);
+      }
+    });
+    s.once("listening", () => {
+      s.close();
+      resolve(true);
+    });
+    s.listen(port);
+  });
 }

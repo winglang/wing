@@ -15,6 +15,19 @@ import { IInflightHost, ILiftable, IHostedLiftable } from "../std";
 export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
 
 /**
+ * Inflight closures are liftable objects that have a single inflight
+ * method called "handle". This method contains the inflight code
+ * that will be executed by the inflight host.
+ */
+const INFLIGHT_CLOSURE_HANDLE_METHOD = "handle";
+
+
+/**
+ * The prefix used to name inflight closure object types.
+ */
+const INFLIGHT_CLOSURE_TYPE_PREFIX = "$Closure";
+
+/**
  * Creates a liftable type from a class or enum
  * @param type The type to lift, Should be a class or enum.
  * @param moduleSpec A module specifier that the type can be imported from. e.g. "aws-cdk-lib"
@@ -280,39 +293,28 @@ export function collectLifts(
       // We can't calculate what ops to put for the collection items (for
       // example, for cases where the items are resources) since the compiler
       // doesn't produce that information yet.
+
+      let items_to_explore: Iterable<any> = [];
       if (Array.isArray(obj)) {
-        for (const item of obj) {
-          if (!explored.has(item)) {
-            queue.push([item, []]);
-          }
-        }
+        items_to_explore = obj;
+      } else if (obj instanceof Set) {
+        items_to_explore = obj;
+      } else if (obj instanceof Map) {
+        items_to_explore = obj.values();
+      } else if (typeof obj === "object" && obj.constructor.name === "Object") {
+        items_to_explore = Object.values(obj);
       }
 
-      if (obj instanceof Set) {
-        for (const item of obj) {
-          if (!explored.has(item)) {
-            queue.push([item, []]);
+      for (const item of items_to_explore) {
+        if (!explored.has(item)) {
+          let item_ops: string[] = [];
+          // If the item is an inflight closure type then implicitly add the "handle" operation
+          if (isInflightClosureObject(item)) {
+            item_ops.push(INFLIGHT_CLOSURE_HANDLE_METHOD);
           }
+          queue.push([item, item_ops]);
         }
       }
-
-      if (obj instanceof Map) {
-        for (const value of obj.values()) {
-          if (!explored.has(value)) {
-            queue.push([value, []]);
-          }
-        }
-      }
-
-      // recurse over ordinary objects
-      if (typeof obj === "object" && obj.constructor.name === "Object") {
-        for (const value of Object.values(obj)) {
-          if (!explored.has(value)) {
-            queue.push([value, []]);
-          }
-        }
-      }
-
       continue;
     }
 
@@ -350,6 +352,18 @@ export function collectLifts(
   }
 
   return explored;
+}
+
+/**
+ * Returns whether the given item is an inflight closure object.
+ */
+function isInflightClosureObject(item: any): boolean {
+  return typeof item === "object" &&
+    typeof item.constructor === "function" &&
+    typeof item.constructor.name === "string" &&
+    item.constructor.name.startsWith(INFLIGHT_CLOSURE_TYPE_PREFIX) &&
+    item._liftMap !== undefined &&
+    item._liftMap[INFLIGHT_CLOSURE_HANDLE_METHOD] !== undefined
 }
 
 /**
