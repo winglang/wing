@@ -1,16 +1,14 @@
 import * as cloud from "../cloud";
 
 /**
- * DEFAULT_RESPONSE is a constant that defines the default response when a request occurs.
+ * `API_DEFAULT_RESPONSE` is a constant that defines the default response when a request occurs.
  * It is used to handle all requests that do not match any defined routes in the API Gateway.
  * The response is a mock integration type, which means it returns a mocked response without
- * forwarding the request to any backend. The response status code is set to 200 for OPTIONS
- * and 404 for any other method. The Content-Type header is set to 'application/json'.
+ * forwarding the request to any backend. The response status code is set to 204 for OPTIONS
+ * and 404 for any other HTTP method. The Content-Type header is set to `application/json`.
  * @internal
  */
-export const API_CORS_DEFAULT_RESPONSE = (
-  corsOptions?: cloud.ApiCorsOptions
-) => {
+export const API_DEFAULT_RESPONSE = (corsOptions?: cloud.ApiCorsOptions) => {
   if (corsOptions) {
     return {
       "/{proxy+}": {
