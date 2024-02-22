@@ -307,12 +307,12 @@ export function collectLifts(
 
       for (const item of items_to_explore) {
         if (!explored.has(item)) {
-          let ops: string[] = [];
+          let item_ops: string[] = [];
           // If the item is an inflight closure type then implicitly add the "handle" operation
           if (isInflightClosureObject(item)) {
-            ops.push(INFLIGHT_CLOSURE_HANDLE_METHOD);
+            item_ops.push(INFLIGHT_CLOSURE_HANDLE_METHOD);
           }
-          queue.push([item, ops]);
+          queue.push([item, item_ops]);
         }
       }
       continue;
