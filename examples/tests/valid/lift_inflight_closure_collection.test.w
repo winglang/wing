@@ -57,7 +57,7 @@ let f4 = new cloud.Function(inflight () => {
   // to make sure we don't lift the closure, but the entire collection
   let i = 0;
   let k = "k1";
-  for c in complex.at(0).get(k) {
+  for c in complex.at(i).get(k) {
     c();
   }
 }) as "f4";
