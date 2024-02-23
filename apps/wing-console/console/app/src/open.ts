@@ -8,7 +8,7 @@
  *
  */
 
-import { ExecOptions, exec } from "node:child_process";
+import { type ExecFileOptions, execFile } from "node:child_process";
 
 import spawn from "cross-spawn";
 import open from "open";
@@ -121,9 +121,9 @@ async function startBrowserProcess(
   }
 }
 
-function execAsync(command: string, options: ExecOptions) {
+function execAsync(command: string, options: ExecFileOptions) {
   return new Promise<string>((resolve, reject) => {
-    exec(command, options, (error, stdout) => {
+    execFile(command, options, (error, stdout) => {
       if (error) {
         reject(error);
       } else {

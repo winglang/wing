@@ -1,11 +1,12 @@
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
-import react from "@vitejs/plugin-react";
 import { createConsoleServer } from "@wingconsole/server";
 import { createServer as createViteServer } from "vite";
 
 import { openBrowser } from "../src/open.js";
+
+import { viteConfig } from "./config.js";
 
 const options = parseArgs({
   options: {
@@ -44,12 +45,7 @@ const options = parseArgs({
   });
 
   const vite = await createViteServer({
-    configFile: false,
-    root: fileURLToPath(new URL("../web", import.meta.url)),
-    plugins: [react()],
-    build: {
-      outDir: fileURLToPath(new URL("../dist/vite", import.meta.url)),
-    },
+    ...viteConfig,
     server: {
       proxy: {
         "/trpc": {

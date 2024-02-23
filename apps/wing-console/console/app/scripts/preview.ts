@@ -23,8 +23,8 @@ const options = parseArgs({
         openBrowser(url);
       },
     },
+    open: true,
   });
-  openBrowser(`http://localhost:${port}`);
 })().catch((error) => {
   console.error(error);
   // eslint-disable-next-line unicorn/no-process-exit

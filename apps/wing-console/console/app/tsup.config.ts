@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 import * as vite from "vite";
 
-import { viteConfig } from "./scripts/config.mjs";
+import { viteConfig } from "./scripts/config.js";
 
 export default defineConfig({
   entry: ["src/index.ts"],
