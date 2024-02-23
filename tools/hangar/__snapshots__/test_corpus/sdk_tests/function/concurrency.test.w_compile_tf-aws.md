@@ -1,4 +1,4 @@
-# [invoke_async.test.w](../../../../../../examples/tests/sdk_tests/function/invoke_async.test.w) | compile | tf-aws
+# [concurrency.test.w](../../../../../../examples/tests/sdk_tests/function/concurrency.test.w) | compile | tf-aws
 
 ## main.tf.json
 ```json
@@ -18,14 +18,14 @@
   },
   "resource": {
     "aws_cloudwatch_log_group": {
-      "cloudFunction_CloudwatchLogGroup_7399B890": {
+      "concurrencyfn_CloudwatchLogGroup_E1F504F7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/CloudwatchLogGroup",
-            "uniqueId": "cloudFunction_CloudwatchLogGroup_7399B890"
+            "path": "root/Default/Default/concurrency fn/CloudwatchLogGroup",
+            "uniqueId": "concurrencyfn_CloudwatchLogGroup_E1F504F7"
           }
         },
-        "name": "/aws/lambda/cloud-Function-c8d2eca1",
+        "name": "/aws/lambda/concurrency-fn-c8670436",
         "retention_in_days": 30
       }
     },
@@ -49,46 +49,46 @@
       }
     },
     "aws_iam_role": {
-      "cloudFunction_IamRole_5A4430DC": {
+      "concurrencyfn_IamRole_AECD4E1A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRole",
-            "uniqueId": "cloudFunction_IamRole_5A4430DC"
+            "path": "root/Default/Default/concurrency fn/IamRole",
+            "uniqueId": "concurrencyfn_IamRole_AECD4E1A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudFunction_IamRolePolicy_618BF987": {
+      "concurrencyfn_IamRolePolicy_89F79FD0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRolePolicy",
-            "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
+            "path": "root/Default/Default/concurrency fn/IamRolePolicy",
+            "uniqueId": "concurrencyfn_IamRolePolicy_89F79FD0"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+        "role": "${aws_iam_role.concurrencyfn_IamRole_AECD4E1A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudFunction_IamRolePolicyAttachment_288B9653": {
+      "concurrencyfn_IamRolePolicyAttachment_39D6A8D1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
-            "uniqueId": "cloudFunction_IamRolePolicyAttachment_288B9653"
+            "path": "root/Default/Default/concurrency fn/IamRolePolicyAttachment",
+            "uniqueId": "concurrencyfn_IamRolePolicyAttachment_39D6A8D1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+        "role": "${aws_iam_role.concurrencyfn_IamRole_AECD4E1A.name}"
       }
     },
     "aws_lambda_function": {
-      "cloudFunction": {
+      "concurrencyfn": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/Default",
-            "uniqueId": "cloudFunction"
+            "path": "root/Default/Default/concurrency fn/Default",
+            "uniqueId": "concurrencyfn"
           }
         },
         "architectures": [
@@ -98,19 +98,19 @@
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+            "WING_FUNCTION_NAME": "concurrency-fn-c8670436",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Function-c8d2eca1",
+        "function_name": "concurrency-fn-c8670436",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "reserved_concurrent_executions": 10,
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
+        "reserved_concurrent_executions": 1,
+        "role": "${aws_iam_role.concurrencyfn_IamRole_AECD4E1A.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
+        "s3_key": "${aws_s3_object.concurrencyfn_S3Object_13B83696.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -127,14 +127,24 @@
           }
         },
         "bucket_prefix": "code-c84a50b1-"
+      },
+      "cloudBucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
       }
     },
     "aws_s3_object": {
-      "cloudFunction_S3Object_71908BAD": {
+      "concurrencyfn_S3Object_13B83696": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/S3Object",
-            "uniqueId": "cloudFunction_S3Object_71908BAD"
+            "path": "root/Default/Default/concurrency fn/S3Object",
+            "uniqueId": "concurrencyfn_S3Object_13B83696"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
