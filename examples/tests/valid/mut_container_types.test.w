@@ -17,9 +17,9 @@ assert(arr1.length == 4);
 assert(arr4.at(0) == "a");
 
 //Set tests
-let s1 = MutSet<num>{1, 2, 3, 3};
-let s2: MutSet<str> = MutSet<str>{"hello", "world", "hello"};
-let s3 = MutSet<cloud.Bucket>{bucket1, bucket2, bucket2};
+let s1 = MutSet<num>[1, 2, 3, 3];
+let s2: MutSet<str> = MutSet<str>["hello", "world", "hello"];
+let s3 = MutSet<cloud.Bucket>[bucket1, bucket2, bucket2];
 s1.add(5);
 s2.add("bye");
 s3.add(bucket3);
@@ -48,4 +48,3 @@ m2.clear();
 assert(m2.size() == 0);
 assert(m1.get("hello") == "goodbye");
 assert(m6.get("a").get("foo") == "bar");
-
