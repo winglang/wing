@@ -1083,14 +1083,7 @@ Duration <DURATION>"
 `;
 
 exports[`container_types.test.w 1`] = `
-"error: Unexpected 'number'
-  --> ../../../examples/tests/invalid/container_types.test.w:3:24
-  |
-3 | let arr2 = Array<num> {1, 2, 3};
-  |                        ^ Unexpected 'number'
-
-
-error: Unknown parser error
+"error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.test.w:14:25
    |
 14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
@@ -1123,13 +1116,6 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |
 2 | let arr1: Array<num> = [1, \\"2\\", 3];
   |                            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
-error: Expected \\"Map\\" or \\"MutMap\\", found \\"Array<num>\\"
-  --> ../../../examples/tests/invalid/container_types.test.w:3:12
-  |
-3 | let arr2 = Array<num> {1, 2, 3};
-  |            ^^^^^^^^^^ Expected \\"Map\\" or \\"MutMap\\", found \\"Array<num>\\"
 
 
 error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
@@ -1802,28 +1788,7 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:23:20
-   |
-23 | let s2 = Set<str> {\\"a\\", \\"b\\", \\"c\\"};
-   |                    ^^^ Unexpected 'string'
-
-
-error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:23:25
-   |
-23 | let s2 = Set<str> {\\"a\\", \\"b\\", \\"c\\"};
-   |                         ^^^ Unexpected 'string'
-
-
-error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:23:30
-   |
-23 | let s2 = Set<str> {\\"a\\", \\"b\\", \\"c\\"};
-   |                              ^^^ Unexpected 'string'
-
-
-error: Unknown symbol \\"set\\"
+"error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
@@ -1877,13 +1842,6 @@ error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\
    |
 21 | let s1: Set<Array<num>> = MutSet<Array<num>>[[1]];
    |                           ^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
-
-
-error: Expected \\"Map\\" or \\"MutMap\\", found \\"Set<str>\\"
-   --> ../../../examples/tests/invalid/immutable_container_types.test.w:23:10
-   |
-23 | let s2 = Set<str> {\\"a\\", \\"b\\", \\"c\\"};
-   |          ^^^^^^^^ Expected \\"Map\\" or \\"MutMap\\", found \\"Set<str>\\"
 
 
 error: Unknown symbol \\"delete\\"

@@ -20,7 +20,7 @@ m4.clear();
 
 let s1: Set<Array<num>> = MutSet<Array<num>>[[1]];
 //                        ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "Set<Array<num>>", but got "MutSet<Array<num>>" instead
-let s2 = Set<str> {"a", "b", "c"};
+let s2 = Set<str> ["a", "b", "c"];
 s2.delete("a");
 // ^^^^^^ Unknown symbol "delete"
 s2.add("d");
