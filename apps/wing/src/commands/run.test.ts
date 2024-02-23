@@ -3,11 +3,8 @@ import { mkdtemp } from "fs/promises";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 import { createConsoleApp } from "@wingconsole/app";
-import open from "open";
 import { vi, test, expect } from "vitest";
 import { run } from "./run";
-
-vi.mock("open");
 
 vi.mock("@wingconsole/app", () => {
   return {
@@ -34,9 +31,8 @@ test("wing it runs the only entrypoint file named main.w", async () => {
       requestedPort: 3000,
       hostUtils: expect.anything(),
       requireAcceptTerms: expect.anything(),
-      open: expect.anything(),
+      open: true,
     });
-    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -56,9 +52,8 @@ test("wing it runs the only entrypoint file ending with .main.w", async () => {
       requestedPort: 3000,
       hostUtils: expect.anything(),
       requireAcceptTerms: expect.anything(),
-      open: expect.anything(),
+      open: true,
     });
-    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -130,9 +125,8 @@ test("wing it with a nested file runs", async () => {
       requestedPort: 3000,
       hostUtils: expect.anything(),
       requireAcceptTerms: expect.anything(),
-      open: expect.anything(),
+      open: true,
     });
-    expect(open).toBeCalledWith("http://localhost:3000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -166,9 +160,8 @@ test("wing it with a custom port runs", async () => {
       requestedPort: 5000,
       hostUtils: expect.anything(),
       requireAcceptTerms: expect.anything(),
-      open: expect.anything(),
+      open: true,
     });
-    expect(open).toBeCalledWith("http://localhost:5000/");
   } finally {
     process.chdir(prevdir);
   }
@@ -223,9 +216,8 @@ test("wing it with a custom platform runs", async () => {
       hostUtils: expect.anything(),
       platform: ["sim", "anyPlatform"],
       requireAcceptTerms: expect.anything(),
-      open: expect.anything(),
+      open: true,
     });
-    expect(open).toBeCalledWith("http://localhost:5000/");
   } finally {
     process.chdir(prevdir);
   }
