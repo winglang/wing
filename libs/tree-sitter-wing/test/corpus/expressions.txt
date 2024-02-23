@@ -175,9 +175,9 @@ New expression with id and scope on different lines
 ================================================================================
 
 new A()
-  as 
-  "b" 
-  in 
+  as
+  "b"
+  in
   c;
 
 --------------------------------------------------------------------------------
@@ -355,18 +355,13 @@ tryGet()!;
 Set Literal
 ================================================================================
 
-{1, 2, 3};
-Set<num> { 1, 2, 3 };
+Set<num>[ 1, 2, 3 ];
+
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (set_literal
-      element: (number)
-      element: (number)
-      element: (number)))
-  (expression_statement
-    (set_literal
+    (array_literal
       type: (immutable_container_type
         type_parameter: (builtin_type))
       element: (number)
@@ -390,9 +385,9 @@ Empty Json Map Literal
 Map Literal
 ================================================================================
 
-{ 
-  "a" => 1, 
-  "b" => 2, 
+{
+  "a" => 1,
+  "b" => 2,
   str_func() => 3,
 };
 
