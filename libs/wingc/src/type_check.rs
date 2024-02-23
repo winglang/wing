@@ -5750,6 +5750,10 @@ impl<'a> TypeChecker<'a> {
 			} else {
 				var.clone()
 			}
+		} else if let LookupResult::NotFound(property) = lookup_res {
+			self
+				.spanned_error_with_var(&property, format!("Property \"{property}\" does not exist"))
+				.0
 		} else {
 			self.type_error(lookup_result_to_type_error(lookup_res, property));
 			self.make_error_variable_info()
