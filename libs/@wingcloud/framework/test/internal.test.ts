@@ -31,7 +31,7 @@ describe("compile", async () => {
           },
           {
             // The typescript compiler is quite slow, especially in CI
-            timeout: 30000,
+            timeout: 60000,
           }
         );
       }
