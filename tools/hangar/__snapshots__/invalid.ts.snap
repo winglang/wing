@@ -2780,13 +2780,6 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"MutSet<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.test.w:12:23
-   |
-12 | let s3: MutSet<num> = [1, 1, 3]; // https://github.com/winglang/wing/issues/1117
-   |                       ^^^^^^^^^ Expected type to be \\"MutSet<num>\\", but got \\"Array<num>\\" instead
-
-
 error: Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
    --> ../../../examples/tests/invalid/mut_container_types.test.w:14:23
    |
