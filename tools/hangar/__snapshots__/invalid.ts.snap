@@ -389,18 +389,18 @@ error: Cannot access static property \\"m\\" from instance
    |     ^ Cannot access static property \\"m\\" from instance
 
 
-error: Unknown symbol \\"instanceField\\"
+error: Property \\"instanceField\\" does not exist
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:7:10
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |          ^^^^^^^^^^^^^ Unknown symbol \\"instanceField\\"
+  |          ^^^^^^^^^^^^^ Property \\"instanceField\\" does not exist
 
 
-error: Unknown symbol \\"f\\"
+error: Property \\"f\\" does not exist
   --> ../../../examples/tests/invalid/access_static_from_instance.test.w:8:10
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
-  |          ^ Unknown symbol \\"f\\"
+  |          ^ Property \\"f\\" does not exist
 
 
  
@@ -1132,11 +1132,11 @@ error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   |                        ^^^^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Property \\"someRandomMethod\\" does not exist
   --> ../../../examples/tests/invalid/container_types.test.w:6:6
   |
 6 | arr1.someRandomMethod();
-  |      ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+  |      ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" does not exist
 
 
 error: Expected type to be \\"num\\", but got \\"num?\\" instead
@@ -1167,11 +1167,11 @@ error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
    |                    ^^ Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Property \\"someRandomMethod\\" does not exist
    --> ../../../examples/tests/invalid/container_types.test.w:17:4
    |
 17 | m1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+   |    ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" does not exist
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -1216,11 +1216,11 @@ error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
-error: Unknown symbol \\"someRandomMethod\\"
+error: Property \\"someRandomMethod\\" does not exist
    --> ../../../examples/tests/invalid/container_types.test.w:29:4
    |
 29 | s1.someRandomMethod();
-   |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
+   |    ^^^^^^^^^^^^^^^^ Property \\"someRandomMethod\\" does not exist
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
@@ -1237,11 +1237,11 @@ error: Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<num>\\" instead
 
 
-error: Unknown symbol \\"copyMut\\"
+error: Property \\"copyMut\\" does not exist
    --> ../../../examples/tests/invalid/container_types.test.w:37:15
    |
 37 | let mm3 = mm2.copyMut();
-   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+   |               ^^^^^^^ Property \\"copyMut\\" does not exist
 
 
 error: Expected type to be \\"MutSet<str>\\", but got \\"Set<str>\\" instead
@@ -1258,11 +1258,11 @@ error: Expected type to be \\"num\\", but got \\"bool\\" instead
    |                                     ^^^^ Expected type to be \\"num\\", but got \\"bool\\" instead
 
 
-error: Unknown symbol \\"copyMut\\"
+error: Property \\"copyMut\\" does not exist
    --> ../../../examples/tests/invalid/container_types.test.w:46:15
    |
 46 | let ss4 = ss3.copyMut();
-   |               ^^^^^^^ Unknown symbol \\"copyMut\\"
+   |               ^^^^^^^ Property \\"copyMut\\" does not exist
 
 
  
@@ -1788,11 +1788,11 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.test.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"error: Property \\"set\\" does not exist
   --> ../../../examples/tests/invalid/immutable_container_types.test.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
-  |    ^^^ Unknown symbol \\"set\\"
+  |    ^^^ Property \\"set\\" does not exist
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"MutMap<str>\\" instead
@@ -1809,32 +1809,32 @@ error: Expected type to be \\"bool\\", but got \\"str\\" instead
   |                             ^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
-error: Unknown symbol \\"set\\"
+error: Property \\"set\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:11:4
    |
 11 | m4.set(\\"2\\", 3);
-   |    ^^^ Unknown symbol \\"set\\"
+   |    ^^^ Property \\"set\\" does not exist
 
 
-error: Unknown symbol \\"copy\\"
+error: Property \\"copy\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:13:13
    |
 13 | let m5 = m4.copy();
-   |             ^^^^ Unknown symbol \\"copy\\"
+   |             ^^^^ Property \\"copy\\" does not exist
 
 
-error: Unknown symbol \\"delete\\"
+error: Property \\"delete\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:15:4
    |
 15 | m4.delete(\\"1\\");
-   |    ^^^^^^ Unknown symbol \\"delete\\"
+   |    ^^^^^^ Property \\"delete\\" does not exist
 
 
-error: Unknown symbol \\"clear\\"
+error: Property \\"clear\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:17:4
    |
 17 | m4.clear();
-   |    ^^^^^ Unknown symbol \\"clear\\"
+   |    ^^^^^ Property \\"clear\\" does not exist
 
 
 error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
@@ -1844,32 +1844,32 @@ error: Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\
    |                           ^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Set<Array<num>>\\", but got \\"MutSet<Array<num>>\\" instead
 
 
-error: Unknown symbol \\"delete\\"
+error: Property \\"delete\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:24:4
    |
 24 | s2.delete(\\"a\\");
-   |    ^^^^^^ Unknown symbol \\"delete\\"
+   |    ^^^^^^ Property \\"delete\\" does not exist
 
 
-error: Unknown symbol \\"add\\"
+error: Property \\"add\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:26:4
    |
 26 | s2.add(\\"d\\");
-   |    ^^^ Unknown symbol \\"add\\"
+   |    ^^^ Property \\"add\\" does not exist
 
 
-error: Unknown symbol \\"copy\\"
+error: Property \\"copy\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:28:13
    |
 28 | let s3 = s2.copy();
-   |             ^^^^ Unknown symbol \\"copy\\"
+   |             ^^^^ Property \\"copy\\" does not exist
 
 
-error: Unknown symbol \\"clear\\"
+error: Property \\"clear\\" does not exist
    --> ../../../examples/tests/invalid/immutable_container_types.test.w:30:4
    |
 30 | s2.clear();
-   |    ^^^^^ Unknown symbol \\"clear\\"
+   |    ^^^^^ Property \\"clear\\" does not exist
 
 
 error: Expected type to be \\"Set<bool>\\", but got \\"Set<Array<num>>\\" instead
@@ -2486,11 +2486,11 @@ error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
    |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
-error: Unknown symbol \\"set\\"
+error: Property \\"set\\" does not exist
    --> ../../../examples/tests/invalid/json.test.w:19:13
    |
 19 | foreverJson.set(\\"a\\", \\"world!\\");
-   |             ^^^ Unknown symbol \\"set\\"
+   |             ^^^ Property \\"set\\" does not exist
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
@@ -2601,11 +2601,11 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.test.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"error: Property \\"set\\" does not exist
   --> ../../../examples/tests/invalid/json_static.test.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
-  |          ^^^ Unknown symbol \\"set\\"
+  |          ^^^ Property \\"set\\" does not exist
 
 
  
@@ -2706,11 +2706,11 @@ error: Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" inst
   |                           ^^^^ Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" instead
 
 
-error: Unknown symbol \\"someMethod\\"
+error: Property \\"someMethod\\" does not exist
   --> ../../../examples/tests/invalid/mut_container_types.test.w:7:6
   |
 7 | arr1.someMethod();
-  |      ^^^^^^^^^^ Unknown symbol \\"someMethod\\"
+  |      ^^^^^^^^^^ Property \\"someMethod\\" does not exist
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -2741,11 +2741,11 @@ error: Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
    |                       ^^ Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
 
 
-error: Unknown symbol \\"someMethod\\"
+error: Property \\"someMethod\\" does not exist
    --> ../../../examples/tests/invalid/mut_container_types.test.w:15:4
    |
 15 | s3.someMethod();
-   |    ^^^^^^^^^^ Unknown symbol \\"someMethod\\"
+   |    ^^^^^^^^^^ Property \\"someMethod\\" does not exist
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -3078,18 +3078,18 @@ exports[`primitives.test.w 1`] = `
   |     ^^^^ Unexpected reference \\"structured_access_expression\\"
 
 
-error: Unknown symbol \\"blabla\\"
+error: Property \\"blabla\\" does not exist
   --> ../../../examples/tests/invalid/primitives.test.w:9:16
   |
 9 | let join = arr.blabla(\\",\\");
-  |                ^^^^^^ Unknown symbol \\"blabla\\"
+  |                ^^^^^^ Property \\"blabla\\" does not exist
 
 
-error: Unknown symbol \\"push\\"
+error: Property \\"push\\" does not exist
    --> ../../../examples/tests/invalid/primitives.test.w:11:5
    |
 11 | arr.push(4);
-   |     ^^^^ Unknown symbol \\"push\\"
+   |     ^^^^ Property \\"push\\" does not exist
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
@@ -3730,11 +3730,11 @@ error: Struct fields must have immutable types
    |   ^ Struct fields must have immutable types
 
 
-error: Unknown symbol \\"badField\\"
+error: Property \\"badField\\" does not exist
    --> ../../../examples/tests/invalid/structs.test.w:32:7
    |
 32 | log(a.badField);
-   |       ^^^^^^^^ Unknown symbol \\"badField\\"
+   |       ^^^^^^^^ Property \\"badField\\" does not exist
 
 
 error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != str)
@@ -3963,11 +3963,11 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.test.w 1`] = `
-"error: Unknown symbol \\"a\\"
+"error: Property \\"a\\" does not exist
   --> ../../../examples/tests/invalid/unknown_field.test.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
-  |            ^ Unknown symbol \\"a\\"
+  |            ^ Property \\"a\\" does not exist
 
 
  
@@ -4042,18 +4042,18 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'
    |                        ^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
 
 
-error: Unknown symbol \\"assert\\"
+error: Property \\"assert\\" does not exist
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:20:17
    |
 20 |     this.bucket.assert(2 + \\"2\\");
-   |                 ^^^^^^ Unknown symbol \\"assert\\"
+   |                 ^^^^^^ Property \\"assert\\" does not exist
 
 
-error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
+error: Property \\"methodWhichIsNotPartOfBucketApi\\" does not exist
    --> ../../../examples/tests/invalid/unknown_symbol.test.w:23:24
    |
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
-   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Property \\"methodWhichIsNotPartOfBucketApi\\" does not exist
 
 
  
