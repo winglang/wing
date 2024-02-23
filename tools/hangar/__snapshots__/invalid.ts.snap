@@ -1084,10 +1084,24 @@ Duration <DURATION>"
 
 exports[`container_types.test.w 1`] = `
 "error: Unexpected 'number'
-  --> ../../../examples/tests/invalid/container_types.test.w:3:24
+  --> ../../../examples/tests/invalid/container_types.test.w:3:30
   |
-3 | let arr2 = Array<num> {1, 2, 3};
-  |                        ^ Unexpected 'number'
+3 | let arr2 = Array<num> [1, 2, 3};
+  |                              ^ Unexpected 'number'
+
+
+error: Unexpected 'reference'
+  --> ../../../examples/tests/invalid/container_types.test.w:4:5
+  |
+4 | let arr3 = Array<str>[\\"hello\\"];
+  |     ^^^^ Unexpected 'reference'
+
+
+error: Expected ']'
+  --> ../../../examples/tests/invalid/container_types.test.w:4:31
+  |
+4 | let arr3 = Array<str>[\\"hello\\"];
+  |                               ^ Expected ']'
 
 
 error: Unknown parser error
@@ -1125,18 +1139,18 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |                            ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"Map\\" or \\"MutMap\\", found \\"Array<num>\\"
-  --> ../../../examples/tests/invalid/container_types.test.w:3:12
+error: Expected type to be \\"num\\", but got \\"Array<str>\\" instead
+  --> ../../../examples/tests/invalid/container_types.test.w:4:12
   |
-3 | let arr2 = Array<num> {1, 2, 3};
-  |            ^^^^^^^^^^ Expected \\"Map\\" or \\"MutMap\\", found \\"Array<num>\\"
+4 | let arr3 = Array<str>[\\"hello\\"];
+  |            ^^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"Array<str>\\" instead
 
 
-error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+error: Unknown symbol \\"arr3\\"
   --> ../../../examples/tests/invalid/container_types.test.w:5:24
   |
 5 | let arr4: Array<num> = arr3;
-  |                        ^^^^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+  |                        ^^^^ Unknown symbol \\"arr3\\"
 
 
 error: Unknown symbol \\"someRandomMethod\\"
