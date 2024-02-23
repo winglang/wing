@@ -74,7 +74,7 @@ const useSignIn = () => {
 
   const signInWithGithub = useCallback(async () => {
     await reportSignInClicked();
-    const url = new URL(wingCloudSignInUrl!);
+    const url = new URL(githubSignInURL!);
     url.searchParams.append("port", location.port);
     url.searchParams.append("anonymousId", `${analytics.data?.anonymousId}`);
     location.href = url.toString();
@@ -120,7 +120,7 @@ export interface SignInModalProps {}
 
 export const SignInModal = (props: SignInModalProps) => {
   const { theme } = useTheme();
-  const signIn = useSignIn();
+  const { signInWithGithub, signInWithGoogle } = useSignIn();
   const signInRequired = useSignInRequired();
   useNotifyAfterSigningIn();
   const [isLoading, setIsLoading] = useState(false);
@@ -142,7 +142,7 @@ export const SignInModal = (props: SignInModalProps) => {
           Wing CLI.
         </p>
 
-        <div className="flex justify-around py-3">
+        <div className="flex justify-around">
           <div className="flex flex-col gap-2.5">
             <Button
               disabled={isLoading}
@@ -182,6 +182,7 @@ export const SignInModal = (props: SignInModalProps) => {
             <Link href={TERMS_AND_CONDITIONS_URL} target="_blank">
               Terms and Conditions
             </Link>
+            .
           </p>
         </div>
       </div>
