@@ -1,6 +1,5 @@
 //Array tests
 let arr1 = MutArray<num>[1, "2", 3];
-let arr2 = MutArray<num>{1, 2, 3};
 let arr3: MutArray<num> = [1, 2, 3]; // https://github.com/winglang/wing/issues/1117
 let arr4 = MutArray<str>["a","b"];
 let arr5: MutArray<num> = arr4;
