@@ -29,7 +29,7 @@ bring cloud;
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (message) => {
-  log("Hello, ${message}!");
+  log("Hello, {message}!");
 });
 ```
 
@@ -41,13 +41,13 @@ The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://gith
 
 ```ts
 import { Construct } from "constructs";
-import * as sdk from "@winglang/sdk";
+import { cloud } from "@winglang/sdk";
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    let bucket = new sdk.cloud.Bucket(this, "bucket", {
+    let bucket = new cloud.Bucket(this, "bucket", {
       public: true,
     });
   }
