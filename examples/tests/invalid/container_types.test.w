@@ -1,6 +1,6 @@
 //Array tests
 let arr1: Array<num> = [1, "2", 3];
-let arr2 = Array<num> {1, 2, 3};
+let arr2 = Array<num> [1, 2, 3};
 let arr3 = Array<str>["hello"];
 let arr4: Array<num> = arr3;
 arr1.someRandomMethod();
