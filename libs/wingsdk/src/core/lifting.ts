@@ -21,7 +21,6 @@ export const INFLIGHT_INIT_METHOD_NAME = "$inflight_init";
  */
 const INFLIGHT_CLOSURE_HANDLE_METHOD = "handle";
 
-
 /**
  * The prefix used to name inflight closure object types.
  */
@@ -358,12 +357,14 @@ export function collectLifts(
  * Returns whether the given item is an inflight closure object.
  */
 function isInflightClosureObject(item: any): boolean {
-  return typeof item === "object" &&
+  return (
+    typeof item === "object" &&
     typeof item.constructor === "function" &&
     typeof item.constructor.name === "string" &&
     item.constructor.name.startsWith(INFLIGHT_CLOSURE_TYPE_PREFIX) &&
     item._liftMap !== undefined &&
     item._liftMap[INFLIGHT_CLOSURE_HANDLE_METHOD] !== undefined
+  );
 }
 
 /**
