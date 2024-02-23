@@ -5,6 +5,11 @@ describe("env", () => {
   test("env", () => {
     expect(Util.env("NODE_ENV")).toBe("test");
   });
+
+  test("setEnv", () => {
+    Util.setEnv("FOO", "bar");
+    expect(Util.env("FOO")).toBe("bar");
+  });
 });
 
 describe("ulid", () => {
