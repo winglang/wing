@@ -123,7 +123,13 @@ export const SignInModal = (props: SignInModalProps) => {
   const { signInWithGithub, signInWithGoogle } = useSignIn();
   const signInRequired = useSignInRequired();
   useNotifyAfterSigningIn();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [githubIsLoading, setGithubIsLoading] = useState(false);
+  const [googleIsLoading, setGoogleIsLoading] = useState(false);
+
+  const isLoading = useMemo(() => {
+    return githubIsLoading || googleIsLoading;
+  }, [githubIsLoading, googleIsLoading]);
 
   return (
     <Modal visible={signInRequired}>
@@ -147,12 +153,12 @@ export const SignInModal = (props: SignInModalProps) => {
             <Button
               disabled={isLoading}
               onClick={() => {
-                setIsLoading(true);
+                setGithubIsLoading(true);
                 void signInWithGithub();
               }}
             >
-              {isLoading ? (
-                <Loader size="xs" className={"mr-1"} />
+              {githubIsLoading ? (
+                <Loader size="xs" />
               ) : (
                 <GithubIcon className="w-4 h-4" />
               )}
@@ -162,12 +168,12 @@ export const SignInModal = (props: SignInModalProps) => {
             <Button
               disabled={isLoading}
               onClick={() => {
-                setIsLoading(true);
+                setGoogleIsLoading(true);
                 void signInWithGoogle();
               }}
             >
-              {isLoading ? (
-                <Loader size="xs" className={"mr-1"} />
+              {googleIsLoading ? (
+                <Loader size="xs" />
               ) : (
                 <GoogleIcon className="w-4 h-4" />
               )}
