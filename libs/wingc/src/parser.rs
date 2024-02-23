@@ -948,10 +948,7 @@ impl<'s> Parser<'s> {
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
 					Ok(StmtKind::Bring {
-						source: BringSource::WingFile(Symbol {
-							name: source_path.to_string(),
-							span: module_name.span,
-						}),
+						source: BringSource::WingFile(source_path),
 						identifier: Some(alias),
 					})
 				} else {
@@ -973,10 +970,7 @@ impl<'s> Parser<'s> {
 				// parse error if no alias is provided
 				let module = if let Some(alias) = alias {
 					Ok(StmtKind::Bring {
-						source: BringSource::Directory(Symbol {
-							name: source_path.to_string(),
-							span: module_name.span,
-						}),
+						source: BringSource::Directory(source_path),
 						identifier: Some(alias),
 					})
 				} else {
