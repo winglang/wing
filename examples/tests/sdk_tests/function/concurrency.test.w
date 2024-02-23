@@ -14,3 +14,4 @@ test "function with concurrency can be invoked" {
     f1.invoke("");
     assert(c.peek() == 1);
   }
+  
