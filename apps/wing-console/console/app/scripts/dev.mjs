@@ -35,7 +35,7 @@ const consoleServer = await createConsoleServer({
   },
   hostUtils: {
     async openExternal(url) {
-      openBrowser(url, {});
+      openBrowser(url);
     },
   },
   requireAcceptTerms: true,
