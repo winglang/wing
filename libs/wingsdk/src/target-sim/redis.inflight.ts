@@ -1,8 +1,11 @@
-import { execSync } from "node:child_process";
-import IoRedis from "ioredis";
+import type IoRedis from "ioredis";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../ex";
-import { generateDockerContainerName, runDockerImage } from "../shared/misc";
+import {
+  generateDockerContainerName,
+  runCommand,
+  runDockerImage,
+} from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -57,7 +60,7 @@ export class Redis
     // disconnect from the redis server
     this.connection?.disconnect();
     // stop the redis container
-    execSync(`docker rm -f ${this.containerName}`);
+    await runCommand("docker", ["rm", "-f", this.containerName]);
   }
 
   public async save(): Promise<void> {}
@@ -68,7 +71,8 @@ export class Redis
     }
 
     if (this.connection_url) {
-      this.connection = new IoRedis(this.connection_url);
+      const IoRedis = await import("ioredis");
+      this.connection = new IoRedis.default(this.connection_url);
       return this.connection;
     }
 
