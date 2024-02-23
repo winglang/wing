@@ -5481,15 +5481,14 @@ impl<'a> TypeChecker<'a> {
 
 				// Try to resolve phase independent property's actual phase
 				property_phase = if property_phase == Phase::Independent {
-					// When the property is phase independent and either the object phase is inflight or we're
-					// passing inflight args to the method call, then we need treat the property as inflight too.
-					// Another case where we need to treat the property as inflight is when the object is a string,
-					// this is because strings might be tokens and not evaluated yet, evaluating them inflight is
-					// safest.
-					if instance_phase == Phase::Inflight
-						|| callee_with_inflight_args
-						|| (env.phase == Phase::Inflight && instance_type.is_string())
-					{
+					// If the object is a string we treat the phase independent property based on our env.
+					// Strings might be tokens and not evaluated yet. Tokenized strings accessed inflight
+					// must be evaluated in inflight.
+					if instance_type.is_string() {
+						env.phase
+					} else if instance_phase == Phase::Inflight || callee_with_inflight_args {
+						// When the property is phase independent and either the object phase is inflight or we're
+						// passing inflight args to the method call, then we need treat the property as inflight too.
 						Phase::Inflight
 					} else {
 						// Default to instance phase
