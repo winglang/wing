@@ -500,6 +500,9 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.6(tailwindcss@3.3.3)
+      '@types/cross-spawn':
+        specifier: ^6.0.6
+        version: 6.0.6
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.18
@@ -753,7 +756,7 @@ importers:
         version: 4.6.10
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.31)(typescript@5.2.2)
+        version: 6.7.0(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -1179,7 +1182,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(typescript@5.3.3)
+        version: 6.7.0(ts-node@10.9.1)(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1201,7 +1204,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(typescript@5.3.3)
+        version: 6.7.0(ts-node@10.9.1)(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -1257,7 +1260,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(typescript@5.3.3)
+        version: 6.7.0(ts-node@10.9.1)(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -11058,6 +11061,12 @@ packages:
       '@types/node': 20.11.0
     dev: true
 
+  /@types/cross-spawn@6.0.6:
+    resolution: {integrity: sha512-fXRhhUkG4H3TQk5dBhQ7m/JDdSNHKwR2BBia62lhwEIq9xGiQKLxd6LymNhn47SjXhsUEPmxi+PKw2OkW4LLjA==}
+    dependencies:
+      '@types/node': 20.11.0
+    dev: true
+
   /@types/d3-color@3.1.1:
     resolution: {integrity: sha512-CSAVrHAtM9wfuLJ2tpvvwCU/F22sm7rMHNN+yh9D6O6hyAms3+O0cgMpC1pm6UEUMOntuZC8bMt74PteiDUdCg==}
     dev: true
@@ -15080,7 +15089,7 @@ packages:
     dependencies:
       semver: 7.5.4
       shelljs: 0.8.5
-      typescript: 5.4.0-dev.20240220
+      typescript: 5.5.0-dev.20240223
     dev: true
 
   /dset@3.1.2:
@@ -24120,7 +24129,7 @@ packages:
       - ts-node
     dev: true
 
-  /tsup@6.7.0(typescript@5.3.3):
+  /tsup@6.7.0(typescript@5.2.2):
     resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
     engines: {node: '>=14.18'}
     hasBin: true
@@ -24144,13 +24153,13 @@ packages:
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
-      postcss-load-config: 3.1.4(postcss@8.4.31)
+      postcss-load-config: 3.1.4(ts-node@10.9.1)
       resolve-from: 5.0.0
       rollup: 3.29.4
       source-map: 0.8.0-beta.0
       sucrase: 3.34.0
       tree-kill: 1.2.2
-      typescript: 5.3.3
+      typescript: 5.2.2
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -24483,8 +24492,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.4.0-dev.20240220:
-    resolution: {integrity: sha512-mUiEcRGUeqXn0/xKi0K01LrBOJ4D1zbn5oVpvofeuo/QUTS/y4+r46h34STyDGMc2KnMYJcWUt2XMalady2J1A==}
+  /typescript@5.5.0-dev.20240223:
+    resolution: {integrity: sha512-5YqrvRjoUfyzQzxctN5Nan2HoGMhM76E6WCiZmAOSYXsQRU7G3NInX7oSHlEfxYK+9hwhuHdIqj8J9lS5j5mpw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

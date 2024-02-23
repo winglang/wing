@@ -148,7 +148,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
 
   if (options.open) {
     // @ts-ignore
-    const { openBrowser } = await import("../scripts/open.mjs");
+    const { openBrowser } = await import("./open.js");
     openBrowser(`http://localhost:${server.port}/`);
   }
 

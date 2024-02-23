@@ -8,7 +8,7 @@
  *
  */
 
-import { exec } from "node:child_process";
+import { ExecOptions, exec } from "node:child_process";
 
 import spawn from "cross-spawn";
 import open from "open";
@@ -17,10 +17,10 @@ import colors from "picocolors";
 /**
  * Reads the BROWSER environment variable and decides what to do with it.
  */
-export function openBrowser(url, opt) {
+export function openBrowser(url: string) {
   // The browser executable to open.
   // See https://github.com/sindresorhus/open#app for documentation.
-  const browser = typeof opt === "string" ? opt : process.env.BROWSER || "";
+  const browser = process.env.BROWSER || "";
   if (browser.toLowerCase().endsWith(".js")) {
     executeNodeScript(browser, url);
   } else if (browser.toLowerCase() !== "none") {
@@ -31,7 +31,7 @@ export function openBrowser(url, opt) {
   }
 }
 
-function executeNodeScript(scriptPath, url) {
+function executeNodeScript(scriptPath: string, url: string) {
   const extraArguments = process.argv.slice(2);
   const child = spawn(process.execPath, [scriptPath, ...extraArguments, url], {
     stdio: "inherit",
@@ -60,7 +60,11 @@ const supportedChromiumBrowsers = [
   "Chromium",
 ];
 
-async function startBrowserProcess(browser, browserArguments, url) {
+async function startBrowserProcess(
+  browser: string | undefined,
+  browserArguments: string[],
+  url: string,
+) {
   // If we're on OS X, the user hasn't specifically
   // requested a different browser, we can try opening
   // a Chromium browser with AppleScript. This lets us reuse an
@@ -86,7 +90,7 @@ async function startBrowserProcess(browser, browserArguments, url) {
             url,
           )}" "${openedBrowser}"`,
           {
-            cwd: import.meta.dirname,
+            cwd: `${__dirname}/../assets`,
           },
         );
         return true;
@@ -117,8 +121,8 @@ async function startBrowserProcess(browser, browserArguments, url) {
   }
 }
 
-function execAsync(command, options) {
-  return new Promise((resolve, reject) => {
+function execAsync(command: string, options: ExecOptions) {
+  return new Promise<string>((resolve, reject) => {
     exec(command, options, (error, stdout) => {
       if (error) {
         reject(error);
