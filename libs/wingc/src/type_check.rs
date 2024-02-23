@@ -5486,9 +5486,10 @@ impl<'a> TypeChecker<'a> {
 					// must be evaluated in inflight.
 					if instance_type.is_string() {
 						env.phase
-					} else if instance_phase == Phase::Inflight || callee_with_inflight_args {
-						// When the property is phase independent and either the object phase is inflight or we're
-						// passing inflight args to the method call, then we need treat the property as inflight too.
+					}
+					// When the property is phase independent and either the object phase is inflight or we're
+					// passing inflight args to the method call, then we need treat the property as inflight too.
+					else if instance_phase == Phase::Inflight || callee_with_inflight_args {
 						Phase::Inflight
 					} else {
 						// Default to instance phase
