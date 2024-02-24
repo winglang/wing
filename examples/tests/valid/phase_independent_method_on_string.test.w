@@ -5,7 +5,6 @@ let api = new cloud.Api();
 let url_regex = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]\{1,256\}\\.[a-zA-Z0-9()]\{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
 
 // Verify the url is not a valid url (because it's a token)
-log(api.url);
 assert(!regex.match(url_regex, api.url));
 
 let token_len = api.url.length;
@@ -13,7 +12,6 @@ let token_len = api.url.length;
 
 test "pahse independent method on string evaled inflight" {
   // Make sure api.url isn't a token but evaled inflight
-  log(api.url);
   assert(regex.match(url_regex, api.url));
   
   // Call a method on the url (should be called inflight)
