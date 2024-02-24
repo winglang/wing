@@ -18,7 +18,7 @@ let c2 = inflight () => {
 
 
 let ar = Array<inflight ():void>[c1, c2];
-// Define an explicit cloud.Function that'll be used in the test. This is so 
+// Define an explicit cloud.Function that'll be used in the test. This is so
 // when generating terraform snapshots we'll see the correct permissions.
 // Writing the test directly in the `test` statement will skip them when
 // generating the tf-aws snapshots.
@@ -41,7 +41,7 @@ test "lift closure map" {
   f2.invoke();
 }
 
-let set = Set<inflight ():void>{c1, c2};
+let set = Set<inflight ():void>[c1, c2];
 let f3 = new cloud.Function(inflight () => {
   for c in set {
     c();
@@ -51,7 +51,7 @@ test "lift closure set" {
   f3.invoke();
 }
 
-let complex = [{"k1" => Set<inflight ():void>{c1, c2}}];
+let complex = [{"k1" => Set<inflight ():void>[c1, c2]}];
 let f4 = new cloud.Function(inflight () => {
   // Use inflight variables to access the complex collection
   // to make sure we don't lift the closure, but the entire collection
