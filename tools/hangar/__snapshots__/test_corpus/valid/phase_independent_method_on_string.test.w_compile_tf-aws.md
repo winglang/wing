@@ -12,7 +12,6 @@ module.exports = function({ $api_url, $regex_Util, $token_len, $url_regex }) {
       return $obj;
     }
     async handle() {
-      console.log($api_url);
       $helpers.assert((await $regex_Util.match($url_regex, $api_url)), "regex.match(url_regex, api.url)");
       $helpers.assert($api_url.startsWith("http"), "api.url.startsWith(\"http\")");
       $helpers.assert($helpers.neq($api_url.length, $token_len), "api.url.length != token_len");
@@ -186,7 +185,6 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.new("@winglang/sdk.cloud.Api", cloud.Api, this, "cloud.Api");
     const url_regex = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256\}\\.[a-zA-Z0-9()]{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
-    console.log(api.url);
     $helpers.assert((!(regex.Util.match(url_regex, api.url))), "!regex.match(url_regex, api.url)");
     const token_len = api.url.length;
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:pahse independent method on string evaled inflight", new $Closure1(this, "$Closure1"));

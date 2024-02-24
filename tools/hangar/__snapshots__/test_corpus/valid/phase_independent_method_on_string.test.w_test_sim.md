@@ -2,9 +2,7 @@
 
 ## stdout.log
 ```log
-${wsim#root/env0/cloud.Api#attrs.url}
-pass ┌ phase_independent_method_on_string.test.wsim » root/env0/test:pahse independent method on string evaled inflight
-     └ http://127.0.0.1:46163
+pass ─ phase_independent_method_on_string.test.wsim » root/env0/test:pahse independent method on string evaled inflight
  
  
 Tests 1 passed (1)
