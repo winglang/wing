@@ -235,7 +235,7 @@ export class Util {
   }
 
   /**
-   * Sets the value of an environment variable.
+   * Sets the value of an environment variable. This only applies to preflight code.
    * @param name The name of the environment variable.
    * @param value The value of the environment variable.
    */
