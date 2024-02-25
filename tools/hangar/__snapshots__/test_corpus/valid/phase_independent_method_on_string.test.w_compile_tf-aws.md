@@ -187,7 +187,7 @@ class $Root extends $stdlib.std.Resource {
     const url_regex = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256\}\\.[a-zA-Z0-9()]{1,6\}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)";
     $helpers.assert((!(regex.Util.match(url_regex, api.url))), "!regex.match(url_regex, api.url)");
     const token_len = api.url.length;
-    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:pahse independent method on string evaled inflight", new $Closure1(this, "$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:phase independent method on string evaluated inflight", new $Closure1(this, "$Closure1"));
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});
