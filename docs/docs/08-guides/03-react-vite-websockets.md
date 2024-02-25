@@ -4,7 +4,7 @@ id: react-vite-websockets
 keywords: [Websockets, React, Vite, Local, Wing]
 ---
 
-# React, Vite & Websockets 
+# React, Vite & WebSockets 
 
 In this guide, we will build a simple React web application with a Wing backend.
 
@@ -65,7 +65,7 @@ In this step, we will be creating our project.
 ```sh
 wing run main.w
 ```
-> The result should be a page shows a single `Cloud.Function` if you invoke it, it should show `hello, world` in the response section.
+> The result should be a page that displays a single `Cloud.Function`; if you invoke it, it should show `hello, world` in the response section.
 
 5. Invoke the cloud.Function to see that response.
 6. Ctrl-C to go back to CLI prompt.
@@ -98,14 +98,14 @@ Open VScode / Intellij on the project directory.
  ```sh
  wing run main.w
  ```
-> You should have 2 web pages open: the React web application and the Wing Simulator, showing the simulator.
+> You should have two web pages open: one for the React web application and another for the Wing Simulator.
 
 ### Sending data to your Vite app using `publicEnv`
 
-Now that we have our backend instantiate the Vite resource, 
-we would like to see how we can pass constant data from the backend to the frontend.
+Now that our backend has instantiated the Vite resource,
+let's explore how to pass constant data from the backend to the frontend.
 
-1. Use `publicEnv` in order to pass `title` from the backend to the frontend. In `backend/main.w:
+1. Use `publicEnv` to pass the `title` from the backend to the frontend, as shown in `backend/main.w`:
  ```ts
  bring vite;
  
@@ -184,7 +184,7 @@ Let's modify our frontend code to fetch and update the counter value using the r
 ```ts
 const API_URL = window.wing.env.API_URL;
 ```
-2. Then, lets use React hooks to update the counter data:
+2. Then, let's use React hooks to update the counter data:
 - Add the import statement for  `useEffect`:
 ```ts
 import { useState, useEffect } from 'react';
@@ -287,7 +287,7 @@ The Broadcaster class contains two public API endpoints:
 ```sh
 npm i -s @winglibs/websockets
 ```
-2. Lets create a new file `backend/broadcaster.w`, and implement it:
+2. Let's create a new file `backend/broadcaster.w`, and implement it as follows:
 ```ts
 bring cloud;
 bring websockets;
@@ -310,9 +310,9 @@ pub class Broadcaster {
     });
 
   }
-  pub inflight broadcast(messgae: str) {
+  pub inflight broadcast(message: str) {
     for id in this.db.list() {
-      this.wb.sendMessage(id, messgae);
+      this.wb.sendMessage(id, message);
     }
   }
 }
@@ -465,12 +465,12 @@ function App() {
 
 export default App;
 ```
-5. Play arround with multiple tabs of the website, they should be automatically updated upon counter increment. 
+5. Play around by opening multiple tabs of the website; they should automatically update when the counter increments.
 
 
 ## Step 5 - Deploy on AWS
 
-Once deployed, the above code translates to the following (simplified) AWS architectue
+Once deployed, the above code translates into the following (simplified) AWS architecture.
 
 ![AWS Architecture](./vite-react-websockets-AWS-diagram.png 'AWS Architecture')
 
@@ -498,7 +498,7 @@ wing compile --platform tf-aws main.w
 ```sh
 cd ./target/main.tfaws
 terraform init
-terraform apply # this take some time
+terraform apply # this takes some time
 ```
 
 
