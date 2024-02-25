@@ -30,7 +30,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $t_last, $t_name, $t_name_length }) {
+module.exports = function({ $t_last, $t_name }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -39,7 +39,7 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
     }
     async handle() {
       console.log($t_name);
-      $helpers.assert(($t_name_length > 0), "t.name.length > 0");
+      $helpers.assert(($t_name.length > 0), "t.name.length > 0");
       console.log($t_last);
     }
   }
@@ -117,7 +117,6 @@ class $Root extends $stdlib.std.Resource {
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $t_last: ${$stdlib.core.liftObject(t.last)},
             $t_name: ${$stdlib.core.liftObject(t.name)},
-            $t_name_length: ${$stdlib.core.liftObject(t.name.length)},
           })
         `;
       }
@@ -136,13 +135,11 @@ class $Root extends $stdlib.std.Resource {
         return ({
           "handle": [
             [t.last, []],
-            [t.name, []],
-            [t.name.length, []],
+            [t.name, ["length"]],
           ],
           "$inflight_init": [
             [t.last, []],
             [t.name, []],
-            [t.name.length, []],
           ],
         });
       }
