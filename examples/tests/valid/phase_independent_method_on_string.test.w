@@ -10,7 +10,7 @@ assert(!regex.match(url_regex, api.url));
 let token_len = api.url.length;
 
 
-test "pahse independent method on string evaled inflight" {
+test "phase independent method on string evaluated inflight" {
   // Make sure api.url isn't a token but evaled inflight
   assert(regex.match(url_regex, api.url));
   
