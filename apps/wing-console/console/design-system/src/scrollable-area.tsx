@@ -33,7 +33,7 @@ export const ScrollableArea = memo(
       ref,
     ) => {
       const { theme } = useTheme();
-      const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
+      const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
       useEffect(() => {
         onScrolledToBottomChange?.(isScrolledToBottom);
       }, [isScrolledToBottom, onScrolledToBottomChange]);

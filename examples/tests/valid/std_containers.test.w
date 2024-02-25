@@ -23,7 +23,7 @@ let mergedMutArray = mutArray.concat(mutArray2);
 assert(mergedMutArray.length == 7);
 assert(mergedMutArray.at(5) == "that");
 
-let sSet = {"one", "two"};
+let sSet = Set<str>["one", "two"];
 let mutSet = sSet.copyMut();
 mutSet.add("three");
 let immutSet = mutSet.copy();
@@ -55,10 +55,10 @@ let heterogeneousDoubleArray = Array<Array<Animal>>[
   Array<Animal>[new Cat() as "C3", new Dog() as "D2"],
   [new Animal() as "A1"],
 ];
-let heterogeneousSet = Set<Animal>{
+let heterogeneousSet = Set<Animal>[
   new Cat() as "C4",
   new Dog() as "D3",
-};
+];
 let heterogeneousMap = Map<Animal>{
   "cat" => new Cat() as "C5",
   "dog" => new Dog() as "D4",
