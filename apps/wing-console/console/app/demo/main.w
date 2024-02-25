@@ -32,7 +32,7 @@ let handler = inflight (message: str): str => {
 
 queue.setConsumer(handler);
 
-new cloud.Function(inflight (message: str): str => {
+new cloud.Function(inflight (message: str?): str? => {
   counter.inc();
   log("Counter is now {counter.inc(0)}");
   return message;
