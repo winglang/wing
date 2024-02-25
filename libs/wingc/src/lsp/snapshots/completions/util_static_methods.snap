@@ -74,7 +74,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(name: str, value: str): void"
   documentation:
     kind: markdown
-    value: "```wing\nstatic setEnv: (name: str, value: str): void\n```\n---\nSets the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n- `value` — `str` — The value of the environment variable."
+    value: "```wing\nstatic setEnv: (name: str, value: str): void\n```\n---\nSets the value of an environment variable.\n### Parameters\n- `name` — `str` — The name of the environment variable.\n- `value` — `str` — The value of the environment variable.\n\n### Remarks\nThis only applies to preflight code."
   sortText: ff|setEnv
   insertText: setEnv($1)
   insertTextFormat: 2

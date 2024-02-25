@@ -195,6 +195,8 @@ util.setEnv(name: str, value: str);
 
 Sets the value of an environment variable.
 
+This only applies to preflight code.
+
 ###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.setEnv.parameter.name"></a>
 
 - *Type:* str
