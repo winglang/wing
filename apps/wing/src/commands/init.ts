@@ -99,7 +99,7 @@ export async function init(template: string, options: InitOptions = {}): Promise
   options.template = template;
   // Check if the template exists for the selected language
   const templatePath = join(PROJECT_TEMPLATES_DIR, language, template);
-  const templateExists = await exists(templatePath, constants.F_OK | constants.R_OK); // eslint-disable-line no-bitwise
+  const templateExists = await exists(templatePath, constants.R_OK);
   if (!templateExists) {
     throw new Error(
       `Template "${template}" is not available in ${language}. Please let us know you'd like to use this template in ${language} by opening an issue at https://github.com/winglang/wing/issues/!`

@@ -224,7 +224,7 @@ async function withTempDir<T>(work: (workdir: string) => Promise<T>): Promise<T>
  */
 export async function exists(
   filePath: string,
-  permissions: number = constants.F_OK | constants.R_OK | constants.W_OK // eslint-disable-line no-bitwise
+  permissions: number = constants.R_OK | constants.W_OK // eslint-disable-line no-bitwise
 ): Promise<boolean> {
   try {
     await fs.access(filePath, permissions);
