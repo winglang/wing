@@ -134,7 +134,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+          "exec": "vitest run --update"
         }
       ]
     },

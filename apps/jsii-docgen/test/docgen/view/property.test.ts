@@ -21,7 +21,7 @@ const findProperty = (): reflect.Property => {
   throw new Error("Assembly does not contain a property");
 };
 
-test.each(Language.values())("%s snapshot", (language) => {
+test.each(Language.values().map(l => l.name))("%s snapshot", (language) => {
   const { transpile } = LANGUAGE_SPECIFIC[language.toString()];
   const markdown = new MarkdownRenderer({ language, ...metadata });
   const prop = new Property(transpile, findProperty()).toJson();

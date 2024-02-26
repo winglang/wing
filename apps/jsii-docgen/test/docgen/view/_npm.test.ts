@@ -8,14 +8,13 @@ import {
   UnInstallablePackageError,
 } from "../../../src";
 import { Npm } from "../../../src/docgen/view/_npm";
+import { vi } from "vitest";
 
 const TMPDIR = tmpdir();
 
-jest.mock("child_process");
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const mockSpawn = require("child_process").spawn as jest.MockedFunction<
-  typeof spawn
->;
+vi.mock("child_process");
+const mockSpawn = vi.mocked(spawn);
+
 
 test("NoSpaceLeftOnDevice error", () => {
   // GIVEN
