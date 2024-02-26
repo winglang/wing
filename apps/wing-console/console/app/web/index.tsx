@@ -22,6 +22,10 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
         import.meta.env.VITE_WING_CLOUD_SIGN_IN_URL ??
         "https://wing.cloud/wrpc/console.signIn"
       }
+      googleSignInURL={
+        import.meta.env.VITE_GOOGLE_SIGN_IN_URL ??
+        "https://wing.cloud/wrpc/console.signIn/google"
+      }
     />
   </React.StrictMode>,
 );
