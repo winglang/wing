@@ -25,7 +25,8 @@ export const createEndpointRouter = () => {
       return endpoints.map((endpoint) => {
         return {
           id: endpoint.path,
-          label: endpoint.attrs.label || endpoint.path.slice(13),
+          // The slice is for removing `"root/Default/"` from `endpoint.path`.
+          label: endpoint.attrs.label ?? endpoint.path.slice(13),
           url: endpoint.attrs.url,
           browserSupport: endpoint.props.browserSupport ?? false,
         };
