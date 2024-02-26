@@ -196,10 +196,11 @@ function removePathsFromTraceLine(line?: string) {
     return undefined;
   }
 
-  // replace any paths in the log line with "foo/bar.ts" instead of "/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/foo/bar.ts"
-  if (line.includes("/")) {
-    return "<sanitized>";
-  }
+  // convert wingsdk paths to src (e.g. "/a/b/wingsdk/src/z/t.js" -> "[src]/z/t.js") with relative paths
+  line = line.replace(/\/.+\/wingsdk\/src\//g, "[src]/");
+
+  // if any absolute paths remain, replace them with "[abs]"
+  line = line.replace(/([ (])\/[^)]+/g, "$1[abs]");
 
   return line;
 }

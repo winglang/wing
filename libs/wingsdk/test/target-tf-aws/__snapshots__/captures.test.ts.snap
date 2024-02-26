@@ -24,12 +24,12 @@ return class Handler {
     }
   }
   async handle(event) {
-      console.log(\\"Event: \\" + event);
-      await this.function.invoke(JSON.stringify({ hello: \\"world\\" }));
+      console.log("Event: " + event);
+      await this.function.invoke(JSON.stringify({ hello: "world" }));
     }
 };
 })())({
-function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"], \\"root/Default/Function1\\")
+function: new (require("[REDACTED]/wingsdk/src/shared-aws/function.inflight")).FunctionClient(process.env["FUNCTION_NAME_50735b21"], "root/Default/Function1")
 })"
 `;
 
@@ -48,19 +48,19 @@ exports[`function with a function binding 3`] = `
     },
     "aws_iam_role": {
       "Function1_IamRole_8B9BC80D": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "Function2_IamRole_62EBED55": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function1_IamRolePolicy_C0724D18": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
       },
       "Function2_IamRolePolicy_E46C9D6B": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.Function1.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["lambda:InvokeFunction"],"Resource":["\${aws_lambda_function.Function1.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
       },
     },
@@ -154,10 +154,10 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(event) { await this.queue.push(\\"info\\"); }
+  async handle(event) { await this.queue.push("info"); }
 };
 })())({
-queue: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/queue.inflight\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
+queue: new (require("[REDACTED]/wingsdk/src/shared-aws/queue.inflight")).QueueClient(process.env["QUEUE_URL_1cfcc997"])
 })"
 `;
 
@@ -169,7 +169,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(event) { console.log(\\"Received\\" + event); }
+  async handle(event) { console.log("Received" + event); }
 };
 })())({
 
@@ -191,19 +191,19 @@ exports[`function with a queue binding 3`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "Queue-SetConsumer0_IamRole_7F9ED9ED": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:SendMessage"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
       "Queue-SetConsumer0_IamRolePolicy_0299B5AB": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.Queue.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["sqs:ReceiveMessage","sqs:ChangeMessageVisibility","sqs:GetQueueUrl","sqs:DeleteMessage","sqs:GetQueueAttributes"],"Resource":["\${aws_sqs_queue.Queue.arn}"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Queue-SetConsumer0_IamRole_7F9ED9ED.name}",
       },
     },
@@ -311,10 +311,10 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
+  async handle(event) { await this.bucket.put("hello.txt", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
+bucket: new (require("[REDACTED]/wingsdk/src/shared-aws/bucket.inflight")).BucketClient(process.env["BUCKET_NAME_1357ca3a"])
 })"
 `;
 
@@ -329,12 +329,12 @@ exports[`function with bucket binding > put operation 2`] = `
     },
     "aws_iam_role": {
       "Function_IamRole_678BE84C": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.Bucket.arn}\\",\\"\${aws_s3_bucket.Bucket.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Action":["s3:PutObject*","s3:Abort*"],"Resource":["\${aws_s3_bucket.Bucket.arn}","\${aws_s3_bucket.Bucket.arn}/*"],"Effect":"Allow"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -406,19 +406,19 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
     },
     "aws_iam_role": {
       "Function1_IamRole_8B9BC80D": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "Function2_IamRole_62EBED55": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Function1_IamRolePolicy_C0724D18": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Function1_IamRole_8B9BC80D.name}",
       },
       "Function2_IamRolePolicy_E46C9D6B": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Function2_IamRole_62EBED55.name}",
       },
     },

@@ -266,7 +266,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle(event) { console.log(\\"Received: \\", event); }
+  async handle(event) { console.log("Received: ", event); }
 };
 })())({
 
@@ -284,12 +284,12 @@ exports[`topic with subscriber function 2`] = `
     },
     "aws_iam_role": {
       "Topic-OnMessage0_IamRole_64DD36FA": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Topic-OnMessage0_IamRolePolicy_F5EE09D8": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Topic-OnMessage0_IamRole_64DD36FA.name}",
       },
     },

@@ -86,10 +86,10 @@ exports[`api configured for cors 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                #if ($context.httpMethod == \\"OPTIONS\\")
-                    {\\"statusCode\\": 204}
+                #if ($context.httpMethod == "OPTIONS")
+                    {"statusCode": 204}
                 #else
-                    {\\"statusCode\\": 404}
+                    {"statusCode": 404}
                 #end
               ",
           },
@@ -111,7 +111,7 @@ exports[`api configured for cors 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -120,7 +120,7 @@ exports[`api configured for cors 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -167,7 +167,7 @@ exports[`api will be private when vpc_api_gateway is true 1`] = `
     },
     "aws_api_gateway_rest_api": {
       "Api_api_91C07D84": {
-        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/{proxy+}\\":{\\"x-amazon-apigateway-any-method\\":{\\"produces\\":[\\"application/json\\"],\\"x-amazon-apigateway-integration\\":{\\"type\\":\\"mock\\",\\"requestTemplates\\":{\\"application/json\\":\\"\\\\n                {\\\\\\"statusCode\\\\\\": 404}\\\\n              \\"},\\"passthroughBehavior\\":\\"never\\",\\"responses\\":{\\"404\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}},\\"default\\":{\\"statusCode\\":\\"404\\",\\"responseParameters\\":{\\"method.response.header.Content-Type\\":\\"'application/json'\\"},\\"responseTemplates\\":{\\"application/json\\":\\"{\\\\\\"statusCode\\\\\\": 404, \\\\\\"message\\\\\\": \\\\\\"Error: Resource not found\\\\\\"}\\"}}}},\\"responses\\":{\\"404\\":{\\"description\\":\\"404 response\\",\\"headers\\":{\\"Content-Type\\":{\\"type\\":\\"string\\"}}}}}}}}",
+        "body": "{"openapi":"3.0.3","paths":{"/{proxy+}":{"x-amazon-apigateway-any-method":{"produces":["application/json"],"x-amazon-apigateway-integration":{"type":"mock","requestTemplates":{"application/json":"\\n                {\\"statusCode\\": 404}\\n              "},"passthroughBehavior":"never","responses":{"404":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}},"default":{"statusCode":"404","responseParameters":{"method.response.header.Content-Type":"'application/json'"},"responseTemplates":{"application/json":"{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}"}}}},"responses":{"404":{"description":"404 response","headers":{"Content-Type":{"type":"string"}}}}}}}}",
         "endpoint_configuration": {
           "types": [
             "PRIVATE",
@@ -180,7 +180,7 @@ exports[`api will be private when vpc_api_gateway is true 1`] = `
           "create_before_destroy": true,
         },
         "name": "api-c8f613f0",
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":\\"execute-api:Invoke\\",\\"Resource\\":[\\"*\\"]},{\\"Effect\\":\\"Deny\\",\\"Principal\\":\\"*\\",\\"Action\\":\\"execute-api:Invoke\\",\\"Resource\\":[\\"*\\"],\\"Condition\\":{\\"StringNotEquals\\":{\\"aws:sourceVpce\\":\\"\${aws_vpc_endpoint.Api_api_api-vpc-endpoint_F7BB1063.id}\\"}}}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":"*","Action":"execute-api:Invoke","Resource":["*"]},{"Effect":"Deny","Principal":"*","Action":"execute-api:Invoke","Resource":["*"],"Condition":{"StringNotEquals":{"aws:sourceVpce":"\${aws_vpc_endpoint.Api_api_api-vpc-endpoint_F7BB1063.id}"}}}]}",
       },
     },
     "aws_api_gateway_stage": {
@@ -398,7 +398,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -407,7 +407,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -416,7 +416,7 @@ exports[`api with 'name' & 'age' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -485,7 +485,7 @@ exports[`api with 'name' parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -494,7 +494,7 @@ exports[`api with 'name' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -503,7 +503,7 @@ exports[`api with 'name' parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -563,7 +563,7 @@ exports[`api with CONNECT route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -572,7 +572,7 @@ exports[`api with CONNECT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -581,7 +581,7 @@ exports[`api with CONNECT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -641,7 +641,7 @@ exports[`api with DELETE route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -650,7 +650,7 @@ exports[`api with DELETE route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -659,7 +659,7 @@ exports[`api with DELETE route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -719,7 +719,7 @@ exports[`api with GET route at root 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -728,7 +728,7 @@ exports[`api with GET route at root 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -737,7 +737,7 @@ exports[`api with GET route at root 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -821,7 +821,7 @@ exports[`api with GET routes with common prefix 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -830,7 +830,7 @@ exports[`api with GET routes with common prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -839,7 +839,7 @@ exports[`api with GET routes with common prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -923,7 +923,7 @@ exports[`api with GET routes with different prefix 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -932,7 +932,7 @@ exports[`api with GET routes with different prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -941,7 +941,7 @@ exports[`api with GET routes with different prefix 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1001,7 +1001,7 @@ exports[`api with HEAD route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1010,7 +1010,7 @@ exports[`api with HEAD route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1019,7 +1019,7 @@ exports[`api with HEAD route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1079,7 +1079,7 @@ exports[`api with OPTIONS route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1088,7 +1088,7 @@ exports[`api with OPTIONS route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1097,7 +1097,7 @@ exports[`api with OPTIONS route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1157,7 +1157,7 @@ exports[`api with PATCH route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1166,7 +1166,7 @@ exports[`api with PATCH route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1175,7 +1175,7 @@ exports[`api with PATCH route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1235,7 +1235,7 @@ exports[`api with POST route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1244,7 +1244,7 @@ exports[`api with POST route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1253,7 +1253,7 @@ exports[`api with POST route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1313,7 +1313,7 @@ exports[`api with PUT route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1322,7 +1322,7 @@ exports[`api with PUT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1331,7 +1331,7 @@ exports[`api with PUT route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1415,7 +1415,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1424,7 +1424,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1433,7 +1433,7 @@ exports[`api with multiple GET route and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1517,7 +1517,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1526,7 +1526,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1535,7 +1535,7 @@ exports[`api with multiple methods and multiple lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1619,7 +1619,7 @@ exports[`api with multiple methods and one lambda 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1628,7 +1628,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1637,7 +1637,7 @@ exports[`api with multiple methods and one lambda 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1719,7 +1719,7 @@ exports[`api with multiple methods on same route 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1728,7 +1728,7 @@ exports[`api with multiple methods on same route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1737,7 +1737,7 @@ exports[`api with multiple methods on same route 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1806,7 +1806,7 @@ exports[`api with path parameter 1`] = `
           "passthroughBehavior": "never",
           "requestTemplates": {
             "application/json": "
-                {\\"statusCode\\": 404}
+                {"statusCode": 404}
               ",
           },
           "responses": {
@@ -1815,7 +1815,7 @@ exports[`api with path parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },
@@ -1824,7 +1824,7 @@ exports[`api with path parameter 1`] = `
                 "method.response.header.Content-Type": "'application/json'",
               },
               "responseTemplates": {
-                "application/json": "{\\"statusCode\\": 404, \\"message\\": \\"Error: Resource not found\\"}",
+                "application/json": "{"statusCode": 404, "message": "Error: Resource not found"}",
               },
               "statusCode": "404",
             },

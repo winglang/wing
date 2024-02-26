@@ -23,12 +23,12 @@ exports[`schedule behavior with cron 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
@@ -288,12 +288,12 @@ exports[`schedule behavior with rate 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
     },
@@ -561,19 +561,19 @@ exports[`schedule with two functions 1`] = `
     },
     "aws_iam_role": {
       "Schedule_OnTick0_IamRole_478B0576": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
       "Schedule_OnTick1_IamRole_99D80025": {
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+        "assume_role_policy": "{"Version":"2012-10-17","Statement":[{"Action":"sts:AssumeRole","Principal":{"Service":"lambda.amazonaws.com"},"Effect":"Allow"}]}",
       },
     },
     "aws_iam_role_policy": {
       "Schedule_OnTick0_IamRolePolicy_708CFC38": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick0_IamRole_478B0576.name}",
       },
       "Schedule_OnTick1_IamRolePolicy_A5F98BAE": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "policy": "{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"none:null","Resource":"*"}]}",
         "role": "\${aws_iam_role.Schedule_OnTick1_IamRole_99D80025.name}",
       },
     },

@@ -3,7 +3,6 @@ title: bool
 id: bool
 ---
 
-
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
