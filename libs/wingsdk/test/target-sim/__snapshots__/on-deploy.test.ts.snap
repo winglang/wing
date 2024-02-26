@@ -3,8 +3,9 @@
 exports[`create an OnDeploy 1`] = `
 {
   ".wing/function_c83fbf14.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -15,7 +16,8 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -137,7 +139,7 @@ return class Handler {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.2.70",
+                "version": "10.3.0",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
@@ -150,7 +152,7 @@ return class Handler {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -162,7 +164,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -176,7 +178,7 @@ exports[`create an OnDeploy 2`] = `
 [
   "@winglang/sdk.cloud.Function created.",
   "super duper success",
-  "Invoke (payload=\\"\\").",
+  "Invoke (payload=undefined).",
   "OnDeploy invoked.",
   "@winglang/sdk.cloud.OnDeploy created.",
   "@winglang/sdk.cloud.OnDeploy deleted.",

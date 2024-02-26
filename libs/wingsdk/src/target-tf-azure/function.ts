@@ -54,6 +54,8 @@ export class Function extends cloud.Function {
   private readonly resourceGroup: ResourceGroup;
   private readonly applicationInsights: ApplicationInsights;
   private permissions: Map<string, ScopedRoleAssignment> = new Map();
+  private readonly functionName: string;
+  private assetPath: string | undefined;
 
   constructor(
     scope: Construct,
@@ -69,93 +71,54 @@ export class Function extends cloud.Function {
     this.servicePlan = app.servicePlan;
     this.applicationInsights = app.applicationInsights;
 
-    const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+    this.functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
     const functionRuntime = "node";
-    const functionNodeVersion = "18"; // support fetch
+    const functionNodeVersion = "20"; // support fetch
 
     // Create Bucket to store function code
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
-    const bundle = createBundle(this.entrypoint);
-    const codeDir = bundle.directory;
-
-    // Package up code in azure expected format
-    const outDir = `${codeDir}/${functionName}`;
-
-    // Move index.js to function name directory. Every Azure function in a function app
-    // must be in its own folder containing an index.js and function.json files
-    fs.mkdirSync(`${codeDir}/${functionName}`);
-    fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
-
     // throw an error if props.memory is defined for an Azure function
     if (props.memory) {
-      throw new NotImplementedError("memory is an invalid parameter on Azure");
+      throw new NotImplementedError("memory is an invalid parameter on Azure", {
+        resource: this.constructor.name,
+        operation: "memory",
+      });
     }
 
-    // As per documentation "a function must have exactly one trigger" so for now
-    // by default a function will support http get requests
-    // when we lift other resources like queues or topics this function.json will need to
-    // be overwritten with the correct trigger
-    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
-    fs.writeFileSync(
-      `${outDir}/function.json`,
-      JSON.stringify({
-        bindings: [
-          {
-            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/4497
-            type: "httpTrigger",
-            direction: "in",
-            name: "req",
-            methods: ["get", "post"],
-          },
-          {
-            type: "http",
-            direction: "out",
-            name: "res",
-          },
-        ],
-      })
-    );
     // TODO: will be uncommented when fixing https://github.com/winglang/wing/issues/4494
     // const timeout = props.timeout ?? Duration.fromMinutes(1);
     if (props.timeout) {
       throw new NotImplementedError(
         "Function.timeout is not implemented yet on tf-azure target.",
-        "https://github.com/winglang/wing/issues/4494"
+        {
+          issue: "https://github.com/winglang/wing/issues/4494",
+          resource: this.constructor.name,
+          operation: "timeout",
+        }
       );
     }
-    // Write host.json file to set function timeout (must be set in root of function app)
-    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
-    // this means that timeout is set for all functions in the function app
-    fs.writeFileSync(
-      `${codeDir}/host.json`,
-      JSON.stringify({
-        version: "2.0",
-        //TODO: need to read the documentation and parse the number in the right way,
-        // while not surpassing the limits, since it will be resulted in a hard to detect error
-        functionTimeout: `00:01:00`,
-      })
-    );
-
-    // Create zip asset from function code
-    const asset = new TerraformAsset(this, "Asset", {
-      path: `${codeDir}`,
-      type: AssetType.ARCHIVE,
-    });
 
     // Upload zip asset to storage account
     const functionCodeBlob = new StorageBlob(this, "CodeBlob", {
-      name: `${functionName}.zip`,
+      name: `${this.functionName}.zip`,
       storageAccountName: this.storageAccount.name,
       storageContainerName: functionCodeBucket.storageContainer.name,
       type: "Block",
-      source: asset.path,
+      source: Lazy.stringValue({
+        produce: () => {
+          if (!this.assetPath) {
+            throw new Error("assetPath was not set");
+          }
+          return this.assetPath;
+        },
+      }),
     });
 
     // Create the function
     this.function = new LinuxFunctionApp(this, "Function", {
-      name: functionName,
+      name: this.functionName,
       resourceGroupName: this.resourceGroup.name,
       location: this.resourceGroup.location,
       servicePlanId: this.servicePlan.id,
@@ -208,6 +171,68 @@ export class Function extends cloud.Function {
       }`,
       roleAssignment
     );
+  }
+
+  /** @internal */
+  public _preSynthesize(): void {
+    super._preSynthesize();
+
+    const bundle = createBundle(this.entrypoint);
+    const codeDir = bundle.directory;
+
+    // Package up code in azure expected format
+    const outDir = `${codeDir}/${this.functionName}`;
+
+    // Move index.js to function name directory. Every Azure function in a function app
+    // must be in its own folder containing an index.js and function.json files
+    fs.mkdirSync(`${codeDir}/${this.functionName}`);
+    fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
+
+    // As per documentation "a function must have exactly one trigger" so for now
+    // by default a function will support http get requests
+    // when we lift other resources like queues or topics this function.json will need to
+    // be overwritten with the correct trigger
+    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
+    fs.writeFileSync(
+      `${outDir}/function.json`,
+      JSON.stringify({
+        bindings: [
+          {
+            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/4497
+            type: "httpTrigger",
+            direction: "in",
+            name: "req",
+            methods: ["get", "post"],
+          },
+          {
+            type: "http",
+            direction: "out",
+            name: "res",
+          },
+        ],
+      })
+    );
+
+    // Write host.json file to set function timeout (must be set in root of function app)
+    // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
+    // this means that timeout is set for all functions in the function app
+    fs.writeFileSync(
+      `${codeDir}/host.json`,
+      JSON.stringify({
+        version: "2.0",
+        //TODO: need to read the documentation and parse the number in the right way,
+        // while not surpassing the limits, since it will be resulted in a hard to detect error
+        functionTimeout: `00:01:00`,
+      })
+    );
+
+    // Create zip asset from function code
+    const asset = new TerraformAsset(this, "Asset", {
+      path: `${codeDir}`,
+      type: AssetType.ARCHIVE,
+    });
+
+    this.assetPath = asset.path;
   }
 
   /**

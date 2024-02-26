@@ -45,6 +45,9 @@ Utility class for mathematical operations.
 | <code><a href="#@winglang/sdk.math.Util.harmonicMean">harmonicMean</a></code> | Calculates the harmonic mean of an array of numbers. |
 | <code><a href="#@winglang/sdk.math.Util.hypot">hypot</a></code> | Calculate the length of the vector from the origin to the point given by the coordinates. |
 | <code><a href="#@winglang/sdk.math.Util.isPrime">isPrime</a></code> | Checks if a number is prime. |
+| <code><a href="#@winglang/sdk.math.Util.log">log</a></code> | Returns the natural logarithm (base e) of a number. |
+| <code><a href="#@winglang/sdk.math.Util.log10">log10</a></code> | Returns the base-10 logarithm of a number. |
+| <code><a href="#@winglang/sdk.math.Util.log2">log2</a></code> | Returns the base-2 logarithm of a number. |
 | <code><a href="#@winglang/sdk.math.Util.max">max</a></code> | Returns the maximum value from an array of numbers. |
 | <code><a href="#@winglang/sdk.math.Util.median">median</a></code> | Calculates the median value of an array of numbers. |
 | <code><a href="#@winglang/sdk.math.Util.min">min</a></code> | Returns the minimum value from an array of numbers. |
@@ -53,6 +56,7 @@ Utility class for mathematical operations.
 | <code><a href="#@winglang/sdk.math.Util.random">random</a></code> | Generates a pseudo-random number between 0 and max (default of 1). |
 | <code><a href="#@winglang/sdk.math.Util.round">round</a></code> | Rounds the given number to the nearest integer. |
 | <code><a href="#@winglang/sdk.math.Util.sec">sec</a></code> | Calculates the secant of an angle (in radians). |
+| <code><a href="#@winglang/sdk.math.Util.sign">sign</a></code> | Returns 1 or -1, indicating the sign of the number passed as an argument, 0 for 0. |
 | <code><a href="#@winglang/sdk.math.Util.sin">sin</a></code> | Returns the sine of a number in radians. |
 | <code><a href="#@winglang/sdk.math.Util.sqrt">sqrt</a></code> | Returns the square root of a number. |
 | <code><a href="#@winglang/sdk.math.Util.tan">tan</a></code> | Returns the tangent of a number in radians. |
@@ -472,6 +476,60 @@ The number to check for primality.
 
 ---
 
+##### `log` <a name="log" id="@winglang/sdk.math.Util.log"></a>
+
+```wing
+bring math;
+
+math.log(value: num);
+```
+
+Returns the natural logarithm (base e) of a number.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.log.parameter.value"></a>
+
+- *Type:* num
+
+The input number.
+
+---
+
+##### `log10` <a name="log10" id="@winglang/sdk.math.Util.log10"></a>
+
+```wing
+bring math;
+
+math.log10(value: num);
+```
+
+Returns the base-10 logarithm of a number.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.log10.parameter.value"></a>
+
+- *Type:* num
+
+The input number.
+
+---
+
+##### `log2` <a name="log2" id="@winglang/sdk.math.Util.log2"></a>
+
+```wing
+bring math;
+
+math.log2(value: num);
+```
+
+Returns the base-2 logarithm of a number.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.log2.parameter.value"></a>
+
+- *Type:* num
+
+The input number.
+
+---
+
 ##### `max` <a name="max" id="@winglang/sdk.math.Util.max"></a>
 
 ```wing
@@ -619,6 +677,24 @@ Calculates the secant of an angle (in radians).
 - *Type:* num
 
 The angle in radians.
+
+---
+
+##### `sign` <a name="sign" id="@winglang/sdk.math.Util.sign"></a>
+
+```wing
+bring math;
+
+math.sign(value: num);
+```
+
+Returns 1 or -1, indicating the sign of the number passed as an argument, 0 for 0.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.math.Util.sign.parameter.value"></a>
+
+- *Type:* num
+
+The input number.
 
 ---
 

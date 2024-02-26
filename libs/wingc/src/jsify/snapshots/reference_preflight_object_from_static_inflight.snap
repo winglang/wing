@@ -55,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyType-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.js")({
             $q: ${$stdlib.core.liftObject(q)},
           })
         `;
@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const MyTypeClient = ${MyType._toInflightType(this)};
+            const MyTypeClient = ${MyType._toInflightType()};
             const client = new MyTypeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -71,14 +71,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "addToQueue", "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+            [q, []],
+          ],
+        });
       }
-      static _registerOnLift(host, ops) {
-        if (ops.includes("addToQueue")) {
-          MyType._registerOnLiftObject(q, host, ["push"]);
-        }
-        super._registerOnLift(host, ops);
+      static get _liftTypeMap() {
+        return ({
+          "addToQueue": [
+            [q, ["push"]],
+          ],
+        });
       }
     }
     const q = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");

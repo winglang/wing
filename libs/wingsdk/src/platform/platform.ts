@@ -13,6 +13,11 @@ export interface IPlatform {
   readonly target: string;
 
   /**
+   * The schema for the parameters the platform accepts
+   */
+  readonly parameters?: any;
+
+  /**
    * Hooks for overriding newInstance calls
    *
    * @param type string fqn of the resource type

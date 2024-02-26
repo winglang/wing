@@ -56,7 +56,7 @@ export class Schedule extends cloud.Schedule {
       "ScheduleOnTickHandlerClient"
     );
 
-    let fn = this.handlers[inflight._hash];
+    let fn = this.handlers[inflight._id];
     if (fn) {
       return fn;
     }
@@ -67,7 +67,7 @@ export class Schedule extends cloud.Schedule {
       functionHandler,
       props
     );
-    this.handlers[inflight._hash] = fn;
+    this.handlers[inflight._id] = fn;
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

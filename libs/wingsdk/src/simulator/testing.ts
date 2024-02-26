@@ -1,6 +1,10 @@
-import { createHash } from "crypto";
-import { InflightBindings, liftObject } from "../core";
-import { IInflight, IInflightHost, Resource } from "../std";
+import {
+  InflightBindings,
+  LiftDepsMatrixRaw,
+  closureId,
+  liftObject,
+} from "../core";
+import { IInflight, IInflightHost } from "../std";
 
 /**
  * Test utilities.
@@ -22,13 +26,22 @@ export class Testing {
     code: string,
     bindings: InflightBindings = {}
   ): IInflight {
-    const clients: Record<string, string> = {};
-
-    for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = liftObject(v.obj);
+    const liftDeps: LiftDepsMatrixRaw = {};
+    liftDeps.handle = [];
+    for (const v of Object.values(bindings)) {
+      liftDeps.handle.push([v.obj, v.ops ?? []]);
     }
 
-    const inflightCode = `\
+    return {
+      _id: closureId(),
+      _toInflight: () => {
+        const clients: Record<string, string> = {};
+
+        for (const [k, v] of Object.entries(bindings)) {
+          clients[k] = liftObject(v.obj);
+        }
+
+        const inflightCode = `\
 new ((function(){
 return class Handler {
   constructor(clients) {
@@ -44,15 +57,10 @@ ${Object.entries(clients)
   .join(",\n")}
 })`;
 
-    return {
-      _hash: createHash("md5").update(inflightCode).digest("hex"),
-      _toInflight: () => inflightCode,
-      _registerOnLift: (host: IInflightHost, _ops: string[]) => {
-        for (const v of Object.values(bindings)) {
-          Resource._registerOnLiftObject(v.obj, host, v.ops);
-        }
+        return inflightCode;
       },
-      onLift: () => {},
+      _liftMap: liftDeps,
+      onLift: (_host: IInflightHost, _ops: string[]) => {},
       _supportedOps: () => [],
     };
   }

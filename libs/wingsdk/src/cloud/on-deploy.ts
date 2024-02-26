@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { IInflight, Node, Resource } from "../std";
 
 /**
@@ -32,6 +33,9 @@ export interface OnDeployProps extends FunctionProps {
  * @abstract
  */
 export class OnDeploy extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IOnDeployClient;
+
   constructor(
     scope: Construct,
     id: string,
@@ -57,7 +61,10 @@ export class OnDeploy extends Resource {
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployHandlerClient`
  */
-export interface IOnDeployHandler extends IInflight {}
+export interface IOnDeployHandler extends IInflight {
+  /** @internal */
+  [INFLIGHT_SYMBOL]?: IOnDeployHandlerClient["handle"];
+}
 
 /**
  * Inflight client for `IOnDeployHandler`.

@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { AbstractMemberError } from "../core/errors";
+import { INFLIGHT_SYMBOL } from "../core/types";
 import { Json, Node, Resource } from "../std";
 
 /**
@@ -57,6 +58,8 @@ export interface TableProps {
  * @abstract
  */
 export class Table extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: ITableClient;
   /**
    * Table name
    */

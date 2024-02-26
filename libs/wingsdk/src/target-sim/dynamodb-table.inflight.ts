@@ -5,13 +5,12 @@ import {
   KeyType,
   KeySchemaElement,
 } from "@aws-sdk/client-dynamodb";
-import { v4 as uuidv4 } from "uuid";
 import {
   DynamodbTableAttributes,
   DynamodbTableSchema,
 } from "./schema-resources";
-import { DynamodbTableClientBase } from "../ex";
-import { runDockerImage } from "../shared/misc";
+import { DynamodbTableClientBase, GlobalSecondaryIndex } from "../ex";
+import { generateDockerContainerName, runDockerImage } from "../shared/misc";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -36,10 +35,9 @@ export class DynamodbTable
     super(props.name);
 
     this.context = context;
-    this.containerName = `wing-sim-dynamodb-${this.context.resourcePath.replace(
-      /\//g,
-      "."
-    )}-${uuidv4()}`;
+    this.containerName = generateDockerContainerName(
+      `wing-sim-dynamodb-${this.context.resourcePath}`
+    );
   }
 
   public async init(): Promise<DynamodbTableAttributes> {
@@ -100,6 +98,16 @@ export class DynamodbTable
       });
     }
 
+    const globalSecondaryIndexKeys = (i: GlobalSecondaryIndex) => {
+      const keys: KeySchemaElement[] = [
+        { AttributeName: i.hashKey, KeyType: KeyType.HASH },
+      ];
+      if (i.rangeKey) {
+        keys.push({ AttributeName: i.rangeKey, KeyType: KeyType.RANGE });
+      }
+      return keys;
+    };
+
     const createTableCommand = new CreateTableCommand({
       TableName: this.tableName,
       AttributeDefinitions: Object.entries(this.props.attributeDefinitions).map(
@@ -107,6 +115,18 @@ export class DynamodbTable
       ),
       KeySchema: keySchema,
       BillingMode: "PAY_PER_REQUEST",
+      GlobalSecondaryIndexes: this.props.globalSecondaryIndex?.map((i) => ({
+        IndexName: i.name,
+        KeySchema: globalSecondaryIndexKeys(i),
+        Projection: {
+          ProjectionType: i.projectionType,
+          NonKeyAttributes: i.nonKeyAttributes,
+        },
+        ProvisionedThroughput: {
+          ReadCapacityUnits: i.readCapacity,
+          WriteCapacityUnits: i.writeCapacity,
+        },
+      })),
     });
 
     // dynamodb server process might take some time to start

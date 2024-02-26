@@ -195,7 +195,24 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				node_to_complete_kind,
 				"." | "?." | "member_identifier" | "type_identifier"
 			) {
+				// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
+				if preceding_text.ends_with("..")
+					|| preceding_text.ends_with(".?.?")
+					|| preceding_text.ends_with("..")
+					|| preceding_text.ends_with(".?.")
+					|| preceding_text.ends_with("..?")
+				{
+					return vec![];
+				}
+
 				let parent = node_to_complete.parent().expect("A dot must have a parent");
+
+				// If the parent is an accessor node (the container of the "." or ".?" nodes) then move up one more level
+				let parent = if parent.kind() == "accessor" {
+					parent.parent().expect("An accessor must have a parent")
+				} else {
+					parent
+				};
 
 				if let Some(nearest_expr) = scope_visitor.nearest_expr {
 					let mut nearest_expr_type = types.get_expr_type(nearest_expr);
@@ -207,17 +224,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 					// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 					if !nearest_expr_type.is_unresolved() {
-						// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
-						if preceding_text.ends_with("..") || preceding_text.ends_with(".?.?") {
-							return vec![];
-						}
-
 						let access_context = if let ExprKind::Reference(Reference::Identifier(ident)) = &nearest_expr.kind {
-							match ident.name.as_str() {
-								"this" => ObjectAccessContext::This,
-								"super" => ObjectAccessContext::Super,
-								_ => ObjectAccessContext::Outside,
-							}
+							str_to_access_context(&ident.name)
 						} else {
 							ObjectAccessContext::Outside
 						};
@@ -285,7 +293,13 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				};
 
 				// We're likely in a type reference of some kind, so let's use the raw text for a lookup
-				let reference_bytes = &preceding_text.as_bytes()[parent.start_byte()..node_to_complete.start_byte()];
+				let start_byte = parent.start_byte();
+				let mut end_byte = node_to_complete.start_byte();
+				if start_byte == end_byte {
+					end_byte = node_to_complete.end_byte();
+				}
+
+				let reference_bytes = &preceding_text.as_bytes()[start_byte..end_byte];
 				let mut reference_text = std::str::from_utf8(reference_bytes)
 					.expect("Reference must be valid utf8")
 					.trim_end_matches(".")
@@ -302,6 +316,29 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								get_completions_from_type(&t, &types, Some(found_env.phase), &ObjectAccessContext::Static)
 							}
 							SymbolKind::Variable(v) => {
+								// Handle cases where the parser incorrectly thinks we're in a type reference
+								// This often happens before return statements when returning an anonymous struct literal:
+								// let a = S { a: 2 };
+								// a.
+								//   ^ The parser is reading this as `a.return { a: 2 }`
+								// return { a: 2 };
+								if parent.kind() == "custom_type" {
+									let mut sibling_iter = node_to_complete;
+									while let Some(sibling) = sibling_iter.next_named_sibling() {
+										if sibling.kind() == "type_identifier" {
+											if sibling.utf8_text(contents.as_bytes()) == Ok("return") {
+												return get_completions_from_type(
+													&v.type_,
+													&types,
+													Some(found_env.phase),
+													&str_to_access_context(&reference_text),
+												);
+											}
+										}
+										sibling_iter = sibling;
+									}
+								}
+
 								get_completions_from_type(&v.type_, &types, Some(found_env.phase), &ObjectAccessContext::Static)
 							}
 							SymbolKind::Namespace(n) => {
@@ -326,11 +363,23 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 						return filter_completions(completions);
 					}
+
+					if node_to_complete_kind == "type_identifier" {
+						// we're in an incomplete bare type (e.g. `new clou` or `extends clo`),
+						// we should attempt to use the text we have to match existing scope symbols
+						return filter_completions(get_current_scope_completions(
+							&types,
+							&scope_visitor,
+							&node_to_complete,
+							&preceding_text,
+						));
+					}
+
 					return vec![];
 				}
 			} else if matches!(
 				nearest_non_reference.kind(),
-				"struct_literal" | "json_map_literal" | "set_literal" | "struct_literal_member"
+				"struct_literal" | "json_map_literal" | "struct_literal_member"
 			) {
 				// check to see if ":" is the last character of the same line up to the cursor
 				// if it is, we want an expression instead of struct completions
@@ -483,7 +532,7 @@ fn get_current_scope_completions(
 
 		// { a: } or { a: 1, b: }
 		//     ^               ^
-		"set_literal" | "struct_literal" | "json_map_literal" | "json_literal_member" => {
+		"struct_literal" | "json_map_literal" | "json_literal_member" => {
 			in_type = false;
 		}
 
@@ -546,7 +595,6 @@ fn get_current_scope_completions(
 			"argument_list"
 			| "call"
 			| "struct_literal"
-			| "set_literal"
 			| "struct_literal_member"
 			| "new_expression"
 			| "keyword_argument_value" => {
@@ -739,7 +787,7 @@ fn nearest_non_reference_ancestor<'a>(start_node: &'a tree_sitter::Node<'a>) -> 
 		|| !nearest_non_reference.is_named()
 		|| matches!(
 			nearest_non_reference.kind(),
-			"identifier" | "reference" | "reference_identifier" | "expression_statement"
+			"identifier" | "reference" | "reference_identifier" | "expression_statement" | "accessor"
 		) {
 		let parent = nearest_non_reference.parent();
 		if let Some(parent) = parent {
@@ -1070,6 +1118,14 @@ fn should_exclude_symbol(symbol: &str) -> bool {
 	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol.starts_with(PARENT_THIS_NAME)
 }
 
+fn str_to_access_context(s: &str) -> ObjectAccessContext {
+	match s {
+		"this" => ObjectAccessContext::This,
+		"super" => ObjectAccessContext::Super,
+		_ => ObjectAccessContext::Outside,
+	}
+}
+
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
@@ -1262,6 +1318,21 @@ new cloud.
 		// all items are preflight
 		// TODO https://github.com/winglang/wing/issues/2512
 		// assert!(new_expression_nested.iter().all(|item| item.detail.as_ref().unwrap().starts_with("preflight")))
+	);
+
+	test_completion_list!(
+		new_expression_partial_namespace,
+		r#"
+bring cloud;
+
+struct cloudy {}
+
+new clo
+     //^
+"#,
+		assert!(!new_expression_partial_namespace.is_empty())
+		assert!(new_expression_partial_namespace.len() == 1)
+		assert!(new_expression_partial_namespace.get(0).unwrap().label == "cloud")
 	);
 
 	test_completion_list!(
@@ -1883,5 +1954,21 @@ let x: Array< >
            //^
 "#,
 		assert!(!type_parameter.is_empty())
+	);
+
+	test_completion_list!(
+		dot_before_returning_struct,
+		r#"
+struct S { s: str; }
+
+let s1 = S { s: "" };
+
+let x: (): S = () => {
+  s1.
+	 //^
+  return { s: "" };
+};
+"#,
+		assert!(dot_before_returning_struct.get(0).unwrap().label == "s")
 	);
 }

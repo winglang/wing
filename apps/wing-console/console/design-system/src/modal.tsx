@@ -6,7 +6,7 @@ import { useTheme } from "./theme-provider.js";
 
 export interface ModalProps {
   visible: boolean;
-  setVisible: (visible: boolean) => void;
+  setVisible?: (visible: boolean) => void;
   className?: string;
   children?: ReactNode;
 }
@@ -23,8 +23,8 @@ export const Modal = ({
     <Transition.Root show={visible} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
-        onClose={() => setVisible(false)}
+        className="relative z-50"
+        onClose={() => setVisible?.(false)}
       >
         <Transition.Child
           as={Fragment}
@@ -36,15 +36,12 @@ export const Modal = ({
           leaveTo="opacity-0"
         >
           <div
-            className={classNames(
-              "fixed inset-0 bg-opacity-40 dark:bg-opacity-70 transition-opacity",
-              theme.bg1,
-            )}
+            className={classNames("fixed inset-0 transition-all backdrop-blur")}
           />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full justify-center text-center items-center p-0">
+          <div className="flex justify-center text-center pt-24">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

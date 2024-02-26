@@ -29,7 +29,7 @@ module.exports = function({ $bucket, $counter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -197,7 +197,7 @@ module.exports = function({ $bucket, $counter }) {
         },
         "message_retention_seconds": 3600,
         "name": "cloud-Queue-c86e03d8",
-        "visibility_timeout_seconds": 10
+        "visibility_timeout_seconds": 30
       }
     }
   }
@@ -217,15 +217,15 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $bucket: ${$stdlib.core.liftObject(bucket)},
             $counter: ${$stdlib.core.liftObject(counter)},
           })
@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -242,20 +242,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(bucket, host, ["put"]);
-          $Closure1._registerOnLiftObject(counter, host, ["inc"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [bucket, ["put"]],
+            [counter, ["inc"]],
+          ],
+          "$inflight_init": [
+            [bucket, []],
+            [counter, []],
+          ],
+        });
       }
     }
     const bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
     const counter = this.node.root.new("@winglang/sdk.cloud.Counter", cloud.Counter, this, "cloud.Counter", { initial: 100 });
-    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue", { timeout: (std.Duration.fromSeconds(10)) });
+    const queue = this.node.root.new("@winglang/sdk.cloud.Queue", cloud.Queue, this, "cloud.Queue");
     const handler = new $Closure1(this, "$Closure1");
     (queue.setConsumer(handler));
   }

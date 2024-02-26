@@ -82,25 +82,43 @@ export class PlatformManager {
 
     let newInstanceOverrides: any[] = [];
 
+    let parameterSchemas: any[] = [];
+
     this.platformInstances.forEach((instance) => {
+      if (instance.parameters) {
+        parameterSchemas.push(instance.parameters);
+      }
+
       if (instance.preSynth) {
-        synthHooks.preSynthesize!.push(instance.preSynth);
+        synthHooks.preSynthesize!.push(instance.preSynth.bind(instance));
       }
 
       if (instance.postSynth) {
-        synthHooks.postSynthesize!.push(instance.postSynth);
+        synthHooks.postSynthesize!.push(instance.postSynth.bind(instance));
       }
 
       if (instance.validate) {
-        synthHooks.validate!.push(instance.validate);
+        synthHooks.validate!.push(instance.validate.bind(instance));
       }
 
       if (instance.newInstance) {
-        newInstanceOverrides.push(instance.newInstance);
+        newInstanceOverrides.push(instance.newInstance.bind(instance));
       }
     });
 
-    return appCall!({ ...appProps, synthHooks, newInstanceOverrides }) as App;
+    const app = appCall!({
+      ...appProps,
+      synthHooks,
+      newInstanceOverrides,
+    }) as App;
+
+    let registrar = app.platformParameters;
+
+    parameterSchemas.forEach((schema) => {
+      registrar.addParameterSchema(schema);
+    });
+
+    return app;
   }
 }
 

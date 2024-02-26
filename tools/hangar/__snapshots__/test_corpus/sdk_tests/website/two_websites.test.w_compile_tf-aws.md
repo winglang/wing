@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {
       "root": {
@@ -313,6 +313,22 @@
       }
     },
     "aws_s3_object": {
+      "cloudWebsite_File--errorhtml_C6A94F52": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/File--error.html",
+            "uniqueId": "cloudWebsite_File--errorhtml_C6A94F52"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
+        ],
+        "key": "/error.html",
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
+      },
       "cloudWebsite_File--indexhtml_2A2AE13C": {
         "//": {
           "metadata": {
@@ -342,6 +358,22 @@
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
+      },
+      "website-2_File--errorhtml_1E2B4001": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/website-2/File--error.html",
+            "uniqueId": "website-2_File--errorhtml_1E2B4001"
+          }
+        },
+        "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.bucket}",
+        "content_type": "text/html; charset=utf-8",
+        "depends_on": [
+          "aws_s3_bucket.website-2_WebsiteBucket_59576A0C"
+        ],
+        "key": "/error.html",
         "source": "<SOURCE>",
         "source_hash": "${filemd5(<SOURCE>)}"
       },

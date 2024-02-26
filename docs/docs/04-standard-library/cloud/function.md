@@ -17,8 +17,7 @@ sidebar_position: 1
 The `cloud.Function` resource represents a serverless function for performing short, stateless tasks.
 Functions are typically used to run business logic in response to events, such as a file being uploaded to a bucket, a message being pushed to a queue, or a timer expiring.
 
-When a function is invoked on a cloud provider, it is typically executed in a container that is spun up on demand.
-The container is then destroyed after the function finishes executing.
+When a function is invoked on a cloud provider, it is typically executed in a container/host which is provisioned on demand.
 
 Functions may be invoked more than once, and some cloud providers may automatically retry failed invocations.
 For performance reasons, most cloud providers impose a timeout on functions, after which the function is automatically terminated.
@@ -50,9 +49,44 @@ new cloud.Function(inflight () => {
   let wordsCount = countWords.invoke(sentence);
   log("'${sentence}' has ${wordsCount} words");
 
-  longTask.invokeAsync();
+  longTask.invokeAsync("");
   log("task started");
 }) as "Invoke Me";
+```
+
+## Function container reuse
+
+Most cloud providers will opportunistically reuse the function's container in additional invocations. It is possible
+to leverage this behavior to cache objects across function executions using `inflight new` and inflight fields.
+
+The following example reads the `bigdata.json` file once and reuses it every time `query()` is called.
+
+```js
+bring cloud;
+
+let big = new cloud.Bucket();
+
+big.addObject("bigdata.json", Json.stringify({
+  "my-key": "my-value"
+}));
+
+class MyDatabase {
+  inflight bigdata: Json;
+  inflight new() {
+    // download big data once
+    this.bigdata = big.getJson("bigdata.json");
+  }
+
+  pub inflight query(key: str): Json {
+    return this.bigdata.get(key);
+  }
+}
+
+let db = new MyDatabase();
+
+new cloud.Function(inflight () => {
+  log(Json.stringify(db.query("my-key")));
+});
 ```
 
 ## Target-specific details
@@ -169,31 +203,74 @@ Add an environment variable to the function.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-inflight invoke(payload: str): str
+inflight invoke(payload?: str): str
 ```
 
 Invokes the function with a payload and waits for the result.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
+###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
 - *Type:* str
+
+payload to pass to the function.
+
+If not defined, an empty string will be passed.
 
 ---
 
 ##### `invokeAsync` <a name="invokeAsync" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync"></a>
 
 ```wing
-inflight invokeAsync(payload: str): void
+inflight invokeAsync(payload?: str): void
 ```
 
 Kicks off the execution of the function with a payload and returns immediately while the function is running.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync.parameter.payload"></a>
+###### `payload`<sup>Optional</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invokeAsync.parameter.payload"></a>
 
 - *Type:* str
 
+payload to pass to the function.
+
+If not defined, an empty string will be passed.
+
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Function.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.cloud.Function.onLiftType"></a>
+
+```wing
+bring cloud;
+
+cloud.Function.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Function.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Function.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -340,12 +417,12 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-inflight handle(event: str): str
+inflight handle(event?: str): str
 ```
 
 Entrypoint function that will be called when the cloud function is invoked.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
+###### `event`<sup>Optional</sup> <a name="event" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
 
 - *Type:* str
 

@@ -174,3 +174,26 @@ test("addJson throws an error for no json path", async () => {
     website.addJson(jsonPath, Object(jsonConfig));
   }).toThrowError('key must have a .json suffix. (current: "not a json Path")');
 });
+
+test("custom error page", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const website = new cloud.Website(app, "website", {
+    path: resolve(__dirname, "../test-files/website"),
+    errorDocument: "b.html",
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const websiteUrl = getWebsiteUrl(s, "/website");
+
+  const errorPage = await fetch(`${websiteUrl}/page123`);
+
+  // THEN
+  await s.stop();
+  expect(await errorPage.text()).toEqual(
+    readFileSync(resolve(__dirname, "../test-files/website/b.html"), {
+      encoding: "utf-8",
+    })
+  );
+});

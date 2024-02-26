@@ -188,3 +188,24 @@ test("consecutive start and stop service", async () => {
       .map((trace) => trace.data.message)
   ).toEqual(["@winglang/sdk.cloud.Service created.", "start!", "stop!"]);
 });
+
+test("throws during service start", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Service(
+    app,
+    "my_service",
+    Testing.makeHandler(`\
+    async handle() {
+      throw new Error("ThisIsAnError");
+      return () => console.log("stop!");
+    }`)
+  );
+
+  const s = await app.startSimulator();
+  const msg = s
+    .listTraces()
+    .find((t) => t.data.message.startsWith("Failed to start service"));
+  expect(msg).toBeTruthy();
+  expect(msg?.data.message).toEqual("Failed to start service: ThisIsAnError");
+});

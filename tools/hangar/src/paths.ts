@@ -6,6 +6,7 @@ export const examplesDir = path.join(repoRoot, "examples");
 export const testDir = path.join(examplesDir, "tests");
 export const validTestDir = path.join(testDir, "valid");
 export const sdkTestsDir = path.join(testDir, "sdk_tests");
+export const compatibilityTestsDir = path.join(testDir, "sdk_tests/counter");
 export const platformsDir = path.join(validTestDir, "platforms");
 export const sdkTests = path.join(testDir, "sdk_tests");
 export const invalidTestDir = path.join(testDir, "invalid");
@@ -32,6 +33,11 @@ export const invalidWingFiles = fs
   .filter((f) => !f.endsWith("skip.w"));
 export const errorWingFiles = fs
   .readdirSync(errorTestDir)
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));
+
+export const compatibilityTestFiles = fs
+  .readdirSync(compatibilityTestsDir)
   .filter((f) => f.endsWith(".w"))
   .filter((f) => !f.endsWith("skip.w"));
 

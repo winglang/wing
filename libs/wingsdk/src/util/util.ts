@@ -181,6 +181,7 @@ export class Util {
     opts?: ShellOptions
   ): Promise<String> {
     const shellOpts = {
+      windowsHide: true,
       cwd: opts?.cwd,
       env:
         opts?.inheritEnv === true
@@ -223,9 +224,9 @@ export class Util {
     opts?: ExecOptions
   ): Promise<Output> {
     const execOpts = {
-      cwd: opts?.cwd,
       windowsHide: true,
       shell: false,
+      cwd: opts?.cwd,
       env:
         opts?.inheritEnv === true
           ? { ...process.env, ...opts?.env }
@@ -384,6 +385,15 @@ export class Util {
   public static ulid(options?: UlidOptions): string {
     const seed = options?.seed;
     return ulid(seed);
+  }
+
+  /**
+   * Returns a string identifying the operating system platform.
+   * @returns The operating system platform
+   * @example "linux", "darwin", "win32"
+   */
+  public static os(): string {
+    return process.platform;
   }
 
   /**

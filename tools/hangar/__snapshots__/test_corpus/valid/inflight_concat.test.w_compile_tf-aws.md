@@ -6,11 +6,11 @@
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class R {
-    constructor({ $_this_s1_concat___world___ }) {
-      this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
+    constructor({ $this_s1 }) {
+      this.$this_s1 = $this_s1;
     }
     async foo() {
-      console.log(this.$_this_s1_concat___world___);
+      console.log((await this.$this_s1.concat(" world")));
     }
   }
   return R;
@@ -25,7 +25,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -57,33 +57,31 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.R-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this)};
+            const RClient = ${R._toInflightType()};
             const client = new RClient({
-              $_this_s1_concat___world___: ${$stdlib.core.liftObject((this.s1.concat(" world")))},
+              $this_s1: ${$stdlib.core.liftObject(this.s1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
-        }
-        if (ops.includes("foo")) {
-          R._registerOnLiftObject((this.s1.concat(" world")), host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "foo": [
+            [this.s1, ["concat"]],
+          ],
+          "$inflight_init": [
+            [this.s1, []],
+          ],
+        });
       }
     }
     const r = new R(this, "R");

@@ -67,7 +67,7 @@ exports[`function with a table binding 2`] = `
     },
     "aws_iam_role_policy": {
       "Function_IamRolePolicy_E3B26607": {
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:PutItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:Scan\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.Table.arn}/index/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
       },
     },
@@ -131,7 +131,7 @@ exports[`function with a table binding 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -141,7 +141,7 @@ exports[`function with a table binding 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -149,7 +149,7 @@ exports[`function with a table binding 3`] = `
                   "CloudwatchLogGroup": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "CloudwatchLogGroup",
                     "path": "root/Default/Function/CloudwatchLogGroup",
@@ -157,7 +157,7 @@ exports[`function with a table binding 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -165,7 +165,7 @@ exports[`function with a table binding 3`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -173,7 +173,7 @@ exports[`function with a table binding 3`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -181,7 +181,7 @@ exports[`function with a table binding 3`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -189,7 +189,7 @@ exports[`function with a table binding 3`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -197,7 +197,7 @@ exports[`function with a table binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
@@ -206,12 +206,20 @@ exports[`function with a table binding 3`] = `
                 "id": "Function",
                 "path": "root/Default/Function",
               },
+              "ParameterRegistrar": {
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.3.0",
+                },
+                "id": "ParameterRegistrar",
+                "path": "root/Default/ParameterRegistrar",
+              },
               "Table": {
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.20.3",
                     },
                     "id": "Default",
                     "path": "root/Default/Table/Default",
@@ -219,7 +227,7 @@ exports[`function with a table binding 3`] = `
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.2.70",
+                  "version": "10.3.0",
                 },
                 "display": {
                   "description": "A DynamoDb Table",
@@ -231,7 +239,7 @@ exports[`function with a table binding 3`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.20.3",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -239,7 +247,7 @@ exports[`function with a table binding 3`] = `
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.2.70",
+              "version": "10.3.0",
             },
             "id": "Default",
             "path": "root/Default",
@@ -247,7 +255,7 @@ exports[`function with a table binding 3`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.20.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -255,7 +263,7 @@ exports[`function with a table binding 3`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.20.3",
         },
         "id": "root",
         "path": "root",
@@ -263,11 +271,80 @@ exports[`function with a table binding 3`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.20.3",
     },
     "id": "App",
     "path": "",
   },
   "version": "tree-0.1",
+}
+`;
+
+exports[`table with global secondary index 1`] = `
+{
+  "resource": {
+    "aws_dynamodb_table": {
+      "Table1": {
+        "attribute": [
+          {
+            "name": "type",
+            "type": "S",
+          },
+          {
+            "name": "id",
+            "type": "S",
+          },
+          {
+            "name": "createdAt",
+            "type": "N",
+          },
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "global_secondary_index": [
+          {
+            "hash_key": "type",
+            "name": "CreatedAtIndex",
+            "projection_type": "ALL",
+            "range_key": "createdAt",
+          },
+        ],
+        "hash_key": "type",
+        "name": "blog1Table1-c8b8c19c",
+        "range_key": "id",
+      },
+      "Table2": {
+        "attribute": [
+          {
+            "name": "type",
+            "type": "S",
+          },
+          {
+            "name": "id",
+            "type": "S",
+          },
+          {
+            "name": "createdAt",
+            "type": "N",
+          },
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "global_secondary_index": [
+          {
+            "hash_key": "id",
+            "name": "idIndex",
+            "non_key_attributes": [
+              "title",
+            ],
+            "projection_type": "INCLUDE",
+            "read_capacity": 5,
+            "write_capacity": 5,
+          },
+        ],
+        "hash_key": "type",
+        "name": "blog2Table2-c8fd9a63",
+        "range_key": "createAt",
+      },
+    },
+  },
 }
 `;

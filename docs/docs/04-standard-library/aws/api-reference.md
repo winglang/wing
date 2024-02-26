@@ -38,6 +38,41 @@ new aws.Domain(props: DomainProps);
 ---
 
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.aws.Domain.onLiftType">onLiftType</a></code> | A hook called by the Wing compiler once for each inflight host that needs to use this type inflight. |
+
+---
+
+##### `onLiftType` <a name="onLiftType" id="@winglang/sdk.aws.Domain.onLiftType"></a>
+
+```wing
+bring aws;
+
+aws.Domain.onLiftType(host: IInflightHost, ops: MutArray<str>);
+```
+
+A hook called by the Wing compiler once for each inflight host that needs to use this type inflight.
+
+The list of requested inflight methods
+needed by the inflight host are given by `ops`.
+
+This method is commonly used for adding permissions, environment variables, or
+other capabilities to the inflight host.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.aws.Domain.onLiftType.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.aws.Domain.onLiftType.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -709,6 +744,7 @@ let AwsWebsiteProps = aws.AwsWebsiteProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file or absolute. |
+| <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.errorDocument">errorDocument</a></code> | <code>str</code> | Name of the error document for the website. |
 | <code><a href="#@winglang/sdk.aws.AwsWebsiteProps.property.domain">domain</a></code> | <code><a href="#@winglang/sdk.aws.Domain">Domain</a></code> | The website's custom domain object. |
 
 ---
@@ -729,6 +765,26 @@ Local path to the website's static files, relative to the Wing source file or ab
 
 ```wing
 "./dist"
+```
+
+
+##### `errorDocument`<sup>Optional</sup> <a name="errorDocument" id="@winglang/sdk.aws.AwsWebsiteProps.property.errorDocument"></a>
+
+```wing
+errorDocument: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+Name of the error document for the website.
+
+---
+
+*Example*
+
+```wing
+"404.html"
 ```
 
 

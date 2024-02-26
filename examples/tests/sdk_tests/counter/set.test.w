@@ -1,28 +1,37 @@
 bring cloud;
+bring expect;
 
-let counter = new cloud.Counter(initial: 0);
+// implicit initial (0)
+let counter1 = new cloud.Counter() as "counter1";
+// explicit initial
+let counter2 = new cloud.Counter(initial: -1) as "counter2";
 
-test "set" {
-  assert(counter.peek() == 0);
-  counter.inc();
-  assert(counter.peek() == 1);
-  counter.inc();
-  assert(counter.peek() == 2);
-  counter.inc(10);
-  assert(counter.peek() == 12);
-  counter.set(88);
-  assert(counter.peek() == 88);
+test "set()" {
+  // set (positive int)
+  counter1.set(42);
+  expect.equal(counter1.peek(), 42);
+
+  // set (negative int)
+  counter1.set(-100);
+  expect.equal(counter1.peek(), -100);
+
+  // set (0)
+  counter1.set(0);
+  expect.equal(counter1.peek(), 0);
 }
 
-test "key set" {
-  let key = "my-key";
-  assert(counter.peek(key) == 0);
-  counter.inc(nil, key);
-  assert(counter.peek(key) == 1);
-  counter.inc(nil, key);
-  assert(counter.peek(key) == 2);
-  counter.inc(10, key);
-  assert(counter.peek(key) == 12);
-  counter.set(88, key);
-  assert(counter.peek(key) == 88);
+test "set() with custom key" {
+  let key = "custom-key";
+
+  // set (positive int)
+  counter2.set(42, key);
+  expect.equal(counter2.peek(key), 42);
+
+  // set (negative int)
+  counter2.set(-100, key);
+  expect.equal(counter2.peek(key), -100);
+
+  // set (0)
+  counter2.set(0, key);
+  expect.equal(counter2.peek(key), 0);
 }

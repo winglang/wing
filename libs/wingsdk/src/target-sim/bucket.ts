@@ -38,6 +38,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
       cloud.BucketInflightMethods.TRY_DELETE,
       cloud.BucketInflightMethods.METADATA,
       cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
   /**

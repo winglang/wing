@@ -34,6 +34,7 @@ export class DynamodbTable
       hashKey: props.hashKey,
       rangeKey: props.rangeKey,
       billingMode: "PAY_PER_REQUEST",
+      globalSecondaryIndex: props.globalSecondaryIndex,
     });
   }
 
@@ -63,6 +64,12 @@ export class DynamodbTable
     host.addPolicyStatements(
       ...calculateDynamodbTablePermissions(this.table.arn, ops)
     );
+
+    if (this.table.globalSecondaryIndex) {
+      host.addPolicyStatements(
+        ...calculateDynamodbTablePermissions(`${this.table.arn}/index/*`, ops)
+      );
+    }
 
     host.addEnvironment(this.envName(), this.table.name);
 

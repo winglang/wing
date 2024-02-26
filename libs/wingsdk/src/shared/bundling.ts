@@ -1,7 +1,6 @@
 import * as crypto from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
-import { join, relative, resolve } from "path";
-import { buildSync } from "esbuild-wasm";
+import { join, resolve } from "path";
 import { normalPath } from "./misc";
 
 const SDK_PATH = normalPath(resolve(__dirname, "..", ".."));
@@ -10,6 +9,8 @@ export interface Bundle {
   entrypointPath: string;
   directory: string;
   hash: string;
+  outfilePath: string;
+  sourcemapPath: string;
 }
 
 /**
@@ -24,7 +25,6 @@ export function createBundle(
   external: string[] = [],
   outputDir?: string
 ): Bundle {
-  const originalEntrypointDir = normalPath(resolve(entrypoint, ".."));
   const outdir = resolve(outputDir ?? entrypoint + ".bundle");
   mkdirSync(outdir, { recursive: true });
 
@@ -34,12 +34,13 @@ export function createBundle(
   const outfile = join(outdir, outfileName);
   const outfileMap = join(outdir, soucemapFilename);
 
-  let esbuild = buildSync({
+  // eslint-disable-next-line import/no-extraneous-dependencies,@typescript-eslint/no-require-imports
+  const esbuilder: typeof import("esbuild") = require("esbuild");
+
+  let esbuild = esbuilder.buildSync({
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],
-    outdir: originalEntrypointDir,
-    sourceRoot: originalEntrypointDir + "/",
-    absWorkingDir: originalEntrypointDir,
+    outfile,
     // otherwise there are problems with running azure cloud functions:
     // https://stackoverflow.com/questions/70332883/webpack-azure-storage-blob-node-fetch-abortsignal-issue
     keepNames: true,
@@ -51,9 +52,10 @@ export function createBundle(
       "@winglang/sdk": SDK_PATH,
     },
     minify: false,
-    sourcemap: "external",
+    sourcemap: "linked",
     platform: "node",
     target: "node18",
+    format: "cjs",
     external,
     write: false,
   });
@@ -63,39 +65,36 @@ export function createBundle(
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 
-  const output = esbuild.outputFiles[1];
-  let fileContents = new TextDecoder().decode(output.contents);
+  const bundleOutput = esbuild.outputFiles[1];
 
-  // sourcemap hacks for winglang:
-  // source paths in sourcemap are incorrect and need to be fixed
+  // ensure source paths have posix path separators
   const sourcemapData = JSON.parse(
     new TextDecoder().decode(esbuild.outputFiles[0].contents)
   );
-  // unrandomize the sourceRoot
-  sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot).replace(
-    /\.\d+\.tmp\/\.wing\//g,
-    "/.wing/"
-  );
-
-  for (const [idx, source] of Object.entries(sourcemapData.sources)) {
-    if ((source as any).endsWith(".w")) {
-      const absolutePath = `/${source}`;
-      const relativePath = relative(originalEntrypointDir, absolutePath);
-      sourcemapData.sources[idx] = relativePath;
-    }
+  if (sourcemapData.sourceRoot) {
+    sourcemapData.sourceRoot = normalPath(sourcemapData.sourceRoot);
   }
 
-  fileContents += `//# sourceMappingURL=${soucemapFilename}`;
+  for (const [idx, source] of Object.entries(
+    sourcemapData.sources as string[]
+  )) {
+    sourcemapData.sources[idx] = normalPath(source);
+  }
 
-  writeFileSync(outfile, fileContents);
+  writeFileSync(outfile, bundleOutput.contents);
   writeFileSync(outfileMap, JSON.stringify(sourcemapData));
 
   // calculate a md5 hash of the contents of asset.path
-  const codeHash = crypto.createHash("md5").update(fileContents).digest("hex");
+  const codeHash = crypto
+    .createHash("md5")
+    .update(bundleOutput.contents)
+    .digest("hex");
 
   return {
     entrypointPath: outfile,
     directory: outdir,
     hash: codeHash,
+    outfilePath: outfile,
+    sourcemapPath: outfileMap,
   };
 }

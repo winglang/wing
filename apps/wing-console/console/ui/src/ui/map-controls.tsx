@@ -1,39 +1,36 @@
 import {
   ArrowsPointingOutIcon,
-  EyeIcon,
-  EyeSlashIcon,
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
 } from "@heroicons/react/24/solid";
 import { Toolbar, ToolbarButton } from "@wingconsole/design-system";
-import { useContext } from "react";
 
-import { TestsContext } from "../tests-context.js";
+export interface MapControlsProps {
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onZoomToFit?: () => void;
+}
 
-import { useZoomPaneContext } from "./zoom-pane.js";
-
-export interface MapControlsProps {}
-
-export const MapControls = ({}: MapControlsProps) => {
-  const { zoomIn, zoomOut, zoomToFit } = useZoomPaneContext();
-
-  const { showTests, setShowTests, testsExists } = useContext(TestsContext);
-
+export const MapControls = ({
+  onZoomIn,
+  onZoomOut,
+  onZoomToFit,
+}: MapControlsProps) => {
   return (
     <div className="flex justify-normal items-center">
       <div className="grow" />
 
       <div>
         <Toolbar>
-          <ToolbarButton title="Zoom out" onClick={zoomOut}>
+          <ToolbarButton title="Zoom out" onClick={onZoomOut}>
             <MagnifyingGlassMinusIcon className="w-4 h-4" />
           </ToolbarButton>
 
-          <ToolbarButton title="Zoom in" onClick={zoomIn}>
+          <ToolbarButton title="Zoom in" onClick={onZoomIn}>
             <MagnifyingGlassPlusIcon className="w-4 h-4" />
           </ToolbarButton>
 
-          <ToolbarButton title="Zoom to fit" onClick={zoomToFit}>
+          <ToolbarButton title="Zoom to fit" onClick={onZoomToFit}>
             <ArrowsPointingOutIcon className="w-4 h-4" />
           </ToolbarButton>
         </Toolbar>

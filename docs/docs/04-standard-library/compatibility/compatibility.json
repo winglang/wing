@@ -1,690 +1,1948 @@
 {
   "Bucket": {
     "BucketProps.public": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "public": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "onCreate": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false, "issue": 2724 },
-      "tf-azure": { "implemented": false, "issue": 1954 },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true,
+        "issue": 2724
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1954
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "onDelete": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1954 },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1954
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "onUpdate": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false, "issue": 2724 },
-      "tf-azure": { "implemented": false, "issue": 1954 },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true,
+        "issue": 2724
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1954
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "onEvent": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false, "issue": 2724 },
-      "tf-azure": { "implemented": false, "issue": 1954 },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true,
+        "issue": 2724
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1954
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "addObject": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "put": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "putJson": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "get": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "tryGet": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "getJson": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "tryGetJson": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "delete": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "tryDelete": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "exists": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "metadata": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 4333 },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "rename": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "copy": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": false, "issue": 4398 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "list": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "publicUrl": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1805 },
-      "tf-gcp": { "implemented": true },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "signedUrl": {
-      "sim": { "implemented": false, "issue": 1383 },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 4635 },
-      "tf-gcp": { "implemented": false, "issue": 4599 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": false,
+        "issue": 1383
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 4635
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
+    },
+    "addFile": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Queue": {
     "QueueProps.duration": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": false
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "QueueProps.retentionPeriod": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": false
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "QueueProps.initialMessages": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "timeout": {
-      "sim": { "implemented": false, "issue": 1980 },
-      "tf-aws": { "implemented": false, "issue": 3354 },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": false,
+        "issue": 1980
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 3354
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "setConsumer": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "approxSize": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "push": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "pop": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "purge": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     }
   },
   "Function": {
     "FunctionProps.timeout": {
-      "sim": { "implemented": false, "issue": 1980 },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": true },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": false,
+        "issue": 1980
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "FunctionProps.memory": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "FunctionProps.concurrency": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": false
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "FunctionProps.env": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "timeout": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "memory": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "concurrency": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": false
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "addEnvironment": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "invoke": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false, "issue": 614 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 614
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "invokeAsync": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": true
+      }
+    },
+    "env": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Counter": {
     "CounterProps.initial": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 629 },
-      "tf-gcp": { "implemented": false, "issue": 628 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "inc": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 629 },
-      "tf-gcp": { "implemented": false, "issue": 628 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "dec": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 629 },
-      "tf-gcp": { "implemented": false, "issue": 628 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "peek": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 629 },
-      "tf-gcp": { "implemented": false, "issue": 628 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
-    "reset": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 629 },
-      "tf-gcp": { "implemented": false, "issue": 628 },
-      "awscdk": { "implemented": true }
+    "set": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": true
+      },
+      "tf-gcp": {
+        "implemented": true
+      },
+      "awscdk": {
+        "implemented": true
+      }
+    },
+    "initial": {
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Topic": {
     "publish": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 621 },
-      "tf-gcp": { "implemented": false, "issue": 620 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 621
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 620
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "onMessage": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 621 },
-      "tf-gcp": { "implemented": false, "issue": 620 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 621
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 620
+      },
+      "awscdk": {
+        "implemented": true
+      }
+    },
+    "permissions": {
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Schedule": {
     "ScheduleProps.cron": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1291 },
-      "tf-gcp": { "implemented": false, "issue": 1292 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1291
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1292
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ScheduleProps.rate": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1291 },
-      "tf-gcp": { "implemented": false, "issue": 1292 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1291
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1292
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "onTick": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1291 },
-      "tf-gcp": { "implemented": false, "issue": 1292 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1291
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1292
+      },
+      "awscdk": {
+        "implemented": false
+      }
     }
   },
   "Website": {
     "WebsiteProps.path": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1295 },
-      "tf-gcp": { "implemented": false, "issue": 1296 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1295
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1296
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "WebsiteProps.domain": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false, "issue": 2440 },
-      "tf-azure": { "implemented": false, "issue": 1295 },
-      "tf-gcp": { "implemented": false, "issue": 1296 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 2440
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1295
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1296
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "path": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1295 },
-      "tf-gcp": { "implemented": false, "issue": 1296 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1295
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1296
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "url": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1295 },
-      "tf-gcp": { "implemented": false, "issue": 1296 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1295
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1296
+      },
+      "awscdk": {
+        "implemented": false
+      }
+    },
+    "addJson": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "addFile": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
   "Api": {
     "ApiProps.ApiCorsProps": {
-      "sim": { "implemented": false },
-      "tf-aws": { "implemented": false },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false
+      },
+      "tf-aws": {
+        "implemented": false
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "url": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": false, "issue": 3342 },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true,
+        "issue": 3342
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "cors": {
-      "sim": { "implemented": false, "issue": 2289 },
-      "tf-aws": { "implemented": false, "issue": 2289 },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false, "issue": 2289 }
+      "sim": {
+        "implemented": false,
+        "issue": 2289
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 2289
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": false,
+        "issue": 2289
+      }
     },
     "get": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "post": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "put": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "delete": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "patch": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "any": {
-      "sim": { "implemented": false, "issue": 1848 },
-      "tf-aws": { "implemented": false, "issue": 1848 },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false, "issue": 1848 }
+      "sim": {
+        "implemented": false,
+        "issue": 1848
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1848
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": false,
+        "issue": 1848
+      }
     },
     "request": {
-      "sim": { "implemented": false, "issue": 1850 },
-      "tf-aws": { "implemented": false, "issue": 1850 },
-      "tf-azure": { "implemented": false, "issue": 625 },
-      "tf-gcp": { "implemented": false, "issue": 624 },
-      "awscdk": { "implemented": false, "issue": 1850 }
+      "sim": {
+        "implemented": false,
+        "issue": 1850
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1850
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 625
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 624
+      },
+      "awscdk": {
+        "implemented": false,
+        "issue": 1850
+      }
+    },
+    "options": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "head": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "connect": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   },
-
   "Secret": {
     "SecretProps.name": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 2178 },
-      "tf-gcp": { "implemented": false, "issue": 2179 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 2178
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 2179
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "SecretProps.value": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 2178 },
-      "tf-gcp": { "implemented": false, "issue": 2179 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 2178
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 2179
+      },
+      "awscdk": {
+        "implemented": true
+      }
     },
     "SecretProps.valueJson": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 2178 },
-      "tf-gcp": { "implemented": false, "issue": 2179 },
-      "awscdk": { "implemented": true }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 2178
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 2179
+      },
+      "awscdk": {
+        "implemented": true
+      }
     }
   },
   "Service": {
     "ServiceProps.buildpackPath": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ServiceProps.env": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ServiceProps.command": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ServiceProps.port": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ServiceProps.memory": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "ServiceProps.cpu": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "url": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "buildpackPath": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "command": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "port": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "memory": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "cpu": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "replicas": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "addEnv": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "request": {
-      "sim": { "implemented": false, "issue": 1305 },
-      "tf-aws": { "implemented": false, "issue": 1306 },
-      "tf-azure": { "implemented": false, "issue": 1307 },
-      "tf-gcp": { "implemented": false, "issue": 1308 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": false,
+        "issue": 1305
+      },
+      "tf-aws": {
+        "implemented": false,
+        "issue": 1306
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1307
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1308
+      },
+      "awscdk": {
+        "implemented": false
+      }
+    },
+    "started": {
+      "sim": {
+        "implemented": true
+      }
+    },
+    "stop": {
+      "sim": {
+        "implemented": true
+      }
+    },
+    "start": {
+      "sim": {
+        "implemented": true
+      }
     }
   },
   "Table": {
     "TableProps.name": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "TableProps.columns": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "TableProps.primaryKey": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "name": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "columns": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "primaryKey": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "addRow": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false },
-      "tf-gcp": { "implemented": false },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false
+      },
+      "tf-gcp": {
+        "implemented": false
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "insert": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "update": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "delete": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "get": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
     },
     "list": {
-      "sim": { "implemented": true },
-      "tf-aws": { "implemented": true },
-      "tf-azure": { "implemented": false, "issue": 1315 },
-      "tf-gcp": { "implemented": false, "issue": 1316 },
-      "awscdk": { "implemented": false }
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      },
+      "tf-azure": {
+        "implemented": false,
+        "issue": 1315
+      },
+      "tf-gcp": {
+        "implemented": false,
+        "issue": 1316
+      },
+      "awscdk": {
+        "implemented": false
+      }
+    },
+    "tryGet": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "upsert": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "Endpoint": {
+    "url": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "DynamodbTable": {
+    "putItem": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "query": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "getItem": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "transactWriteItems": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    }
+  },
+  "ReactApp": {
+    "addEnvironment": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
+    },
+    "url": {
+      "sim": {
+        "implemented": true
+      },
+      "tf-aws": {
+        "implemented": true
+      }
     }
   }
 }

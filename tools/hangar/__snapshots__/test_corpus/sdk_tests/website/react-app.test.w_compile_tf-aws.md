@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {
       "root": {
@@ -31,6 +31,16 @@
     }
   },
   "data": {
+    "aws_caller_identity": {
+      "account": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/account",
+            "uniqueId": "account"
+          }
+        }
+      }
+    },
     "aws_iam_policy_document": {
       "exReactApp_exReactApp-host_AllowDistributionReadOnly_449FAF0F": {
         "//": {
@@ -118,7 +128,7 @@
             "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/\":{\"get\":{\"operationId\":\"get\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_get__0_53449ADC.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/\":{\"get\":{\"operationId\":\"get\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.Region.name}:${data.aws_caller_identity.account.account_id}:function:get_0-c8ca9349/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}},\"/{proxy+}\":{\"x-amazon-apigateway-any-method\":{\"produces\":[\"application/json\"],\"x-amazon-apigateway-integration\":{\"type\":\"mock\",\"requestTemplates\":{\"application/json\":\"\\n                {\\\"statusCode\\\": 404}\\n              \"},\"passthroughBehavior\":\"never\",\"responses\":{\"404\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}},\"default\":{\"statusCode\":\"404\",\"responseParameters\":{\"method.response.header.Content-Type\":\"'application/json'\"},\"responseTemplates\":{\"application/json\":\"{\\\"statusCode\\\": 404, \\\"message\\\": \\\"Error: Resource not found\\\"}\"}}}},\"responses\":{\"404\":{\"description\":\"404 response\",\"headers\":{\"Content-Type\":{\"type\":\"string\"}}}}}}}}",
         "lifecycle": {
           "create_before_destroy": true
         },
@@ -146,6 +156,18 @@
             "uniqueId": "exReactApp_exReactApp-host_Distribution_FE9291B1"
           }
         },
+        "custom_error_response": [
+          {
+            "error_code": 404,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          },
+          {
+            "error_code": 403,
+            "response_code": 200,
+            "response_page_path": "/index.html"
+          }
+        ],
         "default_cache_behavior": {
           "allowed_methods": [
             "GET",
@@ -204,58 +226,58 @@
       }
     },
     "aws_cloudwatch_log_group": {
-      "cloudApi_get__0_CloudwatchLogGroup_8157F45B": {
+      "cloudApi_get_0_CloudwatchLogGroup_9D02C16C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/CloudwatchLogGroup",
-            "uniqueId": "cloudApi_get__0_CloudwatchLogGroup_8157F45B"
+            "path": "root/Default/Default/cloud.Api/get_0/CloudwatchLogGroup",
+            "uniqueId": "cloudApi_get_0_CloudwatchLogGroup_9D02C16C"
           }
         },
-        "name": "/aws/lambda/get__-0-c83a3423",
+        "name": "/aws/lambda/get_0-c8ca9349",
         "retention_in_days": 30
       }
     },
     "aws_iam_role": {
-      "cloudApi_get__0_IamRole_BA7625E6": {
+      "cloudApi_get_0_IamRole_111BBD82": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/IamRole",
-            "uniqueId": "cloudApi_get__0_IamRole_BA7625E6"
+            "path": "root/Default/Default/cloud.Api/get_0/IamRole",
+            "uniqueId": "cloudApi_get_0_IamRole_111BBD82"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudApi_get__0_IamRolePolicy_EA1F05B0": {
+      "cloudApi_get_0_IamRolePolicy_6778B83A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/IamRolePolicy",
-            "uniqueId": "cloudApi_get__0_IamRolePolicy_EA1F05B0"
+            "path": "root/Default/Default/cloud.Api/get_0/IamRolePolicy",
+            "uniqueId": "cloudApi_get_0_IamRolePolicy_6778B83A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.cloudApi_get__0_IamRole_BA7625E6.name}"
+        "role": "${aws_iam_role.cloudApi_get_0_IamRole_111BBD82.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudApi_get__0_IamRolePolicyAttachment_9A60D059": {
+      "cloudApi_get_0_IamRolePolicyAttachment_1A88E668": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/IamRolePolicyAttachment",
-            "uniqueId": "cloudApi_get__0_IamRolePolicyAttachment_9A60D059"
+            "path": "root/Default/Default/cloud.Api/get_0/IamRolePolicyAttachment",
+            "uniqueId": "cloudApi_get_0_IamRolePolicyAttachment_1A88E668"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudApi_get__0_IamRole_BA7625E6.name}"
+        "role": "${aws_iam_role.cloudApi_get_0_IamRole_111BBD82.name}"
       }
     },
     "aws_lambda_function": {
-      "cloudApi_get__0_53449ADC": {
+      "cloudApi_get_0_B857C178": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/Default",
-            "uniqueId": "cloudApi_get__0_53449ADC"
+            "path": "root/Default/Default/cloud.Api/get_0/Default",
+            "uniqueId": "cloudApi_get_0_B857C178"
           }
         },
         "architectures": [
@@ -264,18 +286,18 @@
         "environment": {
           "variables": {
             "NODE_OPTIONS": "--enable-source-maps",
-            "WING_FUNCTION_NAME": "get__-0-c83a3423",
+            "WING_FUNCTION_NAME": "get_0-c8ca9349",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "get__-0-c83a3423",
+        "function_name": "get_0-c8ca9349",
         "handler": "index.handler",
         "memory_size": 1024,
         "publish": true,
-        "role": "${aws_iam_role.cloudApi_get__0_IamRole_BA7625E6.arn}",
+        "role": "${aws_iam_role.cloudApi_get_0_IamRole_111BBD82.arn}",
         "runtime": "nodejs20.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudApi_get__0_S3Object_806093F6.key}",
+        "s3_key": "${aws_s3_object.cloudApi_get_0_S3Object_67E48DD4.key}",
         "timeout": 60,
         "vpc_config": {
           "security_group_ids": [],
@@ -292,7 +314,7 @@
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.cloudApi_get__0_53449ADC.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_get_0_B857C178.function_name}",
         "principal": "apigateway.amazonaws.com",
         "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/",
         "statement_id": "AllowExecutionFromAPIGateway-GET-c2e3ffa8"
@@ -340,17 +362,20 @@
           }
         },
         "bucket": "${aws_s3_bucket.exReactApp_exReactApp-host_WebsiteBucket_FE5E163A.bucket}",
+        "error_document": {
+          "key": "index.html"
+        },
         "index_document": {
           "suffix": "index.html"
         }
       }
     },
     "aws_s3_object": {
-      "cloudApi_get__0_S3Object_806093F6": {
+      "cloudApi_get_0_S3Object_67E48DD4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Api/get__}0/S3Object",
-            "uniqueId": "cloudApi_get__0_S3Object_806093F6"
+            "path": "root/Default/Default/cloud.Api/get_0/S3Object",
+            "uniqueId": "cloudApi_get_0_S3Object_67E48DD4"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",

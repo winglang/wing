@@ -1,5 +1,6 @@
 bring cloud;
 bring util;
+bring expect;
 
 let b = new cloud.Bucket();
 
@@ -9,10 +10,10 @@ test "copy()" {
     try {
       block();
     } catch actual {
-      assert(actual.contains(expected));
+      expect.equal(actual, expected);
       error = true;
     }
-    assert(error);
+    expect.equal(error, true);
   };
   let UNEXISTING_KEY = "no-such-file.txt";
   let OBJECT_DOES_NOT_EXIST_ERROR = "Source object does not exist (srcKey={UNEXISTING_KEY}).";

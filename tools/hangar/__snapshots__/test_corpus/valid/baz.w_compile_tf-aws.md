@@ -29,14 +29,14 @@ class Baz extends $stdlib.std.Resource {
   }
   static _toInflightType() {
     return `
-      require("./inflight.Baz-1.js")({
+      require("${$helpers.normalPath(__dirname)}/inflight.Baz-1.js")({
       })
     `;
   }
   _toInflight() {
     return `
       (await (async () => {
-        const BazClient = ${Baz._toInflightType(this)};
+        const BazClient = ${Baz._toInflightType()};
         const client = new BazClient({
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
@@ -44,8 +44,11 @@ class Baz extends $stdlib.std.Resource {
       })())
     `;
   }
-  _supportedOps() {
-    return [...super._supportedOps(), "$inflight_init"];
+  get _liftMap() {
+    return ({
+      "$inflight_init": [
+      ],
+    });
   }
 }
 module.exports = { Baz };

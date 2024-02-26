@@ -21,7 +21,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -59,14 +59,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.R-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.R-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this)};
+            const RClient = ${R._toInflightType()};
             const client = new RClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -74,8 +74,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const x = "hi";

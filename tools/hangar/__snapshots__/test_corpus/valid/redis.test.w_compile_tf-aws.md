@@ -36,9 +36,9 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       const value2 = (await $r2.get("wing"));
       $helpers.assert($helpers.eq(value2, "does redis again"), "value2 == \"does redis again\"");
       (await $queue.push("world!"));
-      (await $util_Util.waitUntil(async () => {
-        return !$helpers.eq((await $r.get("hello")), undefined);
-      }));
+      (await $util_Util.waitUntil((async () => {
+        return $helpers.neq((await $r.get("hello")), undefined);
+      })));
       $helpers.assert($helpers.eq("world!", String.raw({ raw: ["", ""] }, (await $r.get("hello")))), "\"world!\" == \"{r.get(\"hello\")}\"");
     }
   }
@@ -54,7 +54,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -114,7 +114,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+          "${aws_security_group.exRedis_KEN15securityGroup_3840F345.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.exRedis_RedisSubnetGroup_EE9BBE48.name}"
       },
@@ -133,7 +133,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_securityGroup_35A75C2E.id}"
+          "${aws_security_group.r2_KEN24securityGroup_AFC21ADF.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
       }
@@ -256,7 +256,7 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "timeout": "${aws_sqs_queue.cloudQueue.visibility_timeout_seconds}",
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+            "${aws_security_group.exRedis_KEN15securityGroup_3840F345.id}"
           ],
           "subnet_ids": [
             "${aws_subnet.PrivateSubnet.id}"
@@ -386,11 +386,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
       }
     },
     "aws_security_group": {
-      "exRedis_securityGroup_3948C3F2": {
+      "exRedis_KEN15securityGroup_3840F345": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/ex.Redis/securityGroup",
-            "uniqueId": "exRedis_securityGroup_3948C3F2"
+            "path": "root/Default/Default/ex.Redis/KEN.15]}securityGroup",
+            "uniqueId": "exRedis_KEN15securityGroup_3840F345"
           }
         },
         "egress": [
@@ -426,11 +426,11 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
         "name": "89baf91f-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       },
-      "r2_securityGroup_35A75C2E": {
+      "r2_KEN24securityGroup_AFC21ADF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/r2/securityGroup",
-            "uniqueId": "r2_securityGroup_35A75C2E"
+            "path": "root/Default/Default/r2/KEN.24]}securityGroup",
+            "uniqueId": "r2_KEN24securityGroup_AFC21ADF"
           }
         },
         "egress": [
@@ -545,15 +545,15 @@ const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $r: ${$stdlib.core.liftObject(r)},
           })
         `;
@@ -561,7 +561,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -569,25 +569,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(r, host, ["set"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [r, ["set"]],
+          ],
+          "$inflight_init": [
+            [r, []],
+          ],
+        });
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $queue: ${$stdlib.core.liftObject(queue)},
             $r: ${$stdlib.core.liftObject(r)},
             $r2: ${$stdlib.core.liftObject(r2)},
@@ -598,7 +599,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -606,16 +607,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(queue, host, ["push"]);
-          $Closure2._registerOnLiftObject(r, host, ["get"]);
-          $Closure2._registerOnLiftObject(r2, host, ["get", "set"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [queue, ["push"]],
+            [r, ["get"]],
+            [r2, ["get", "set"]],
+          ],
+          "$inflight_init": [
+            [queue, []],
+            [r, []],
+            [r2, []],
+          ],
+        });
       }
     }
     const r = this.node.root.new("@winglang/sdk.ex.Redis", ex.Redis, this, "ex.Redis");

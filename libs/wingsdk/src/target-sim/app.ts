@@ -238,6 +238,10 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    if (this._synthHooks?.preSynthesize) {
+      this._synthHooks.preSynthesize.forEach((hook) => hook(this));
+    }
+
     // write simulator.json file into workdir
     this.synthSimulatorFile(this.outdir);
 
@@ -248,6 +252,10 @@ export class App extends core.App {
     core.Connections.of(this).synth(this.outdir);
 
     this.synthed = true;
+
+    if (this._synthHooks?.postSynthesize) {
+      this._synthHooks.postSynthesize.forEach((hook) => hook(this));
+    }
 
     return this.outdir;
   }

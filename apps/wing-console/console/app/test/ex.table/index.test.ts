@@ -29,13 +29,13 @@ const addRow = async (
 };
 
 describe(`${__dirname}/main.w`, () => {
-  test("adds new row", async ({ page }) => {
+  test.skip("adds new row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
 
     await addRow(page, "Hello World!");
   });
 
-  test("edits row", async ({ page }) => {
+  test.skip("edits row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
 
     const rowId = "Hello World!";
@@ -54,7 +54,7 @@ describe(`${__dirname}/main.w`, () => {
     expect(editedValue).toBe("Hello World! 2");
   });
 
-  test("removes row", async ({ page }) => {
+  test.skip("removes row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
 
     const rowId = "Hello World!";

@@ -1,6 +1,12 @@
 import { basename } from "path";
 import { normalPath } from "../shared/misc";
 
+let closureCount = 0;
+
+export function closureId(): number {
+  return closureCount++;
+}
+
 export type InflightBindings = Record<string, InflightBinding>;
 
 /**

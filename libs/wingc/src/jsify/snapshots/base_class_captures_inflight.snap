@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Base-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Base-1.js")({
             $x: ${$stdlib.core.liftObject(x)},
           })
         `;
@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const BaseClient = ${Base._toInflightType(this)};
+            const BaseClient = ${Base._toInflightType()};
             const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -93,14 +93,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "bar", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("bar")) {
-          Base._registerOnLiftObject(x, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "bar": [
+            [x, []],
+          ],
+          "$inflight_init": [
+            [x, []],
+          ],
+        });
       }
     }
     class Derived extends Base {
@@ -109,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Derived-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Derived-1.js")({
             $Base: ${$stdlib.core.liftObject(Base)},
           })
         `;
@@ -117,7 +118,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const DerivedClient = ${Derived._toInflightType(this)};
+            const DerivedClient = ${Derived._toInflightType()};
             const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -125,14 +126,14 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "foo", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("foo")) {
-          Derived._registerOnLiftObject(this, host, ["bar"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "foo": [
+            [this, ["bar"]],
+          ],
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const x = "hello";

@@ -19,3 +19,4 @@ export * from "./dynamodb-table.inflight";
 export * from "./on-deploy";
 export * from "./test-runner";
 export * from "./tokens";
+export * from "./api";

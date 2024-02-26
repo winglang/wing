@@ -3,8 +3,9 @@
 exports[`create a function 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -28,7 +29,8 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -141,7 +143,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -153,7 +155,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -174,8 +176,9 @@ exports[`invoke function fails 1`] = `
 exports[`invoke function fails 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -199,7 +202,8 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -310,7 +314,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -322,7 +326,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -343,8 +347,9 @@ exports[`invoke function succeeds 1`] = `
 exports[`invoke function succeeds 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -368,7 +373,8 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -479,7 +485,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -491,7 +497,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -512,8 +518,9 @@ exports[`invoke function with environment variables 1`] = `
 exports[`invoke function with environment variables 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -537,7 +544,8 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -650,7 +658,7 @@ async handle(event) {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -662,7 +670,7 @@ async handle(event) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -683,8 +691,9 @@ exports[`invoke function with process.exit(1) 1`] = `
 exports[`invoke function with process.exit(1) 2`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -698,7 +707,8 @@ async handle() {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -809,7 +819,7 @@ async handle() {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -821,7 +831,7 @@ async handle() {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -834,8 +844,9 @@ async handle() {
 exports[`runtime environment tests 1`] = `
 {
   ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -852,11 +863,13 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   ".wing/function.1_c89ed254.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -871,11 +884,13 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -891,11 +906,13 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   ".wing/function.3_c8badafa.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -911,7 +928,8 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [],
@@ -1058,7 +1076,7 @@ return class Handler {
         "Function.0": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1070,7 +1088,7 @@ return class Handler {
         "Function.1": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1082,7 +1100,7 @@ return class Handler {
         "Function.2": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1094,7 +1112,7 @@ return class Handler {
         "Function.3": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -1106,7 +1124,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

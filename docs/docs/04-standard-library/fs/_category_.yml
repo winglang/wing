@@ -1,3 +1,5 @@
 label: fs
 collapsible: true
 collapsed: true
+link:
+  type: generated-index

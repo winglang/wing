@@ -39,11 +39,52 @@ import {
   DynamodbTransactWriteItemsOptions,
 } from ".";
 import { fqnForType } from "../../constants";
+import { INFLIGHT_SYMBOL } from "../../core/types";
 import { Json, Node, Resource } from "../../std";
+
 /**
  * Global identifier for `DynamodbTable`.
  */
 export const DYNAMODB_TABLE_FQN = fqnForType("ex.DynamodbTable");
+
+/**
+ * Options for `DynamodbTable.GlobalSecondaryIndex`.
+ */
+export interface GlobalSecondaryIndex {
+  /**
+   * The name of the index.
+   */
+  readonly name: string;
+  /**
+   * The name of the hash key in the index.
+   */
+  readonly hashKey: string;
+  /**
+   * The name of the range key.
+   * @default undefined
+   */
+  readonly rangeKey?: string;
+  /**
+   * Number of read units for this index.
+   * @default undefined
+   */
+  readonly writeCapacity?: number;
+  /**
+   * Number of write units for this index
+   * @default undefined
+   */
+  readonly readCapacity?: number;
+  /**
+   * The set of attributes that are projected into the index.
+   * @default "ALL"
+   */
+  readonly projectionType: "ALL" | "INCLUDE" | "KEYS_ONLY";
+  /**
+   * A list of attributes to project into the index.
+   * @default undefined
+   */
+  readonly nonKeyAttributes?: string[];
+}
 
 /**
  * Properties for `DynamodbTable`.
@@ -66,6 +107,11 @@ export interface DynamodbTableProps {
    * @default undefined
    */
   readonly rangeKey?: string;
+  /**
+   * The GSI for the table.
+   * @default undefined
+   */
+  readonly globalSecondaryIndex?: GlobalSecondaryIndex[];
 }
 
 /**
@@ -75,6 +121,9 @@ export interface DynamodbTableProps {
  * @abstract
  */
 export class DynamodbTable extends Resource {
+  /** @internal */
+  public [INFLIGHT_SYMBOL]?: IDynamodbTableClient;
+
   /**
    * Table name
    */

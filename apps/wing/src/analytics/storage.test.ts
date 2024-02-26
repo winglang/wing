@@ -11,7 +11,7 @@ describe("storage tests", () => {
     properties: {
       cli: {
         platform: ["xbox", "ps5"].join(","),
-        options: '{"-t": "fake-aws"}',
+        options: { "-t": "fake-aws" },
         target: "fake-aws",
         version: "4.2.0",
         wing_console_version: "1.2.3",
@@ -63,7 +63,7 @@ describe("storage tests", () => {
             cli_target: "fake-aws",
             cli_platform: "xbox,ps5",
             cli_version: "4.2.0",
-            cli_options: '{"-t": "fake-aws"}',
+            "cli_options_-t": "fake-aws",
             cli_wing_console_version: "1.2.3",
             cli_wing_sdk_version: "4.5.6",
             os_arch: "x64",

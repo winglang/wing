@@ -20,11 +20,11 @@ module.exports = function({ $s1, $s2 }) {
       $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
       $helpers.assert($helpers.eq($s1, $s1), "s1 == s1");
       $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s1)), "\"{s1}\" == \"{s1}\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
+      $helpers.assert($helpers.neq(String.raw({ raw: ["", ""] }, $s1), String.raw({ raw: ["", ""] }, $s2)), "\"{s1}\" != \"{s2}\"");
       $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["a", ""] }, $s1)), "\"a{s1}\" == \"a{s1}\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["b", ""] }, $s1)), "\"a{s1}\" != \"b{s1}\"");
+      $helpers.assert($helpers.neq(String.raw({ raw: ["a", ""] }, $s1), String.raw({ raw: ["b", ""] }, $s1)), "\"a{s1}\" != \"b{s1}\"");
       $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "a"] }, $s1)), "\"{s1}a\" == \"{s1}a\"");
-      $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "b"] }, $s1)), "\"{s1}a\" != \"{s1}b\"");
+      $helpers.assert($helpers.neq(String.raw({ raw: ["", "a"] }, $s1), String.raw({ raw: ["", "b"] }, $s1)), "\"{s1}a\" != \"{s1}b\"");
       $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, $s1), String.raw({ raw: ["`'", ""] }, $s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
       $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, $s1, $s2), String.raw({ raw: ["a", "b", "c"] }, $s1, $s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     }
@@ -41,7 +41,7 @@ module.exports = function({ $s1, $s2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -65,15 +65,15 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $s1: ${$stdlib.core.liftObject(s1)},
             $s2: ${$stdlib.core.liftObject(s2)},
           })
@@ -82,7 +82,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -90,15 +90,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(s1, host, []);
-          $Closure1._registerOnLiftObject(s2, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [s1, []],
+            [s2, []],
+          ],
+          "$inflight_init": [
+            [s1, []],
+            [s2, []],
+          ],
+        });
       }
     }
     const s1 = "foo";
@@ -111,11 +113,11 @@ class $Root extends $stdlib.std.Resource {
     $helpers.assert($helpers.eq("`s1`", "`s1`"), "\"`s1`\" == \"`s1`\"");
     $helpers.assert($helpers.eq(s1, s1), "s1 == s1");
     $helpers.assert($helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s1)), "\"{s1}\" == \"{s1}\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s2)), "\"{s1}\" != \"{s2}\"");
+    $helpers.assert($helpers.neq(String.raw({ raw: ["", ""] }, s1), String.raw({ raw: ["", ""] }, s2)), "\"{s1}\" != \"{s2}\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["a", ""] }, s1)), "\"a{s1}\" == \"a{s1}\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["b", ""] }, s1)), "\"a{s1}\" != \"b{s1}\"");
+    $helpers.assert($helpers.neq(String.raw({ raw: ["a", ""] }, s1), String.raw({ raw: ["b", ""] }, s1)), "\"a{s1}\" != \"b{s1}\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "a"] }, s1)), "\"{s1}a\" == \"{s1}a\"");
-    $helpers.assert(!$helpers.eq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "b"] }, s1)), "\"{s1}a\" != \"{s1}b\"");
+    $helpers.assert($helpers.neq(String.raw({ raw: ["", "a"] }, s1), String.raw({ raw: ["", "b"] }, s1)), "\"{s1}a\" != \"{s1}b\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["`'", ""] }, s1), String.raw({ raw: ["`'", ""] }, s1)), "\"`\'{s1}\" == \"`\'{s1}\"");
     $helpers.assert($helpers.eq(String.raw({ raw: ["a", "b", "c"] }, s1, s2), String.raw({ raw: ["a", "b", "c"] }, s1, s2)), "\"a{s1}b{s2}c\" == \"a{s1}b{s2}c\"");
     this.node.root.new("@winglang/sdk.std.Test", std.Test, this, "test:assert works inflight", new $Closure1(this, "$Closure1"));

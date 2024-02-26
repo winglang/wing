@@ -24,7 +24,7 @@
     "email": "dummy@example.com",
     "organization": false
   },
-  "dependencies": {
+  "peerDependencies": {
     "@aws-cdk/aws-events": "^1.204.0",
     "@aws-cdk/aws-iam": "^1.204.0",
     "@aws-cdk/aws-kms": "^1.204.0",
@@ -33,20 +33,18 @@
     "@aws-cdk/core": "^1.204.0",
     "constructs": "^3.4.344"
   },
-  "peerDependencies": {
-    "@aws-cdk/aws-events": "^1.204.0",
-    "@aws-cdk/aws-iam": "^1.204.0",
-    "@aws-cdk/aws-kms": "^1.204.0",
-    "@aws-cdk/aws-s3": "^1.204.0",
-    "@aws-cdk/cloud-assembly-schema": "^1.204.0",
-    "@aws-cdk/core": "^1.204.0",
-    "constructs": "^3.3.69"
-  },
   "devDependencies": {
-    "@types/node": "^18.17.13",
+    "@aws-cdk/aws-events": "1.204.0",
+    "@aws-cdk/aws-iam": "1.204.0",
+    "@aws-cdk/aws-kms": "1.204.0",
+    "@aws-cdk/aws-s3": "1.204.0",
+    "@aws-cdk/cloud-assembly-schema": "1.204.0",
+    "@aws-cdk/core": "1.204.0",
+    "constructs": "3.4.344",
+    "@types/node": "^20.11.0",
     "@types/prettier": "2.6.0",
-    "jsii": "~5.0.21",
-    "typescript": "^4.9.5"
+    "jsii": "~5.3.11",
+    "typescript": "^5.3.3"
   },
   "license": "Apache-2.0",
   "version": "0.0.0"

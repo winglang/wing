@@ -581,6 +581,7 @@ export class Simulator {
    */
   private stopServer() {
     this._server!.close();
+    //@ts-ignore
     this._server!.closeAllConnections();
   }
 

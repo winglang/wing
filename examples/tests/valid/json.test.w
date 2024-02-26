@@ -162,7 +162,7 @@ if let val = jsonElements.tryGet("strings")?.tryGet("single")?.asStr() {
 }
 
 if let vals = jsonElements.tryGet("strings")?.tryGet("array") {
-  // Try getting an index 
+  // Try getting an index
   if let hello = vals.tryGetAt(0) {
     assert(hello == "Hello");
   } else {
@@ -228,9 +228,9 @@ struct StructyJson {
 }
 
 let arrayStruct: Array<StructyJson> = [ { foo: "", stuff: [] } ];
-let setStruct: Set<StructyJson> = { { foo: "", stuff: [] } };
+let setStruct: Set<StructyJson> = Set<StructyJson>[ { foo: "", stuff: [] } ];
 let mapStruct: Map<StructyJson> = { "1" => ({ foo: "", stuff: [] }) };
-let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ { { foo: "", stuff: [] } } ] };
+let deepCollectionStruct: Map<Array<Set<StructyJson>>> = { "1" => [ Set<StructyJson>[ { foo: "", stuff: [] } ] ] };
 
 let notJsonMissingField: StructyJson = {
   foo: "bar",

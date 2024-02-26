@@ -1,8 +1,21 @@
-import { deepStrictEqual } from "node:assert";
+// Code in this file will be automatically included in all inflight code bundles,
+// so avoid importing anything heavy here.
+import { deepStrictEqual, notDeepStrictEqual } from "node:assert";
+import type { Construct } from "constructs";
+import { Node } from "./std/node";
 
 export function eq(a: any, b: any): boolean {
   try {
     deepStrictEqual(a, b);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function neq(a: any, b: any): boolean {
+  try {
+    notDeepStrictEqual(a, b);
     return true;
   } catch {
     return false;
@@ -23,4 +36,19 @@ export function range(start: number, end: number, inclusive: boolean) {
     while (i > limit) yield i--;
   }
   return iterator();
+}
+
+export function nodeof(construct: Construct): Node {
+  return Node.of(construct);
+}
+
+export function normalPath(path: string): string {
+  return path.replace(/\\+/g, "/");
+}
+
+export function unwrap<T>(value: T): T | never {
+  if (value != null) {
+    return value;
+  }
+  throw new Error("Unexpected nil");
 }

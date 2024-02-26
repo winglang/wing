@@ -11,7 +11,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async handle(s) {
+    async handle() {
       console.log($myStr);
       const n = $myNum;
       console.log(String.raw({ raw: ["", ""] }, n));
@@ -41,7 +41,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -172,15 +172,15 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $myBool: ${$stdlib.core.liftObject(myBool)},
             $myDur_hours: ${$stdlib.core.liftObject(myDur.hours)},
             $myDur_minutes: ${$stdlib.core.liftObject(myDur.minutes)},
@@ -194,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -202,20 +202,27 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(myBool, host, []);
-          $Closure1._registerOnLiftObject(myDur.hours, host, []);
-          $Closure1._registerOnLiftObject(myDur.minutes, host, []);
-          $Closure1._registerOnLiftObject(myDur.seconds, host, []);
-          $Closure1._registerOnLiftObject(myNum, host, []);
-          $Closure1._registerOnLiftObject(mySecondBool, host, []);
-          $Closure1._registerOnLiftObject(myStr, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [myBool, []],
+            [myDur.hours, []],
+            [myDur.minutes, []],
+            [myDur.seconds, []],
+            [myNum, []],
+            [mySecondBool, []],
+            [myStr, []],
+          ],
+          "$inflight_init": [
+            [myBool, []],
+            [myDur.hours, []],
+            [myDur.minutes, []],
+            [myDur.seconds, []],
+            [myNum, []],
+            [mySecondBool, []],
+            [myStr, []],
+          ],
+        });
       }
     }
     const myStr = "hello, string";

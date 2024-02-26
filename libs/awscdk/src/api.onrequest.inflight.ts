@@ -1,0 +1,1 @@
+export { ApiOnRequestHandlerClient } from "@winglang/sdk/lib/shared-aws/api.onrequest.inflight";

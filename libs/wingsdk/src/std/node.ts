@@ -6,7 +6,7 @@ import {
   MetadataOptions,
   IValidation,
 } from "constructs";
-import { Connections } from "../core";
+import { Connections } from "../core/connections";
 
 const NODE_SYMBOL = Symbol.for("@winglang/sdk.std.Node");
 export const APP_SYMBOL = Symbol.for("@winglang/sdk.std.Node/app");

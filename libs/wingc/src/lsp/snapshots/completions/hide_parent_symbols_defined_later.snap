@@ -39,6 +39,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: nodeof
+  kind: 3
+  detail: "preflight (construct: IConstruct): Node"
+  documentation:
+    kind: markdown
+    value: "```wing\nnodeof: preflight (construct: IConstruct): Node\n```\n---\nObtain the tree node of a preflight resource.\n### Parameters\n- `construct` — `IConstruct` — The construct to obtain the tree node of"
+  sortText: cc|nodeof
+  insertText: nodeof($1)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: unsafeCast
   kind: 3
   detail: "(value: any): any"

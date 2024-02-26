@@ -56,12 +56,12 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k")), 2);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
-      $helpers.assert((await $util_Util.waitUntil(async () => {
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })");
+      $helpers.assert((await $util_Util.waitUntil((async () => {
         return $helpers.eq((await $counter.peek("k2")), 1);
-      })), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
+      }))), "util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })");
     }
   }
   return $Closure3;
@@ -99,7 +99,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -163,22 +163,22 @@ class $Root extends $stdlib.std.Resource {
         super($scope, $id);
         this.bucket = this.node.root.new("@winglang/sdk.cloud.Bucket", cloud.Bucket, this, "cloud.Bucket");
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
-          _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+        class $Closure1 extends $stdlib.std.AutoIdResource {
+          _id = $stdlib.core.closureId();
           constructor($scope, $id, ) {
             super($scope, $id);
-            (std.Node.of(this)).hidden = true;
+            $helpers.nodeof(this).hidden = true;
           }
           static _toInflightType() {
             return `
-              require("./inflight.$Closure1-1.js")({
+              require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
               })
             `;
           }
           _toInflight() {
             return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this)};
+                const $Closure1Client = ${$Closure1._toInflightType()};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
@@ -186,8 +186,13 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
-          _supportedOps() {
-            return [...super._supportedOps(), "handle", "$inflight_init"];
+          get _liftMap() {
+            return ({
+              "handle": [
+              ],
+              "$inflight_init": [
+              ],
+            });
           }
         }
         this.onUpdateCallback = new $Closure1(this, "$Closure1");
@@ -197,14 +202,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.KeyValueStore-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.KeyValueStore-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
+            const KeyValueStoreClient = ${KeyValueStore._toInflightType()};
             const client = new KeyValueStoreClient({
               $this_bucket: ${$stdlib.core.liftObject(this.bucket)},
               $this_onUpdateCallback: ${$stdlib.core.liftObject(this.onUpdateCallback)},
@@ -214,33 +219,31 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "get", "set", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, []);
-          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, []);
-        }
-        if (ops.includes("get")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, ["getJson"]);
-          KeyValueStore._registerOnLiftObject(this.onUpdateCallback, host, ["handle"]);
-        }
-        if (ops.includes("set")) {
-          KeyValueStore._registerOnLiftObject(this.bucket, host, ["putJson"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "get": [
+            [this.bucket, ["getJson"]],
+            [this.onUpdateCallback, ["handle"]],
+          ],
+          "set": [
+            [this.bucket, ["putJson"]],
+          ],
+          "$inflight_init": [
+            [this.bucket, []],
+            [this.onUpdateCallback, []],
+          ],
+        });
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure2 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure2-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure2-1.js")({
             $counter: ${$stdlib.core.liftObject(counter)},
           })
         `;
@@ -248,7 +251,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this)};
+            const $Closure2Client = ${$Closure2._toInflightType()};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -256,25 +259,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerOnLiftObject(counter, host, ["inc"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [counter, ["inc"]],
+          ],
+          "$inflight_init": [
+            [counter, []],
+          ],
+        });
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure3 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure3-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure3-1.js")({
             $counter: ${$stdlib.core.liftObject(counter)},
             $kv: ${$stdlib.core.liftObject(kv)},
             $util_Util: ${$stdlib.core.liftObject($stdlib.core.toLiftableModuleType(util.Util, "@winglang/sdk/util", "Util"))},
@@ -284,7 +288,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this)};
+            const $Closure3Client = ${$Closure3._toInflightType()};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -292,15 +296,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure3._registerOnLiftObject(counter, host, ["peek"]);
-          $Closure3._registerOnLiftObject(kv, host, ["get", "set"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [counter, ["peek"]],
+            [kv, ["get", "set"]],
+          ],
+          "$inflight_init": [
+            [counter, []],
+            [kv, []],
+          ],
+        });
       }
     }
     const kv = new KeyValueStore(this, "KeyValueStore");

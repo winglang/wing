@@ -51,11 +51,10 @@ test("function with a table binding", () => {
   const output = app.synth();
 
   const template = Template.fromJSON(JSON.parse(output));
-  template.hasResource("Custom::LogRetention", 1);
+  template.resourceCountIs("AWS::Logs::LogGroup", 1);
   template.hasResource("AWS::DynamoDB::Table", 1);
-  template.hasResource("AWS::IAM::Role", 2);
-  template.hasResource("AWS::IAM::Policy", 2);
-  // 1 inflight function and 1 log retention function
-  template.hasResource("AWS::Lambda::Function", 2);
+  template.hasResource("AWS::IAM::Role", 1);
+  template.hasResource("AWS::IAM::Policy", 1);
+  template.hasResource("AWS::Lambda::Function", 1);
   expect(awscdkSanitize(template)).toMatchSnapshot();
 });

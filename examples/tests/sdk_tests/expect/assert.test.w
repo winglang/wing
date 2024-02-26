@@ -115,14 +115,14 @@ test "equal maps" {
 
 // Set tests
 
-let mySet = Set<num> {1, 2, 3};
+let mySet = Set<num>[1, 2, 3];
 
-expect.equal(mySet, Set<num> {1, 2, 3});
-expect.notEqual(mySet, Set<num> {1, 2, 3, 4});
+expect.equal(mySet, Set<num>[1, 2, 3]);
+expect.notEqual(mySet, Set<num>[1, 2, 3, 4]);
 
 test "equal sets" {
-    expect.equal(mySet, Set<num> {1, 2, 3});
-    expect.notEqual(mySet, Set<num> {1, 2, 3, 4});
+    expect.equal(mySet, Set<num>[1, 2, 3]);
+    expect.notEqual(mySet, Set<num>[1, 2, 3, 4]);
 }
 
 // DateTime tests
@@ -139,27 +139,6 @@ test "equal sets" {
 // test "equal time" {
 //     expect.equal(dt, datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
 //     expect.notEqual(dt, datetime.fromIso("2024-07-18T20:18:25.177+03:00"));
-// }
-
-// Range tests
-// Doesn't work, while expect.equal([1,2,3,4], [1,2,3,4]); works and the JS equivalent works too
-// 
-//ERROR: Values have same structure but are not reference-equal:
-
-// [
-//     1,
-//     2,
-//     3,
-//     4
-//   ]
-// let myRange = std.Range.of(1,5);
-
-// expect.equal(myRange, [1,2,3,4]);
-// expect.notEqual(myRange, std.Range.of(1,6));
-
-// test "equal ranges" {
-//     expect.equal(myRange, std.Range.of(1,5));
-//     expect.notEqual(myRange, std.Range.of(1,6));
 // }
 
 // Duration tests

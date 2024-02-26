@@ -54,13 +54,21 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n### Parameters\n- `...options` — `NanoidOptions?` — - Optional options object for generating the ID.\n  \n  - `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n  - `size?` — `num?` — Size of ID.\n\n### Remarks\n# @link https://github.com/ai/nanoid"
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n### Parameters\n- `...options` — `NanoidOptions?` — - Optional options object for generating the ID.\n  \n  - `alphabet?` — `str?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n  - `size?` — `num?` — Size of ID.\n\n### Remarks\n#\n\n*@link* *https://github.com/ai/nanoid*"
   sortText: ff|nanoid
   insertText: nanoid($1)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: os
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic os: (): str\n```\n---\nReturns a string identifying the operating system platform.\n\n### Returns\nThe operating system platform\n\n### Example\n```ts\n\"linux\", \"darwin\", \"win32\"\n```"
+  sortText: ff|os
+  insertText: os()
 - label: sha256
   kind: 2
   detail: "(data: str): str"
@@ -114,7 +122,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: UlidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\n# @link https://github.com/ulid/javascript"
+    value: "```wing\nstatic ulid: (options: UlidOptions?): str\n```\n---\nGenerates universally unique lexicographically sortable identifier.\n### Parameters\n- `...options` — `UlidOptions?` — - Optional options object for generating the ID.\n  \n  - `seed?` — `num?` — You can also input a seed time which will consistently give you the same string for the time component.\n\n### Remarks\n#\n\n*@link* *https://github.com/ulid/javascript*"
   sortText: ff|ulid
   insertText: ulid($1)
   insertTextFormat: 2

@@ -32,9 +32,9 @@
   "private": true,
   "homepage": "https://github.com/winglang/wing",
   "devDependencies": {
-    "jsii": "^1.70.0",
-    "jsii-pacmak": "^1.70.0",
-    "jsii-release": "^0.2.519"
+    "jsii": "~5.3.11",
+    "jsii-pacmak": "^1.94.0",
+    "jsii-release": "^0.2.778"
   },
   "volta": {
     "extends": "../../package.json"

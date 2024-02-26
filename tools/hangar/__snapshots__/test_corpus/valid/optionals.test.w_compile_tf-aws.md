@@ -88,7 +88,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -127,6 +127,7 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
+    const Person = $stdlib.std.Struct._createJsonSchema({id:"/Person",type:"object",properties:{age:{type:"number"},name:{type:"string"},},required:["age","name",]});
     class Super extends $stdlib.std.Resource {
       constructor($scope, $id, ) {
         super($scope, $id);
@@ -134,14 +135,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Super-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Super-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const SuperClient = ${Super._toInflightType(this)};
+            const SuperClient = ${Super._toInflightType()};
             const client = new SuperClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -149,8 +150,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Sub extends Super {
@@ -160,7 +164,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Sub-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Sub-1.js")({
             $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
@@ -168,7 +172,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const SubClient = ${Sub._toInflightType(this)};
+            const SubClient = ${Sub._toInflightType()};
             const client = new SubClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -176,8 +180,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Sub1 extends Super {
@@ -187,7 +194,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Sub1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Sub1-1.js")({
             $Super: ${$stdlib.core.liftObject(Super)},
           })
         `;
@@ -195,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const Sub1Client = ${Sub1._toInflightType(this)};
+            const Sub1Client = ${Sub1._toInflightType()};
             const client = new Sub1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -203,8 +210,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -216,14 +226,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Node-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Node-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const NodeClient = ${Node._toInflightType(this)};
+            const NodeClient = ${Node._toInflightType()};
             const client = new NodeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -231,19 +241,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
             $__payloadWithBucket_c_____null_: ${$stdlib.core.liftObject(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${$stdlib.core.liftObject(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${$stdlib.core.liftObject(payloadWithBucket.c)},
@@ -253,7 +266,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -261,16 +274,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(((payloadWithBucket.c) != null), host, []);
-          $Closure1._registerOnLiftObject(((payloadWithoutOptions.b) != null), host, []);
-          $Closure1._registerOnLiftObject(payloadWithBucket.c, host, ["put"]);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, ["put"]],
+          ],
+          "$inflight_init": [
+            [((payloadWithBucket.c) != null), []],
+            [((payloadWithoutOptions.b) != null), []],
+            [payloadWithBucket.c, []],
+          ],
+        });
       }
     }
     const x = 4;
@@ -375,7 +391,7 @@ class $Root extends $stdlib.std.Resource {
       if ($if_let_value != undefined) {
         const parsedName = $if_let_value;
         $helpers.assert($helpers.eq(parsedName.first, "BadName"), "parsedName.first == \"BadName\"");
-        if (!$helpers.eq(parsedName.last, "")) {
+        if ($helpers.neq(parsedName.last, "")) {
           $helpers.assert(false, "false");
         }
       }
@@ -455,6 +471,67 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     }
+    let fn = (() => {
+      return (() => {
+        return 1337;
+      });
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert($helpers.eq((f()), 1337), "f() == 1337");
+      }
+      else {
+        $helpers.assert(false, "false");
+      }
+    }
+    fn = (() => {
+      return undefined;
+    });
+    {
+      const $if_let_value = (fn());
+      if ($if_let_value != undefined) {
+        const f = $if_let_value;
+        $helpers.assert(false, "false");
+      }
+      else {
+        $helpers.assert(true, "true");
+      }
+    }
+    const maybeVar = 123;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeVar), 123), "maybeVar! == 123");
+    const maybeVarNull = undefined;
+    try {
+      const err = $helpers.unwrap(maybeVarNull);
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    const maybeFn = ((b) => {
+      if (b) {
+        return ["hi"];
+      }
+    });
+    try {
+      $helpers.unwrap((maybeFn(false)));
+      $helpers.assert(false, "false");
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      $helpers.assert($helpers.eq(e, "Unexpected nil"), "e == \"Unexpected nil\"");
+    }
+    $helpers.assert($helpers.eq($helpers.unwrap((maybeFn(true))), ["hi"]), "maybeFn(true)! == [\"hi\"]");
+    const maybeVarBool = true;
+    $helpers.assert($helpers.eq((!$helpers.unwrap(maybeVarBool)), false), "!maybeVarBool! == false");
+    const person = $helpers.unwrap(Person._tryParseJson(((json, opts) => { return JSON.stringify(json, null, opts?.indent) })(({"name": "john", "age": 30}))));
+    $helpers.assert(($helpers.eq(person.name, "john") && $helpers.eq(person.age, 30)), "person.name == \"john\" && person.age == 30");
+    const maybeX = 0;
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeX), 0), "maybeX! == 0");
+    const maybeY = "";
+    $helpers.assert($helpers.eq($helpers.unwrap(maybeY), ""), "maybeY! == \"\"");
   }
 }
 const $PlatformManager = new $stdlib.platform.PlatformManager({platformPaths: $platforms});

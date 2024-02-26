@@ -94,3 +94,25 @@ let val: str = baz?.bar?.foo?.val;
 let optionalFunction = Json.tryParse("")?.asStr;
 optionalFunction();
 //^ Cannot call optional function (unless it's part of a reference)
+
+let optionalFunctionWithNoRetType: ()? = () => {};
+//                                 ^^ Unexpected syntax
+
+// Pass incorrect optional function type to a function
+let functionWithOptionalFuncParam1: ((num):void)? = (x: str):void => {};
+//                                                  ^^^^^^^^^^^^^^^^^^^ Expected type to be "(preflight (num): void)?", but got "preflight (x: str): void" instead
+let functionWithOptionalFuncParam2: (():num)? = ():str => { return "s"; };
+//                                              ^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "(preflight (): num)?", but got "preflight (): str" instead
+
+// Unwrap non-optional type
+
+let nonOptional: num = 10;
+let unwrapValue = nonOptional!;
+//                ^^^^^^^^^^^ '!' expects an optional type, found "num"
+
+let nonOptionalFn = (): num => {
+  return 10;
+};
+let unwrapValueFn = nonOptionalFn()!;
+//                  ^^^^^^^^^^^^^^^ '!' expects an optional type, found "num"
+

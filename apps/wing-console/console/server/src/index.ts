@@ -3,7 +3,6 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import type { inferRouterInputs } from "@trpc/server";
-import { prettyPrintError } from "@winglang/sdk/lib/util/enhanced-error.js";
 import Emittery from "emittery";
 import type { Express } from "express";
 
@@ -15,8 +14,10 @@ import type { Router } from "./router/index.js";
 import type { Trace } from "./types.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
+import type { Analytics } from "./utils/analytics.js";
 import { createCompiler } from "./utils/compiler.js";
 import {
+  FileLink,
   LayoutConfig,
   TestItem,
   TestsStateManager,
@@ -71,6 +72,10 @@ export interface CreateConsoleServerOptions {
   layoutConfig?: LayoutConfig;
   platform?: string[];
   stateDir?: string;
+  analyticsAnonymousId?: string;
+  analytics?: Analytics;
+  requireSignIn?: () => Promise<boolean>;
+  notifySignedIn?: () => Promise<void>;
 }
 
 export const createConsoleServer = async ({
@@ -87,10 +92,15 @@ export const createConsoleServer = async ({
   layoutConfig,
   platform,
   stateDir,
+  analyticsAnonymousId,
+  analytics,
+  requireSignIn,
+  notifySignedIn,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
     trace: Trace;
+    openFileInEditor: FileLink;
   }>();
 
   const invalidateQuery = async (query: RouteNames) => {
@@ -249,6 +259,7 @@ export const createConsoleServer = async ({
     emitter: emitter as Emittery<{
       invalidateQuery: string | undefined;
       trace: Trace;
+      openFileInEditor: FileLink;
     }>,
     log,
     updater,
@@ -270,6 +281,10 @@ export const createConsoleServer = async ({
       selectedNode = node;
     },
     testsStateManager,
+    analyticsAnonymousId,
+    analytics,
+    requireSignIn,
+    notifySignedIn,
   });
 
   const close = async (callback?: () => void) => {

@@ -3,8 +3,9 @@
 exports[`create a bucket 1`] = `
 {
   ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+var $handler = undefined;
 exports.handler = async function(event) {
-  return await (new ((function(){
+  $handler = $handler ?? (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -15,7 +16,8 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+}));
+  return await $handler.handle(event);
 };",
   "connections.json": {
     "connections": [
@@ -143,7 +145,7 @@ return class Handler {
         "my_bucket": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud object store",
@@ -155,7 +157,7 @@ return class Handler {
         "my_function": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A cloud function (FaaS)",
@@ -167,7 +169,7 @@ return class Handler {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",

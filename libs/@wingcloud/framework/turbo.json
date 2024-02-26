@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": [
+    "//"
+  ],
+  "pipeline": {
+    "compile": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "test": {},
+    "package": {
+      "outputs": ["../../../dist/wingcloud-framework-*.tgz"]
+    }
+  }
+}

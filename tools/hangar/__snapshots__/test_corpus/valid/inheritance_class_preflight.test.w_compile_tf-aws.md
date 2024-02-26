@@ -36,7 +36,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.20.3"
     },
     "outputs": {}
   },
@@ -73,14 +73,14 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.FooBase-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.FooBase-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const FooBaseClient = ${FooBase._toInflightType(this)};
+            const FooBaseClient = ${FooBase._toInflightType()};
             const client = new FooBaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -88,8 +88,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return ({
+          "$inflight_init": [
+          ],
+        });
       }
     }
     class Foo extends FooBase {
@@ -104,7 +107,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.Foo-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.Foo-1.js")({
             $FooBase: ${$stdlib.core.liftObject(FooBase)},
           })
         `;
@@ -112,7 +115,7 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return `
           (await (async () => {
-            const FooClient = ${Foo._toInflightType(this)};
+            const FooClient = ${Foo._toInflightType()};
             const client = new FooClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -120,8 +123,11 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "$inflight_init"];
+      get _liftMap() {
+        return $stdlib.core.mergeLiftDeps(super._liftMap, {
+          "$inflight_init": [
+          ],
+        });
       }
     }
     const foo = new Foo(this, "Foo");

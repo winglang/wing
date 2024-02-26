@@ -106,7 +106,7 @@ exports[`create a topic 1`] = `
         "my_topic": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.2.70",
+            "version": "10.3.0",
           },
           "display": {
             "description": "A pub/sub notification topic",
@@ -118,7 +118,7 @@ exports[`create a topic 1`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.2.70",
+        "version": "10.3.0",
       },
       "id": "root",
       "path": "root",
@@ -126,43 +126,4 @@ exports[`create a topic 1`] = `
     "version": "tree-0.1",
   },
 }
-`;
-
-exports[`topic publishes messages as they are received 1`] = `
-[
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-0).",
-  "InvokeAsync (payload=\\"Alpha\\").",
-  "Publish (message=Beta).",
-  "Sending message (message=Beta, subscriber=sim-0).",
-  "InvokeAsync (payload=\\"Beta\\").",
-  "Received Alpha",
-  "Received Beta",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-]
-`;
-
-exports[`topic publishes messages to multiple subscribers 1`] = `
-[
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.cloud.Topic created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "@winglang/sdk.cloud.Function created.",
-  "@winglang/sdk.sim.EventMapping created.",
-  "Publish (message=Alpha).",
-  "Sending message (message=Alpha, subscriber=sim-0).",
-  "InvokeAsync (payload=\\"Alpha\\").",
-  "Sending message (message=Alpha, subscriber=sim-3).",
-  "InvokeAsync (payload=\\"Alpha\\").",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-  "@winglang/sdk.sim.EventMapping deleted.",
-  "@winglang/sdk.cloud.Topic deleted.",
-  "@winglang/sdk.cloud.Function deleted.",
-]
 `;

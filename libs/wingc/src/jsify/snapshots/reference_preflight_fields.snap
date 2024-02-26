@@ -36,12 +36,12 @@ source: libs/wingc/src/jsify/tests.rs
 const $helpers = require("@winglang/sdk/lib/helpers");
 module.exports = function({  }) {
   class MyType {
-    constructor({ $this_b, $this_s_length }) {
+    constructor({ $this_b, $this_s }) {
       this.$this_b = $this_b;
-      this.$this_s_length = $this_s_length;
+      this.$this_s = $this_s;
     }
     async boom() {
-      $helpers.assert((this.$this_s_length > 0), "this.s.length > 0");
+      $helpers.assert((this.$this_s.length > 0), "this.s.length > 0");
       $helpers.assert(((await this.$this_b.list()).length > 0), "this.b.list().length > 0");
     }
     async bam() {
@@ -76,39 +76,37 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType() {
         return `
-          require("./inflight.MyType-1.js")({
+          require("${$helpers.normalPath(__dirname)}/inflight.MyType-1.js")({
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const MyTypeClient = ${MyType._toInflightType(this)};
+            const MyTypeClient = ${MyType._toInflightType()};
             const client = new MyTypeClient({
               $this_b: ${$stdlib.core.liftObject(this.b)},
-              $this_s_length: ${$stdlib.core.liftObject(this.s.length)},
+              $this_s: ${$stdlib.core.liftObject(this.s)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "boom", "bam", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          MyType._registerOnLiftObject(this.b, host, []);
-          MyType._registerOnLiftObject(this.s.length, host, []);
-        }
-        if (ops.includes("bam")) {
-          MyType._registerOnLiftObject(this.b, host, ["get", "put"]);
-        }
-        if (ops.includes("boom")) {
-          MyType._registerOnLiftObject(this.b, host, ["list"]);
-          MyType._registerOnLiftObject(this.s.length, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "boom": [
+            [this.b, ["list"]],
+            [this.s, ["length"]],
+          ],
+          "bam": [
+            [this.b, ["get", "put"]],
+          ],
+          "$inflight_init": [
+            [this.b, []],
+            [this.s, []],
+          ],
+        });
       }
     }
   }

@@ -13,6 +13,7 @@ import { IInflightHost } from "../std";
 export class Website extends cloud.Website implements ISimulatorResource {
   private fileRoutes: FileRoutes = {};
   private readonly endpoint: cloud.Endpoint;
+  private readonly errorDocument?: string;
 
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
@@ -23,6 +24,8 @@ export class Website extends cloud.Website implements ISimulatorResource {
       simulatorAttrToken(this, "url"),
       { label: `Website ${this.node.path}`, browserSupport: true }
     );
+
+    this.errorDocument = props.errorDocument;
   }
 
   protected get _endpoint(): cloud.Endpoint {
@@ -49,7 +52,11 @@ export class Website extends cloud.Website implements ISimulatorResource {
       type: cloud.WEBSITE_FQN,
       path: this.node.path,
       addr: this.node.addr,
-      props: { staticFilesPath: this.path, fileRoutes: this.fileRoutes },
+      props: {
+        staticFilesPath: this.path,
+        fileRoutes: this.fileRoutes,
+        errorDocument: this.errorDocument,
+      },
       attrs: {} as any,
     };
     return schema;

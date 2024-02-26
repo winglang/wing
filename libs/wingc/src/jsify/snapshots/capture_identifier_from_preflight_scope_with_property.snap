@@ -17,7 +17,7 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $x_length }) {
+module.exports = function({ $x }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -25,7 +25,7 @@ module.exports = function({ $x_length }) {
       return $obj;
     }
     async handle() {
-      $helpers.assert(($x_length > 0), "x.length > 0");
+      $helpers.assert(($x.length > 0), "x.length > 0");
     }
   }
   return $Closure1;
@@ -46,23 +46,23 @@ const $helpers = $stdlib.helpers;
 class $Root extends $stdlib.std.Resource {
   constructor($scope, $id) {
     super($scope, $id);
-    class $Closure1 extends $stdlib.std.Resource {
-      _hash = require('crypto').createHash('md5').update(this._toInflight()).digest('hex');
+    class $Closure1 extends $stdlib.std.AutoIdResource {
+      _id = $stdlib.core.closureId();
       constructor($scope, $id, ) {
         super($scope, $id);
-        (std.Node.of(this)).hidden = true;
+        $helpers.nodeof(this).hidden = true;
       }
       static _toInflightType() {
         return `
-          require("./inflight.$Closure1-1.js")({
-            $x_length: ${$stdlib.core.liftObject(x.length)},
+          require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
+            $x: ${$stdlib.core.liftObject(x)},
           })
         `;
       }
       _toInflight() {
         return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType()};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
@@ -70,14 +70,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
-      _supportedOps() {
-        return [...super._supportedOps(), "handle", "$inflight_init"];
-      }
-      _registerOnLift(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure1._registerOnLiftObject(x.length, host, []);
-        }
-        super._registerOnLift(host, ops);
+      get _liftMap() {
+        return ({
+          "handle": [
+            [x, ["length"]],
+          ],
+          "$inflight_init": [
+            [x, []],
+          ],
+        });
       }
     }
     const x = "hello";

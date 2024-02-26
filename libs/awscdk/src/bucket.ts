@@ -81,6 +81,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
     return fn;
   }
+
   /** @internal */
   public _supportedOps(): string[] {
     return [
@@ -98,6 +99,7 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
       cloud.BucketInflightMethods.SIGNED_URL,
       cloud.BucketInflightMethods.METADATA,
       cloud.BucketInflightMethods.COPY,
+      cloud.BucketInflightMethods.RENAME,
     ];
   }
 
@@ -210,15 +212,10 @@ export class Bucket extends cloud.Bucket implements IAwsBucket {
 
   /** @internal */
   public _toInflight(): string {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "BucketClient",
-      [
-        `process.env["${this.envName()}"]`,
-        `process.env["${this.isPublicEnvName()}"]`,
-      ]
-    );
+    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
+      `process.env["${this.envName()}"]`,
+      `process.env["${this.isPublicEnvName()}"]`,
+    ]);
   }
 
   private isPublicEnvName(): string {
@@ -249,11 +246,11 @@ export function createEncryptedBucket(
     encryption: BucketEncryption.S3_MANAGED,
     blockPublicAccess: isPublic
       ? {
-        blockPublicAcls: false,
-        blockPublicPolicy: false,
-        ignorePublicAcls: false,
-        restrictPublicBuckets: false,
-      }
+          blockPublicAcls: false,
+          blockPublicPolicy: false,
+          ignorePublicAcls: false,
+          restrictPublicBuckets: false,
+        }
       : BlockPublicAccess.BLOCK_ALL,
     publicReadAccess: isPublic ? true : false,
     removalPolicy: RemovalPolicy.DESTROY,

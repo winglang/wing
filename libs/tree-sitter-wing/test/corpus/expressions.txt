@@ -111,6 +111,7 @@ obj.method();
         (nested_identifier
           object: (reference
             (reference_identifier))
+          accessor_type: (accessor)
           property: (member_identifier)))
       args: (argument_list))))
 
@@ -132,6 +133,7 @@ x == obj.method();
           (nested_identifier
             object: (reference
               (reference_identifier))
+            accessor_type: (accessor)
             property: (member_identifier)))
         args: (argument_list)))))
 
@@ -173,9 +175,9 @@ New expression with id and scope on different lines
 ================================================================================
 
 new A()
-  as 
-  "b" 
-  in 
+  as
+  "b"
+  in
   c;
 
 --------------------------------------------------------------------------------
@@ -321,21 +323,45 @@ maybeVal ?? 2 == 2;
       (number))))
 
 ================================================================================
-Set Literal
+Unwrap expression
 ================================================================================
 
-{1, 2, 3};
-Set<num> { 1, 2, 3 };
+maybeVal!;
+tryGet()!;
+!tryGetBool()!;
+
 --------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (set_literal
-      element: (number)
-      element: (number)
-      element: (number)))
+    (optional_unwrap
+      (reference
+        (reference_identifier))))
   (expression_statement
-    (set_literal
+    (optional_unwrap
+      (call
+        (reference
+          (reference_identifier))
+        (argument_list))))
+  (expression_statement
+    (unary_expression
+      (optional_unwrap
+        (call
+          (reference
+            (reference_identifier))
+          (argument_list))))))
+
+================================================================================
+Set Literal
+================================================================================
+
+Set<num>[ 1, 2, 3 ];
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (array_literal
       type: (immutable_container_type
         type_parameter: (builtin_type))
       element: (number)
@@ -359,9 +385,9 @@ Empty Json Map Literal
 Map Literal
 ================================================================================
 
-{ 
-  "a" => 1, 
-  "b" => 2, 
+{
+  "a" => 1,
+  "b" => 2,
   str_func() => 3,
 };
 
@@ -489,7 +515,9 @@ a?;
               (nested_identifier
                 object: (reference
                   (reference_identifier))
+                accessor_type: (accessor)
                 property: (member_identifier)))
+            accessor_type: (accessor)
             property: (member_identifier)))))))
 
 ================================================================================

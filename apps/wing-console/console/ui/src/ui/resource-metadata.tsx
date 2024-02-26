@@ -17,6 +17,7 @@ import {
   Attribute,
   ScrollableArea,
 } from "@wingconsole/design-system";
+import { NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { memo, useCallback, useMemo, useState } from "react";
 
@@ -54,6 +55,7 @@ export interface MetadataNode {
   id: string;
   path: string;
   type: string;
+  display?: NodeDisplay;
   props?:
     | {
         [key: string]: any;
@@ -257,6 +259,12 @@ export const ResourceMetadata = memo(
                   <Attribute name="ID" value={node.id} />
                   <Attribute name="Path" value={node.path} />
                   <Attribute name="Type" value={node.type} />
+                  {node.display?.description && (
+                    <Attribute
+                      name="Description"
+                      value={node.display.description}
+                    />
+                  )}
                 </div>
               </div>
             </InspectorSection>

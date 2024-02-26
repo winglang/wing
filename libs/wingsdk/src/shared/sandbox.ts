@@ -14,7 +14,9 @@ export interface SandboxOptions {
 
 export class Sandbox {
   private loaded = false; // "true" after first run (module is loaded into context)
+  private createBundlePromise: Promise<void>;
   private entrypoint: string;
+  private code: string | undefined;
   private readonly options: SandboxOptions;
   private readonly context: any = {};
 
@@ -22,6 +24,7 @@ export class Sandbox {
     this.entrypoint = entrypoint;
     this.options = options;
     this.context = this.createContext();
+    this.createBundlePromise = this.createBundle();
   }
 
   private createContext() {
@@ -92,25 +95,31 @@ export class Sandbox {
     return context;
   }
 
-  private async loadBundleOnce() {
+  private async createBundle() {
     // load bundle into context on first run
-    if (this.loaded) {
-      return;
-    }
-
     const workdir = await mkdtemp(path.join(tmpdir(), "wing-bundles-"));
     const bundle = createBundle(this.entrypoint, [], workdir);
     this.entrypoint = bundle.entrypointPath;
 
-    const code = await readFile(this.entrypoint, "utf-8");
+    this.code = await readFile(this.entrypoint, "utf-8");
 
     if (process.env.DEBUG) {
-      const bundleSize = Buffer.byteLength(code, "utf-8");
+      const bundleSize = Buffer.byteLength(this.code, "utf-8");
       this.options.log?.(true, "log", `Bundled code (${bundleSize} bytes).`);
+    }
+  }
+
+  private loadBundleOnce() {
+    if (this.loaded) {
+      return;
+    }
+
+    if (!this.code) {
+      throw new Error("Bundle not created yet - please report this as a bug");
     }
 
     // this will add stuff to the "exports" object within our context
-    vm.runInContext(code, this.context, {
+    vm.runInContext(this.code!, this.context, {
       filename: this.entrypoint,
     });
 
@@ -118,7 +127,13 @@ export class Sandbox {
   }
 
   public async call(fn: string, ...args: any[]): Promise<any> {
-    await this.loadBundleOnce();
+    // wait for the bundle to finish creation
+    await this.createBundlePromise;
+
+    // load the bundle into context on the first run
+    // we don't do this earlier because bundled code may have side effects
+    // and we want to simulate that a function is "cold" on the first run
+    this.loadBundleOnce();
 
     return new Promise(($resolve, $reject) => {
       const cleanup = () => {
@@ -136,9 +151,9 @@ export class Sandbox {
         $reject(reason);
       };
 
-      const code = `exports.${fn}(${args.join(
-        ","
-      )}).then($resolve).catch($reject);`;
+      const code = `exports.${fn}(${args
+        .map((a) => JSON.stringify(a))
+        .join(",")}).then($resolve).catch($reject);`;
       vm.runInContext(code, this.context, {
         filename: this.entrypoint,
         timeout: this.options.timeout,

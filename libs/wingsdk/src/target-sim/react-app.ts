@@ -26,6 +26,7 @@ export class ReactApp extends ex.ReactApp implements ISimulatorResource {
       this._host = new cloud.Website(this, `${this.node.id}-host`, {
         ...this._hostProps,
         path: this._buildPath,
+        errorDocument: ex.REACT_APP_ERROR_DOCUMENT,
       });
 
       this.node.addDependency(this._websiteHost);
