@@ -15,6 +15,8 @@ const project = new typescript.TypeScriptProject({
     "jsii-docgen": "bin/jsii-docgen",
   },
   devDeps: [
+    "vitest",
+    "tsx",
     "jsii@~5.3.11",
     "@types/fs-extra",
     "@types/semver",
@@ -37,10 +39,12 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
-  jestOptions: {
-    coverageText: false,
-  },
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
+
+project.testTask.reset("vitest run --update");
 
 const libraryFixtures = ["construct-library"];
 

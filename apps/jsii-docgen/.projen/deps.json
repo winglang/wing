@@ -93,11 +93,15 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
+      "name": "tsx",
       "type": "build"
     },
     {
       "name": "typescript",
+      "type": "build"
+    },
+    {
+      "name": "vitest",
       "type": "build"
     },
     {
