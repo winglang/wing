@@ -4,7 +4,7 @@
 ```js
 "use strict";
 const $helpers = require("@winglang/sdk/lib/helpers");
-module.exports = function({ $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_, $_s1_concat_s2__, $s1_indexOf__s__ }) {
+module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,9 +12,9 @@ module.exports = function({ $__arr__index_______if__index___0____index____arr_le
       return $obj;
     }
     async handle() {
-      console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__));
-      console.log($__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_);
-      console.log($_s1_concat_s2__);
+      console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1.indexOf("s")));
+      console.log(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((await $s1.split(" ")), 1));
+      console.log((await $s1.concat($s2)));
     }
   }
   return $Closure1;
@@ -62,9 +62,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType() {
         return `
           require("${$helpers.normalPath(__dirname)}/inflight.$Closure1-1.js")({
-            $__arr__index_______if__index___0____index____arr_length__throw_new_Error__Index_out_of_bounds____return_arr_index_______s1_split________1_: ${$stdlib.core.liftObject(((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1))},
-            $_s1_concat_s2__: ${$stdlib.core.liftObject((s1.concat(s2)))},
-            $s1_indexOf__s__: ${$stdlib.core.liftObject(s1.indexOf("s"))},
+            $s1: ${$stdlib.core.liftObject(s1)},
+            $s2: ${$stdlib.core.liftObject(s2)},
           })
         `;
       }
@@ -82,14 +81,12 @@ class $Root extends $stdlib.std.Resource {
       get _liftMap() {
         return ({
           "handle": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
-            [(s1.concat(s2)), []],
-            [s1.indexOf("s"), []],
+            [s1, ["concat", "indexOf", "split"]],
+            [s2, []],
           ],
           "$inflight_init": [
-            [((arr, index) => { if (index < 0 || index >= arr.length) throw new Error("Index out of bounds"); return arr[index]; })((s1.split(" ")), 1), []],
-            [(s1.concat(s2)), []],
-            [s1.indexOf("s"), []],
+            [s1, []],
+            [s2, []],
           ],
         });
       }

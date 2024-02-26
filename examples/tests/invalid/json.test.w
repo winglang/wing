@@ -17,7 +17,7 @@ let a: Array<str> = j;
 // Immutable Json
 let foreverJson = Json {a: "hello"};
 foreverJson.set("a", "world!");
-//          ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660) 
+//          ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660)
 
 let bkt = new cloud.Bucket();
 let jArr = Json [bkt];
@@ -58,15 +58,16 @@ let notJsonMissingField: StructyJson = {
 };
 //^ Missing required field "maybe" from "StructyJson"
 
-let notJsonMissingFieldArray: Map<Set<Array<StructyJson>>> = {
-  "1" => {[ 
+let notJsonMissingFieldArray = {
+  "1" => Set<Array<StructyJson>> [[
     {
       foo: "bar",
       stuff: [],
     }
   //^ Missing required field "maybe" from "StructyJson"
-  ]}
+  ]]
 };
+
 
 let notJsonBadNesting: StructyJson = {
   foo: "bar",
