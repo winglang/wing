@@ -25,7 +25,7 @@ export const createEndpointRouter = () => {
       return endpoints.map((endpoint) => {
         return {
           id: endpoint.path,
-          label: endpoint.attrs.label || `${endpoint.path}`,
+          label: endpoint.attrs.label || endpoint.path.slice(13),
           url: endpoint.attrs.url,
         };
       });
