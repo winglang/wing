@@ -39,6 +39,7 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
+  depsUpgrade: false,
 });
 
 project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");

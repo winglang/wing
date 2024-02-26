@@ -35,6 +35,7 @@ const project = new TypeScriptAppProject({
   buildWorkflow: false,
   jest: false,
   github: false,
+  depsUpgrade: false,
   npmignoreEnabled: false,
   entrypoint: "lib/extension.js",
   eslintOptions: {

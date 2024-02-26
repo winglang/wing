@@ -15,10 +15,8 @@
     "eslint": "pnpm exec projen eslint",
     "package": "pnpm exec projen package",
     "post-compile": "pnpm exec projen post-compile",
-    "post-upgrade": "pnpm exec projen post-upgrade",
     "pre-compile": "pnpm exec projen pre-compile",
     "test": "pnpm exec projen test",
-    "upgrade": "pnpm exec projen upgrade",
     "watch": "pnpm exec projen watch",
     "projen": "pnpm exec projen"
   },
@@ -47,7 +45,6 @@
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^4.2.1",
     "node-fetch": "^2.6.7",
-    "npm-check-updates": "^16",
     "open": "^8.4.2",
     "prettier": "^2.8.8",
     "projen": "^0.71.163",

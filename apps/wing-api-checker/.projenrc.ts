@@ -19,6 +19,8 @@ const project = new typescript.TypeScriptProject({
   projenrcTs: true,
   prettier: true,
   package: false,
+  depsUpgrade: false,
+  jest: false,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
   devDeps: ["@types/yargs"],
 });
