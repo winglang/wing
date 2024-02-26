@@ -1,4 +1,4 @@
-import type IoRedis from "ioredis";
+import IoRedis from "ioredis";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { RedisClientBase } from "../ex";
 import {
@@ -71,8 +71,7 @@ export class Redis
     }
 
     if (this.connection_url) {
-      const IoRedis = await import("ioredis");
-      this.connection = new IoRedis.default(this.connection_url);
+      this.connection = new IoRedis(this.connection_url);
       return this.connection;
     }
 
