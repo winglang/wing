@@ -16,6 +16,7 @@ Introduce a mechanism to protect resources from accidental deletion/moves in the
 
 ### Functional
 - User-ability in sources to signify intent for a resource to not be deleted or moved (e.g. "pinning")
+- Provide default for a resource's "pinned" state in it's implementation
 - Git-trackable way to store changes to pinned resources between compilations, per target platform (e.g. "pinfile")
 - User-ability to manually and declaratively override a pinned resource's path in the resource tree
 - Compilation failure when a pinned resource is deleted without explicit removal from the pinfile
@@ -49,15 +50,6 @@ bring cloud;
 new cloud.Bucket() as "CoolBucket";
 ```
 
-because they want to make sure the bucket doesn't get deleted by accident, they pin it
-
-```wing
-// main.w
-bring cloud;
-
-pin(new cloud.Bucket() as "CoolBucket");
-```
-
 They run `wing compile` and then `wing test`, nice looks like everything works.
 
 Running `wing compile -t tf-aws` also succeeds with the following output and automatically generates a pinfile next to the entrypoint file.
@@ -68,12 +60,15 @@ Running `wing compile -t tf-aws` also succeeds with the following output and aut
 ```
 
 ```json
-// main.w.pin.json
+// main.w.pin.json, comments added for clarity
 {
   "version": "1",
   "pinned": {
     "tf-aws": {
-      "/root/CoolBucket": {}
+      "/root/CoolBucket": {
+        "type": "aws_s3_bucket",
+        "uniqueId": "CoolBucket"
+      }
     }
   }
 }
@@ -95,7 +90,8 @@ class MyBucket {
   }
 }
 
-pin(new MyBucket());
+let myBucket = new MyBucket();
+
 ```
 
 `wing compile` and `wing test` still work as expected.
@@ -122,11 +118,11 @@ So Sally adds fromPath to the pinfile:
   "version": "1",
   "pinned": {
     "tf-aws": {
-      "/root/CoolBucket": {
-        "fromPath": "/root/MyBucket/cloud.Bucket"
-      },
-      "/root/MyBucket": {},
-      "/root/MyBucket/cloud.Bucket": {}
+      "/root/MyBucket/cloud.Bucket": {
+        "type": "aws_s3_bucket",
+        "uniqueId": "CoolBucket",
+        "fromPath": "/root/CoolBucket"
+      }
     }
   }
 }
@@ -138,9 +134,37 @@ Running `wing compile -t tf-aws` now succeeds and nothing is deleted or moved in
 
 ### pinning
 
-The `pin` function is used to mark a created resource as "pinned" in the resource tree. It takes a construct and returns the same construct, with metadata added to the tree to track the pin. This means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
+The `pinned` property is used to mark a created resource as "pinned" in the resource tree. This is an inherent public property of all resources. This means that the user does not intend for the resource to be deleted or moved. Pinning is deep, meaning that pinning a parent inherently pins all of its children.
 
 This information will be available to the target platform/app which can choose what to do with this information. For example, the sim target can simply ignore this while the terraform target can manage a pinfile to inform the user when this changes between compilation and allow them to resolve any renames.
+
+### Proposal for pinfile schema
+
+```json
+{
+  "version": "1",
+  "pinned": {
+    "tf-aws": {
+      // The current (not remapped) logical path to the resource. These will only be leaves of the resource tree
+      "/root/CoolBucket": {
+        // These attributes have platform-specific values and only make sense in that context.
+        // The keys however are platform-agnostic.
+
+        // a string that uniquely identify the resource.
+        "uniqueId": "CoolBucket",
+
+        // The type of the resource.  
+        "type": "aws_s3_bucket",
+
+        "overrides": [
+          // a json path that maps to a new value
+          [".name", "newName"]
+        ]
+      }
+    }
+  }
+}
+```
 
 ### pinfile API
 
