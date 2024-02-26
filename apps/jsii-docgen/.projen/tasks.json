@@ -138,15 +138,6 @@
         }
       ]
     },
-    "test:watch": {
-      "name": "test:watch",
-      "description": "Run jest in watch mode",
-      "steps": [
-        {
-          "exec": "jest --watch"
-        }
-      ]
-    },
     "watch": {
       "name": "watch",
       "description": "Watch & compile in the background",

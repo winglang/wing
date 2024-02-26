@@ -39,6 +39,7 @@ const project = new typescript.TypeScriptProject({
   prettier: true,
   release: false,
   package: false,
+  jest: false,
   depsUpgrade: false,
 });
 
