@@ -87,7 +87,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+          "exec": "tsx --tsconfig tsconfig.dev.json .projenrc.ts"
         }
       ]
     },

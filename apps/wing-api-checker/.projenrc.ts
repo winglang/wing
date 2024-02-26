@@ -22,8 +22,11 @@ const project = new typescript.TypeScriptProject({
   depsUpgrade: false,
   jest: false,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
-  devDeps: ["@types/yargs"],
+  devDeps: ["@types/yargs", "tsx"],
 });
+
+project.defaultTask!.reset("tsx --tsconfig tsconfig.dev.json .projenrc.ts");
+project.deps.removeDependency("ts-node");
 
 const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(

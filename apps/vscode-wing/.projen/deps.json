@@ -93,11 +93,11 @@
       "type": "build"
     },
     {
-      "name": "ts-node",
+      "name": "tsup",
       "type": "build"
     },
     {
-      "name": "tsup",
+      "name": "tsx",
       "type": "build"
     },
     {

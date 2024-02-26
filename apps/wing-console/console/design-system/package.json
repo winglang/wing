@@ -55,7 +55,7 @@
     "bump-pack": "workspace:^",
     "eslint": "^8.48.0",
     "happy-dom": "^9.20.3",
-    "tsup": "^7.2.0",
+    "tsup": "^8.0.2",
     "typescript": "^5.2.2",
     "vite": "^4.5.2",
     "vitest": "^0.34.6",
