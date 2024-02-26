@@ -17,7 +17,8 @@ export const Console = ({
   theme,
   color,
   onTrace,
-  wingCloudSignInUrl,
+  wingCloudSignInUrl: githubSignInURL,
+  googleSignInURL,
 }: {
   trpcUrl: string;
   wsUrl: string;
@@ -27,6 +28,7 @@ export const Console = ({
   color?: string;
   onTrace?: (trace: Trace) => void;
   wingCloudSignInUrl?: string;
+  googleSignInURL?: string;
 }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -105,7 +107,12 @@ export const Console = ({
 
   return (
     <AppContext.Provider
-      value={{ appMode, title: windowTitle, wingCloudSignInUrl }}
+      value={{
+        appMode,
+        title: windowTitle,
+        githubSignInURL,
+        googleSignInURL,
+      }}
     >
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
