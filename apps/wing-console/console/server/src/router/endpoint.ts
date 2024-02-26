@@ -27,6 +27,7 @@ export const createEndpointRouter = () => {
           id: endpoint.path,
           label: endpoint.attrs.label || endpoint.path.slice(13),
           url: endpoint.attrs.url,
+          browserSupport: endpoint.props.browserSupport ?? false,
         };
       });
     }),

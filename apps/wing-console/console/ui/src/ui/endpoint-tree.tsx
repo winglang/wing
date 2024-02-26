@@ -1,4 +1,4 @@
-import { LinkIcon } from "@heroicons/react/24/outline";
+import { GlobeAltIcon, LinkIcon } from "@heroicons/react/24/outline";
 import {
   ScrollableArea,
   Toolbar,
@@ -57,9 +57,16 @@ export const EndpointTree = ({ endpointList }: EndpointTreeProps) => {
                     title={endpoint.url}
                     icon={
                       <>
-                        <LinkIcon
-                          className={classNames("w-4 h-4", theme.text1)}
-                        />
+                        {endpoint.browserSupport && (
+                          <GlobeAltIcon
+                            className={classNames("w-4 h-4", theme.text1)}
+                          />
+                        )}
+                        {!endpoint.browserSupport && (
+                          <LinkIcon
+                            className={classNames("w-4 h-4", theme.text1)}
+                          />
+                        )}
                       </>
                     }
                   />
