@@ -18,10 +18,12 @@
       "outputs": ["src/test_corpus/**"]
     },
     "test": {
-      "dependsOn": ["^package", "test:generate"]
+      "dependsOn": ["^package", "test:generate"],
+      "env": ["CI"]
     },
     "bench": {
-      "dependsOn": ["^package", "examples-valid#topo"]
+      "dependsOn": ["^package", "examples-valid#topo"],
+      "env": ["CI"]
     }
   }
 }
