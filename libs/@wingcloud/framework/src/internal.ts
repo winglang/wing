@@ -6,20 +6,37 @@ export interface CompileOptions {
   entrypoint: string;
 }
 
+const MANAGED_TSCONFIG_OPTIONS = [
+  "target",
+  "module",
+  "moduleResolution",
+  "baseUrl",
+  "paths",
+  "outDir",
+];
+
 export async function compile(options: CompileOptions) {
+  const entrypointDir = dirname(options.entrypoint);
   const ts = (await import("typescript")).default;
   const outDir = join(options.workDir, "ts");
 
-  const program = ts.createProgram([options.entrypoint], {
+  // load user's tsconfig
+  const tsconfigPath = ts.findConfigFile(entrypointDir, ts.sys.fileExists);
+  const compilerOptions: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2022,
     module: ts.ModuleKind.CommonJS,
     moduleResolution: ts.ModuleResolutionKind.Node10,
+    baseUrl: entrypointDir,
+    paths: {
+      "@winglang/sdk/*": [dirname(require.resolve("@winglang/sdk")) + "/*"],
+    },
+    outDir,
     alwaysStrict: true,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,
     strict: true,
+    jsx: ts.JsxEmit.Preserve,
     sourceMap: true,
-    outDir,
     declaration: false,
     noEmitOnError: true,
     listEmittedFiles: true,
@@ -27,11 +44,44 @@ export async function compile(options: CompileOptions) {
     skipLibCheck: true,
     resolveJsonModule: true,
     isolatedModules: true,
-    baseUrl: dirname(options.entrypoint),
-    paths: {
-      "@winglang/sdk/*": [dirname(require.resolve("@winglang/sdk")) + "/*"],
-    },
-  });
+  };
+
+  if (tsconfigPath) {
+    const { config, error } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    if (error) {
+      throw new Error(
+        `Failed to read tsconfig at ${tsconfigPath}: ${error.messageText}`
+      );
+    }
+
+    const { options, errors } = ts.parseJsonConfigFileContent(
+      config,
+      ts.sys,
+      dirname(tsconfigPath),
+      {}
+    );
+
+    if (errors.length > 0) {
+      throw new Error(
+        `Failed to parse tsconfig at ${tsconfigPath}: ${errors
+          .map((e) => e.messageText)
+          .join("\n")}`
+      );
+    }
+
+    for (const managedOption of MANAGED_TSCONFIG_OPTIONS) {
+      if (config?.compilerOptions?.[managedOption] !== undefined) {
+        console.warn(
+          `'${managedOption}' in tsconfig is managed by wing, value is ${compilerOptions[managedOption]}`
+        );
+        delete options[managedOption];
+      }
+    }
+
+    Object.assign(compilerOptions, options);
+  }
+
+  const program = ts.createProgram([options.entrypoint], compilerOptions);
 
   const { InflightTransformer } = await import("./transformer");
   const transformer = new InflightTransformer(program);

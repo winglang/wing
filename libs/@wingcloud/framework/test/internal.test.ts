@@ -14,20 +14,24 @@ describe("compile", async () => {
     const shouldFail = dir === "fail";
 
     describe(dir, async () => {
-      for (const file of readdirSync(statusDir)) {
+      for (const file of readdirSync(statusDir).filter((f) =>
+        f.endsWith(".ts")
+      )) {
         test(
           file,
           async () => {
             const tmpDir = await mkdtemp(join(tmpdir(), `wingts.${file}`));
             const filePath = join(statusDir, file);
-            await compile({
+            let compilePromise = compile({
               entrypoint: filePath,
               workDir: tmpDir,
-            }).catch((e) => {
-              if (!shouldFail) {
-                expect.fail("expected to pass: " + e);
-              }
             });
+
+            if (shouldFail) {
+              await expect(compilePromise).rejects.toThrow();
+            } else {
+              await compilePromise;
+            }
           },
           {
             // The typescript compiler is quite slow, especially in CI
