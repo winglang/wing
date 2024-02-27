@@ -5,11 +5,11 @@ let assertThrows = inflight (expected: str, block: (): void) => {
   let var error = false;
   try {
     block();
-  } catch actual {
-    assert(actual.contains(expected));
-    error = true;
-  }
-  assert(error);
+    } catch actual {
+      expect.equal(actual, expected);
+      error = true;
+    }
+    expect.equal(error, true);
 };
 
 
@@ -24,25 +24,25 @@ test "spawn() with successful execution" {
   expect.equal(output.status, 0);
 }
 
-// test "spawn() with non-existent program" {
-//   let program = "no-such-program";
-//   let args = [""];
+test "spawn() with non-existent program" {
+  let program = "no-such-program";
+  let args = ["--help" ];
 
-//   assertThrows("Error: spawn no-such-program ENOENT", () => {
-//     util.spawn(program, args);
-//   });
-// }
-
-test "spawn() and wait for terminated program" {
-  let program = "sleep";
-  let args = ["1"];
-
-  let child = util.spawn(program, args);
-  util.sleep(2s);
-  let output = child.wait();
-
-  expect.equal(child.pid, 0);
+  assertThrows("Error: spawn no-such-program ENOENT", () => {
+    util.spawn(program, args);
+  });
 }
+
+// test "spawn() and wait for terminated program" {
+//   let program = "sleep";
+//   let args = ["1"];
+
+//   let child = util.spawn(program, args);
+//   util.sleep(2s);
+//   let output = child.wait();
+
+//   expect.equal(child.pid, 0);
+// }
 
 
 // test "spawn() and kill process" {
