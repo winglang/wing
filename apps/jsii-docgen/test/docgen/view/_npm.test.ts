@@ -2,19 +2,18 @@ import { ChildProcess, spawn } from "child_process";
 import { EventEmitter } from "events";
 import { tmpdir } from "os";
 import { Readable, Writable } from "stream";
+import { vi } from "vitest";
 import {
   NoSpaceLeftOnDevice,
   NpmError,
   UnInstallablePackageError,
 } from "../../../src";
 import { Npm } from "../../../src/docgen/view/_npm";
-import { vi } from "vitest";
 
 const TMPDIR = tmpdir();
 
 vi.mock("child_process");
 const mockSpawn = vi.mocked(spawn);
-
 
 test("NoSpaceLeftOnDevice error", () => {
   // GIVEN
