@@ -11,6 +11,7 @@
     "tools/bump-pack/**",
     "!tools/bump-pack/node_modules/**"
   ],
+  "globalEnv": ["CI"],
   "pipeline": {
     "default": {
       "inputs": ["*.json", ".projenrc.ts"]

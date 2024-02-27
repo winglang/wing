@@ -317,13 +317,19 @@ async function runPreflightCodeInWorkerThread(
 ): Promise<void> {
   try {
     // Create a shimmed entrypoint that ensures we always load the compiler's version of the SDK
+    const sdkEntrypoint = require.resolve("@winglang/sdk");
     const shim = `\
 var Module = require('module');
 var original_resolveFilename = Module._resolveFilename;
-var WINGSDK_PATH = '${normalPath(require.resolve("@winglang/sdk"))}';
+var WINGSDK_PATH = '${normalPath(sdkEntrypoint)}';
+var WINGSDK_DIR = '${normalPath(join(sdkEntrypoint, "..", ".."))}';
 
 Module._resolveFilename = function () {
-  if(arguments[0] === '@winglang/sdk') return WINGSDK_PATH;
+  const path = arguments[0];
+  if(path === '@winglang/sdk') return WINGSDK_PATH;
+  if(path.startsWith('@winglang/sdk')){
+    arguments[0] = path.replace('@winglang/sdk', WINGSDK_DIR);
+  }
   return original_resolveFilename.apply(this, arguments);
 };
 
