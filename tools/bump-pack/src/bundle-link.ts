@@ -94,6 +94,12 @@ export async function linkBundledTransitiveDeps(
       if (!(await fs.pathExists(dep.path))) {
         throw new Error(`pnpm dependency path not found: ${dep.path}`);
       }
+
+      // if the symlink exists but is broken, attempt to remove it
+      await fs
+        .stat(destModule)
+        .catch(() => fs.unlink(destModule).catch(() => {}));
+
       await fs.ensureSymlink(dep.path, destModule);
     }
   }

@@ -2,7 +2,7 @@
 
 exports[`create a function 1`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -17,12 +17,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -168,14 +168,14 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function fails 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -190,12 +190,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -339,14 +339,14 @@ async handle(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function succeeds 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -361,12 +361,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -510,14 +510,14 @@ async handle(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
+  "Invoke (payload="{\\"name\\":\\"Alice\\"}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function with environment variables 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -532,12 +532,12 @@ async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
-    throw new Error(\\"Name must start with uppercase letter\\");
+    throw new Error("Name must start with uppercase letter");
   }
   if (process.env.PIG_LATIN) {
-    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+    msg = "Ellohay, " + event.name + "!";
   } else {
-    msg = \\"Hello, \\" + event.name + \\"!\\";
+    msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
 }
@@ -683,14 +683,14 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "@winglang/sdk.cloud.Function created.",
-  "Invoke (payload=\\"{}\\").",
+  "Invoke (payload="{}").",
   "@winglang/sdk.cloud.Function deleted.",
 ]
 `;
 
 exports[`invoke function with process.exit(1) 2`] = `
 {
-  ".wing/my_function_c85c4e0e.js": "\\"use strict\\";
+  ".wing/my_function_c85c4e0e.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -843,7 +843,7 @@ async handle() {
 
 exports[`runtime environment tests 1`] = `
 {
-  ".wing/function.0_c8d5fca2.js": "\\"use strict\\";
+  ".wing/function.0_c8d5fca2.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -855,9 +855,9 @@ return class Handler {
   }
   async handle() {
           
-    const query = \\"q=URLUtils.searchParams&topic=api\\";
+    const query = "q=URLUtils.searchParams&topic=api";
     const p = new URLSearchParams(query);
-    return p.get(\\"topic\\");
+    return p.get("topic");
   
         }
 };
@@ -866,7 +866,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.1_c89ed254.js": "\\"use strict\\";
+  ".wing/function.1_c89ed254.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -887,7 +887,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.2_c8cd6c39.js": "\\"use strict\\";
+  ".wing/function.2_c8cd6c39.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -899,7 +899,7 @@ return class Handler {
   }
   async handle() {
           
-    const c = require(\\"crypto\\");
+    const c = require("crypto");
     return typeof c.createHash;
   
         }
@@ -909,7 +909,7 @@ return class Handler {
 }));
   return await $handler.handle(event);
 };",
-  ".wing/function.3_c8badafa.js": "\\"use strict\\";
+  ".wing/function.3_c8badafa.js": ""use strict";
 var $handler = undefined;
 exports.handler = async function(event) {
   $handler = $handler ?? (new ((function(){
@@ -921,7 +921,7 @@ return class Handler {
   }
   async handle() {
           
-    const { nanoid } = await import(\\"nanoid\\");
+    const { nanoid } = await import("nanoid");
     return nanoid();
   
         }
