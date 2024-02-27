@@ -3,6 +3,7 @@ import classNames from "classnames";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
+  MouseEventHandler,
   forwardRef,
   useCallback,
   useEffect,
@@ -80,7 +81,7 @@ export interface ZoomPaneRef {
 }
 
 export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
-  const { boundingBox, children, className, ...divProps } = props;
+  const { boundingBox, children, className, onClick, ...divProps } = props;
 
   const [viewTransform, setViewTransform] = useState(IDENTITY_TRANSFORM);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -140,12 +141,18 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
   useEvent("wheel", onWheel as (event: Event) => void, containerRef.current);
 
   const [isDragging, setDragging] = useState(false);
+
+  // Use ref to keep track of whether the user was dragging,
+  // and stop emitting `onClick` events if the user was dragging.
+  const wasDragging = useRef(false);
+
   const dragStart = useRef({ x: 0, y: 0 });
   useEvent(
     "mousedown",
     useCallback((event: MouseEvent) => {
       setDragging(true);
       dragStart.current = { x: event.x, y: event.y };
+      wasDragging.current = false;
     }, []) as (event: Event) => void,
     containerRef.current,
   );
@@ -154,6 +161,8 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     "mousemove",
     useCallback(
       (event: MouseEvent) => {
+        wasDragging.current = true;
+
         if (!isDragging) {
           return;
         }
@@ -182,6 +191,21 @@ export const ZoomPane = forwardRef<ZoomPaneRef, ZoomPaneProps>((props, ref) => {
     useCallback((event: MouseEvent) => {
       setDragging(false);
     }, []) as (event: Event) => void,
+    containerRef.current,
+  );
+
+  useEvent(
+    "click",
+    useCallback(
+      (event: any): void => {
+        if (wasDragging.current) {
+          return;
+        }
+        onClick?.(event);
+        wasDragging.current = false;
+      },
+      [onClick],
+    ),
     containerRef.current,
   );
 

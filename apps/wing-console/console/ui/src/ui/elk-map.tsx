@@ -123,8 +123,8 @@ export interface ElkMapProps<T> {
   nodes: Node<T>[];
   edges?: Edge[];
   node: FC<NodeItemProps<T>>;
-  selectedNodeId?: string;
-  onSelectedNodeIdChange?: (id: string) => void;
+  selectedNodeId?: string | undefined;
+  onSelectedNodeIdChange?: (id: string | undefined) => void;
   selectedEdgeId?: string;
   onSelectedEdgeIdChange?: (id: string) => void;
 }
@@ -143,7 +143,6 @@ interface EdgesContainerProps {
   selectedEdgeId?: string;
   onClick?: (id: string) => void;
   isHighlighted(nodeId: string): boolean;
-  setHighlighted(nodeId: string | undefined): void;
   selectedNodeId?: string;
   highlighted?: string;
 }
@@ -157,7 +156,6 @@ const EdgesContainer = memo(
     selectedEdgeId,
     onClick,
     isHighlighted,
-    setHighlighted,
     selectedNodeId,
     highlighted,
   }: EdgesContainerProps) => {
@@ -247,10 +245,6 @@ const EdgesContainer = memo(
                   : "arrow-head"
                 // "arrow-head"
               }
-              onMouseEnter={() => {
-                setHighlighted(edge.sources[0] ?? edge.targets[0]);
-              }}
-              onMouseLeave={() => setHighlighted(undefined)}
               onClick={onClick}
             />
           );
@@ -269,7 +263,6 @@ interface GraphProps {
   onSelectedNodeIdChange?(id: string): void;
   isHighlighted(nodeId: string): boolean;
   hasHighlightedEdge(node: NodeData): boolean;
-  setHighlighted(nodeId: string | undefined): void;
   onSelectedEdgeIdChange?(id: string): void;
 }
 
@@ -283,7 +276,6 @@ const Graph = memo(
     onSelectedNodeIdChange,
     isHighlighted,
     hasHighlightedEdge,
-    setHighlighted,
     onSelectedEdgeIdChange,
   }: GraphProps) => {
     return (
@@ -308,7 +300,6 @@ const Graph = memo(
             onSelectedNodeIdChange={onSelectedNodeIdChange}
             isHighlighted={isHighlighted}
             hasHighlightedEdge={hasHighlightedEdge}
-            setHighlighted={setHighlighted}
           />
         </AnimatePresence>
 
@@ -322,7 +313,6 @@ const Graph = memo(
               selectedNodeId={selectedNodeId}
               onClick={onSelectedEdgeIdChange}
               isHighlighted={isHighlighted}
-              setHighlighted={setHighlighted}
             />
           )}
         </AnimatePresence>
@@ -348,7 +338,6 @@ interface NodesContainerProps {
   onSelectedNodeIdChange?(id: string): void;
   isHighlighted(nodeId: string): boolean;
   hasHighlightedEdge(node: NodeData): boolean;
-  setHighlighted(nodeId: string | undefined): void;
 }
 
 const NodesContainer = memo(
@@ -359,7 +348,6 @@ const NodesContainer = memo(
     onSelectedNodeIdChange,
     isHighlighted,
     hasHighlightedEdge,
-    setHighlighted,
   }: NodesContainerProps) => {
     return (
       <>
@@ -388,9 +376,11 @@ const NodesContainer = memo(
             exit={{
               opacity: 0,
             }}
-            onClick={() => onSelectedNodeIdChange?.(node.id)}
-            onMouseEnter={() => setHighlighted(node.id)}
-            onMouseLeave={() => setHighlighted(undefined)}
+            onClick={(event) => {
+              // Stop the event from propagating to the background node.
+              event.stopPropagation();
+              onSelectedNodeIdChange?.(node.id);
+            }}
           >
             <NodeItem
               node={node.data}
@@ -480,7 +470,7 @@ export const ElkMap = <T extends unknown = undefined>({
     };
   }, [nodes, edges, minimumSizes]);
 
-  const [highlighted, setHighlighted] = useState<string>();
+  const highlighted = selectedNodeId;
 
   const isHighlighted = useCallback(
     (nodeId: string) => {
@@ -580,6 +570,7 @@ export const ElkMap = <T extends unknown = undefined>({
         boundingBox={mapSize}
         className="w-full h-full bg-white dark:bg-slate-500"
         data-testid="map-pane"
+        onClick={() => onSelectedNodeIdChange?.(undefined)}
       >
         {graph && (
           <Graph
@@ -592,7 +583,6 @@ export const ElkMap = <T extends unknown = undefined>({
             onSelectedEdgeIdChange={onSelectedEdgeIdChange}
             isHighlighted={isHighlighted}
             hasHighlightedEdge={hasHighlightedEdge}
-            setHighlighted={setHighlighted}
           />
         )}
       </ZoomPane>
