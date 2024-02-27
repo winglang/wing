@@ -117,6 +117,7 @@ const project = new cdk.JsiiProject({
     ignorePatterns: ["src/.gen/", "**/*.d.ts"],
   },
   jest: false,
+  depsUpgrade: false,
   prettier: true,
   npmignoreEnabled: false,
   minNodeVersion: "20.0.0",
