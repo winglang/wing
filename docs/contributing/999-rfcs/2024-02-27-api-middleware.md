@@ -98,7 +98,7 @@ handler = authMiddleware(handler);
 handler = loggingMiddleware(handler);
 ```
 
-- There is no way to apply middleware to all routes of `cloud.Api` automatically. The user needs to write out code the calls the middleware `middleware(...)` for each route.
+- There is no way to apply middleware to all routes of `cloud.Api` automatically. The user needs to write out code that calls the middleware `middleware(...)` for each route.
 - Middleware cannot be provided by Wing libraries because middleware implemented as static methods do not work as expected.
   - The example below errors during preflight compilation ("Cannot read properties of undefined"):
 
