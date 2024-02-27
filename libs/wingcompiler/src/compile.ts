@@ -321,14 +321,15 @@ async function runPreflightCodeInWorkerThread(
     const shim = `\
 var Module = require('module');
 var original_resolveFilename = Module._resolveFilename;
+var WINGSDK = '@winglang/sdk';
 var WINGSDK_PATH = '${normalPath(sdkEntrypoint)}';
 var WINGSDK_DIR = '${normalPath(join(sdkEntrypoint, "..", ".."))}';
 
 Module._resolveFilename = function () {
   const path = arguments[0];
-  if(path === '@winglang/sdk') return WINGSDK_PATH;
-  if(path.startsWith('@winglang/sdk')){
-    arguments[0] = path.replace('@winglang/sdk', WINGSDK_DIR);
+  if(path === WINGSDK) return WINGSDK_PATH;
+  if(path.startsWith(WINGSDK)){
+    arguments[0] = path.replace(WINGSDK, WINGSDK_DIR);
   }
   return original_resolveFilename.apply(this, arguments);
 };
